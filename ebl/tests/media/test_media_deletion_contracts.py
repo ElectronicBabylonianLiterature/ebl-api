@@ -1,8 +1,8 @@
 import pytest
 
 from ebl.media.application import MediaNotFoundError
-from ebl.media.domain import MediaAssociation, MediaId, MediaType
-from ebl.tests.media.factories import contract_media
+from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType
+from ebl.tests.media.factories import contract_media, stored_media_sequence
 from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
     InMemoryRepresentationStore,
@@ -15,12 +15,14 @@ MISSING_ID = MediaId("550e8400-e29b-41d4-a716-4466554400ff")
 K1 = MuseumNumber.of("K.1")
 
 
-def photo():
+def photo() -> Media:
     return contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
 
 
-def build_service():
-    repository = InMemoryMediaRepository((photo(),))
+def build_service() -> tuple[
+    InMemoryMediaRepository, InMemoryRepresentationStore, InMemoryMediaService
+]:
+    repository = InMemoryMediaRepository(stored_media_sequence(photo()))
     store = InMemoryRepresentationStore()
     return repository, store, InMemoryMediaService(repository, store)
 

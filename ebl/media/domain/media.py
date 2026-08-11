@@ -1,11 +1,17 @@
 import re
 import uuid
 from enum import Enum
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Union
 
 import attr
 
 from ebl.common.domain.project import ResearchProject
+from ebl.media.domain.converters import (
+    tuple_of_associations,
+    tuple_of_projects,
+    tuple_of_references,
+    tuple_of_thumbnail_representations,
+)
 from ebl.media.domain.mime import (
     is_supported_raster_mime_type,
     is_svg_mime_type,
@@ -16,30 +22,26 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 SHA256 = "sha256"
 
 
-def _not_empty(_, attribute: attr.Attribute, value: str) -> None:
+def _not_empty(_instance: object, attribute: attr.Attribute, value: str) -> None:
     if not value:
         raise ValueError(f"Attribute {attribute.name} cannot be empty.")
 
 
-def _positive(_, attribute: attr.Attribute, value: int) -> None:
+def _positive(_instance: object, attribute: attr.Attribute, value: int) -> None:
     if value <= 0:
         raise ValueError(f"Attribute {attribute.name} must be positive.")
 
 
-def _non_negative(_, attribute: attr.Attribute, value: int) -> None:
+def _non_negative(_instance: object, attribute: attr.Attribute, value: int) -> None:
     if value < 0:
         raise ValueError(f"Attribute {attribute.name} cannot be negative.")
 
 
-def _tuple_of(value):
-    return tuple(value or ())
-
-
-def _museum_number_of(value) -> MuseumNumber:
+def _museum_number_of(value: str | MuseumNumber) -> MuseumNumber:
     return value if isinstance(value, MuseumNumber) else MuseumNumber.of(value)
 
 
-def _media_id_of(value) -> "MediaId":
+def _media_id_of(value: Union[str, "MediaId"]) -> "MediaId":
     return value if isinstance(value, MediaId) else MediaId(value)
 
 
@@ -52,7 +54,7 @@ def _checksum_algorithm_of(value: str) -> str:
 
 
 def _validate_associations(
-    _, attribute: attr.Attribute, value: Sequence["MediaAssociation"]
+    _instance: object, attribute: attr.Attribute, value: Sequence["MediaAssociation"]
 ) -> None:
     if not value:
         raise ValueError(f"Attribute {attribute.name} must contain at least one item.")
@@ -62,7 +64,9 @@ def _validate_associations(
         raise ValueError("Media cannot contain duplicate fragment associations.")
 
 
-def _validate_mime_policy(media: "Media", _, value: "MediaRepresentations") -> None:
+def _validate_mime_policy(
+    media: "Media", _attribute: attr.Attribute, value: "MediaRepresentations"
+) -> None:
     original_is_raster = is_supported_raster_mime_type(value.original.mime_type)
     original_is_svg = is_svg_mime_type(value.original.mime_type)
     preview_mime_types = []
@@ -156,7 +160,7 @@ class MediaRepresentation:
 class MediaRepresentations:
     original: MediaRepresentation = attr.ib()
     thumbnails: Sequence[tuple[ThumbnailSize, MediaRepresentation]] = attr.ib(
-        factory=tuple, converter=_tuple_of
+        factory=tuple, converter=tuple_of_thumbnail_representations
     )
     display: Optional[MediaRepresentation] = attr.ib(default=None, kw_only=True)
 
@@ -193,10 +197,16 @@ class Media:
     original_filename: str = attr.ib(validator=_not_empty)
     representations: MediaRepresentations = attr.ib(validator=_validate_mime_policy)
     associations: Sequence[MediaAssociation] = attr.ib(
-        factory=tuple, converter=_tuple_of, validator=_validate_associations
+        factory=tuple,
+        converter=tuple_of_associations,
+        validator=_validate_associations,
     )
-    projects: Sequence[ResearchProject] = attr.ib(factory=tuple, converter=_tuple_of)
-    references: Sequence[MediaReference] = attr.ib(factory=tuple, converter=_tuple_of)
+    projects: Sequence[ResearchProject] = attr.ib(
+        factory=tuple, converter=tuple_of_projects
+    )
+    references: Sequence[MediaReference] = attr.ib(
+        factory=tuple, converter=tuple_of_references
+    )
     caption: Optional[str] = None
     attribution: Optional[str] = None
     import_source: Optional[MediaImportSource] = None
@@ -216,7 +226,7 @@ class Media:
             ),
         )
 
-    def association_for(self, fragment_id) -> MediaAssociation:
+    def association_for(self, fragment_id: str | MuseumNumber) -> MediaAssociation:
         normalized_fragment_id = _museum_number_of(fragment_id)
         try:
             return next(
@@ -229,7 +239,7 @@ class Media:
                 f"Media {self.id} is not associated with fragment {fragment_id}."
             ) from error
 
-    def is_associated_with(self, fragment_id) -> bool:
+    def is_associated_with(self, fragment_id: str | MuseumNumber) -> bool:
         try:
             self.association_for(fragment_id)
             return True

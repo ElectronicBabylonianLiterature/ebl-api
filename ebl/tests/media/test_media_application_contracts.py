@@ -14,6 +14,7 @@ from ebl.tests.media.factories import (
     contract_media,
     original_representation,
     stored_media,
+    stored_media_sequence,
 )
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -32,7 +33,7 @@ def test_repository_contract_reads_media_by_fragment_in_fragment_order() -> None
         (MediaAssociation(K1, 1, False), MediaAssociation(SM2, 0, True)),
     )
     copy = contract_media(COPY_ID, MediaType.COPY, (MediaAssociation(K1, 0, True),))
-    repository = InMemoryMediaRepository((photo, copy))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo, copy))
 
     assert repository.find_by_fragment(K1) == (copy, photo)
     assert repository.find_by_fragment(SM2) == (photo,)
@@ -50,7 +51,7 @@ def test_repository_contract_batch_keys_every_requested_fragment() -> None:
         MediaType.PHOTO,
         (MediaAssociation(K1, 0, True), MediaAssociation(SM2, 0, True)),
     )
-    repository = InMemoryMediaRepository((photo,))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo))
     missing = MuseumNumber.of("BM.99")
 
     assert repository.find_by_fragments((K1, SM2, missing)) == {
@@ -62,14 +63,14 @@ def test_repository_contract_batch_keys_every_requested_fragment() -> None:
 
 def test_repository_contract_batch_collapses_duplicate_fragment_ids() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
-    repository = InMemoryMediaRepository((photo,))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo))
 
     assert repository.find_by_fragments((K1, K1)) == {K1: (photo,)}
 
 
 def test_repository_contract_reads_one_media_item_in_fragment_context() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
-    repository = InMemoryMediaRepository((photo,))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo))
 
     assert repository.find_in_fragment(PHOTO_ID, K1) == photo
     assert repository.find_in_fragment(PHOTO_ID, SM2) is None
@@ -86,7 +87,7 @@ def test_repository_contract_creates_new_media() -> None:
 
 def test_repository_contract_rejects_creating_an_existing_media_id() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
-    repository = InMemoryMediaRepository((photo,))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo))
 
     with pytest.raises(MediaAlreadyExistsError):
         repository.create(stored_media(attr.evolve(photo, caption="Duplicate")))
@@ -95,7 +96,7 @@ def test_repository_contract_rejects_creating_an_existing_media_id() -> None:
 def test_repository_contract_replaces_metadata_without_changing_identity() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
     replacement = attr.evolve(photo, caption="Replacement audit note")
-    repository = InMemoryMediaRepository((photo,))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo))
 
     previous = repository.replace(stored_media(replacement, "replacement"))
 
@@ -113,7 +114,7 @@ def test_repository_contract_rejects_replacing_unknown_media() -> None:
 
 def test_repository_contract_deletes_metadata_idempotently() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
-    repository = InMemoryMediaRepository((photo,))
+    repository = InMemoryMediaRepository(stored_media_sequence(photo))
 
     repository.delete(PHOTO_ID)
     repository.delete(PHOTO_ID)

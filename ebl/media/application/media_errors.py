@@ -4,7 +4,7 @@ from ebl.media.domain import MediaId, ThumbnailSize
 
 
 class MediaNotFoundError(NotFoundError):
-    def __init__(self, media_id: MediaId):
+    def __init__(self, media_id: MediaId) -> None:
         super().__init__(media_id)
         self.media_id = media_id
 
@@ -13,7 +13,7 @@ class MediaNotFoundError(NotFoundError):
 
 
 class MediaAlreadyExistsError(DuplicateError):
-    def __init__(self, media_id: MediaId):
+    def __init__(self, media_id: MediaId) -> None:
         super().__init__(media_id)
         self.media_id = media_id
 
@@ -22,7 +22,7 @@ class MediaAlreadyExistsError(DuplicateError):
 
 
 class MediaRepresentationNotFoundError(NotFoundError):
-    def __init__(self, media_id: MediaId, representation: str):
+    def __init__(self, media_id: MediaId, representation: str) -> None:
         super().__init__(media_id, representation)
         self.media_id = media_id
         self.representation = representation
@@ -38,7 +38,7 @@ class MediaRepresentationNotFoundError(NotFoundError):
 
 
 class StoredRepresentationNotFoundError(NotFoundError):
-    def __init__(self, handle: StoredRepresentationHandle):
+    def __init__(self, handle: StoredRepresentationHandle) -> None:
         super().__init__(handle)
         self.handle = handle
 

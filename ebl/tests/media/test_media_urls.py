@@ -25,7 +25,7 @@ MEDIA_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
     ],
 )
 def test_fragment_media_original_url_encodes_fragment_path_segment(
-    fragment_id, encoded_fragment_id
+    fragment_id: MuseumNumber, encoded_fragment_id: str
 ) -> None:
     assert fragment_media_original_url(fragment_id, MEDIA_ID) == (
         f"/fragments/{encoded_fragment_id}/media/{MEDIA_ID}/file"

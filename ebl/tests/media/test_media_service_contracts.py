@@ -1,6 +1,10 @@
 from ebl.media.application import ImportMode, ImportReport, BackfillReport
-from ebl.media.domain import MediaAssociation, MediaId, MediaType
-from ebl.tests.media.factories import contract_media, stored_media
+from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType
+from ebl.tests.media.factories import (
+    contract_media,
+    stored_media,
+    stored_media_sequence,
+)
 from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
 )
@@ -13,7 +17,7 @@ K1 = MuseumNumber.of("K.1")
 SM2 = MuseumNumber.of("Sm.2")
 
 
-def shared_photo():
+def shared_photo() -> Media:
     return contract_media(
         PHOTO_ID,
         MediaType.PHOTO,
@@ -24,7 +28,9 @@ def shared_photo():
 def test_service_lists_fragment_media_in_canonical_order() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 1, False),))
     copy = contract_media(COPY_ID, MediaType.COPY, (MediaAssociation(K1, 0, True),))
-    service = InMemoryMediaService(InMemoryMediaRepository((photo, copy)))
+    service = InMemoryMediaService(
+        InMemoryMediaRepository(stored_media_sequence(photo, copy))
+    )
 
     assert service.list_fragment_media(K1) == (copy, photo)
 
@@ -32,7 +38,9 @@ def test_service_lists_fragment_media_in_canonical_order() -> None:
 def test_service_batch_reads_return_raw_domain_media_for_every_fragment() -> None:
     photo = shared_photo()
     missing = MuseumNumber.of("BM.99")
-    service = InMemoryMediaService(InMemoryMediaRepository((photo,)))
+    service = InMemoryMediaService(
+        InMemoryMediaRepository(stored_media_sequence(photo))
+    )
 
     assert service.find_media_by_fragments((K1, SM2, missing)) == {
         K1: (photo,),
@@ -44,7 +52,7 @@ def test_service_batch_reads_return_raw_domain_media_for_every_fragment() -> Non
 def test_service_reads_one_media_item_only_within_its_fragment() -> None:
     service = InMemoryMediaService(
         InMemoryMediaRepository(
-            (
+            stored_media_sequence(
                 contract_media(
                     PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),)
                 ),
@@ -68,7 +76,9 @@ def test_service_reads_stored_media_item_in_fragment_context() -> None:
 
 def test_shared_media_appears_under_every_requested_fragment() -> None:
     photo = shared_photo()
-    service = InMemoryMediaService(InMemoryMediaRepository((photo,)))
+    service = InMemoryMediaService(
+        InMemoryMediaRepository(stored_media_sequence(photo))
+    )
 
     result = service.find_media_by_fragments((K1, SM2))
 

@@ -31,7 +31,7 @@ Expected modes:
 - Upload the original representation.
 - Generate and upload a display-sized raster representation where appropriate.
 - Generate and upload raster thumbnails.
-- Insert the media document last.
+- Insert stored media metadata with current representation handles last.
 - Preserve stable media identity during replacement.
 - Preserve `originalFilename` for audit and reconciliation.
 - Record optional import provenance for idempotency.
@@ -45,16 +45,16 @@ Expected modes:
 ```text
 validate
 -> calculate checksum
--> upload original
--> generate and upload display where appropriate
--> generate and upload thumbnails
--> insert media document last
+-> upload original and receive stored handle
+-> generate and upload display where appropriate and receive stored handle
+-> generate and upload thumbnails and receive stored handles
+-> insert stored media metadata last
 ```
 
-The media document is inserted last so a document never points at missing binary
-representations during normal failures. If a normal failure happens after one or
-more files were written, the future implementation must delete the files created
-for that failed attempt.
+Stored media metadata is inserted last so metadata never points at missing binary
+representations during normal failures. The caller retains every handle returned
+by successful writes before metadata creation, so those staged handles are
+cleanup candidates if metadata creation fails.
 
 Display generation is optional when no appropriate display representation can be
 created. Raster photographs should normally receive a display representation.
@@ -69,11 +69,30 @@ media states in the initial model.
 
 ### Replacement behavior
 
-Replacement changes representation metadata and storage references while
-preserving the media ID. The media ID must never be derived from filename,
+Replacement changes representation metadata and stored representation handles
+while preserving the media ID. The media ID must never be derived from filename,
 museum number, checksum, or GridFS ObjectId. Replacement must verify the
 requested media is associated with the target fragment when invoked in a
 fragment-scoped administrative flow.
+
+Replacement lifecycle:
+
+```text
+read current StoredMedia
+-> write replacement representations and receive new handles
+-> build replacement StoredMedia
+-> atomically replace stored metadata
+-> retain previous StoredMedia returned by replace
+-> delete superseded handles
+```
+
+From the application contract's perspective, stored metadata replacement is
+atomic. New writes create new independently addressable logical stored versions.
+Existing handles continue to identify their existing bytes until the exact
+logical handle is deleted. Each handle is an exclusive logical stored-version
+reference owned by one stored representation version. Storage adapters may
+deduplicate physical bytes internally only if deleting one logical handle cannot
+break another current handle.
 
 ### Duplicate checksums
 
@@ -158,18 +177,19 @@ The backfill must not:
 
 ## Orphan audit
 
-A later orphan audit command will identify representation files that do not have
-corresponding media metadata. It exists to handle hard crashes and interrupted
-administrative operations. It should report candidates first and require a
-separate explicit cleanup action if deletion is ever introduced.
+A later orphan audit command will identify stored logical representation
+versions that are not referenced by current stored media metadata. It exists to
+handle hard crashes and interrupted administrative operations. It should report
+candidates first and require a separate explicit cleanup action if deletion is
+ever introduced.
 
 The audit should cover:
 
 - files created by failed imports;
 - files created by failed replacements;
-- thumbnails without originals;
-- originals without thumbnails;
-- storage references not reachable from media records.
+- thumbnails whose handles are not referenced by stored media metadata;
+- originals whose handles are not referenced by stored media metadata;
+- stored handles not reachable from current stored media records.
 
 ## Binary authentication
 
@@ -186,6 +206,12 @@ Each request must verify:
 1. The user may read the fragment.
 2. The media is associated with that fragment.
 3. The requested representation exists.
+
+After those checks, route code loads the current `StoredMedia` for the
+fragment/media pair, resolves the requested original, display, or thumbnail
+`StoredRepresentationHandle`, and opens that handle through the representation
+store. Stored handles are server-internal references, not bearer capabilities or
+public route parameters.
 
 The frontend currently uses bearer-authenticated API requests. A normal
 `<img src>` cannot reliably send bearer tokens for restricted media. The initial
@@ -227,6 +253,10 @@ SVG is not a third media type.
 - A safe XML parser is required.
 - Raster display previews are generated when conversion succeeds.
 - Raster preview thumbnails are generated.
+- Display and thumbnail metadata accepts only supported raster MIME types:
+  `image/jpeg`, `image/png`, and `image/webp`.
+- `PHOTO` originals accept only supported raster MIME types.
+- `COPY` originals accept supported raster MIME types or `image/svg+xml`.
 - The initial frontend displays raster previews.
 - Original SVG is download-only.
 - The frontend never injects raw SVG markup.
@@ -242,7 +272,7 @@ extension and user-provided MIME type are advisory only.
 
 Validation should include:
 
-- accepted MIME allowlist;
+- accepted MIME allowlist matching the domain/application role policy;
 - decoded image dimensions;
 - decoded pixel count;
 - file size;

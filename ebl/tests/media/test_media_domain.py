@@ -142,7 +142,7 @@ def test_media_id_create_returns_unique_uuid() -> None:
         ("sha256", "a" * 63),
     ],
 )
-def test_invalid_checksum_is_invalid(algorithm, value) -> None:
+def test_invalid_checksum_is_invalid(algorithm: str, value: str) -> None:
     with pytest.raises(ValueError):
         MediaChecksum(algorithm=algorithm, value=value)
 
@@ -156,7 +156,7 @@ def test_invalid_checksum_is_invalid(algorithm, value) -> None:
     ],
 )
 def test_invalid_representation_dimensions_or_file_size_are_invalid(
-    width, height, file_size
+    width: int, height: int, file_size: int
 ) -> None:
     with pytest.raises(ValueError):
         MediaRepresentation("image/jpeg", width, height, file_size)

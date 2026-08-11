@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from io import BytesIO
-from typing import Any, cast
+from typing import cast
 
 import pytest
 
@@ -14,13 +15,14 @@ from ebl.media.application import (
     StoredRepresentationNotFoundError,
     ThumbnailRepresentationWriteRequest,
 )
-from ebl.media.domain import MediaAssociation, MediaId, MediaType, ThumbnailSize
+from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType, ThumbnailSize
 from ebl.tests.media.factories import (
     association,
     contract_media,
     media_id,
     original_representation,
     photo_media,
+    stored_media_sequence,
 )
 from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
@@ -32,15 +34,15 @@ PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 K1 = MuseumNumber.of("K.1")
 
 
-def write_content():
+def write_content() -> BytesIO:
     return BytesIO(b"media-bytes")
 
 
-def photo_with_small_thumbnail():
+def photo_with_small_thumbnail() -> Media:
     return photo_media(media_id_=PHOTO_ID, associations=(association(fragment_id=K1),))
 
 
-def make_request(request_type: Any, **kwargs: Any) -> Any:
+def make_request(request_type: Callable[..., object], **kwargs: object) -> object:
     return request_type(**kwargs)
 
 
@@ -147,7 +149,9 @@ def test_missing_thumbnail_error_names_thumbnail_size() -> None:
 def test_dry_run_import_request_carries_no_write_intent() -> None:
     request = ImportRequest(ImportMode.DRY_RUN, "legacy-gridfs", (K1,))
     repository = InMemoryMediaRepository(
-        (contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),)),)
+        stored_media_sequence(
+            contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+        )
     )
     store = InMemoryRepresentationStore()
 

@@ -7,7 +7,7 @@ from ebl.media.domain import Media, MediaId, MediaRepresentation, ThumbnailSize
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def _not_blank(_, attribute: attr.Attribute, value: str) -> None:
+def _not_blank(_instance: object, attribute: attr.Attribute, value: str) -> None:
     if not value.strip():
         raise ValueError(f"Attribute {attribute.name} cannot be blank.")
 
@@ -19,11 +19,20 @@ def _tuple_of(
 
 
 def _validate_thumbnail_handles(
-    _, __, value: Sequence["StoredThumbnailRepresentation"]
+    _instance: object,
+    _attribute: attr.Attribute,
+    value: Sequence["StoredThumbnailRepresentation"],
 ) -> None:
     sizes = [thumbnail.size for thumbnail in value]
     if len(sizes) != len(set(sizes)):
         raise ValueError("Stored media cannot contain duplicate thumbnail sizes.")
+
+
+def _validate_unique_handles(value: Sequence["StoredRepresentationHandle"]) -> None:
+    if len(value) != len(set(value)):
+        raise ValueError(
+            "Stored media cannot contain duplicate representation handles."
+        )
 
 
 class ImportMode(Enum):
@@ -80,6 +89,9 @@ class StoredMediaRepresentations:
             handles.append(self.display)
         handles.extend(thumbnail.handle for thumbnail in self.thumbnails)
         return tuple(handles)
+
+    def __attrs_post_init__(self) -> None:
+        _validate_unique_handles(self.handles)
 
     def thumbnail(self, size: ThumbnailSize) -> Optional[StoredRepresentationHandle]:
         return next(

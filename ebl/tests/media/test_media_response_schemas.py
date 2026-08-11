@@ -1,8 +1,8 @@
-from typing import Any, Dict, List, cast
+from typing import Sequence, cast
 
 from ebl.media.application.media_dtos import FragmentMediaResponseDto
 from ebl.media.application.media_schemas import FragmentMediaResponseDtoSchema
-from ebl.media.domain import MediaRepresentations, MediaType, ThumbnailSize
+from ebl.media.domain import Media, MediaRepresentations, MediaType, ThumbnailSize
 from ebl.tests.media.factories import (
     DEFAULT_COPY_MEDIA_ID,
     DEFAULT_MEDIA_ID,
@@ -20,17 +20,25 @@ from ebl.tests.media.factories import (
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def dump_response(fragment_id, media) -> Dict[str, Any]:
+def dump_response(
+    fragment_id: MuseumNumber, media: Sequence[Media]
+) -> dict[str, object]:
     return cast(
-        Dict[str, Any],
+        dict[str, object],
         FragmentMediaResponseDtoSchema().dump(
             FragmentMediaResponseDto.of(fragment_id, media)
         ),
     )
 
 
-def dump_media(fragment_id, media) -> List[Dict[str, Any]]:
-    return cast(List[Dict[str, Any]], dump_response(fragment_id, media)["media"])
+def dump_media(
+    fragment_id: MuseumNumber, media: Sequence[Media]
+) -> list[dict[str, object]]:
+    return cast(list[dict[str, object]], dump_response(fragment_id, media)["media"])
+
+
+def mapped(value: object) -> dict[str, object]:
+    return cast(dict[str, object], value)
 
 
 def test_fragment_media_response_serializes_fragment_context() -> None:
@@ -87,7 +95,7 @@ def test_fragment_media_response_serializes_display_representation() -> None:
 
     [result] = dump_media(fragment_id, (item,))
 
-    assert result["representations"]["display"] == {
+    assert mapped(result["representations"])["display"] == {
         "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/display",
         "mimeType": "image/webp",
         "width": 2560,
@@ -101,10 +109,12 @@ def test_fragment_media_response_encodes_future_media_urls() -> None:
 
     [result] = dump_media(fragment_id, (item,))
 
-    assert result["representations"]["original"]["url"] == (
+    representations = mapped(result["representations"])
+    assert mapped(representations["original"])["url"] == (
         f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/file"
     )
-    assert result["representations"]["thumbnails"]["small"]["url"] == (
+    thumbnails = mapped(representations["thumbnails"])
+    assert mapped(thumbnails["small"])["url"] == (
         f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/thumbnail/small"
     )
 
@@ -117,7 +127,7 @@ def test_fragment_media_response_omits_optional_empty_fields() -> None:
     assert "caption" not in result
     assert "attribution" not in result
     assert "references" not in result
-    assert "display" not in result["representations"]
+    assert "display" not in mapped(result["representations"])
 
 
 def test_fragment_media_response_excludes_internal_fields() -> None:
@@ -126,8 +136,9 @@ def test_fragment_media_response_excludes_internal_fields() -> None:
     [result] = dump_media(fragment_id, (photo_media(),))
 
     assert "originalFilename" not in result
-    assert "checksum" not in result["representations"]["original"]
-    assert "fileSize" not in result["representations"]["original"]
+    original = mapped(mapped(result["representations"])["original"])
+    assert "checksum" not in original
+    assert "fileSize" not in original
     assert "importSource" not in result
     assert "projects" not in result
 
@@ -146,7 +157,7 @@ def test_fragment_media_response_serializes_multiple_thumbnail_sizes() -> None:
 
     [result] = dump_media(fragment_id, (item,))
 
-    thumbnails = result["representations"]["thumbnails"]
+    thumbnails = mapped(mapped(result["representations"])["thumbnails"])
 
     assert set(thumbnails) == {"small", "medium", "large"}
     assert thumbnails["small"] == {
@@ -183,5 +194,6 @@ def test_fragment_media_response_supports_svg_original_with_raster_display() -> 
 
     assert result["id"] == DEFAULT_COPY_MEDIA_ID
     assert result["type"] == MediaType.COPY.name
-    assert result["representations"]["original"]["mimeType"] == "image/svg+xml"
-    assert result["representations"]["display"]["mimeType"] == "image/jpeg"
+    representations = mapped(result["representations"])
+    assert mapped(representations["original"])["mimeType"] == "image/svg+xml"
+    assert mapped(representations["display"])["mimeType"] == "image/jpeg"

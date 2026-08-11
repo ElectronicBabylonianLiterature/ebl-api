@@ -19,7 +19,9 @@ class MediaRepresentationDto:
     height: int
 
     @classmethod
-    def of(cls, url: str, representation: MediaRepresentation):
+    def of(
+        cls, url: str, representation: MediaRepresentation
+    ) -> "MediaRepresentationDto":
         return cls(
             url=url,
             mime_type=representation.mime_type,
@@ -52,7 +54,7 @@ class FragmentMediaItemDto:
     references: Sequence[MediaReferenceDto] = ()
 
     @classmethod
-    def of(cls, fragment_id: MuseumNumber, media: Media):
+    def of(cls, fragment_id: MuseumNumber, media: Media) -> "FragmentMediaItemDto":
         association = media.association_for(fragment_id)
         display_representation = media.representations.display
         return cls(
@@ -95,5 +97,7 @@ class FragmentMediaResponseDto:
     media: Sequence[FragmentMediaItemDto]
 
     @classmethod
-    def of(cls, fragment_id: MuseumNumber, media: Sequence[Media]):
+    def of(
+        cls, fragment_id: MuseumNumber, media: Sequence[Media]
+    ) -> "FragmentMediaResponseDto":
         return cls(tuple(FragmentMediaItemDto.of(fragment_id, item) for item in media))

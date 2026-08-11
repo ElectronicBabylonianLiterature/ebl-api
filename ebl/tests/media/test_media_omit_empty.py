@@ -1,4 +1,4 @@
-from typing import Any, Dict, cast
+from typing import cast
 
 import pytest
 from marshmallow import Schema, fields
@@ -8,7 +8,7 @@ from ebl.media.application.media_schemas import (
     FragmentMediaItemDtoSchema,
     OmitEmptyMixin,
 )
-from ebl.media.domain import MediaAssociation, MediaId, MediaType
+from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType
 from ebl.tests.media.factories import contract_media
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -16,9 +16,9 @@ K1 = MuseumNumber.of("K.1")
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 
 
-def dump_item(media) -> Dict[str, Any]:
+def dump_item(media: Media) -> dict[str, object]:
     return cast(
-        Dict[str, Any],
+        dict[str, object],
         FragmentMediaItemDtoSchema().dump(FragmentMediaItemDto.of(K1, media)),
     )
 
@@ -50,7 +50,7 @@ class OmitEmptyProbeSchema(OmitEmptyMixin, Schema):
     ],
 )
 def test_omit_empty_only_drops_none_and_empty_collections(
-    field_name, value, is_omitted
+    field_name: str, value: object, is_omitted: bool
 ) -> None:
     result = OmitEmptyProbeSchema().dump({field_name: value})
 
@@ -81,4 +81,4 @@ def test_absent_optional_media_metadata_is_omitted() -> None:
     assert "caption" not in result
     assert "attribution" not in result
     assert "references" not in result
-    assert "display" not in result["representations"]
+    assert "display" not in cast(dict[str, object], result["representations"])

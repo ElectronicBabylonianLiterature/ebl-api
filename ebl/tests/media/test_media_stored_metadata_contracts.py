@@ -79,6 +79,47 @@ def test_stored_state_rejects_duplicate_thumbnail_sizes() -> None:
         )
 
 
+def test_stored_state_rejects_original_display_handle_reuse() -> None:
+    handle = StoredRepresentationHandle("same")
+
+    with pytest.raises(ValueError, match="duplicate representation handles"):
+        StoredMediaRepresentations(handle, display=handle)
+
+
+def test_stored_state_rejects_original_thumbnail_handle_reuse() -> None:
+    handle = StoredRepresentationHandle("same")
+
+    with pytest.raises(ValueError, match="duplicate representation handles"):
+        StoredMediaRepresentations(
+            handle,
+            (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle),),
+        )
+
+
+def test_stored_state_rejects_display_thumbnail_handle_reuse() -> None:
+    handle = StoredRepresentationHandle("same")
+
+    with pytest.raises(ValueError, match="duplicate representation handles"):
+        StoredMediaRepresentations(
+            StoredRepresentationHandle("original"),
+            (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle),),
+            display=handle,
+        )
+
+
+def test_stored_state_rejects_small_medium_handle_reuse() -> None:
+    handle = StoredRepresentationHandle("same")
+
+    with pytest.raises(ValueError, match="duplicate representation handles"):
+        StoredMediaRepresentations(
+            StoredRepresentationHandle("original"),
+            (
+                StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle),
+                StoredThumbnailRepresentation(ThumbnailSize.MEDIUM, handle),
+            ),
+        )
+
+
 def test_stored_state_is_immutable() -> None:
     field = "display"
 

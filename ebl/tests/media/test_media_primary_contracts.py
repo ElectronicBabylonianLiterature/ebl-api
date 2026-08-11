@@ -6,8 +6,8 @@ from ebl.media.application import (
     primary_media_for,
     primary_photo_for,
 )
-from ebl.media.domain import MediaAssociation, MediaId, MediaType
-from ebl.tests.media.factories import contract_media
+from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType
+from ebl.tests.media.factories import contract_media, stored_media_sequence
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 from ebl.tests.media.in_memory_media_service import InMemoryMediaService
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -19,13 +19,13 @@ K1 = MuseumNumber.of("K.1")
 SM2 = MuseumNumber.of("Sm.2")
 
 
-def photo(media_id: MediaId, sort_order: int, is_primary: bool):
+def photo(media_id: MediaId, sort_order: int, is_primary: bool) -> Media:
     return contract_media(
         media_id, MediaType.PHOTO, (MediaAssociation(K1, sort_order, is_primary),)
     )
 
 
-def copy(media_id: MediaId, sort_order: int, is_primary: bool):
+def copy(media_id: MediaId, sort_order: int, is_primary: bool) -> Media:
     return contract_media(
         media_id, MediaType.COPY, (MediaAssociation(K1, sort_order, is_primary),)
     )
@@ -87,7 +87,7 @@ def test_selection_rejects_media_from_another_fragment() -> None:
 
 def test_service_owns_the_single_primary_per_fragment_invariant() -> None:
     repository = InMemoryMediaRepository(
-        (photo(PHOTO_ID, 0, True), photo(SECOND_PHOTO_ID, 1, True))
+        stored_media_sequence(photo(PHOTO_ID, 0, True), photo(SECOND_PHOTO_ID, 1, True))
     )
     service = InMemoryMediaService(repository)
 
@@ -105,7 +105,7 @@ def test_service_primary_transition_only_affects_the_target_fragment() -> None:
         MediaType.PHOTO,
         (MediaAssociation(K1, 0, False), MediaAssociation(SM2, 0, True)),
     )
-    repository = InMemoryMediaRepository((shared,))
+    repository = InMemoryMediaRepository(stored_media_sequence(shared))
     service = InMemoryMediaService(repository)
 
     service.set_primary_media(K1, PHOTO_ID)
@@ -117,7 +117,9 @@ def test_service_primary_transition_only_affects_the_target_fragment() -> None:
 
 
 def test_service_rejects_promoting_media_outside_the_fragment() -> None:
-    repository = InMemoryMediaRepository((photo(PHOTO_ID, 0, True),))
+    repository = InMemoryMediaRepository(
+        stored_media_sequence(photo(PHOTO_ID, 0, True))
+    )
     service = InMemoryMediaService(repository)
 
     with pytest.raises(MediaNotFoundError):
@@ -127,7 +129,9 @@ def test_service_rejects_promoting_media_outside_the_fragment() -> None:
 def test_repository_primary_reads_match_the_shared_selection_policy() -> None:
     primary_copy = copy(COPY_ID, 0, True)
     primary_photo = photo(PHOTO_ID, 1, True)
-    repository = InMemoryMediaRepository((primary_copy, primary_photo))
+    repository = InMemoryMediaRepository(
+        stored_media_sequence(primary_copy, primary_photo)
+    )
 
     assert repository.find_primary_media(K1) == primary_photo
     assert repository.find_primary_photo(K1) == primary_photo

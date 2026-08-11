@@ -1,6 +1,8 @@
+from collections.abc import Callable
+
 import pytest
 
-from ebl.media.domain import MediaRepresentations, ThumbnailSize
+from ebl.media.domain import Media, MediaRepresentations, ThumbnailSize
 from ebl.tests.media.factories import (
     copy_media,
     display_representation,
@@ -25,7 +27,7 @@ UNSUPPORTED_PREVIEW_MIME_TYPES = (
 
 
 @pytest.mark.parametrize("mime_type", SUPPORTED_RASTER_MIME_TYPES)
-def test_supported_raster_originals_are_valid_for_photo(mime_type) -> None:
+def test_supported_raster_originals_are_valid_for_photo(mime_type: str) -> None:
     result = photo_media(
         media_representations=representations(original_mime_type=mime_type)
     )
@@ -34,7 +36,7 @@ def test_supported_raster_originals_are_valid_for_photo(mime_type) -> None:
 
 
 @pytest.mark.parametrize("mime_type", SUPPORTED_RASTER_MIME_TYPES)
-def test_supported_raster_originals_are_valid_for_copy(mime_type) -> None:
+def test_supported_raster_originals_are_valid_for_copy(mime_type: str) -> None:
     result = copy_media(
         media_representations=representations(original_mime_type=mime_type)
     )
@@ -53,13 +55,13 @@ def test_svg_original_is_valid_for_copy() -> None:
 
 
 @pytest.mark.parametrize("mime_type", UNSUPPORTED_ORIGINAL_MIME_TYPES)
-def test_unsupported_original_mime_is_rejected_for_photo(mime_type) -> None:
+def test_unsupported_original_mime_is_rejected_for_photo(mime_type: str) -> None:
     with pytest.raises(ValueError, match="MIME types"):
         photo_media(media_representations=representations(original_mime_type=mime_type))
 
 
 @pytest.mark.parametrize("mime_type", ("text/html", "application/pdf", "audio/mpeg"))
-def test_unsupported_original_mime_is_rejected_for_copy(mime_type) -> None:
+def test_unsupported_original_mime_is_rejected_for_copy(mime_type: str) -> None:
     with pytest.raises(ValueError, match="MIME types"):
         copy_media(media_representations=representations(original_mime_type=mime_type))
 
@@ -67,7 +69,7 @@ def test_unsupported_original_mime_is_rejected_for_copy(mime_type) -> None:
 @pytest.mark.parametrize("media_factory", (photo_media, copy_media))
 @pytest.mark.parametrize("mime_type", UNSUPPORTED_PREVIEW_MIME_TYPES)
 def test_unsupported_display_mime_is_rejected_for_preview_roles(
-    media_factory, mime_type
+    media_factory: Callable[..., Media], mime_type: str
 ) -> None:
     with pytest.raises(ValueError, match="MIME types"):
         media_factory(
@@ -78,7 +80,7 @@ def test_unsupported_display_mime_is_rejected_for_preview_roles(
 @pytest.mark.parametrize("media_factory", (photo_media, copy_media))
 @pytest.mark.parametrize("mime_type", UNSUPPORTED_PREVIEW_MIME_TYPES)
 def test_unsupported_thumbnail_mime_is_rejected_for_preview_roles(
-    media_factory, mime_type
+    media_factory: Callable[..., Media], mime_type: str
 ) -> None:
     with pytest.raises(ValueError, match="MIME types"):
         media_factory(

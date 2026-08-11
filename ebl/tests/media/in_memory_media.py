@@ -12,10 +12,8 @@ from ebl.media.application import (
     OriginalRepresentationWriteRequest,
     RepresentationHandle,
     StoredMedia,
-    StoredMediaRepresentations,
     StoredRepresentationHandle,
     StoredRepresentationNotFoundError,
-    StoredThumbnailRepresentation,
     ThumbnailRepresentationWriteRequest,
     fragment_media_in_order,
     primary_media_for,
@@ -35,11 +33,10 @@ class StoredRepresentationRecord:
 
 
 class InMemoryMediaRepository(MediaRepository):
-    def __init__(self, media: Sequence[Media | StoredMedia] = ()) -> None:
+    def __init__(self, media: Sequence[StoredMedia] = ()) -> None:
         self.fail_next_replace = False
         self._media: Dict[MediaId, StoredMedia] = {
-            stored.media.id: stored
-            for stored in (_stored_media_of(item) for item in media)
+            stored_media.media.id: stored_media for stored_media in media
         }
 
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
@@ -188,30 +185,4 @@ def _handle(record: StoredRepresentationRecord) -> RepresentationHandle:
         content=BytesIO(record.content),
         content_type=record.representation.mime_type,
         length=len(record.content),
-    )
-
-
-def _stored_media_of(media: Media | StoredMedia) -> StoredMedia:
-    return (
-        media
-        if isinstance(media, StoredMedia)
-        else StoredMedia(media, _stored_representations_for(media))
-    )
-
-
-def _stored_representations_for(media: Media) -> StoredMediaRepresentations:
-    return StoredMediaRepresentations(
-        StoredRepresentationHandle(f"{media.id}:original"),
-        tuple(
-            StoredThumbnailRepresentation(
-                size,
-                StoredRepresentationHandle(f"{media.id}:thumbnail:{size.value}"),
-            )
-            for size, _ in media.representations.thumbnails
-        ),
-        display=(
-            StoredRepresentationHandle(f"{media.id}:display")
-            if media.representations.display is not None
-            else None
-        ),
     )

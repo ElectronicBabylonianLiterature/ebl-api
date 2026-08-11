@@ -1,4 +1,5 @@
-from typing import Sequence
+from collections.abc import Callable
+from typing import Sequence, Union, cast
 
 import attr
 
@@ -156,6 +157,20 @@ def stored_media(
     return StoredMedia(media_, stored_representations(media_, handle_prefix))
 
 
+def stored_media_sequence(*media_items: Media) -> tuple[StoredMedia, ...]:
+    return tuple(
+        stored_media(media_item, f"stored-{index}")
+        for index, media_item in enumerate(media_items)
+    )
+
+
+def _evolve_options(
+    options: MediaFactoryOptions, **kwargs: object
+) -> MediaFactoryOptions:
+    evolve_options = cast(Callable[..., object], attr.evolve)
+    return cast(MediaFactoryOptions, evolve_options(options, **kwargs))
+
+
 def _media_id_of(value: str | MediaId) -> MediaId:
     return value if isinstance(value, MediaId) else MediaId(value)
 
@@ -195,17 +210,20 @@ def contract_media(
     )
 
 
-def photo_media(**kwargs) -> Media:
-    return media(attr.evolve(MediaFactoryOptions(media_type=MediaType.PHOTO), **kwargs))
-
-
-def copy_media(**kwargs) -> Media:
+def photo_media(**kwargs: object) -> Media:
     return media(
-        attr.evolve(
+        _evolve_options(MediaFactoryOptions(media_type=MediaType.PHOTO), **kwargs)
+    )
+
+
+def copy_media(**kwargs: object) -> Media:
+    media_id_ = cast(
+        Union[str, MediaId], kwargs.pop("media_id_", DEFAULT_COPY_MEDIA_ID)
+    )
+    return media(
+        _evolve_options(
             MediaFactoryOptions(media_type=MediaType.COPY),
-            **{
-                "media_id_": kwargs.pop("media_id_", DEFAULT_COPY_MEDIA_ID),
-                **kwargs,
-            },
+            media_id_=media_id_,
+            **kwargs,
         )
     )

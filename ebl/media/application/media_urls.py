@@ -4,7 +4,7 @@ from ebl.media.domain import MediaId, ThumbnailSize
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def _path_segment(value) -> str:
+def _path_segment(value: object) -> str:
     return quote(str(value), safe="")
 
 

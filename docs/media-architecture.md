@@ -74,9 +74,11 @@ The pure domain layer owns only persistence-independent concepts:
 Domain validation is pure. It may validate UUID shape, checksum algorithm and
 value, positive dimensions, positive file size, valid museum number shape,
 presence of at least one association, no duplicate fragment associations,
-non-negative sort order, deterministic association ordering, and SVG only for
-`COPY`. It must not query fragment existence or import PyMongo, GridFS, Falcon,
-application context, or environment configuration.
+non-negative sort order, deterministic association ordering, canonical MIME
+shape, supported raster preview MIME types, `PHOTO` originals as supported
+raster image MIME types, and SVG only as `COPY` originals. It must not query
+fragment existence or import PyMongo, GridFS, Falcon, application context, or
+environment configuration.
 
 ## Future persistence proposal
 
@@ -110,7 +112,7 @@ Proposed document shape, for documentation only:
   "attribution": null,
   "representations": {
     "original": {
-      "gridFsFileId": "...",
+      "storedHandle": "...",
       "mimeType": "image/jpeg",
       "checksum": {
         "algorithm": "sha256",
@@ -121,7 +123,7 @@ Proposed document shape, for documentation only:
       "fileSize": 5242880
     },
     "display": {
-      "gridFsFileId": "...",
+      "storedHandle": "...",
       "mimeType": "image/jpeg",
       "width": 2560,
       "height": 1920,
@@ -129,7 +131,7 @@ Proposed document shape, for documentation only:
     },
     "thumbnails": {
       "small": {
-        "gridFsFileId": "...",
+        "storedHandle": "...",
         "mimeType": "image/jpeg",
         "width": 240,
         "height": 180,
@@ -147,9 +149,12 @@ Proposed document shape, for documentation only:
 }
 ```
 
-Infrastructure-specific fields such as `gridFsFileId` and `gridFsBucket` belong
-outside pure domain objects where possible. Domain representations should only
-need MIME type, dimensions, file size, and checksum metadata.
+`storedHandle` is the serialized form of the application-layer
+`StoredRepresentationHandle`. It is server-internal metadata, not a domain field
+or API field. Infrastructure-specific values such as GridFS ObjectIds, bucket
+names, S3 keys, filesystem paths, or provider version IDs must remain hidden
+behind that opaque handle contract. Domain representations only need MIME type,
+dimensions, file size, and checksum metadata.
 
 Future indexes, not created in this PR:
 
@@ -172,7 +177,8 @@ code. No index should be added before an implemented query requires it.
 
 Application contracts may define these responsibilities:
 
-- `MediaRepository`: persistence-agnostic metadata reads and future writes.
+- `MediaRepository`: persistence-agnostic domain reads plus handle-aware stored
+  metadata create, replace, delete, and stored-state reads.
 - `MediaRepresentationStore`: future binary representation retrieval and storage
   boundaries without GridFS types in the domain.
 - `MediaService`: fragment-context orchestration and batch media reads for
@@ -181,6 +187,18 @@ Application contracts may define these responsibilities:
 - `MediaBackfill`: future non-destructive legacy backfill reporting.
 
 No production implementation is introduced by the architecture foundation.
+
+Stored media metadata is represented by application-layer `StoredMedia`, which
+pairs pure `Media` domain metadata with current `StoredMediaRepresentations`.
+The stored representation state contains one required original
+`StoredRepresentationHandle`, an optional display handle, and typed thumbnail
+handles keyed by `ThumbnailSize`. Repository create receives complete
+`StoredMedia`. Repository replace atomically switches from previous stored state
+to new stored state from the application contract's perspective and returns the
+previous `StoredMedia` so the caller can target superseded handles for cleanup.
+Domain-oriented read methods continue to return `Media`; stored-state read
+methods allow future binary routes to resolve current handles without exposing
+them on the wire.
 
 ## Future routes
 
@@ -198,6 +216,11 @@ Every future request must verify:
 1. The user may read the fragment.
 2. The media is associated with that fragment.
 3. The requested representation exists.
+
+After authorization, binary routes resolve the current stored version by loading
+`StoredMedia` for the fragment/media pair, selecting the requested original,
+display, or typed thumbnail handle from `StoredMediaRepresentations`, and then
+opening that handle through `MediaRepresentationStore.open_representation`.
 
 Fragment-scoped routes reuse existing fragment authorization, avoid ambiguous
 media-only authorization, support media shared by several fragments, reduce IDOR
@@ -289,8 +312,8 @@ Rules:
 The fragment-context response flattens the matching association into `sortOrder`
 and `isPrimary`.
 
-The API must not expose GridFS ObjectIds, checksums, import source, internal
-filenames, storage buckets, or authorization scopes.
+The API must not expose stored handles, GridFS ObjectIds, checksums, import
+source, internal filenames, storage buckets, or authorization scopes.
 
 ## Future query-performance contract
 
@@ -348,6 +371,10 @@ Future SVG behavior is mandatory:
 - A safe XML parser is required.
 - Raster display previews are generated when conversion succeeds.
 - Raster preview thumbnails are generated.
+- Display and thumbnail metadata accepts only supported raster MIME types:
+  `image/jpeg`, `image/png`, and `image/webp`.
+- `PHOTO` originals accept only supported raster MIME types.
+- `COPY` originals accept supported raster MIME types or `image/svg+xml`.
 - The initial frontend displays raster previews.
 - Original SVG is download-only.
 - The frontend never injects raw SVG markup.

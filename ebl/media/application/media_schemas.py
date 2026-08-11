@@ -10,7 +10,7 @@ class OmitEmptyMixin:
     preserve_empty_collections: FrozenSet[str] = frozenset()
 
     @post_dump
-    def omit_empty(self, data, **kwargs):
+    def omit_empty(self, data: dict[str, object], **_: object) -> dict[str, object]:
         return {
             key: value
             for key, value in data.items()

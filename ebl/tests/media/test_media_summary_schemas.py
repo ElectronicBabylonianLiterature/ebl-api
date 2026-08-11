@@ -1,8 +1,8 @@
-from typing import Any, Dict, cast
+from typing import Sequence, cast
 
 from ebl.media.application.media_schemas import FragmentMediaSummaryDtoSchema
 from ebl.media.application.media_summary_dtos import FragmentMediaSummaryDto
-from ebl.media.domain import ThumbnailSize
+from ebl.media.domain import Media, ThumbnailSize
 from ebl.tests.media.factories import (
     DEFAULT_COPY_MEDIA_ID,
     DEFAULT_MEDIA_ID,
@@ -19,13 +19,17 @@ FRAGMENT_ID = MuseumNumber.of("K.1")
 LEGACY_THUMBNAIL_PATH = "/fragments/K.1/thumbnail/small"
 
 
-def dump(media) -> Dict[str, Any]:
+def dump(media: Sequence[Media]) -> dict[str, object]:
     return cast(
-        Dict[str, Any],
+        dict[str, object],
         FragmentMediaSummaryDtoSchema().dump(
             FragmentMediaSummaryDto.of(FRAGMENT_ID, media)
         ),
     )
+
+
+def mapped(value: object) -> dict[str, object]:
+    return cast(dict[str, object], value)
 
 
 def test_media_summary_serializes_primary_photo_and_legacy_fields() -> None:
@@ -59,7 +63,7 @@ def test_media_summary_for_copy_only_fragment_has_no_legacy_photo_flag() -> None
 
     assert result["hasPhoto"] is False
     assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
-    assert result["mediaSummary"]["primary"] == {
+    assert mapped(result["mediaSummary"])["primary"] == {
         "id": DEFAULT_COPY_MEDIA_ID,
         "type": "COPY",
         "thumbnail": {
@@ -76,7 +80,7 @@ def test_media_summary_without_primary_keeps_legacy_thumbnail_path() -> None:
 
     result = dump((photo,))
 
-    assert result["mediaSummary"] == {"count": 1, "types": ["PHOTO"]}
+    assert mapped(result["mediaSummary"]) == {"count": 1, "types": ["PHOTO"]}
     assert result["hasPhoto"] is True
     assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
 
@@ -99,7 +103,7 @@ def test_media_summary_without_small_photo_thumbnail_omits_primary_thumbnail() -
     result = dump((photo,))
 
     assert result["hasPhoto"] is True
-    assert result["mediaSummary"]["primary"] == {
+    assert mapped(result["mediaSummary"])["primary"] == {
         "id": DEFAULT_MEDIA_ID,
         "type": "PHOTO",
     }
@@ -113,7 +117,7 @@ def test_media_summary_never_promotes_medium_thumbnail_to_small() -> None:
         )
     )
 
-    primary = dump((photo,))["mediaSummary"]["primary"]
+    primary = mapped(mapped(dump((photo,))["mediaSummary"])["primary"])
 
     assert "thumbnail" not in primary
 
@@ -125,7 +129,7 @@ def test_media_summary_legacy_thumbnail_path_ignores_primary_selection() -> None
     result = dump((copy, photo))
 
     assert result["hasPhoto"] is True
-    assert result["mediaSummary"]["primary"]["type"] == "COPY"
+    assert mapped(mapped(result["mediaSummary"])["primary"])["type"] == "COPY"
     assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
 
 
@@ -140,6 +144,7 @@ def test_media_summary_selects_first_primary_photo_by_sort_order() -> None:
 
     result = dump((later_photo, earlier_photo))
 
-    assert result["mediaSummary"]["count"] == 2
-    assert result["mediaSummary"]["primary"]["id"] == DEFAULT_MEDIA_ID
+    media_summary = mapped(result["mediaSummary"])
+    assert media_summary["count"] == 2
+    assert mapped(media_summary["primary"])["id"] == DEFAULT_MEDIA_ID
     assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH

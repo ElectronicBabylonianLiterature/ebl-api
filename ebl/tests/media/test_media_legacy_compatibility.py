@@ -1,4 +1,4 @@
-from typing import Any, Dict, cast
+from typing import cast
 
 import attr
 
@@ -23,8 +23,8 @@ def summary(museum_number: MuseumNumber, has_photo: bool) -> FragmentQuerySummar
     )
 
 
-def dump(item: FragmentQuerySummary) -> Dict[str, Any]:
-    return cast(Dict[str, Any], FragmentQuerySummarySchema().dump(item))
+def dump(item: FragmentQuerySummary) -> dict[str, object]:
+    return cast(dict[str, object], FragmentQuerySummarySchema().dump(item))
 
 
 def test_production_summary_keeps_the_raw_legacy_thumbnail_path() -> None:
