@@ -1,7 +1,9 @@
 import pytest
+import re
 
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MAX_CANDIDATES,
+    NON_STRING_QUERY_MESSAGE,
     MongoAfoRegisterRepository,
     candidate_splits,
 )
@@ -27,7 +29,8 @@ def test_candidate_splits_without_split_point():
 
 
 def test_candidate_splits_rejects_non_string():
-    assert candidate_splits(None) == []
+    with pytest.raises(DataError, match=re.escape(NON_STRING_QUERY_MESSAGE)):
+        candidate_splits(None)
 
 
 def test_build_candidate_query_deduplicates_candidates(

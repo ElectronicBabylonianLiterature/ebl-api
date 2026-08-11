@@ -1,6 +1,7 @@
 import falcon
 import pytest
 import json
+import re
 from mockito import when
 
 from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
@@ -13,10 +14,13 @@ from ebl.afo_register.application.afo_register_repository import (
 )
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MAX_CANDIDATES,
+    TOO_MANY_CANDIDATES_MESSAGE,
     AfoRegisterRecordSchema,
     AfoRegisterRecordSuggestionSchema,
 )
 from ebl.afo_register.web.afo_register_records import (
+    count_candidate_splits,
+    validate_candidate_budget,
     validate_texts_and_numbers_query,
     MAX_TEXTS_AND_NUMBERS_QUERIES,
     MAX_QUERY_LENGTH,
@@ -133,17 +137,48 @@ def test_search_by_texts_and_numbers_route_rejects_too_many_words(client) -> Non
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-def test_search_by_texts_and_numbers_route_rejects_too_broad_query(client) -> None:
-    queries = [
+def build_maximal_queries(count: int) -> list:
+    return [
         " ".join([f"text{index}"] + [f"token{position}" for position in range(23)])
-        for index in range(MAX_CANDIDATES // 23 + 1)
+        for index in range(count)
     ]
 
+
+def test_count_candidate_splits_counts_split_points():
+    assert count_candidate_splits(["A B C", "A", ""]) == 2
+
+
+def test_validate_candidate_budget_accepts_the_largest_allowed_batch():
+    queries = build_maximal_queries(MAX_CANDIDATES // 23)
+
+    assert validate_candidate_budget(queries) == queries
+
+
+def test_validate_candidate_budget_rejects_an_over_broad_batch():
+    with pytest.raises(DataError, match=re.escape(TOO_MANY_CANDIDATES_MESSAGE)):
+        validate_candidate_budget(build_maximal_queries(MAX_CANDIDATES // 23 + 1))
+
+
+def test_search_by_texts_and_numbers_route_rejects_too_broad_query(client) -> None:
     get_result = client.simulate_post(
-        "/afo-register/texts-numbers", body=json.dumps(queries)
+        "/afo-register/texts-numbers",
+        body=json.dumps(build_maximal_queries(MAX_CANDIDATES // 23 + 1)),
     )
 
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert get_result.json["description"] == TOO_MANY_CANDIDATES_MESSAGE
+
+
+def test_search_by_texts_and_numbers_route_accepts_the_largest_allowed_batch(
+    client,
+) -> None:
+    get_result = client.simulate_post(
+        "/afo-register/texts-numbers",
+        body=json.dumps(build_maximal_queries(MAX_CANDIDATES // 23)),
+    )
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.json == []
 
 
 def test_search_afo_register_route_not_found_on_value_error(

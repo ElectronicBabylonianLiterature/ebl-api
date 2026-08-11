@@ -1,9 +1,12 @@
-from typing import List
+from typing import List, Sequence
 from falcon import Request, Response
 from ebl.errors import DataError, NotFoundError
 
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MAX_CANDIDATES,
+    NON_STRING_QUERY_MESSAGE,
+    TOO_MANY_CANDIDATES_MESSAGE,
     AfoRegisterRecordSchema,
     AfoRegisterRecordSuggestionSchema,
 )
@@ -15,7 +18,7 @@ MAX_QUERY_TOKENS = 24
 
 def validate_query(query: object) -> str:
     if not isinstance(query, str):
-        raise DataError("Each query must be a string.")
+        raise DataError(NON_STRING_QUERY_MESSAGE)
     if len(query) > MAX_QUERY_LENGTH:
         raise DataError(
             f"Query too long: at most {MAX_QUERY_LENGTH} characters allowed."
@@ -27,6 +30,16 @@ def validate_query(query: object) -> str:
     return query
 
 
+def count_candidate_splits(queries: Sequence[str]) -> int:
+    return sum(max(len(query.split()) - 1, 0) for query in queries)
+
+
+def validate_candidate_budget(queries: List[str]) -> List[str]:
+    if count_candidate_splits(queries) > MAX_CANDIDATES:
+        raise DataError(TOO_MANY_CANDIDATES_MESSAGE)
+    return queries
+
+
 def validate_texts_and_numbers_query(body: object) -> List[str]:
     if not isinstance(body, list):
         raise DataError("Request body must be a list of strings.")
@@ -34,7 +47,7 @@ def validate_texts_and_numbers_query(body: object) -> List[str]:
         raise DataError(
             f"Too many queries: at most {MAX_TEXTS_AND_NUMBERS_QUERIES} allowed."
         )
-    return [validate_query(query) for query in body]
+    return validate_candidate_budget([validate_query(query) for query in body])
 
 
 class AfoRegisterResource:

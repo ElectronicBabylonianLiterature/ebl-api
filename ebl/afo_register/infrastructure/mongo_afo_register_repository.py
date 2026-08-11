@@ -16,6 +16,11 @@ from ebl.common.query.query_collation import make_query_params
 
 COLLECTION = "afo_register"
 MAX_CANDIDATES = 10000
+TOO_MANY_CANDIDATES_MESSAGE = (
+    "The submitted queries expand to more than "
+    f"{MAX_CANDIDATES} text and number combinations."
+)
+NON_STRING_QUERY_MESSAGE = "Each query must be a string."
 
 
 def create_search_query(query):
@@ -41,7 +46,7 @@ def cast_with_sorting(
 
 def candidate_splits(query: object) -> List[Tuple[str, str]]:
     if not isinstance(query, str):
-        return []
+        raise DataError(NON_STRING_QUERY_MESSAGE)
     tokens = query.strip().split()
     return [
         (" ".join(tokens[:index]), " ".join(tokens[index:]))
@@ -110,10 +115,7 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
                 if (text, text_number) in seen:
                     continue
                 if len(candidates) >= MAX_CANDIDATES:
-                    raise DataError(
-                        "Query is too broad: it expands to more than "
-                        f"{MAX_CANDIDATES} text and number combinations."
-                    )
+                    raise DataError(TOO_MANY_CANDIDATES_MESSAGE)
                 seen.add((text, text_number))
                 candidates.append({"text": text, "textNumber": text_number})
         return {"$or": candidates} if candidates else None
