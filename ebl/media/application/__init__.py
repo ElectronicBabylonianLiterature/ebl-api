@@ -1,61 +1,35 @@
-from ebl.media.application.media import (
-    MediaBackfill,
-    MediaImporter,
-    MediaReader,
-    MediaRepository,
-    MediaRepresentationStore,
-    MediaService,
-    MediaWriter,
-)
-from ebl.media.application.media_errors import (
-    MediaAlreadyExistsError,
-    MediaNotFoundError,
-    MediaRepresentationNotFoundError,
-    StoredRepresentationNotFoundError,
-)
-from ebl.media.application.media_requests import (
-    BackfillReport,
-    BackfillRequest,
-    DisplayRepresentationWriteRequest,
-    ImportMode,
-    ImportReport,
-    ImportRequest,
-    OriginalRepresentationWriteRequest,
-    RepresentationHandle,
-    StoredRepresentationHandle,
-    ThumbnailRepresentationWriteRequest,
-)
-from ebl.media.application.media_selection import (
-    fragment_media_in_order,
-    has_photo,
-    primary_media_for,
-    primary_photo_for,
+from ebl.media.application import media as _media
+from ebl.media.application import media_errors as _media_errors
+from ebl.media.application import media_requests as _media_requests
+from ebl.media.application import media_selection as _media_selection
+
+MediaBackfill = _media.MediaBackfill
+MediaImporter = _media.MediaImporter
+MediaReader = _media.MediaReader
+MediaRepository = _media.MediaRepository
+MediaRepresentationStore = _media.MediaRepresentationStore
+MediaService = _media.MediaService
+MediaWriter = _media.MediaWriter
+
+MediaAlreadyExistsError = _media_errors.MediaAlreadyExistsError
+MediaNotFoundError = _media_errors.MediaNotFoundError
+MediaRepresentationNotFoundError = _media_errors.MediaRepresentationNotFoundError
+StoredRepresentationNotFoundError = _media_errors.StoredRepresentationNotFoundError
+
+BackfillReport = _media_requests.BackfillReport
+BackfillRequest = _media_requests.BackfillRequest
+DisplayRepresentationWriteRequest = _media_requests.DisplayRepresentationWriteRequest
+ImportMode = _media_requests.ImportMode
+ImportReport = _media_requests.ImportReport
+ImportRequest = _media_requests.ImportRequest
+OriginalRepresentationWriteRequest = _media_requests.OriginalRepresentationWriteRequest
+RepresentationHandle = _media_requests.RepresentationHandle
+StoredRepresentationHandle = _media_requests.StoredRepresentationHandle
+ThumbnailRepresentationWriteRequest = (
+    _media_requests.ThumbnailRepresentationWriteRequest
 )
 
-__all__ = [
-    "BackfillReport",
-    "BackfillRequest",
-    "DisplayRepresentationWriteRequest",
-    "ImportMode",
-    "ImportReport",
-    "ImportRequest",
-    "MediaAlreadyExistsError",
-    "MediaBackfill",
-    "MediaImporter",
-    "MediaNotFoundError",
-    "MediaReader",
-    "MediaRepository",
-    "MediaRepresentationNotFoundError",
-    "MediaRepresentationStore",
-    "MediaService",
-    "MediaWriter",
-    "OriginalRepresentationWriteRequest",
-    "RepresentationHandle",
-    "StoredRepresentationHandle",
-    "StoredRepresentationNotFoundError",
-    "ThumbnailRepresentationWriteRequest",
-    "fragment_media_in_order",
-    "has_photo",
-    "primary_media_for",
-    "primary_photo_for",
-]
+fragment_media_in_order = _media_selection.fragment_media_in_order
+has_photo = _media_selection.has_photo
+primary_media_for = _media_selection.primary_media_for
+primary_photo_for = _media_selection.primary_photo_for
