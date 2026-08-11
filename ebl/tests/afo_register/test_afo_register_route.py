@@ -12,6 +12,7 @@ from ebl.afo_register.application.afo_register_repository import (
     AfoRegisterRepository,
 )
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MAX_CANDIDATES,
     AfoRegisterRecordSchema,
     AfoRegisterRecordSuggestionSchema,
 )
@@ -19,6 +20,7 @@ from ebl.afo_register.web.afo_register_records import (
     validate_texts_and_numbers_query,
     MAX_TEXTS_AND_NUMBERS_QUERIES,
     MAX_QUERY_LENGTH,
+    MAX_QUERY_TOKENS,
 )
 from ebl.errors import DataError
 
@@ -108,10 +110,37 @@ def test_validate_texts_and_numbers_query_rejects_too_long_query():
         validate_texts_and_numbers_query(["x" * (MAX_QUERY_LENGTH + 1)])
 
 
+def test_validate_texts_and_numbers_query_rejects_query_with_too_many_words():
+    with pytest.raises(DataError):
+        validate_texts_and_numbers_query([" ".join(["x"] * (MAX_QUERY_TOKENS + 1))])
+
+
 def test_search_by_texts_and_numbers_route_rejects_oversized_body(client) -> None:
     get_result = client.simulate_post(
         "/afo-register/texts-numbers",
         body=json.dumps(["x"] * (MAX_TEXTS_AND_NUMBERS_QUERIES + 1)),
+    )
+
+    assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_by_texts_and_numbers_route_rejects_too_many_words(client) -> None:
+    get_result = client.simulate_post(
+        "/afo-register/texts-numbers",
+        body=json.dumps([" ".join(["x"] * (MAX_QUERY_TOKENS + 1))]),
+    )
+
+    assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_by_texts_and_numbers_route_rejects_too_broad_query(client) -> None:
+    queries = [
+        " ".join([f"text{index}"] + [f"token{position}" for position in range(23)])
+        for index in range(MAX_CANDIDATES // 23 + 1)
+    ]
+
+    get_result = client.simulate_post(
+        "/afo-register/texts-numbers", body=json.dumps(queries)
     )
 
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

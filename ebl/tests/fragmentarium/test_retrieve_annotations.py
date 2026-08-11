@@ -101,6 +101,7 @@ def test_context_fallback_to_mongo(monkeypatch, when):
 
     when(retrieve_annotations).create_context().thenRaise(KeyError("DB failed"))
 
+    # Mock MongoDB components
     mock_client = mock()
     mock_db = mock()
     mock_annotations_repo = mock()
@@ -109,6 +110,7 @@ def test_context_fallback_to_mongo(monkeypatch, when):
     when(mock_client).get_database("test_db").thenReturn(mock_db)
     when(mock_annotations_repo).retrieve_all_non_empty().thenReturn([])
 
+    # Mock the class constructors at module level
     when(pymongo).MongoClient("mongodb://test:27017").thenReturn(mock_client)
     when(mongo_anno_module).MongoAnnotationsRepository(mock_db).thenReturn(
         mock_annotations_repo
@@ -120,7 +122,9 @@ def test_context_fallback_to_mongo(monkeypatch, when):
     when(retrieve_annotations).create_annotations(...).thenReturn(None)
     when(retrieve_annotations).write_fragment_numbers(...).thenReturn(None)
 
+    # Should not raise, should use fallback
     retrieve_annotations.main([])
+    # verify
     verify(pymongo).MongoClient("mongodb://test:27017")
     verify(mongo_anno_module).MongoAnnotationsRepository(mock_db)
     verify(gridfs_module).GridFsFileRepository(mock_db, "photos")

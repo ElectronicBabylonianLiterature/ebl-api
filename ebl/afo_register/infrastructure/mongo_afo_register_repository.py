@@ -4,6 +4,7 @@ from pymongo.database import Database
 import pymongo
 from natsort import natsorted
 
+from ebl.errors import DataError
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecord,
@@ -14,6 +15,7 @@ from ebl.common.query.query_collation import make_query_params
 
 
 COLLECTION = "afo_register"
+MAX_CANDIDATES = 10000
 
 
 def create_search_query(query):
@@ -37,7 +39,9 @@ def cast_with_sorting(
     )
 
 
-def candidate_splits(query: str) -> List[Tuple[str, str]]:
+def candidate_splits(query: object) -> List[Tuple[str, str]]:
+    if not isinstance(query, str):
+        return []
     tokens = query.strip().split()
     return [
         (" ".join(tokens[:index]), " ".join(tokens[index:]))
@@ -105,6 +109,11 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
             for text, text_number in candidate_splits(query):
                 if (text, text_number) in seen:
                     continue
+                if len(candidates) >= MAX_CANDIDATES:
+                    raise DataError(
+                        "Query is too broad: it expands to more than "
+                        f"{MAX_CANDIDATES} text and number combinations."
+                    )
                 seen.add((text, text_number))
                 candidates.append({"text": text, "textNumber": text_number})
         return {"$or": candidates} if candidates else None

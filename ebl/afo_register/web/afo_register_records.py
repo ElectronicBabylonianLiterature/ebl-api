@@ -10,6 +10,21 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 
 MAX_TEXTS_AND_NUMBERS_QUERIES = 1000
 MAX_QUERY_LENGTH = 500
+MAX_QUERY_TOKENS = 24
+
+
+def validate_query(query: object) -> str:
+    if not isinstance(query, str):
+        raise DataError("Each query must be a string.")
+    if len(query) > MAX_QUERY_LENGTH:
+        raise DataError(
+            f"Query too long: at most {MAX_QUERY_LENGTH} characters allowed."
+        )
+    if len(query.split()) > MAX_QUERY_TOKENS:
+        raise DataError(
+            f"Query has too many words: at most {MAX_QUERY_TOKENS} allowed."
+        )
+    return query
 
 
 def validate_texts_and_numbers_query(body: object) -> List[str]:
@@ -19,16 +34,7 @@ def validate_texts_and_numbers_query(body: object) -> List[str]:
         raise DataError(
             f"Too many queries: at most {MAX_TEXTS_AND_NUMBERS_QUERIES} allowed."
         )
-    validated_queries: List[str] = []
-    for query in body:
-        if not isinstance(query, str):
-            raise DataError("Each query must be a string.")
-        if len(query) > MAX_QUERY_LENGTH:
-            raise DataError(
-                f"Query too long: at most {MAX_QUERY_LENGTH} characters allowed."
-            )
-        validated_queries.append(query)
-    return validated_queries
+    return [validate_query(query) for query in body]
 
 
 class AfoRegisterResource:
@@ -57,7 +63,8 @@ class AfoRegisterTextsAndNumbersResource:
             )
         except ValueError as error:
             raise NotFoundError(
-                f"No AfO registry entries matching {str(req.media)} found."
+                f"No AfO registry entries matching the {len(query_list)} "
+                "submitted queries found."
             ) from error
         resp.media = AfoRegisterRecordSchema().dump(response, many=True)
 

@@ -138,8 +138,8 @@ core.*
 # Added by ggshield
 .cache_ggshield
 
-# Claude
-.claude
+# Claude Code
+.claude/
 
 # qlty
-.qlty
+.qlty/
