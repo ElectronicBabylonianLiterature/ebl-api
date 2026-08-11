@@ -33,7 +33,7 @@ paths:
           description: Missing `export:bibliography` scope.
     post:
       summary: Create a bibliography entry
-      description: Minimal partner create wrapper around existing bibliography create behavior. Requires `write:bibliography`. Duplicate detection runs before create; likely and possible duplicates return `409 Conflict`. Idempotency, external partner mapping persistence, and citationKey assignment are not implemented yet.
+      description: Create a partner bibliography entry. Requires `write:bibliography`. Duplicate detection runs before create; likely and possible duplicates return `409 Conflict`. The server assigns the canonical eBL bibliography id and citation key when enough citation data is present. A partner-submitted `id` is stored as a trusted alias, not honored as the canonical id. Idempotency and external partner mapping persistence are not implemented yet.
       security:
         - bearerAuth: []
       requestBody:
@@ -59,15 +59,17 @@ paths:
         "403":
           description: Missing `write:bibliography` scope.
         "409":
-          description: Duplicate candidate found; review before creating.
+          description: Duplicate candidate found; review before creating. Also returned when a submitted partner id or generated lookup value collides with an existing id, citation key, or alias.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DuplicateCandidateResponse"
+        "422":
+          description: Unprocessable partner payload, including server-owned fields, control characters in partner ids, or internal CSL schema validation failures.
   /api/v1/bibliography/{idOrCitationKey}:
     get:
       summary: Get one bibliography entry
-      description: Read-only partner endpoint. Currently resolves by eBL bibliography `id`; citation-key lookup is reserved until stored citation keys exist. Requires `export:bibliography`.
+      description: Read-only partner endpoint. Resolves by eBL bibliography id, citation key, or trusted alias. The literal path segment `resolve` is reserved for `/api/v1/bibliography/resolve`; resolve that identifier with `/api/v1/bibliography/resolve?identifier=resolve`. Generated canonical ids are unaffected. Requires `export:bibliography`.
       security:
         - bearerAuth: []
       parameters:
@@ -89,7 +91,7 @@ paths:
           description: Bibliography entry not found.
     post:
       summary: Update a bibliography entry
-      description: Minimal partner update wrapper around existing bibliography update behavior. Requires `write:bibliography`. The path value is treated as an eBL bibliography `id`; citationKey lookup is not active until citation keys are stored. Duplicate detection runs before update while excluding the record itself. Idempotency and external partner mapping persistence are not implemented yet.
+      description: Update a partner bibliography entry. Requires `write:bibliography`. The path value is resolved by eBL bibliography id, citation key, or trusted alias using the same lookup rules as GET. Duplicate detection runs before update while excluding the record itself. Idempotency and external partner mapping persistence are not implemented yet.
       security:
         - bearerAuth: []
       parameters:
@@ -98,7 +100,7 @@ paths:
           required: true
           schema:
             type: string
-          description: eBL bibliography id for update.
+          description: eBL bibliography id, citation key, or trusted alias for update. The literal path segment `resolve` is reserved for `/api/v1/bibliography/resolve`.
       requestBody:
         required: true
         content:
@@ -115,11 +117,41 @@ paths:
         "404":
           description: Bibliography entry not found.
         "409":
-          description: Duplicate candidate found; review before updating.
+          description: Duplicate candidate found; review before updating. Also returned when the identifier is ambiguous.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DuplicateCandidateResponse"
+        "422":
+          description: Unprocessable partner payload, including server-owned fields or internal CSL schema validation failures.
+  /api/v1/bibliography/resolve:
+    get:
+      summary: Resolve a bibliography identifier
+      description: Read-only resolver for eBL bibliography ids, citation keys, or trusted aliases. This static route reserves the literal path segment `resolve`; a literal identifier equal to `resolve` must be resolved with `/api/v1/bibliography/resolve?identifier=resolve`. Generated canonical ids are unaffected. Requires `export:bibliography`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: identifier
+          required: true
+          schema:
+            type: string
+          description: eBL bibliography id, citation key, or trusted alias to resolve.
+      responses:
+        "200":
+          description: Resolved bibliography entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerBibliographyEntry"
+        "400":
+          description: Missing identifier query parameter.
+        "403":
+          description: Missing `export:bibliography` scope.
+        "404":
+          description: Bibliography entry not found.
+        "409":
+          description: Identifier is ambiguous or follows a redirect loop.
   /api/v1/bibliography/duplicate-candidates:
     post:
       summary: Check a proposed bibliography entry for likely duplicates
@@ -189,12 +221,12 @@ components:
     BibliographyEntry:
       type: object
       required:
-        - id
         - type
-      additionalProperties: true
+      additionalProperties: false
       properties:
         id:
           type: string
+          description: Optional partner-provided id. On create, this value is stored as a trusted alias while the server assigns the canonical eBL bibliography id.
         type:
           type: string
         title:

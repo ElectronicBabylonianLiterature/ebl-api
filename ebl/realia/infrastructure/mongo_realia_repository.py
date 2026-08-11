@@ -1,5 +1,5 @@
 import attr
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, List, Sequence, Tuple, cast
 
 from pymongo.database import Database
 
@@ -48,8 +48,17 @@ class MongoRealiaRepository(RealiaRepository):
             raise NotFoundError(f"Realia entry with realiaId '{realia_id}' not found.")
         return self._load_entry(document)
 
+    def find_by_realia_ids(self, realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
+        documents = self._realia_collection.find_many(
+            {"realiaId": {"$in": list(realia_ids)}},
+            projection={"realiaId": True, "type": True},
+        )
+        return cast(
+            List[RealiaEntry], RealiaEntrySchema(many=True).load(list(documents))
+        )
+
     def _load_entry(self, document: dict) -> RealiaEntry:
-        entries = [RealiaEntrySchema().load(document)]
+        entries = [cast(RealiaEntry, RealiaEntrySchema().load(document))]
         self._inject_bibliography(entries)
         return entries[0]
 
@@ -62,7 +71,7 @@ class MongoRealiaRepository(RealiaRepository):
             self._realia_collection.find_many(self._build_search_query(stripped)),
             key=ranker.key,
         )
-        entries = RealiaEntrySchema(many=True).load(documents)
+        entries = cast(List[RealiaEntry], RealiaEntrySchema(many=True).load(documents))
         self._inject_bibliography(entries)
         return entries
 

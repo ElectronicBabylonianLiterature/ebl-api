@@ -47,6 +47,7 @@ def test_update_lemma_annotation(client, fragmentarium, user):
         fragment.update_lemma_annotation(cast_annotation),
         user,
         fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK

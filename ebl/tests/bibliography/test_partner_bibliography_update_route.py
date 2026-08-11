@@ -2,6 +2,7 @@ import json
 
 import falcon
 import pydash
+import pytest
 
 from ebl.tests.bibliography.bibliography_route_test_helpers import (
     client_with_scope,
@@ -22,6 +23,55 @@ def test_partner_bibliography_update(client, saved_entry):
     get_result = client.simulate_get(f"/api/v1/bibliography/{saved_entry['id']}")
 
     assert get_result.json["bibliographyEntry"] == updated_entry
+
+
+def test_partner_bibliography_update_preserves_server_owned_fields(
+    client, bibliography, user
+):
+    stored_entry = BibliographyEntryFactory.build(
+        id="Q30000001",
+        citationKey="storedCitationKey",
+        aliases=[
+            {
+                "value": "partner-old-id",
+                "normalizedValue": "partner-old-id",
+                "type": "partner_id",
+                "source": "partner_request",
+                "status": "redirect",
+            }
+        ],
+    )
+    bibliography.create(stored_entry, user)
+    update_payload = pydash.omit(
+        {**stored_entry, "title": "New Partner Title"},
+        "aliases",
+        "citationKey",
+    )
+
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{stored_entry['id']}", body=json.dumps(update_payload)
+    )
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert bibliography.find(stored_entry["id"]) == {
+        **update_payload,
+        "citationKey": stored_entry["citationKey"],
+        "aliases": stored_entry["aliases"],
+    }
+
+
+@pytest.mark.parametrize(
+    "field", ["aliases", "deprecated", "redirectTo", "citationKey"]
+)
+def test_partner_bibliography_update_rejects_server_owned_fields(
+    field, client, saved_entry
+):
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{saved_entry['id']}",
+        body=json.dumps({**saved_entry, field: [] if field == "aliases" else "value"}),
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_partner_bibliography_update_requires_write_scope(guest_client, saved_entry):

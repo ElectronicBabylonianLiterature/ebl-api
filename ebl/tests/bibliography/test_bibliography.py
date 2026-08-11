@@ -1,10 +1,24 @@
 import pytest
-from mockito import verify
+from mockito import ANY, verify
 
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, Defect, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 
 COLLECTION = "bibliography"
+
+
+def allow_identity_create(bibliography_repository, when, entry):
+    when(bibliography_repository).claim_lookup_values(ANY, [entry["id"]]).thenReturn()
+    when(bibliography_repository).query_by_id(entry["id"]).thenRaise(NotFoundError)
+    when(bibliography_repository).query_by_citation_key(entry["id"]).thenRaise(
+        NotFoundError
+    )
+    when(bibliography_repository).query_by_alias(entry["id"]).thenRaise(NotFoundError)
+
+
+def allow_identity_update(bibliography_repository, when, entry):
+    when(bibliography_repository).claim_lookup_values(ANY, []).thenReturn()
+    when(bibliography_repository).query_by_id(entry["id"]).thenReturn(entry)
 
 
 def test_search_container_short_collection_number(
@@ -66,14 +80,23 @@ def test_search_author_title_year(bibliography, bibliography_repository, when):
     assert [bibliography_entry] == bibliography.search(query)
 
 
-def test_find(bibliography, bibliography_repository, when):
-    bibliography_entry = BibliographyEntryFactory.build()
+def test_search_excludes_deprecated_entries(
+    bibliography, bibliography_repository, when
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo="CANONICAL_ID"
+    )
+    author = canonical_entry["author"][0]["family"]
+    year = canonical_entry["issued"]["date-parts"][0][0]
+    title = canonical_entry["title"]
     (
         when(bibliography_repository)
-        .query_by_id(bibliography_entry["id"])
-        .thenReturn(bibliography_entry)
+        .query_by_author_year_and_title(author, year, title)
+        .thenReturn([deprecated_entry, canonical_entry])
     )
-    assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
+
+    assert bibliography.search(f"{author} {year} {title}") == [canonical_entry]
 
 
 def test_create(
@@ -85,6 +108,9 @@ def test_create(
     create_mongo_bibliography_entry,
 ):
     bibliography_entry = BibliographyEntryFactory.build()
+    created_id = bibliography_entry["id"]
+    allow_identity_create(bibliography_repository, when, bibliography_entry)
+    when(bibliography_repository).commit_lookup_values(ANY, ANY).thenReturn()
     (
         when(changelog)
         .create(
@@ -95,9 +121,25 @@ def test_create(
         )
         .thenReturn()
     )
-    (when(bibliography_repository).create(bibliography_entry).thenReturn())
+    (when(bibliography_repository).create(bibliography_entry).thenReturn(created_id))
 
-    bibliography.create(bibliography_entry, user)
+    assert bibliography.create(bibliography_entry, user) == created_id
+    verify(bibliography_repository).commit_lookup_values(ANY, ANY)
+
+
+def test_create_rejects_mismatched_repository_id(
+    bibliography, bibliography_repository, user, when
+):
+    bibliography_entry = BibliographyEntryFactory.build()
+    allow_identity_create(bibliography_repository, when, bibliography_entry)
+    (
+        when(bibliography_repository)
+        .create(bibliography_entry)
+        .thenReturn("DIFFERENT_ID")
+    )
+
+    with pytest.raises(Defect, match="does not match"):
+        bibliography.create(bibliography_entry, user)
 
 
 def test_create_duplicate(
@@ -109,6 +151,8 @@ def test_create_duplicate(
     create_mongo_bibliography_entry,
 ):
     bibliography_entry = BibliographyEntryFactory.build()
+    allow_identity_create(bibliography_repository, when, bibliography_entry)
+    when(bibliography_repository).release_pending_lookup_values(ANY).thenReturn()
     (
         when(changelog)
         .create(
@@ -122,17 +166,13 @@ def test_create_duplicate(
     (when(bibliography_repository).create(bibliography_entry).thenRaise(DuplicateError))
     with pytest.raises(DuplicateError):
         bibliography.create(bibliography_entry, user)
-
-
-def test_entry_not_found(bibliography, bibliography_repository, when):
-    bibliography_entry = BibliographyEntryFactory.build()
-    (
-        when(bibliography_repository)
-        .query_by_id(bibliography_entry["id"])
-        .thenRaise(NotFoundError)
+    verify(bibliography_repository).release_pending_lookup_values(ANY)
+    verify(changelog, times=0).create(
+        COLLECTION,
+        user.profile,
+        {"_id": bibliography_entry["id"]},
+        create_mongo_bibliography_entry(),
     )
-    with pytest.raises(NotFoundError):
-        bibliography.find(bibliography_entry["id"])
 
 
 def test_update(
@@ -144,11 +184,11 @@ def test_update(
     create_mongo_bibliography_entry,
 ):
     bibliography_entry = BibliographyEntryFactory.build()
-    (
-        when(bibliography_repository)
-        .query_by_id(bibliography_entry["id"])
-        .thenReturn(bibliography_entry)
-    )
+    allow_identity_update(bibliography_repository, when, bibliography_entry)
+    when(bibliography_repository).commit_lookup_values(ANY, ANY).thenReturn()
+    when(bibliography_repository).retire_lookup_values(
+        bibliography_entry["id"], [], ANY
+    ).thenReturn()
     (
         when(changelog)
         .create(
@@ -174,23 +214,23 @@ def test_update_not_found(bibliography_repository, bibliography, user, when):
         bibliography.update(bibliography_entry, user)
 
 
-def test_validate_references(
+def test_canonicalize_references(
     bibliography_repository, bibliography, user, changelog, when
 ):
     reference = ReferenceFactory.build(with_document=True)
 
-    (when(bibliography).find(reference.id).thenReturn(reference))
-    bibliography.validate_references([reference])
+    (when(bibliography).find(reference.id).thenReturn(reference.document))
+    assert bibliography.canonicalize_references([reference]) == (reference,)
 
 
-def test_validate_references_invalid(
+def test_canonicalize_references_invalid(
     bibliography_repository, bibliography, user, changelog, when
 ):
     valid_reference = ReferenceFactory.build(with_document=True)
     first_invalid = ReferenceFactory.build(with_document=True)
     second_invalid = ReferenceFactory.build(with_document=True)
     bibliography.create(valid_reference.document, user)
-    (when(bibliography).find(valid_reference.id).thenReturn(valid_reference))
+    (when(bibliography).find(valid_reference.id).thenReturn(valid_reference.document))
     (when(bibliography).find(first_invalid.id).thenRaise(NotFoundError))
     (when(bibliography).find(second_invalid.id).thenRaise(NotFoundError))
 
@@ -199,7 +239,7 @@ def test_validate_references_invalid(
     )
 
     with pytest.raises(DataError, match=expected_error):
-        bibliography.validate_references(
+        bibliography.canonicalize_references(
             [first_invalid, valid_reference, second_invalid]
         )
 

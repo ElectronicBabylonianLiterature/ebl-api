@@ -1,5 +1,10 @@
+from typing import cast
+
 import attr
-from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
+from ebl.fragmentarium.application.named_entity_schema import (
+    NamedEntitySchema,
+    RealiaEntitySchema,
+)
 import pydash
 import pytest
 from ebl.common.application.schemas import AccessionSchema
@@ -12,7 +17,12 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.fragmentarium.domain.archaeology import ExcavationNumber
+from ebl.fragmentarium.web.dtos import (
+    create_response_dto,
+    parse_excavation_number,
+    parse_museum_number,
+)
 from ebl.tests.factories.fragment import (
     JoinFactory,
     LemmatizedFragmentFactory,
@@ -54,7 +64,9 @@ def expected_dto(lemmatized_fragment, has_photo):
             "cdliImages": lemmatized_fragment.cdli_images,
             "acquisition": AcquisitionSchema().dump(lemmatized_fragment.acquisition),
             "description": lemmatized_fragment.description,
-            "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
+            "joins": cast(dict, JoinsSchema().dump(lemmatized_fragment.joins))[
+                "fragments"
+            ],
             "length": attr.asdict(
                 lemmatized_fragment.length, filter=lambda _, value: value is not None
             ),
@@ -135,13 +147,15 @@ def expected_dto(lemmatized_fragment, has_photo):
             "namedEntities": NamedEntitySchema().dump(
                 lemmatized_fragment.named_entities, many=True
             ),
+            "realia": RealiaEntitySchema().dump(lemmatized_fragment.realia, many=True),
+            "realiaInfo": [],
         },
         pydash.is_none,
     )
 
 
 def test_create_response_dto(user, lemmatized_fragment, expected_dto, has_photo):
-    assert create_response_dto(lemmatized_fragment, user, has_photo) == expected_dto
+    assert create_response_dto(lemmatized_fragment, user, has_photo, []) == expected_dto
 
 
 def test_create_fragment_info_dto():
@@ -172,3 +186,13 @@ def test_parse_museum_number():
 def test_parse_invalid_museum_number():
     with pytest.raises(DataError):
         parse_museum_number("invalid")
+
+
+def test_parse_excavation_number():
+    number = ExcavationNumber("A", "B", "C")
+    assert parse_excavation_number(str(number)) == number
+
+
+def test_parse_invalid_excavation_number():
+    with pytest.raises(DataError):
+        parse_excavation_number("invalid")
