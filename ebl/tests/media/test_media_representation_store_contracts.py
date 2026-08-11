@@ -10,6 +10,8 @@ from ebl.media.application import (
     ImportRequest,
     MediaRepresentationNotFoundError,
     OriginalRepresentationWriteRequest,
+    StoredRepresentationHandle,
+    StoredRepresentationNotFoundError,
     ThumbnailRepresentationWriteRequest,
 )
 from ebl.media.domain import MediaAssociation, MediaId, MediaType, ThumbnailSize
@@ -96,46 +98,50 @@ def test_representation_store_writes_accept_operation_specific_requests() -> Non
     )
     store = InMemoryRepresentationStore()
 
-    store.write_original(original_request)
-    store.write_display(display_request)
-    store.write_thumbnail(thumbnail_request)
+    original_handle = store.write_original(original_request)
+    display_handle = store.write_display(display_request)
+    thumbnail_handle = store.write_thumbnail(thumbnail_request)
 
     assert store.written_originals == [original_request]
     assert store.written_displays == [display_request]
     assert store.written_thumbnails == [thumbnail_request]
+    assert original_handle != display_handle
+    assert display_handle != thumbnail_handle
 
 
-def test_representation_reads_return_a_streamable_handle() -> None:
-    media = photo_with_small_thumbnail()
+def test_representation_open_returns_a_streamable_handle() -> None:
+    request = OriginalRepresentationWriteRequest(
+        PHOTO_ID, write_content(), original_representation()
+    )
     store = InMemoryRepresentationStore()
 
-    handle = store.read_original(media)
+    stored_handle = store.write_original(request)
+    handle = store.open_representation(stored_handle)
 
     assert handle.media_id == PHOTO_ID
     assert handle.content_type == "image/jpeg"
     assert handle.content.read() == b"media-bytes"
 
 
-def test_reading_an_absent_display_raises_representation_not_found() -> None:
+def test_opening_an_absent_handle_raises_representation_not_found() -> None:
     store = InMemoryRepresentationStore()
 
-    with pytest.raises(MediaRepresentationNotFoundError, match="display"):
-        store.read_display(photo_with_small_thumbnail())
+    with pytest.raises(StoredRepresentationNotFoundError, match="missing"):
+        store.open_representation(StoredRepresentationHandle("missing"))
 
 
-def test_reading_an_absent_thumbnail_size_raises_representation_not_found() -> None:
-    store = InMemoryRepresentationStore()
+def test_missing_role_error_identifies_media_and_representation() -> None:
+    error = MediaRepresentationNotFoundError(PHOTO_ID, "display")
 
-    with pytest.raises(MediaRepresentationNotFoundError, match="large thumbnail"):
-        store.read_thumbnail(photo_with_small_thumbnail(), ThumbnailSize.LARGE)
+    assert error.media_id == PHOTO_ID
+    assert error.representation == "display"
+    assert str(error) == f"Media {PHOTO_ID} has no display representation."
 
 
-def test_reading_a_present_thumbnail_size_returns_that_representation() -> None:
-    store = InMemoryRepresentationStore()
+def test_missing_thumbnail_error_names_thumbnail_size() -> None:
+    error = MediaRepresentationNotFoundError.thumbnail(PHOTO_ID, ThumbnailSize.LARGE)
 
-    handle = store.read_thumbnail(photo_with_small_thumbnail(), ThumbnailSize.SMALL)
-
-    assert handle.representation.width == 240
+    assert error.representation == "large thumbnail"
 
 
 def test_dry_run_import_request_carries_no_write_intent() -> None:

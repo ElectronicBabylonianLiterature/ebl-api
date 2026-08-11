@@ -7,10 +7,23 @@ from ebl.media.domain import MediaId, MediaRepresentation, ThumbnailSize
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
+def _not_empty(_, attribute: attr.Attribute, value: str) -> None:
+    if not value:
+        raise ValueError(f"Attribute {attribute.name} cannot be empty.")
+
+
 class ImportMode(Enum):
     DRY_RUN = "dry-run"
     SKIP_EXISTING = "skip-existing"
     REPLACE = "replace"
+
+
+@attr.s(auto_attribs=True, frozen=True, str=False)
+class StoredRepresentationHandle:
+    value: str = attr.ib(validator=_not_empty)
+
+    def __str__(self) -> str:
+        return self.value
 
 
 @attr.s(auto_attribs=True, frozen=True)

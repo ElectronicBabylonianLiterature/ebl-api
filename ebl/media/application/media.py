@@ -9,9 +9,10 @@ from ebl.media.application.media_requests import (
     ImportRequest,
     OriginalRepresentationWriteRequest,
     RepresentationHandle,
+    StoredRepresentationHandle,
     ThumbnailRepresentationWriteRequest,
 )
-from ebl.media.domain import Media, MediaId, ThumbnailSize
+from ebl.media.domain import Media, MediaId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -65,29 +66,31 @@ class MediaRepository(MediaReader, MediaWriter, ABC):
 
 class MediaRepresentationStore(ABC):
     @abstractmethod
-    def read_original(self, media: Media) -> RepresentationHandle:
-        raise NotImplementedError
-
-    @abstractmethod
-    def read_display(self, media: Media) -> RepresentationHandle:
-        raise NotImplementedError
-
-    @abstractmethod
-    def read_thumbnail(
-        self, media: Media, thumbnail_size: ThumbnailSize
+    def open_representation(
+        self, handle: StoredRepresentationHandle
     ) -> RepresentationHandle:
         raise NotImplementedError
 
     @abstractmethod
-    def write_original(self, request: OriginalRepresentationWriteRequest) -> None:
+    def write_original(
+        self, request: OriginalRepresentationWriteRequest
+    ) -> StoredRepresentationHandle:
         raise NotImplementedError
 
     @abstractmethod
-    def write_display(self, request: DisplayRepresentationWriteRequest) -> None:
+    def write_display(
+        self, request: DisplayRepresentationWriteRequest
+    ) -> StoredRepresentationHandle:
         raise NotImplementedError
 
     @abstractmethod
-    def write_thumbnail(self, request: ThumbnailRepresentationWriteRequest) -> None:
+    def write_thumbnail(
+        self, request: ThumbnailRepresentationWriteRequest
+    ) -> StoredRepresentationHandle:
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_representation(self, handle: StoredRepresentationHandle) -> None:
         raise NotImplementedError
 
     @abstractmethod

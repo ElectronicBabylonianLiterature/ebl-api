@@ -23,12 +23,9 @@ def test_svg_original_is_valid_for_copy() -> None:
     assert result.representations.original.mime_type == SVG
 
 
-def test_svg_display_is_valid_for_copy() -> None:
-    result = copy_media(media_representations=representations(display_mime_type=SVG))
-
-    display = result.representations.display
-    assert display is not None
-    assert display.mime_type == SVG
+def test_svg_display_is_rejected_for_copy() -> None:
+    with pytest.raises(ValueError, match="SVG representations"):
+        copy_media(media_representations=representations(display_mime_type=SVG))
 
 
 def test_svg_original_is_rejected_for_photo() -> None:
@@ -48,6 +45,27 @@ def test_svg_thumbnail_is_rejected_for_photo() -> None:
                 thumbnails=((ThumbnailSize.SMALL, thumbnail_representation(SVG)),)
             )
         )
+
+
+def test_svg_thumbnail_is_rejected_for_copy() -> None:
+    with pytest.raises(ValueError, match="SVG representations"):
+        copy_media(
+            media_representations=representations(
+                thumbnails=((ThumbnailSize.SMALL, thumbnail_representation(SVG)),)
+            )
+        )
+
+
+def test_svg_copy_with_raster_previews_is_valid() -> None:
+    result = copy_media(
+        media_representations=MediaRepresentations(
+            original_representation(SVG),
+            ((ThumbnailSize.SMALL, thumbnail_representation("image/png")),),
+            display=display_representation("image/png"),
+        )
+    )
+
+    assert result.representations.original.mime_type == SVG
 
 
 def test_raster_photo_with_every_representation_role_is_valid() -> None:

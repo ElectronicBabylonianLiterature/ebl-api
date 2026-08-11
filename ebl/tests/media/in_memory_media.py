@@ -4,25 +4,36 @@ from typing import Dict, List, Mapping, Optional, Sequence
 import attr
 
 from ebl.media.application import (
+    DisplayRepresentationWriteRequest,
     MediaAlreadyExistsError,
     MediaNotFoundError,
     MediaRepository,
-    MediaRepresentationNotFoundError,
     MediaRepresentationStore,
     MediaService,
+    OriginalRepresentationWriteRequest,
     RepresentationHandle,
+    StoredRepresentationHandle,
+    StoredRepresentationNotFoundError,
+    ThumbnailRepresentationWriteRequest,
     fragment_media_in_order,
     primary_media_for,
     primary_photo_for,
 )
-from ebl.media.domain import Media, MediaId, MediaRepresentation, ThumbnailSize
+from ebl.media.domain import Media, MediaId, MediaRepresentation
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 REPRESENTATION_BYTES = b"media-bytes"
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class StoredRepresentationRecord:
+    media_id: MediaId
+    representation: MediaRepresentation
+    content: bytes
+
+
 class InMemoryMediaRepository(MediaRepository):
-    def __init__(self, media: Sequence[Media] = ()):
+    def __init__(self, media: Sequence[Media] = ()) -> None:
         self._media: Dict[MediaId, Media] = {item.id: item for item in media}
 
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
@@ -75,40 +86,75 @@ class InMemoryMediaRepository(MediaRepository):
 
 
 class InMemoryRepresentationStore(MediaRepresentationStore):
-    def __init__(self):
+    def __init__(self) -> None:
         self.written_originals: List[object] = []
         self.written_displays: List[object] = []
         self.written_thumbnails: List[object] = []
+        self.deleted_handles: List[StoredRepresentationHandle] = []
         self.deleted_media_ids: List[MediaId] = []
+        self.delete_failures: List[StoredRepresentationHandle] = []
+        self._records: Dict[StoredRepresentationHandle, StoredRepresentationRecord] = {}
+        self._next_handle = 0
 
-    def read_original(self, media: Media) -> RepresentationHandle:
-        return _handle(media.id, media.representations.original)
-
-    def read_display(self, media: Media) -> RepresentationHandle:
-        display = media.representations.display
-        if display is None:
-            raise MediaRepresentationNotFoundError(media.id, "display")
-        return _handle(media.id, display)
-
-    def read_thumbnail(
-        self, media: Media, thumbnail_size: ThumbnailSize
+    def open_representation(
+        self, handle: StoredRepresentationHandle
     ) -> RepresentationHandle:
-        for size, representation in media.representations.thumbnails:
-            if size is thumbnail_size:
-                return _handle(media.id, representation)
-        raise MediaRepresentationNotFoundError.thumbnail(media.id, thumbnail_size)
+        try:
+            record = self._records[handle]
+        except KeyError as error:
+            raise StoredRepresentationNotFoundError(handle) from error
+        return _handle(record)
 
-    def write_original(self, request) -> None:
+    def write_original(
+        self, request: OriginalRepresentationWriteRequest
+    ) -> StoredRepresentationHandle:
         self.written_originals.append(request)
+        return self._write(request)
 
-    def write_display(self, request) -> None:
+    def write_display(
+        self, request: DisplayRepresentationWriteRequest
+    ) -> StoredRepresentationHandle:
         self.written_displays.append(request)
+        return self._write(request)
 
-    def write_thumbnail(self, request) -> None:
+    def write_thumbnail(
+        self, request: ThumbnailRepresentationWriteRequest
+    ) -> StoredRepresentationHandle:
         self.written_thumbnails.append(request)
+        return self._write(request)
+
+    def delete_representation(self, handle: StoredRepresentationHandle) -> None:
+        if handle in self.delete_failures:
+            raise RuntimeError("Stored representation delete failed.")
+        self.deleted_handles.append(handle)
+        self._records.pop(handle, None)
 
     def delete_representations(self, media_id: MediaId) -> None:
         self.deleted_media_ids.append(media_id)
+        for handle, record in tuple(self._records.items()):
+            if record.media_id == media_id:
+                self.delete_representation(handle)
+
+    def fail_deleting(self, handle: StoredRepresentationHandle) -> None:
+        self.delete_failures.append(handle)
+
+    def contains(self, handle: StoredRepresentationHandle) -> bool:
+        return handle in self._records
+
+    def _write(
+        self,
+        request: OriginalRepresentationWriteRequest
+        | DisplayRepresentationWriteRequest
+        | ThumbnailRepresentationWriteRequest,
+    ) -> StoredRepresentationHandle:
+        self._next_handle += 1
+        handle = StoredRepresentationHandle(
+            f"stored-representation-{self._next_handle}"
+        )
+        self._records[handle] = StoredRepresentationRecord(
+            request.media_id, request.representation, request.content.read()
+        )
+        return handle
 
 
 class InMemoryMediaService(MediaService):
@@ -116,7 +162,7 @@ class InMemoryMediaService(MediaService):
         self,
         repository: MediaRepository,
         representation_store: Optional[MediaRepresentationStore] = None,
-    ):
+    ) -> None:
         self._repository = repository
         self._representation_store = (
             representation_store or InMemoryRepresentationStore()
@@ -155,15 +201,13 @@ class InMemoryMediaService(MediaService):
         self._representation_store.delete_representations(media_id)
 
 
-def _handle(
-    media_id: MediaId, representation: MediaRepresentation
-) -> RepresentationHandle:
+def _handle(record: StoredRepresentationRecord) -> RepresentationHandle:
     return RepresentationHandle(
-        media_id=media_id,
-        representation=representation,
-        content=BytesIO(REPRESENTATION_BYTES),
-        content_type=representation.mime_type,
-        length=len(REPRESENTATION_BYTES),
+        media_id=record.media_id,
+        representation=record.representation,
+        content=BytesIO(record.content),
+        content_type=record.representation.mime_type,
+        length=len(record.content),
     )
 
 

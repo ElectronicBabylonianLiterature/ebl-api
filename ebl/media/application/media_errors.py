@@ -1,4 +1,5 @@
 from ebl.errors import DuplicateError, NotFoundError
+from ebl.media.application.media_requests import StoredRepresentationHandle
 from ebl.media.domain import MediaId, ThumbnailSize
 
 
@@ -34,3 +35,12 @@ class MediaRepresentationNotFoundError(NotFoundError):
         cls, media_id: MediaId, thumbnail_size: ThumbnailSize
     ) -> "MediaRepresentationNotFoundError":
         return cls(media_id, f"{thumbnail_size.value} thumbnail")
+
+
+class StoredRepresentationNotFoundError(NotFoundError):
+    def __init__(self, handle: StoredRepresentationHandle):
+        super().__init__(handle)
+        self.handle = handle
+
+    def __str__(self) -> str:
+        return f"Stored media representation {self.handle} not found."

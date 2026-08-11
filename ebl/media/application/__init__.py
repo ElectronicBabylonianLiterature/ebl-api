@@ -11,6 +11,7 @@ from ebl.media.application.media_errors import (
     MediaAlreadyExistsError,
     MediaNotFoundError,
     MediaRepresentationNotFoundError,
+    StoredRepresentationNotFoundError,
 )
 from ebl.media.application.media_requests import (
     BackfillReport,
@@ -21,6 +22,7 @@ from ebl.media.application.media_requests import (
     ImportRequest,
     OriginalRepresentationWriteRequest,
     RepresentationHandle,
+    StoredRepresentationHandle,
     ThumbnailRepresentationWriteRequest,
 )
 from ebl.media.application.media_selection import (
@@ -49,6 +51,8 @@ __all__ = [
     "MediaWriter",
     "OriginalRepresentationWriteRequest",
     "RepresentationHandle",
+    "StoredRepresentationHandle",
+    "StoredRepresentationNotFoundError",
     "ThumbnailRepresentationWriteRequest",
     "fragment_media_in_order",
     "has_photo",

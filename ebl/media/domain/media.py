@@ -58,15 +58,17 @@ def _validate_associations(
         raise ValueError("Media cannot contain duplicate fragment associations.")
 
 
-def _validate_svg_copy(media: "Media", _, value: "MediaRepresentations") -> None:
-    if media.type is MediaType.COPY:
-        return
-
-    if any(
+def _validate_svg_placement(media: "Media", _, value: "MediaRepresentations") -> None:
+    svg_original_for_photo = (
+        media.type is MediaType.PHOTO and value.original.mime_type == SVG_MIME_TYPE
+    )
+    svg_display = value.display is not None and value.display.mime_type == SVG_MIME_TYPE
+    svg_thumbnail = any(
         representation.mime_type == SVG_MIME_TYPE
-        for representation in value.all_representations
-    ):
-        raise ValueError("SVG representations are only valid for COPY media.")
+        for _, representation in value.thumbnails
+    )
+    if svg_original_for_photo or svg_display or svg_thumbnail:
+        raise ValueError("SVG representations are only valid as COPY originals.")
 
 
 class MediaType(Enum):
@@ -174,7 +176,7 @@ class Media:
     id: MediaId = attr.ib(converter=_media_id_of)
     type: MediaType
     original_filename: str = attr.ib(validator=_not_empty)
-    representations: MediaRepresentations = attr.ib(validator=_validate_svg_copy)
+    representations: MediaRepresentations = attr.ib(validator=_validate_svg_placement)
     associations: Sequence[MediaAssociation] = attr.ib(
         factory=tuple, converter=_tuple_of, validator=_validate_associations
     )
