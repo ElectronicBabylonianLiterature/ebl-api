@@ -24,7 +24,10 @@ ImportReport = _media_requests.ImportReport
 ImportRequest = _media_requests.ImportRequest
 OriginalRepresentationWriteRequest = _media_requests.OriginalRepresentationWriteRequest
 RepresentationHandle = _media_requests.RepresentationHandle
+StoredMedia = _media_requests.StoredMedia
+StoredMediaRepresentations = _media_requests.StoredMediaRepresentations
 StoredRepresentationHandle = _media_requests.StoredRepresentationHandle
+StoredThumbnailRepresentation = _media_requests.StoredThumbnailRepresentation
 ThumbnailRepresentationWriteRequest = (
     _media_requests.ThumbnailRepresentationWriteRequest
 )

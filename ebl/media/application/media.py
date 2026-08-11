@@ -9,6 +9,7 @@ from ebl.media.application.media_requests import (
     ImportRequest,
     OriginalRepresentationWriteRequest,
     RepresentationHandle,
+    StoredMedia,
     StoredRepresentationHandle,
     ThumbnailRepresentationWriteRequest,
 )
@@ -19,6 +20,10 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 class MediaReader(ABC):
     @abstractmethod
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_stored_by_id(self, media_id: MediaId) -> Optional[StoredMedia]:
         raise NotImplementedError
 
     @abstractmethod
@@ -38,6 +43,12 @@ class MediaReader(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def find_stored_in_fragment(
+        self, media_id: MediaId, fragment_id: MuseumNumber
+    ) -> Optional[StoredMedia]:
+        raise NotImplementedError
+
+    @abstractmethod
     def find_primary_media(self, fragment_id: MuseumNumber) -> Optional[Media]:
         raise NotImplementedError
 
@@ -48,11 +59,11 @@ class MediaReader(ABC):
 
 class MediaWriter(ABC):
     @abstractmethod
-    def create(self, media: Media) -> MediaId:
+    def create(self, media: StoredMedia) -> MediaId:
         raise NotImplementedError
 
     @abstractmethod
-    def replace(self, media: Media) -> MediaId:
+    def replace(self, media: StoredMedia) -> StoredMedia:
         raise NotImplementedError
 
     @abstractmethod
@@ -113,6 +124,12 @@ class MediaService(ABC):
     def get_fragment_media(
         self, fragment_id: MuseumNumber, media_id: MediaId
     ) -> Optional[Media]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_stored_fragment_media(
+        self, fragment_id: MuseumNumber, media_id: MediaId
+    ) -> Optional[StoredMedia]:
         raise NotImplementedError
 
     @abstractmethod

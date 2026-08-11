@@ -6,10 +6,14 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.common.domain.project import ResearchProject
+from ebl.media.domain.mime import (
+    is_supported_raster_mime_type,
+    is_svg_mime_type,
+    normalize_mime_type,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 SHA256 = "sha256"
-SVG_MIME_TYPE = "image/svg+xml"
 
 
 def _not_empty(_, attribute: attr.Attribute, value: str) -> None:
@@ -58,17 +62,28 @@ def _validate_associations(
         raise ValueError("Media cannot contain duplicate fragment associations.")
 
 
-def _validate_svg_placement(media: "Media", _, value: "MediaRepresentations") -> None:
-    svg_original_for_photo = (
-        media.type is MediaType.PHOTO and value.original.mime_type == SVG_MIME_TYPE
+def _validate_mime_policy(media: "Media", _, value: "MediaRepresentations") -> None:
+    original_is_raster = is_supported_raster_mime_type(value.original.mime_type)
+    original_is_svg = is_svg_mime_type(value.original.mime_type)
+    preview_mime_types = []
+    if value.display is not None:
+        preview_mime_types.append(value.display.mime_type)
+    preview_mime_types.extend(
+        representation.mime_type for _, representation in value.thumbnails
     )
-    svg_display = value.display is not None and value.display.mime_type == SVG_MIME_TYPE
-    svg_thumbnail = any(
-        representation.mime_type == SVG_MIME_TYPE
-        for _, representation in value.thumbnails
+    valid_original = (
+        original_is_raster
+        if media.type is MediaType.PHOTO
+        else original_is_raster or original_is_svg
     )
-    if svg_original_for_photo or svg_display or svg_thumbnail:
-        raise ValueError("SVG representations are only valid as COPY originals.")
+    valid_previews = all(
+        is_supported_raster_mime_type(mime_type) for mime_type in preview_mime_types
+    )
+    if not valid_original or not valid_previews:
+        raise ValueError(
+            "Media representation MIME types are invalid. "
+            "SVG representations are only valid as COPY originals."
+        )
 
 
 class MediaType(Enum):
@@ -130,7 +145,7 @@ class MediaChecksum:
 
 @attr.s(auto_attribs=True, frozen=True)
 class MediaRepresentation:
-    mime_type: str = attr.ib(validator=_not_empty)
+    mime_type: str = attr.ib(converter=normalize_mime_type, validator=_not_empty)
     width: int = attr.ib(validator=_positive)
     height: int = attr.ib(validator=_positive)
     file_size: int = attr.ib(validator=_positive)
@@ -176,7 +191,7 @@ class Media:
     id: MediaId = attr.ib(converter=_media_id_of)
     type: MediaType
     original_filename: str = attr.ib(validator=_not_empty)
-    representations: MediaRepresentations = attr.ib(validator=_validate_svg_placement)
+    representations: MediaRepresentations = attr.ib(validator=_validate_mime_policy)
     associations: Sequence[MediaAssociation] = attr.ib(
         factory=tuple, converter=_tuple_of, validator=_validate_associations
     )

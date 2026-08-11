@@ -3,6 +3,12 @@ from typing import Sequence
 import attr
 
 from ebl.common.domain.project import ResearchProject
+from ebl.media.application import (
+    StoredMedia,
+    StoredMediaRepresentations,
+    StoredRepresentationHandle,
+    StoredThumbnailRepresentation,
+)
 from ebl.media.domain import (
     Media,
     MediaAssociation,
@@ -118,6 +124,36 @@ def media_import_source(
     file_id: str = "legacy-gridfs-id",
 ) -> MediaImportSource:
     return MediaImportSource(system, bucket, file_id)
+
+
+def stored_handle(value: str = "stored-original") -> StoredRepresentationHandle:
+    return StoredRepresentationHandle(value)
+
+
+def stored_representations(
+    media_: Media, handle_prefix: str = "stored"
+) -> StoredMediaRepresentations:
+    return StoredMediaRepresentations(
+        StoredRepresentationHandle(f"{handle_prefix}-original"),
+        tuple(
+            StoredThumbnailRepresentation(
+                size, StoredRepresentationHandle(f"{handle_prefix}-{size.value}")
+            )
+            for size, _ in media_.representations.thumbnails
+        ),
+        display=(
+            StoredRepresentationHandle(f"{handle_prefix}-display")
+            if media_.representations.display is not None
+            else None
+        ),
+    )
+
+
+def stored_media(
+    media_: Media | None = None, handle_prefix: str = "stored"
+) -> StoredMedia:
+    media_ = media_ or photo_media()
+    return StoredMedia(media_, stored_representations(media_, handle_prefix))
 
 
 def _media_id_of(value: str | MediaId) -> MediaId:

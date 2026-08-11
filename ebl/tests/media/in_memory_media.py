@@ -9,11 +9,13 @@ from ebl.media.application import (
     MediaNotFoundError,
     MediaRepository,
     MediaRepresentationStore,
-    MediaService,
     OriginalRepresentationWriteRequest,
     RepresentationHandle,
+    StoredMedia,
+    StoredMediaRepresentations,
     StoredRepresentationHandle,
     StoredRepresentationNotFoundError,
+    StoredThumbnailRepresentation,
     ThumbnailRepresentationWriteRequest,
     fragment_media_in_order,
     primary_media_for,
@@ -33,19 +35,27 @@ class StoredRepresentationRecord:
 
 
 class InMemoryMediaRepository(MediaRepository):
-    def __init__(self, media: Sequence[Media] = ()) -> None:
-        self._media: Dict[MediaId, Media] = {item.id: item for item in media}
+    def __init__(self, media: Sequence[Media | StoredMedia] = ()) -> None:
+        self.fail_next_replace = False
+        self._media: Dict[MediaId, StoredMedia] = {
+            stored.media.id: stored
+            for stored in (_stored_media_of(item) for item in media)
+        }
 
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
+        stored_media = self.find_stored_by_id(media_id)
+        return stored_media.media if stored_media is not None else None
+
+    def find_stored_by_id(self, media_id: MediaId) -> Optional[StoredMedia]:
         return self._media.get(media_id)
 
     def find_by_fragment(self, fragment_id: MuseumNumber) -> Sequence[Media]:
         return fragment_media_in_order(
             fragment_id,
             tuple(
-                item
+                item.media
                 for item in self._media.values()
-                if item.is_associated_with(fragment_id)
+                if item.media.is_associated_with(fragment_id)
             ),
         )
 
@@ -60,8 +70,18 @@ class InMemoryMediaRepository(MediaRepository):
     def find_in_fragment(
         self, media_id: MediaId, fragment_id: MuseumNumber
     ) -> Optional[Media]:
-        media = self.find_by_id(media_id)
-        return media if media and media.is_associated_with(fragment_id) else None
+        stored_media = self.find_stored_in_fragment(media_id, fragment_id)
+        return stored_media.media if stored_media is not None else None
+
+    def find_stored_in_fragment(
+        self, media_id: MediaId, fragment_id: MuseumNumber
+    ) -> Optional[StoredMedia]:
+        stored_media = self.find_stored_by_id(media_id)
+        if stored_media is None or not stored_media.media.is_associated_with(
+            fragment_id
+        ):
+            return None
+        return stored_media
 
     def find_primary_media(self, fragment_id: MuseumNumber) -> Optional[Media]:
         return primary_media_for(fragment_id, self.find_by_fragment(fragment_id))
@@ -69,17 +89,21 @@ class InMemoryMediaRepository(MediaRepository):
     def find_primary_photo(self, fragment_id: MuseumNumber) -> Optional[Media]:
         return primary_photo_for(fragment_id, self.find_by_fragment(fragment_id))
 
-    def create(self, media: Media) -> MediaId:
-        if media.id in self._media:
-            raise MediaAlreadyExistsError(media.id)
-        self._media[media.id] = media
-        return media.id
+    def create(self, media: StoredMedia) -> MediaId:
+        if media.media.id in self._media:
+            raise MediaAlreadyExistsError(media.media.id)
+        self._media[media.media.id] = media
+        return media.media.id
 
-    def replace(self, media: Media) -> MediaId:
-        if media.id not in self._media:
-            raise MediaNotFoundError(media.id)
-        self._media[media.id] = media
-        return media.id
+    def replace(self, media: StoredMedia) -> StoredMedia:
+        if media.media.id not in self._media:
+            raise MediaNotFoundError(media.media.id)
+        if self.fail_next_replace:
+            self.fail_next_replace = False
+            raise RuntimeError("Metadata replacement failed.")
+        previous = self._media[media.media.id]
+        self._media[media.media.id] = media
+        return previous
 
     def delete(self, media_id: MediaId) -> None:
         self._media.pop(media_id, None)
@@ -157,50 +181,6 @@ class InMemoryRepresentationStore(MediaRepresentationStore):
         return handle
 
 
-class InMemoryMediaService(MediaService):
-    def __init__(
-        self,
-        repository: MediaRepository,
-        representation_store: Optional[MediaRepresentationStore] = None,
-    ) -> None:
-        self._repository = repository
-        self._representation_store = (
-            representation_store or InMemoryRepresentationStore()
-        )
-
-    def list_fragment_media(self, fragment_id: MuseumNumber) -> Sequence[Media]:
-        return self._repository.find_by_fragment(fragment_id)
-
-    def find_media_by_fragments(
-        self, fragment_ids: Sequence[MuseumNumber]
-    ) -> Mapping[MuseumNumber, Sequence[Media]]:
-        return self._repository.find_by_fragments(fragment_ids)
-
-    def get_fragment_media(
-        self, fragment_id: MuseumNumber, media_id: MediaId
-    ) -> Optional[Media]:
-        return self._repository.find_in_fragment(media_id, fragment_id)
-
-    def set_primary_media(
-        self, fragment_id: MuseumNumber, media_id: MediaId
-    ) -> Sequence[Media]:
-        if self._repository.find_in_fragment(media_id, fragment_id) is None:
-            raise MediaNotFoundError(media_id)
-
-        for item in self._repository.find_by_fragment(fragment_id):
-            self._repository.replace(
-                _with_primary(item, fragment_id, item.id == media_id)
-            )
-        return self._repository.find_by_fragment(fragment_id)
-
-    def delete_media(self, media_id: MediaId) -> None:
-        if self._repository.find_by_id(media_id) is None:
-            raise MediaNotFoundError(media_id)
-
-        self._repository.delete(media_id)
-        self._representation_store.delete_representations(media_id)
-
-
 def _handle(record: StoredRepresentationRecord) -> RepresentationHandle:
     return RepresentationHandle(
         media_id=record.media_id,
@@ -211,13 +191,27 @@ def _handle(record: StoredRepresentationRecord) -> RepresentationHandle:
     )
 
 
-def _with_primary(media: Media, fragment_id: MuseumNumber, is_primary: bool) -> Media:
-    return attr.evolve(
-        media,
-        associations=tuple(
-            attr.evolve(association, is_primary=is_primary)
-            if association.fragment_id == fragment_id
-            else association
-            for association in media.associations
+def _stored_media_of(media: Media | StoredMedia) -> StoredMedia:
+    return (
+        media
+        if isinstance(media, StoredMedia)
+        else StoredMedia(media, _stored_representations_for(media))
+    )
+
+
+def _stored_representations_for(media: Media) -> StoredMediaRepresentations:
+    return StoredMediaRepresentations(
+        StoredRepresentationHandle(f"{media.id}:original"),
+        tuple(
+            StoredThumbnailRepresentation(
+                size,
+                StoredRepresentationHandle(f"{media.id}:thumbnail:{size.value}"),
+            )
+            for size, _ in media.representations.thumbnails
+        ),
+        display=(
+            StoredRepresentationHandle(f"{media.id}:display")
+            if media.representations.display is not None
+            else None
         ),
     )

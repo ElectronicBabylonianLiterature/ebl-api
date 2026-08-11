@@ -8,10 +8,8 @@ from ebl.media.application import (
 )
 from ebl.media.domain import MediaAssociation, MediaId, MediaType
 from ebl.tests.media.factories import contract_media
-from ebl.tests.media.in_memory_media import (
-    InMemoryMediaRepository,
-    InMemoryMediaService,
-)
+from ebl.tests.media.in_memory_media import InMemoryMediaRepository
+from ebl.tests.media.in_memory_media_service import InMemoryMediaService
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")

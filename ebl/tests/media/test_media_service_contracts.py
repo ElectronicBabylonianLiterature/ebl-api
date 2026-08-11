@@ -1,10 +1,10 @@
 from ebl.media.application import ImportMode, ImportReport, BackfillReport
 from ebl.media.domain import MediaAssociation, MediaId, MediaType
-from ebl.tests.media.factories import contract_media
+from ebl.tests.media.factories import contract_media, stored_media
 from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
-    InMemoryMediaService,
 )
+from ebl.tests.media.in_memory_media_service import InMemoryMediaService
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
@@ -54,6 +54,16 @@ def test_service_reads_one_media_item_only_within_its_fragment() -> None:
 
     assert service.get_fragment_media(K1, PHOTO_ID) is not None
     assert service.get_fragment_media(SM2, PHOTO_ID) is None
+
+
+def test_service_reads_stored_media_item_in_fragment_context() -> None:
+    stored = stored_media(shared_photo(), "current")
+    service = InMemoryMediaService(InMemoryMediaRepository((stored,)))
+
+    result = service.get_stored_fragment_media(K1, PHOTO_ID)
+
+    assert result == stored
+    assert service.get_stored_fragment_media(MuseumNumber.of("BM.99"), PHOTO_ID) is None
 
 
 def test_shared_media_appears_under_every_requested_fragment() -> None:

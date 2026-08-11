@@ -10,7 +10,11 @@ from ebl.media.application import (
     RepresentationHandle,
 )
 from ebl.media.domain import MediaAssociation, MediaId, MediaType
-from ebl.tests.media.factories import contract_media, original_representation
+from ebl.tests.media.factories import (
+    contract_media,
+    original_representation,
+    stored_media,
+)
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -76,7 +80,7 @@ def test_repository_contract_creates_new_media() -> None:
     photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
     repository = InMemoryMediaRepository()
 
-    assert repository.create(photo) == PHOTO_ID
+    assert repository.create(stored_media(photo)) == PHOTO_ID
     assert repository.find_by_id(PHOTO_ID) == photo
 
 
@@ -85,7 +89,7 @@ def test_repository_contract_rejects_creating_an_existing_media_id() -> None:
     repository = InMemoryMediaRepository((photo,))
 
     with pytest.raises(MediaAlreadyExistsError):
-        repository.create(attr.evolve(photo, caption="Duplicate"))
+        repository.create(stored_media(attr.evolve(photo, caption="Duplicate")))
 
 
 def test_repository_contract_replaces_metadata_without_changing_identity() -> None:
@@ -93,7 +97,9 @@ def test_repository_contract_replaces_metadata_without_changing_identity() -> No
     replacement = attr.evolve(photo, caption="Replacement audit note")
     repository = InMemoryMediaRepository((photo,))
 
-    assert repository.replace(replacement) == PHOTO_ID
+    previous = repository.replace(stored_media(replacement, "replacement"))
+
+    assert previous.media == photo
     assert repository.find_by_id(PHOTO_ID) == replacement
 
 
@@ -102,7 +108,7 @@ def test_repository_contract_rejects_replacing_unknown_media() -> None:
     repository = InMemoryMediaRepository()
 
     with pytest.raises(MediaNotFoundError):
-        repository.replace(photo)
+        repository.replace(stored_media(photo))
 
 
 def test_repository_contract_deletes_metadata_idempotently() -> None:

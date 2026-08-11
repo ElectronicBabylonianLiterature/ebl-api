@@ -3,13 +3,27 @@ from typing import BinaryIO, Mapping, Optional, Sequence
 
 import attr
 
-from ebl.media.domain import MediaId, MediaRepresentation, ThumbnailSize
+from ebl.media.domain import Media, MediaId, MediaRepresentation, ThumbnailSize
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def _not_empty(_, attribute: attr.Attribute, value: str) -> None:
-    if not value:
-        raise ValueError(f"Attribute {attribute.name} cannot be empty.")
+def _not_blank(_, attribute: attr.Attribute, value: str) -> None:
+    if not value.strip():
+        raise ValueError(f"Attribute {attribute.name} cannot be blank.")
+
+
+def _tuple_of(
+    value: Optional[Sequence["StoredThumbnailRepresentation"]],
+) -> tuple["StoredThumbnailRepresentation", ...]:
+    return tuple(value or ())
+
+
+def _validate_thumbnail_handles(
+    _, __, value: Sequence["StoredThumbnailRepresentation"]
+) -> None:
+    sizes = [thumbnail.size for thumbnail in value]
+    if len(sizes) != len(set(sizes)):
+        raise ValueError("Stored media cannot contain duplicate thumbnail sizes.")
 
 
 class ImportMode(Enum):
@@ -20,10 +34,87 @@ class ImportMode(Enum):
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class StoredRepresentationHandle:
-    value: str = attr.ib(validator=_not_empty)
+    value: str = attr.ib(validator=_not_blank)
 
     def __str__(self) -> str:
         return self.value
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class StoredThumbnailRepresentation:
+    size: ThumbnailSize = attr.ib(validator=attr.validators.instance_of(ThumbnailSize))
+    handle: StoredRepresentationHandle = attr.ib(
+        validator=attr.validators.instance_of(StoredRepresentationHandle)
+    )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class StoredMediaRepresentations:
+    original: StoredRepresentationHandle = attr.ib(
+        validator=attr.validators.instance_of(StoredRepresentationHandle)
+    )
+    thumbnails: tuple[StoredThumbnailRepresentation, ...] = attr.ib(
+        factory=tuple,
+        converter=_tuple_of,
+        validator=[
+            attr.validators.deep_iterable(
+                member_validator=attr.validators.instance_of(
+                    StoredThumbnailRepresentation
+                )
+            ),
+            _validate_thumbnail_handles,
+        ],
+    )
+    display: Optional[StoredRepresentationHandle] = attr.ib(
+        default=None,
+        kw_only=True,
+        validator=attr.validators.optional(
+            attr.validators.instance_of(StoredRepresentationHandle)
+        ),
+    )
+
+    @property
+    def handles(self) -> Sequence[StoredRepresentationHandle]:
+        handles = [self.original]
+        if self.display is not None:
+            handles.append(self.display)
+        handles.extend(thumbnail.handle for thumbnail in self.thumbnails)
+        return tuple(handles)
+
+    def thumbnail(self, size: ThumbnailSize) -> Optional[StoredRepresentationHandle]:
+        return next(
+            (
+                thumbnail.handle
+                for thumbnail in self.thumbnails
+                if thumbnail.size is size
+            ),
+            None,
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class StoredMedia:
+    media: Media = attr.ib(validator=attr.validators.instance_of(Media))
+    representations: StoredMediaRepresentations = attr.ib(
+        validator=attr.validators.instance_of(StoredMediaRepresentations)
+    )
+
+    def __attrs_post_init__(self) -> None:
+        display_mismatch = (
+            self.media.representations.display is None
+            and self.representations.display is not None
+        ) or (
+            self.media.representations.display is not None
+            and self.representations.display is None
+        )
+        media_thumbnail_sizes = {
+            size for size, _ in self.media.representations.thumbnails
+        }
+        stored_thumbnail_sizes = {
+            thumbnail.size for thumbnail in self.representations.thumbnails
+        }
+        if display_mismatch or media_thumbnail_sizes != stored_thumbnail_sizes:
+            raise ValueError("Stored media representations must match media metadata.")
 
 
 @attr.s(auto_attribs=True, frozen=True)
