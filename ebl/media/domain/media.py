@@ -6,12 +6,6 @@ from typing import Optional, Sequence, Union
 import attr
 
 from ebl.common.domain.project import ResearchProject
-from ebl.media.domain.converters import (
-    tuple_of_associations,
-    tuple_of_projects,
-    tuple_of_references,
-    tuple_of_thumbnail_representations,
-)
 from ebl.media.domain.mime import (
     is_supported_raster_mime_type,
     is_svg_mime_type,
@@ -51,6 +45,30 @@ def _checksum_value_of(value: str) -> str:
 
 def _checksum_algorithm_of(value: str) -> str:
     return value.lower()
+
+
+def _tuple_of_thumbnail_representations(
+    value: Optional[Sequence[tuple["ThumbnailSize", "MediaRepresentation"]]],
+) -> tuple[tuple["ThumbnailSize", "MediaRepresentation"], ...]:
+    return tuple(value or ())
+
+
+def _tuple_of_associations(
+    value: Optional[Sequence["MediaAssociation"]],
+) -> tuple["MediaAssociation", ...]:
+    return tuple(value or ())
+
+
+def _tuple_of_projects(
+    value: Optional[Sequence[ResearchProject]],
+) -> tuple[ResearchProject, ...]:
+    return tuple(value or ())
+
+
+def _tuple_of_references(
+    value: Optional[Sequence["MediaReference"]],
+) -> tuple["MediaReference", ...]:
+    return tuple(value or ())
 
 
 def _validate_associations(
@@ -160,7 +178,7 @@ class MediaRepresentation:
 class MediaRepresentations:
     original: MediaRepresentation = attr.ib()
     thumbnails: Sequence[tuple[ThumbnailSize, MediaRepresentation]] = attr.ib(
-        factory=tuple, converter=tuple_of_thumbnail_representations
+        factory=tuple, converter=_tuple_of_thumbnail_representations
     )
     display: Optional[MediaRepresentation] = attr.ib(default=None, kw_only=True)
 
@@ -198,14 +216,14 @@ class Media:
     representations: MediaRepresentations = attr.ib(validator=_validate_mime_policy)
     associations: Sequence[MediaAssociation] = attr.ib(
         factory=tuple,
-        converter=tuple_of_associations,
+        converter=_tuple_of_associations,
         validator=_validate_associations,
     )
     projects: Sequence[ResearchProject] = attr.ib(
-        factory=tuple, converter=tuple_of_projects
+        factory=tuple, converter=_tuple_of_projects
     )
     references: Sequence[MediaReference] = attr.ib(
-        factory=tuple, converter=tuple_of_references
+        factory=tuple, converter=_tuple_of_references
     )
     caption: Optional[str] = None
     attribution: Optional[str] = None
