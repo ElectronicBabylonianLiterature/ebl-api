@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from typing import Sequence
+from typing import TYPE_CHECKING, Sequence
 
 from ebl.common.domain.project import ResearchProject
-from ebl.media.domain import media as media_types
+
+if TYPE_CHECKING:
+    from ebl.media.domain import media as media_types
 
 
 def tuple_of_thumbnail_representations(
