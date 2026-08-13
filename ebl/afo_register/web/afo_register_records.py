@@ -1,4 +1,4 @@
-from typing import List, Sequence
+from typing import List, Optional, Sequence
 from falcon import Request, Response
 from ebl.errors import DataError, NotFoundError
 
@@ -12,17 +12,28 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 )
 
 MAX_TEXTS_AND_NUMBERS_QUERIES = 1000
-MAX_QUERY_LENGTH = 500
+MAX_QUERY_BYTES = 500
 MAX_QUERY_TOKENS = 24
+MAX_JSON_ESCAPE_EXPANSION = 6
+MAX_REQUEST_BYTES = (
+    MAX_TEXTS_AND_NUMBERS_QUERIES * (MAX_QUERY_BYTES * MAX_JSON_ESCAPE_EXPANSION + 3)
+    + 2
+)
+REQUEST_TOO_LARGE_MESSAGE = (
+    f"Request too large: at most {MAX_REQUEST_BYTES} bytes allowed."
+)
+
+
+def validate_request_size(content_length: Optional[int]) -> None:
+    if content_length and content_length > MAX_REQUEST_BYTES:
+        raise DataError(REQUEST_TOO_LARGE_MESSAGE)
 
 
 def validate_query(query: object) -> str:
     if not isinstance(query, str):
         raise DataError(NON_STRING_QUERY_MESSAGE)
-    if len(query) > MAX_QUERY_LENGTH:
-        raise DataError(
-            f"Query too long: at most {MAX_QUERY_LENGTH} characters allowed."
-        )
+    if len(query.encode("utf-8")) > MAX_QUERY_BYTES:
+        raise DataError(f"Query too long: at most {MAX_QUERY_BYTES} bytes allowed.")
     if len(query.split()) > MAX_QUERY_TOKENS:
         raise DataError(
             f"Query has too many words: at most {MAX_QUERY_TOKENS} allowed."
@@ -69,6 +80,7 @@ class AfoRegisterTextsAndNumbersResource:
         self._afoRegisterRepository = afoRegisterRepository
 
     def on_post(self, req: Request, resp: Response) -> None:
+        validate_request_size(req.content_length)
         query_list = validate_texts_and_numbers_query(req.media)
         try:
             response = self._afoRegisterRepository.search_by_texts_and_numbers(

@@ -23,7 +23,7 @@ from ebl.afo_register.web.afo_register_records import (
     validate_candidate_budget,
     validate_texts_and_numbers_query,
     MAX_TEXTS_AND_NUMBERS_QUERIES,
-    MAX_QUERY_LENGTH,
+    MAX_QUERY_BYTES,
     MAX_QUERY_TOKENS,
 )
 from ebl.errors import DataError
@@ -111,7 +111,7 @@ def test_validate_texts_and_numbers_query_rejects_non_string_element():
 
 def test_validate_texts_and_numbers_query_rejects_too_long_query():
     with pytest.raises(DataError):
-        validate_texts_and_numbers_query(["x" * (MAX_QUERY_LENGTH + 1)])
+        validate_texts_and_numbers_query(["x" * (MAX_QUERY_BYTES + 1)])
 
 
 def test_validate_texts_and_numbers_query_rejects_query_with_too_many_words():
