@@ -13,7 +13,7 @@ from ebl.afo_register.web.afo_register_records import (
 from ebl.errors import DataError
 
 
-def build_request_without_content_length(body: bytes) -> Request:
+def build_request_without_content_length(body: str) -> Request:
     environ = create_environ(body=body)
     del environ["CONTENT_LENGTH"]
     return Request(environ)
@@ -71,14 +71,16 @@ def test_search_by_texts_and_numbers_route_rejects_wide_utf8_query(client) -> No
 
 
 def test_a_body_without_content_length_is_never_read():
-    request = build_request_without_content_length(b"x" * (MAX_REQUEST_BYTES * 2))
+    body = "x" * (MAX_REQUEST_BYTES * 2)
+    request = build_request_without_content_length(body)
 
+    assert len(body.encode("utf-8")) == MAX_REQUEST_BYTES * 2
     assert request.content_length is None
     assert request.bounded_stream.read(MAX_REQUEST_BYTES * 2) == b""
 
 
 def test_a_body_is_never_read_beyond_its_content_length():
-    environ = create_environ(body=b"x" * (MAX_REQUEST_BYTES * 2))
+    environ = create_environ(body="x" * (MAX_REQUEST_BYTES * 2))
     environ["CONTENT_LENGTH"] = "100"
 
     assert len(Request(environ).bounded_stream.read(MAX_REQUEST_BYTES * 2)) == 100
