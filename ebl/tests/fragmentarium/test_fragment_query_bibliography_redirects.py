@@ -1,5 +1,3 @@
-import pytest
-
 from ebl.fragmentarium.application.fragment_query_bibliography import (
     bibliography_documents_of,
 )
@@ -8,19 +6,6 @@ from ebl.tests.fragmentarium.fragment_query_bibliography_test_helpers import (
     reference_of,
     summary_of,
 )
-
-
-@pytest.fixture
-def spied_bibliography_repository(monkeypatch, bibliography_repository):
-    calls = []
-    original_query_by_ids = bibliography_repository.query_by_ids
-
-    def query_by_ids(ids):
-        calls.append(list(ids))
-        return original_query_by_ids(ids)
-
-    monkeypatch.setattr(bibliography_repository, "query_by_ids", query_by_ids)
-    return bibliography_repository, calls
 
 
 def create_entry(repository, id_: str, redirect_to=None) -> dict:

@@ -1,5 +1,4 @@
 import falcon
-import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, ReferenceType
@@ -8,19 +7,6 @@ from ebl.fragmentarium.domain.fragment import Script
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
-
-
-@pytest.fixture
-def spied_bibliography_repository(monkeypatch, bibliography_repository):
-    calls = []
-    original_query_by_ids = bibliography_repository.query_by_ids
-
-    def query_by_ids(ids):
-        calls.append(list(ids))
-        return original_query_by_ids(ids)
-
-    monkeypatch.setattr(bibliography_repository, "query_by_ids", query_by_ids)
-    return bibliography_repository, calls
 
 
 def reference_of(id_: str, type_: ReferenceType = ReferenceType.COPY):

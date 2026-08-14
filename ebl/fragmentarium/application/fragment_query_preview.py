@@ -67,5 +67,5 @@ def matching_line_preview_of(
             preview_line_of(cast(dict, schema.dump(line)))
             for line in selected_lines(text.lines, matching_lines)
         ],
-        "parser_version": text.parser_version or DEFAULT_ATF_PARSER_VERSION,
+        "parserVersion": text.parser_version or DEFAULT_ATF_PARSER_VERSION,
     }

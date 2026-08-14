@@ -19,7 +19,7 @@ class FragmentQueryArchaeology:
 
 
 def empty_matching_line_preview() -> Dict[str, Any]:
-    return {"lines": (), "parser_version": DEFAULT_ATF_PARSER_VERSION}
+    return {"lines": (), "parserVersion": DEFAULT_ATF_PARSER_VERSION}
 
 
 @attr.s(auto_attribs=True, frozen=True, eq=False)

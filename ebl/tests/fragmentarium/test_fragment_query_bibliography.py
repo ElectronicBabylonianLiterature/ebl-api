@@ -12,19 +12,6 @@ from ebl.tests.fragmentarium.fragment_query_bibliography_test_helpers import (
 )
 
 
-@pytest.fixture
-def spied_bibliography_repository(monkeypatch, bibliography_repository):
-    calls = []
-    original_query_by_ids = bibliography_repository.query_by_ids
-
-    def query_by_ids(ids):
-        calls.append(list(ids))
-        return original_query_by_ids(ids)
-
-    monkeypatch.setattr(bibliography_repository, "query_by_ids", query_by_ids)
-    return bibliography_repository, calls
-
-
 def create_entries(bibliography_repository, *ids) -> None:
     for id_ in ids:
         bibliography_repository.create(BibliographyEntryFactory.build(id=id_))
