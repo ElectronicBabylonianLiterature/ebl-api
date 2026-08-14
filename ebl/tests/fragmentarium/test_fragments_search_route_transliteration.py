@@ -138,7 +138,7 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_summary_of(fragment, matching_lines=[0])], 1
+        [query_summary_of(fragment, matching_lines=[0])], 1, bibliography_documents={}
     )
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
     assert "description" in result.json["items"][0]

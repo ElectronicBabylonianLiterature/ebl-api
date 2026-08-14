@@ -10,6 +10,9 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_query_preview import (
+    matching_line_preview_of_data,
+)
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
@@ -35,7 +38,6 @@ from ebl.bibliography.infrastructure.bibliography import join_reference_document
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended import (
     MongoFragmentRepositoryGetExtended,
 )
-from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 
 RETRIEVE_ALL_LIMIT = 1000
 FRAGMENT_QUERY_SUMMARY_PROJECTION = {
@@ -72,31 +74,6 @@ def fragment_photo_filename(museum_number: Union[dict, MuseumNumber]) -> str:
     suffix = museum_number.get("suffix") or ""
     suffix_part = f".{suffix}" if suffix else ""
     return f"{museum_number.get('prefix', '')}.{museum_number.get('number', '')}{suffix_part}.jpg"
-
-
-def compact_preview_token(token: dict) -> dict:
-    data = {
-        "value": token.get("value"),
-        "cleanValue": token.get("cleanValue"),
-        "uniqueLemma": token.get("uniqueLemma"),
-        "type": token.get("type"),
-    }
-    return {
-        key: value
-        for key, value in data.items()
-        if value is not None and (key != "uniqueLemma" or value)
-    }
-
-
-def compact_preview_line(line: dict) -> dict:
-    content = line.get("content") or []
-    prefix = line.get("prefix") or ""
-    return {
-        "number": prefix,
-        "prefix": prefix,
-        "text": " ".join(token.get("value", "") for token in content),
-        "tokens": [compact_preview_token(token) for token in content],
-    }
 
 
 def chapter_lemma_pipeline(clean_values: List[str]) -> List[dict]:
@@ -272,18 +249,6 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             )
         ]
 
-    def _matching_line_preview(self, fragment: dict, matching_lines: Sequence[int]):
-        text = fragment.get("text") or {}
-        lines = text.get("lines") or []
-        return {
-            "lines": [
-                compact_preview_line(lines[line_index])
-                for line_index in matching_lines
-                if 0 <= line_index < len(lines)
-            ],
-            "parserVersion": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
-        }
-
     def _hydrate_fragment_query_item(
         self,
         item: dict,
@@ -313,8 +278,8 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             "projects": fragment.get("projects", []),
             "dossiers": fragment.get("dossiers", []),
             "matchingLines": matching_lines,
-            "matchingLinePreview": self._matching_line_preview(
-                fragment, matching_lines
+            "matchingLinePreview": matching_line_preview_of_data(
+                fragment.get("text") or {}, matching_lines
             ),
             "matchCount": item.get("matchCount", 0),
             "hasPhoto": fragment_photo_filename(museum_number) in photo_filenames,

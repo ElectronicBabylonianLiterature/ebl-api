@@ -1,7 +1,9 @@
 import pytest
 import re
 from ebl.common.query.parameter_parser import (
+    MAX_QUERY_LIMIT,
     parse_integer_field,
+    parse_limit,
     parse_non_negative_integer_field,
     parse_pages,
     parse_lemmas,
@@ -50,6 +52,29 @@ def test_parse_non_negative_integer_field_negative():
     parse = parse_non_negative_integer_field("offset")
     with pytest.raises(DataError, match="offset must be non-negative"):
         parse({"offset": "-1"})
+
+
+@pytest.mark.parametrize("limit", [1, 25, 50, 100, 101, MAX_QUERY_LIMIT])
+def test_parse_limit(limit):
+    assert parse_limit({"limit": str(limit)}) == {"limit": limit}
+
+
+def test_parse_limit_missing():
+    assert parse_limit({"number": "K.1"}) == {"number": "K.1"}
+
+
+@pytest.mark.parametrize("limit", ["0", "-1", str(MAX_QUERY_LIMIT + 1), "1000000"])
+def test_parse_limit_out_of_range(limit):
+    with pytest.raises(
+        DataError, match=f"limit must be between 1 and {MAX_QUERY_LIMIT}"
+    ):
+        parse_limit({"limit": limit})
+
+
+@pytest.mark.parametrize("limit", ["not an int", "1.5"])
+def test_parse_limit_invalid(limit):
+    with pytest.raises(DataError, match="limit must be integer"):
+        parse_limit({"limit": limit})
 
 
 @pytest.mark.parametrize("count", ["exact", "none", "page"])

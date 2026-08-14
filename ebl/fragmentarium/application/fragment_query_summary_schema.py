@@ -98,10 +98,13 @@ class FragmentQueryPreviewLineSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
+    type = fields.String()
     number = fields.String(required=True)
     prefix = fields.String(required=True)
     text = fields.String(required=True)
     tokens = fields.Nested(FragmentQueryPreviewTokenSchema, many=True, required=True)
+    lineNumber = fields.Dict()
+    content = fields.List(fields.Dict())
 
 
 class FragmentQueryMatchingLinePreviewSchema(Schema):
@@ -180,6 +183,12 @@ class FragmentQueryResultSchema(QueryResultSchema):
         unknown = EXCLUDE
 
     items = fields.Nested(FragmentQuerySummarySchema, many=True, required=True)
+    bibliography_documents = fields.Dict(
+        keys=fields.String(),
+        values=fields.Dict(),
+        load_default=dict,
+        data_key="bibliographyDocuments",
+    )
 
     @post_load
     def make_query_result(self, data, **kwargs) -> FragmentQueryResult:

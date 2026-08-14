@@ -5,6 +5,9 @@ from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
+from ebl.fragmentarium.application.fragment_query_preview import (
+    matching_line_preview_of,
+)
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQuerySummarySchema,
 )
@@ -13,7 +16,6 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQuerySummary,
-    matching_line_preview_of,
 )
 from ebl.tests.factories.provenance import build_provenance_records
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -48,12 +50,18 @@ def query_result_of(
     match_count_total: Optional[int],
     is_match_count_total_exact: bool = True,
     has_next_page: Optional[bool] = None,
+    bibliography_documents: Optional[Dict] = None,
 ) -> Dict:
     return {
         "items": items,
         "matchCountTotal": match_count_total,
         "isMatchCountTotalExact": is_match_count_total_exact,
         "hasNextPage": has_next_page,
+        **(
+            {}
+            if bibliography_documents is None
+            else {"bibliographyDocuments": bibliography_documents}
+        ),
     }
 
 
