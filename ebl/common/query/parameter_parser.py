@@ -18,7 +18,7 @@ def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
 
         try:
             return {**parameters, field: int(value)}
-        except ValueError as error:
+        except (TypeError, ValueError) as error:
             raise DataError(
                 f"{field} must be integer, got {value!r} instead"
             ) from error

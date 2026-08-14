@@ -38,12 +38,10 @@ def preview_line_of(line: dict) -> Dict[str, Any]:
 
 
 def selected_lines(lines: Sequence, matching_lines: Sequence[int]) -> List:
-    return list(
-        islice(
-            (lines[index] for index in matching_lines if 0 <= index < len(lines)),
-            MAX_PREVIEW_LINES,
-        )
+    unique_indices = dict.fromkeys(
+        index for index in matching_lines if 0 <= index < len(lines)
     )
+    return [lines[index] for index in islice(unique_indices, MAX_PREVIEW_LINES)]
 
 
 def matching_line_preview_of_data(

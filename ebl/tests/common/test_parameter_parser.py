@@ -42,6 +42,12 @@ def test_parse_integer_field_invalid():
         parse({"invalid_field": "not an int"})
 
 
+def test_parse_integer_field_duplicate_query_param():
+    parse = parse_integer_field("limit")
+    with pytest.raises(DataError, match="limit must be integer"):
+        parse({"limit": ["1", "300"]})
+
+
 def test_parse_non_negative_integer_field():
     parse = parse_non_negative_integer_field("offset")
     assert parse({"offset": "0"}) == {"offset": 0}
@@ -75,6 +81,11 @@ def test_parse_limit_out_of_range(limit):
 def test_parse_limit_invalid(limit):
     with pytest.raises(DataError, match="limit must be integer"):
         parse_limit({"limit": limit})
+
+
+def test_parse_limit_duplicate_query_param():
+    with pytest.raises(DataError, match="limit must be integer"):
+        parse_limit({"limit": ["1", "300"]})
 
 
 @pytest.mark.parametrize("count", ["exact", "none", "page"])

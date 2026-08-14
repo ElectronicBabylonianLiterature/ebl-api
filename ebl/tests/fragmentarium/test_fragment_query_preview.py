@@ -173,6 +173,23 @@ def test_preview_cap_skips_out_of_range_before_capping(long_text):
     ]
 
 
+@pytest.mark.parametrize(
+    "matching_lines,expected_numbers",
+    [
+        ((0, 1, 1, 2, 2, 3), ["1.", "2.", "3.", "4."]),
+        ((0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5), ["1.", "2.", "3.", "4.", "5."]),
+        ((3, 1, 3, 2, 1, 4), ["4.", "2.", "3.", "5."]),
+        ((99, 0, 0, 1, 2, 3, 4, 5), ["1.", "2.", "3.", "4.", "5."]),
+    ],
+)
+def test_preview_deduplicates_matching_indexes(
+    long_text, matching_lines, expected_numbers
+):
+    preview = matching_line_preview_of(long_text, matching_lines)
+
+    assert [line["number"] for line in preview["lines"]] == expected_numbers
+
+
 def test_stored_data_preview_applies_the_same_cap():
     fragment = FragmentFactory.build(
         text=parse_atf_lark("\n".join(f"{index}. ku" for index in range(1, 31)))
@@ -187,6 +204,19 @@ def test_stored_data_preview_applies_the_same_cap():
     assert (
         len(matching_line_preview_of_data(stored["text"], matching_lines)["lines"])
         == MAX_PREVIEW_LINES
+    )
+
+
+def test_stored_data_preview_deduplicates_the_same_way():
+    fragment = FragmentFactory.build(
+        text=parse_atf_lark("\n".join(f"{index}. ku" for index in range(1, 31)))
+    )
+    stored = FragmentSchema(exclude=["joins"]).dump(fragment)
+    matching_lines = (0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5)
+
+    assert (
+        matching_line_preview_of_data(stored["text"], matching_lines)["lines"]
+        == matching_line_preview_of(fragment.text, matching_lines)["lines"]
     )
 
 

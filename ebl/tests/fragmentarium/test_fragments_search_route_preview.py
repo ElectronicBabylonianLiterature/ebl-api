@@ -107,6 +107,21 @@ def test_preview_is_capped_while_match_count_stays_complete(
     ]
 
 
+def test_preview_deduplicates_overlapping_multiline_matches(
+    client, heavily_matched_fragment
+):
+    result = client.simulate_get(
+        "/fragments/query", params={"transliteration": "ku\nku", "limit": "10"}
+    )
+    item = result.json["items"][0]
+
+    assert result.status == falcon.HTTP_OK
+    assert len(item["matchingLines"]) > len(set(item["matchingLines"]))
+    assert [line["number"] for line in item["matchingLinePreview"]["lines"]] == [
+        f"{index}." for index in range(1, MAX_PREVIEW_LINES + 1)
+    ]
+
+
 def test_preview_keeps_compact_and_structured_fields(client, matched_fragment):
     line = query_preview(client)["lines"][0]
 

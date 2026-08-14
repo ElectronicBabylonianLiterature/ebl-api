@@ -199,6 +199,24 @@ def test_query_fragmentarium_offset_invalid(client, offset):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
+def test_query_fragmentarium_limit_duplicate_query_param(client):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "limit": ["1", "300"]},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_query_fragmentarium_offset_duplicate_query_param(client):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "offset": ["0", "1"]},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
 @pytest.mark.parametrize("count", ["false", "0", "random", "approx"])
 def test_query_fragmentarium_count_invalid(client, count):
     result = client.simulate_get(
