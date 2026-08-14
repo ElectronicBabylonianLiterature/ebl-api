@@ -1,3 +1,4 @@
+from ebl.bibliography.application.bibliography import MAX_REDIRECT_DEPTH
 from ebl.fragmentarium.application.fragment_query_bibliography import (
     bibliography_documents_of,
 )
@@ -15,6 +16,12 @@ def create_entry(repository, id_: str, redirect_to=None) -> dict:
     )
     repository.create(entry)
     return entry
+
+
+def create_chain(repository, ids) -> dict:
+    for index, current in enumerate(ids[:-1]):
+        create_entry(repository, current, redirect_to=ids[index + 1])
+    return create_entry(repository, ids[-1])
 
 
 def test_active_reference_uses_one_batch(spied_bibliography_repository):
@@ -107,6 +114,65 @@ def test_no_references_performs_no_lookup(spied_bibliography_repository):
 
     assert bibliography_documents_of([summary_of("X.1")], repository) == {}
     assert calls == []
+
+
+def test_chained_redirect_resolves_to_the_terminal_record(
+    spied_bibliography_repository,
+):
+    repository, calls = spied_bibliography_repository
+    canonical = create_chain(repository, ["OLD", "MID", "CANON"])
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of("OLD"))], repository
+    )
+
+    assert documents == {"OLD": canonical}
+    assert documents["OLD"]["id"] == "CANON"
+    assert calls == [["OLD"], ["MID"], ["CANON"]]
+
+
+def test_chained_redirects_share_one_batch_per_hop(spied_bibliography_repository):
+    repository, calls = spied_bibliography_repository
+    canonical = create_chain(repository, ["OLD1", "MID", "CANON"])
+    create_entry(repository, "OLD2", redirect_to="MID")
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of("OLD1"), reference_of("OLD2"))], repository
+    )
+
+    assert documents == {"OLD1": canonical, "OLD2": canonical}
+    assert calls == [["OLD1", "OLD2"], ["MID"], ["CANON"]]
+
+
+def test_chain_longer_than_the_redirect_depth_stops_safely(
+    spied_bibliography_repository,
+):
+    repository, calls = spied_bibliography_repository
+    ids = [f"HOP{index}" for index in range(MAX_REDIRECT_DEPTH + 3)]
+    create_chain(repository, ids)
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of(ids[0]))], repository
+    )
+
+    assert len(calls) == MAX_REDIRECT_DEPTH + 1
+    assert documents[ids[0]]["id"] == ids[MAX_REDIRECT_DEPTH]
+    assert set(documents) == {ids[0]}
+
+
+def test_redirect_cycle_terminates_without_extra_queries(
+    spied_bibliography_repository,
+):
+    repository, calls = spied_bibliography_repository
+    create_entry(repository, "A", redirect_to="B")
+    create_entry(repository, "B", redirect_to="A")
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of("A"))], repository
+    )
+
+    assert calls == [["A"], ["B"]]
+    assert set(documents) == {"A"}
 
 
 def test_many_occurrences_use_two_batches(spied_bibliography_repository):
