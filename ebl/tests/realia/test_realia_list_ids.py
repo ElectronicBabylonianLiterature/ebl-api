@@ -82,9 +82,6 @@ def test_list_non_redirect_ids_orders_equivalent_ids_deterministically(
         ("afoRegister", [{"mainWord": "x"}]),
         ("references", [{"id": "bib_1"}]),
         ("afoCrossReferences", [{"id": "a", "lemma": "b"}]),
-        ("relatedTerms", ["Schwein", "Sau"]),
-        ("type", ["Divine names"]),
-        ("wikidataId", ["Q787"]),
     ],
 )
 def test_list_non_redirect_ids_lists_entries_with_own_content(
@@ -96,11 +93,28 @@ def test_list_non_redirect_ids_lists_entries_with_own_content(
 
 
 @pytest.mark.parametrize(
+    "field,value",
+    [
+        ("relatedTerms", ["Schwein", "Sau"]),
+        ("type", ["Divine names"]),
+        ("wikidataId", ["Q787"]),
+    ],
+)
+def test_list_non_redirect_ids_treats_metadata_only_entries_as_redirects(
+    field: str, value: list, realia_repository: MongoRealiaRepository
+) -> None:
+    _insert_with_single_cross_reference(realia_repository, "Stub", **{field: value})
+
+    assert realia_repository.list_non_redirect_ids() == []
+
+
+@pytest.mark.parametrize(
     "reallexikon",
     [
         [{"id": "a", "reference": {"id": "bib_1"}}],
         [{"id": "a", "reference": "bib_1"}],
         [{"id": "a", "reference": None}, {"id": "b", "reference": {"id": "bib_1"}}],
+        [{"id": "a", "reference": None}, {"id": "b", "reference": None}],
     ],
 )
 def test_list_non_redirect_ids_lists_entries_with_resolvable_reallexikon(
@@ -119,7 +133,6 @@ def test_list_non_redirect_ids_lists_entries_with_resolvable_reallexikon(
         [{"id": "r", "reference": None}],
         [{"id": "r", "reference": {"pages": "5"}}],
         [{"id": "r", "reference": ""}],
-        [{"id": "a", "reference": None}, {"id": "b", "reference": None}],
     ],
 )
 def test_list_non_redirect_ids_excludes_unresolvable_reallexikon(

@@ -1,14 +1,12 @@
 from typing import Sequence
 
 EXACTLY_ONE_CROSS_REFERENCE = 1
+SINGLE_REALLEXIKON_ENTRY = 1
 
 OWN_CONTENT_ARRAY_FIELDS: Sequence[str] = (
     "afoRegister",
     "references",
     "afoCrossReferences",
-    "relatedTerms",
-    "type",
-    "wikidataId",
 )
 
 
@@ -34,6 +32,7 @@ def _has_own_content_expression() -> dict:
     return {
         "$or": [
             *({"$gt": [_array_size(field), 0]} for field in OWN_CONTENT_ARRAY_FIELDS),
+            {"$gt": [_array_size("reallexikon"), SINGLE_REALLEXIKON_ENTRY]},
             {"$gt": [_resolvable_reallexikon_count(), 0]},
         ]
     }

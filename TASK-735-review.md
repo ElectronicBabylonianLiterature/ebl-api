@@ -423,23 +423,65 @@ known array field to be absent, null, or an actual array. Malformed
 documents are excluded from the listing instead of emitted. Verified over
 HTTP: every listed ID now returns 200 individually.
 
+### Finding 10 — semantic merge conflict with master (fixed)
+
+**Severity: High. Surfaced by merging master in; now fixed.**
+
+Master's PR #740 added `ebl/tests/fragmentarium/test_realia_info.py` with
+`FakeRealiaRepository(RealiaRepository)`. This branch added the abstract
+method `list_non_redirect_ids` to that ABC. Neither side touched the
+other's lines, so `git merge` reported success with no conflicts — and 6
+tests then failed with `TypeError: Can't instantiate abstract class
+FakeRealiaRepository with abstract method list_non_redirect_ids`.
+
+Fix: `list_non_redirect_ids` implemented as a `NotImplementedError` stub
+on the fake, matching the file's pattern for the other abstract methods.
+`FailingRealiaRepository` subclasses it, so one addition covered all six.
+
+This is a standing argument for running the full suite after every merge:
+a clean textual merge proved nothing.
+
+### Status of Findings 4 and 6 — done
+
+The PR title is now "Add GET /realia/all endpoint for listing Realia IDs
+for the sitemap". The body documents the three exclusion rules
+(redirect stubs, reserved identifiers, malformed documents), the
+`$isArray` robustness fix, the `$expr` full-scan trade-off from Finding 6,
+and the open domain question from Finding 5.
+
 ### Outstanding decisions
 
-1. **Finding 5** — is "exactly one cross-reference and no own content" the
-   right definition of a redirect stub, or should any entry with
-   cross-references and no own content be excluded? Behaviour is unchanged
-   pending this answer.
-2. **Finding 4** — the PR title and body still describe `/realia/all`
-   returning *all* IDs. They now need to describe the redirect-stub,
-   reserved-identifier, and malformed-document exclusions. Awaiting
-   authorisation to edit the PR.
-3. **Test removal** — `test_entry_named_all_is_reachable` asserted that
-   `GET /realia/all` returns the entry whose `_id` is `"all"`. That is
-   false by design now that `/realia/all` is the listing route. It was
-   replaced by `test_list_excludes_reserved_identifiers` and
-   `test_every_listed_id_is_retrievable`. Per project rules this removal
-   needs explicit approval.
-4. **Tooling regression from Finding 3** — master's `type-pyright` task
+1. **Finding 5 — resolved, but not as originally framed.** The
+   "exactly one cross-reference" test was never the problem: it mirrors
+   `crossReferences.length === 1` in the frontend's `getRedirectTarget`
+   exactly, and the frontend renders a real "See also" page for entries
+   with two or more, so listing those is correct.
+
+   The actual defect was that the backend and the frontend kept two
+   independent definitions of "has own content" and they disagreed. The
+   backend counted `relatedTerms`, `type` and `wikidataId` as content
+   while the frontend did not, so entries carrying only metadata were
+   published to the sitemap and then redirected away on arrival; and the
+   frontend counted `reallexikon.length > 1` while the backend required a
+   resolvable reference, so a page that renders was missing from the
+   sitemap.
+
+   Fixed by aligning the backend to the frontend. Verified exhaustively:
+   1344 generated entry shapes (3 cross-reference counts x 7 reallexikon
+   shapes x 2^6 content-field combinations) compared against a port of
+   `getRedirectTarget` — **0 mismatches**.
+
+   Still worth doing separately: the two rules remain two independent
+   implementations of one concept and will drift again. One side should
+   own the definition, or a shared fixture should pin them together.
+2. **Test removal — covered.** `test_entry_named_all_is_reachable`
+   asserted that `GET /realia/all` returns the entry whose `_id` is
+   `"all"`, which is false by design now that `/realia/all` is the listing
+   route. It was replaced by `test_list_excludes_reserved_identifiers` and
+   `test_every_listed_id_is_retrievable`. The removal was flagged before
+   committing and the user instructed the commit to proceed; it is also
+   called out in the commit message.
+3. **Tooling regression from Finding 3** — master's `type-pyright` task
    reads the committed diff only, ignores explicit paths, and skips
    untracked files, so it cannot check a tree containing an uncommitted
    rename. The branch's version handled both. Worth a separate PR against

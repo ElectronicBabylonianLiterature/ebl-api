@@ -1,11 +1,14 @@
 from typing import Sequence
 
-from ebl.realia.infrastructure.realia_stub_filter import OWN_CONTENT_ARRAY_FIELDS
-
 ABSENT_TYPES: Sequence[str] = ("missing", "null")
 
 ARRAY_FIELDS: Sequence[str] = (
-    *OWN_CONTENT_ARRAY_FIELDS,
+    "afoRegister",
+    "references",
+    "afoCrossReferences",
+    "relatedTerms",
+    "type",
+    "wikidataId",
     "crossReferences",
     "reallexikon",
 )
