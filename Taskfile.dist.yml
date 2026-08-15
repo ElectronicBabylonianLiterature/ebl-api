@@ -45,22 +45,18 @@ tasks:
 
   type-pyright:
     desc: >-
-      Pyright (the checker behind Pylance) on Python files changed against
-      the merge base with master. Pass explicit paths after -- to override.
+      Run pyright (the checker behind Pylance) on Python files changed vs
+      master. Pyre and mypy do not catch what the IDE reports, so changed
+      code is gated on pyright too.
     cmds:
       - |
-        files="{{.CLI_ARGS}}"
-        if [ -z "$files" ]; then
-          files=$( {
-            git diff --name-only --diff-filter=ACMR \
-              "$(git merge-base HEAD master)" -- '*.py'
-            git ls-files --others --exclude-standard -- '*.py'
-          } | sort -u )
-        fi
-        if [ -z "$files" ]; then
-          echo "No changed Python files to check."
+        BASE=origin/master
+        git rev-parse --verify --quiet "$BASE" >/dev/null 2>&1 || BASE=master
+        FILES=$(git diff --name-only --diff-filter=ACMR "$BASE...HEAD" -- '*.py')
+        if [ -z "$FILES" ]; then
+          echo "No changed Python files."
         else
-          npx --yes pyright@1.1.411 $files
+          printf '%s\n' "$FILES" | xargs npx --yes pyright@1.1.411
         fi
 
   format:

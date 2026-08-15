@@ -13,10 +13,14 @@ from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.domain.realia_entry import RealiaEntry, ReallexikonEntry
+from ebl.realia.domain.reserved_identifiers import RESERVED_REALIA_IDS
 from ebl.realia.infrastructure.realia_id_sorting import sort_realia_ids
 from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanker
-from ebl.realia.infrastructure.realia_stub_filter import non_redirect_stub_query
+from ebl.realia.infrastructure.realia_document_shape import (
+    well_formed_arrays_expression,
+)
+from ebl.realia.infrastructure.realia_stub_filter import non_redirect_stub_expression
 
 REALIA_COLLECTION = "realia"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
@@ -70,10 +74,21 @@ class MongoRealiaRepository(RealiaRepository):
 
     def list_non_redirect_ids(self) -> Sequence[str]:
         documents = self._realia_collection.find_many(
-            non_redirect_stub_query(),
+            self._build_listable_query(),
             projection={"_id": True},
         )
         return sort_realia_ids(document["_id"] for document in documents)
+
+    def _build_listable_query(self) -> dict:
+        return {
+            "_id": {"$nin": list(RESERVED_REALIA_IDS)},
+            "$expr": {
+                "$and": [
+                    well_formed_arrays_expression(),
+                    non_redirect_stub_expression(),
+                ]
+            },
+        }
 
     def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
         options = "i" if cfq.use_collations else ""

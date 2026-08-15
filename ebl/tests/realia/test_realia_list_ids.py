@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.realia.application.realia_repository import RealiaRepository
+from ebl.realia.domain.reserved_identifiers import RESERVED_REALIA_IDS
 from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.tests.realia.realia_repository_helpers import insert_minimal, insert_stored
 
@@ -30,6 +31,16 @@ def test_list_non_redirect_ids_sorted(realia_repository: MongoRealiaRepository) 
 
 def test_list_non_redirect_ids_empty(realia_repository: RealiaRepository) -> None:
     assert realia_repository.list_non_redirect_ids() == []
+
+
+@pytest.mark.parametrize("reserved_identifier", RESERVED_REALIA_IDS)
+def test_list_non_redirect_ids_excludes_reserved_identifiers(
+    reserved_identifier: str, realia_repository: MongoRealiaRepository
+) -> None:
+    for identifier in (reserved_identifier, "Anu"):
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_non_redirect_ids() == ["Anu"]
 
 
 def test_list_non_redirect_ids_returns_every_id_without_limit(

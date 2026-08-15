@@ -9,8 +9,8 @@ class RealiaResource:
     def __init__(self, realia_repository: RealiaRepository) -> None:
         self._realia_repository = realia_repository
 
-    def on_get(self, _req: Request, resp: Response, realia_id: str) -> None:
-        entry = self._realia_repository.find(realia_id)
+    def on_get(self, _req: Request, resp: Response, entry_id: str) -> None:
+        entry = self._realia_repository.find(entry_id)
         resp.media = RealiaEntrySchema().dump(entry)
 
 
@@ -20,14 +20,14 @@ class RealiaLemmaSink:
     def __init__(self, realia_repository: RealiaRepository) -> None:
         self._resource = RealiaResource(realia_repository)
 
-    def __call__(self, req: Request, resp: Response, realia_id: str) -> None:
+    def __call__(self, req: Request, resp: Response, entry_id: str) -> None:
         if req.method == "OPTIONS":
             resp.set_header("Allow", ", ".join(self._allowed_methods))
             resp.status = HTTP_OK
             return
         if req.method != "GET":
             raise HTTPMethodNotAllowed(self._allowed_methods)
-        self._resource.on_get(req, resp, realia_id)
+        self._resource.on_get(req, resp, entry_id)
 
 
 class RealiaByIdResource:

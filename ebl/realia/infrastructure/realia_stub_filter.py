@@ -1,7 +1,6 @@
 from typing import Sequence
 
-REDIRECT_CROSS_REFERENCE_COUNT = 1
-IF_NULL = "$ifNull"
+EXACTLY_ONE_CROSS_REFERENCE = 1
 
 OWN_CONTENT_ARRAY_FIELDS: Sequence[str] = (
     "afoRegister",
@@ -13,8 +12,8 @@ OWN_CONTENT_ARRAY_FIELDS: Sequence[str] = (
 )
 
 
-def non_redirect_stub_query() -> dict:
-    return {"$expr": {"$not": [_is_redirect_stub_expression()]}}
+def non_redirect_stub_expression() -> dict:
+    return {"$not": [_is_redirect_stub_expression()]}
 
 
 def _is_redirect_stub_expression() -> dict:
@@ -23,7 +22,7 @@ def _is_redirect_stub_expression() -> dict:
             {
                 "$eq": [
                     _array_size("crossReferences"),
-                    REDIRECT_CROSS_REFERENCE_COUNT,
+                    EXACTLY_ONE_CROSS_REFERENCE,
                 ]
             },
             {"$not": [_has_own_content_expression()]},
@@ -40,15 +39,19 @@ def _has_own_content_expression() -> dict:
     }
 
 
+def _as_array(value: str) -> dict:
+    return {"$cond": [{"$isArray": value}, value, []]}
+
+
 def _array_size(field: str) -> dict:
-    return {"$size": {IF_NULL: [f"${field}", []]}}
+    return {"$size": _as_array(f"${field}")}
 
 
 def _resolvable_reallexikon_count() -> dict:
     return {
         "$size": {
             "$filter": {
-                "input": {IF_NULL: ["$reallexikon", []]},
+                "input": _as_array("$reallexikon"),
                 "cond": _is_resolvable_reference("$$this.reference"),
             }
         }
@@ -65,7 +68,7 @@ def _is_resolvable_reference(reference: str) -> dict:
                 },
                 {
                     "case": {"$eq": [{"$type": reference}, "object"]},
-                    "then": {"$ne": [{IF_NULL: [f"{reference}.id", ""]}, ""]},
+                    "then": {"$ne": [{"$ifNull": [f"{reference}.id", ""]}, ""]},
                 },
             ],
             "default": False,
