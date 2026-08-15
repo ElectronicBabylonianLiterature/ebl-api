@@ -39,6 +39,7 @@ class MongoFragmentRepository(
         )
         self._fragments.create_index([("text.lines.type", pymongo.ASCENDING)])
         self._fragments.create_index([("dossiers.dossierId", pymongo.ASCENDING)])
+        self._fragments.create_index([("genres.category", pymongo.ASCENDING)])
         self._fragments.create_index(
             [
                 ("archaeology.excavationNumber.prefix", pymongo.ASCENDING),
@@ -101,6 +102,8 @@ class MongoFragmentRepository(
                 "signs",
                 "record",
                 "line_to_vec",
+                "named_entities",
+                "realia",
             ),
             "date": ("date",),
             "dates_in_text": ("dates_in_text",),
@@ -108,8 +111,8 @@ class MongoFragmentRepository(
             "authorized_scopes": [
                 "authorized_scopes",
             ],
-            "ocredSigns": ("ocredSigns"),
-            "named_entities": ("text", "named_entities"),
+            "ocredSigns": ("ocred_signs",),
+            "named_entities": ("text", "named_entities", "realia"),
         }
 
         if field not in fields_to_update:

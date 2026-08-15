@@ -2,18 +2,19 @@ from itertools import zip_longest
 from typing import (
     Callable,
     Iterable,
+    List,
+    Mapping,
     Optional,
     Sequence,
     Type,
     TypeVar,
-    Union,
     cast,
 )
 
 import attr
 import pydash
 
-from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation
+from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation, TokenIndex
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -29,7 +30,7 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 
-L = TypeVar("L", "TextLine", "Line")
+L = TypeVar("L", bound=Line)
 T = TypeVar("T")
 
 
@@ -57,6 +58,12 @@ def merge_tokens(old: Sequence[Token], new: Sequence[Token]) -> Sequence[Token]:
 
 
 AlignmentMap = Sequence[Optional[int]]
+
+
+def annotation_ids(
+    token_map: Mapping[str, List[str]], token_id: Optional[str]
+) -> List[str]:
+    return token_map.get(token_id, []) if token_id else []
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -109,8 +116,11 @@ class TextLine(Line):
     ) -> "TextLine":
         content = tuple(
             (
-                attr.evolve(token, unique_lemma=line_annotation[index])
-                if index in line_annotation
+                attr.evolve(
+                    cast(AbstractWord, token),
+                    unique_lemma=line_annotation[TokenIndex(index)],
+                )
+                if TokenIndex(index) in line_annotation
                 else token
             )
             for index, token in enumerate(self.content)
@@ -133,14 +143,17 @@ class TextLine(Line):
             self, content=update_tokens(self.content, updates, updater, error_class)
         )
 
-    def merge(self, other: L) -> Union["TextLine", L]:
+    def merge(self, other: L) -> L:
         if not isinstance(other, TextLine):
             return other
 
         other_text_line = cast(TextLine, other)
-        return TextLine.of_iterable(
-            other_text_line.line_number,
-            merge_tokens(self.content, other_text_line.content),
+        return cast(
+            L,
+            TextLine.of_iterable(
+                other_text_line.line_number,
+                merge_tokens(self.content, other_text_line.content),
+            ),
         )
 
     def update_alignments(self, alignment_map: AlignmentMap) -> "TextLine":
@@ -153,10 +166,18 @@ class TextLine(Line):
         for token in self.content:
             token.accept(visitor)
 
-    def set_named_entities(self, token_entity_map: dict) -> "TextLine":
+    def set_named_entities(
+        self,
+        token_entity_map: Mapping[str, List[str]],
+        token_realia_map: Mapping[str, List[str]],
+    ) -> "TextLine":
         updated_content = tuple(
             (
-                attr.evolve(token, named_entities=token_entity_map.get(token.id_, []))
+                attr.evolve(
+                    token,
+                    named_entities=annotation_ids(token_entity_map, token.id_),
+                    realia=annotation_ids(token_realia_map, token.id_),
+                )
                 if isinstance(token, AbstractWord)
                 else token
             )

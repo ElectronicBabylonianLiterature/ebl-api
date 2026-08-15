@@ -20,6 +20,25 @@ LATEST_TRANSLITERATION_LIMIT: int = 50
 LATEST_TRANSLITERATION_LINE_LIMIT: int = 3
 
 
+def fragment_photo_filename_expression() -> Dict:
+    suffix = {"$ifNull": ["$museumNumber.suffix", ""]}
+    return {
+        "$concat": [
+            {"$ifNull": ["$museumNumber.prefix", ""]},
+            ".",
+            {"$ifNull": ["$museumNumber.number", ""]},
+            {
+                "$cond": {
+                    "if": {"$eq": [suffix, ""]},
+                    "then": "",
+                    "else": {"$concat": [".", suffix]},
+                }
+            },
+            ".jpg",
+        ]
+    }
+
+
 def fragment_is(fragment: Fragment) -> dict:
     return query_number_is(fragment.number)
 
@@ -231,25 +250,7 @@ def aggregate_path_of_the_pioneers(
                 ]
             }
         },
-        {
-            "$addFields": {
-                "filename": {
-                    "$concat": [
-                        "$museumNumber.prefix",
-                        ".",
-                        "$museumNumber.number",
-                        {
-                            "$cond": {
-                                "if": {"$eq": ["$museumNumber.suffix", ""]},
-                                "then": "",
-                                "else": {"$concat": [".", "$museumNumber.suffix"]},
-                            }
-                        },
-                        ".jpg",
-                    ]
-                }
-            }
-        },
+        {"$addFields": {"filename": fragment_photo_filename_expression()}},
         {
             "$lookup": {
                 "from": "photos.files",

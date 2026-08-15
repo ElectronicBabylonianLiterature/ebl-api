@@ -22,6 +22,17 @@ def test_search_by_id(
     assert results[0].id == entry.id
 
 
+def test_search_by_id_collates_uppercase_h(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    insert_minimal(realia_repository, "Ḫattusa")
+
+    for query in ["Hattusa", "Ḥattusa", "ḥattusa", "ḫattusa"]:
+        results = realia_repository.search(query)
+
+        assert [result.id for result in results] == ["Ḫattusa"]
+
+
 def test_search_by_related_term(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,

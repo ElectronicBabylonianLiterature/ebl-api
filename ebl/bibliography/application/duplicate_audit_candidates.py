@@ -13,7 +13,8 @@ from ebl.bibliography.application.duplicate_audit_scoring import PairScore, scor
 
 
 def pair_key(left_id: str, right_id: str) -> tuple[str, str]:
-    return tuple(sorted((left_id, right_id)))
+    left, right = sorted((left_id, right_id))
+    return left, right
 
 
 def reviewed_not_duplicate_pairs(path: Optional[Path]) -> set[tuple[str, str]]:

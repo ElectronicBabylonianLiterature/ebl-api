@@ -33,6 +33,12 @@ class Museum(Enum):
         "AU",
         "https://www.aiarch.org.au/",
     )
+    BATMAN_HASANKEYF_MUZESI = (
+        "Batman Hasankeyf Müzesi",
+        "Batman",
+        "TR",
+        "https://kvmgm.ktb.gov.tr/TR-281298/batman-muze-mudurlugu.html",
+    )
     BANQUE_NATIONALE_DE_BELGIQUE = (
         "Banque Nationale de Belgique",
         "Brussels",
@@ -92,6 +98,12 @@ class Museum(Enum):
         "Cambridge",
         "US",
         "https://harvardartmuseums.org/",
+    )
+    HARVEY_CUSHING_WHITNEY_MEDICAL_LIBRARY = (
+        "Harvey Cushing/John Hay Whitney Medical Library, Yale University",
+        "New Haven",
+        "US",
+        "https://library.medicine.yale.edu/",
     )
     HATAY_ARCHAEOLOGY_MUSEUM = (
         "Hatay Archaeology Museum",
@@ -154,6 +166,12 @@ class Museum(Enum):
         "https://www.khm.at/",
     )
     LOUVRE = ("Louvre", "Paris", "FR", "https://www.louvre.fr/")
+    MARDIN_MUZESI = (
+        "Mardin Müzesi",
+        "Mardin",
+        "TR",
+        "https://muze.gov.tr/muze-detay?sectionId=MRD01&distId=MRK",
+    )
     MOSUL_MUSEUM = (
         "Mosul Museum",
         "Mosul",
@@ -191,6 +209,12 @@ class Museum(Enum):
         "https://muze.gov.tr/muze-detay?SectionId=AMM01&DistId=AMM",
     )
     NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DK", "https://en.natmus.dk/")
+    MUSEO_NAZIONALE_D_ARTE_ORIENTALE = (
+        "Museo Nazionale d’Arte Orientale “Giuseppe Tucci”",
+        "Rome",
+        "IT",
+        "https://www.museodellecivilta.it/arte-orientale/",
+    )
     NATIONAL_MUSEUM_OF_WORLD_WRITING_SYSTEMS = (
         "National Museum of World Writing Systems",
         "Incheon",
@@ -246,6 +270,11 @@ class Museum(Enum):
         "Private collection of W. Lamplough",
         "",
         "GB",
+    )
+    PRIVATE_COLLECTION_OF_Z_YILDIZ = (
+        "Private collection of Zeynel Yıldız",
+        "Elazığ",
+        "TR",
     )
     MCGILL_UNIVERSITY = (
         "McGill University Ethnological Collections",

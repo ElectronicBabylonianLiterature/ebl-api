@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 NAME_SCHEMA = {
     "type": "object",
     "properties": {
@@ -35,6 +37,31 @@ DATE_SCHEMA = {
     "additionalProperties": False,
 }
 
+
+BIBLIOGRAPHY_ALIAS_SCHEMA = {
+    "type": "object",
+    "description": (
+        "Trusted legacy alias shape. Partner APIs do not accept this field; "
+        "server-owned partner aliases are built by the application layer. "
+        "Optional metadata remains supported for curated and migration records "
+        "with minimal alias objects. Lookup uses value/normalizedValue when "
+        "present; missing type, source, or status is not a fully validated alias "
+        "lifecycle. Future tightening may require a migration."
+    ),
+    "properties": {
+        "value": {"type": "string"},
+        "normalizedValue": {"type": "string"},
+        "type": {"type": "string"},
+        "source": {"type": "string"},
+        "status": {"type": "string"},
+    },
+    "required": ["value"],
+    "additionalProperties": False,
+}
+
+SERVER_OWNED_BIBLIOGRAPHY_FIELDS = frozenset(
+    "aliases citationKey deprecated redirectTo".split()
+)
 
 CSL_JSON_SCHEMA = {
     "type": "object",
@@ -80,6 +107,10 @@ CSL_JSON_SCHEMA = {
             ],
         },
         "id": {"type": "string", "pattern": r"^[^/]+$"},
+        "citationKey": {"type": "string"},
+        "aliases": {"type": "array", "items": BIBLIOGRAPHY_ALIAS_SCHEMA},
+        "deprecated": {"type": "boolean"},
+        "redirectTo": {"type": ["string", "null"]},
         "categories": {"type": "array", "items": {"type": "string"}},
         "language": {"type": "string"},
         "journalAbbreviation": {"type": "string"},
@@ -158,7 +189,29 @@ CSL_JSON_SCHEMA = {
         "year-suffix": {"type": "string"},
     },
     "required": ["type", "id"],
+    "allOf": [
+        {
+            "if": {
+                "properties": {"deprecated": {"const": True}},
+                "required": ["deprecated"],
+            },
+            "then": {
+                "properties": {"redirectTo": {"type": "string", "minLength": 1}},
+                "required": ["redirectTo"],
+            },
+        }
+    ],
     "additionalProperties": False,
+}
+
+PARTNER_CSL_JSON_SCHEMA = {
+    **{key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"},
+    "properties": {
+        key: {"type": "string"} if key == "id" else value
+        for key, value in cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]).items()
+        if key not in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+    },
+    "required": ["type"],
 }
 
 DUPLICATE_CANDIDATE_JSON_SCHEMA = {
@@ -186,4 +239,12 @@ DUPLICATE_OVERRIDE_JSON_SCHEMA = {
     },
     "required": ["bibliographyEntry", "override"],
     "additionalProperties": False,
+}
+
+PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA = {
+    **DUPLICATE_OVERRIDE_JSON_SCHEMA,
+    "properties": {
+        **cast(dict[str, Any], DUPLICATE_OVERRIDE_JSON_SCHEMA["properties"]),
+        "bibliographyEntry": PARTNER_CSL_JSON_SCHEMA,
+    },
 }

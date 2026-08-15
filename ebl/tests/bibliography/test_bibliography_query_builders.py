@@ -1,4 +1,7 @@
+import pytest
+
 from ebl.bibliography.infrastructure.bibliography import (
+    ACTIVE_BIBLIOGRAPHY_FILTER,
     MongoBibliographyRepository,
     author_year_title_match,
     bibliography_query_pipeline,
@@ -19,11 +22,13 @@ def test_author_year_title_match_and_pipeline() -> None:
 
     assert match["author.0.family"] == "George"
     assert match["issued.date-parts.0.0"] == {"$gte": 2003, "$lt": 2004}
-    assert pipeline[0] == {"$match": match}
+    assert pipeline[0] == {"$match": {**match, **ACTIVE_BIBLIOGRAPHY_FILTER}}
     assert pipeline[2]["$sort"]["title"] == 1
 
 
-def test_query_by_author_year_and_title_uses_title_sort() -> None:
+def test_query_by_author_year_and_title_uses_title_sort(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     repository = object.__new__(MongoBibliographyRepository)
     seen = {}
 
@@ -32,7 +37,7 @@ def test_query_by_author_year_and_title_uses_title_sort() -> None:
         seen["trailing_sort_field"] = trailing_sort_field
         return ["result"]
 
-    repository._query = fake_query
+    monkeypatch.setattr(repository, "_query", fake_query)
 
     assert repository.query_by_author_year_and_title("George", 2003, "Gilgamesh") == [
         "result"

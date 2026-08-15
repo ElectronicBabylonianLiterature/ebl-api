@@ -16,6 +16,7 @@ class MongoFragmentRepositoryBase(FragmentRepository):
     ) -> None:
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self._photo_files = MongoCollection(database, "photos.files")
         self._provenance_service = provenance_service
 
     def _schema(self, **kwargs):

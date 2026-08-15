@@ -9,3 +9,4 @@ class Genre(Enum):
     MAGIC = "Mag"
     MEDICINE = "Med"
     SHUILA = "Šui"
+    SUMERIAN = "Sum"
