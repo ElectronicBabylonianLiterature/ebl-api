@@ -1,14 +1,23 @@
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import AbstractSet, Iterable, Optional, Sequence, Tuple, TypeVar
 
 import attr
 
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import to_sub_index
 from ebl.transliteration.domain.converters import (
     convert_flag_sequence,
     convert_string_sequence,
 )
-from ebl.transliteration.domain.tokens import Token, TokenVisitor, ValueToken
+from ebl.transliteration.domain.enclosure_type import EnclosureType
+from ebl.transliteration.domain.tokens import (
+    ErasureState,
+    Token,
+    TokenVisitor,
+    ValueToken,
+)
+
+TokenT = TypeVar("TokenT", bound=Token)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -40,8 +49,40 @@ class NamePart(Token):
         return self.token.value
 
     @property
+    def clean_value(self) -> str:
+        return self.token.clean_value
+
+    @property
     def parts(self) -> Sequence[Token]:
         return self.token.parts
+
+    @property
+    def lemmatizable(self) -> bool:
+        return self.token.lemmatizable
+
+    @property
+    def alignable(self) -> bool:
+        return self.token.alignable
+
+    def get_key(self) -> str:
+        return self.token.get_key()
+
+    def set_unique_lemma(self, lemma: LemmatizationToken) -> "NamePart":
+        return NamePart.of(self.token.set_unique_lemma(lemma))
+
+    def update_alignment(self, alignment_map) -> "NamePart":
+        return NamePart.of(self.token.update_alignment(alignment_map))
+
+    def set_enclosure_type(
+        self, enclosure_type: AbstractSet[EnclosureType]
+    ) -> "NamePart":
+        return NamePart.of(self.token.set_enclosure_type(enclosure_type))
+
+    def set_erasure(self, erasure: ErasureState) -> "NamePart":
+        return NamePart.of(self.token.set_erasure(erasure))
+
+    def merge(self, token: TokenT) -> TokenT:
+        return self.token.merge(token)
 
     def accept(self, visitor: TokenVisitor) -> None:
         self.token.accept(visitor)

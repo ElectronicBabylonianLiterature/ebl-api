@@ -24,7 +24,7 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
 
 def tree_to_string(tree: Tree) -> str:
     _children = []
-    for part in tree.scan_values(lambda value: bool(value)):
+    for part in tree.scan_values(bool):
         if hasattr(part, "value"):
             _children.append(cast(Any, part).value)
         elif isinstance(part, Tree):
@@ -77,8 +77,8 @@ class SignTransformer(Transformer):
         self, name, sub_index, modifiers, flags, surrogate
     ):
         return Logogram.of(
-            tuple(name.children), sub_index, modifiers, flags, None, surrogate.children
-        )
+            tuple(name.children), sub_index, modifiers, flags
+        ).with_surrogate(surrogate.children)
 
     @v_args()
     def ebl_atf_text_line__logogram_name_part(self, children):

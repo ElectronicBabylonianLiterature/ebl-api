@@ -64,6 +64,9 @@ class Logogram(NamedSign):
             else ""
         )
 
+    def with_surrogate(self, surrogate: Sequence[Token]) -> "Logogram":
+        return attr.evolve(self, surrogate=surrogate)
+
     @staticmethod
     def of(
         name: Sequence[Token],
@@ -71,7 +74,6 @@ class Logogram(NamedSign):
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
-        surrogate: Sequence[Token] = (),
     ) -> "Logogram":
         return Logogram(
             frozenset(),
@@ -81,7 +83,6 @@ class Logogram(NamedSign):
             convert_name_parts(name),
             sub_index,
             sign,
-            surrogate,
         )
 
     @staticmethod
@@ -91,11 +92,8 @@ class Logogram(NamedSign):
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
-        surrogate: Sequence[Token] = (),
     ) -> "Logogram":
-        return Logogram.of(
-            (ValueToken.of(name),), sub_index, modifiers, flags, sign, surrogate
-        )
+        return Logogram.of((ValueToken.of(name),), sub_index, modifiers, flags, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)

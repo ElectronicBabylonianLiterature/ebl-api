@@ -44,15 +44,6 @@ __all__ = [
     "MuseumNumberString",
 ]
 
-__all__ = [
-    "ApiChapterSchema",
-    "ApiLineSchema",
-    "ApiManuscriptLineSchema",
-    "ApiManuscriptSchema",
-    "ApiOldSiglumSchema",
-    "MuseumNumberString",
-]
-
 
 class LineNumberString(fields.String):
     def _serialize(self, value, attr, obj, **kwargs):

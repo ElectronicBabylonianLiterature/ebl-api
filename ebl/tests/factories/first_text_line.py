@@ -27,13 +27,12 @@ FIRST_TEXT_LINE = TextLine.of_iterable(
         Word.of([UnidentifiedSign.of()]),
         Word.of(
             [
-                Logogram.of_name(
-                    "BA",
-                    surrogate=[
+                Logogram.of_name("BA").with_surrogate(
+                    [
                         Reading.of_name("ku"),
                         Joiner.hyphen(),
                         Reading.of_name("u", 4),
-                    ],
+                    ]
                 )
             ]
         ),

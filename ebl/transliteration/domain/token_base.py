@@ -95,11 +95,13 @@ class TokenVisitor(ABC):  # noqa: B024
 
 class SignsCollectingVisitor(TokenVisitor, ABC):
     @abstractmethod
-    def reset(self) -> None: ...
+    def reset(self) -> None:
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def result_string(self) -> Sequence[str]: ...
+    def result_string(self) -> Sequence[str]:
+        raise NotImplementedError
 
 
 class ErasureState(Enum):

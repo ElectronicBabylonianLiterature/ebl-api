@@ -81,8 +81,8 @@ class LogogramSchema(NamedSignSchema):
                 data["modifiers"],
                 data["flags"],
                 data["sign"],
-                data["surrogate"],
             )
+            .with_surrogate(data["surrogate"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
         )

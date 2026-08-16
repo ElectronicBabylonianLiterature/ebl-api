@@ -9,6 +9,7 @@ from typing import (
     Type,
     TypeVar,
     cast,
+    final,
 )
 
 import attr
@@ -66,6 +67,7 @@ def annotation_ids(
     return token_map.get(token_id, []) if token_id else []
 
 
+@final
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
     line_number: AbstractLineNumber

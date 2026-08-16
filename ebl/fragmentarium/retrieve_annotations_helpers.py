@@ -37,21 +37,21 @@ def filter_annotation(annotation: Annotation, to_filter) -> bool:
     return annotation.data.type not in to_filter and filter_empty_annotation(annotation)
 
 
+TYPES_MATCHED_BY_NAME = (
+    AnnotationValueType.SURFACE_AT_LINE,
+    AnnotationValueType.BLANK,
+    AnnotationValueType.ColumnAtLine,
+    AnnotationValueType.STRUCT,
+    AnnotationValueType.UnclearSign,
+)
+
+
 def match(annotation_data: AnnotationData) -> str:
-    type = annotation_data.type
-    if type == AnnotationValueType.SURFACE_AT_LINE:
-        return AnnotationValueType.SURFACE_AT_LINE.name
-    if type == AnnotationValueType.BLANK:
-        return AnnotationValueType.BLANK.name
-    if type == AnnotationValueType.ColumnAtLine:
-        return AnnotationValueType.ColumnAtLine.name
-    if type == AnnotationValueType.STRUCT:
-        return AnnotationValueType.STRUCT.name
-    if type == AnnotationValueType.UnclearSign:
-        return AnnotationValueType.UnclearSign.name
-    if type == AnnotationValueType.PARTIALLY_BROKEN:
-        return f"{parse_annotations(annotation_data)}?"
-    return parse_annotations(annotation_data)
+    annotation_type = annotation_data.type
+    if annotation_type in TYPES_MATCHED_BY_NAME:
+        return annotation_type.name
+    suffix = "?" if annotation_type == AnnotationValueType.PARTIALLY_BROKEN else ""
+    return f"{parse_annotations(annotation_data)}{suffix}"
 
 
 def parse_annotations(annotation_data: AnnotationData) -> str:

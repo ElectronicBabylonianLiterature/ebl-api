@@ -1,6 +1,11 @@
-from ebl.transliteration.domain.common_transformer import CommonTransformer
+from typing import Dict, Optional, cast
+
 import roman
-from lark.visitors import Visitor, Tree, Token
+from lark.lexer import Token
+from lark.tree import Tree
+from lark.visitors import Visitor
+
+from ebl.transliteration.domain.common_transformer import CommonTransformer
 
 surface_mapping = {
     "obverse": "o",
@@ -20,7 +25,11 @@ class IndexingVisitor(Visitor):
 
     def reset(self) -> None:
         self.column_counter = 1
-        self.cursor = {"surface": None, "column": None, "line": None}
+        self.cursor: Dict[str, Optional[str]] = {
+            "surface": None,
+            "column": None,
+            "line": None,
+        }
 
     def ebl_atf_at_line__surface_with_status(self, tree: Tree) -> Tree:
         if (
@@ -28,7 +37,7 @@ class IndexingVisitor(Visitor):
             and tree.children[0].type == "ebl_atf_at_line__ebl_atf_common__SURFACE"
         ):
             surface = surface_mapping[str(tree.children[0])] + "".join(
-                str(child) for child in tree.children[1].children
+                str(child) for child in cast(Tree, tree.children[1]).children
             )
         else:
             surface = self._tree_to_string(tree)
@@ -38,7 +47,7 @@ class IndexingVisitor(Visitor):
 
     def _tree_to_string(self, tree: Tree) -> str:
         return " ".join(
-            str(child) if isinstance(child, Token) else self._tree_to_string(child)
+            self._tree_to_string(child) if isinstance(child, Tree) else str(child)
             for child in tree.children
         ).strip()
 
@@ -48,8 +57,9 @@ class IndexingVisitor(Visitor):
         return tree
 
     def ebl_atf_at_line__column(self, tree: Tree) -> Tree:
-        self.cursor["column"] = roman.toRoman(int(tree.children[0])).lower() + "".join(
-            str(child) for child in tree.children[1].children
+        column_number = int(str(tree.children[0]))
+        self.cursor["column"] = roman.toRoman(column_number).lower() + "".join(
+            str(child) for child in cast(Tree, tree.children[1]).children
         )
         return tree
 
