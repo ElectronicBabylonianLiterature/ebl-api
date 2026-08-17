@@ -6,6 +6,7 @@ from pymongo.database import Database
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_identity import (
+    BibliographyIdentityContext,
     update_with_identity_claims,
 )
 from ebl.bibliography.application.lookup_reservation import (
@@ -69,9 +70,11 @@ def reclaim(bibliography_repository, value: str):
 
 def update_identity(context: "BibliographyIdentityUpdateContext", entry: dict) -> None:
     update_with_identity_claims(
-        context.bibliography_repository,
-        context.changelog,
-        context.bibliography.find,
+        BibliographyIdentityContext(
+            context.bibliography_repository,
+            context.changelog,
+            context.bibliography.find,
+        ),
         entry,
         context.user,
     )

@@ -9,6 +9,7 @@ from ebl.bibliography.application.duplicate_detection import (
 )
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.bibliography_identity import (
+    BibliographyIdentityContext,
     create_with_identity_claims,
     update_with_identity_claims,
 )
@@ -29,11 +30,10 @@ class Bibliography:
         self._repository = repository
         self._changelog = changelog
         self._partner = PartnerBibliography(self, repository)
+        self._identity = BibliographyIdentityContext(repository, changelog, self.find)
 
     def create(self, entry, user: User) -> str:
-        return create_with_identity_claims(
-            self._repository, self._changelog, self.find, entry, user
-        )
+        return create_with_identity_claims(self._identity, entry, user)
 
     def find(self, id_: str):
         for query in (
@@ -96,9 +96,7 @@ class Bibliography:
     def update(self, entry: dict, user: User) -> None:
         stored_entry = self._stored_entry_for_update(entry)
         update_with_identity_claims(
-            self._repository,
-            self._changelog,
-            self.find,
+            self._identity,
             preserve_server_owned_fields(entry, stored_entry),
             user,
             stored_entry,

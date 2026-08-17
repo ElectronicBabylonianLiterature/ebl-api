@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable
 
@@ -17,23 +18,29 @@ from ebl.users.domain.user import User
 COLLECTION = "bibliography"
 
 
+@dataclass(frozen=True)
+class BibliographyIdentityContext:
+    repository: BibliographyRepository
+    changelog: Changelog
+    find: Callable[[str], dict]
+
+
 def identity_values(entry: dict[str, Any]) -> set[str]:
     return set(bibliography_lookup_values(entry))
 
 
 def create_with_identity_claims(
-    repository: BibliographyRepository,
-    changelog: Changelog,
-    find: Callable[[str], dict],
+    context: BibliographyIdentityContext,
     entry: dict[str, Any],
     user: User,
 ) -> str:
+    repository = context.repository
     now = datetime.now(timezone.utc)
     operation = new_lookup_reservation_operation(entry["id"], now)
     created = False
     try:
         repository.claim_lookup_values(operation, bibliography_lookup_values(entry))
-        ensure_lookup_values_available(find, entry)
+        ensure_lookup_values_available(context.find, entry)
         created_id = repository.create(entry)
         created = True
         if created_id != entry["id"]:
@@ -41,7 +48,7 @@ def create_with_identity_claims(
                 f"Created bibliography id {created_id} does not match {entry['id']}."
             )
         repository.commit_lookup_values(operation, datetime.now(timezone.utc))
-        changelog.create(
+        context.changelog.create(
             COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry)
         )
         return created_id
@@ -52,13 +59,12 @@ def create_with_identity_claims(
 
 
 def update_with_identity_claims(
-    repository: BibliographyRepository,
-    changelog: Changelog,
-    find: Callable[[str], dict],
+    context: BibliographyIdentityContext,
     entry: dict[str, Any],
     user: User,
     stored_entry: dict[str, Any] | None = None,
 ) -> None:
+    repository = context.repository
     old_entry = (
         repository.query_by_id(entry["id"]) if stored_entry is None else stored_entry
     )
@@ -71,14 +77,14 @@ def update_with_identity_claims(
     updated = False
     try:
         repository.claim_lookup_values(operation, values_to_claim)
-        ensure_lookup_values_available(find, entry, entry["id"])
+        ensure_lookup_values_available(context.find, entry, entry["id"])
         repository.update(entry)
         updated = True
         repository.commit_lookup_values(operation, datetime.now(timezone.utc))
         repository.retire_lookup_values(
             entry["id"], values_to_retire, datetime.now(timezone.utc)
         )
-        changelog.create(
+        context.changelog.create(
             COLLECTION,
             user.profile,
             create_mongo_entry(old_entry),
