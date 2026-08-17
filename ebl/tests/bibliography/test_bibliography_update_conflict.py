@@ -1,16 +1,25 @@
+from dataclasses import dataclass
+
 import falcon
 import pytest
+from falcon import testing
+from pymongo.database import Database
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyUpdateConflictError,
 )
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.tests.bibliography.identity_preservation_test_helpers import (
     CORRECTED_TITLE,
     metadata_only_payload,
     post_entry,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.users.domain.user import User
 
+ENTRY_ID = "Q30000042"
+ORIGINAL_TITLE = "Before"
 CONCURRENT_ALIAS = {
     "value": "RN9001",
     "normalizedValue": "rn9001",
@@ -18,129 +27,126 @@ CONCURRENT_ALIAS = {
     "source": "duplicate_merge_2026-08-04",
     "status": "redirect",
 }
+ADD_ALIAS = {"$push": {"aliases": CONCURRENT_ALIAS}}
+DEPRECATE = {"$set": {"deprecated": True, "redirectTo": "rla_9_388"}}
+
+
+@dataclass(frozen=True)
+class UpdateConflictContext:
+    bibliography: Bibliography
+    bibliography_repository: MongoBibliographyRepository
+    database: Database
+    client: testing.TestClient
+    user: User
+    entry: dict
 
 
 @pytest.fixture
-def active_entry(bibliography, user):
-    entry = BibliographyEntryFactory.build(id="Q30000042", title="Before")
+def conflict_context(request: pytest.FixtureRequest) -> UpdateConflictContext:
+    bibliography = request.getfixturevalue("bibliography")
+    user = request.getfixturevalue("user")
+    entry = BibliographyEntryFactory.build(id=ENTRY_ID, title=ORIGINAL_TITLE)
     bibliography.create(entry, user)
-    return entry
-
-
-def inject_concurrent_write(monkeypatch, bibliography_repository, database, update):
-    def claim_lookup_values(_operation, _values):
-        database["bibliography"].update_one({"_id": "Q30000042"}, update)
-
-    monkeypatch.setattr(
-        bibliography_repository, "claim_lookup_values", claim_lookup_values
+    return UpdateConflictContext(
+        bibliography,
+        request.getfixturevalue("bibliography_repository"),
+        request.getfixturevalue("database"),
+        request.getfixturevalue("client"),
+        user,
+        entry,
     )
 
 
-def stored(database):
-    return database["bibliography"].find_one({"_id": "Q30000042"})
+def inject_concurrent_write(
+    monkeypatch: pytest.MonkeyPatch, context: UpdateConflictContext, update: dict
+) -> None:
+    def claim_lookup_values(_operation, _values) -> None:
+        context.database["bibliography"].update_one({"_id": ENTRY_ID}, update)
+
+    monkeypatch.setattr(
+        context.bibliography_repository, "claim_lookup_values", claim_lookup_values
+    )
 
 
-def test_metadata_update_succeeds_without_concurrent_write(
-    client, database, active_entry
-):
-    result = post_entry(client, metadata_only_payload(active_entry))
+def update_metadata(context: UpdateConflictContext) -> None:
+    context.bibliography.update(metadata_only_payload(context.entry), context.user)
+
+
+def stored(context: UpdateConflictContext) -> dict:
+    document = context.database["bibliography"].find_one({"_id": ENTRY_ID})
+    assert document is not None
+    return document
+
+
+def changelog_count(context: UpdateConflictContext) -> int:
+    return context.database["changelog"].count_documents({"resource_id": ENTRY_ID})
+
+
+def test_metadata_update_succeeds_without_concurrent_write(conflict_context):
+    result = post_entry(
+        conflict_context.client, metadata_only_payload(conflict_context.entry)
+    )
 
     assert result.status == falcon.HTTP_NO_CONTENT
-    assert stored(database)["title"] == CORRECTED_TITLE
+    assert stored(conflict_context)["title"] == CORRECTED_TITLE
 
 
 def test_concurrently_added_alias_makes_metadata_update_conflict(
-    monkeypatch, bibliography, bibliography_repository, database, user, active_entry
+    monkeypatch, conflict_context
 ):
-    inject_concurrent_write(
-        monkeypatch,
-        bibliography_repository,
-        database,
-        {"$push": {"aliases": CONCURRENT_ALIAS}},
-    )
+    inject_concurrent_write(monkeypatch, conflict_context, ADD_ALIAS)
 
     with pytest.raises(BibliographyUpdateConflictError):
-        bibliography.update(metadata_only_payload(active_entry), user)
+        update_metadata(conflict_context)
 
 
-def test_concurrently_added_alias_survives_the_conflict(
-    monkeypatch, bibliography, bibliography_repository, database, user, active_entry
-):
-    inject_concurrent_write(
-        monkeypatch,
-        bibliography_repository,
-        database,
-        {"$push": {"aliases": CONCURRENT_ALIAS}},
-    )
+def test_concurrently_added_alias_survives_the_conflict(monkeypatch, conflict_context):
+    inject_concurrent_write(monkeypatch, conflict_context, ADD_ALIAS)
 
     with pytest.raises(BibliographyUpdateConflictError):
-        bibliography.update(metadata_only_payload(active_entry), user)
-    stored_entry = stored(database)
+        update_metadata(conflict_context)
+    stored_entry = stored(conflict_context)
 
     assert stored_entry["aliases"] == [CONCURRENT_ALIAS]
-    assert stored_entry["title"] == active_entry["title"]
+    assert stored_entry["title"] == ORIGINAL_TITLE
 
 
 def test_concurrent_deprecation_makes_metadata_update_conflict(
-    monkeypatch, bibliography, bibliography_repository, database, user, active_entry
+    monkeypatch, conflict_context
 ):
-    inject_concurrent_write(
-        monkeypatch,
-        bibliography_repository,
-        database,
-        {"$set": {"deprecated": True, "redirectTo": "rla_9_388"}},
-    )
+    inject_concurrent_write(monkeypatch, conflict_context, DEPRECATE)
 
     with pytest.raises(BibliographyUpdateConflictError):
-        bibliography.update(metadata_only_payload(active_entry), user)
+        update_metadata(conflict_context)
 
 
-def test_concurrent_tombstone_survives_the_conflict(
-    monkeypatch, bibliography, bibliography_repository, database, user, active_entry
-):
-    inject_concurrent_write(
-        monkeypatch,
-        bibliography_repository,
-        database,
-        {"$set": {"deprecated": True, "redirectTo": "rla_9_388"}},
-    )
+def test_concurrent_tombstone_survives_the_conflict(monkeypatch, conflict_context):
+    inject_concurrent_write(monkeypatch, conflict_context, DEPRECATE)
 
     with pytest.raises(BibliographyUpdateConflictError):
-        bibliography.update(metadata_only_payload(active_entry), user)
-    stored_entry = stored(database)
+        update_metadata(conflict_context)
+    stored_entry = stored(conflict_context)
 
     assert stored_entry["deprecated"] is True
     assert stored_entry["redirectTo"] == "rla_9_388"
-    assert stored_entry["title"] == active_entry["title"]
+    assert stored_entry["title"] == ORIGINAL_TITLE
 
 
-def test_conflict_writes_no_changelog_entry(
-    monkeypatch, bibliography, bibliography_repository, database, user, active_entry
-):
-    before = database["changelog"].count_documents({"resource_id": "Q30000042"})
-    inject_concurrent_write(
-        monkeypatch,
-        bibliography_repository,
-        database,
-        {"$push": {"aliases": CONCURRENT_ALIAS}},
-    )
+def test_conflict_writes_no_changelog_entry(monkeypatch, conflict_context):
+    before = changelog_count(conflict_context)
+    inject_concurrent_write(monkeypatch, conflict_context, ADD_ALIAS)
 
     with pytest.raises(BibliographyUpdateConflictError):
-        bibliography.update(metadata_only_payload(active_entry), user)
+        update_metadata(conflict_context)
 
-    assert database["changelog"].count_documents({"resource_id": "Q30000042"}) == before
+    assert changelog_count(conflict_context) == before
 
 
-def test_conflict_is_reported_as_http_conflict(
-    monkeypatch, client, bibliography_repository, database, active_entry
-):
-    inject_concurrent_write(
-        monkeypatch,
-        bibliography_repository,
-        database,
-        {"$push": {"aliases": CONCURRENT_ALIAS}},
+def test_conflict_is_reported_as_http_conflict(monkeypatch, conflict_context):
+    inject_concurrent_write(monkeypatch, conflict_context, ADD_ALIAS)
+
+    result = post_entry(
+        conflict_context.client, metadata_only_payload(conflict_context.entry)
     )
-
-    result = post_entry(client, metadata_only_payload(active_entry))
 
     assert result.status == falcon.HTTP_CONFLICT
