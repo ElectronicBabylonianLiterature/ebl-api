@@ -1,7 +1,8 @@
+import falcon
 import pytest
 
-from ebl.bibliography.application.bibliography_repository import LookupValueInUseError
 from ebl.bibliography.application.lookup_reservation import LookupReservationState
+from ebl.errors import DataError
 from ebl.tests.bibliography.identity_preservation_test_helpers import (
     CITATION_KEY,
     PARTNER_ALIAS,
@@ -9,6 +10,9 @@ from ebl.tests.bibliography.identity_preservation_test_helpers import (
     post_entry,
     reservations,
 )
+
+
+DEPRECATED_ERROR = "RN2001 is deprecated; edit rla_9_388 instead"
 
 
 def deprecated_payload(deprecated_entry: dict, **overrides) -> dict:
@@ -44,28 +48,29 @@ def test_metadata_update_keeps_reservation_owners(client, database, aliased_entr
     } == owners_before
 
 
-def test_metadata_update_does_not_add_reservations(client, database, aliased_entry):
+def test_rejected_identity_input_adds_no_reservations(client, database, aliased_entry):
     payload = {
         **metadata_only_payload(aliased_entry),
         "citationKey": "brand-new-key",
         "aliases": [{"value": "brand-new", "normalizedValue": "brand-new"}],
     }
 
-    post_entry(client, payload)
+    result = post_entry(client, payload)
 
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert "brand-new-key" not in reservations(database)
     assert "brand-new" not in reservations(database)
 
 
 def test_deprecated_record_update_is_rejected(bibliography, user, deprecated_entry):
-    with pytest.raises(LookupValueInUseError):
+    with pytest.raises(DataError, match=DEPRECATED_ERROR):
         bibliography.update(deprecated_payload(deprecated_entry), user)
 
 
 def test_rejected_deprecated_update_keeps_tombstone(
     bibliography, user, database, deprecated_entry
 ):
-    with pytest.raises(LookupValueInUseError):
+    with pytest.raises(DataError, match=DEPRECATED_ERROR):
         bibliography.update(deprecated_payload(deprecated_entry), user)
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})
 
@@ -76,7 +81,7 @@ def test_rejected_deprecated_update_keeps_tombstone(
 def test_rejected_deprecated_update_keeps_redirect_working(
     bibliography, user, deprecated_entry
 ):
-    with pytest.raises(LookupValueInUseError):
+    with pytest.raises(DataError, match=DEPRECATED_ERROR):
         bibliography.update(deprecated_payload(deprecated_entry), user)
 
     assert bibliography.find("RN2001")["id"] == "rla_9_388"
@@ -85,7 +90,7 @@ def test_rejected_deprecated_update_keeps_redirect_working(
 def test_deprecated_record_update_cannot_clear_tombstone_fields(
     bibliography, user, database, deprecated_entry
 ):
-    with pytest.raises(LookupValueInUseError):
+    with pytest.raises(DataError, match=DEPRECATED_ERROR):
         bibliography.update(
             deprecated_payload(deprecated_entry, deprecated=False), user
         )

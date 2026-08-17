@@ -10,7 +10,7 @@ from ebl.bibliography.application.bibliography_identity import (
 from ebl.bibliography.application.bibliography_repository import LookupValueInUseError
 from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
-from ebl.errors import NotFoundError
+from ebl.errors import Defect, NotFoundError
 
 
 class ChangelogSpy:
@@ -96,7 +96,8 @@ class UpdateRepositorySpy:
     def claim_lookup_values(self, _operation, values):
         self.claimed_values = values
 
-    def update(self, _entry):
+    def update(self, _entry, expected_server_owned_fields):
+        self.expected_server_owned_fields = expected_server_owned_fields
         if self.update_error:
             raise self.update_error
 
@@ -163,3 +164,40 @@ def test_create_releases_claims_when_repository_insert_fails(user):
         )
 
     assert repository.released_owners == [repository.claimed_owner]
+
+
+def test_update_rejects_a_stored_entry_for_a_different_record(user):
+    repository = UpdateRepositorySpy({"id": "OTHER", "type": "book"})
+
+    with pytest.raises(Defect, match="does not match"):
+        update_with_identity_claims(
+            identity_context(repository, ChangelogSpy(), missing_lookup),
+            {"id": "Q30000000", "type": "book"},
+            user,
+            {"id": "OTHER", "type": "book"},
+        )
+
+    assert repository.claimed_values is None
+    assert repository.retired_values is None
+    assert repository.released_owners == []
+
+
+def test_update_passes_stored_server_owned_state_to_the_repository(user):
+    old_entry = {
+        "id": "Q30000000",
+        "type": "book",
+        "citationKey": "old-key",
+        "aliases": [{"value": "old-alias", "normalizedValue": "old-alias"}],
+    }
+    repository = UpdateRepositorySpy(old_entry)
+
+    update_with_identity_claims(
+        identity_context(repository, ChangelogNoop(), missing_lookup),
+        {"id": "Q30000000", "type": "book", "citationKey": "new-key"},
+        user,
+    )
+
+    assert repository.expected_server_owned_fields == {
+        "citationKey": "old-key",
+        "aliases": [{"value": "old-alias", "normalizedValue": "old-alias"}],
+    }

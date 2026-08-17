@@ -1,7 +1,9 @@
 import pytest
 
 from ebl.bibliography.application.server_owned_fields import (
+    preserve_persisted_fields,
     preserve_server_owned_fields,
+    stored_preserved_fields,
     stored_server_owned_fields,
     strip_server_owned_fields,
 )
@@ -79,6 +81,59 @@ def test_preserve_drops_submitted_fields_absent_from_stored():
     }
 
     assert preserve_server_owned_fields(entry, {"id": "RN1", "type": "book"}) == {
+        "id": "RN1",
+        "type": "book",
+    }
+
+
+def test_stored_server_owned_fields_are_deep_copied():
+    preserved = stored_server_owned_fields(STORED)
+
+    assert preserved["aliases"] == ALIASES
+    assert preserved["aliases"] is not ALIASES
+    assert preserved["aliases"][0] is not ALIASES[0]
+
+
+def test_preserve_does_not_alias_stored_mutable_values():
+    entry = {"id": "Q30000024", "type": "book", "title": "Corrected"}
+
+    preserved = preserve_server_owned_fields(entry, STORED)
+    preserved["aliases"].append({"value": "added"})
+
+    assert STORED["aliases"] == ALIASES
+
+
+def test_stored_preserved_fields_keeps_unknown_persisted_keys():
+    stored_entry = {"id": "RN1", "type": "book", "DPO": "10.1/x", "pages": "1-2"}
+
+    assert stored_preserved_fields(stored_entry) == {"DPO": "10.1/x", "pages": "1-2"}
+
+
+def test_stored_preserved_fields_excludes_client_editable_metadata():
+    assert stored_preserved_fields(STORED) == {
+        "aliases": ALIASES,
+        "citationKey": "stored-key",
+    }
+
+
+def test_preserve_persisted_restores_unknown_and_server_owned_fields():
+    stored_entry = {**STORED, "DPO": "10.1/x"}
+    entry = {"id": "Q30000024", "type": "book", "title": "Corrected"}
+
+    assert preserve_persisted_fields(entry, stored_entry) == {
+        "id": "Q30000024",
+        "type": "book",
+        "title": "Corrected",
+        "aliases": ALIASES,
+        "citationKey": "stored-key",
+        "DPO": "10.1/x",
+    }
+
+
+def test_preserve_persisted_drops_unknown_fields_supplied_by_the_client():
+    entry = {"id": "RN1", "type": "book", "DPO": "attacker"}
+
+    assert preserve_persisted_fields(entry, {"id": "RN1", "type": "book"}) == {
         "id": "RN1",
         "type": "book",
     }

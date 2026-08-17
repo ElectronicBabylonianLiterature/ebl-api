@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
 from ebl.errors import DuplicateError
@@ -16,6 +16,15 @@ class LookupValueInUseError(DuplicateError):
     def __init__(self, value: str):
         self.value = value
         super().__init__(f"Bibliography lookup value {value} is in use.")
+
+
+class BibliographyUpdateConflictError(DuplicateError):
+    def __init__(self, id_: str):
+        self.id_ = id_
+        super().__init__(
+            f"Bibliography entry {id_} was changed by another operation; "
+            "reload the entry and retry."
+        )
 
 
 class BibliographyRepository(ABC):
@@ -74,7 +83,9 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, entry: Any) -> None:
+    def update(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
         raise NotImplementedError
 
     @abstractmethod

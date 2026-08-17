@@ -14,15 +14,16 @@ from ebl.bibliography.application.bibliography_identity import (
     update_with_identity_claims,
 )
 from ebl.bibliography.application.partner_bibliography import PartnerBibliography
+from ebl.bibliography.application.redirect_resolution import (
+    follow_bibliography_redirect,
+)
 from ebl.bibliography.application.server_owned_fields import (
-    preserve_server_owned_fields,
+    preserve_persisted_fields,
 )
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
-
-MAX_REDIRECT_DEPTH = 5
 
 
 class Bibliography:
@@ -60,44 +61,13 @@ class Bibliography:
         return resolved_entries
 
     def _follow_redirect(self, entry: dict) -> dict:
-        current = entry
-        visited_ids: set[str] = set()
-        redirects_followed = 0
-
-        while current.get("deprecated", False):
-            current_id = current.get("id")
-            redirect_to = current.get("redirectTo")
-            if not isinstance(redirect_to, str) or not redirect_to:
-                raise NotFoundError(
-                    f"Deprecated bibliography {current_id} has no redirect target."
-                )
-            if current_id in visited_ids or redirect_to in visited_ids:
-                raise DuplicateError(
-                    f"Bibliography redirect loop detected at {current_id}."
-                )
-            if redirects_followed >= MAX_REDIRECT_DEPTH:
-                raise DuplicateError(
-                    f"Bibliography redirect from {entry.get('id')} exceeds "
-                    f"the maximum depth of {MAX_REDIRECT_DEPTH}."
-                )
-
-            if isinstance(current_id, str):
-                visited_ids.add(current_id)
-            try:
-                current = self._repository.query_by_id(redirect_to)
-            except NotFoundError as error:
-                raise NotFoundError(
-                    f"Bibliography redirect target {redirect_to} not found."
-                ) from error
-            redirects_followed += 1
-
-        return current
+        return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
     def update(self, entry: dict, user: User) -> None:
         stored_entry = self._stored_entry_for_update(entry)
         update_with_identity_claims(
             self._identity,
-            preserve_server_owned_fields(entry, stored_entry),
+            preserve_persisted_fields(entry, stored_entry),
             user,
             stored_entry,
         )
@@ -106,7 +76,13 @@ class Bibliography:
         id_ = entry.get("id")
         if not isinstance(id_, str) or not id_:
             raise DataError("Bibliography entry id is required.")
-        return self._repository.query_by_id(id_)
+        stored_entry = self._repository.query_by_id(id_)
+        if stored_entry.get("deprecated"):
+            raise DataError(
+                f"Bibliography entry {id_} is deprecated; "
+                f"edit {stored_entry.get('redirectTo')} instead."
+            )
+        return stored_entry
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []

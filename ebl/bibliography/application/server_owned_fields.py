@@ -1,7 +1,14 @@
-from typing import Any, Mapping
+from copy import deepcopy
+from typing import Any, Mapping, cast
 
 from ebl.bibliography.domain.bibliography_entry import (
+    CSL_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
+)
+
+CLIENT_EDITABLE_BIBLIOGRAPHY_FIELDS = (
+    frozenset(cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]))
+    - SERVER_OWNED_BIBLIOGRAPHY_FIELDS
 )
 
 
@@ -13,12 +20,32 @@ def strip_server_owned_fields(entry: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def stored_server_owned_fields(stored_entry: Mapping[str, Any]) -> dict[str, Any]:
+def client_editable_fields(entry: Mapping[str, Any]) -> dict[str, Any]:
     return {
-        field: stored_entry[field]
-        for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
-        if field in stored_entry
+        key: value
+        for key, value in entry.items()
+        if key in CLIENT_EDITABLE_BIBLIOGRAPHY_FIELDS
     }
+
+
+def stored_server_owned_fields(stored_entry: Mapping[str, Any]) -> dict[str, Any]:
+    return deepcopy(
+        {
+            field: stored_entry[field]
+            for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+            if field in stored_entry
+        }
+    )
+
+
+def stored_preserved_fields(stored_entry: Mapping[str, Any]) -> dict[str, Any]:
+    return deepcopy(
+        {
+            key: value
+            for key, value in stored_entry.items()
+            if key not in CLIENT_EDITABLE_BIBLIOGRAPHY_FIELDS
+        }
+    )
 
 
 def preserve_server_owned_fields(
@@ -27,4 +54,13 @@ def preserve_server_owned_fields(
     return {
         **strip_server_owned_fields(entry),
         **stored_server_owned_fields(stored_entry),
+    }
+
+
+def preserve_persisted_fields(
+    entry: Mapping[str, Any], stored_entry: Mapping[str, Any]
+) -> dict[str, Any]:
+    return {
+        **client_editable_fields(entry),
+        **stored_preserved_fields(stored_entry),
     }

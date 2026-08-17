@@ -3,6 +3,7 @@ from falcon_caching import Cache
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 import json
+from typing import Mapping, Sequence
 from ebl.cache.application.cache import DAILY_TIMEOUT
 
 from ebl.bibliography.domain.bibliography_entry import (
@@ -18,6 +19,17 @@ from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.duplicate_override import DuplicateOverrideError
 
 
+def submitted_server_owned_fields(candidate_entries: Sequence[Mapping]) -> list[str]:
+    return sorted(
+        {
+            field
+            for entry in candidate_entries
+            for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+            if field in entry
+        }
+    )
+
+
 def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
     media = req.media
     if not isinstance(media, dict):
@@ -27,18 +39,22 @@ def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
     if isinstance(media.get("bibliographyEntry"), dict):
         candidate_entries.append(media["bibliographyEntry"])
 
-    forbidden_fields = sorted(
-        {
-            field
-            for entry in candidate_entries
-            for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
-            if field in entry
-        }
-    )
-    if forbidden_fields:
+    if forbidden_fields := submitted_server_owned_fields(candidate_entries):
         raise DataError(
             "Partner bibliography payload may not include server-owned fields: "
             f"{', '.join(forbidden_fields)}."
+        )
+
+
+def reject_server_owned_bibliography_fields(req, _resp, _resource, _params) -> None:
+    media = req.media
+    if not isinstance(media, dict):
+        return
+
+    if forbidden_fields := submitted_server_owned_fields([media]):
+        raise DataError(
+            "Bibliography metadata updates may not include server-owned fields: "
+            f"{', '.join(forbidden_fields)}. These are maintained by the server."
         )
 
 
@@ -67,6 +83,7 @@ class BibliographyEntriesResource:
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(reject_server_owned_bibliography_fields)
     @validate(CSL_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response, id_: str) -> None:
         entry = {**req.media, "id": id_}

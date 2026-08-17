@@ -196,7 +196,7 @@ def test_update(bibliography_repository):
     bibliography_entry = BibliographyEntryFactory.build()
     updated_entry = pydash.omit({**bibliography_entry, "title": "New Title"}, "PMID")
     bibliography_repository.create(bibliography_entry)
-    bibliography_repository.update(updated_entry)
+    bibliography_repository.update(updated_entry, {})
 
     assert (
         bibliography_repository.query_by_id(bibliography_entry["id"]) == updated_entry
@@ -206,7 +206,7 @@ def test_update(bibliography_repository):
 def test_update_not_found(bibliography_repository):
     bibliography_entry = BibliographyEntryFactory.build()
     with pytest.raises(NotFoundError):
-        bibliography_repository.update(bibliography_entry)
+        bibliography_repository.update(bibliography_entry, {})
 
 
 def test_duplicate_candidate_queries_prioritize_strong_identifiers() -> None:

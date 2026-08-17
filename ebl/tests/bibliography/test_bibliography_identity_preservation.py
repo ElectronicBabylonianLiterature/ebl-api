@@ -64,35 +64,44 @@ def test_metadata_update_applies_requested_metadata(
     assert bibliography.find(aliased_entry["id"])["volume"] == "99"
 
 
-def test_update_ignores_submitted_aliases(client, bibliography, aliased_entry):
+SERVER_OWNED_PAYLOADS = {
+    "aliases": [{"value": "attacker-alias", "normalizedValue": "attacker-alias"}],
+    "citationKey": "different",
+    "deprecated": True,
+    "redirectTo": "other-record",
+}
+
+
+@pytest.mark.parametrize("field", sorted(SERVER_OWNED_PAYLOADS))
+def test_update_rejects_submitted_server_owned_field(
+    field, client, bibliography, aliased_entry
+):
     payload = {
         **metadata_only_payload(aliased_entry),
-        "aliases": [{"value": "attacker-alias", "normalizedValue": "attacker-alias"}],
+        field: SERVER_OWNED_PAYLOADS[field],
     }
 
-    post_entry(client, payload)
+    result = post_entry(client, payload)
 
-    assert bibliography.find(aliased_entry["id"])["aliases"] == [PARTNER_ALIAS]
-
-
-def test_update_ignores_submitted_citation_key(client, bibliography, aliased_entry):
-    payload = {**metadata_only_payload(aliased_entry), "citationKey": "different"}
-
-    post_entry(client, payload)
-
-    assert bibliography.find(aliased_entry["id"])["citationKey"] == CITATION_KEY
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert field in result.text
 
 
-def test_update_cannot_deprecate_an_active_record(client, bibliography, aliased_entry):
+@pytest.mark.parametrize("field", sorted(SERVER_OWNED_PAYLOADS))
+def test_rejected_server_owned_field_leaves_record_unchanged(
+    field, client, bibliography, aliased_entry
+):
     payload = {
         **metadata_only_payload(aliased_entry),
-        "deprecated": True,
-        "redirectTo": "other-record",
+        field: SERVER_OWNED_PAYLOADS[field],
     }
 
     post_entry(client, payload)
     stored_entry = bibliography.find(aliased_entry["id"])
 
+    assert stored_entry["aliases"] == [PARTNER_ALIAS]
+    assert stored_entry["citationKey"] == CITATION_KEY
+    assert stored_entry["title"] == aliased_entry["title"]
     assert stored_entry.get("deprecated") is None
     assert stored_entry.get("redirectTo") is None
 
@@ -107,8 +116,9 @@ def test_update_cannot_steal_an_alias_from_another_record(
         "aliases": [PARTNER_ALIAS],
     }
 
-    post_entry(client, payload)
+    result = post_entry(client, payload)
 
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert bibliography.find(PARTNER_ALIAS["value"])["id"] == aliased_entry["id"]
     assert "aliases" not in bibliography.find(other_entry["id"])
 
@@ -135,6 +145,30 @@ def test_legacy_record_update_does_not_invent_identity_fields(
     assert "citationKey" not in stored_entry
     assert "deprecated" not in stored_entry
     assert "redirectTo" not in stored_entry
+
+
+@pytest.mark.parametrize(
+    "unknown_field,value", [("DPO", "10.1086/719864"), ("pages", "129-143")]
+)
+def test_update_preserves_unknown_persisted_fields(
+    unknown_field, value, client, database, saved_entry
+):
+    database["bibliography"].update_one(
+        {"_id": saved_entry["id"]}, {"$set": {unknown_field: value}}
+    )
+
+    result = post_entry(client, {**saved_entry, "title": "Legacy corrected"})
+    stored_entry = database["bibliography"].find_one({"_id": saved_entry["id"]})
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert stored_entry[unknown_field] == value
+    assert stored_entry["title"] == "Legacy corrected"
+
+
+def test_update_does_not_accept_unknown_fields_from_the_client(client, saved_entry):
+    result = post_entry(client, {**saved_entry, "DPO": "10.1086/719864"})
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
 
 
 @pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": None}, {"id": 47}])
