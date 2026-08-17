@@ -153,3 +153,62 @@ def test_partner_bibliography_delete_not_supported(client, saved_entry):
     result = client.simulate_delete(f"/api/v1/bibliography/{saved_entry['id']}")
 
     assert result.status == falcon.HTTP_METHOD_NOT_ALLOWED
+
+
+@pytest.fixture
+def identified_entry(bibliography, user):
+    entry = BibliographyEntryFactory.build(
+        id="Q30000024",
+        title="Old partner title",
+        citationKey="dossin1967La",
+        aliases=[
+            {
+                "value": "dossin1967archives",
+                "normalizedValue": "dossin1967archives",
+                "type": "partner_id",
+                "source": "partner_request",
+                "status": "redirect",
+            }
+        ],
+    )
+    bibliography.create(entry, user)
+    return entry
+
+
+@pytest.mark.parametrize(
+    "lookup_value", ["Q30000024", "dossin1967archives", "dossin1967La"]
+)
+def test_partner_bibliography_update_by_any_identifier_preserves_identity(
+    lookup_value, client, bibliography, identified_entry
+):
+    payload = pydash.omit(
+        {**identified_entry, "title": "New partner title"}, "aliases", "citationKey"
+    )
+
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{lookup_value}", body=json.dumps(payload)
+    )
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert bibliography.find(identified_entry["id"]) == {
+        **payload,
+        "citationKey": identified_entry["citationKey"],
+        "aliases": identified_entry["aliases"],
+    }
+
+
+@pytest.mark.parametrize(
+    "lookup_value", ["Q30000024", "dossin1967archives", "dossin1967La"]
+)
+def test_partner_bibliography_update_by_any_identifier_applies_metadata(
+    lookup_value, client, bibliography, identified_entry
+):
+    payload = pydash.omit(
+        {**identified_entry, "title": "New partner title"}, "aliases", "citationKey"
+    )
+
+    client.simulate_post(
+        f"/api/v1/bibliography/{lookup_value}", body=json.dumps(payload)
+    )
+
+    assert bibliography.find(lookup_value)["title"] == "New partner title"

@@ -13,6 +13,9 @@ from ebl.bibliography.application.bibliography_identity import (
     update_with_identity_claims,
 )
 from ebl.bibliography.application.partner_bibliography import PartnerBibliography
+from ebl.bibliography.application.server_owned_fields import (
+    preserve_server_owned_fields,
+)
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, DuplicateError, NotFoundError
@@ -90,9 +93,18 @@ class Bibliography:
 
         return current
 
-    def update(self, entry, user: User):
+    def update(self, entry: dict, user: User) -> None:
         update_with_identity_claims(
-            self._repository, self._changelog, self.find, entry, user
+            self._repository,
+            self._changelog,
+            self.find,
+            self._with_preserved_server_owned_fields(entry),
+            user,
+        )
+
+    def _with_preserved_server_owned_fields(self, entry: dict) -> dict:
+        return preserve_server_owned_fields(
+            entry, self._repository.query_by_id(entry["id"])
         )
 
     def search(self, query: str) -> Sequence[dict]:
