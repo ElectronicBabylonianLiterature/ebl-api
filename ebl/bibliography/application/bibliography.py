@@ -94,18 +94,21 @@ class Bibliography:
         return current
 
     def update(self, entry: dict, user: User) -> None:
+        stored_entry = self._stored_entry_for_update(entry)
         update_with_identity_claims(
             self._repository,
             self._changelog,
             self.find,
-            self._with_preserved_server_owned_fields(entry),
+            preserve_server_owned_fields(entry, stored_entry),
             user,
+            stored_entry,
         )
 
-    def _with_preserved_server_owned_fields(self, entry: dict) -> dict:
-        return preserve_server_owned_fields(
-            entry, self._repository.query_by_id(entry["id"])
-        )
+    def _stored_entry_for_update(self, entry: dict) -> dict:
+        id_ = entry.get("id")
+        if not isinstance(id_, str) or not id_:
+            raise DataError("Bibliography entry id is required.")
+        return self._repository.query_by_id(id_)
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []

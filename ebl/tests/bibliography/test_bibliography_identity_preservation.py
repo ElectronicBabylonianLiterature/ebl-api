@@ -1,46 +1,16 @@
-import json
-
 import falcon
 import pydash
 import pytest
-from falcon import testing
 
+from ebl.errors import DataError, NotFoundError
+from ebl.tests.bibliography.identity_preservation_test_helpers import (
+    CITATION_KEY,
+    CORRECTED_TITLE,
+    PARTNER_ALIAS,
+    metadata_only_payload,
+    post_entry,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
-
-PARTNER_ALIAS = {
-    "value": "dossin1967archives",
-    "normalizedValue": "dossin1967archives",
-    "type": "partner_id",
-    "source": "partner_request",
-    "status": "redirect",
-}
-CITATION_KEY = "dossin1967La"
-
-
-@pytest.fixture
-def aliased_entry(bibliography, user):
-    entry = BibliographyEntryFactory.build(
-        id="Q30000024",
-        title="Old title",
-        aliases=[PARTNER_ALIAS],
-        citationKey=CITATION_KEY,
-    )
-    bibliography.create(entry, user)
-    return entry
-
-
-def metadata_only_payload(entry: dict) -> dict:
-    return pydash.omit(
-        {**entry, "title": "Corrected title"},
-        "aliases",
-        "citationKey",
-        "deprecated",
-        "redirectTo",
-    )
-
-
-def post_entry(client, entry: dict) -> testing.Result:
-    return client.simulate_post(f"/bibliography/{entry['id']}", body=json.dumps(entry))
 
 
 def test_metadata_update_preserves_aliases_and_citation_key(
@@ -81,7 +51,7 @@ def test_metadata_update_keeps_record_active(client, bibliography, aliased_entry
 
     assert stored_entry.get("deprecated") is None
     assert stored_entry.get("redirectTo") is None
-    assert stored_entry["title"] == "Corrected title"
+    assert stored_entry["title"] == CORRECTED_TITLE
 
 
 def test_metadata_update_applies_requested_metadata(
@@ -165,3 +135,14 @@ def test_legacy_record_update_does_not_invent_identity_fields(
     assert "citationKey" not in stored_entry
     assert "deprecated" not in stored_entry
     assert "redirectTo" not in stored_entry
+
+
+@pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": None}, {"id": 47}])
+def test_update_without_a_usable_id_is_rejected(entry, bibliography, user):
+    with pytest.raises(DataError, match="id is required"):
+        bibliography.update({**entry, "type": "book"}, user)
+
+
+def test_update_of_unknown_id_is_not_found(bibliography, user):
+    with pytest.raises(NotFoundError):
+        bibliography.update({"id": "does-not-exist", "type": "book"}, user)

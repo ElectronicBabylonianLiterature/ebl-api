@@ -155,60 +155,40 @@ def test_partner_bibliography_delete_not_supported(client, saved_entry):
     assert result.status == falcon.HTTP_METHOD_NOT_ALLOWED
 
 
-@pytest.fixture
-def identified_entry(bibliography, user):
-    entry = BibliographyEntryFactory.build(
-        id="Q30000024",
-        title="Old partner title",
-        citationKey="dossin1967La",
-        aliases=[
-            {
-                "value": "dossin1967archives",
-                "normalizedValue": "dossin1967archives",
-                "type": "partner_id",
-                "source": "partner_request",
-                "status": "redirect",
-            }
-        ],
+PARTNER_LOOKUP_VALUES = ["Q30000024", "dossin1967archives", "dossin1967La"]
+
+
+def partner_update_payload(entry: dict) -> dict:
+    return pydash.omit(
+        {**entry, "title": "New partner title"}, "aliases", "citationKey"
     )
-    bibliography.create(entry, user)
-    return entry
 
 
-@pytest.mark.parametrize(
-    "lookup_value", ["Q30000024", "dossin1967archives", "dossin1967La"]
-)
+@pytest.mark.parametrize("lookup_value", PARTNER_LOOKUP_VALUES)
 def test_partner_bibliography_update_by_any_identifier_preserves_identity(
-    lookup_value, client, bibliography, identified_entry
+    lookup_value, client, bibliography, aliased_entry
 ):
-    payload = pydash.omit(
-        {**identified_entry, "title": "New partner title"}, "aliases", "citationKey"
-    )
+    payload = partner_update_payload(aliased_entry)
 
     result = client.simulate_post(
         f"/api/v1/bibliography/{lookup_value}", body=json.dumps(payload)
     )
 
     assert result.status == falcon.HTTP_NO_CONTENT
-    assert bibliography.find(identified_entry["id"]) == {
+    assert bibliography.find(aliased_entry["id"]) == {
         **payload,
-        "citationKey": identified_entry["citationKey"],
-        "aliases": identified_entry["aliases"],
+        "citationKey": aliased_entry["citationKey"],
+        "aliases": aliased_entry["aliases"],
     }
 
 
-@pytest.mark.parametrize(
-    "lookup_value", ["Q30000024", "dossin1967archives", "dossin1967La"]
-)
+@pytest.mark.parametrize("lookup_value", PARTNER_LOOKUP_VALUES)
 def test_partner_bibliography_update_by_any_identifier_applies_metadata(
-    lookup_value, client, bibliography, identified_entry
+    lookup_value, client, bibliography, aliased_entry
 ):
-    payload = pydash.omit(
-        {**identified_entry, "title": "New partner title"}, "aliases", "citationKey"
-    )
-
     client.simulate_post(
-        f"/api/v1/bibliography/{lookup_value}", body=json.dumps(payload)
+        f"/api/v1/bibliography/{lookup_value}",
+        body=json.dumps(partner_update_payload(aliased_entry)),
     )
 
     assert bibliography.find(lookup_value)["title"] == "New partner title"

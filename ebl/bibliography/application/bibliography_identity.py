@@ -57,8 +57,11 @@ def update_with_identity_claims(
     find: Callable[[str], dict],
     entry: dict[str, Any],
     user: User,
+    stored_entry: dict[str, Any] | None = None,
 ) -> None:
-    old_entry = repository.query_by_id(entry["id"])
+    old_entry = (
+        repository.query_by_id(entry["id"]) if stored_entry is None else stored_entry
+    )
     old_values = identity_values(old_entry)
     new_values = identity_values(entry)
     values_to_claim = sorted(new_values - old_values)

@@ -1,63 +1,18 @@
-import json
-
-import pydash
 import pytest
-from falcon import testing
 
 from ebl.bibliography.application.bibliography_repository import LookupValueInUseError
 from ebl.bibliography.application.lookup_reservation import LookupReservationState
-from ebl.tests.factories.bibliography import BibliographyEntryFactory
-
-RESERVATIONS = "bibliography_lookup_reservations"
-PARTNER_ALIAS = {
-    "value": "dossin1967archives",
-    "normalizedValue": "dossin1967archives",
-    "type": "partner_id",
-    "source": "partner_request",
-    "status": "redirect",
-}
-CITATION_KEY = "dossin1967La"
+from ebl.tests.bibliography.identity_preservation_test_helpers import (
+    CITATION_KEY,
+    PARTNER_ALIAS,
+    metadata_only_payload,
+    post_entry,
+    reservations,
+)
 
 
-@pytest.fixture
-def aliased_entry(bibliography, user):
-    entry = BibliographyEntryFactory.build(
-        id="Q30000024",
-        title="Old title",
-        aliases=[PARTNER_ALIAS],
-        citationKey=CITATION_KEY,
-    )
-    bibliography.create(entry, user)
-    return entry
-
-
-@pytest.fixture
-def deprecated_entry(bibliography, user):
-    canonical_entry = BibliographyEntryFactory.build(id="rla_9_388", title="Canonical")
-    bibliography.create(canonical_entry, user)
-    entry = BibliographyEntryFactory.build(
-        id="RN2001", title="Loser", deprecated=True, redirectTo="rla_9_388"
-    )
-    bibliography.create(entry, user)
-    return entry
-
-
-def reservations(database) -> dict:
-    return {document["_id"]: document for document in database[RESERVATIONS].find({})}
-
-
-def metadata_only_payload(entry: dict) -> dict:
-    return pydash.omit(
-        {**entry, "title": "Corrected title"},
-        "aliases",
-        "citationKey",
-        "deprecated",
-        "redirectTo",
-    )
-
-
-def post_entry(client, entry: dict) -> testing.Result:
-    return client.simulate_post(f"/bibliography/{entry['id']}", body=json.dumps(entry))
+def deprecated_payload(deprecated_entry: dict, **overrides) -> dict:
+    return {**metadata_only_payload(deprecated_entry), "id": "RN2001", **overrides}
 
 
 def test_metadata_update_keeps_every_reservation(client, database, aliased_entry):
@@ -104,18 +59,14 @@ def test_metadata_update_does_not_add_reservations(client, database, aliased_ent
 
 def test_deprecated_record_update_is_rejected(bibliography, user, deprecated_entry):
     with pytest.raises(LookupValueInUseError):
-        bibliography.update(
-            {**metadata_only_payload(deprecated_entry), "id": "RN2001"}, user
-        )
+        bibliography.update(deprecated_payload(deprecated_entry), user)
 
 
 def test_rejected_deprecated_update_keeps_tombstone(
     bibliography, user, database, deprecated_entry
 ):
     with pytest.raises(LookupValueInUseError):
-        bibliography.update(
-            {**metadata_only_payload(deprecated_entry), "id": "RN2001"}, user
-        )
+        bibliography.update(deprecated_payload(deprecated_entry), user)
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})
 
     assert stored_entry["deprecated"] is True
@@ -126,9 +77,7 @@ def test_rejected_deprecated_update_keeps_redirect_working(
     bibliography, user, deprecated_entry
 ):
     with pytest.raises(LookupValueInUseError):
-        bibliography.update(
-            {**metadata_only_payload(deprecated_entry), "id": "RN2001"}, user
-        )
+        bibliography.update(deprecated_payload(deprecated_entry), user)
 
     assert bibliography.find("RN2001")["id"] == "rla_9_388"
 
@@ -138,12 +87,7 @@ def test_deprecated_record_update_cannot_clear_tombstone_fields(
 ):
     with pytest.raises(LookupValueInUseError):
         bibliography.update(
-            {
-                **metadata_only_payload(deprecated_entry),
-                "id": "RN2001",
-                "deprecated": False,
-            },
-            user,
+            deprecated_payload(deprecated_entry, deprecated=False), user
         )
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})
 
