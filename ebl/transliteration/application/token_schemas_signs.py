@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import Any, Dict, List, Mapping, Sequence, cast
 
 from marshmallow import fields, post_load
 
@@ -15,19 +16,36 @@ from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Grapheme,
     Logogram,
+    NamedSign,
     Number,
     Reading,
 )
 from ebl.transliteration.domain.tokens import (
     LineBreak,
+    Token,
     Variant,
 )
 
 
+def _dump_name_parts(named_sign: NamedSign) -> List[Dict[str, Any]]:
+    from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+
+    return cast(
+        List[Dict[str, Any]],
+        OneOfTokenSchema().dump(list(named_sign.name_tokens), many=True),
+    )
+
+
+def _load_name_parts(value: Sequence[Mapping[str, Any]]) -> List[Token]:
+    from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+
+    return cast(List[Token], OneOfTokenSchema().load(value, many=True))
+
+
 class NamedSignSchema(BaseTokenSchema):
     name = fields.String(required=True)
-    name_parts = fields.List(
-        fields.Nested("OneOfTokenSchema"), required=True, data_key="nameParts"
+    name_parts = fields.Function(
+        _dump_name_parts, _load_name_parts, required=True, data_key="nameParts"
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
@@ -63,8 +81,8 @@ class LogogramSchema(NamedSignSchema):
                 data["modifiers"],
                 data["flags"],
                 data["sign"],
-                data["surrogate"],
             )
+            .with_surrogate(data["surrogate"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
         )

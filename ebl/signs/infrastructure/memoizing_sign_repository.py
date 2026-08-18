@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
 import pydash
 
@@ -21,6 +21,8 @@ class MemoizingSignRepository(SignRepository):
         self._search_by_lists_name = pydash.memoize(delegate.search_by_lists_name)
         self._search_by_lemma = pydash.memoize(delegate.search_by_lemma)
         self._list_all_signs = pydash.memoize(delegate.list_all_signs)
+        self._find_signs_by_order = pydash.memoize(delegate.find_signs_by_order)
+        self._get_unicode_from_atf = delegate.get_unicode_from_atf
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)
@@ -40,9 +42,7 @@ class MemoizingSignRepository(SignRepository):
     def search_include_homophones(self, reading) -> Sequence[Sign]:
         return self._search_include_homophones(reading)
 
-    def search_composite_signs(
-        self, reading: str, sub_index: Optional[int] = None
-    ) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return self._search_composite_signs(reading, sub_index)
 
     def search_by_id(self, query: str) -> Sequence[Sign]:
@@ -56,3 +56,11 @@ class MemoizingSignRepository(SignRepository):
 
     def list_all_signs(self) -> Sequence[str]:
         return self._list_all_signs()
+
+    def find_signs_by_order(
+        self, name: SignName, sort_era: str
+    ) -> Sequence[Sequence[Sign]]:
+        return self._find_signs_by_order(name, sort_era)
+
+    def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
+        return self._get_unicode_from_atf(line)

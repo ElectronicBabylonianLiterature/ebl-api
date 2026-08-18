@@ -1,0 +1,179 @@
+"""Parsed-word test cases, part 4 of 5."""
+
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    Determinative,
+    Erasure,
+    PerhapsBrokenAway,
+)
+from ebl.transliteration.domain.sign_tokens import (
+    Logogram,
+    Reading,
+)
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    UnknownNumberOfSigns,
+)
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
+from ebl.transliteration.domain.word_tokens import (
+    ErasureState,
+    Word,
+)
+
+WORD_CASES = [
+    (
+        "me-°e\\li°-ku",
+        Word.of(
+            [
+                Reading.of_name("me"),
+                Joiner.hyphen(),
+                Erasure.open(),
+                Reading.of_name("e").set_erasure(ErasureState.ERASED),
+                Erasure.center(),
+                Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
+                Erasure.close(),
+                Joiner.hyphen(),
+                Reading.of_name("ku"),
+            ]
+        ),
+    ),
+    (
+        "me-°e\\li°-me-°e\\li°-ku",
+        Word.of(
+            [
+                Reading.of_name("me"),
+                Joiner.hyphen(),
+                Erasure.open(),
+                Reading.of_name("e").set_erasure(ErasureState.ERASED),
+                Erasure.center(),
+                Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
+                Erasure.close(),
+                Joiner.hyphen(),
+                Reading.of_name("me"),
+                Joiner.hyphen(),
+                Erasure.open(),
+                Reading.of_name("e").set_erasure(ErasureState.ERASED),
+                Erasure.center(),
+                Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
+                Erasure.close(),
+                Joiner.hyphen(),
+                Reading.of_name("ku"),
+            ]
+        ),
+    ),
+    (
+        "...{d}kur",
+        Word.of(
+            [
+                UnknownNumberOfSigns.of(),
+                Determinative.of([Reading.of_name("d")]),
+                Reading.of_name("kur"),
+            ]
+        ),
+    ),
+    (
+        "kur{d}...",
+        Word.of(
+            [
+                Reading.of_name("kur"),
+                Determinative.of([Reading.of_name("d")]),
+                UnknownNumberOfSigns.of(),
+            ]
+        ),
+    ),
+    (
+        "...-kur-...",
+        Word.of(
+            [
+                UnknownNumberOfSigns.of(),
+                Joiner.hyphen(),
+                Reading.of_name("kur"),
+                Joiner.hyphen(),
+                UnknownNumberOfSigns.of(),
+            ]
+        ),
+    ),
+    (
+        "kur-...-kur-...-kur",
+        Word.of(
+            [
+                Reading.of_name("kur"),
+                Joiner.hyphen(),
+                UnknownNumberOfSigns.of(),
+                Joiner.hyphen(),
+                Reading.of_name("kur"),
+                Joiner.hyphen(),
+                UnknownNumberOfSigns.of(),
+                Joiner.hyphen(),
+                Reading.of_name("kur"),
+            ]
+        ),
+    ),
+    (
+        "...]-ku",
+        Word.of(
+            [
+                UnknownNumberOfSigns.of(),
+                BrokenAway.close(),
+                Joiner.hyphen(),
+                Reading.of_name("ku"),
+            ]
+        ),
+    ),
+    (
+        "ku-[...",
+        Word.of(
+            [
+                Reading.of_name("ku"),
+                Joiner.hyphen(),
+                BrokenAway.open(),
+                UnknownNumberOfSigns.of(),
+            ]
+        ),
+    ),
+    (
+        "....ku",
+        Word.of([UnknownNumberOfSigns.of(), Joiner.dot(), Reading.of_name("ku")]),
+    ),
+    (
+        "ku....",
+        Word.of([Reading.of_name("ku"), Joiner.dot(), UnknownNumberOfSigns.of()]),
+    ),
+    (
+        "(x)]",
+        Word.of(
+            [
+                PerhapsBrokenAway.open(),
+                UnclearSign.of(),
+                PerhapsBrokenAway.close(),
+                BrokenAway.close(),
+            ]
+        ),
+    ),
+    (
+        "[{d}UTU",
+        Word.of(
+            [
+                BrokenAway.open(),
+                Determinative.of([Reading.of_name("d")]),
+                Logogram.of_name("UTU"),
+            ]
+        ),
+    ),
+    (
+        "{m#}[{d}AG-sa-lim",
+        Word.of(
+            [
+                Determinative.of([Reading.of_name("m", flags=[atf.Flag.DAMAGE])]),
+                BrokenAway.open(),
+                Determinative.of([Reading.of_name("d")]),
+                Logogram.of_name("AG"),
+                Joiner.hyphen(),
+                Reading.of_name("sa"),
+                Joiner.hyphen(),
+                Reading.of_name("lim"),
+            ]
+        ),
+    ),
+]

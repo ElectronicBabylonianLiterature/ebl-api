@@ -113,3 +113,28 @@ def test_signs_visitor_unicode(
     visitor = SignsVisitor(sign_repository, False, True)
     parse_line(f"1. {text}").accept(visitor)
     assert visitor.result == expected
+
+
+def test_reset_clears_accumulated_signs(sign_repository, signs) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
+
+    visitor = SignsVisitor(sign_repository)
+    parse_line("1. ku gid₂").accept(visitor)
+    assert visitor.result_string == ["KU", "BU"]
+
+    visitor.reset()
+
+    assert visitor.result_string == []
+
+
+def test_reset_lets_a_visitor_be_reused(sign_repository, signs) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
+
+    visitor = SignsVisitor(sign_repository)
+    parse_line("1. ku").accept(visitor)
+    visitor.reset()
+    parse_line("1. nu").accept(visitor)
+
+    assert visitor.result_string == ["ABZ075"]

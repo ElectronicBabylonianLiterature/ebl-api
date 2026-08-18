@@ -1,12 +1,18 @@
 import copy
+from typing import cast
 
 import pytest
 from lark.lark import LarkOptions
+
+from lark.exceptions import ParseError
+
+from ebl.transliteration.domain.line import Line
 
 from ebl.transliteration.domain.atf_parsers.lark_parser import (
     LINE_PARSER,
     WORD_PARSER,
     _StartParser,
+    validate_line,
 )
 
 
@@ -40,3 +46,8 @@ def test_wrapper_is_copyable() -> None:
     copied = copy.deepcopy(WORD_PARSER)
 
     assert copied.parse("kur") == WORD_PARSER.parse("kur")
+
+
+def test_validate_line_rejects_untransformed_tree():
+    with pytest.raises(ParseError):
+        validate_line(cast(Line, LINE_PARSER.parse("kur", start="any_word")))

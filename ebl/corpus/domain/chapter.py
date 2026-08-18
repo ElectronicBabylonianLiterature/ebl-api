@@ -1,5 +1,7 @@
 from enum import Enum, unique
+from functools import singledispatchmethod
 from typing import Iterator, Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
+from typing import cast
 
 import attr
 import pydash
@@ -28,6 +30,7 @@ ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
 
 
 class ChapterVisitor:
+    @singledispatchmethod
     def visit(self, item: ChapterItem) -> None:
         pass
 
@@ -159,12 +162,19 @@ class Chapter:
             for index in sorted(self._get_matching_line_indexes(query))
         ]
 
+    @staticmethod
+    def _lines_in_range(
+        lines: Sequence[TextLineEntry], start: int, end: int
+    ) -> Sequence[TextLineEntry]:
+        stop = end + 1
+        return lines[start:stop]
+
     def _get_matching_line_indexes(self, query: TransliterationQuery) -> Set[int]:
         return {
             line.source
             for index, numbers in enumerate(self._match(query))
             for start, end in numbers
-            for line in self.text_lines[index][start : end + 1]
+            for line in self._lines_in_range(self.text_lines[index], start, end)
             if line.source is not None
         }
 
@@ -184,7 +194,7 @@ class Chapter:
                 self.manuscripts[index].id: [
                     line.line
                     for start, end in numbers
-                    for line in text_lines[index][start : end + 1]
+                    for line in self._lines_in_range(text_lines[index], start, end)
                     if line.source is None
                 ]
                 for index, numbers in enumerate(self._match(query))
@@ -202,7 +212,7 @@ class Chapter:
     def _get_extant_lines(
         self, manuscript_id: int
     ) -> Mapping[ManuscriptLineLabel, ExtantLine]:
-        return pydash.group_by(
+        grouped = pydash.group_by(
             (
                 ExtantLine.of(line, manuscript_id)
                 for line in self.lines
@@ -211,6 +221,7 @@ class Chapter:
             ),
             lambda extant_line: extant_line.label,
         )
+        return cast(Mapping[ManuscriptLineLabel, ExtantLine], grouped)
 
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript

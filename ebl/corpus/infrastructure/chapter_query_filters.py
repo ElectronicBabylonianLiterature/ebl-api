@@ -1,10 +1,9 @@
-from typing import Tuple, List, Dict, Mapping
-from pymongo.collection import Collection
+from typing import Any, Dict, Iterable, List, Mapping, Tuple
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 def filter_query_by_transliteration(
-    query: TransliterationQuery, cursor: Collection
+    query: TransliterationQuery, cursor: Iterable[Dict[str, Any]]
 ) -> List:
     _cursor = []
     for chapter in cursor:
@@ -59,8 +58,8 @@ def get_all_line_manuscript_indexes(chapter: Mapping) -> List:
 def find_chapter_query_lines(
     manuscript_matches: List, chapter_lines: List
 ) -> Tuple[List, Dict[str, List[int]]]:
-    text_lines = []
-    colophon_lines = {}
+    text_lines: List = []
+    colophon_lines: Dict[str, List[int]] = {}
     for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
         for match in matches:
             text_lines, colophon_lines = find_lines_in_range(

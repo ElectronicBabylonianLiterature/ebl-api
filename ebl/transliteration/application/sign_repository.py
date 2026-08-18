@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
 from ebl.transliteration.domain.sign import Sign, SignName
 
@@ -47,4 +47,14 @@ class SignRepository(ABC):
 
     @abstractmethod
     def list_all_signs(self) -> Sequence[str]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_signs_by_order(
+        self, name: SignName, sort_era: str
+    ) -> Sequence[Sequence[Sign]]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
         raise NotImplementedError

@@ -6,6 +6,7 @@ import attr
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
@@ -100,7 +101,7 @@ class BoldPart(MarkupTokenPart):
 @attr.s(frozen=True, auto_attribs=True)
 class LanguagePart(MarkupPart):
     language: Language = attr.ib()
-    tokens: Sequence[Token] = attr.ib(converter=tuple)
+    tokens: Sequence[Token] = attr.ib(converter=convert_token_sequence)
 
     @property
     def code(self) -> str:
@@ -132,20 +133,20 @@ class LanguagePart(MarkupPart):
         return LanguagePart(language, tokens_with_language)
 
 
+def _validate_reference(_instance, _attribute, value: Reference) -> None:
+    is_type_invalid = value.type != ReferenceType.DISCUSSION
+    is_notes_invalid = value.notes != ""
+    is_lines_invalid = len(value.lines_cited) != 0
+
+    if is_type_invalid or is_notes_invalid or is_lines_invalid:
+        raise ValueError(
+            "The reference must be a DISCUSSION without notes or lines cited."
+        )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class BibliographyPart(MarkupPart):
-    reference: Reference = attr.ib()
-
-    @reference.validator
-    def validate_reference(self, _attribute, value: Reference) -> None:
-        is_type_invalid = value.type != ReferenceType.DISCUSSION
-        is_notes_invalid = value.notes != ""
-        is_lines_invalid = len(value.lines_cited) != 0
-
-        if is_type_invalid or is_notes_invalid or is_lines_invalid:
-            raise ValueError(
-                "The reference must be a DISCUSSION without notes or lines cited."
-            )
+    reference: Reference = attr.ib(validator=_validate_reference)
 
     @property
     def value(self) -> str:

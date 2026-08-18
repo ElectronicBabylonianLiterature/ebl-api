@@ -1,8 +1,14 @@
 import base64
+from typing import cast
+
 import attr
 from cairosvg import svg2png
+from ebl.errors import DataError
 from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
+    LINE_PARSE_ERRORS,
+)
 
 
 class SignsResource:
@@ -15,11 +21,14 @@ class SignsResource:
         for fossey in sign.fossey:
             svg = fossey.sign
             if svg != "":
-                binary = svg2png(
-                    bytestring=svg,
-                    output_height=100,
-                    parent_width=200,
-                    parent_height=200,
+                binary = cast(
+                    bytes,
+                    svg2png(
+                        bytestring=svg,
+                        output_height=100,
+                        parent_width=200,
+                        parent_height=200,
+                    ),
                 )
                 b64 = base64.b64encode(binary).decode("utf-8")
                 fosseysBase64.append(attr.evolve(fossey, sign=b64))
@@ -50,4 +59,7 @@ class TransliterationResource:
         self.sign_repository = signs
 
     def on_get(self, req, resp, line):
-        resp.media = self.sign_repository.get_unicode_from_atf(line)
+        try:
+            resp.media = self.sign_repository.get_unicode_from_atf(line)
+        except LINE_PARSE_ERRORS as error:
+            raise DataError(f'Invalid transliteration: "{line}"') from error

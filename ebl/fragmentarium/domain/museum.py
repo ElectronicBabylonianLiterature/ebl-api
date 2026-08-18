@@ -1,412 +1,112 @@
 from enum import Enum
 
+from ebl.fragmentarium.domain import museum_entries_a_l
+from ebl.fragmentarium.domain import museum_entries_m_s
+from ebl.fragmentarium.domain import museum_entries_t_y
+
 
 class Museum(Enum):
-    def __init__(self, museum_name, city="", country="", url=""):
+    def __init__(
+        self,
+        museum_name: str,
+        city: str = "",
+        country: str = "",
+        url: str = "",
+    ) -> None:
         self.museum_name = museum_name
         self.city = city
         self.country = country
         self.url = url
 
-    ABBEY_MUSEUM = (
-        "Abbey Museum",
-        "Queensland",
-        "AU",
-        "https://abbeymuseum.com.au",
-    )
-    ADANA_ARKEOLOJI_MUZESI = (
-        "Adana Arkeoloji Müzesi",
-        "Adana",
-        "TR",
-        "https://muze.gov.tr/muze-detay?SectionId=AAR01&DistId=MRK",
-    )
-    ANCIENT_CULTURES_CHICAGO = (
-        "Institute for the Study of Ancient Cultures, West Asia & North Africa",
-        "Chicago",
-        "US",
-        "https://isac.uchicago.edu/",
-    )
-    ASHMOLEAN_MUSEUM = ("Ashmolean Museum", "Oxford", "GB", "https://ashmolean.org/")
+    ABBEY_MUSEUM = museum_entries_a_l.ABBEY_MUSEUM
+    ADANA_ARKEOLOJI_MUZESI = museum_entries_a_l.ADANA_ARKEOLOJI_MUZESI
+    ANCIENT_CULTURES_CHICAGO = museum_entries_a_l.ANCIENT_CULTURES_CHICAGO
+    ASHMOLEAN_MUSEUM = museum_entries_a_l.ASHMOLEAN_MUSEUM
     AUSTRALIAN_INSTITUTE_OF_ARCHAEOLOGY = (
-        "Australian Institute of Archaeology",
-        "Melbourne",
-        "AU",
-        "https://www.aiarch.org.au/",
+        museum_entries_a_l.AUSTRALIAN_INSTITUTE_OF_ARCHAEOLOGY
     )
-    BATMAN_HASANKEYF_MUZESI = (
-        "Batman Hasankeyf Müzesi",
-        "Batman",
-        "TR",
-        "https://kvmgm.ktb.gov.tr/TR-281298/batman-muze-mudurlugu.html",
-    )
-    BANQUE_NATIONALE_DE_BELGIQUE = (
-        "Banque Nationale de Belgique",
-        "Brussels",
-        "BE",
-        "https://www.nbb.be/",
-    )
-    BRYN_MAWR_COLLEGE = (
-        "Bryn Mawr College Special Collections",
-        "Bryn Mawr",
-        "US",
-        "https://www.brynmawr.edu/about-college/special-collections",
-    )
-    CHESTER_BEATTY_LIBRARY = (
-        "Chester Beatty Library",
-        "Dublin",
-        "IE",
-        "https://chesterbeatty.ie/",
-    )
-    COLUMBIA_UNIVERSITY = (
-        "Columbia University Cuneiform Collection",
-        "New York",
-        "US",
-        "https://library.columbia.edu/libraries/rbml.html",
-    )
-    COUVENT_SAINTE_ANNE = (
-        "Couvent Sainte-Anne",
-        "Jerusalem",
-        "IL",
-        "https://ste-anne-jerusalem.org/",
-    )
-    COUVENT_SAINT_ETIENNE = (
-        "Couvent Saint-Étienne",
-        "Jerusalem",
-        "IL",
-        "https://www.ebaf.edu/couvent/",
-    )
-    DE_LIAGRE_BOEHL_COLLECTION = (
-        "de Liagre Böhl Collection",
-        "Leiden",
-        "NL",
-        "https://www.nino-leiden.nl/collections/de-liagre-bohl-collection",
-    )
+    BATMAN_HASANKEYF_MUZESI = museum_entries_a_l.BATMAN_HASANKEYF_MUZESI
+    BANQUE_NATIONALE_DE_BELGIQUE = museum_entries_a_l.BANQUE_NATIONALE_DE_BELGIQUE
+    BRYN_MAWR_COLLEGE = museum_entries_a_l.BRYN_MAWR_COLLEGE
+    CHESTER_BEATTY_LIBRARY = museum_entries_a_l.CHESTER_BEATTY_LIBRARY
+    COLUMBIA_UNIVERSITY = museum_entries_a_l.COLUMBIA_UNIVERSITY
+    COUVENT_SAINTE_ANNE = museum_entries_a_l.COUVENT_SAINTE_ANNE
+    COUVENT_SAINT_ETIENNE = museum_entries_a_l.COUVENT_SAINT_ETIENNE
+    DE_LIAGRE_BOEHL_COLLECTION = museum_entries_a_l.DE_LIAGRE_BOEHL_COLLECTION
     ECOLE_PRATIQUE_DES_HAUTES_ETUDES = (
-        "École pratique des hautes Études",
-        "Paris",
-        "FR",
-        "https://www.ephe.psl.eu/",
+        museum_entries_a_l.ECOLE_PRATIQUE_DES_HAUTES_ETUDES
     )
-    HARVARD_MUSEUM = (
-        "Harvard Museum of the Ancient Near East",
-        "Cambridge",
-        "US",
-        "https://hmane.harvard.edu/",
-    )
-    HARVARD_ART_MUSEUMS = (
-        "Harvard Art Museums",
-        "Cambridge",
-        "US",
-        "https://harvardartmuseums.org/",
-    )
+    HARVARD_MUSEUM = museum_entries_a_l.HARVARD_MUSEUM
+    HARVARD_ART_MUSEUMS = museum_entries_a_l.HARVARD_ART_MUSEUMS
     HARVEY_CUSHING_WHITNEY_MEDICAL_LIBRARY = (
-        "Harvey Cushing/John Hay Whitney Medical Library, Yale University",
-        "New Haven",
-        "US",
-        "https://library.medicine.yale.edu/",
+        museum_entries_a_l.HARVEY_CUSHING_WHITNEY_MEDICAL_LIBRARY
     )
-    HATAY_ARCHAEOLOGY_MUSEUM = (
-        "Hatay Archaeology Museum",
-        "Antakya",
-        "TR",
-        "https://muze.gov.tr/muze-detay?SectionId=HTY01&DistId=HTY",
-    )
-    HEARST_MUSEUM = (
-        "Phoebe A. Hearst Museum of Anthropology",
-        "Berkeley",
-        "US",
-        "https://hearstmuseum.berkeley.edu/",
-    )
-    HERMITAGE = (
-        "The State Hermitage Museum",
-        "Saint Petersburg",
-        "RU",
-        "https://www.hermitagemuseum.org/",
-    )
-    HILPRECHT_COLLECTION = (
-        "Frau Professor Hilprecht Collection of Babylonian Antiquities",
-        "Jena",
-        "DE",
-        "https://www.gw.uni-jena.de/fakultaet/institut-fuer-orientalistik-indogermanistik-ur-und-fruehgeschichtliche-archaeologie/altorientalistik/hilprecht-sammlung",
-    )
-    ISTANBUL_ARKEOLOJI_MUSEUM = (
-        "İstanbul Arkeoloji Müzeleri",
-        "Istanbul",
-        "TR",
-        "https://muze.gov.tr/muze-detay?SectionId=IAR01&DistId=IAR",
-    )
-    IZIKO_MUSEUMS_OF_SOUTH_AFRICA = (
-        "Iziko Museums of South Africa",
-        "Cape Town",
-        "ZA",
-        "https://www.iziko.org.za/",
-    )
-    KATZ_CENTER = (
-        "Katz Center for Advanced Judaic Studies",
-        "Philadelphia",
-        "US",
-        "https://katz.sas.upenn.edu/",
-    )
-    KAYSERI_ARKEOLOJI_MUZESI = (
-        "Kayseri Arkeoloji Müzesi",
-        "Kayseri",
-        "TR",
-        "https://www.turkishmuseums.com/museum/detail/2111-kayseri-arkeoloji-muzesi/2111/1",
-    )
-    KELSEY_MUSEUM = (
-        "Kelsey Museum of Archaeology",
-        "Ann Arbor",
-        "US",
-        "https://lsa.umich.edu/kelsey",
-    )
-    KUNSTHISTORISCHES_MUSEUM = (
-        "Kunsthistorisches Museum",
-        "Vienna",
-        "AT",
-        "https://www.khm.at/",
-    )
-    LOUVRE = ("Louvre", "Paris", "FR", "https://www.louvre.fr/")
-    MARDIN_MUZESI = (
-        "Mardin Müzesi",
-        "Mardin",
-        "TR",
-        "https://muze.gov.tr/muze-detay?sectionId=MRD01&distId=MRK",
-    )
-    MOSUL_MUSEUM = (
-        "Mosul Museum",
-        "Mosul",
-        "IQ",
-        "https://www.wmf.org/monuments/mosul-cultural-museum",
-    )
-    MUSEE_D_ART = (
-        "Musée d’Art et d’Histoire",
-        "Geneva",
-        "CH",
-        "https://www.mahmah.ch/",
-    )
-    MUSEES_ROYAUX = (
-        "Musées royaux d’Art et d’Histoire",
-        "Brussels",
-        "BE",
-        "https://www.kmkg-mrah.be/",
-    )
+    HATAY_ARCHAEOLOGY_MUSEUM = museum_entries_a_l.HATAY_ARCHAEOLOGY_MUSEUM
+    HEARST_MUSEUM = museum_entries_a_l.HEARST_MUSEUM
+    HERMITAGE = museum_entries_a_l.HERMITAGE
+    HILPRECHT_COLLECTION = museum_entries_a_l.HILPRECHT_COLLECTION
+    ISTANBUL_ARKEOLOJI_MUSEUM = museum_entries_a_l.ISTANBUL_ARKEOLOJI_MUSEUM
+    IZIKO_MUSEUMS_OF_SOUTH_AFRICA = museum_entries_a_l.IZIKO_MUSEUMS_OF_SOUTH_AFRICA
+    KATZ_CENTER = museum_entries_a_l.KATZ_CENTER
+    KAYSERI_ARKEOLOJI_MUZESI = museum_entries_a_l.KAYSERI_ARKEOLOJI_MUZESI
+    KELSEY_MUSEUM = museum_entries_a_l.KELSEY_MUSEUM
+    KUNSTHISTORISCHES_MUSEUM = museum_entries_a_l.KUNSTHISTORISCHES_MUSEUM
+    LOUVRE = museum_entries_a_l.LOUVRE
+    MARDIN_MUZESI = museum_entries_m_s.MARDIN_MUZESI
+    MOSUL_MUSEUM = museum_entries_m_s.MOSUL_MUSEUM
+    MUSEE_D_ART = museum_entries_m_s.MUSEE_D_ART
+    MUSEES_ROYAUX = museum_entries_m_s.MUSEES_ROYAUX
     MUSEUM_OF_ARCHAEOLOGY_AND_ANTHROPOLOGY_CAMBRIDGE = (
-        "Museum of Archaeology and Anthropology",
-        "Cambridge",
-        "GB",
-        "https://collections.maa.cam.ac.uk",
+        museum_entries_m_s.MUSEUM_OF_ARCHAEOLOGY_AND_ANTHROPOLOGY_CAMBRIDGE
     )
-    MUSEUM_OF_MONTSERRAT = (
-        "Museum of Montserrat",
-        "Montserrat",
-        "ES",
-        "https://www.museudemontserrat.com/en/index.html",
-    )
+    MUSEUM_OF_MONTSERRAT = museum_entries_m_s.MUSEUM_OF_MONTSERRAT
     MUSEUM_OF_ANATOLIAN_CIVILIZATIONS = (
-        "Anadolu Medeniyetleri Müzesi",
-        "Ankara",
-        "TR",
-        "https://muze.gov.tr/muze-detay?SectionId=AMM01&DistId=AMM",
+        museum_entries_m_s.MUSEUM_OF_ANATOLIAN_CIVILIZATIONS
     )
-    NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DK", "https://en.natmus.dk/")
+    NATIONALMUSEET = museum_entries_m_s.NATIONALMUSEET
     MUSEO_NAZIONALE_D_ARTE_ORIENTALE = (
-        "Museo Nazionale d’Arte Orientale “Giuseppe Tucci”",
-        "Rome",
-        "IT",
-        "https://www.museodellecivilta.it/arte-orientale/",
+        museum_entries_m_s.MUSEO_NAZIONALE_D_ARTE_ORIENTALE
     )
     NATIONAL_MUSEUM_OF_WORLD_WRITING_SYSTEMS = (
-        "National Museum of World Writing Systems",
-        "Incheon",
-        "KR",
-        "https://mow.or.kr/",
+        museum_entries_m_s.NATIONAL_MUSEUM_OF_WORLD_WRITING_SYSTEMS
     )
-    OAKLAND_MUSEUM = (
-        "Oakland Museum of California",
-        "Oakland",
-        "US",
-        "https://museumca.org/",
-    )
-    PENN_MUSEUM = (
-        "University of Pennsylvania Museum of Archaeology and Anthropology",
-        "Philadelphia",
-        "US",
-        "https://www.penn.museum/",
-    )
-    MUETTER_MUSEUM = (
-        "The Mütter Museum at The College of Physicians of Philadelphia",
-        "Philadelphia",
-        "US",
-        "https://muttermuseum.org/",
-    )
-    PIERPONT_MORGAN = (
-        "Pierpont Morgan Library & Museum",
-        "New York",
-        "US",
-        "https://www.themorgan.org/",
-    )
-    PONTIFICAL_BIBLICAL_INSTITUTE = (
-        "Pontifical Biblical Institute",
-        "Rome",
-        "IT",
-        "http://www.biblico.it/",
-    )
-    PRIVATE_COLLECTION_CHICAGO = (
-        "Private collection in Chicago",
-        "Chicago",
-        "US",
-    )
-    PRIVATE_COLLECTION_OF_J_CARRE = (
-        "Private collection of J. Carré",
-        "Brussels",
-        "BE",
-    )
-    PRIVATE_COLLECTION_OF_M_FOEKEN = (
-        "Private collection of M. Foeken",
-        "Leiden",
-        "NL",
-    )
+    OAKLAND_MUSEUM = museum_entries_m_s.OAKLAND_MUSEUM
+    PENN_MUSEUM = museum_entries_m_s.PENN_MUSEUM
+    MUETTER_MUSEUM = museum_entries_m_s.MUETTER_MUSEUM
+    PIERPONT_MORGAN = museum_entries_m_s.PIERPONT_MORGAN
+    PONTIFICAL_BIBLICAL_INSTITUTE = museum_entries_m_s.PONTIFICAL_BIBLICAL_INSTITUTE
+    PRIVATE_COLLECTION_CHICAGO = museum_entries_m_s.PRIVATE_COLLECTION_CHICAGO
+    PRIVATE_COLLECTION_OF_J_CARRE = museum_entries_m_s.PRIVATE_COLLECTION_OF_J_CARRE
+    PRIVATE_COLLECTION_OF_M_FOEKEN = museum_entries_m_s.PRIVATE_COLLECTION_OF_M_FOEKEN
     PRIVATE_COLLECTION_OF_W_LAMPLOUGH = (
-        "Private collection of W. Lamplough",
-        "",
-        "GB",
+        museum_entries_m_s.PRIVATE_COLLECTION_OF_W_LAMPLOUGH
     )
-    PRIVATE_COLLECTION_OF_Z_YILDIZ = (
-        "Private collection of Zeynel Yıldız",
-        "Elazığ",
-        "TR",
-    )
-    MCGILL_UNIVERSITY = (
-        "McGill University Ethnological Collections",
-        "Montreal",
-        "CA",
-        "https://www.mcgill.ca/redpath/collections/ethnology",
-    )
-    ROSICRUCIAN_EGYPTIAN_MUSEUM = (
-        "Rosicrucian Egyptian Museum",
-        "San Jose",
-        "US",
-        "https://egyptianmuseum.org/",
-    )
-    ROYAL_ONTARIO_MUSEUM = (
-        "Royal Ontario Museum",
-        "Toronto",
-        "CA",
-        "https://www.rom.on.ca/",
-    )
-    RYLANDS_INSTITUTE = (
-        "John Rylands Research Institute and Library",
-        "Manchester",
-        "GB",
-        "https://www.library.manchester.ac.uk/rylands/",
-    )
-    SANLIURFA_MUSEUM = (
-        "Şanlıurfa Arkeoloji Müzesi",
-        "Şanlıurfa",
-        "TR",
-        "https://muze.gov.tr/muze-detay?SectionId=SUM02&DistId=SUM",
-    )
-    SCHOYEN_COLLECTION = (
-        "Schøyen Collection",
-        "Oslo",
-        "NO",
-        "https://www.schoyencollection.com/",
-    )
-    SEPHARDIC_MUSEUM_OF_TOLEDO = (
-        "Sephardic Museum of Toledo",
-        "Toledo",
-        "ES",
-        "https://www.cultura.gob.es/msefardi/",
-    )
-    SLEMANI_MUSEUM = (
-        "Slemani Museum",
-        "Sulaymaniyah",
-        "IQ",
-        "https://slemanimuseum.org/",
-    )
-    SPURLOCK_MUSEUM = (
-        "Spurlock Museum, University of Illinois",
-        "Urbana",
-        "US",
-        "https://www.spurlock.illinois.edu/",
-    )
-    THE_BRITISH_MUSEUM = (
-        "The British Museum",
-        "London",
-        "GB",
-        "https://www.britishmuseum.org/",
-    )
+    PRIVATE_COLLECTION_OF_Z_YILDIZ = museum_entries_m_s.PRIVATE_COLLECTION_OF_Z_YILDIZ
+    MCGILL_UNIVERSITY = museum_entries_m_s.MCGILL_UNIVERSITY
+    ROSICRUCIAN_EGYPTIAN_MUSEUM = museum_entries_m_s.ROSICRUCIAN_EGYPTIAN_MUSEUM
+    ROYAL_ONTARIO_MUSEUM = museum_entries_m_s.ROYAL_ONTARIO_MUSEUM
+    RYLANDS_INSTITUTE = museum_entries_m_s.RYLANDS_INSTITUTE
+    SANLIURFA_MUSEUM = museum_entries_m_s.SANLIURFA_MUSEUM
+    SCHOYEN_COLLECTION = museum_entries_m_s.SCHOYEN_COLLECTION
+    SEPHARDIC_MUSEUM_OF_TOLEDO = museum_entries_m_s.SEPHARDIC_MUSEUM_OF_TOLEDO
+    SLEMANI_MUSEUM = museum_entries_m_s.SLEMANI_MUSEUM
+    SPURLOCK_MUSEUM = museum_entries_m_s.SPURLOCK_MUSEUM
+    THE_BRITISH_MUSEUM = museum_entries_t_y.THE_BRITISH_MUSEUM
     THE_FIELD_MUSEUM_OF_NATURAL_HISTORY = (
-        "The Field Museum of Natural History",
-        "Chicago",
-        "US",
-        "https://www.fieldmuseum.org/",
+        museum_entries_t_y.THE_FIELD_MUSEUM_OF_NATURAL_HISTORY
     )
     THE_FREE_LIBRARY_OF_PHILADELPHIA = (
-        "The Free Library of Philadelphia",
-        "Philadelphia",
-        "US",
-        "https://www.freelibrary.org/",
+        museum_entries_t_y.THE_FREE_LIBRARY_OF_PHILADELPHIA
     )
-    THE_IRAQ_MUSEUM = (
-        "The Iraq Museum",
-        "Baghdad",
-        "IQ",
-        "https://theiraqmuseum.com/",
-    )
-    THE_METROPOLITAN_MUSEUM_OF_ART = (
-        "The Metropolitan Museum of Art",
-        "New York",
-        "US",
-        "https://www.metmuseum.org/",
-    )
-    THE_WALTERS_ART_MUSEUM = (
-        "The Walters Art Museum",
-        "Baltimore",
-        "US",
-        "https://thewalters.org/",
-    )
-    TOPKAPI_SARAYI = (
-        "Topkapı Sarayı Müzesi",
-        "Istanbul",
-        "TR",
-        "https://muze.gen.tr/muze-detay/topkapi",
-    )
-    TRINITY_COLLEGE_DUBLIN = (
-        "Trinity College Dublin",
-        "Dublin",
-        "IE",
-        "https://www.tcd.ie/",
-    )
-    TURIN_DEPARTMENT_ARCHAEOLOGY = (
-        "Sezione di Archeologia del Dipartimento di Studi Storici, Università di Torino",
-        "Turin",
-        "IT",
-        "https://www.dipstudistorici.unito.it/",
-    )
-    URUK_WARKA_SAMMLUNG = (
-        "Uruk-Warka-Sammlung",
-        "Heidelberg",
-        "DE",
-        "https://www.ori.uni-heidelberg.de/assyriologie/institut/sammlungen/sa-uw.html",
-    )
-    VATICAN_MUSEUMS = (
-        "Vatican Museums",
-        "Vatican City",
-        "VA",
-        "http://www.museivaticani.va/",
-    )
-    VORDERASIATISCHES_MUSEUM = (
-        "Vorderasiatisches Museum",
-        "Berlin",
-        "DE",
-        "https://www.smb.museum/en/museums-institutions/vorderasiatisches-museum/home/",
-    )
-    YALE_PEABODY_COLLECTION = (
-        "Yale Peabody Museum, Yale Babylonian Collection",
-        "New Haven",
-        "US",
-        "https://peabody.yale.edu/explore/collections/yale-babylonian-collection",
-    )
+    THE_IRAQ_MUSEUM = museum_entries_t_y.THE_IRAQ_MUSEUM
+    THE_METROPOLITAN_MUSEUM_OF_ART = museum_entries_t_y.THE_METROPOLITAN_MUSEUM_OF_ART
+    THE_WALTERS_ART_MUSEUM = museum_entries_t_y.THE_WALTERS_ART_MUSEUM
+    TOPKAPI_SARAYI = museum_entries_t_y.TOPKAPI_SARAYI
+    TRINITY_COLLEGE_DUBLIN = museum_entries_t_y.TRINITY_COLLEGE_DUBLIN
+    TURIN_DEPARTMENT_ARCHAEOLOGY = museum_entries_t_y.TURIN_DEPARTMENT_ARCHAEOLOGY
+    URUK_WARKA_SAMMLUNG = museum_entries_t_y.URUK_WARKA_SAMMLUNG
+    VATICAN_MUSEUMS = museum_entries_t_y.VATICAN_MUSEUMS
+    VORDERASIATISCHES_MUSEUM = museum_entries_t_y.VORDERASIATISCHES_MUSEUM
+    YALE_PEABODY_COLLECTION = museum_entries_t_y.YALE_PEABODY_COLLECTION
     UNKNOWN = ("UNKNOWN",)
     HYPERURANION = ("HYPERURANION",)

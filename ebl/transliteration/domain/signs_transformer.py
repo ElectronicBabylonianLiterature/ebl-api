@@ -1,7 +1,9 @@
 import re
-from typing import Sequence
+from typing import Any, Sequence, cast
 from lark import Tree
 from lark.visitors import Transformer, v_args
+
+from ebl.transliteration.domain.sign import SignName
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int, to_sub_index
@@ -22,9 +24,9 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
 
 def tree_to_string(tree: Tree) -> str:
     _children = []
-    for part in tree.scan_values(lambda x: x):
+    for part in tree.scan_values(bool):
         if hasattr(part, "value"):
-            _children.append(part.value)
+            _children.append(cast(Any, part).value)
         elif isinstance(part, Tree):
             _children.append(tree_to_string(part))
         else:
@@ -75,8 +77,8 @@ class SignTransformer(Transformer):
         self, name, sub_index, modifiers, flags, surrogate
     ):
         return Logogram.of(
-            tuple(name.children), sub_index, modifiers, flags, None, surrogate.children
-        )
+            tuple(name.children), sub_index, modifiers, flags
+        ).with_surrogate(surrogate.children)
 
     @v_args()
     def ebl_atf_text_line__logogram_name_part(self, children):
@@ -111,7 +113,7 @@ class SignTransformer(Transformer):
     def ebl_atf_text_line__grapheme(self, name, sub_index, modifiers, flags):
         _name = tree_to_string(name)
         _sub_index = to_sub_index(sub_index) if sub_index and sub_index != 1 else ""
-        return Grapheme.of(_name + _sub_index, modifiers, flags)
+        return Grapheme.of(SignName(_name + _sub_index), modifiers, flags)
 
     def ebl_atf_text_line__sub_compound(self, children):
         return Tree("ebl_atf_text_line__sub_compound", ["(", *children, ")"])
@@ -133,7 +135,7 @@ class SignTransformer(Transformer):
         return re.split(r"\.(?!(?:[^\(\)]*\)))", "".join(_children))
 
     def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
-        _children = []
+        _children: list = []
         for part in children:
             if isinstance(part, Tree):
                 _children += self._flatten_grapheme_elements(part.children)

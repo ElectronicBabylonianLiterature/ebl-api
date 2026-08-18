@@ -1,13 +1,13 @@
 from __future__ import annotations
 import re
 import attr
-from typing import cast, Sequence, Tuple, List
+from typing import cast, Optional, Sequence, Tuple, List
 from enum import Enum
 from collections import OrderedDict
 from ebl.errors import DataError
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import TokenVisitor
+from ebl.transliteration.domain.tokens import SignsCollectingVisitor
 
 
 class Type(Enum):
@@ -32,7 +32,7 @@ wildcard_matchers: OrderedDict[Type, str] = OrderedDict(
 @attr.s(auto_attribs=True)
 class TransliterationQuery:
     string: str
-    visitor: TokenVisitor
+    visitor: Optional[SignsCollectingVisitor]
     type: Type = attr.ib(init=False)
     regexp: str = attr.ib(init=False)
 
@@ -141,11 +141,12 @@ class TransliterationQueryText(TransliterationQuery):
         return rf"(\S+\/)*{re.escape(sign)}(?![^\s\/])"
 
     def _create_signs(self, transliteration: str) -> Sequence[str]:
-        if not transliteration:
+        visitor = self.visitor
+        if not transliteration or visitor is None:
             return []
-        self.visitor._standardizations = []
-        self._parse(transliteration).accept(self.visitor)
-        return self.visitor.result
+        visitor.reset()
+        self._parse(transliteration).accept(visitor)
+        return visitor.result_string
 
     def _parse(self, transliteration: str) -> TextLine:
         from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
@@ -192,10 +193,10 @@ class TransliterationQueryLine(TransliterationQuery):
         return rf"(?<![^|\s]){content.regexp}"
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True)
 class TransliterationQueryEmpty(TransliterationQuery):
     string: str = ""
-    visitor: TokenVisitor = TokenVisitor()
+    visitor: Optional[SignsCollectingVisitor] = None
     type: Type = Type.UNDEFINED
     regexp: str = r""
 

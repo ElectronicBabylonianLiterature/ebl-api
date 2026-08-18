@@ -1,5 +1,6 @@
 import pytest
 import json
+from typing import List
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.logger import Logger
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
@@ -146,9 +147,8 @@ def test_text_lines(database, legacy_lines, ebl_lines):
     assert legacy_lines == expected_lines
 
 
-lemma_lines = []
 with open("ebl/tests/atf_importer/test_lemma_lines.json", "r") as file:
-    lemma_lines: list = json.load(file)
+    lemma_lines: List[str] = json.load(file)
 
 
 @pytest.mark.parametrize("line", lemma_lines)
@@ -157,3 +157,16 @@ def test_lemma_line_c_type_is_lem_line(database, line):
     result = legacy_atf_converter.convert_lines([line])[0]
 
     assert result["c_type"] == "lem_line"
+
+
+def test_unparsable_line_falls_back_to_empty_tree(database, monkeypatch):
+    legacy_atf_converter = LegacyAtfConverter(database, config, logger)
+
+    def refuse_input():
+        raise EOFError
+
+    monkeypatch.setattr("builtins.input", refuse_input)
+
+    tree = legacy_atf_converter._parse_and_validate_line("1. ((((")
+
+    assert tree == legacy_atf_converter.ebl_parser.parse("")
