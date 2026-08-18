@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.bibliography.application.server_owned_fields import (
+    changed_server_owned_fields,
     preserve_persisted_fields,
     preserve_server_owned_fields,
     stored_preserved_fields,
@@ -152,3 +153,46 @@ def test_preserve_keeps_stored_tombstone_fields():
 
     assert preserved_entry["deprecated"] is True
     assert preserved_entry["redirectTo"] == "rla_9_388"
+
+
+def test_changed_server_owned_fields_accepts_round_tripped_values():
+    assert changed_server_owned_fields({**STORED, "title": "Corrected"}, STORED) == []
+
+
+def test_changed_server_owned_fields_accepts_omitted_fields():
+    entry = {"id": "Q30000024", "type": "book", "title": "Corrected"}
+
+    assert changed_server_owned_fields(entry, STORED) == []
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("aliases", [{"value": "attacker", "normalizedValue": "attacker"}]),
+        ("citationKey", "attacker-key"),
+        ("deprecated", True),
+        ("redirectTo", "other-record"),
+    ],
+)
+def test_changed_server_owned_fields_reports_a_changed_field(field, value):
+    assert changed_server_owned_fields({**STORED, field: value}, STORED) == [field]
+
+
+def test_changed_server_owned_fields_reports_every_changed_field():
+    entry = {**STORED, "aliases": [], "citationKey": "other"}
+
+    assert changed_server_owned_fields(entry, STORED) == ["aliases", "citationKey"]
+
+
+def test_changed_server_owned_fields_reports_a_field_absent_from_stored():
+    entry = {"id": "RN1", "type": "book", "deprecated": True}
+
+    assert changed_server_owned_fields(entry, {"id": "RN1", "type": "book"}) == [
+        "deprecated"
+    ]
+
+
+def test_changed_server_owned_fields_accepts_null_matching_absent_stored_field():
+    entry = {"id": "RN1", "type": "book", "redirectTo": None}
+
+    assert changed_server_owned_fields(entry, {"id": "RN1", "type": "book"}) == []

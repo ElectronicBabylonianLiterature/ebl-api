@@ -18,6 +18,7 @@ from ebl.bibliography.application.redirect_resolution import (
     follow_bibliography_redirect,
 )
 from ebl.bibliography.application.server_owned_fields import (
+    changed_server_owned_fields,
     preserve_persisted_fields,
 )
 from ebl.bibliography.domain.reference import BibliographyId, Reference
@@ -65,12 +66,28 @@ class Bibliography:
 
     def update(self, entry: dict, user: User) -> None:
         stored_entry = self._stored_entry_for_update(entry)
+        self._persist_update(entry, stored_entry, user)
+
+    def update_metadata(self, entry: dict, user: User) -> None:
+        stored_entry = self._stored_entry_for_update(entry)
+        self._reject_changed_server_owned_fields(entry, stored_entry)
+        self._persist_update(entry, stored_entry, user)
+
+    def _persist_update(self, entry: dict, stored_entry: dict, user: User) -> None:
         update_with_identity_claims(
             self._identity,
             preserve_persisted_fields(entry, stored_entry),
             user,
             stored_entry,
         )
+
+    @staticmethod
+    def _reject_changed_server_owned_fields(entry: dict, stored_entry: dict) -> None:
+        if changed_fields := changed_server_owned_fields(entry, stored_entry):
+            raise DataError(
+                "Bibliography metadata updates may not change server-owned fields: "
+                f"{', '.join(changed_fields)}. These are maintained by the server."
+            )
 
     def _stored_entry_for_update(self, entry: dict) -> dict:
         id_ = entry.get("id")

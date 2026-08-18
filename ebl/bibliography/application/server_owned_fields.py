@@ -64,3 +64,13 @@ def preserve_persisted_fields(
         **client_editable_fields(entry),
         **stored_preserved_fields(stored_entry),
     }
+
+
+def changed_server_owned_fields(
+    entry: Mapping[str, Any], stored_entry: Mapping[str, Any]
+) -> list[str]:
+    return sorted(
+        field
+        for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+        if field in entry and entry[field] != stored_entry.get(field)
+    )
