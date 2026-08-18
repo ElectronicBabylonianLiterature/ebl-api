@@ -5,6 +5,9 @@ from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
+from ebl.fragmentarium.application.fragment_query_preview import (
+    matching_line_preview_of,
+)
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryArchaeologySchema,
     FragmentQueryMatchingLinePreviewSchema,
@@ -17,7 +20,6 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQueryResult,
     FragmentQuerySummary,
-    matching_line_preview_of,
 )
 from ebl.schemas import ResearchProjectField
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -173,6 +175,7 @@ def test_fragment_query_result_schema_roundtrip_and_compatibility():
     assert dumped == {
         "items": [FragmentQuerySummarySchema().dump(summary)],
         "matchCountTotal": 7,
+        "bibliographyDocuments": {},
     }
     assert FragmentQueryResultSchema().load(dumped) == result
 
@@ -188,6 +191,7 @@ def test_fragment_query_result_schema_roundtrip_and_compatibility():
         "matchCountTotal": 7,
         "isMatchCountTotalExact": True,
         "hasNextPage": None,
+        "bibliographyDocuments": {},
     }
 
 

@@ -2,6 +2,7 @@ import falcon
 import pytest
 
 from ebl.common.domain.period import Period
+from ebl.common.query.parameter_parser import MAX_QUERY_LIMIT
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import (
@@ -74,6 +75,7 @@ def test_query_fragmentarium_transliteration_count_page(
         None,
         False,
         True,
+        bibliography_documents={},
     )
     assert last_page_result.status == falcon.HTTP_OK
     assert last_page_result.json == query_result_of(
@@ -81,6 +83,7 @@ def test_query_fragmentarium_transliteration_count_page(
         None,
         False,
         False,
+        bibliography_documents={},
     )
 
 
@@ -108,6 +111,7 @@ def test_query_fragmentarium_transliteration_limit_with_offset(
     assert result.json == query_result_of(
         [query_summary_of(fragment, matching_lines=[3]) for fragment in fragments[1:3]],
         4,
+        bibliography_documents={},
     )
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
 
@@ -159,7 +163,30 @@ def test_query_fragmentarium_transliteration_offset_zero_is_accepted(
     assert result.json == query_result_of(
         [query_summary_of(fragment, matching_lines=[3])],
         1,
+        bibliography_documents={},
     )
+
+
+@pytest.mark.parametrize("limit", ["25", "50", "100", "101", str(MAX_QUERY_LIMIT)])
+def test_query_fragmentarium_limit_accepted(client, limit):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "limit": limit},
+    )
+
+    assert result.status == falcon.HTTP_OK
+
+
+@pytest.mark.parametrize(
+    "limit", ["0", "-1", str(MAX_QUERY_LIMIT + 1), "1000000", "invalid"]
+)
+def test_query_fragmentarium_limit_invalid(client, limit):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "limit": limit},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.parametrize("offset", ["invalid", "-1"])
@@ -167,6 +194,24 @@ def test_query_fragmentarium_offset_invalid(client, offset):
     result = client.simulate_get(
         "/fragments/query",
         params={"number": "K.1", "offset": offset},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_query_fragmentarium_limit_duplicate_query_param(client):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "limit": ["1", "300"]},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_query_fragmentarium_offset_duplicate_query_param(client):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "offset": ["0", "1"]},
     )
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
