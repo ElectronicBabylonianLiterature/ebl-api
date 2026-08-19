@@ -151,9 +151,7 @@ class StoredMedia:
         """
         if self.media.id != replacement.media.id:
             raise ValueError("Cannot supersede stored state of a different media.")
-        return _superseded_handles(
-            self.representations, replacement.representations
-        )
+        return _superseded_handles(self.representations, replacement.representations)
 
 
 @attr.s(auto_attribs=True, frozen=True)
