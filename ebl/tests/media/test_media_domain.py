@@ -120,9 +120,10 @@ def test_invalid_uuid_is_invalid() -> None:
         MediaId("not-a-uuid")
 
 
-def test_empty_media_id_is_invalid() -> None:
-    with pytest.raises(ValueError, match="cannot be empty"):
-        MediaId("")
+@pytest.mark.parametrize("value", ("", " ", "\t", "\n"))
+def test_blank_media_id_is_invalid(value: str) -> None:
+    with pytest.raises(ValueError, match="cannot be blank"):
+        MediaId(value)
 
 
 def test_media_id_create_returns_unique_uuid() -> None:

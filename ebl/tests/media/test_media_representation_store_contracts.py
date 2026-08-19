@@ -4,6 +4,7 @@ from typing import cast
 
 import pytest
 
+from ebl.errors import NotFoundError
 from ebl.media.application import (
     BackfillRequest,
     DisplayRepresentationWriteRequest,
@@ -12,20 +13,17 @@ from ebl.media.application import (
     MediaRepresentationNotFoundError,
     OriginalRepresentationWriteRequest,
     StoredRepresentationHandle,
-    StoredRepresentationNotFoundError,
+    StoredRepresentationMissingError,
     ThumbnailRepresentationWriteRequest,
 )
-from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType, ThumbnailSize
+from ebl.media.domain import Media, MediaId, ThumbnailSize
 from ebl.tests.media.factories import (
     association,
-    contract_media,
     media_id,
     original_representation,
     photo_media,
-    stored_media_sequence,
 )
 from ebl.tests.media.in_memory_media import (
-    InMemoryMediaRepository,
     InMemoryRepresentationStore,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -121,15 +119,22 @@ def test_representation_open_returns_a_streamable_handle() -> None:
     handle = store.open_representation(stored_handle)
 
     assert handle.media_id == PHOTO_ID
-    assert handle.content_type == "image/jpeg"
+    assert handle.representation.mime_type == "image/jpeg"
     assert handle.content.read() == b"media-bytes"
 
 
-def test_opening_an_absent_handle_raises_representation_not_found() -> None:
+def test_opening_an_absent_handle_raises_a_storage_integrity_error() -> None:
     store = InMemoryRepresentationStore()
+    handle = StoredRepresentationHandle("secret-gridfs-object-id")
 
-    with pytest.raises(StoredRepresentationNotFoundError, match="missing"):
-        store.open_representation(StoredRepresentationHandle("missing"))
+    with pytest.raises(StoredRepresentationMissingError) as error_info:
+        store.open_representation(handle)
+
+    error = error_info.value
+    assert error.handle == handle
+    assert "secret-gridfs-object-id" not in str(error)
+    assert str(error) == "Stored media representation not found."
+    assert not isinstance(error, NotFoundError)
 
 
 def test_missing_role_error_identifies_media_and_representation() -> None:
@@ -146,20 +151,28 @@ def test_missing_thumbnail_error_names_thumbnail_size() -> None:
     assert error.representation == "large thumbnail"
 
 
-def test_dry_run_import_request_carries_no_write_intent() -> None:
-    request = ImportRequest(ImportMode.DRY_RUN, "legacy-gridfs", (K1,))
-    repository = InMemoryMediaRepository(
-        stored_media_sequence(
-            contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
-        )
-    )
-    store = InMemoryRepresentationStore()
+@pytest.mark.parametrize("mode", tuple(ImportMode))
+def test_dry_run_is_orthogonal_to_the_import_mode(mode: ImportMode) -> None:
+    preview = ImportRequest(mode, "legacy-gridfs", (K1,), dry_run=True)
+    applied = ImportRequest(mode, "legacy-gridfs", (K1,))
 
-    assert request.mode is ImportMode.DRY_RUN
-    assert repository.find_by_fragment(K1) != ()
-    assert store.written_originals == []
-    assert store.written_thumbnails == []
-    assert store.deleted_media_ids == []
+    assert preview.mode is mode
+    assert preview.dry_run is True
+    assert applied.mode is mode
+    assert applied.dry_run is False
+
+
+def test_import_modes_describe_only_existing_source_handling() -> None:
+    assert {mode.value for mode in ImportMode} == {"skip-existing", "replace"}
+
+
+def test_import_request_collections_are_immutable() -> None:
+    fragment_ids = [K1]
+    request = ImportRequest(ImportMode.REPLACE, "legacy-gridfs", fragment_ids)
+
+    fragment_ids.append(MuseumNumber.of("BM.99"))
+
+    assert request.fragment_ids == (K1,)
 
 
 def test_backfill_request_defaults_to_dry_run() -> None:

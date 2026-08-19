@@ -23,4 +23,4 @@ COPY ./ebl ./ebl
 COPY ./docs ./docs
 RUN chmod -R a-wx ./docs
 
-CMD ["poetry", "run", "waitress-serve", "--port=8000", "--connection-limit=500", "--call", "ebl.app:get_app"]
+CMD ["poetry", "run", "waitress-serve", "--port=8000", "--connection-limit=500", "--max-request-body-size=67108864", "--call", "ebl.app:get_app"]

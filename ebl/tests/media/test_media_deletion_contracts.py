@@ -22,8 +22,9 @@ def photo() -> Media:
 def build_service() -> tuple[
     InMemoryMediaRepository, InMemoryRepresentationStore, InMemoryMediaService
 ]:
-    repository = InMemoryMediaRepository(stored_media_sequence(photo()))
-    store = InMemoryRepresentationStore()
+    call_log: list[str] = []
+    repository = InMemoryMediaRepository(stored_media_sequence(photo()), call_log)
+    store = InMemoryRepresentationStore(call_log)
     return repository, store, InMemoryMediaService(repository, store)
 
 
@@ -32,6 +33,10 @@ def test_service_deletes_metadata_before_representations() -> None:
 
     service.delete_media(PHOTO_ID)
 
+    assert repository.call_log == [
+        "repository.delete",
+        "store.delete_representations",
+    ]
     assert repository.find_by_id(PHOTO_ID) is None
     assert store.deleted_media_ids == [PHOTO_ID]
 

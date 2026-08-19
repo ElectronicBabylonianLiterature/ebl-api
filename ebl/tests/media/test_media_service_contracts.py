@@ -1,4 +1,6 @@
-from ebl.media.application import ImportMode, ImportReport, BackfillReport
+from types import MappingProxyType
+
+from ebl.media.application import BackfillCategory, BackfillReport, ImportReport
 from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType
 from ebl.tests.media.factories import (
     contract_media,
@@ -85,14 +87,6 @@ def test_shared_media_appears_under_every_requested_fragment() -> None:
     assert result[K1] == result[SM2] == (photo,)
 
 
-def test_import_modes_are_explicit_and_distinct() -> None:
-    assert {mode.value for mode in ImportMode} == {
-        "dry-run",
-        "skip-existing",
-        "replace",
-    }
-
-
 def test_import_report_distinguishes_every_outcome() -> None:
     report = ImportReport()
 
@@ -106,8 +100,42 @@ def test_import_report_distinguishes_every_outcome() -> None:
     assert report.warnings == ()
 
 
-def test_backfill_report_defaults_to_a_non_mutating_summary() -> None:
+def test_backfill_report_defaults_to_an_empty_completed_summary() -> None:
     report = BackfillReport()
 
-    assert (report.scanned, report.candidates) == (0, 0)
+    counts = (
+        report.scanned,
+        report.candidates,
+        report.created,
+        report.replaced,
+        report.skipped,
+        report.failed,
+    )
+
+    assert counts == (0, 0, 0, 0, 0, 0)
+    assert report.next_resume_token is None
     assert report.reports == {}
+
+
+def test_backfill_report_carries_a_resume_token_and_typed_categories() -> None:
+    report = BackfillReport(
+        scanned=100,
+        candidates=40,
+        created=38,
+        failed=2,
+        next_resume_token="cursor-2",
+        reports={BackfillCategory.UNKNOWN_FRAGMENT: ["K.999"]},
+    )
+
+    assert report.next_resume_token == "cursor-2"
+    assert report.reports[BackfillCategory.UNKNOWN_FRAGMENT] == ("K.999",)
+
+
+def test_backfill_report_collections_cannot_be_mutated_by_the_caller() -> None:
+    entries = ["K.999"]
+    report = BackfillReport(reports={BackfillCategory.UNKNOWN_FRAGMENT: entries})
+
+    entries.append("K.1000")
+
+    assert report.reports[BackfillCategory.UNKNOWN_FRAGMENT] == ("K.999",)
+    assert isinstance(report.reports, MappingProxyType)

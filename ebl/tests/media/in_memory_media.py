@@ -9,11 +9,11 @@ from ebl.media.application import (
     MediaNotFoundError,
     MediaRepository,
     MediaRepresentationStore,
+    OpenRepresentation,
     OriginalRepresentationWriteRequest,
-    RepresentationHandle,
     StoredMedia,
     StoredRepresentationHandle,
-    StoredRepresentationNotFoundError,
+    StoredRepresentationMissingError,
     ThumbnailRepresentationWriteRequest,
     fragment_media_in_order,
     primary_media_for,
@@ -33,8 +33,13 @@ class StoredRepresentationRecord:
 
 
 class InMemoryMediaRepository(MediaRepository):
-    def __init__(self, media: Sequence[StoredMedia] = ()) -> None:
+    def __init__(
+        self,
+        media: Sequence[StoredMedia] = (),
+        call_log: Optional[List[str]] = None,
+    ) -> None:
         self.fail_next_replace = False
+        self.call_log = call_log if call_log is not None else []
         self._media: Dict[MediaId, StoredMedia] = {
             stored_media.media.id: stored_media for stored_media in media
         }
@@ -93,38 +98,49 @@ class InMemoryMediaRepository(MediaRepository):
         return media.media.id
 
     def replace(self, media: StoredMedia) -> StoredMedia:
-        if media.media.id not in self._media:
-            raise MediaNotFoundError(media.media.id)
+        return self.replace_many((media,))[0]
+
+    def replace_many(self, media: Sequence[StoredMedia]) -> Sequence[StoredMedia]:
+        media_ids = [item.media.id for item in media]
+        if len(media_ids) != len(set(media_ids)):
+            raise ValueError("Cannot replace the same media twice in one batch.")
+        for media_id in media_ids:
+            if media_id not in self._media:
+                raise MediaNotFoundError(media_id)
         if self.fail_next_replace:
             self.fail_next_replace = False
             raise RuntimeError("Metadata replacement failed.")
-        previous = self._media[media.media.id]
-        self._media[media.media.id] = media
+
+        previous = tuple(self._media[media_id] for media_id in media_ids)
+        for item in media:
+            self._media[item.media.id] = item
         return previous
 
     def delete(self, media_id: MediaId) -> None:
+        self.call_log.append("repository.delete")
         self._media.pop(media_id, None)
 
 
 class InMemoryRepresentationStore(MediaRepresentationStore):
-    def __init__(self) -> None:
+    def __init__(self, call_log: Optional[List[str]] = None) -> None:
         self.written_originals: List[object] = []
         self.written_displays: List[object] = []
         self.written_thumbnails: List[object] = []
         self.deleted_handles: List[StoredRepresentationHandle] = []
         self.deleted_media_ids: List[MediaId] = []
         self.delete_failures: List[StoredRepresentationHandle] = []
+        self.call_log = call_log if call_log is not None else []
         self._records: Dict[StoredRepresentationHandle, StoredRepresentationRecord] = {}
         self._next_handle = 0
 
     def open_representation(
         self, handle: StoredRepresentationHandle
-    ) -> RepresentationHandle:
+    ) -> OpenRepresentation:
         try:
             record = self._records[handle]
         except KeyError as error:
-            raise StoredRepresentationNotFoundError(handle) from error
-        return _handle(record)
+            raise StoredRepresentationMissingError(handle) from error
+        return _open_representation(record)
 
     def write_original(
         self, request: OriginalRepresentationWriteRequest
@@ -151,6 +167,7 @@ class InMemoryRepresentationStore(MediaRepresentationStore):
         self._records.pop(handle, None)
 
     def delete_representations(self, media_id: MediaId) -> None:
+        self.call_log.append("store.delete_representations")
         self.deleted_media_ids.append(media_id)
         for handle, record in tuple(self._records.items()):
             if record.media_id == media_id:
@@ -178,11 +195,10 @@ class InMemoryRepresentationStore(MediaRepresentationStore):
         return handle
 
 
-def _handle(record: StoredRepresentationRecord) -> RepresentationHandle:
-    return RepresentationHandle(
+def _open_representation(record: StoredRepresentationRecord) -> OpenRepresentation:
+    return OpenRepresentation(
         media_id=record.media_id,
         representation=record.representation,
         content=BytesIO(record.content),
-        content_type=record.representation.mime_type,
         length=len(record.content),
     )

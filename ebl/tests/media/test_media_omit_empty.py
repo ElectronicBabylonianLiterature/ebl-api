@@ -82,3 +82,12 @@ def test_absent_optional_media_metadata_is_omitted() -> None:
     assert "attribution" not in result
     assert "references" not in result
     assert "display" not in cast(dict[str, object], result["representations"])
+
+
+def test_empty_thumbnails_are_serialized_as_an_empty_object() -> None:
+    media = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+
+    representations = cast(dict[str, object], dump_item(media)["representations"])
+
+    assert representations["thumbnails"] == {}
+    assert "original" in representations

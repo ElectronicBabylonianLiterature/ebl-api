@@ -1,17 +1,21 @@
 from ebl.media.domain.media import (
     Media,
     MediaAssociation,
-    MediaChecksum,
     MediaId,
     MediaImportSource,
     MediaReference,
+    MediaType,
+)
+from ebl.media.domain.representations import (
+    SHA256,
+    MediaChecksum,
     MediaRepresentation,
     MediaRepresentations,
-    MediaType,
     ThumbnailSize,
 )
 
 __all__ = [
+    "SHA256",
     "Media",
     "MediaAssociation",
     "MediaChecksum",

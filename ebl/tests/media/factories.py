@@ -121,10 +121,10 @@ def media_reference(reference_id: str = "bibliography-id") -> MediaReference:
 def media_import_source(
     *,
     system: str = "legacy-gridfs",
-    bucket: str = "photos",
     file_id: str = "legacy-gridfs-id",
+    container: str | None = "photos",
 ) -> MediaImportSource:
-    return MediaImportSource(system, bucket, file_id)
+    return MediaImportSource(system, file_id, container=container)
 
 
 def stored_handle(value: str = "stored-original") -> StoredRepresentationHandle:

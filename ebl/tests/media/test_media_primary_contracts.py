@@ -1,3 +1,5 @@
+from typing import Sequence
+
 import pytest
 
 from ebl.media.application import (
@@ -8,7 +10,10 @@ from ebl.media.application import (
 )
 from ebl.media.domain import Media, MediaAssociation, MediaId, MediaType
 from ebl.tests.media.factories import contract_media, stored_media_sequence
-from ebl.tests.media.in_memory_media import InMemoryMediaRepository
+from ebl.tests.media.in_memory_media import (
+    InMemoryMediaRepository,
+    InMemoryRepresentationStore,
+)
 from ebl.tests.media.in_memory_media_service import InMemoryMediaService
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -136,3 +141,73 @@ def test_repository_primary_reads_match_the_shared_selection_policy() -> None:
     assert repository.find_primary_media(K1) == primary_photo
     assert repository.find_primary_photo(K1) == primary_photo
     assert repository.find_primary_photo(SM2) is None
+
+
+def test_primary_transition_preserves_every_stored_handle() -> None:
+    repository = InMemoryMediaRepository(
+        stored_media_sequence(
+            photo(PHOTO_ID, 0, True), photo(SECOND_PHOTO_ID, 1, False)
+        )
+    )
+    store = InMemoryRepresentationStore()
+    service = InMemoryMediaService(repository, store)
+    before = _stored_representations(repository, (PHOTO_ID, SECOND_PHOTO_ID))
+
+    service.set_primary_media(K1, SECOND_PHOTO_ID)
+
+    after = _stored_representations(repository, (PHOTO_ID, SECOND_PHOTO_ID))
+    assert after == before
+    assert store.written_originals == []
+    assert store.written_displays == []
+    assert store.written_thumbnails == []
+    assert store.deleted_handles == []
+
+
+def test_primary_transition_leaves_exactly_one_primary() -> None:
+    repository = InMemoryMediaRepository(
+        stored_media_sequence(
+            photo(PHOTO_ID, 0, True),
+            photo(SECOND_PHOTO_ID, 1, True),
+            copy(COPY_ID, 2, True),
+        )
+    )
+    service = InMemoryMediaService(repository)
+
+    updated = service.set_primary_media(K1, COPY_ID)
+
+    primaries = [item.id for item in updated if item.association_for(K1).is_primary]
+    assert primaries == [COPY_ID]
+
+
+def test_primary_transition_applies_through_one_atomic_batch() -> None:
+    repository = InMemoryMediaRepository(
+        stored_media_sequence(
+            photo(PHOTO_ID, 0, True), photo(SECOND_PHOTO_ID, 1, False)
+        )
+    )
+    service = InMemoryMediaService(repository)
+    repository.fail_next_replace = True
+
+    with pytest.raises(RuntimeError, match="Metadata replacement failed"):
+        service.set_primary_media(K1, SECOND_PHOTO_ID)
+
+    primary = repository.find_primary_media(K1)
+    demoted = repository.find_by_id(SECOND_PHOTO_ID)
+    assert primary is not None
+    assert primary.id == PHOTO_ID
+    assert demoted is not None
+    assert demoted.association_for(K1).is_primary is False
+
+
+def _stored_representations(
+    repository: InMemoryMediaRepository, media_ids: Sequence[MediaId]
+) -> dict[MediaId, object]:
+    stored = {
+        media_id: repository.find_stored_by_id(media_id) for media_id in media_ids
+    }
+    assert all(item is not None for item in stored.values())
+    return {
+        media_id: item.representations
+        for media_id, item in stored.items()
+        if item is not None
+    }

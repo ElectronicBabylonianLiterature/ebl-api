@@ -31,6 +31,8 @@ class MediaReferenceDtoSchema(Schema):
 
 
 class MediaRepresentationsDtoSchema(OmitEmptyMixin, Schema):
+    preserve_empty_collections: FrozenSet[str] = frozenset({"thumbnails"})
+
     original = fields.Nested(MediaRepresentationDtoSchema, required=True)
     display = fields.Nested(MediaRepresentationDtoSchema)
     thumbnails = fields.Dict(

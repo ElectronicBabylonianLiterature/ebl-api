@@ -48,15 +48,17 @@ class InMemoryMediaService(MediaService):
     ) -> Sequence[Media]:
         if self._repository.find_in_fragment(media_id, fragment_id) is None:
             raise MediaNotFoundError(media_id)
-        for item in self._repository.find_by_fragment(fragment_id):
-            stored_media = self._repository.find_stored_by_id(item.id)
-            if stored_media is not None:
-                self._repository.replace(
-                    attr.evolve(
-                        stored_media,
-                        media=_with_primary(item, fragment_id, item.id == media_id),
-                    )
+        self._repository.replace_many(
+            tuple(
+                attr.evolve(
+                    stored_media,
+                    media=_with_primary(
+                        stored_media.media, fragment_id, item.id == media_id
+                    ),
                 )
+                for item, stored_media in self._stored_fragment_media(fragment_id)
+            )
+        )
         return self._repository.find_by_fragment(fragment_id)
 
     def delete_media(self, media_id: MediaId) -> None:
@@ -64,6 +66,19 @@ class InMemoryMediaService(MediaService):
             raise MediaNotFoundError(media_id)
         self._repository.delete(media_id)
         self._representation_store.delete_representations(media_id)
+
+    def _stored_fragment_media(
+        self, fragment_id: MuseumNumber
+    ) -> Sequence[tuple[Media, StoredMedia]]:
+        found = (
+            (item, self._repository.find_stored_by_id(item.id))
+            for item in self._repository.find_by_fragment(fragment_id)
+        )
+        return tuple(
+            (item, stored_media)
+            for item, stored_media in found
+            if stored_media is not None
+        )
 
 
 def _with_primary(media: Media, fragment_id: MuseumNumber, is_primary: bool) -> Media:

@@ -7,9 +7,14 @@ from ebl.media.application import (
     MediaAlreadyExistsError,
     MediaNotFoundError,
     MediaRepository,
-    RepresentationHandle,
+    OpenRepresentation,
+    OriginalRepresentationWriteRequest,
 )
 from ebl.media.domain import MediaAssociation, MediaId, MediaType
+from ebl.tests.media.conftest import (
+    MediaRepositoryFactory,
+    RepresentationStoreFactory,
+)
 from ebl.tests.media.factories import (
     contract_media,
     original_representation,
@@ -138,13 +143,106 @@ def test_repository_contract_does_not_expose_representation_reads() -> None:
     assert not hasattr(MediaRepository, "find_display")
 
 
-def test_representation_handle_contract_includes_readable_content() -> None:
-    handle = RepresentationHandle(
+def test_open_representation_carries_readable_content_and_domain_mime() -> None:
+    representation = original_representation()
+    opened = OpenRepresentation(
         media_id=PHOTO_ID,
-        representation=original_representation(),
+        representation=representation,
         content=BytesIO(b"media-bytes"),
-        content_type="image/jpeg",
         length=len(b"media-bytes"),
     )
 
-    assert handle.content.read() == b"media-bytes"
+    assert opened.content.read() == b"media-bytes"
+    assert opened.representation.mime_type == representation.mime_type
+    assert not hasattr(opened, "content_type")
+
+
+def test_repository_contract_batch_replaces_and_returns_previous_states() -> None:
+    first = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    second = contract_media(COPY_ID, MediaType.COPY, (MediaAssociation(K1, 1, False),))
+    repository = InMemoryMediaRepository(stored_media_sequence(first, second))
+    replacements = tuple(
+        stored_media(attr.evolve(item, caption="Batch"), f"batch-{index}")
+        for index, item in enumerate((first, second))
+    )
+
+    previous = repository.replace_many(replacements)
+
+    replaced_first = repository.find_by_id(PHOTO_ID)
+    replaced_second = repository.find_by_id(COPY_ID)
+    assert [item.media for item in previous] == [first, second]
+    assert replaced_first is not None and replaced_first.caption == "Batch"
+    assert replaced_second is not None and replaced_second.caption == "Batch"
+
+
+def test_repository_contract_batch_replace_is_all_or_nothing() -> None:
+    existing = contract_media(
+        PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),)
+    )
+    missing = contract_media(
+        MISSING_ID, MediaType.PHOTO, (MediaAssociation(K1, 1, False),)
+    )
+    repository = InMemoryMediaRepository(stored_media_sequence(existing))
+
+    with pytest.raises(MediaNotFoundError):
+        repository.replace_many(
+            (
+                stored_media(attr.evolve(existing, caption="Applied"), "applied"),
+                stored_media(missing, "missing"),
+            )
+        )
+
+    assert repository.find_by_id(PHOTO_ID) == existing
+    assert repository.find_by_id(MISSING_ID) is None
+
+
+def test_repository_contract_batch_replace_rejects_duplicate_targets() -> None:
+    existing = contract_media(
+        PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),)
+    )
+    repository = InMemoryMediaRepository(stored_media_sequence(existing))
+
+    with pytest.raises(ValueError, match="same media twice"):
+        repository.replace_many(
+            (
+                stored_media(attr.evolve(existing, caption="One"), "one"),
+                stored_media(attr.evolve(existing, caption="Two"), "two"),
+            )
+        )
+
+    assert repository.find_by_id(PHOTO_ID) == existing
+
+
+def test_repository_contract_holds_for_any_implementation(
+    media_repository_factory: MediaRepositoryFactory,
+) -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    repository = media_repository_factory(stored_media_sequence(photo))
+
+    assert repository.find_by_id(PHOTO_ID) == photo
+    assert repository.find_by_id(MISSING_ID) is None
+    assert repository.find_in_fragment(PHOTO_ID, K1) == photo
+    assert repository.find_in_fragment(PHOTO_ID, SM2) is None
+    assert repository.find_stored_in_fragment(PHOTO_ID, SM2) is None
+    assert repository.find_by_fragments((K1, SM2)) == {K1: (photo,), SM2: ()}
+
+
+def test_representation_store_contract_holds_for_any_implementation(
+    representation_store_factory: RepresentationStoreFactory,
+) -> None:
+    store = representation_store_factory()
+    request = OriginalRepresentationWriteRequest(
+        PHOTO_ID, BytesIO(b"bytes"), original_representation()
+    )
+
+    first = store.write_original(request)
+    second = store.write_original(
+        OriginalRepresentationWriteRequest(
+            PHOTO_ID, BytesIO(b"other"), original_representation()
+        )
+    )
+
+    assert first != second
+    store.delete_representation(first)
+    store.delete_representation(first)
+    assert store.open_representation(second).content.read() == b"other"

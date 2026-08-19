@@ -33,6 +33,13 @@ def test_stored_representation_handle_rejects_blank_values() -> None:
             StoredRepresentationHandle(value)
 
 
+def test_stored_handle_stringifies_to_its_raw_value_for_internal_logs() -> None:
+    handle = StoredRepresentationHandle("gridfs-object-id")
+
+    assert str(handle) == "gridfs-object-id"
+    assert f"{handle}" == "gridfs-object-id"
+
+
 def test_write_returns_distinct_handles_for_the_same_media_role() -> None:
     store = InMemoryRepresentationStore()
 

@@ -1,36 +1,41 @@
-from ebl.media.application import media as _media
 from ebl.media.application import media_errors as _media_errors
+from ebl.media.application import media_repository as _media_repository
 from ebl.media.application import media_requests as _media_requests
 from ebl.media.application import media_selection as _media_selection
+from ebl.media.application import media_service as _media_service
+from ebl.media.application import media_store as _media_store
+from ebl.media.application import media_stored as _media_stored
 
-MediaBackfill = _media.MediaBackfill
-MediaImporter = _media.MediaImporter
-MediaReader = _media.MediaReader
-MediaRepository = _media.MediaRepository
-MediaRepresentationStore = _media.MediaRepresentationStore
-MediaService = _media.MediaService
-MediaWriter = _media.MediaWriter
+MediaReader = _media_repository.MediaReader
+MediaRepository = _media_repository.MediaRepository
+MediaWriter = _media_repository.MediaWriter
+
+MediaRepresentationStore = _media_store.MediaRepresentationStore
+
+MediaBackfill = _media_service.MediaBackfill
+MediaImporter = _media_service.MediaImporter
+MediaService = _media_service.MediaService
 
 MediaAlreadyExistsError = _media_errors.MediaAlreadyExistsError
 MediaNotFoundError = _media_errors.MediaNotFoundError
 MediaRepresentationNotFoundError = _media_errors.MediaRepresentationNotFoundError
-StoredRepresentationNotFoundError = _media_errors.StoredRepresentationNotFoundError
+StoredRepresentationMissingError = _media_errors.StoredRepresentationMissingError
 
+BackfillCategory = _media_requests.BackfillCategory
 BackfillReport = _media_requests.BackfillReport
 BackfillRequest = _media_requests.BackfillRequest
-DisplayRepresentationWriteRequest = _media_requests.DisplayRepresentationWriteRequest
 ImportMode = _media_requests.ImportMode
 ImportReport = _media_requests.ImportReport
 ImportRequest = _media_requests.ImportRequest
-OriginalRepresentationWriteRequest = _media_requests.OriginalRepresentationWriteRequest
-RepresentationHandle = _media_requests.RepresentationHandle
-StoredMedia = _media_requests.StoredMedia
-StoredMediaRepresentations = _media_requests.StoredMediaRepresentations
-StoredRepresentationHandle = _media_requests.StoredRepresentationHandle
-StoredThumbnailRepresentation = _media_requests.StoredThumbnailRepresentation
-ThumbnailRepresentationWriteRequest = (
-    _media_requests.ThumbnailRepresentationWriteRequest
-)
+
+DisplayRepresentationWriteRequest = _media_stored.DisplayRepresentationWriteRequest
+OpenRepresentation = _media_stored.OpenRepresentation
+OriginalRepresentationWriteRequest = _media_stored.OriginalRepresentationWriteRequest
+StoredMedia = _media_stored.StoredMedia
+StoredMediaRepresentations = _media_stored.StoredMediaRepresentations
+StoredRepresentationHandle = _media_stored.StoredRepresentationHandle
+StoredThumbnailRepresentation = _media_stored.StoredThumbnailRepresentation
+ThumbnailRepresentationWriteRequest = _media_stored.ThumbnailRepresentationWriteRequest
 
 fragment_media_in_order = _media_selection.fragment_media_in_order
 has_photo = _media_selection.has_photo
