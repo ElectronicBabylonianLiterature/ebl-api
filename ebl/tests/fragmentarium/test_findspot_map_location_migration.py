@@ -1,7 +1,10 @@
 import attr
 import json
 
-from ebl.fragmentarium.application.findspot_map_location_importer import run_import
+from ebl.fragmentarium.application.findspot_map_location_importer import (
+    ImportPaths,
+    run_import,
+)
 from ebl.fragmentarium.domain.map_location import (
     MapLocation,
     MapLocationMatchMethod,
@@ -67,7 +70,7 @@ def _write_artifacts(tmp_path):
             _record(3, ADDED_POLYGON),
         ],
     )
-    return mappings, inventory, previous_mappings, previous_inventory
+    return ImportPaths(mappings, inventory, previous_mappings, previous_inventory)
 
 
 def test_exact_migration_replaces_inserts_idempotently_and_rolls_back(
@@ -82,10 +85,10 @@ def test_exact_migration_replaces_inserts_idempotently_and_rolls_back(
     )
     _create_findspot(findspot_repository, seeded_provenance_service, 3)
 
-    dry_run = run_import(database, *paths, dry_run=True)
-    applied = run_import(database, *paths, dry_run=False)
-    idempotent = run_import(database, *paths, dry_run=True)
-    rollback = run_import(database, *paths, dry_run=False, rollback=True)
+    dry_run = run_import(database, paths, dry_run=True)
+    applied = run_import(database, paths, dry_run=False)
+    idempotent = run_import(database, paths, dry_run=True)
+    rollback = run_import(database, paths, dry_run=False, rollback=True)
 
     assert (dry_run.changed, dry_run.new, dry_run.applied) == (2, 1, 0)
     assert applied.applied == 3
@@ -109,7 +112,7 @@ def test_exact_migration_blocks_unexpected_current_value(
     )
     _create_findspot(findspot_repository, seeded_provenance_service, 3)
 
-    summary = run_import(database, *paths, dry_run=False)
+    summary = run_import(database, paths, dry_run=False)
 
     assert summary.invalid == 1
     assert summary.applied == 0

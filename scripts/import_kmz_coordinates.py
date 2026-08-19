@@ -286,6 +286,55 @@ def load_provenance_records(collection: Any) -> tuple[ProvenanceRecord, ...]:
     return tuple(ProvenanceRecordSchema(many=True).load(documents))
 
 
+@dataclass(frozen=True)
+class _MatchOutcome:
+    exact_unique: int = 0
+    normalized_unique: int = 0
+    ambiguous: int = 0
+    proposed: ProposedUpdate | None = None
+    review: ProposedUpdate | None = None
+    skipped: SkippedRecord | None = None
+    matched_placemark: KmlPlacemark | None = None
+
+
+def _classify_record(
+    record: ProvenanceRecord,
+    backend_basic: Mapping[str, Sequence[ProvenanceRecord]],
+    backend_normalized: Mapping[str, Sequence[ProvenanceRecord]],
+    kmz_basic: Mapping[str, Sequence[KmlPlacemark]],
+    kmz_normalized: Mapping[str, Sequence[KmlPlacemark]],
+) -> _MatchOutcome:
+    if is_broad_region_record(record):
+        return _MatchOutcome(
+            skipped=SkippedRecord(record.id, record.long_name, "broad region")
+        )
+
+    match = _find_match(
+        record, backend_basic, backend_normalized, kmz_basic, kmz_normalized
+    )
+    tier = match["tier"]
+    placemark = match["placemark"]
+
+    if tier == "ambiguous":
+        return _MatchOutcome(
+            ambiguous=1,
+            skipped=SkippedRecord(record.id, record.long_name, "ambiguous match"),
+        )
+    if placemark is None:
+        return _MatchOutcome(
+            skipped=SkippedRecord(record.id, record.long_name, "no match")
+        )
+
+    proposal, skip = _build_update_candidate(record, placemark, tier)
+    if tier == "exact":
+        return _MatchOutcome(
+            exact_unique=1, proposed=proposal, skipped=skip, matched_placemark=placemark
+        )
+    return _MatchOutcome(
+        normalized_unique=1, review=proposal, skipped=skip, matched_placemark=placemark
+    )
+
+
 def build_import_plan(
     records: Sequence[ProvenanceRecord],
     placemarks: Sequence[KmlPlacemark],
@@ -307,48 +356,20 @@ def build_import_plan(
     matched_placemark_ids: set[int] = set()
 
     for record in records:
-        if is_broad_region_record(record):
-            skipped_records.append(
-                SkippedRecord(record.id, record.long_name, "broad region")
-            )
-            continue
-
-        match = _find_match(
-            record,
-            backend_basic,
-            backend_normalized,
-            kmz_basic,
-            kmz_normalized,
+        outcome = _classify_record(
+            record, backend_basic, backend_normalized, kmz_basic, kmz_normalized
         )
-        tier = match["tier"]
-        placemark = match["placemark"]
-
-        if tier == "ambiguous":
-            ambiguous_matches += 1
-            skipped_records.append(
-                SkippedRecord(record.id, record.long_name, "ambiguous match")
-            )
-            continue
-        if placemark is None:
-            skipped_records.append(
-                SkippedRecord(record.id, record.long_name, "no match")
-            )
-            continue
-
-        matched_placemark_ids.add(id(placemark))
-        proposal, skip = _build_update_candidate(record, placemark, tier)
-        if tier == "exact":
-            exact_unique_matches += 1
-            if proposal:
-                proposed_updates.append(proposal)
-            elif skip:
-                skipped_records.append(skip)
-        elif tier == "normalized":
-            normalized_unique_matches += 1
-            if proposal:
-                review_candidates.append(proposal)
-            elif skip:
-                skipped_records.append(skip)
+        exact_unique_matches += outcome.exact_unique
+        normalized_unique_matches += outcome.normalized_unique
+        ambiguous_matches += outcome.ambiguous
+        if outcome.proposed:
+            proposed_updates.append(outcome.proposed)
+        if outcome.review:
+            review_candidates.append(outcome.review)
+        if outcome.skipped:
+            skipped_records.append(outcome.skipped)
+        if outcome.matched_placemark is not None:
+            matched_placemark_ids.add(id(outcome.matched_placemark))
 
     unmatched_provenance_records = sum(
         1 for skipped in skipped_records if skipped.reason == "no match"
@@ -527,15 +548,11 @@ def filter_plan_by_allowlist(
             if not _allowlist_allows(allowlist, update)
         ),
     ]
-    return ImportPlan(
-        tuple(chain(exact_updates, approved_normalized_updates)),
-        review_candidates,
-        tuple(skipped_records),
-        plan.exact_unique_matches,
-        plan.normalized_unique_matches,
-        plan.ambiguous_matches,
-        plan.unmatched_provenance_records,
-        plan.unmatched_kmz_placemarks,
+    return replace(
+        plan,
+        proposed_updates=tuple(chain(exact_updates, approved_normalized_updates)),
+        review_candidates=review_candidates,
+        skipped_records=tuple(skipped_records),
     )
 
 
@@ -714,45 +731,46 @@ def _local_name(tag: str) -> str:
     return tag.rsplit("}", 1)[-1]
 
 
+def _parse_geometry_coordinates(
+    node: ElementTree.Element,
+) -> tuple[tuple[Coordinate, ...] | None, bool, bool]:
+    """Return (coordinates, invalid, missing) parsed from a single geometry node."""
+    coordinates_text = _first_descendant_text(node, "coordinates")
+    if not coordinates_text or not coordinates_text.strip():
+        return None, False, True
+    try:
+        return parse_kml_coordinate_sequence(coordinates_text), False, False
+    except ValueError:
+        return None, True, False
+
+
 def _extract_point(
     placemark: ElementTree.Element,
 ) -> tuple[Coordinate | None, bool, bool]:
-    missing = False
-    invalid = False
+    missing = invalid = False
     for point in _iter(placemark, "Point"):
-        coordinates_text = _first_descendant_text(point, "coordinates")
-        if not coordinates_text or not coordinates_text.strip():
-            missing = True
-            continue
-        try:
-            coordinates = parse_kml_coordinate_sequence(coordinates_text)
-        except ValueError:
-            invalid = True
-            continue
+        coordinates, node_invalid, node_missing = _parse_geometry_coordinates(point)
+        invalid = invalid or node_invalid
+        missing = missing or node_missing
         if coordinates:
             return coordinates[0], invalid, missing
-        missing = True
+        if coordinates is not None:
+            missing = True
     return None, invalid, missing
 
 
 def _extract_polygon(
     placemark: ElementTree.Element,
 ) -> tuple[tuple[Coordinate, ...], bool, bool]:
-    missing = False
-    invalid = False
+    missing = invalid = False
     for polygon in _iter(placemark, "Polygon"):
-        coordinates_text = _first_descendant_text(polygon, "coordinates")
-        if not coordinates_text or not coordinates_text.strip():
-            missing = True
-            continue
-        try:
-            coordinates = parse_kml_coordinate_sequence(coordinates_text)
-        except ValueError:
-            invalid = True
-            continue
-        if len(coordinates) >= 3:
+        coordinates, node_invalid, node_missing = _parse_geometry_coordinates(polygon)
+        invalid = invalid or node_invalid
+        missing = missing or node_missing
+        if coordinates is not None and len(coordinates) >= 3:
             return coordinates, invalid, missing
-        invalid = True
+        if coordinates is not None:
+            invalid = True
     return (), invalid, missing
 
 

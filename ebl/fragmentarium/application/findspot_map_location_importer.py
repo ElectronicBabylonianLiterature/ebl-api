@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
 
@@ -21,6 +22,7 @@ from ebl.fragmentarium.application.findspot_map_location_importer_plan import (
 )
 from ebl.fragmentarium.application.findspot_map_location_target import (
     DEVELOPMENT_CLASSIFICATION,
+    MappingInputs,
     fingerprint_database,
 )
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
@@ -81,19 +83,25 @@ def load_import_records(
     return tuple(records), tuple(issues), len(data)
 
 
+@dataclass(frozen=True)
+class ImportPaths:
+    mappings: Path | str = DEFAULT_MAPPINGS_PATH
+    inventory: Path | str = DEFAULT_INVENTORY_PATH
+    previous_mappings: Path | str | None = None
+    previous_inventory: Path | str | None = None
+
+
 def run_import(
     database,
-    mappings_path: Path | str = DEFAULT_MAPPINGS_PATH,
-    inventory_path: Path | str = DEFAULT_INVENTORY_PATH,
-    previous_mappings_path: Path | str | None = None,
-    previous_inventory_path: Path | str | None = None,
+    paths: ImportPaths | None = None,
     dry_run: bool = True,
     rollback: bool = False,
 ) -> ImportSummary:
-    polygon_ids = load_polygon_inventory(inventory_path)
-    records, issues, scanned = load_import_records(mappings_path, polygon_ids)
+    paths = paths or ImportPaths()
+    polygon_ids = load_polygon_inventory(paths.inventory)
+    records, issues, scanned = load_import_records(paths.mappings, polygon_ids)
     previous_records = _load_previous_records(
-        previous_mappings_path, previous_inventory_path
+        paths.previous_mappings, paths.previous_inventory
     )
     findspots = _load_findspots(database)
     valid_records, site_issues = _validate_findspots(records, findspots)
@@ -104,7 +112,7 @@ def run_import(
     issues = issues + plan_issues
     issue_counts = _count_issues(issues)
     fingerprint = fingerprint_database(
-        database, valid_records, polygon_ids, previous_records
+        database, MappingInputs(valid_records, polygon_ids, previous_records)
     )
 
     applied = 0

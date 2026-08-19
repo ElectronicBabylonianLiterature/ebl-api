@@ -24,6 +24,20 @@ PROTECTED_TARGET_TOKENS = ("prod", "production", "stage", "staging")
 
 
 @dataclass(frozen=True)
+class MappingInputs:
+    records: Sequence[MapLocationImportRecord]
+    polygon_ids: set[str]
+    previous_records: Sequence[MapLocationImportRecord] = ()
+
+
+@dataclass(frozen=True)
+class ExpectedFingerprint:
+    total_findspots: int = EXPECTED_TOTAL_FINDSPOTS
+    assur_findspots: int = EXPECTED_ASSUR_FINDSPOTS
+    unresolved: int | None = None
+
+
+@dataclass(frozen=True)
 class DatabaseFingerprint:
     total_findspots: int
     assur_findspots: int
@@ -58,13 +72,18 @@ def is_protected_target(uri: str, database_name: str) -> bool:
 
 def fingerprint_database(
     database,
-    records: Sequence[MapLocationImportRecord],
-    polygon_ids: set[str],
-    previous_records: Sequence[MapLocationImportRecord] = (),
-    expected_total_findspots: int = EXPECTED_TOTAL_FINDSPOTS,
-    expected_assur_findspots: int = EXPECTED_ASSUR_FINDSPOTS,
-    expected_unresolved: int | None = None,
+    inputs: MappingInputs,
+    expected: ExpectedFingerprint | None = None,
 ) -> DatabaseFingerprint:
+    expected = expected or ExpectedFingerprint()
+    records, polygon_ids, previous_records = (
+        inputs.records,
+        inputs.polygon_ids,
+        inputs.previous_records,
+    )
+    expected_total_findspots = expected.total_findspots
+    expected_assur_findspots = expected.assur_findspots
+    expected_unresolved = expected.unresolved
     findspots = database[FINDSPOTS_COLLECTION]
     assur_site_name = _assur_site_name(database)
     mapping_ids = [record.findspot_id for record in records]
@@ -150,12 +169,8 @@ def validate_approved_development_target(
     uri: str,
     database,
     confirm_database: str | None,
-    records: Sequence[MapLocationImportRecord],
-    polygon_ids: set[str],
-    previous_records: Sequence[MapLocationImportRecord] = (),
-    expected_total_findspots: int = EXPECTED_TOTAL_FINDSPOTS,
-    expected_assur_findspots: int = EXPECTED_ASSUR_FINDSPOTS,
-    expected_unresolved: int | None = None,
+    inputs: MappingInputs,
+    expected: ExpectedFingerprint | None = None,
 ) -> DatabaseFingerprint:
     if confirm_database != APPROVED_DEVELOPMENT_DATABASE:
         raise ValueError("approved development mode requires --confirm-database ebldev")
@@ -163,15 +178,7 @@ def validate_approved_development_target(
         raise ValueError("connected database name does not match ebldev")
     if is_protected_target(uri, database.name):
         raise ValueError("refusing protected production or staging-like target")
-    fingerprint = fingerprint_database(
-        database,
-        records,
-        polygon_ids,
-        previous_records,
-        expected_total_findspots,
-        expected_assur_findspots,
-        expected_unresolved,
-    )
+    fingerprint = fingerprint_database(database, inputs, expected)
     if not fingerprint.is_approved_development:
         raise ValueError("database fingerprint does not match approved ebldev dataset")
     return fingerprint

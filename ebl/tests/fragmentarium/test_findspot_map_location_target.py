@@ -3,11 +3,14 @@ import json
 import pytest
 
 from ebl.fragmentarium.application.findspot_map_location_importer import (
+    ImportPaths,
     load_import_records,
     load_polygon_inventory,
     run_import,
 )
 from ebl.fragmentarium.application.findspot_map_location_target import (
+    ExpectedFingerprint,
+    MappingInputs,
     fingerprint_database,
     is_protected_target,
     validate_approved_development_target,
@@ -81,11 +84,8 @@ def test_approved_development_requires_database_confirmation(tmp_path, database)
             "mongodb://dev.example/ebldev",
             database,
             None,
-            records,
-            polygon_ids,
-            expected_total_findspots=3,
-            expected_assur_findspots=3,
-            expected_unresolved=1,
+            MappingInputs(records, polygon_ids),
+            ExpectedFingerprint(total_findspots=3, assur_findspots=3, unresolved=1),
         )
 
 
@@ -98,11 +98,8 @@ def test_wrong_database_name_is_rejected(tmp_path, database):
             "mongodb://dev.example/ebldev",
             database,
             "ebldev",
-            records,
-            polygon_ids,
-            expected_total_findspots=3,
-            expected_assur_findspots=3,
-            expected_unresolved=1,
+            MappingInputs(records, polygon_ids),
+            ExpectedFingerprint(total_findspots=3, assur_findspots=3, unresolved=1),
         )
 
 
@@ -115,11 +112,8 @@ def test_wrong_dataset_fingerprint_is_rejected(tmp_path, database):
             "mongodb://dev.example/ebldev",
             database.client["ebldev"],
             "ebldev",
-            records,
-            polygon_ids,
-            expected_total_findspots=3,
-            expected_assur_findspots=3,
-            expected_unresolved=1,
+            MappingInputs(records, polygon_ids),
+            ExpectedFingerprint(total_findspots=3, assur_findspots=3, unresolved=1),
         )
 
 
@@ -134,14 +128,12 @@ def test_valid_development_fingerprint_passes_dry_run(tmp_path, database):
 
     fingerprint = fingerprint_database(
         database,
-        records,
-        polygon_ids,
-        expected_total_findspots=3,
-        expected_assur_findspots=3,
-        expected_unresolved=1,
+        MappingInputs(records, polygon_ids),
+        ExpectedFingerprint(total_findspots=3, assur_findspots=3, unresolved=1),
     )
     summary = run_import(
-        database, tmp_path / "mappings.json", tmp_path / "inventory.json"
+        database,
+        ImportPaths(tmp_path / "mappings.json", tmp_path / "inventory.json"),
     )
 
     assert fingerprint.is_approved_development

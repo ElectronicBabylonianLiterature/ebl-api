@@ -1,11 +1,16 @@
 import attr
 import json
+from types import SimpleNamespace
+
 import pytest
 
 from ebl.fragmentarium.application import (
     findspot_map_location_importer as importer,
 )
-from ebl.fragmentarium.application.findspot_map_location_importer import run_import
+from ebl.fragmentarium.application.findspot_map_location_importer import (
+    ImportPaths,
+    run_import,
+)
 from ebl.fragmentarium.domain.map_location import (
     MapLocation,
     MapLocationMatchMethod,
@@ -74,7 +79,7 @@ def test_run_import_defaults_to_dry_run(
     _write_json(inventory, _inventory(POLYGON_ID))
     _create_findspot(findspot_repository, seeded_provenance_service, 1)
 
-    summary = run_import(database, mappings, inventory)
+    summary = run_import(database, ImportPaths(mappings, inventory))
 
     assert summary.dry_run is True
     assert summary.new == 1
@@ -91,8 +96,8 @@ def test_run_import_applies_and_is_idempotent(
     _write_json(inventory, _inventory(POLYGON_ID))
     _create_findspot(findspot_repository, seeded_provenance_service, 1)
 
-    summary = run_import(database, mappings, inventory, dry_run=False)
-    rerun = run_import(database, mappings, inventory)
+    summary = run_import(database, ImportPaths(mappings, inventory), dry_run=False)
+    rerun = run_import(database, ImportPaths(mappings, inventory))
 
     assert summary.new == 1
     assert summary.applied == 1
@@ -107,8 +112,18 @@ def test_run_import_applies_and_is_idempotent(
     assert rerun.new == rerun.changed == rerun.applied == 0
 
 
+@pytest.fixture
+def import_env(tmp_path, database, findspot_repository, seeded_provenance_service):
+    return SimpleNamespace(
+        tmp_path=tmp_path,
+        database=database,
+        findspot_repository=findspot_repository,
+        provenance_service=seeded_provenance_service,
+    )
+
+
 @pytest.mark.parametrize(
-    "mappings, inventory",
+    "case",
     [
         (_mapping(404), _inventory(POLYGON_ID)),
         (_mapping(1, polygon_ids=(OTHER_POLYGON_ID,)), _inventory(POLYGON_ID)),
@@ -141,20 +156,13 @@ def test_run_import_applies_and_is_idempotent(
         ),
     ],
 )
-def test_run_import_invalid_rows_prevent_writes(
-    tmp_path,
-    database,
-    findspot_repository,
-    seeded_provenance_service,
-    monkeypatch,
-    mappings,
-    inventory,
-):
-    mappings_path = tmp_path / "mappings.json"
-    inventory_path = tmp_path / "inventory.json"
+def test_run_import_invalid_rows_prevent_writes(import_env, monkeypatch, case):
+    mappings, inventory = case
+    mappings_path = import_env.tmp_path / "mappings.json"
+    inventory_path = import_env.tmp_path / "inventory.json"
     _write_json(mappings_path, mappings)
     _write_json(inventory_path, inventory)
-    _create_findspot(findspot_repository, seeded_provenance_service, 1)
+    _create_findspot(import_env.findspot_repository, import_env.provenance_service, 1)
     calls = {"write": 0}
 
     def wrapped(*args, **kwargs):
@@ -167,7 +175,9 @@ def test_run_import_invalid_rows_prevent_writes(
         wrapped,
     )
 
-    summary = run_import(database, mappings_path, inventory_path, dry_run=False)
+    summary = run_import(
+        import_env.database, ImportPaths(mappings_path, inventory_path), dry_run=False
+    )
 
     assert summary.invalid == 1
     assert summary.applied == 0
@@ -183,7 +193,7 @@ def test_run_import_duplicate_records_are_invalid(
     _write_json(inventory, _inventory(POLYGON_ID))
     _create_findspot(findspot_repository, seeded_provenance_service, 1)
 
-    summary = run_import(database, mappings, inventory)
+    summary = run_import(database, ImportPaths(mappings, inventory))
 
     assert summary.invalid == 1
     assert summary.applied == 0
@@ -195,7 +205,7 @@ def test_run_import_empty_file_is_noop(tmp_path, database):
     _write_json(mappings, [])
     _write_json(inventory, _inventory(POLYGON_ID))
 
-    summary = run_import(database, mappings, inventory)
+    summary = run_import(database, ImportPaths(mappings, inventory))
 
     assert summary.scanned == 0
     assert summary.valid == summary.invalid == summary.applied == 0
@@ -214,7 +224,7 @@ def test_run_import_preserves_unrelated_fields_and_blocks_partial_updates(
     )
     database["findspots"].update_one({"_id": 1}, {"$set": {"extraField": "keep"}})
 
-    summary = run_import(database, mappings, inventory, dry_run=False)
+    summary = run_import(database, ImportPaths(mappings, inventory), dry_run=False)
 
     assert summary.invalid == 1
     assert summary.applied == 0

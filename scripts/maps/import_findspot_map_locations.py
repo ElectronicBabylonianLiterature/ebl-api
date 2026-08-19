@@ -15,12 +15,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from ebl.fragmentarium.application.findspot_map_location_target import (  # noqa: E402
     DEVELOPMENT_CLASSIFICATION,
+    MappingInputs,
     is_local_mongo_uri,
     validate_approved_development_target,
 )
 from ebl.fragmentarium.application.findspot_map_location_importer import (
     DEFAULT_INVENTORY_PATH,
     DEFAULT_MAPPINGS_PATH,
+    ImportPaths,
     load_import_records,
     load_polygon_inventory,
     run_import,
@@ -112,6 +114,72 @@ def _print_summary(summary) -> None:
             print(f"  ... and {len(summary.issues) - 10} more")
 
 
+class _RefuseApprovedDevelopment(Exception):
+    def __init__(self, exit_code: int, message: str) -> None:
+        super().__init__(message)
+        self.exit_code = exit_code
+
+
+def _load_validation_inputs(
+    args: argparse.Namespace,
+) -> tuple[
+    Sequence[MapLocationImportRecord], set[str], Sequence[MapLocationImportRecord]
+]:
+    polygon_ids = load_polygon_inventory(args.inventory)
+    records, issues, _ = load_import_records(args.mappings, polygon_ids)
+    previous_records: Sequence[MapLocationImportRecord] = ()
+    if args.previous_mappings:
+        if not args.previous_inventory:
+            raise _RefuseApprovedDevelopment(
+                2,
+                "approved development mode: --previous-inventory is required "
+                "with --previous-mappings.",
+            )
+        previous_ids = load_polygon_inventory(args.previous_inventory)
+        previous_records, previous_issues, _ = load_import_records(
+            args.previous_mappings, previous_ids
+        )
+        if previous_issues:
+            raise _RefuseApprovedDevelopment(
+                1, "approved development mode: previous mapping input is invalid."
+            )
+    if issues:
+        raise _RefuseApprovedDevelopment(
+            1, "approved development mode: mapping input is invalid."
+        )
+    return records, polygon_ids, previous_records
+
+
+def _verify_approved_development_target(
+    mongo_uri: str, database, args: argparse.Namespace
+) -> int | None:
+    if is_local_mongo_uri(mongo_uri):
+        return None
+    try:
+        if not args.allow_approved_development_target:
+            raise _RefuseApprovedDevelopment(
+                2, "non-local MongoDB target without approved development mode."
+            )
+        records, polygon_ids, previous_records = _load_validation_inputs(args)
+        validate_approved_development_target(
+            mongo_uri,
+            database,
+            args.confirm_database,
+            MappingInputs(records, polygon_ids, previous_records),
+        )
+    except _RefuseApprovedDevelopment as error:
+        print(f"Refusing {error}", file=sys.stderr)
+        return error.exit_code
+    except ValueError as error:
+        print(f"Refusing approved development mode: {error}", file=sys.stderr)
+        return 2
+    print(
+        "Approved development target verified "
+        f"({DEVELOPMENT_CLASSIFICATION}, database ebldev)."
+    )
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     mongo_uri = os.environ.get("MONGODB_URI")
@@ -125,60 +193,17 @@ def main(argv: list[str] | None = None) -> int:
     client = MongoClient(mongo_uri)
     try:
         database = client.get_database(os.environ.get("MONGODB_DB"))
-        if not is_local_mongo_uri(mongo_uri):
-            if not args.allow_approved_development_target:
-                print(
-                    "Refusing non-local MongoDB target without approved development mode.",
-                    file=sys.stderr,
-                )
-                return 2
-            polygon_ids = load_polygon_inventory(args.inventory)
-            records, issues, _ = load_import_records(args.mappings, polygon_ids)
-            previous_records: Sequence[MapLocationImportRecord] = ()
-            if args.previous_mappings:
-                if not args.previous_inventory:
-                    print(
-                        "Refusing approved development mode: "
-                        "--previous-inventory is required with --previous-mappings.",
-                        file=sys.stderr,
-                    )
-                    return 2
-                previous_ids = load_polygon_inventory(args.previous_inventory)
-                previous_records, previous_issues, _ = load_import_records(
-                    args.previous_mappings, previous_ids
-                )
-                if previous_issues:
-                    print(
-                        "Refusing approved development mode: "
-                        "previous mapping input is invalid.",
-                        file=sys.stderr,
-                    )
-                    return 1
-            if issues:
-                print("Refusing approved development mode: mapping input is invalid.")
-                return 1
-            try:
-                validate_approved_development_target(
-                    mongo_uri,
-                    database,
-                    args.confirm_database,
-                    records,
-                    polygon_ids,
-                    previous_records,
-                )
-            except ValueError as error:
-                print(f"Refusing approved development mode: {error}", file=sys.stderr)
-                return 2
-            print(
-                "Approved development target verified "
-                f"({DEVELOPMENT_CLASSIFICATION}, database ebldev)."
-            )
+        exit_code = _verify_approved_development_target(mongo_uri, database, args)
+        if exit_code is not None:
+            return exit_code
         summary = run_import(
             database,
-            mappings_path=args.mappings,
-            inventory_path=args.inventory,
-            previous_mappings_path=args.previous_mappings,
-            previous_inventory_path=args.previous_inventory,
+            ImportPaths(
+                mappings=args.mappings,
+                inventory=args.inventory,
+                previous_mappings=args.previous_mappings,
+                previous_inventory=args.previous_inventory,
+            ),
             dry_run=not args.apply and not args.rollback,
             rollback=args.rollback,
         )
