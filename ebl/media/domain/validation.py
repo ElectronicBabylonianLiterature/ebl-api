@@ -6,7 +6,9 @@ T = TypeVar("T")
 
 
 def not_blank(_instance: object, attribute: attr.Attribute, value: object) -> None:
-    if not isinstance(value, str) or not value.strip():
+    if not isinstance(value, str):
+        raise ValueError(f"Attribute {attribute.name} must be a string.")
+    if not value.strip():
         raise ValueError(f"Attribute {attribute.name} cannot be blank.")
 
 

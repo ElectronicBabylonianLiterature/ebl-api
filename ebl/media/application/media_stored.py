@@ -29,6 +29,20 @@ def _validate_unique_handles(value: Sequence["StoredRepresentationHandle"]) -> N
         )
 
 
+def _superseded_handles(
+    previous: "StoredMediaRepresentations", replacement: "StoredMediaRepresentations"
+) -> tuple["StoredRepresentationHandle", ...]:
+    """Handles of `previous` that `replacement` no longer references.
+
+    Private because a representation state carries no media identity and so
+    cannot tell whether both states describe the same media. Pairing two
+    different media here would report every handle of one as deletable, which
+    is why `StoredMedia.superseded_by` is the only exported way to reach it.
+    """
+    current = set(replacement.handles)
+    return tuple(handle for handle in previous.handles if handle not in current)
+
+
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class StoredRepresentationHandle:
     """Opaque, server-internal reference to one immutable logical stored version.
@@ -97,18 +111,6 @@ class StoredMediaRepresentations:
             None,
         )
 
-    def superseded_by(
-        self, replacement: "StoredMediaRepresentations"
-    ) -> Sequence[StoredRepresentationHandle]:
-        """Handles of this state that the replacement state no longer references.
-
-        The only handles a caller may delete after a successful replacement.
-        Handles still current in `replacement` are never returned, so a
-        metadata-only replacement supersedes nothing.
-        """
-        current = set(replacement.handles)
-        return tuple(handle for handle in self.handles if handle not in current)
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class StoredMedia:
@@ -139,12 +141,19 @@ class StoredMedia:
     ) -> Sequence[StoredRepresentationHandle]:
         """Handles this media no longer references after `replacement` becomes current.
 
+        The only supported way to compute cleanup candidates, and the only
+        handles a caller may delete after a successful replacement. Handles
+        still current in `replacement` are never returned, so a metadata-only
+        replacement supersedes nothing.
+
         Rejects a replacement for a different media, which would otherwise report
         every handle of this one as safe to delete.
         """
         if self.media.id != replacement.media.id:
             raise ValueError("Cannot supersede stored state of a different media.")
-        return self.representations.superseded_by(replacement.representations)
+        return _superseded_handles(
+            self.representations, replacement.representations
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)

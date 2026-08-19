@@ -114,6 +114,11 @@ class MediaWriter(ABC):
         replacement is applied or none is, so a caller cannot observe a
         half-applied per-fragment primary transition.
 
+        The result is positional: index `i` is the state that was current before
+        `media[i]` was applied, so callers may pair `previous[i]` with
+        `media[i]`. An empty sequence is valid and is a no-op that mutates
+        nothing and returns an empty sequence; it is never an error.
+
         Intended for metadata-only transitions; it implies no binary cleanup.
         """
         raise NotImplementedError

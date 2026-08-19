@@ -7,7 +7,7 @@ from ebl.media.application import (
     StoredRepresentationHandle,
     StoredThumbnailRepresentation,
 )
-from ebl.media.domain import MediaId, ThumbnailSize
+from ebl.media.domain import Media, MediaId, ThumbnailSize
 from ebl.tests.media.factories import photo_media, representations, stored_media
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 
@@ -25,9 +25,31 @@ def state(original: str, small: str) -> StoredMediaRepresentations:
     )
 
 
+def state_with_display(
+    original: str, small: str, display: str
+) -> StoredMediaRepresentations:
+    return attr.evolve(state(original, small), display=handle(display))
+
+
+def photo_with_small_thumbnail() -> Media:
+    return photo_media(media_id_=PHOTO_ID)
+
+
+def photo_with_display() -> Media:
+    return photo_media(
+        media_id_=PHOTO_ID,
+        media_representations=representations(display_mime_type="image/jpeg"),
+    )
+
+
+def stored(media_: Media, representations_: StoredMediaRepresentations) -> StoredMedia:
+    return StoredMedia(media_, representations_)
+
+
 def test_replacing_every_binary_supersedes_every_previous_handle() -> None:
-    previous = state("old-original", "old-small")
-    replacement = state("new-original", "new-small")
+    media = photo_with_small_thumbnail()
+    previous = stored(media, state("old-original", "old-small"))
+    replacement = stored(media, state("new-original", "new-small"))
 
     assert set(previous.superseded_by(replacement)) == {
         handle("old-original"),
@@ -36,35 +58,51 @@ def test_replacing_every_binary_supersedes_every_previous_handle() -> None:
 
 
 def test_replacing_one_binary_supersedes_only_the_changed_handle() -> None:
-    previous = state("old-original", "shared-small")
-    replacement = state("new-original", "shared-small")
+    media = photo_with_small_thumbnail()
+    previous = stored(media, state("old-original", "shared-small"))
+    replacement = stored(media, state("new-original", "shared-small"))
 
     assert previous.superseded_by(replacement) == (handle("old-original"),)
 
 
 def test_metadata_only_replacement_supersedes_nothing() -> None:
-    previous = state("original", "small")
-    replacement = state("original", "small")
+    media = photo_with_small_thumbnail()
+    previous = stored(media, state("original", "small"))
+    replacement = stored(media, state("original", "small"))
 
     assert previous.superseded_by(replacement) == ()
 
 
 def test_superseded_handles_never_include_a_current_handle() -> None:
-    previous = StoredMediaRepresentations(
-        handle("old-original"),
-        (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle("kept-small")),),
-        display=handle("old-display"),
+    media = photo_with_display()
+    previous = stored(
+        media, state_with_display("old-original", "kept-small", "old-display")
     )
-    replacement = StoredMediaRepresentations(
-        handle("new-original"),
-        (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle("kept-small")),),
-        display=handle("new-display"),
+    replacement = stored(
+        media, state_with_display("new-original", "kept-small", "new-display")
     )
 
     superseded = previous.superseded_by(replacement)
 
-    assert set(superseded).isdisjoint(set(replacement.handles))
+    assert set(superseded).isdisjoint(set(replacement.representations.handles))
     assert handle("kept-small") not in superseded
+
+
+def test_a_handle_that_migrates_between_roles_is_still_current() -> None:
+    media = photo_with_small_thumbnail()
+    previous = stored(media, state("old-original", "migrating"))
+    replacement = stored(media, state("migrating", "new-small"))
+
+    superseded = previous.superseded_by(replacement)
+
+    assert handle("migrating") not in superseded
+    assert superseded == (handle("old-original"),)
+
+
+def test_representation_state_exposes_no_public_supersession_primitive() -> None:
+    representation_state = state("original", "small")
+
+    assert not hasattr(representation_state, "superseded_by")
 
 
 def test_stored_media_supersession_delegates_to_representation_state() -> None:

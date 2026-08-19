@@ -9,7 +9,21 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 class ImportMode(Enum):
-    """What an import does with a source that already has a media record."""
+    """What an import does with a source that already has a media record.
+
+    A source object "already has a media record" when some media's
+    `import_source` equals the source object's `MediaImportSource` identity —
+    the whole value: `system`, `file_id` and `container` together, with
+    `container` None matching only another None. Nothing else establishes
+    import identity: equal `MediaChecksum` values mean duplicate *content* and
+    are reported as `BackfillCategory.DUPLICATE_CHECKSUM`, never treated as the
+    same source; `MediaId`, `original_filename` and museum number are likewise
+    not import identity.
+
+    `SKIP_EXISTING` leaves such a record untouched; `REPLACE` replaces it.
+    Media with no `import_source` can never match, so it is never skipped or
+    replaced by an import.
+    """
 
     SKIP_EXISTING = "skip-existing"
     REPLACE = "replace"
@@ -51,6 +65,11 @@ def _frozen_reports(
 
 @attr.s(auto_attribs=True, frozen=True)
 class ImportRequest:
+    """One import run. `mode` decides what happens to sources that already have
+    a media record, as defined by `ImportMode`; `dry_run` is orthogonal to the
+    mode, so any mode can be previewed.
+    """
+
     mode: ImportMode = attr.ib(validator=attr.validators.instance_of(ImportMode))
     source_name: str = attr.ib(validator=not_blank)
     fragment_ids: Sequence[MuseumNumber] = attr.ib(

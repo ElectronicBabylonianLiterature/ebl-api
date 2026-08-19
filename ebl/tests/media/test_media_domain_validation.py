@@ -164,7 +164,7 @@ def test_non_canonical_uuid_spellings_are_rejected(value: str) -> None:
 
 @pytest.mark.parametrize("value", (123, True, 1.5, None, b"bytes"))
 def test_non_string_media_id_raises_value_error(value: object) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="must be a string"):
         MediaId(cast(str, value))
 
 

@@ -75,6 +75,25 @@ def test_targeted_delete_of_missing_handle_is_a_noop() -> None:
     ]
 
 
+def test_empty_batch_replacement_is_a_noop_returning_nothing() -> None:
+    media = photo_media(media_id_=PHOTO_ID, media_representations=representations())
+    stored = StoredMedia(
+        media,
+        StoredMediaRepresentations(
+            StoredRepresentationHandle("current-original"),
+            (
+                StoredThumbnailRepresentation(
+                    ThumbnailSize.SMALL, StoredRepresentationHandle("current-small")
+                ),
+            ),
+        ),
+    )
+    repository = InMemoryMediaRepository((stored,))
+
+    assert repository.replace_many(()) == ()
+    assert repository.find_stored_by_id(PHOTO_ID) == stored
+
+
 def test_replacement_metadata_failure_leaves_old_metadata_current() -> None:
     store = InMemoryRepresentationStore()
     old = _stored_media(store, "old")
