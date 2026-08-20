@@ -7,6 +7,9 @@ from ebl.bibliography.infrastructure.bibliography import (
     bibliography_query_pipeline,
     join_reference_documents,
 )
+from ebl.bibliography.infrastructure.bibliography_queries import (
+    server_owned_state_filter,
+)
 
 
 def test_join_reference_documents_pipeline() -> None:
@@ -43,3 +46,28 @@ def test_query_by_author_year_and_title_uses_title_sort(
         "result"
     ]
     assert seen["trailing_sort_field"] == "title"
+
+
+def test_server_owned_state_filter_requires_absent_fields_to_stay_absent() -> None:
+    assert server_owned_state_filter("Q30000024", {}) == {
+        "_id": "Q30000024",
+        "aliases": {"$exists": False},
+        "citationKey": {"$exists": False},
+        "deprecated": {"$exists": False},
+        "redirectTo": {"$exists": False},
+    }
+
+
+def test_server_owned_state_filter_matches_stored_values_exactly() -> None:
+    filter_ = server_owned_state_filter("Q30000024", {"citationKey": "dossin1967La"})
+
+    assert filter_["citationKey"] == "dossin1967La"
+    assert filter_["aliases"] == {"$exists": False}
+
+
+def test_server_owned_state_filter_separates_a_stored_null_from_an_absent_field() -> (
+    None
+):
+    filter_ = server_owned_state_filter("Q30000024", {"redirectTo": None})
+
+    assert filter_["redirectTo"] == {"$type": "null"}
