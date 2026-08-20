@@ -44,13 +44,18 @@ class MongoCollection:
         raise AssertionError("insert_one should return or raise")
 
     def find_one_by_id(self, id_):
-        return self.find_one({"_id": id_})
+        document = self.__get_collection().find_one({"_id": id_})
+
+        if document is None:
+            raise self.__id_not_found_error(id_)
+        else:
+            return document
 
     def find_one(self, query, *args, **kwargs) -> Any:
         document = self.__get_collection().find_one(query, *args, **kwargs)
 
         if document is None:
-            raise self.__not_found_error(query)
+            raise self.__not_found_error()
         else:
             return document
 
@@ -65,7 +70,7 @@ class MongoCollection:
             filter_ or {"_id": document["_id"]}, document, upsert
         )
         if result.matched_count == 0 and not upsert:
-            raise self.__not_found_error(document["_id"])
+            raise self.__id_not_found_error(document["_id"])
         else:
             return result
 
@@ -74,14 +79,14 @@ class MongoCollection:
             raise ValueError("Empty Query for delete one not allowed")
         result = self.__get_collection().delete_one(query)
         if result.deleted_count == 0:
-            raise self.__not_found_error(query)
+            raise self.__not_found_error()
 
     def delete_many(self, query: dict) -> None:
         if not bool(query):
             raise ValueError("Empty Query for delete many not allowed")
         result = self.__get_collection().delete_many(query)
         if result.deleted_count == 0:
-            raise self.__not_found_error(query)
+            raise self.__not_found_error()
 
     def update_one(self, query, update):
         for attempt in range(2):
@@ -92,7 +97,7 @@ class MongoCollection:
                     raise
                 continue
             if result.matched_count == 0:
-                raise self.__not_found_error(query)
+                raise self.__not_found_error()
             return result
         raise AssertionError("update_one should return or raise")
 
@@ -115,8 +120,11 @@ class MongoCollection:
         values = self.__get_collection().distinct(field, query or {})
         return [value for value in values if not isinstance(value, ObjectId)]
 
-    def __not_found_error(self, query):
-        return NotFoundError(f"{self.__resource_noun} {query} not found.")
+    def __not_found_error(self) -> NotFoundError:
+        return NotFoundError(f"{self.__resource_noun} not found.")
+
+    def __id_not_found_error(self, id_: object) -> NotFoundError:
+        return NotFoundError(f"{self.__resource_noun} {id_} not found.")
 
     def __get_collection(self) -> Collection:
         return self.__database[self.__collection]
