@@ -19,6 +19,7 @@ from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
 )
+from ebl.errors import DataError
 
 CLIENT_EDITABLE_BIBLIOGRAPHY_FIELDS = (
     frozenset(cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]))
@@ -88,3 +89,21 @@ def changed_server_owned_fields(
         for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
         if field in entry and entry[field] != stored_entry.get(field)
     )
+
+
+def submitted_server_owned_fields(entry: Mapping[str, Any]) -> list[str]:
+    return sorted(SERVER_OWNED_BIBLIOGRAPHY_FIELDS.intersection(entry))
+
+
+def reject_submitted_server_owned_fields(entry: Mapping[str, Any]) -> None:
+    """Refuse a client submission that carries server-owned identity state.
+
+    Enforced here rather than only in the route schema so the invariant holds
+    for any caller of the ordinary metadata creation path, not just HTTP.
+    """
+    if forbidden_fields := submitted_server_owned_fields(entry):
+        raise DataError(
+            "Bibliography creation may not include server-owned fields: "
+            f"{', '.join(forbidden_fields)}. "
+            "Use POST /bibliography/{id}/identity to manage identity state."
+        )

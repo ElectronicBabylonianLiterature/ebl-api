@@ -6,12 +6,18 @@ import json
 from typing import Mapping, Sequence
 from ebl.cache.application.cache import DAILY_TIMEOUT
 
+from ebl.bibliography.application.server_owned_fields import (
+    reject_submitted_server_owned_fields,
+)
 from ebl.bibliography.domain.bibliography_entry import (
-    CSL_JSON_SCHEMA,
     DUPLICATE_CANDIDATE_JSON_SCHEMA,
     PARTNER_CSL_JSON_SCHEMA,
     PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
+)
+from ebl.bibliography.domain.bibliography_requests import (
+    INTERNAL_CREATE_JSON_SCHEMA,
+    INTERNAL_METADATA_UPDATE_JSON_SCHEMA,
 )
 from ebl.errors import DataError
 from ebl.users.web.require_scope import require_scope
@@ -31,6 +37,18 @@ def submitted_server_owned_fields(
             if field in entry
         }
     )
+
+
+def reject_server_owned_internal_fields(req, _resp, _resource, _params) -> None:
+    """Refuse identity state on ordinary internal creation.
+
+    Runs ahead of `@validate` so the caller is told which fields are
+    server-owned and where identity is managed, rather than getting the
+    schema's generic `additionalProperties` rejection.
+    """
+    media = req.media
+    if isinstance(media, dict):
+        reject_submitted_server_owned_fields(media)
 
 
 def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
@@ -57,10 +75,11 @@ class BibliographyResource:
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
+    @falcon.before(reject_server_owned_internal_fields)
+    @validate(INTERNAL_CREATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media
-        self._bibliography.create(bibliography_entry, req.context.user)
+        self._bibliography.create_metadata(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
         resp.location = f"/bibliography/{bibliography_entry['id']}"
         resp.media = bibliography_entry
@@ -74,7 +93,7 @@ class BibliographyEntriesResource:
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
+    @validate(INTERNAL_METADATA_UPDATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response, id_: str) -> None:
         entry = {**req.media, "id": id_}
         self._bibliography.update_metadata(entry, req.context.user)

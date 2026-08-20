@@ -70,12 +70,14 @@ def test_create_entry_invalid(transform, client):
     assert put_result.status == falcon.HTTP_BAD_REQUEST
 
 
-def test_create_deprecated_entry_requires_redirect_target(client):
+def test_create_rejects_lifecycle_state_outright(client):
     bibliography_entry = BibliographyEntryFactory.build(deprecated=True)
 
     result = client.simulate_post("/bibliography", json=bibliography_entry)
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "deprecated" in result.text
+    assert "identity" in result.text
 
 
 def test_update_entry(client, saved_entry):
