@@ -30,7 +30,7 @@ def test_update_rejects_submitted_server_owned_field(
 
     result = post_entry(client, payload)
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert field in result.text
 
 
@@ -63,7 +63,7 @@ def test_update_cannot_tombstone_an_active_record(client, bibliography, aliased_
     result = post_entry(client, payload)
     stored_entry = bibliography.find(aliased_entry["id"])
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert "deprecated" in result.text
     assert stored_entry.get("deprecated") is None
     assert stored_entry.get("redirectTo") is None
@@ -89,6 +89,6 @@ def test_update_cannot_steal_an_alias_from_another_record(
 
     result = post_entry(client, payload)
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert bibliography.find(PARTNER_ALIAS["value"])["id"] == aliased_entry["id"]
     assert "aliases" not in bibliography.find(other_entry["id"])

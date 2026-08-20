@@ -57,7 +57,7 @@ def test_rejected_identity_input_adds_no_reservations(client, database, aliased_
 
     result = post_entry(client, payload)
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert "brand-new-key" not in reservations(database)
     assert "brand-new" not in reservations(database)
 

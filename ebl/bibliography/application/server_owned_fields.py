@@ -1,3 +1,17 @@
+"""Splitting a bibliography entry into client-owned and server-owned parts.
+
+Two helpers rebuild an entry from a submission plus stored state and are easy
+to confuse:
+
+* `preserve_server_owned_fields` keeps every submitted key except the
+  server-owned ones and overlays the stored server-owned values. Callers that
+  have already projected the submission to known metadata use it.
+* `preserve_persisted_fields` keeps only submitted keys that are client
+  editable and overlays everything else the stored document holds, including
+  keys outside the CSL schema. The generic update uses it so unknown persisted
+  fields survive an edit.
+"""
+
 from copy import deepcopy
 from typing import Any, Mapping, cast
 

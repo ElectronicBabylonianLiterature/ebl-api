@@ -150,3 +150,18 @@ def test_conflict_is_reported_as_http_conflict(monkeypatch, conflict_context):
     )
 
     assert result.status == falcon.HTTP_CONFLICT
+
+
+def test_conflict_error_names_the_mismatched_fields():
+    error = BibliographyUpdateConflictError(ENTRY_ID, ["aliases", "citationKey"])
+
+    assert error.fields == ("aliases", "citationKey")
+    assert "aliases, citationKey" in str(error)
+    assert "reload the entry and retry" in str(error)
+
+
+def test_conflict_error_without_fields_reports_a_concurrent_change():
+    error = BibliographyUpdateConflictError(ENTRY_ID)
+
+    assert error.fields == ()
+    assert "changed by another operation" in str(error)

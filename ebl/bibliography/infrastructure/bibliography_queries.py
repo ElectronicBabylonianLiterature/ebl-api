@@ -8,6 +8,15 @@ from ebl.bibliography.infrastructure.duplicate_candidate_queries import year_ran
 ACTIVE_BIBLIOGRAPHY_FILTER = {"deprecated": {"$ne": True}}
 
 
+def expected_field_match(value: Any) -> Any:
+    """Match exactly the stored value, distinguishing null from absent.
+
+    A bare ``None`` also matches documents where the field is missing, which
+    would let a concurrent removal slip past the compare-and-set.
+    """
+    return {"$type": "null"} if value is None else value
+
+
 def server_owned_state_filter(
     id_: str, expected_server_owned_fields: Mapping[str, Any]
 ) -> Dict[str, Any]:
@@ -15,7 +24,7 @@ def server_owned_state_filter(
         "_id": id_,
         **{
             field: (
-                expected_server_owned_fields[field]
+                expected_field_match(expected_server_owned_fields[field])
                 if field in expected_server_owned_fields
                 else {"$exists": False}
             )

@@ -3,6 +3,9 @@ import re
 import pydash
 import pytest
 
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyUpdateConflictError,
+)
 from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
     doi_query,
     duplicate_candidate_queries,
@@ -207,6 +210,38 @@ def test_update_not_found(bibliography_repository):
     bibliography_entry = BibliographyEntryFactory.build()
     with pytest.raises(NotFoundError):
         bibliography_repository.update(bibliography_entry, {})
+
+
+def test_update_detects_a_concurrently_removed_null_redirect(
+    bibliography_repository, database
+):
+    bibliography_entry = BibliographyEntryFactory.build(redirectTo=None)
+    bibliography_repository.create(bibliography_entry)
+    database[COLLECTION].update_one(
+        {"_id": bibliography_entry["id"]}, {"$unset": {"redirectTo": ""}}
+    )
+
+    with pytest.raises(BibliographyUpdateConflictError):
+        bibliography_repository.update(
+            {**bibliography_entry, "title": "New Title"}, {"redirectTo": None}
+        )
+
+    assert (
+        database[COLLECTION].find_one({"_id": bibliography_entry["id"]})["title"]
+        == bibliography_entry["title"]
+    )
+
+
+def test_update_accepts_an_unchanged_null_redirect(bibliography_repository):
+    bibliography_entry = BibliographyEntryFactory.build(redirectTo=None)
+    updated_entry = {**bibliography_entry, "title": "New Title"}
+    bibliography_repository.create(bibliography_entry)
+
+    bibliography_repository.update(updated_entry, {"redirectTo": None})
+
+    assert (
+        bibliography_repository.query_by_id(bibliography_entry["id"]) == updated_entry
+    )
 
 
 def test_duplicate_candidate_queries_prioritize_strong_identifiers() -> None:

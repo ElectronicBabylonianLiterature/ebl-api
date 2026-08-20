@@ -7,7 +7,10 @@ from pydash import uniq_with
 from ebl.bibliography.application.duplicate_detection import (
     BibliographyDuplicateDetector,
 )
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+    BibliographyUpdateConflictError,
+)
 from ebl.bibliography.application.bibliography_identity import (
     BibliographyIdentityContext,
     create_with_identity_claims,
@@ -65,10 +68,22 @@ class Bibliography:
         return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
     def update(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry, keeping its persisted identity state.
+
+        Trusted internal caller path: submitted server-owned fields are ignored
+        rather than rejected, because the caller (`PartnerBibliography`) has
+        already screened them out and rebuilt the entry from stored state.
+        """
         stored_entry = self._stored_entry_for_update(entry)
         self._persist_update(entry, stored_entry, user)
 
     def update_metadata(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry on behalf of a client.
+
+        Same persistence as `update`, but a submitted server-owned field that
+        disagrees with stored state is reported as a conflict instead of being
+        silently dropped.
+        """
         stored_entry = self._stored_entry_for_update(entry)
         self._reject_changed_server_owned_fields(entry, stored_entry)
         self._persist_update(entry, stored_entry, user)
@@ -84,10 +99,7 @@ class Bibliography:
     @staticmethod
     def _reject_changed_server_owned_fields(entry: dict, stored_entry: dict) -> None:
         if changed_fields := changed_server_owned_fields(entry, stored_entry):
-            raise DataError(
-                "Bibliography metadata updates may not change server-owned fields: "
-                f"{', '.join(changed_fields)}. These are maintained by the server."
-            )
+            raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
 
     def _stored_entry_for_update(self, entry: dict) -> dict:
         id_ = entry.get("id")

@@ -19,11 +19,23 @@ class LookupValueInUseError(DuplicateError):
 
 
 class BibliographyUpdateConflictError(DuplicateError):
-    def __init__(self, id_: str):
+    """The server-owned state the update was based on is no longer current.
+
+    Raised both when the submitted entry disagrees with the stored identity
+    state and when another operation changes it while the update runs. The
+    remedy is the same in either case: reload the entry and retry.
+    """
+
+    def __init__(self, id_: str, fields: Sequence[str] = ()):
         self.id_ = id_
+        self.fields = tuple(fields)
+        cause = (
+            f"does not match the stored server-owned state ({', '.join(self.fields)})"
+            if self.fields
+            else "was changed by another operation"
+        )
         super().__init__(
-            f"Bibliography entry {id_} was changed by another operation; "
-            "reload the entry and retry."
+            f"Bibliography entry {id_} {cause}; reload the entry and retry."
         )
 
 
