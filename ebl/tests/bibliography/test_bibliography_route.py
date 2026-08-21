@@ -4,6 +4,7 @@ import falcon
 import pydash
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.tests.bibliography.bibliography_route_test_helpers import INVALID_ENTRIES
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
@@ -49,6 +50,27 @@ def test_create_entry(client):
     get_result = client.simulate_get(f"/bibliography/{id_}")
 
     assert get_result.json == bibliography_entry
+
+
+def test_create_route_calls_the_guarded_application_method(client, monkeypatch):
+    """`create_metadata` -- not the trusted `create` -- is what rejects
+    server-owned fields for any caller, not just HTTP. Reverting the route to
+    call `create` directly would remove that non-HTTP enforcement silently,
+    since the route-level schema and hook alone would still reject the
+    payloads the create-contract tests send.
+    """
+    calls = []
+    monkeypatch.setattr(
+        Bibliography,
+        "create_metadata",
+        lambda self, entry, user: calls.append(entry["id"]) or entry["id"],
+    )
+    bibliography_entry = BibliographyEntryFactory.build()
+
+    result = client.simulate_post("/bibliography", body=json.dumps(bibliography_entry))
+
+    assert result.status == falcon.HTTP_CREATED
+    assert calls == [bibliography_entry["id"]]
 
 
 def test_create_entry_duplicate(client, saved_entry):
