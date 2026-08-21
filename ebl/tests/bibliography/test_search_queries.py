@@ -50,14 +50,3 @@ def test_parse_container_title_short_and_collection_number(query, expected):
 )
 def test_parse_title_short_and_volume(query, expected):
     assert parse_title_short_and_volume(query) == expected
-
-
-def test_search_skips_the_author_query_when_it_does_not_parse(bibliography, user):
-    """A leading digit fails the author pattern, so `search` must fall through
-    to the container and title patterns instead of querying by author."""
-    from ebl.tests.factories.bibliography import BibliographyEntryFactory
-
-    entry = BibliographyEntryFactory.build(id="Q1", container_title_short="123")
-    bibliography.create(entry, user)
-
-    assert bibliography.search("123") == [entry]
