@@ -11,7 +11,7 @@ values themselves rather than routing through the metadata editor.
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyRepository,
@@ -24,7 +24,7 @@ from ebl.bibliography.application.lookup_reservation import (
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.application.server_owned_fields import stored_server_owned_fields
 from ebl.changelog import Changelog
-from ebl.errors import Defect, NotFoundError
+from ebl.errors import Defect, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
@@ -52,7 +52,7 @@ def create_with_identity_claims(
     created = False
     try:
         repository.claim_lookup_values(operation, bibliography_lookup_values(entry))
-        ensure_lookup_values_available(context.find, bibliography_lookup_values(entry))
+        ensure_lookup_values_available(repository, bibliography_lookup_values(entry))
         created_id = repository.create(entry)
         created = True
         if created_id != entry["id"]:
@@ -95,7 +95,7 @@ def update_with_identity_claims(
     updated = False
     try:
         repository.claim_lookup_values(operation, values_to_claim)
-        ensure_lookup_values_available(context.find, values_to_claim, entry["id"])
+        ensure_lookup_values_available(repository, values_to_claim, entry["id"])
         repository.update(entry, expected_server_owned_fields)
         updated = True
         repository.commit_lookup_values(operation, datetime.now(timezone.utc))
@@ -114,15 +114,39 @@ def update_with_identity_claims(
         raise
 
 
+def raw_lookup_owner(
+    repository: BibliographyRepository, value: str
+) -> Optional[dict[str, Any]]:
+    """The document that literally stores `value`, without following redirects.
+
+    A deprecated entry's own lookup values stay physically present on its
+    document until retired, even though reads resolve it to its redirect
+    target. An availability check based on the resolved read would see the
+    target as already owning the value and let the target claim it too.
+    """
+    for query in (
+        repository.query_by_id,
+        repository.query_by_citation_key,
+        repository.query_by_alias,
+    ):
+        try:
+            return query(value)
+        except NotFoundError:
+            continue
+    return None
+
+
 def ensure_lookup_values_available(
-    find: Callable[[str], dict],
+    repository: BibliographyRepository,
     values: Sequence[str],
     allowed_id: str | None = None,
 ) -> None:
     for value in values:
         try:
-            existing_entry = find(value)
-        except NotFoundError:
+            existing_entry = raw_lookup_owner(repository, value)
+        except DuplicateError:
+            raise LookupValueInUseError(value) from None
+        if existing_entry is None:
             continue
         if allowed_id is None or existing_entry["id"] != allowed_id:
             raise LookupValueInUseError(value)
