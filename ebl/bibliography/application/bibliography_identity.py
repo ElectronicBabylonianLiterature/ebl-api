@@ -1,12 +1,23 @@
 """Trusted bibliography identity primitives.
 
-`update_with_identity_claims` is the only path allowed to change the
-server-owned identity of an entry: it diffs the lookup values, claims the added
-ones, retires the removed ones, and recovers reservations when persistence
-fails. `Bibliography.update` is the generic CSL metadata editor and deliberately
-calls this primitive with identity preserved, so a metadata edit never claims or
-retires anything. Callers that need to mutate identity must supply the new
-values themselves rather than routing through the metadata editor.
+`update_with_identity_claims` and `update_identity_fields_only` are the two
+paths allowed to change the server-owned identity of an entry: both diff the
+lookup values, claim the added ones, retire the removed ones, and recover
+reservations when persistence fails. They differ only in what they persist.
+
+`update_with_identity_claims` replaces the whole document. `Bibliography.update`
+is the generic CSL metadata editor and deliberately calls it with identity
+preserved, so a metadata edit never claims or retires anything; the full
+replace is correct there because writing new CSL content is the point.
+
+`update_identity_fields_only` writes just the four identity fields via
+`$set`/`$unset`. The trusted identity operation reads a document once, does
+further I/O (redirect validation, lookup claims) before it can persist, and
+must never let that first read's copy of CSL content overwrite a metadata
+edit that lands in between -- a full replace would do exactly that.
+
+Callers that need to mutate identity must supply the new values themselves
+rather than routing through the metadata editor.
 """
 
 from dataclasses import dataclass
@@ -106,6 +117,47 @@ def update_with_identity_claims(
             COLLECTION,
             user.profile,
             create_mongo_entry(old_entry),
+            create_mongo_entry(entry),
+        )
+    except Exception:
+        if not updated:
+            repository.release_pending_lookup_values(operation.owner)
+        raise
+
+
+def update_identity_fields_only(
+    context: BibliographyIdentityContext,
+    entry: dict[str, Any],
+    user: User,
+    stored_entry: dict[str, Any],
+) -> None:
+    repository = context.repository
+    if stored_entry.get("id") != entry["id"]:
+        raise Defect(
+            f"Stored bibliography {stored_entry.get('id')} does not match "
+            f"the entry being updated {entry['id']}."
+        )
+    expected_server_owned_fields = stored_server_owned_fields(stored_entry)
+    old_values = identity_values(stored_entry)
+    new_values = identity_values(entry)
+    values_to_claim = sorted(new_values - old_values)
+    values_to_retire = sorted(old_values - new_values)
+    now = datetime.now(timezone.utc)
+    operation = new_lookup_reservation_operation(entry["id"], now)
+    updated = False
+    try:
+        repository.claim_lookup_values(operation, values_to_claim)
+        ensure_lookup_values_available(repository, values_to_claim, entry["id"])
+        repository.update_identity_fields(entry, expected_server_owned_fields)
+        updated = True
+        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
+        repository.retire_lookup_values(
+            entry["id"], values_to_retire, datetime.now(timezone.utc)
+        )
+        context.changelog.create(
+            COLLECTION,
+            user.profile,
+            create_mongo_entry(stored_entry),
             create_mongo_entry(entry),
         )
     except Exception:

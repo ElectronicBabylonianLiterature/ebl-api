@@ -71,7 +71,9 @@ def test_persistence_failure_releases_pending_claims(
     user,
 ):
     entry(bibliography, user, "Q30000131")
-    fail_once(monkeypatch, bibliography_repository, "update", "update failed")
+    fail_once(
+        monkeypatch, bibliography_repository, "update_identity_fields", "update failed"
+    )
 
     with pytest.raises(RuntimeError, match="update failed"):
         identity_management.manage_identity(
