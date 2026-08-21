@@ -35,11 +35,11 @@ def interleave(monkeypatch, concurrent_change):
     original = identity_module.validate_identity_state
     calls = {"count": 0}
 
-    def validate(entry, query_by_id):
+    def validate(entry, query_by_id, query_by_redirect_target):
         if calls["count"] == 0:
             calls["count"] += 1
             concurrent_change()
-        return original(entry, query_by_id)
+        return original(entry, query_by_id, query_by_redirect_target)
 
     monkeypatch.setattr(identity_module, "validate_identity_state", validate)
 

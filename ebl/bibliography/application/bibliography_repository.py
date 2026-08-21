@@ -91,6 +91,15 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
+        """Every stored entry whose `redirectTo` literally equals `id_`.
+
+        Direct predecessors only -- does not itself walk transitive inbound
+        chains.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
         raise NotImplementedError
 
@@ -98,6 +107,18 @@ class BibliographyRepository(ABC):
     def update(
         self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
     ) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_identity_fields(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        """Persist only the server-owned identity fields of `entry`.
+
+        Unlike `update`, every other field of the stored document is left
+        untouched, so a concurrent edit to non-identity state cannot be
+        reverted by this write.
+        """
         raise NotImplementedError
 
     @abstractmethod

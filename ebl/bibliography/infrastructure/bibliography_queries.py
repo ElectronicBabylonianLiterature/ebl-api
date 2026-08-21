@@ -33,6 +33,27 @@ def server_owned_state_filter(
     }
 
 
+def server_owned_state_update(entry: Mapping[str, Any]) -> Dict[str, Any]:
+    """A `$set`/`$unset` update touching only the server-owned identity fields
+    of `entry`, so persisting an identity change never overwrites any other
+    field of the stored document.
+    """
+    set_fields = {
+        field: entry[field]
+        for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+        if field in entry
+    }
+    unset_fields = {
+        field: "" for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS if field not in entry
+    }
+    update: Dict[str, Any] = {}
+    if set_fields:
+        update["$set"] = set_fields
+    if unset_fields:
+        update["$unset"] = unset_fields
+    return update
+
+
 def author_year_title_match(
     author: Optional[str], year: Optional[int], title: Optional[str]
 ) -> Dict[str, Any]:
