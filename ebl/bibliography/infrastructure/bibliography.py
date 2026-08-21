@@ -19,6 +19,7 @@ from ebl.bibliography.infrastructure.bibliography_queries import (
     author_year_title_match,
     bibliography_query_pipeline,
     server_owned_state_filter,
+    server_owned_state_update,
 )
 from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
     duplicate_candidate_queries,
@@ -123,6 +124,21 @@ class MongoBibliographyRepository(BibliographyRepository):
             self._collection.replace_one(
                 mongo_entry,
                 filter_=server_owned_state_filter(id_, expected_server_owned_fields),
+            )
+        except NotFoundError as error:
+            if not self._collection.exists({"_id": id_}):
+                raise
+            raise BibliographyUpdateConflictError(id_) from error
+
+    def update_identity_fields(
+        self, entry, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        mongo_entry = create_mongo_entry(entry)
+        id_ = mongo_entry["_id"]
+        try:
+            self._collection.update_one(
+                server_owned_state_filter(id_, expected_server_owned_fields),
+                server_owned_state_update(mongo_entry),
             )
         except NotFoundError as error:
             if not self._collection.exists({"_id": id_}):

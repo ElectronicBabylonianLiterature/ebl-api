@@ -101,6 +101,18 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def update_identity_fields(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        """Persist only the server-owned identity fields of `entry`.
+
+        Unlike `update`, every other field of the stored document is left
+        untouched, so a concurrent edit to non-identity state cannot be
+        reverted by this write.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]
     ) -> Sequence[Any]:

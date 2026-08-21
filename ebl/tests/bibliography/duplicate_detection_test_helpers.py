@@ -56,6 +56,11 @@ class FakeBibliographyRepository(BibliographyRepository):
     ) -> None:
         raise NotImplementedError
 
+    def update_identity_fields(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        raise NotImplementedError
+
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]
     ) -> Sequence[Any]:
