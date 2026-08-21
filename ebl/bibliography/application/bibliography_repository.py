@@ -91,6 +91,15 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
+        """Every stored entry whose `redirectTo` literally equals `id_`.
+
+        Direct predecessors only -- does not itself walk transitive inbound
+        chains.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
         raise NotImplementedError
 

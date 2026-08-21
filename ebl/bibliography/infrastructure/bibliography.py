@@ -44,6 +44,7 @@ class MongoBibliographyRepository(BibliographyRepository):
         self._collection.create_index([("citationKey", pymongo.ASCENDING)])
         self._collection.create_index([(ALIASES_VALUE_FIELD, pymongo.ASCENDING)])
         self._collection.create_index([("aliases.normalizedValue", pymongo.ASCENDING)])
+        self._collection.create_index([("redirectTo", pymongo.ASCENDING)])
         self._lookup_reservations.create_indexes()
 
     def claim_lookup_values(
@@ -112,6 +113,10 @@ class MongoBibliographyRepository(BibliographyRepository):
         if len({item["_id"] for item in data}) > 1:
             raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
         return create_object_entry(data[0])
+
+    def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
+        data = self._collection.find_many({"redirectTo": id_})
+        return [create_object_entry(item) for item in data]
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})
