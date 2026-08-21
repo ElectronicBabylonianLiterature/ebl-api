@@ -10,12 +10,12 @@ from ebl.bibliography.application.server_owned_fields import (
     reject_submitted_server_owned_fields,
 )
 from ebl.bibliography.domain.bibliography_entry import (
-    DUPLICATE_CANDIDATE_JSON_SCHEMA,
     PARTNER_CSL_JSON_SCHEMA,
     PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
 )
 from ebl.bibliography.domain.bibliography_requests import (
+    DUPLICATE_CANDIDATE_JSON_SCHEMA,
     INTERNAL_CREATE_JSON_SCHEMA,
     INTERNAL_METADATA_UPDATE_JSON_SCHEMA,
 )
