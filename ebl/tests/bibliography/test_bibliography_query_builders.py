@@ -9,6 +9,7 @@ from ebl.bibliography.infrastructure.bibliography import (
 )
 from ebl.bibliography.infrastructure.bibliography_queries import (
     server_owned_state_filter,
+    server_owned_state_update,
 )
 
 
@@ -71,3 +72,33 @@ def test_server_owned_state_filter_separates_a_stored_null_from_an_absent_field(
     filter_ = server_owned_state_filter("Q30000024", {"redirectTo": None})
 
     assert filter_["redirectTo"] == {"$type": "null"}
+
+
+def test_server_owned_state_update_sets_present_identity_fields() -> None:
+    update = server_owned_state_update(
+        {"_id": "Q30000024", "type": "book", "citationKey": "dossin1967La"}
+    )
+
+    assert update["$set"] == {"citationKey": "dossin1967La"}
+
+
+def test_server_owned_state_update_unsets_absent_identity_fields() -> None:
+    update = server_owned_state_update({"_id": "Q30000024", "citationKey": "key"})
+
+    assert update["$unset"] == {
+        "aliases": "",
+        "deprecated": "",
+        "redirectTo": "",
+    }
+    assert "citationKey" not in update["$unset"]
+
+
+def test_server_owned_state_update_never_names_a_non_identity_field() -> None:
+    update = server_owned_state_update(
+        {"_id": "Q30000024", "type": "book", "title": "New title"}
+    )
+
+    assert "type" not in update.get("$set", {})
+    assert "title" not in update.get("$set", {})
+    assert "type" not in update.get("$unset", {})
+    assert "title" not in update.get("$unset", {})
