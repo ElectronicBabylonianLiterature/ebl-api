@@ -177,6 +177,7 @@ def test_an_unrelated_new_value_can_still_be_claimed(
 
     apply_identity(identity_fixtures, winner["id"], citationKey="genuinely-free-key")
 
-    assert identity_fixtures.bibliography.find("genuinely-free-key")["id"] == (
-        winner["id"]
+    assert (
+        identity_fixtures.bibliography.find("genuinely-free-key")["id"]
+        == (winner["id"])
     )
