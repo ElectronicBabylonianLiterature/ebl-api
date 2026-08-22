@@ -22,7 +22,7 @@ rather than routing through the metadata editor.
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Callable, Optional, Sequence
+from typing import Any, Callable, Mapping, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyRepository,
@@ -81,16 +81,14 @@ def create_with_identity_claims(
         raise
 
 
-def update_with_identity_claims(
+def _claim_persist_and_record(
     context: BibliographyIdentityContext,
     entry: dict[str, Any],
     user: User,
-    stored_entry: dict[str, Any] | None = None,
+    old_entry: dict[str, Any],
+    persist: Callable[[dict[str, Any], Mapping[str, Any]], None],
 ) -> None:
     repository = context.repository
-    old_entry = (
-        repository.query_by_id(entry["id"]) if stored_entry is None else stored_entry
-    )
     if old_entry.get("id") != entry["id"]:
         raise Defect(
             f"Stored bibliography {old_entry.get('id')} does not match "
@@ -107,7 +105,7 @@ def update_with_identity_claims(
     try:
         repository.claim_lookup_values(operation, values_to_claim)
         ensure_lookup_values_available(repository, values_to_claim, entry["id"])
-        repository.update(entry, expected_server_owned_fields)
+        persist(entry, expected_server_owned_fields)
         updated = True
         repository.commit_lookup_values(operation, datetime.now(timezone.utc))
         repository.retire_lookup_values(
@@ -125,45 +123,31 @@ def update_with_identity_claims(
         raise
 
 
+def update_with_identity_claims(
+    context: BibliographyIdentityContext,
+    entry: dict[str, Any],
+    user: User,
+    stored_entry: dict[str, Any] | None = None,
+) -> None:
+    old_entry = (
+        context.repository.query_by_id(entry["id"])
+        if stored_entry is None
+        else stored_entry
+    )
+    _claim_persist_and_record(
+        context, entry, user, old_entry, context.repository.update
+    )
+
+
 def update_identity_fields_only(
     context: BibliographyIdentityContext,
     entry: dict[str, Any],
     user: User,
     stored_entry: dict[str, Any],
 ) -> None:
-    repository = context.repository
-    if stored_entry.get("id") != entry["id"]:
-        raise Defect(
-            f"Stored bibliography {stored_entry.get('id')} does not match "
-            f"the entry being updated {entry['id']}."
-        )
-    expected_server_owned_fields = stored_server_owned_fields(stored_entry)
-    old_values = identity_values(stored_entry)
-    new_values = identity_values(entry)
-    values_to_claim = sorted(new_values - old_values)
-    values_to_retire = sorted(old_values - new_values)
-    now = datetime.now(timezone.utc)
-    operation = new_lookup_reservation_operation(entry["id"], now)
-    updated = False
-    try:
-        repository.claim_lookup_values(operation, values_to_claim)
-        ensure_lookup_values_available(repository, values_to_claim, entry["id"])
-        repository.update_identity_fields(entry, expected_server_owned_fields)
-        updated = True
-        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
-        repository.retire_lookup_values(
-            entry["id"], values_to_retire, datetime.now(timezone.utc)
-        )
-        context.changelog.create(
-            COLLECTION,
-            user.profile,
-            create_mongo_entry(stored_entry),
-            create_mongo_entry(entry),
-        )
-    except Exception:
-        if not updated:
-            repository.release_pending_lookup_values(operation.owner)
-        raise
+    _claim_persist_and_record(
+        context, entry, user, stored_entry, context.repository.update_identity_fields
+    )
 
 
 def raw_lookup_owner(

@@ -1,7 +1,12 @@
+from dataclasses import dataclass
+
 import falcon
 import pytest
+from falcon import testing
+from pymongo.database import Database
 
 from ebl.bibliography.application import identity_management as identity_module
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyUpdateConflictError,
 )
@@ -17,6 +22,7 @@ from ebl.tests.bibliography.identity_management_test_helpers import (
     reservation,
     stored,
 )
+from ebl.users.domain.user import User
 
 
 @pytest.fixture
@@ -29,6 +35,22 @@ def identity_management(bibliography_repository, changelog, bibliography):
     return BibliographyIdentityManagement(
         bibliography_repository, changelog, bibliography.find
     )
+
+
+@dataclass(frozen=True)
+class ConcurrencyContext:
+    client: testing.TestClient
+    database: Database
+    bibliography: Bibliography
+    identity_management: BibliographyIdentityManagement
+    user: User
+
+
+@pytest.fixture
+def concurrency_context(
+    client, database, bibliography, identity_management, user
+) -> ConcurrencyContext:
+    return ConcurrencyContext(client, database, bibliography, identity_management, user)
 
 
 def interleave(monkeypatch, concurrent_change):
@@ -44,89 +66,89 @@ def interleave(monkeypatch, concurrent_change):
     monkeypatch.setattr(identity_module, "validate_identity_state", validate)
 
 
-def test_concurrent_alias_addition_is_not_lost(
-    monkeypatch, client, database, bibliography, identity_management, user
-):
-    entry(bibliography, user, "Q30000090")
+def test_concurrent_alias_addition_is_not_lost(monkeypatch, concurrency_context):
+    context = concurrency_context
+    entry(context.bibliography, context.user, "Q30000090")
     interleave(
         monkeypatch,
-        lambda: identity_management.manage_identity(
-            "Q30000090", {"addAliases": [alias("concurrent-a")]}, user
+        lambda: context.identity_management.manage_identity(
+            "Q30000090", {"addAliases": [alias("concurrent-a")]}, context.user
         ),
     )
 
     result = manage_identity(
-        client, "Q30000090", {"addAliases": [alias("concurrent-b")]}
+        context.client, "Q30000090", {"addAliases": [alias("concurrent-b")]}
     )
 
     assert result.status == falcon.HTTP_CONFLICT
-    assert stored(database, "Q30000090")["aliases"] == [alias("concurrent-a")]
+    assert stored(context.database, "Q30000090")["aliases"] == [alias("concurrent-a")]
 
 
-def test_concurrent_citation_key_change_is_not_lost(
-    monkeypatch, client, database, bibliography, identity_management, user
-):
-    entry(bibliography, user, "Q30000091")
+def test_concurrent_citation_key_change_is_not_lost(monkeypatch, concurrency_context):
+    context = concurrency_context
+    entry(context.bibliography, context.user, "Q30000091")
     interleave(
         monkeypatch,
-        lambda: identity_management.manage_identity(
-            "Q30000091", {"citationKey": "winner1999Key"}, user
+        lambda: context.identity_management.manage_identity(
+            "Q30000091", {"citationKey": "winner1999Key"}, context.user
         ),
     )
 
-    result = manage_identity(client, "Q30000091", {"citationKey": "loser1999Key"})
+    result = manage_identity(
+        context.client, "Q30000091", {"citationKey": "loser1999Key"}
+    )
 
     assert result.status == falcon.HTTP_CONFLICT
-    assert stored(database, "Q30000091")["citationKey"] == "winner1999Key"
+    assert stored(context.database, "Q30000091")["citationKey"] == "winner1999Key"
 
 
 def test_conflict_leaves_no_reservation_or_changelog_trace(
-    monkeypatch, client, database, bibliography, identity_management, user
+    monkeypatch, concurrency_context
 ):
-    entry(bibliography, user, "Q30000092")
+    context = concurrency_context
+    entry(context.bibliography, context.user, "Q30000092")
     interleave(
         monkeypatch,
-        lambda: identity_management.manage_identity(
-            "Q30000092", {"addAliases": [alias("winner-alias")]}, user
+        lambda: context.identity_management.manage_identity(
+            "Q30000092", {"addAliases": [alias("winner-alias")]}, context.user
         ),
     )
-    changelog_before = database["changelog"].count_documents(
+    changelog_before = context.database["changelog"].count_documents(
         {"resource_id": "Q30000092"}
     )
 
-    manage_identity(client, "Q30000092", {"addAliases": [alias("loser-alias")]})
+    manage_identity(context.client, "Q30000092", {"addAliases": [alias("loser-alias")]})
 
-    assert reservation(database, "loser-alias") is None
-    assert database[RESERVATIONS].count_documents({"state": "pending"}) == 0
+    assert reservation(context.database, "loser-alias") is None
+    assert context.database[RESERVATIONS].count_documents({"state": "pending"}) == 0
     assert (
-        database["changelog"].count_documents({"resource_id": "Q30000092"})
+        context.database["changelog"].count_documents({"resource_id": "Q30000092"})
         == changelog_before + 1
     )
 
 
-def test_retry_after_conflict_succeeds(
-    monkeypatch, client, database, bibliography, identity_management, user
-):
-    entry(bibliography, user, "Q30000093")
+def test_retry_after_conflict_succeeds(monkeypatch, concurrency_context):
+    context = concurrency_context
+    entry(context.bibliography, context.user, "Q30000093")
     interleave(
         monkeypatch,
-        lambda: identity_management.manage_identity(
-            "Q30000093", {"addAliases": [alias("first-alias")]}, user
+        lambda: context.identity_management.manage_identity(
+            "Q30000093", {"addAliases": [alias("first-alias")]}, context.user
         ),
     )
     assert (
         manage_identity(
-            client, "Q30000093", {"addAliases": [alias("second-alias")]}
+            context.client, "Q30000093", {"addAliases": [alias("second-alias")]}
         ).status
         == falcon.HTTP_CONFLICT
     )
 
     result = manage_identity(
-        client, "Q30000093", {"addAliases": [alias("second-alias")]}
+        context.client, "Q30000093", {"addAliases": [alias("second-alias")]}
     )
 
     assert result.status == falcon.HTTP_OK
-    assert stored(database, "Q30000093")["aliases"] == [
+    assert stored(context.database, "Q30000093")["aliases"] == [
         alias("first-alias"),
         alias("second-alias"),
     ]

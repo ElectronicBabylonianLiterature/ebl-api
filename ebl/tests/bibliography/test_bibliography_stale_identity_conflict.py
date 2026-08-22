@@ -7,9 +7,15 @@ persists the submitted value, which keeps the remedy the same as for a write
 that races the request: reload the entry and retry.
 """
 
+from dataclasses import dataclass
+from typing import Callable
+
 import falcon
 import pytest
+from falcon import testing
+from pymongo.database import Database
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_identity import (
     BibliographyIdentityContext,
     update_with_identity_claims,
@@ -23,6 +29,7 @@ from ebl.tests.bibliography.identity_preservation_test_helpers import (
     reservations,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.users.domain.user import User
 
 CANONICAL_ID = "rla_9_388"
 NEW_CITATION_KEY = "dossin1967Lb"
@@ -63,6 +70,32 @@ def stale_payload(fetched_entry: dict) -> dict:
 
 def changelog_count(database, id_: str) -> int:
     return database["changelog"].count_documents({"resource_id": id_})
+
+
+@dataclass(frozen=True)
+class TombstoneConflictContext:
+    client: testing.TestClient
+    bibliography: Bibliography
+    database: Database
+    user: User
+    aliased_entry: dict
+    fetched_entry: dict
+    identity_operation: Callable[[dict], None]
+
+
+@pytest.fixture
+def tombstone_conflict_context(
+    request: pytest.FixtureRequest,
+) -> TombstoneConflictContext:
+    return TombstoneConflictContext(
+        request.getfixturevalue("client"),
+        request.getfixturevalue("bibliography"),
+        request.getfixturevalue("database"),
+        request.getfixturevalue("user"),
+        request.getfixturevalue("aliased_entry"),
+        request.getfixturevalue("fetched_entry"),
+        request.getfixturevalue("identity_operation"),
+    )
 
 
 def test_stale_aliases_are_a_conflict(client, fetched_entry, identity_operation):
@@ -174,31 +207,27 @@ def test_an_invented_identity_value_is_also_a_conflict(
     assert stored_entry["title"] == aliased_entry["title"]
 
 
-def test_a_stale_body_cannot_resurrect_a_tombstoned_entry(
-    client,
-    bibliography,
-    database,
-    user,
-    aliased_entry,
-    fetched_entry,
-    identity_operation,
-):
-    bibliography.create(
-        BibliographyEntryFactory.build(id=CANONICAL_ID, title="Canonical"), user
+def test_a_stale_body_cannot_resurrect_a_tombstoned_entry(tombstone_conflict_context):
+    context = tombstone_conflict_context
+    context.bibliography.create(
+        BibliographyEntryFactory.build(id=CANONICAL_ID, title="Canonical"),
+        context.user,
     )
-    identity_operation(
-        {**fetched_entry, "deprecated": True, "redirectTo": CANONICAL_ID}
+    context.identity_operation(
+        {**context.fetched_entry, "deprecated": True, "redirectTo": CANONICAL_ID}
     )
 
-    result = post_entry(client, stale_payload(fetched_entry))
-    stored_entry = database["bibliography"].find_one({"_id": aliased_entry["id"]})
+    result = post_entry(context.client, stale_payload(context.fetched_entry))
+    stored_entry = context.database["bibliography"].find_one(
+        {"_id": context.aliased_entry["id"]}
+    )
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert "is deprecated" in result.text
     assert stored_entry["deprecated"] is True
     assert stored_entry["redirectTo"] == CANONICAL_ID
-    assert stored_entry["title"] == aliased_entry["title"]
-    assert bibliography.find(aliased_entry["id"])["id"] == CANONICAL_ID
+    assert stored_entry["title"] == context.aliased_entry["title"]
+    assert context.bibliography.find(context.aliased_entry["id"])["id"] == CANONICAL_ID
 
 
 @pytest.mark.parametrize(
