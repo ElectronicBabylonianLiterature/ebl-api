@@ -55,7 +55,9 @@ class TestParseEnv:
 
 
 class TestMain:
-    def test_appends_missing_keys(self, tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
+    def test_appends_missing_keys(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture
+    ) -> None:
         example = tmp_path / ".env.example"
         example.write_text("EXISTING=placeholder\nMISSING=placeholder\n")
         env = tmp_path / ".env"
@@ -129,7 +131,9 @@ def _run_main_in(directory: Path) -> None:
 
 
 class TestEntryPoint:
-    def test_runs_as_script(self, tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
+    def test_runs_as_script(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture
+    ) -> None:
         (tmp_path / ".env.example").write_text("KEY=placeholder\n")
         (tmp_path / ".env").write_text("KEY=value\n")
         script = str(Path(__file__).parent / "sync-env.py")

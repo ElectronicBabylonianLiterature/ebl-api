@@ -229,9 +229,7 @@ def test_a_stale_body_cannot_resurrect_a_tombstoned_entry(
     assert stored_entry["deprecated"] is True
     assert stored_entry["redirectTo"] == CANONICAL_ID
     assert stored_entry["title"] == context.aliased_entry["title"]
-    assert (
-        context.bibliography.find(context.aliased_entry["id"])["id"] == CANONICAL_ID
-    )
+    assert context.bibliography.find(context.aliased_entry["id"])["id"] == CANONICAL_ID
 
 
 @pytest.mark.parametrize(
