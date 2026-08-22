@@ -27,11 +27,42 @@ this branch:
 - deprecating an entry could push an *existing* tombstone that already
   redirected to it past the maximum redirect depth, invisibly, because
   validation only walked forward from the entry being changed (fixed:
-  inbound chains are now walked and re-validated too).
+  inbound chains are now walked and re-validated too);
+- two reconcilers racing the same stale/committed lookup reservation could
+  raise an uncaught `NotFoundError` from an operation that never touched the
+  contested value, since `reconcile_lookup_reservations` runs unconditionally
+  at the start of every claim (fixed: the reconciliation transition is now
+  idempotent against a concurrent reconciler that already made the same
+  transition, mirroring the existing `retire`/`release_pending` pattern).
 
 None of these were reachable in production before now, because nothing
 granted the scope. They are fixed as of this branch, so that is no longer a
 reason to withhold provisioning.
+
+## Known limitation: concurrent cross-record redirects (single-writer constraint)
+
+Per-record compare-and-set correctly serializes two identity operations on
+the *same* record, but it cannot serialize two identity operations on
+*different* records. Two concurrent requests — one setting `A`'s
+`redirectTo` to `B`, the other concurrently setting `B`'s `redirectTo` to
+`A` — each validate against the other record's current, not-yet-changed
+state and can both pass and both persist, producing an undetected two-record
+redirect cycle. The next read of either `A` or `B` then fails with a
+redirect-loop error, making both records unreadable via ordinary lookup
+until an operator manually repairs one of them (e.g. `POST
+.../{id}/identity` with `{"reactivate": true}`, which does not depend on
+redirect resolution). No MongoDB transaction or lock spans the two writes,
+and none is being added by this branch — building that machinery is out of
+scope for now (see `ebl/bibliography/application/identity_validation.py`'s
+module docstring).
+
+**Operational consequence: until cross-record redirect serialization
+exists, `admin:bibliography` must be treated as a single-writer curator
+capability** — granted to one trusted operator/process at a time, or to an
+operator workflow that does not issue concurrent redirect-changing requests
+against different records. This is a real, tracked limitation, not
+theoretical: it is not covered by a regression test (a genuine race is hard
+to make deterministic) and is not otherwise enforced by the code.
 
 ## Still worth doing first, not a hard blocker
 
@@ -55,7 +86,9 @@ reservation path instead of the collection scan behind
    one app and one auth backend (see
    `ebl/bibliography/web/bibliography_identity_management.py`'s module
    docstring), so a partner client holding this scope would reach the
-   identity route directly.
+   identity route directly. Keep this to a single trusted operator/process at
+   a time per the single-writer constraint above, until cross-record
+   redirect serialization exists.
 3. Confirm the grant by requesting a token for that role/account and
    checking its `scope` claim or `permissions` array includes
    `admin:bibliography` (`ebl/users/infrastructure/auth0.py` reads both).

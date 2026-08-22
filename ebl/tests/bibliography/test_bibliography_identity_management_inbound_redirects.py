@@ -82,3 +82,37 @@ def test_a_predecessor_with_no_inbound_chain_of_its_own_is_unaffected(
 
     assert result.status == falcon.HTTP_OK
     assert stored(database, a["id"])["deprecated"] is True
+
+
+def test_extending_a_chain_past_a_two_hop_inbound_predecessor_is_rejected(
+    client, database, bibliography, user
+):
+    # A pre-existing, already-valid 3-hop forward chain: B -> C -> D -> E.
+    b = entry(bibliography, user, "Q30000190")
+    c = entry(bibliography, user, "Q30000191")
+    d = entry(bibliography, user, "Q30000192")
+    e = entry(bibliography, user, "Q30000193")
+    assert deprecate(client, d["id"], e["id"]).status == falcon.HTTP_OK
+    assert deprecate(client, c["id"], d["id"]).status == falcon.HTTP_OK
+    assert deprecate(client, b["id"], c["id"]).status == falcon.HTTP_OK
+
+    # A two-hop inbound predecessor chain onto a still-live A: Y -> X -> A.
+    a = entry(bibliography, user, "Q30000194")
+    x = entry(bibliography, user, "Q30000195")
+    y = entry(bibliography, user, "Q30000196")
+    assert deprecate(client, x["id"], a["id"]).status == falcon.HTTP_OK
+    assert deprecate(client, y["id"], x["id"]).status == falcon.HTTP_OK
+
+    # X's own resulting chain (X -> A -> B -> C -> D -> E) is exactly 5 hops
+    # and would pass if only the immediate predecessor were re-validated.
+    # Y's chain (Y -> X -> A -> B -> C -> D -> E) needs 6 hops and is only
+    # reachable by walking a second hop back -- this is what
+    # `frontier.extend(...)` in `_validate_inbound_chains` is for, and this
+    # test fails if that second-hop walk is ever removed.
+    result = deprecate(client, a["id"], b["id"])
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "maximum depth" in description(result)
+    assert "deprecated" not in stored(database, a["id"])
+    assert stored(database, x["id"])["redirectTo"] == a["id"]
+    assert stored(database, y["id"])["redirectTo"] == x["id"]
