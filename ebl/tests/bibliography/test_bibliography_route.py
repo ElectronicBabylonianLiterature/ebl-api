@@ -4,6 +4,7 @@ import falcon
 import pydash
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.tests.bibliography.bibliography_route_test_helpers import INVALID_ENTRIES
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
@@ -51,6 +52,27 @@ def test_create_entry(client):
     assert get_result.json == bibliography_entry
 
 
+def test_create_route_calls_the_guarded_application_method(client, monkeypatch):
+    """`create_metadata` -- not the trusted `create` -- is what rejects
+    server-owned fields for any caller, not just HTTP. Reverting the route to
+    call `create` directly would remove that non-HTTP enforcement silently,
+    since the route-level schema and hook alone would still reject the
+    payloads the create-contract tests send.
+    """
+    calls = []
+    monkeypatch.setattr(
+        Bibliography,
+        "create_metadata",
+        lambda self, entry, user: calls.append(entry["id"]) or entry["id"],
+    )
+    bibliography_entry = BibliographyEntryFactory.build()
+
+    result = client.simulate_post("/bibliography", body=json.dumps(bibliography_entry))
+
+    assert result.status == falcon.HTTP_CREATED
+    assert calls == [bibliography_entry["id"]]
+
+
 def test_create_entry_duplicate(client, saved_entry):
     body = json.dumps(saved_entry)
 
@@ -70,12 +92,14 @@ def test_create_entry_invalid(transform, client):
     assert put_result.status == falcon.HTTP_BAD_REQUEST
 
 
-def test_create_deprecated_entry_requires_redirect_target(client):
+def test_create_rejects_lifecycle_state_outright(client):
     bibliography_entry = BibliographyEntryFactory.build(deprecated=True)
 
     result = client.simulate_post("/bibliography", json=bibliography_entry)
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "deprecated" in result.text
+    assert "identity" in result.text
 
 
 def test_update_entry(client, saved_entry):
@@ -195,3 +219,25 @@ def test_list_bibliography_deduplicates_redirected_canonical_entries(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [canonical_entry]
+
+
+def test_update_entry_rejects_a_non_object_body(client, saved_entry):
+    result = client.simulate_post(
+        f"/bibliography/{saved_entry['id']}", body=json.dumps([saved_entry])
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_list_bibliography_serves_the_cached_response(
+    cached_client, bibliography, user
+):
+    entry = BibliographyEntryFactory.build(id="Q30000123")
+    bibliography.create(entry, user)
+    url = "/bibliography/list"
+
+    first_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
+    second_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
+
+    assert first_result.status == falcon.HTTP_OK
+    assert second_result.json == first_result.json

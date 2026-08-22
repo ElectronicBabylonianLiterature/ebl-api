@@ -95,3 +95,33 @@ def test_duplicate_candidates_rejects_write_only_scope(context, saved_entry):
     )
 
     assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_duplicate_candidates_rejects_deprecated_without_the_confusing_lifecycle_error(
+    client,
+):
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps({"type": "book", "title": "Merged away", "deprecated": True}),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "redirectTo' is a required property" not in result.text
+
+
+def test_duplicate_candidates_accepts_a_partner_style_id(client):
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps({"type": "book", "title": "X", "id": "10.1234/abc"}),
+    )
+
+    assert result.status == falcon.HTTP_OK
+
+
+def test_duplicate_candidates_rejects_a_submitted_server_owned_field(client):
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps({"type": "book", "title": "X", "citationKey": "smuggled"}),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST

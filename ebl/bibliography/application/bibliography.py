@@ -1,4 +1,3 @@
-import re
 from typing import Any, Mapping, Optional, Sequence
 
 import attr
@@ -7,18 +6,33 @@ from pydash import uniq_with
 from ebl.bibliography.application.duplicate_detection import (
     BibliographyDuplicateDetector,
 )
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+    BibliographyUpdateConflictError,
+)
 from ebl.bibliography.application.bibliography_identity import (
+    BibliographyIdentityContext,
     create_with_identity_claims,
     update_with_identity_claims,
 )
 from ebl.bibliography.application.partner_bibliography import PartnerBibliography
+from ebl.bibliography.application.redirect_resolution import (
+    follow_bibliography_redirect,
+)
+from ebl.bibliography.application.search_queries import (
+    parse_author_year_and_title,
+    parse_container_title_short_and_collection_number,
+    parse_title_short_and_volume,
+)
+from ebl.bibliography.application.server_owned_fields import (
+    changed_server_owned_fields,
+    preserve_persisted_fields,
+    reject_submitted_server_owned_fields,
+)
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
-
-MAX_REDIRECT_DEPTH = 5
 
 
 class Bibliography:
@@ -26,11 +40,25 @@ class Bibliography:
         self._repository = repository
         self._changelog = changelog
         self._partner = PartnerBibliography(self, repository)
+        self._identity = BibliographyIdentityContext(repository, changelog, self.find)
 
     def create(self, entry, user: User) -> str:
-        return create_with_identity_claims(
-            self._repository, self._changelog, self.find, entry, user
-        )
+        """Create an entry, claiming whatever identity state it carries.
+
+        Trusted internal caller path, mirroring `update`: the identity fields
+        are taken as given because the caller (`PartnerBibliography`) built
+        them server-side. Client submissions go through `create_metadata`.
+        """
+        return create_with_identity_claims(self._identity, entry, user)
+
+    def create_metadata(self, entry: dict, user: User) -> str:
+        """Create an entry on behalf of a client.
+
+        Identity state has a dedicated trusted operation, so a submitted
+        server-owned field is refused here rather than silently dropped.
+        """
+        reject_submitted_server_owned_fields(entry)
+        return self.create(entry, user)
 
     def find(self, id_: str):
         for query in (
@@ -57,54 +85,64 @@ class Bibliography:
         return resolved_entries
 
     def _follow_redirect(self, entry: dict) -> dict:
-        current = entry
-        visited_ids: set[str] = set()
-        redirects_followed = 0
+        return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
-        while current.get("deprecated", False):
-            current_id = current.get("id")
-            redirect_to = current.get("redirectTo")
-            if not isinstance(redirect_to, str) or not redirect_to:
-                raise NotFoundError(
-                    f"Deprecated bibliography {current_id} has no redirect target."
-                )
-            if current_id in visited_ids or redirect_to in visited_ids:
-                raise DuplicateError(
-                    f"Bibliography redirect loop detected at {current_id}."
-                )
-            if redirects_followed >= MAX_REDIRECT_DEPTH:
-                raise DuplicateError(
-                    f"Bibliography redirect from {entry.get('id')} exceeds "
-                    f"the maximum depth of {MAX_REDIRECT_DEPTH}."
-                )
+    def update(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry, keeping its persisted identity state.
 
-            if isinstance(current_id, str):
-                visited_ids.add(current_id)
-            try:
-                current = self._repository.query_by_id(redirect_to)
-            except NotFoundError as error:
-                raise NotFoundError(
-                    f"Bibliography redirect target {redirect_to} not found."
-                ) from error
-            redirects_followed += 1
+        Trusted internal caller path: submitted server-owned fields are ignored
+        rather than rejected, because the caller (`PartnerBibliography`) has
+        already screened them out and rebuilt the entry from stored state.
+        """
+        stored_entry = self._stored_entry_for_update(entry)
+        self._persist_update(entry, stored_entry, user)
 
-        return current
+    def update_metadata(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry on behalf of a client.
 
-    def update(self, entry, user: User):
+        Same persistence as `update`, but a submitted server-owned field that
+        disagrees with stored state is reported as a conflict instead of being
+        silently dropped.
+        """
+        stored_entry = self._stored_entry_for_update(entry)
+        self._reject_changed_server_owned_fields(entry, stored_entry)
+        self._persist_update(entry, stored_entry, user)
+
+    def _persist_update(self, entry: dict, stored_entry: dict, user: User) -> None:
         update_with_identity_claims(
-            self._repository, self._changelog, self.find, entry, user
+            self._identity,
+            preserve_persisted_fields(entry, stored_entry),
+            user,
+            stored_entry,
         )
+
+    @staticmethod
+    def _reject_changed_server_owned_fields(entry: dict, stored_entry: dict) -> None:
+        if changed_fields := changed_server_owned_fields(entry, stored_entry):
+            raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
+
+    def _stored_entry_for_update(self, entry: dict) -> dict:
+        id_ = entry.get("id")
+        if not isinstance(id_, str) or not id_:
+            raise DataError("Bibliography entry id is required.")
+        stored_entry = self._repository.query_by_id(id_)
+        if stored_entry.get("deprecated"):
+            raise DataError(
+                f"Bibliography entry {id_} is deprecated; "
+                f"edit {stored_entry.get('redirectTo')} instead."
+            )
+        return stored_entry
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []
-        author_query = self._parse_author_year_and_title(query)
+        author_query = parse_author_year_and_title(query)
         if any(value is not None for value in author_query.values()):
             author_query_result = self.search_author_year_and_title(
                 author_query["author"], author_query["year"], author_query["title"]
             )
 
         container_query_result: Sequence[dict] = []
-        container_query = self._parse_container_title_short_and_collection_number(query)
+        container_query = parse_container_title_short_and_collection_number(query)
         if any(value is not None for value in list(container_query.values())):
             container_query_result = self.search_container_title_and_collection_number(
                 container_query["container_title_short"],
@@ -112,7 +150,7 @@ class Bibliography:
             )
 
         title_short_volume_result: Sequence[dict] = []
-        title_short_volume_query = self._parse_title_short_and_volume(query)
+        title_short_volume_query = parse_title_short_and_volume(query)
         if any(value is not None for value in list(title_short_volume_query.values())):
             title_short_volume_result = self.search_title_short_and_volume(
                 title_short_volume_query["title_short"],
@@ -150,31 +188,6 @@ class Bibliography:
 
     def find_partner_entry(self, id_: str) -> dict:
         return self._partner.find_entry(id_)
-
-    @staticmethod
-    def _parse_author_year_and_title(query: str) -> dict:
-        parsed_query = dict.fromkeys(["author", "year", "title"])
-        if match := re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query):
-            parsed_query["author"] = match[1]
-            parsed_query["year"] = int(match[2]) if match[2] else None
-            parsed_query["title"] = match[3]
-        return parsed_query
-
-    @staticmethod
-    def _parse_container_title_short_and_collection_number(query: str) -> dict:
-        parsed_query = dict.fromkeys(["container_title_short", "collection_number"])
-        if match := re.match(r"^([^\s]+)(?: (\d*))?$", query):
-            parsed_query["container_title_short"] = match[1]
-            parsed_query["collection_number"] = match[2]
-        return parsed_query
-
-    @staticmethod
-    def _parse_title_short_and_volume(query: str) -> dict:
-        parsed_query = dict.fromkeys(["title_short", "volume"])
-        if match := re.match(r"^([^\s]+)(?: (\d*))?$", query):
-            parsed_query["title_short"] = match[1]
-            parsed_query["volume"] = match[2]
-        return parsed_query
 
     def search_author_year_and_title(
         self,
