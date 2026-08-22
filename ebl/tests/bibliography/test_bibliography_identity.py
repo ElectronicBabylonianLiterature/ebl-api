@@ -1,13 +1,16 @@
+from typing import Optional
+
 import pytest
 
 from ebl.bibliography.application.bibliography_identity import (
+    BibliographyIdentityContext,
     create_with_identity_claims,
     update_with_identity_claims,
 )
 from ebl.bibliography.application.bibliography_repository import LookupValueInUseError
 from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
-from ebl.errors import NotFoundError
+from ebl.errors import Defect, NotFoundError
 
 
 class ChangelogSpy:
@@ -21,15 +24,35 @@ class ChangelogNoop:
 
 
 class RepositorySpy:
-    def __init__(self, create_error=None):
+    def __init__(self, create_error=None, existing_entry=None):
         self.create_error = create_error
-        self.operation = None
-        self.released_owners = []
+        self.existing_entry = existing_entry
+        self.operation: Optional[LookupReservationOperation] = None
+        self.released_owners: list[str] = []
+
+    @property
+    def claimed_owner(self) -> str:
+        assert self.operation is not None
+        return self.operation.owner
 
     def claim_lookup_values(
         self, operation: LookupReservationOperation, _values
     ) -> None:
         self.operation = operation
+
+    def query_by_id(self, _value):
+        return self._raw_match()
+
+    def query_by_citation_key(self, _value):
+        return self._raw_match()
+
+    def query_by_alias(self, _value):
+        return self._raw_match()
+
+    def _raw_match(self):
+        if self.existing_entry is None:
+            raise NotFoundError("missing")
+        return self.existing_entry
 
     def create(self, _entry):
         if self.create_error:
@@ -46,19 +69,25 @@ class RepositorySpy:
         self.released_owners.append(owner)
 
 
+def identity_context(repository, changelog, find):
+    return BibliographyIdentityContext(repository, changelog, find)
+
+
+def missing_lookup(_value):
+    raise NotFoundError("missing")
+
+
 def test_create_releases_claims_when_post_claim_lookup_finds_existing_entry(user):
-    repository = RepositorySpy()
+    repository = RepositorySpy(existing_entry={"id": "OTHER"})
 
     with pytest.raises(LookupValueInUseError):
         create_with_identity_claims(
-            repository,
-            ChangelogSpy(),
-            lambda _value: {"id": "OTHER"},
+            identity_context(repository, ChangelogSpy(), missing_lookup),
             {"id": "Q30000000", "type": "book"},
             user,
         )
 
-    assert repository.released_owners == [repository.operation.owner]
+    assert repository.released_owners == [repository.claimed_owner]
 
 
 def test_lookup_values_skip_non_mapping_aliases():
@@ -81,10 +110,17 @@ class UpdateRepositorySpy:
     def query_by_id(self, _id):
         return self.old_entry
 
+    def query_by_citation_key(self, _citation_key):
+        raise NotFoundError("missing")
+
+    def query_by_alias(self, _alias):
+        raise NotFoundError("missing")
+
     def claim_lookup_values(self, _operation, values):
         self.claimed_values = values
 
-    def update(self, _entry):
+    def update(self, _entry, expected_server_owned_fields):
+        self.expected_server_owned_fields = expected_server_owned_fields
         if self.update_error:
             raise self.update_error
 
@@ -98,10 +134,6 @@ class UpdateRepositorySpy:
         self.released_owners.append(owner)
 
 
-def missing_lookup(_value):
-    raise NotFoundError("missing")
-
-
 def test_update_claims_added_alias_and_retires_removed_citation_key(user):
     old_entry = {"id": "Q30000000", "type": "book", "citationKey": "old-key"}
     new_entry = {
@@ -112,7 +144,7 @@ def test_update_claims_added_alias_and_retires_removed_citation_key(user):
     repository = UpdateRepositorySpy(old_entry)
 
     update_with_identity_claims(
-        repository, ChangelogNoop(), missing_lookup, new_entry, user
+        identity_context(repository, ChangelogNoop(), missing_lookup), new_entry, user
     )
 
     assert repository.claimed_values == ["new-alias"]
@@ -126,7 +158,9 @@ def test_update_failure_releases_new_claims_without_retiring_old_claims(user):
 
     with pytest.raises(RuntimeError, match="update failed"):
         update_with_identity_claims(
-            repository, ChangelogSpy(), missing_lookup, new_entry, user
+            identity_context(repository, ChangelogSpy(), missing_lookup),
+            new_entry,
+            user,
         )
 
     assert repository.claimed_values == ["new-key"]
@@ -139,11 +173,46 @@ def test_create_releases_claims_when_repository_insert_fails(user):
 
     with pytest.raises(RuntimeError, match="insert failed"):
         create_with_identity_claims(
-            repository,
-            ChangelogSpy(),
-            lambda _value: (_ for _ in ()).throw(NotFoundError("missing")),
+            identity_context(repository, ChangelogSpy(), missing_lookup),
             {"id": "Q30000000", "type": "book"},
             user,
         )
 
-    assert repository.released_owners == [repository.operation.owner]
+    assert repository.released_owners == [repository.claimed_owner]
+
+
+def test_update_rejects_a_stored_entry_for_a_different_record(user):
+    repository = UpdateRepositorySpy({"id": "OTHER", "type": "book"})
+
+    with pytest.raises(Defect, match="does not match"):
+        update_with_identity_claims(
+            identity_context(repository, ChangelogSpy(), missing_lookup),
+            {"id": "Q30000000", "type": "book"},
+            user,
+            {"id": "OTHER", "type": "book"},
+        )
+
+    assert repository.claimed_values is None
+    assert repository.retired_values is None
+    assert repository.released_owners == []
+
+
+def test_update_passes_stored_server_owned_state_to_the_repository(user):
+    old_entry = {
+        "id": "Q30000000",
+        "type": "book",
+        "citationKey": "old-key",
+        "aliases": [{"value": "old-alias", "normalizedValue": "old-alias"}],
+    }
+    repository = UpdateRepositorySpy(old_entry)
+
+    update_with_identity_claims(
+        identity_context(repository, ChangelogNoop(), missing_lookup),
+        {"id": "Q30000000", "type": "book", "citationKey": "new-key"},
+        user,
+    )
+
+    assert repository.expected_server_owned_fields == {
+        "citationKey": "old-key",
+        "aliases": [{"value": "old-alias", "normalizedValue": "old-alias"}],
+    }

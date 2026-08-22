@@ -1,6 +1,6 @@
 from contextlib import suppress
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Callable, Sequence
 
 import pymongo
@@ -12,18 +12,14 @@ from ebl.bibliography.application.lookup_reservation import (
     LookupReservationOperation,
     LookupReservationState,
 )
+from ebl.bibliography.infrastructure.lookup_reservation_reconciliation import (
+    abandon_value,
+    reconcile_reservation,
+)
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography_lookup_reservations"
-
-
-def _to_utc_datetime(value: datetime) -> datetime:
-    return (
-        value.replace(tzinfo=timezone.utc)
-        if value.tzinfo is None
-        else value.astimezone(timezone.utc)
-    )
 
 
 @dataclass(frozen=True)
@@ -94,8 +90,12 @@ class MongoLookupReservations:
     def retire(self, entry_id: str, values: Sequence[str], now: datetime) -> None:
         for value in dict.fromkeys(values):
             with suppress(NotFoundError):
-                self._abandon_value(
-                    value, now, entry_id, LookupReservationState.COMMITTED
+                abandon_value(
+                    self._collection,
+                    value,
+                    now,
+                    entry_id,
+                    LookupReservationState.COMMITTED,
                 )
 
     def is_active(
@@ -125,7 +125,7 @@ class MongoLookupReservations:
             ).limit(limit)
         )
         for reservation in candidates:
-            self._reconcile_reservation(reservation, now, owns_value)
+            reconcile_reservation(self._collection, reservation, now, owns_value)
         return len(candidates)
 
     def reconcile_value(
@@ -135,7 +135,7 @@ class MongoLookupReservations:
             reservation = self._collection.find_one_by_id(value)
         except NotFoundError:
             return
-        self._reconcile_reservation(reservation, now, owns_value)
+        reconcile_reservation(self._collection, reservation, now, owns_value)
 
     def _insert_pending(
         self,
@@ -167,7 +167,7 @@ class MongoLookupReservations:
             and owns_value(operation.entry_id, value)
         ):
             return
-        self._reconcile_reservation(reservation, claim.now, owns_value)
+        reconcile_reservation(self._collection, reservation, claim.now, owns_value)
         reservation = self._collection.find_one_by_id(value)
         if reservation.get("state") == LookupReservationState.ABANDONED.value:
             self._collection.replace_one(
@@ -189,28 +189,6 @@ class MongoLookupReservations:
             "expiresAt": claim.operation.expires_at,
         }
 
-    def _reconcile_reservation(
-        self, reservation: dict, now: datetime, owns_value: Callable[[str, str], bool]
-    ) -> None:
-        value = reservation["_id"]
-        entry_id = reservation["entryId"]
-        state = LookupReservationState(reservation["state"])
-        expires_at = reservation.get("expiresAt")
-        comparison_now = _to_utc_datetime(now)
-        if (
-            state == LookupReservationState.PENDING
-            and isinstance(expires_at, datetime)
-            and _to_utc_datetime(expires_at) <= comparison_now
-        ):
-            if owns_value(entry_id, value):
-                self._commit_value(value, comparison_now)
-            else:
-                self._abandon_value(value, comparison_now, entry_id, state)
-        elif state == LookupReservationState.COMMITTED and not owns_value(
-            entry_id, value
-        ):
-            self._abandon_value(value, comparison_now, entry_id, state)
-
     def _release_values(self, owner: str, values: Sequence[str]) -> None:
         for value in values:
             with suppress(NotFoundError):
@@ -221,33 +199,3 @@ class MongoLookupReservations:
                         "state": LookupReservationState.PENDING.value,
                     }
                 )
-
-    def _commit_value(self, value: str, now: datetime) -> None:
-        self._collection.update_one(
-            {"_id": value, "state": LookupReservationState.PENDING.value},
-            {
-                "$set": {
-                    "state": LookupReservationState.COMMITTED.value,
-                    "committedAt": now,
-                },
-                "$unset": {"expiresAt": "", "deleteAt": ""},
-            },
-        )
-
-    def _abandon_value(
-        self,
-        value: str,
-        now: datetime,
-        entry_id: str,
-        state: LookupReservationState,
-    ) -> None:
-        self._collection.update_one(
-            {"_id": value, "entryId": entry_id, "state": state.value},
-            {
-                "$set": {
-                    "state": LookupReservationState.ABANDONED.value,
-                    "deleteAt": now,
-                },
-                "$unset": {"expiresAt": ""},
-            },
-        )

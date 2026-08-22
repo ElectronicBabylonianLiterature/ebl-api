@@ -18,6 +18,9 @@ from ebl.bibliography.application.partner_identity import (
     generate_partner_citation_key,
     select_canonical_bibliography_id,
 )
+from ebl.bibliography.application.server_owned_fields import (
+    preserve_server_owned_fields,
+)
 from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
@@ -81,15 +84,9 @@ class PartnerBibliography:
     def update_entry(self, id_: str, entry: dict, user: User) -> Optional[dict]:
         self._reject_server_owned_fields(entry)
         stored_entry = self._bibliography.find(id_)
-        updated_entry = {
-            "id": stored_entry["id"],
-            **self._project_metadata(entry),
-            **{
-                field: stored_entry[field]
-                for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
-                if field in stored_entry
-            },
-        }
+        updated_entry = preserve_server_owned_fields(
+            {"id": stored_entry["id"], **self._project_metadata(entry)}, stored_entry
+        )
         self._validate_internal_entry(updated_entry)
         if duplicate_result := self._find_blocking_duplicate_candidates(updated_entry):
             return duplicate_result

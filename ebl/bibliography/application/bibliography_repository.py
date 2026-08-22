@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
 from ebl.errors import DuplicateError
@@ -16,6 +16,27 @@ class LookupValueInUseError(DuplicateError):
     def __init__(self, value: str):
         self.value = value
         super().__init__(f"Bibliography lookup value {value} is in use.")
+
+
+class BibliographyUpdateConflictError(DuplicateError):
+    """The server-owned state the update was based on is no longer current.
+
+    Raised both when the submitted entry disagrees with the stored identity
+    state and when another operation changes it while the update runs. The
+    remedy is the same in either case: reload the entry and retry.
+    """
+
+    def __init__(self, id_: str, fields: Sequence[str] = ()):
+        self.id_ = id_
+        self.fields = tuple(fields)
+        cause = (
+            f"does not match the stored server-owned state ({', '.join(self.fields)})"
+            if self.fields
+            else "was changed by another operation"
+        )
+        super().__init__(
+            f"Bibliography entry {id_} {cause}; reload the entry and retry."
+        )
 
 
 class BibliographyRepository(ABC):
@@ -70,11 +91,34 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
+        """Every stored entry whose `redirectTo` literally equals `id_`.
+
+        Direct predecessors only -- does not itself walk transitive inbound
+        chains.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, entry: Any) -> None:
+    def update(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_identity_fields(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        """Persist only the server-owned identity fields of `entry`.
+
+        Unlike `update`, every other field of the stored document is left
+        untouched, so a concurrent edit to non-identity state cannot be
+        reverted by this write.
+        """
         raise NotImplementedError
 
     @abstractmethod
