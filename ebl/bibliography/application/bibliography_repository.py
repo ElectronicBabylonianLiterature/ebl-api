@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
 from ebl.errors import DuplicateError
@@ -16,6 +16,27 @@ class LookupValueInUseError(DuplicateError):
     def __init__(self, value: str):
         self.value = value
         super().__init__(f"Bibliography lookup value {value} is in use.")
+
+
+class BibliographyUpdateConflictError(DuplicateError):
+    """The server-owned state the update was based on is no longer current.
+
+    Raised both when the submitted entry disagrees with the stored identity
+    state and when another operation changes it while the update runs. The
+    remedy is the same in either case: reload the entry and retry.
+    """
+
+    def __init__(self, id_: str, fields: Sequence[str] = ()):
+        self.id_ = id_
+        self.fields = tuple(fields)
+        cause = (
+            f"does not match the stored server-owned state ({', '.join(self.fields)})"
+            if self.fields
+            else "was changed by another operation"
+        )
+        super().__init__(
+            f"Bibliography entry {id_} {cause}; reload the entry and retry."
+        )
 
 
 class BibliographyRepository(ABC):
@@ -74,7 +95,9 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, entry: Any) -> None:
+    def update(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
         raise NotImplementedError
 
     @abstractmethod

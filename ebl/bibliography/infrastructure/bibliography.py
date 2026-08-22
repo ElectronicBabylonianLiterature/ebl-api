@@ -1,9 +1,12 @@
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, Sequence
+from typing import Any, Dict, Mapping, Optional, Sequence
 
 import pymongo
 
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+    BibliographyUpdateConflictError,
+)
 from ebl.bibliography.application.duplicate_audit import PROJECTION
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
 from ebl.bibliography.application.partner_identity import normalize_partner_id
@@ -11,9 +14,14 @@ from ebl.bibliography.application.serialization import (
     create_mongo_entry,
     create_object_entry,
 )
+from ebl.bibliography.infrastructure.bibliography_queries import (
+    ACTIVE_BIBLIOGRAPHY_FILTER,
+    author_year_title_match,
+    bibliography_query_pipeline,
+    server_owned_state_filter,
+)
 from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
     duplicate_candidate_queries,
-    year_range,
 )
 from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
 from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
@@ -22,7 +30,6 @@ from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography"
 DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS = 5000
-ACTIVE_BIBLIOGRAPHY_FILTER = {"deprecated": {"$ne": True}}
 ALIASES_VALUE_FIELD = "aliases.value"
 __all__ = ["MongoBibliographyRepository", "join_reference_documents"]
 
@@ -109,9 +116,18 @@ class MongoBibliographyRepository(BibliographyRepository):
         data = self._collection.find_many({"_id": {"$in": ids}})
         return [create_object_entry(item) for item in data]
 
-    def update(self, entry) -> None:
+    def update(self, entry, expected_server_owned_fields: Mapping[str, Any]) -> None:
         mongo_entry = create_mongo_entry(entry)
-        self._collection.replace_one(mongo_entry)
+        id_ = mongo_entry["_id"]
+        try:
+            self._collection.replace_one(
+                mongo_entry,
+                filter_=server_owned_state_filter(id_, expected_server_owned_fields),
+            )
+        except NotFoundError as error:
+            if not self._collection.exists({"_id": id_}):
+                raise
+            raise BibliographyUpdateConflictError(id_) from error
 
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]
@@ -186,37 +202,3 @@ class MongoBibliographyRepository(BibliographyRepository):
 
         matching_ids = self._collection.get_all_values("_id", lookup_query)
         return matching_ids == [entry_id]
-
-
-def author_year_title_match(
-    author: Optional[str], year: Optional[int], title: Optional[str]
-) -> Dict[str, Any]:
-    match: Dict[str, Any] = {}
-    if author:
-        match["author.0.family"] = author
-    if year:
-        match["issued.date-parts.0.0"] = year_range(year)
-    if title:
-        match["$expr"] = {"$eq": [{"$substrCP": ["$title", 0, len(title)]}, title]}
-    return match
-
-
-def bibliography_query_pipeline(
-    match: Dict[str, Any], trailing_sort_field: str
-) -> list[dict]:
-    return [
-        {"$match": {**match, **ACTIVE_BIBLIOGRAPHY_FILTER}},
-        {"$addFields": {"primaryYear": primary_year_expression()}},
-        {
-            "$sort": {
-                "author.0.family": 1,
-                "primaryYear": 1,
-                trailing_sort_field: 1,
-            }
-        },
-        {"$project": {"primaryYear": 0}},
-    ]
-
-
-def primary_year_expression() -> dict:
-    return {"$arrayElemAt": [{"$arrayElemAt": ["$issued.date-parts", 0]}, 0]}

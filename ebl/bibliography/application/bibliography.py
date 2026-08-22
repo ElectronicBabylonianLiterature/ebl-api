@@ -7,18 +7,27 @@ from pydash import uniq_with
 from ebl.bibliography.application.duplicate_detection import (
     BibliographyDuplicateDetector,
 )
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+    BibliographyUpdateConflictError,
+)
 from ebl.bibliography.application.bibliography_identity import (
+    BibliographyIdentityContext,
     create_with_identity_claims,
     update_with_identity_claims,
 )
 from ebl.bibliography.application.partner_bibliography import PartnerBibliography
+from ebl.bibliography.application.redirect_resolution import (
+    follow_bibliography_redirect,
+)
+from ebl.bibliography.application.server_owned_fields import (
+    changed_server_owned_fields,
+    preserve_persisted_fields,
+)
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
-
-MAX_REDIRECT_DEPTH = 5
 
 
 class Bibliography:
@@ -26,11 +35,10 @@ class Bibliography:
         self._repository = repository
         self._changelog = changelog
         self._partner = PartnerBibliography(self, repository)
+        self._identity = BibliographyIdentityContext(repository, changelog, self.find)
 
     def create(self, entry, user: User) -> str:
-        return create_with_identity_claims(
-            self._repository, self._changelog, self.find, entry, user
-        )
+        return create_with_identity_claims(self._identity, entry, user)
 
     def find(self, id_: str):
         for query in (
@@ -57,43 +65,53 @@ class Bibliography:
         return resolved_entries
 
     def _follow_redirect(self, entry: dict) -> dict:
-        current = entry
-        visited_ids: set[str] = set()
-        redirects_followed = 0
+        return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
-        while current.get("deprecated", False):
-            current_id = current.get("id")
-            redirect_to = current.get("redirectTo")
-            if not isinstance(redirect_to, str) or not redirect_to:
-                raise NotFoundError(
-                    f"Deprecated bibliography {current_id} has no redirect target."
-                )
-            if current_id in visited_ids or redirect_to in visited_ids:
-                raise DuplicateError(
-                    f"Bibliography redirect loop detected at {current_id}."
-                )
-            if redirects_followed >= MAX_REDIRECT_DEPTH:
-                raise DuplicateError(
-                    f"Bibliography redirect from {entry.get('id')} exceeds "
-                    f"the maximum depth of {MAX_REDIRECT_DEPTH}."
-                )
+    def update(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry, keeping its persisted identity state.
 
-            if isinstance(current_id, str):
-                visited_ids.add(current_id)
-            try:
-                current = self._repository.query_by_id(redirect_to)
-            except NotFoundError as error:
-                raise NotFoundError(
-                    f"Bibliography redirect target {redirect_to} not found."
-                ) from error
-            redirects_followed += 1
+        Trusted internal caller path: submitted server-owned fields are ignored
+        rather than rejected, because the caller (`PartnerBibliography`) has
+        already screened them out and rebuilt the entry from stored state.
+        """
+        stored_entry = self._stored_entry_for_update(entry)
+        self._persist_update(entry, stored_entry, user)
 
-        return current
+    def update_metadata(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry on behalf of a client.
 
-    def update(self, entry, user: User):
+        Same persistence as `update`, but a submitted server-owned field that
+        disagrees with stored state is reported as a conflict instead of being
+        silently dropped.
+        """
+        stored_entry = self._stored_entry_for_update(entry)
+        self._reject_changed_server_owned_fields(entry, stored_entry)
+        self._persist_update(entry, stored_entry, user)
+
+    def _persist_update(self, entry: dict, stored_entry: dict, user: User) -> None:
         update_with_identity_claims(
-            self._repository, self._changelog, self.find, entry, user
+            self._identity,
+            preserve_persisted_fields(entry, stored_entry),
+            user,
+            stored_entry,
         )
+
+    @staticmethod
+    def _reject_changed_server_owned_fields(entry: dict, stored_entry: dict) -> None:
+        if changed_fields := changed_server_owned_fields(entry, stored_entry):
+            raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
+
+    def _stored_entry_for_update(self, entry: dict) -> dict:
+        id_ = entry.get("id")
+        if not isinstance(id_, str) or not id_:
+            raise DataError("Bibliography entry id is required.")
+        stored_entry = self._repository.query_by_id(id_)
+        if stored_entry.get("deprecated"):
+            raise DataError(
+                f"Bibliography entry {id_} is deprecated; "
+                f"edit {stored_entry.get('redirectTo')} instead."
+            )
+        return stored_entry
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []
