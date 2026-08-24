@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Sequence
 
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -18,6 +19,7 @@ class AnnotationsRepository(ABC):
         include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
+        user_scopes: Sequence[Scope] = (),
     ) -> Sequence[Annotations]:
         raise NotImplementedError
 

@@ -58,14 +58,16 @@ def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def match_user_scopes(user_scopes: Sequence[Scope] = ()) -> dict:
+def match_user_scopes(
+    user_scopes: Sequence[Scope] = (), field: str = "authorizedScopes"
+) -> dict:
     allowed_scopes: List[dict] = [
-        {"authorizedScopes": {"$exists": False}},
-        {"authorizedScopes": {"$size": 0}},
+        {field: {"$exists": False}},
+        {field: {"$size": 0}},
     ]
 
     if user_scopes:
-        allowed_scopes.extend({"authorizedScopes": str(scope)} for scope in user_scopes)
+        allowed_scopes.extend({field: str(scope)} for scope in user_scopes)
 
     return {"$or": allowed_scopes}
 

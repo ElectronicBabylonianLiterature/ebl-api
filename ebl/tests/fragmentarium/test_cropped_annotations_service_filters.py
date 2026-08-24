@@ -39,14 +39,14 @@ def test_find_annotations_by_sign_passes_centroids_only_filter(
     )
 
     when(annotations_repository).find_by_sign(
-        "test-sign", True, False, None, None
+        "test-sign", True, False, None, None, ()
     ).thenReturn([])
 
     result = service.find_annotations_by_sign("test-sign", centroids_only=True)
 
     assert result == []
     verify(annotations_repository, times=1).find_by_sign(
-        "test-sign", True, False, None, None
+        "test-sign", True, False, None, None, ()
     )
 
 
@@ -62,7 +62,7 @@ def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     )
 
     when(annotations_repository).find_by_sign(
-        "test-sign", False, False, "test-cluster-id", "Neo-Assyrian"
+        "test-sign", False, False, "test-cluster-id", "Neo-Assyrian", ()
     ).thenReturn([])
 
     result = service.find_annotations_by_sign(
@@ -73,7 +73,7 @@ def test_find_annotations_by_sign_passes_cluster_and_script_filters(
 
     assert result == []
     verify(annotations_repository, times=1).find_by_sign(
-        "test-sign", False, False, "test-cluster-id", "Neo-Assyrian"
+        "test-sign", False, False, "test-cluster-id", "Neo-Assyrian", ()
     )
 
 
@@ -95,7 +95,7 @@ def test_find_annotations_by_sign_deduplicates_fetch_date_and_image_lookups(when
     fragment = FragmentFactory.build(number=annotations.fragment_number)
 
     when(annotations_repository).find_by_sign(
-        "test-sign", False, False, None, None
+        "test-sign", False, False, None, None, ()
     ).thenReturn([annotations])
     when(fragment_repository).fetch_date(annotations.fragment_number).thenReturn(
         fragment.date

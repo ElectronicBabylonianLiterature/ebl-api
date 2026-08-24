@@ -12,6 +12,7 @@ from typing import Sequence, Union, Tuple
 from PIL import Image
 
 from ebl.app import create_context
+from ebl.common.application.image_limits import fragment_image_pixel_limit
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.domain.annotation import (
     Annotations,
@@ -144,7 +145,8 @@ def create_annotations(
         image_filename = f"{fragment_number}.jpg"
         fragment_image = photo_repository.query_by_file_name(image_filename)
         image_bytes = fragment_image.read()
-        image = Image.open(BytesIO(image_bytes), mode="r")
+        with fragment_image_pixel_limit():
+            image = Image.open(BytesIO(image_bytes), mode="r")
         image.save(join(output_folder_images, image_filename))
 
         bounding_boxes, signs = prepare_annotations(

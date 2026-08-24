@@ -554,14 +554,20 @@ def client(context):
 
 
 class EnsureAnnotationPost:
+    def __init__(self, resource: AnnotationResource):
+        self._resource = resource
+
     def on_post(self, req, resp):
-        return AnnotationResource(annotations_service).on_post(req, resp, "K.123")
+        return self._resource.on_post(req, resp, "K.123")
 
 
 @pytest.fixture
-def guest_client(context):
+def guest_client(context, annotations_service, fragment_finder):
     api = ebl.app.create_app(attr.evolve(context, auth_backend=NoneAuthBackend(Guest)))
-    api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
+    api.add_route(
+        "/fragments/K.123/annotations",
+        EnsureAnnotationPost(AnnotationResource(annotations_service, fragment_finder)),
+    )
     return testing.TestClient(api)
 
 

@@ -135,7 +135,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     )
     archaeology = ArchaeologyResource(updater, provenance_service, dto_factory)
     colophon = ColophonResource(updater, dto_factory)
-    annotations = AnnotationResource(annotations_service)
+    annotations = AnnotationResource(annotations_service, finder)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)

@@ -5,6 +5,7 @@ import requests
 from PIL import Image
 from marshmallow import Schema, fields, post_load
 
+from ebl.common.application.image_limits import fragment_image_pixel_limit
 from ebl.files.application.file_repository import File
 from ebl.fragmentarium.domain.annotation import Annotations, BoundingBoxPrediction
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -55,7 +56,8 @@ class EblAiClient:
     ) -> Annotations:
         image_bytes = fragment_image.read()
         buf = BytesIO(image_bytes)
-        width, height = Image.open(buf).size
+        with fragment_image_pixel_limit():
+            width, height = Image.open(buf).size
         bounding_boxes_predictions = self._request_generate_annotations(buf.getvalue())
 
         bounding_boxes_predictions = list(

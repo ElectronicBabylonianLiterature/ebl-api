@@ -2,6 +2,7 @@ from typing import Dict, List, Optional, Sequence
 
 import attr
 
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import PcaClusteringSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage
@@ -92,9 +93,15 @@ class CroppedAnnotationService:
         include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
+        user_scopes: Sequence[Scope] = (),
     ) -> Sequence[dict]:
         annotations = self._annotations_repository.find_by_sign(
-            sign, centroids_only, include_unclustered, cluster_id, script_filter
+            sign,
+            centroids_only,
+            include_unclustered,
+            cluster_id,
+            script_filter,
+            user_scopes,
         )
         cropped_image_annotations: List[dict] = []
         date_cache: Dict[str, dict] = {}

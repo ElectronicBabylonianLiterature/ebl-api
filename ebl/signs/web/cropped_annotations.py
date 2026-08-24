@@ -1,12 +1,21 @@
+from typing import List
+
 import falcon
 from falcon import Request, Response
 
 from ebl.common.domain.period import Period
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
+from ebl.users.domain.user import User
 
 ABBREV_TO_NAME = {period.value[1]: period.value[0] for period in Period}
+
+
+def fragment_read_scopes(req: Request) -> List[Scope]:
+    user: User = req.context["user"]
+    return user.get_scopes(prefix="read:", suffix="-fragments")
 
 
 class CroppedAnnotationsResource:
@@ -23,6 +32,7 @@ class CroppedAnnotationsResource:
             sign_name,
             centroids_only=centroids_only,
             include_unclustered=include_unclustered,
+            user_scopes=fragment_read_scopes(req),
         )
         resp.media = cropped_signs
 
@@ -49,5 +59,6 @@ class ClusterCroppedAnnotationsResource:
             include_unclustered=False,
             cluster_id=cluster_id,
             script_filter=script_filter,
+            user_scopes=fragment_read_scopes(req),
         )
         resp.media = cropped_signs

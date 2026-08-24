@@ -5,6 +5,7 @@ from marshmallow import EXCLUDE
 import pymongo
 from pymongo.database import Database
 
+from ebl.common.domain.scopes import Scope
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import (
@@ -12,6 +13,7 @@ from ebl.fragmentarium.application.annotations_schema import (
     AnnotationsSchema,
 )
 from ebl.fragmentarium.domain.annotation import Annotations
+from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.mongo_collection import MongoCollection
 
@@ -58,6 +60,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
+        user_scopes: Sequence[Scope] = (),
     ) -> Sequence[Annotations]:
         query: Dict[str, str] = {"$regex": re.escape(sign), "$options": "i"}
 
@@ -106,16 +109,22 @@ class MongoAnnotationsRepository(AnnotationsRepository):
             {"$unwind": "$fragment"},
         ]
 
+        match_readable_fragments = {
+            "$match": match_user_scopes(user_scopes, "fragment.authorizedScopes")
+        }
+
         if script_filter:
             match_conditions["fragment.script.period"] = script_filter
             pipeline = [
                 *lookup_stages,
                 {"$match": match_conditions},
+                match_readable_fragments,
             ]
         else:
             pipeline = [
                 {"$match": match_conditions},
                 *lookup_stages,
+                match_readable_fragments,
             ]
 
         pipeline.append(

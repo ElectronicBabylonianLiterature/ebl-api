@@ -3,7 +3,7 @@ import logging
 import falcon
 
 from ebl.dispatcher import DispatchError
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, Defect, DuplicateError, NotFoundError
 from ebl.lemmatization.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.alignment import AlignmentError
 
@@ -14,6 +14,11 @@ def http_error(_req, _resp, ex, _params):
 
 def unexpected_error(_req, _resp, _ex, _params):
     logging.exception("Unexpected Exception")
+    raise falcon.HTTPInternalServerError()
+
+
+def defect_error(_req, _resp, _ex, _params):
+    logging.exception("Application defect")
     raise falcon.HTTPInternalServerError()
 
 
@@ -31,6 +36,7 @@ def duplicate_error(_req, _resp, ex, _params):
 
 def set_up(api):
     api.add_error_handler(Exception, unexpected_error)
+    api.add_error_handler(Defect, defect_error)
     api.add_error_handler(AlignmentError, unprocessable_entity)
     api.add_error_handler(DispatchError, unprocessable_entity)
     api.add_error_handler(LemmatizationError, unprocessable_entity)

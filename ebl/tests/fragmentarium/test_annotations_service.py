@@ -14,7 +14,14 @@ from ebl.tests.factories.annotation import (
     CroppedSignFactory,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.word_tokens import Word
 
 SCHEMA = AnnotationsSchema()
 
@@ -170,3 +177,21 @@ def test_update(
 
     result = annotations_service.update(annotations, user)
     assert result == expected_annotations
+
+
+def test_get_labels_keeps_unhandled_lines_with_the_current_label(annotations_service):
+    text_line = TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("ku")])])
+
+    labels = annotations_service.get_labels([EmptyLine(), text_line])
+
+    assert [line for _, line in labels] == [EmptyLine(), text_line]
+
+
+def test_get_labels_skips_note_lines(annotations_service):
+    text_line = TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("ku")])])
+
+    labels = annotations_service.get_labels(
+        [NoteLine([StringPart("a note")]), text_line]
+    )
+
+    assert [line for _, line in labels] == [text_line]

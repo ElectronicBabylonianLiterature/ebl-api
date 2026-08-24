@@ -5,6 +5,7 @@ import attr
 from PIL import Image
 
 from ebl.changelog import Changelog
+from ebl.common.application.image_limits import fragment_image_pixel_limit
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
@@ -31,8 +32,6 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.users.domain.user import User
-
-Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
@@ -97,10 +96,11 @@ class AnnotationsService:
             f"{annotations.fragment_number}.jpg"
         )
         image_bytes = fragment_image.read()
-        image = Image.open(BytesIO(image_bytes), mode="r")
-        return self._cropped_image_from_annotations_helper(
-            annotations, image, self.get_labels(fragment.text.lines)
-        )
+        with fragment_image_pixel_limit():
+            image = Image.open(BytesIO(image_bytes), mode="r")
+            return self._cropped_image_from_annotations_helper(
+                annotations, image, self.get_labels(fragment.text.lines)
+            )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
         old_annotations = self._annotations_repository.query_by_museum_number(
