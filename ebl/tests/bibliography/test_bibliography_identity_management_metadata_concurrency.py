@@ -6,10 +6,15 @@ has no way to know its request could otherwise carry stale CSL content back
 into storage.
 """
 
+from dataclasses import dataclass
+
 import falcon
 import pytest
+from falcon import testing
+from pymongo.database import Database
 
 from ebl.bibliography.application import identity_management as identity_module
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.identity_management import (
     BibliographyIdentityManagement,
 )
@@ -21,6 +26,7 @@ from ebl.tests.bibliography.identity_management_test_helpers import (
     manage_identity,
     stored,
 )
+from ebl.users.domain.user import User
 
 
 @pytest.fixture
@@ -32,6 +38,24 @@ def client(context):
 def identity_management(bibliography_repository, changelog, bibliography):
     return BibliographyIdentityManagement(
         bibliography_repository, changelog, bibliography.find
+    )
+
+
+@dataclass(frozen=True)
+class ReactivationContext:
+    client: testing.TestClient
+    database: Database
+    bibliography: Bibliography
+    identity_management: BibliographyIdentityManagement
+    user: User
+
+
+@pytest.fixture
+def reactivation_context(
+    client, database, bibliography, identity_management, user
+) -> ReactivationContext:
+    return ReactivationContext(
+        client, database, bibliography, identity_management, user
     )
 
 
@@ -102,30 +126,35 @@ def test_concurrent_title_edit_survives_a_deprecation(
 
 
 def test_a_title_edit_concurrent_with_deprecation_survives_a_later_reactivation(
-    monkeypatch, client, database, bibliography, identity_management, user
+    monkeypatch, reactivation_context
 ):
     """A metadata edit can never itself race a reactivation -- an entry
     rejects metadata edits outright while it is deprecated -- so this races
     the edit against the deprecation instead and checks the title is still
     intact once the entry is reactivated.
     """
-    entry(bibliography, user, "Q30000164")
-    target = entry(bibliography, user, "Q30000165")
+    context = reactivation_context
+    entry(context.bibliography, context.user, "Q30000164")
+    target = entry(context.bibliography, context.user, "Q30000165")
     interleave_metadata_edit(
-        monkeypatch, bibliography, user, "Q30000164", title="Concurrent title"
+        monkeypatch,
+        context.bibliography,
+        context.user,
+        "Q30000164",
+        title="Concurrent title",
     )
 
     deprecate_result = manage_identity(
-        client, "Q30000164", {"deprecateTo": target["id"]}
+        context.client, "Q30000164", {"deprecateTo": target["id"]}
     )
     assert deprecate_result.status == falcon.HTTP_OK
 
-    result = identity_management.manage_identity(
-        "Q30000164", {"reactivate": True}, user
+    result = context.identity_management.manage_identity(
+        "Q30000164", {"reactivate": True}, context.user
     )
 
     assert result["title"] == "Concurrent title"
-    stored_entry = stored(database, "Q30000164")
+    stored_entry = stored(context.database, "Q30000164")
     assert stored_entry["title"] == "Concurrent title"
     assert "deprecated" not in stored_entry
 

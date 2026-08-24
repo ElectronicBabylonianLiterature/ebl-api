@@ -45,9 +45,7 @@ def reconcile_reservation(
                 commit_value(collection, value, comparison_now)
             else:
                 abandon_value(collection, value, comparison_now, entry_id, state)
-    elif state == LookupReservationState.COMMITTED and not owns_value(
-        entry_id, value
-    ):
+    elif state == LookupReservationState.COMMITTED and not owns_value(entry_id, value):
         with suppress(NotFoundError):
             abandon_value(collection, value, comparison_now, entry_id, state)
 
