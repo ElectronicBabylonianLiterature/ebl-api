@@ -4,6 +4,7 @@ from bson import ObjectId
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import AutoReconnect, DuplicateKeyError
+from pymongo.results import UpdateResult
 from ebl.errors import DuplicateError, NotFoundError
 
 
@@ -43,7 +44,7 @@ class MongoCollection:
                     raise
         raise AssertionError("insert_one should return or raise")
 
-    def find_one_by_id(self, id_):
+    def find_one_by_id(self, id_: object) -> Any:
         document = self.__get_collection().find_one({"_id": id_})
 
         if document is None:
@@ -100,6 +101,12 @@ class MongoCollection:
                 raise self.__not_found_error()
             return result
         raise AssertionError("update_one should return or raise")
+
+    def update_one_by_id(self, id_: object, update) -> UpdateResult:
+        try:
+            return self.update_one({"_id": id_}, update)
+        except NotFoundError as error:
+            raise self.__id_not_found_error(id_) from error
 
     def update_many(self, query, update, **kwargs):
         return self.__get_collection().update_many(query, update, **kwargs)

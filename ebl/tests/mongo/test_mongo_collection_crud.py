@@ -186,3 +186,11 @@ def test_create_and_drop_index(collection):
 
     collection.drop_index(index_name)
     assert index_name not in collection.index_information()
+
+
+def test_update_one_by_id(collection):
+    collection.insert_one({"_id": "ID", "data": "payload"})
+
+    collection.update_one_by_id("ID", {"$set": {"data": "updated"}})
+
+    assert collection.find_one_by_id("ID") == {"_id": "ID", "data": "updated"}

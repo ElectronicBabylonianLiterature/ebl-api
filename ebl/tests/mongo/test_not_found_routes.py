@@ -3,6 +3,8 @@ import json
 import falcon
 import pytest
 
+from ebl.tests.mongo.sanitization_helpers import assert_no_query_details
+
 BIBLIOGRAPHY_ENTRY = {
     "id": "clientChosenKey",
     "type": "article-journal",
@@ -17,9 +19,7 @@ def assert_sanitized(result, expected_description: str) -> None:
     assert set(result.json) == {"title", "description"}
     assert result.json["title"] == "404 Not Found"
     assert result.json["description"] == expected_description
-    assert "{" not in result.json["description"]
-    assert "$" not in result.json["description"]
-    assert "_id" not in result.json["description"]
+    assert_no_query_details(result.json["description"])
 
 
 def test_bibliography_update_of_missing_entry(client) -> None:
@@ -32,7 +32,9 @@ def test_bibliography_update_of_missing_entry(client) -> None:
     assert_sanitized(result, "bibliography clientChosenKey not found.")
 
 
-def test_bibliography_get_of_missing_entry_keeps_domain_message(client) -> None:
+def test_bibliography_get_of_missing_entry_reports_resource_and_identifier(
+    client,
+) -> None:
     result = client.simulate_get("/bibliography/clientChosenKey")
 
     assert_sanitized(result, "bibliography clientChosenKey not found.")

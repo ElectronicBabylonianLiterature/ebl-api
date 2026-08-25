@@ -5,9 +5,11 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import NotFoundError
 from ebl.transliteration.domain.genre import Genre
 from ebl.common.domain.stage import Stage
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 TEXT_ID = TextId(Genre.LITERATURE, 1, 99)
 CHAPTER_ID = ChapterId(TEXT_ID, Stage.OLD_BABYLONIAN, "missing")
+MISSING_MUSEUM_NUMBER = MuseumNumber("X", "999")
 
 
 def test_corpus_text_keeps_domain_message(text_repository) -> None:
@@ -29,6 +31,20 @@ def test_corpus_manuscripts_keeps_domain_message(text_repository) -> None:
         text_repository.query_manuscripts_by_chapter(CHAPTER_ID)
 
     assert str(excinfo.value) == f"Chapter {CHAPTER_ID} not found."
+
+
+def test_corpus_sign_data_keeps_domain_message(text_repository) -> None:
+    with pytest.raises(NotFoundError) as excinfo:
+        text_repository.get_sign_data(CHAPTER_ID)
+
+    assert str(excinfo.value) == f"Chapter {CHAPTER_ID} not found."
+
+
+def test_fragment_pager_keeps_domain_message(fragment_repository) -> None:
+    with pytest.raises(NotFoundError) as excinfo:
+        fragment_repository.query_next_and_previous_fragment(MISSING_MUSEUM_NUMBER)
+
+    assert str(excinfo.value) == f"Fragment {MISSING_MUSEUM_NUMBER} not found."
 
 
 def test_realia_keeps_domain_message(realia_repository) -> None:

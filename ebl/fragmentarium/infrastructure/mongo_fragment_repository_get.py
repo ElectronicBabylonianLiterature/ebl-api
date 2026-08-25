@@ -405,14 +405,17 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-        current = self._fragments.find_one(
-            {
-                "museumNumber.prefix": museum_number.prefix,
-                "museumNumber.number": museum_number.number,
-                "museumNumber.suffix": museum_number.suffix,
-            },
-            projection={"_sortKey": True},
-        ).get("_sortKey")
+        try:
+            current = self._fragments.find_one(
+                {
+                    "museumNumber.prefix": museum_number.prefix,
+                    "museumNumber.number": museum_number.number,
+                    "museumNumber.suffix": museum_number.suffix,
+                },
+                projection={"_sortKey": True},
+            ).get("_sortKey")
+        except NotFoundError as error:
+            raise NotFoundError(f"Fragment {museum_number} not found.") from error
 
         if current is None:
             prev = next_ = museum_number
