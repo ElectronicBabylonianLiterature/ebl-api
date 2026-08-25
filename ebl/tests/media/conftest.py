@@ -2,6 +2,9 @@ from typing import Callable, List, Sequence
 
 import pytest
 
+from ebl.common.domain.scopes import Scope
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+
 from ebl.media.application import (
     MediaRepository,
     MediaRepresentationStore,
@@ -44,3 +47,35 @@ def representation_store_factory(call_log: List[str]) -> RepresentationStoreFact
         return InMemoryRepresentationStore(call_log)
 
     return factory
+
+
+@pytest.fixture
+def public_fragment(fragmentarium):
+    fragment = TransliteratedFragmentFactory.build(authorized_scopes=[])
+    fragmentarium.create(fragment)
+    return fragment
+
+
+@pytest.fixture
+def other_public_fragment(fragmentarium):
+    fragment = TransliteratedFragmentFactory.build(authorized_scopes=[])
+    fragmentarium.create(fragment)
+    return fragment
+
+
+@pytest.fixture
+def restricted_fragment(fragmentarium):
+    fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.READ_COPENHAGEN_FRAGMENTS]
+    )
+    fragmentarium.create(fragment)
+    return fragment
+
+
+@pytest.fixture
+def readable_restricted_fragment(fragmentarium):
+    fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.READ_CAIC_FRAGMENTS]
+    )
+    fragmentarium.create(fragment)
+    return fragment

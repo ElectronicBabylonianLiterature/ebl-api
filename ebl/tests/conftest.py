@@ -95,6 +95,10 @@ from ebl.tests.factories.provenance import build_provenance_records
 from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
+from ebl.media.infrastructure.grid_fs_media_store import (
+    GridFsMediaRepresentationStore,
+)
+from ebl.media.infrastructure.mongo_media_repository import MongoMediaRepository
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -482,6 +486,16 @@ def provenance_repository(database):
 
 
 @pytest.fixture
+def media_repository(database):
+    return MongoMediaRepository(database)
+
+
+@pytest.fixture
+def media_representation_store(database):
+    return GridFsMediaRepresentationStore(database)
+
+
+@pytest.fixture
 def provenance_service(provenance_repository):
     return ProvenanceService(provenance_repository)
 
@@ -518,6 +532,8 @@ def context(
     user,
     parallel_line_injector,
     mongo_cache_repository,
+    media_repository,
+    media_representation_store,
 ) -> ebl.context.Context:
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
@@ -544,6 +560,8 @@ def context(
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
+        media_repository=media_repository,
+        media_representation_store=media_representation_store,
     )
 
 

@@ -20,6 +20,11 @@ from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
 from ebl.lemmatization.application.suggestion_finder import LemmaRepository
+from ebl.media.application.fragment_media_service import FragmentMediaService
+from ebl.media.infrastructure.grid_fs_media_store import (
+    GridFsMediaRepresentationStore,
+)
+from ebl.media.infrastructure.mongo_media_repository import MongoMediaRepository
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -61,6 +66,13 @@ class Context:
     provenance_repository: ProvenanceRepository
     provenance_service: ProvenanceService
     realia_repository: RealiaRepository
+    media_repository: MongoMediaRepository
+    media_representation_store: GridFsMediaRepresentationStore
+
+    def get_media_service(self) -> FragmentMediaService:
+        return FragmentMediaService(
+            self.media_repository, self.media_representation_store
+        )
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

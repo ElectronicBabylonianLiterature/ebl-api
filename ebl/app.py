@@ -39,6 +39,10 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
+from ebl.media.infrastructure.grid_fs_media_store import (
+    GridFsMediaRepresentationStore,
+)
+from ebl.media.infrastructure.mongo_media_repository import MongoMediaRepository
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.afo_register.web.bootstrap import create_afo_register_routes
@@ -118,6 +122,8 @@ def create_context():
         provenance_repository=provenance_repository,
         provenance_service=provenance_service,
         realia_repository=MongoRealiaRepository(database),
+        media_repository=MongoMediaRepository(database),
+        media_representation_store=GridFsMediaRepresentationStore(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),

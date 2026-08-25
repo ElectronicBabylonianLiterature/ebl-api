@@ -60,6 +60,9 @@ class MongoCollection:
     def aggregate(self, pipeline, **kwargs):
         return self.__get_collection().aggregate(pipeline, **kwargs)
 
+    def bulk_write(self, requests, ordered=True):
+        return self.__get_collection().bulk_write(requests, ordered=ordered)
+
     def replace_one(self, document, filter_=None, upsert=False):
         result = self.__get_collection().replace_one(
             filter_ or {"_id": document["_id"]}, document, upsert
