@@ -15,7 +15,7 @@ from ebl.transliteration.application.parallel_line_injector import ParallelLineI
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-class ThumbnailSize(Enum):
+class ThumbnailWidth(Enum):
     SMALL = 240
     MEDIUM = 480
     LARGE = 720
@@ -98,6 +98,6 @@ class FragmentFinder:
         file_name = f"{number}.jpg"
         return self._photos.query_by_file_name(file_name)
 
-    def find_thumbnail(self, number: str, width: ThumbnailSize) -> File:
+    def find_thumbnail(self, number: str, width: ThumbnailWidth) -> File:
         file_name = f"{number}_{width.value}.jpg"
         return self._thumbnails.query_by_file_name(file_name)

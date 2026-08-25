@@ -8,10 +8,10 @@ import io
 
 from tqdm import tqdm
 
-from ebl.fragmentarium.application.fragment_finder import ThumbnailSize
+from ebl.fragmentarium.application.fragment_finder import ThumbnailWidth
 
 
-def resize(original: Image.Image, size: ThumbnailSize):
+def resize(original: Image.Image, size: ThumbnailWidth):
     width = size.value
     resolution = (width, original.size[1])
     resized = original.copy()
@@ -28,7 +28,7 @@ def clear_thumbnails(collection) -> None:
         collection.delete(old_thumbnail._id)
 
 
-def create_thumbnails(collection, originals: list, size: ThumbnailSize):
+def create_thumbnails(collection, originals: list, size: ThumbnailWidth):
     for item in tqdm(
         originals,
         desc=f"Creating {size.name.lower()} thumbnails",
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         clear_thumbnails(thumbnail_collection)
 
         print("Generating thumbnails...")
-        for size in ThumbnailSize:
+        for size in ThumbnailWidth:
             create_thumbnails(thumbnail_collection, originals, size)
         print("Done.")
 

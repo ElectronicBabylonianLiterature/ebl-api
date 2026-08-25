@@ -2,7 +2,7 @@ from typing import Optional
 import falcon
 from falcon import Response
 
-from ebl.fragmentarium.application.fragment_finder import FragmentFinder, ThumbnailSize
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder, ThumbnailWidth
 from ebl.users.web.require_scope import require_fragment_read_scope
 
 
@@ -17,7 +17,7 @@ class PhotoResource:
         if resolution is None:
             file = self._finder.find_photo(number)
         else:
-            width = ThumbnailSize.from_string(resolution)
+            width = ThumbnailWidth.from_string(resolution)
             file = self._finder.find_thumbnail(number, width)
 
         resp.content_type = file.content_type

@@ -1,7 +1,7 @@
 import falcon
 import pytest
 
-from ebl.fragmentarium.application.fragment_finder import ThumbnailSize
+from ebl.fragmentarium.application.fragment_finder import ThumbnailWidth
 
 
 def test_get_photo(client, photo):
@@ -18,7 +18,7 @@ def test_get_photo_not_found(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-@pytest.mark.parametrize("resolution", [item.name.lower() for item in ThumbnailSize])
+@pytest.mark.parametrize("resolution", [item.name.lower() for item in ThumbnailWidth])
 def test_get_thumbnail(client, photo, resolution: str):
     result = client.simulate_get(f"/fragments/K.1/thumbnail/{resolution}")
 
