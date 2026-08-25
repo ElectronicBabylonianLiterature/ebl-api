@@ -24,6 +24,7 @@ from ebl.bibliography.application.server_owned_fields import (
     changed_server_owned_fields,
     preserve_persisted_fields,
 )
+from ebl.bibliography.application.update_target import stored_entry_for_update
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, NotFoundError
@@ -67,28 +68,24 @@ class Bibliography:
     def _follow_redirect(self, entry: dict) -> dict:
         return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
-    def update(self, entry: dict, user: User) -> None:
+    def update_metadata(self, entry: dict, user: User) -> None:
         """Edit the metadata of an entry, keeping its persisted identity state.
 
-        Trusted internal caller path: submitted server-owned fields are ignored
-        rather than rejected, because the caller (`PartnerBibliography`) has
-        already screened them out and rebuilt the entry from stored state.
-        """
-        stored_entry = self._stored_entry_for_update(entry)
-        self._persist_update(entry, stored_entry, user)
+        The only way to write an existing entry, for clients and for trusted
+        internal callers alike. Client-editable CSL fields are replaced by the
+        submission; `aliases`, `citationKey`, `deprecated`, `redirectTo` and
+        every other persisted field the client does not own are carried over
+        from the stored record.
 
-    def update_metadata(self, entry: dict, user: User) -> None:
-        """Edit the metadata of an entry on behalf of a client.
-
-        Same persistence as `update`, but a submitted server-owned field that
-        disagrees with stored state is reported as a conflict instead of being
-        silently dropped.
+        A submitted server-owned field that disagrees with stored state is a
+        conflict: never a silent overwrite, and never a silent drop either, so a
+        caller holding a stale identity is told to reload rather than writing on
+        top of the newer state.
         """
-        stored_entry = self._stored_entry_for_update(entry)
+        stored_entry = stored_entry_for_update(
+            entry, self._repository.query_by_id, self.find
+        )
         self._reject_changed_server_owned_fields(entry, stored_entry)
-        self._persist_update(entry, stored_entry, user)
-
-    def _persist_update(self, entry: dict, stored_entry: dict, user: User) -> None:
         update_with_identity_claims(
             self._identity,
             preserve_persisted_fields(entry, stored_entry),
@@ -100,18 +97,6 @@ class Bibliography:
     def _reject_changed_server_owned_fields(entry: dict, stored_entry: dict) -> None:
         if changed_fields := changed_server_owned_fields(entry, stored_entry):
             raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
-
-    def _stored_entry_for_update(self, entry: dict) -> dict:
-        id_ = entry.get("id")
-        if not isinstance(id_, str) or not id_:
-            raise DataError("Bibliography entry id is required.")
-        stored_entry = self._repository.query_by_id(id_)
-        if stored_entry.get("deprecated"):
-            raise DataError(
-                f"Bibliography entry {id_} is deprecated; "
-                f"edit {stored_entry.get('redirectTo')} instead."
-            )
-        return stored_entry
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []

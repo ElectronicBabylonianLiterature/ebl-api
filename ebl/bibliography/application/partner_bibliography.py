@@ -42,7 +42,7 @@ class BibliographyCore(Protocol):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, entry: dict, user: User) -> None:
+    def update_metadata(self, entry: dict, user: User) -> None:
         raise NotImplementedError
 
     @abstractmethod
@@ -90,7 +90,7 @@ class PartnerBibliography:
         self._validate_internal_entry(updated_entry)
         if duplicate_result := self._find_blocking_duplicate_candidates(updated_entry):
             return duplicate_result
-        self._bibliography.update(updated_entry, user)
+        self._bibliography.update_metadata(updated_entry, user)
         return None
 
     def export_page(

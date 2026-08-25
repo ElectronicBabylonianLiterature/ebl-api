@@ -200,7 +200,7 @@ def test_update(
         .thenReturn()
     )
     (when(bibliography_repository).update(bibliography_entry, {}).thenReturn())
-    bibliography.update(bibliography_entry, user)
+    bibliography.update_metadata(bibliography_entry, user)
 
 
 def test_update_not_found(bibliography_repository, bibliography, user, when):
@@ -211,7 +211,7 @@ def test_update_not_found(bibliography_repository, bibliography, user, when):
         .thenRaise(NotFoundError)
     )
     with pytest.raises(NotFoundError):
-        bibliography.update(bibliography_entry, user)
+        bibliography.update_metadata(bibliography_entry, user)
 
 
 def test_canonicalize_references(

@@ -29,14 +29,15 @@ class BibliographyUpdateConflictError(DuplicateError):
     def __init__(self, id_: str, fields: Sequence[str] = ()):
         self.id_ = id_
         self.fields = tuple(fields)
+        super().__init__(id_, fields)
+
+    def __str__(self) -> str:
         cause = (
             f"does not match the stored server-owned state ({', '.join(self.fields)})"
             if self.fields
             else "was changed by another operation"
         )
-        super().__init__(
-            f"Bibliography entry {id_} {cause}; reload the entry and retry."
-        )
+        return f"Bibliography entry {self.id_} {cause}; reload the entry and retry."
 
 
 class BibliographyRepository(ABC):

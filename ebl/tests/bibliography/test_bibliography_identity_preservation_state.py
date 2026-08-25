@@ -64,14 +64,14 @@ def test_rejected_identity_input_adds_no_reservations(client, database, aliased_
 
 def test_deprecated_record_update_is_rejected(bibliography, user, deprecated_entry):
     with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(deprecated_payload(deprecated_entry), user)
+        bibliography.update_metadata(deprecated_payload(deprecated_entry), user)
 
 
 def test_rejected_deprecated_update_keeps_tombstone(
     bibliography, user, database, deprecated_entry
 ):
     with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(deprecated_payload(deprecated_entry), user)
+        bibliography.update_metadata(deprecated_payload(deprecated_entry), user)
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})
 
     assert stored_entry["deprecated"] is True
@@ -82,7 +82,7 @@ def test_rejected_deprecated_update_keeps_redirect_working(
     bibliography, user, deprecated_entry
 ):
     with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(deprecated_payload(deprecated_entry), user)
+        bibliography.update_metadata(deprecated_payload(deprecated_entry), user)
 
     assert bibliography.find("RN2001")["id"] == "rla_9_388"
 
@@ -91,7 +91,7 @@ def test_deprecated_record_update_cannot_clear_tombstone_fields(
     bibliography, user, database, deprecated_entry
 ):
     with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(
+        bibliography.update_metadata(
             deprecated_payload(deprecated_entry, deprecated=False), user
         )
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})

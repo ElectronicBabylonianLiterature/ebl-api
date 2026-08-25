@@ -1,3 +1,16 @@
+"""Bibliography HTTP resources.
+
+`METADATA_UPDATE_JSON_SCHEMA` is `CSL_JSON_SCHEMA` without its lifecycle rule.
+The stored schema requires `redirectTo` whenever `deprecated` is true, which is
+an invariant of a *stored* entry. Applied to an update body it answered a client
+that submitted `deprecated` with `'redirectTo' is a required property` — a `400`
+about a field the client does not own, raised before the application could give
+the real answer, that the submitted state simply disagrees with what is stored.
+Dropping the rule from this one route lets that reach `update_metadata` and come
+back as a conflict. Every property keeps its shape, so an editor can still post
+back the whole entry it fetched, and `CSL_JSON_SCHEMA` itself is untouched.
+"""
+
 import falcon
 from falcon_caching import Cache
 from falcon import Request, Response
@@ -18,6 +31,11 @@ from ebl.users.web.require_scope import require_scope
 from ebl.users.web.user_request import UserRequest
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.duplicate_override import DuplicateOverrideError
+
+
+METADATA_UPDATE_JSON_SCHEMA = {
+    key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"
+}
 
 
 def submitted_server_owned_fields(
@@ -74,7 +92,7 @@ class BibliographyEntriesResource:
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
+    @validate(METADATA_UPDATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response, id_: str) -> None:
         entry = {**req.media, "id": id_}
         self._bibliography.update_metadata(entry, req.context.user)

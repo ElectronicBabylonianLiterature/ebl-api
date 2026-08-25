@@ -114,12 +114,12 @@ def test_update_does_not_accept_unknown_fields_from_the_client(client, saved_ent
 @pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": None}, {"id": 47}])
 def test_update_without_a_usable_id_is_rejected(entry, bibliography, user):
     with pytest.raises(DataError, match="id is required"):
-        bibliography.update({**entry, "type": "book"}, user)
+        bibliography.update_metadata({**entry, "type": "book"}, user)
 
 
 def test_update_of_unknown_id_is_not_found(bibliography, user):
     with pytest.raises(NotFoundError):
-        bibliography.update({"id": "does-not-exist", "type": "book"}, user)
+        bibliography.update_metadata({"id": "does-not-exist", "type": "book"}, user)
 
 
 def test_get_returns_the_server_owned_fields_the_editor_round_trips(
