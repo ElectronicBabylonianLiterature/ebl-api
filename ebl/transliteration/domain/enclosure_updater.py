@@ -1,4 +1,4 @@
-from typing import FrozenSet, Iterable, List, Sequence, TypeVar, Union
+from typing import FrozenSet, Iterable, List, Sequence, TypeVar
 
 import attr
 
@@ -124,7 +124,7 @@ class EnclosureUpdater(TokenVisitor):
 
     def _visit_parts(self, tokens: Sequence[Token]) -> Sequence[Token]:
         part_visitor = EnclosureUpdater(self._enclosures)
-        for token in (token for token in tokens if hasattr(token, "accept")):
+        for token in tokens:
             token.accept(part_visitor)
 
         self._enclosures = part_visitor._enclosures
@@ -139,9 +139,7 @@ class EnclosureUpdater(TokenVisitor):
         )
 
 
-def set_enclosure_type(
-    tokens: Union[Sequence[Token], Iterable[Token]],
-) -> Sequence[Token]:
+def set_enclosure_type(tokens: Iterable[Token]) -> Sequence[Token]:
     enclosure_visitor = EnclosureUpdater()
     for token in tokens:
         token.accept(enclosure_visitor)

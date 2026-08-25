@@ -1,5 +1,7 @@
 """Parsed-word test cases, part 4 of 5."""
 
+from typing import List
+
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
@@ -13,6 +15,7 @@ from ebl.transliteration.domain.sign_tokens import (
 )
 from ebl.transliteration.domain.tokens import (
     Joiner,
+    Token,
     UnknownNumberOfSigns,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
@@ -21,6 +24,17 @@ from ebl.transliteration.domain.word_tokens import (
     Word,
 )
 
+
+def erased_e_over_li() -> List[Token]:
+    return [
+        Erasure.open(),
+        Reading.of_name("e").set_erasure(ErasureState.ERASED),
+        Erasure.center(),
+        Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
+        Erasure.close(),
+    ]
+
+
 WORD_CASES = [
     (
         "me-°e\\li°-ku",
@@ -28,11 +42,7 @@ WORD_CASES = [
             [
                 Reading.of_name("me"),
                 Joiner.hyphen(),
-                Erasure.open(),
-                Reading.of_name("e").set_erasure(ErasureState.ERASED),
-                Erasure.center(),
-                Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
-                Erasure.close(),
+                *erased_e_over_li(),
                 Joiner.hyphen(),
                 Reading.of_name("ku"),
             ]
@@ -44,19 +54,11 @@ WORD_CASES = [
             [
                 Reading.of_name("me"),
                 Joiner.hyphen(),
-                Erasure.open(),
-                Reading.of_name("e").set_erasure(ErasureState.ERASED),
-                Erasure.center(),
-                Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
-                Erasure.close(),
+                *erased_e_over_li(),
                 Joiner.hyphen(),
                 Reading.of_name("me"),
                 Joiner.hyphen(),
-                Erasure.open(),
-                Reading.of_name("e").set_erasure(ErasureState.ERASED),
-                Erasure.center(),
-                Reading.of_name("li").set_erasure(ErasureState.OVER_ERASED),
-                Erasure.close(),
+                *erased_e_over_li(),
                 Joiner.hyphen(),
                 Reading.of_name("ku"),
             ]

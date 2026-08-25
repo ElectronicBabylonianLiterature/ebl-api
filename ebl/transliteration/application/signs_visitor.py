@@ -5,7 +5,6 @@ from typing import (
     Optional,
     Sequence,
     TypeVar,
-    Union,
     cast,
 )
 
@@ -88,10 +87,6 @@ class SignsVisitor(SignsCollectingVisitor):
 
     def reset(self) -> None:
         self._standardizations = []
-
-    @property
-    def result(self) -> Sequence[Union[int, str]]:
-        return self.result_unicode if self._to_unicode else self.result_string
 
     @property
     def result_string(self) -> Sequence[str]:

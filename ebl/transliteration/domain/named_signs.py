@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Type, TypeVar
 
 import attr
 
@@ -13,6 +13,28 @@ from ebl.transliteration.domain.tokens import (
 )
 
 
+NamedSignT = TypeVar("NamedSignT", bound=NamedSign)
+
+
+def _create(
+    named_sign_type: Type[NamedSignT],
+    name: Sequence[Token],
+    sub_index: Optional[int],
+    modifiers: Sequence[str],
+    flags: Sequence[atf.Flag],
+    sign: Optional[Token],
+) -> NamedSignT:
+    return named_sign_type(
+        frozenset(),
+        ErasureState.NONE,
+        modifiers,
+        flags,
+        convert_name_parts(name),
+        sub_index,
+        sign,
+    )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class Reading(NamedSign):
     @staticmethod
@@ -23,15 +45,7 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return Reading(
-            frozenset(),
-            ErasureState.NONE,
-            modifiers,
-            flags,
-            convert_name_parts(name),
-            sub_index,
-            sign,
-        )
+        return _create(Reading, name, sub_index, modifiers, flags, sign)
 
     @staticmethod
     def of_name(
@@ -75,15 +89,7 @@ class Logogram(NamedSign):
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Logogram":
-        return Logogram(
-            frozenset(),
-            ErasureState.NONE,
-            modifiers,
-            flags,
-            convert_name_parts(name),
-            sub_index,
-            sign,
-        )
+        return _create(Logogram, name, sub_index, modifiers, flags, sign)
 
     @staticmethod
     def of_name(
@@ -109,15 +115,7 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number(
-            frozenset(),
-            ErasureState.NONE,
-            modifiers,
-            flags,
-            convert_name_parts(name),
-            sub_index,
-            sign,
-        )
+        return _create(Number, name, sub_index, modifiers, flags, sign)
 
     @staticmethod
     def of_name(

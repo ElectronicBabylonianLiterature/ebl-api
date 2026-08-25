@@ -1,4 +1,4 @@
-from typing import Iterable, List, Sequence, Union
+from typing import Iterable, List, Sequence
 
 from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
@@ -37,7 +37,7 @@ class LanguageVisitor(TokenVisitor):
 
 
 def set_language(
-    tokens: Union[Sequence[Token], Iterable[Token]],
+    tokens: Iterable[Token],
     language: Language = DEFAULT_LANGUAGE,
 ) -> Sequence[Token]:
     language_visitor = LanguageVisitor(language)

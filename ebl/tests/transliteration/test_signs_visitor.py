@@ -69,7 +69,7 @@ def test_signs_visitor_string(
 
     visitor = SignsVisitor(sign_repository)
     parse_line(f"1. {text}").accept(visitor)
-    assert visitor.result == expected
+    assert visitor.result_string == expected
 
 
 @pytest.mark.parametrize(
@@ -105,14 +105,14 @@ def test_signs_visitor_string(
     ],
 )
 def test_signs_visitor_unicode(
-    text: str, expected: Sequence[str], sign_repository, signs
+    text: str, expected: Sequence[int], sign_repository, signs
 ):
     for sign in signs:
         sign_repository.create(sign)
 
     visitor = SignsVisitor(sign_repository, False, True)
     parse_line(f"1. {text}").accept(visitor)
-    assert visitor.result == expected
+    assert visitor.result_unicode == expected
 
 
 def test_reset_clears_accumulated_signs(sign_repository, signs) -> None:
