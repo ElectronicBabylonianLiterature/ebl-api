@@ -6,6 +6,7 @@ import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.token_base import (
     ErasureState,
+    NullSignsCollectingVisitor,
     SignsCollectingVisitor,
     Token,
     TokenVisitor,
@@ -19,6 +20,7 @@ __all__ = [
     "Joiner",
     "LanguageShift",
     "LineBreak",
+    "NullSignsCollectingVisitor",
     "SignsCollectingVisitor",
     "Tabulation",
     "Token",
@@ -105,7 +107,9 @@ class CommentaryProtocol(ValueToken):
         visitor.visit_commentary_protocol(self)
 
 
-def _validate_column_number(_instance, _attribute, value: Optional[int]) -> None:
+def _validate_column_number(
+    _instance: object, _attribute: object, value: Optional[int]
+) -> None:
     if value is not None and value < 0:
         raise ValueError("number must not be negative")
 

@@ -115,9 +115,11 @@ CASES = [
 
 @pytest.mark.parametrize("case", [LogogramCase(*case) for case in CASES])
 def test_logogram(case: LogogramCase) -> None:
-    logogram = Logogram.of(
-        case.name_parts, case.sub_index, case.modifiers, case.flags, case.sign
-    ).with_surrogate(case.surrogate)
+    logogram = (
+        Logogram.of(case.name_parts, case.sub_index, case.modifiers, case.flags)
+        .with_sign(case.sign)
+        .with_surrogate(case.surrogate)
+    )
 
     sign = case.sign
     expected_parts: Tuple[Token, ...] = tuple(case.name_parts) + (

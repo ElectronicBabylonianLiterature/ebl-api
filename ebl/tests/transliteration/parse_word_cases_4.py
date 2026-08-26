@@ -1,6 +1,6 @@
 """Parsed-word test cases, part 4 of 5."""
 
-from typing import List
+from typing import List, Sequence
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
@@ -35,33 +35,36 @@ def erased_e_over_li() -> List[Token]:
     ]
 
 
+def hyphenated_word(*parts: Sequence[Token]) -> Word:
+    tokens: List[Token] = []
+    for index, part in enumerate(parts):
+        if index:
+            tokens.append(Joiner.hyphen())
+        tokens.extend(part)
+    return Word.of(tokens)
+
+
+def reading(name: str) -> List[Token]:
+    return [Reading.of_name(name)]
+
+
+def unknown_signs() -> List[Token]:
+    return [UnknownNumberOfSigns.of()]
+
+
 WORD_CASES = [
     (
         "me-°e\\li°-ku",
-        Word.of(
-            [
-                Reading.of_name("me"),
-                Joiner.hyphen(),
-                *erased_e_over_li(),
-                Joiner.hyphen(),
-                Reading.of_name("ku"),
-            ]
-        ),
+        hyphenated_word(reading("me"), erased_e_over_li(), reading("ku")),
     ),
     (
         "me-°e\\li°-me-°e\\li°-ku",
-        Word.of(
-            [
-                Reading.of_name("me"),
-                Joiner.hyphen(),
-                *erased_e_over_li(),
-                Joiner.hyphen(),
-                Reading.of_name("me"),
-                Joiner.hyphen(),
-                *erased_e_over_li(),
-                Joiner.hyphen(),
-                Reading.of_name("ku"),
-            ]
+        hyphenated_word(
+            reading("me"),
+            erased_e_over_li(),
+            reading("me"),
+            erased_e_over_li(),
+            reading("ku"),
         ),
     ),
     (
@@ -86,53 +89,25 @@ WORD_CASES = [
     ),
     (
         "...-kur-...",
-        Word.of(
-            [
-                UnknownNumberOfSigns.of(),
-                Joiner.hyphen(),
-                Reading.of_name("kur"),
-                Joiner.hyphen(),
-                UnknownNumberOfSigns.of(),
-            ]
-        ),
+        hyphenated_word(unknown_signs(), reading("kur"), unknown_signs()),
     ),
     (
         "kur-...-kur-...-kur",
-        Word.of(
-            [
-                Reading.of_name("kur"),
-                Joiner.hyphen(),
-                UnknownNumberOfSigns.of(),
-                Joiner.hyphen(),
-                Reading.of_name("kur"),
-                Joiner.hyphen(),
-                UnknownNumberOfSigns.of(),
-                Joiner.hyphen(),
-                Reading.of_name("kur"),
-            ]
+        hyphenated_word(
+            reading("kur"),
+            unknown_signs(),
+            reading("kur"),
+            unknown_signs(),
+            reading("kur"),
         ),
     ),
     (
         "...]-ku",
-        Word.of(
-            [
-                UnknownNumberOfSigns.of(),
-                BrokenAway.close(),
-                Joiner.hyphen(),
-                Reading.of_name("ku"),
-            ]
-        ),
+        hyphenated_word([UnknownNumberOfSigns.of(), BrokenAway.close()], reading("ku")),
     ),
     (
         "ku-[...",
-        Word.of(
-            [
-                Reading.of_name("ku"),
-                Joiner.hyphen(),
-                BrokenAway.open(),
-                UnknownNumberOfSigns.of(),
-            ]
-        ),
+        hyphenated_word(reading("ku"), [BrokenAway.open(), UnknownNumberOfSigns.of()]),
     ),
     (
         "....ku",
@@ -165,17 +140,15 @@ WORD_CASES = [
     ),
     (
         "{m#}[{d}AG-sa-lim",
-        Word.of(
+        hyphenated_word(
             [
                 Determinative.of([Reading.of_name("m", flags=[atf.Flag.DAMAGE])]),
                 BrokenAway.open(),
                 Determinative.of([Reading.of_name("d")]),
                 Logogram.of_name("AG"),
-                Joiner.hyphen(),
-                Reading.of_name("sa"),
-                Joiner.hyphen(),
-                Reading.of_name("lim"),
-            ]
+            ],
+            reading("sa"),
+            reading("lim"),
         ),
     ),
 ]

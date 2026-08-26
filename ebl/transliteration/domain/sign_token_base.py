@@ -1,4 +1,4 @@
-from typing import Iterable, Optional, Sequence, Tuple, Type, TypeVar, Union
+from typing import Iterable, Optional, Sequence, Tuple, Type, TypeVar
 
 import attr
 
@@ -30,23 +30,13 @@ def name_contribution_of(token: Token) -> str:
     return token.value if isinstance(token, ValueToken) else ""
 
 
-def _validate_name_contribution(instance, _attribute, value: str) -> None:
-    expected = name_contribution_of(instance.token)
-    if value != expected:
-        raise ValueError(
-            f"Name contribution {value!r} does not match "
-            f"the contribution {expected!r} of its token."
-        )
-
-
 @attr.s(auto_attribs=True, frozen=True)
 class NamePart:
     token: Token
-    name_contribution: str = attr.ib(validator=_validate_name_contribution)
 
-    @staticmethod
-    def of(token: Token) -> "NamePart":
-        return NamePart(token, name_contribution_of(token))
+    @property
+    def name_contribution(self) -> str:
+        return name_contribution_of(self.token)
 
     @property
     def value(self) -> str:
@@ -54,16 +44,19 @@ class NamePart:
 
 
 NameParts = Sequence[NamePart]
-NamePartInput = Union[Token, NamePart]
 
 
-def convert_name_parts(parts: Iterable[NamePartInput]) -> Tuple[NamePart, ...]:
-    return tuple(
-        part if isinstance(part, NamePart) else NamePart.of(part) for part in parts
-    )
+def convert_name_parts(parts: Iterable[NamePart]) -> Tuple[NamePart, ...]:
+    return tuple(parts)
 
 
-def _validate_sub_index(_instance, _attribute, value: Optional[int]) -> None:
+def name_parts_of(tokens: Iterable[Token]) -> Tuple[NamePart, ...]:
+    return tuple(NamePart(token) for token in tokens)
+
+
+def _validate_sub_index(
+    _instance: object, _attribute: object, value: Optional[int]
+) -> None:
     if value is not None and value < 0:
         raise ValueError("Sub-index must be >= 0.")
 
@@ -80,7 +73,6 @@ class NamedSignArguments:
     sub_index: Optional[int] = 1
     modifiers: Sequence[str] = ()
     flags: Sequence[atf.Flag] = ()
-    sign: Optional[Token] = None
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -96,10 +88,15 @@ class NamedSign(AbstractSign):
             ErasureState.NONE,
             arguments.modifiers,
             arguments.flags,
-            convert_name_parts(arguments.name),
+            name_parts_of(arguments.name),
             arguments.sub_index,
-            arguments.sign,
         )
+
+    def with_name_tokens(self: NamedSignT, tokens: Sequence[Token]) -> NamedSignT:
+        return attr.evolve(self, name_parts=name_parts_of(tokens))
+
+    def with_sign(self: NamedSignT, sign: Optional[Token]) -> NamedSignT:
+        return attr.evolve(self, sign=sign)
 
     @property
     def name_tokens(self) -> Sequence[Token]:
@@ -145,9 +142,8 @@ class NamedSignWithLeadingSubIndex(NamedSign):
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
     ) -> LeadingSubIndexSignT:
-        return cls._create(NamedSignArguments(name, sub_index, modifiers, flags, sign))
+        return cls._create(NamedSignArguments(name, sub_index, modifiers, flags))
 
     @classmethod
     def of_name(
@@ -156,6 +152,5 @@ class NamedSignWithLeadingSubIndex(NamedSign):
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
     ) -> LeadingSubIndexSignT:
-        return cls.of((ValueToken.of(name),), sub_index, modifiers, flags, sign)
+        return cls.of((ValueToken.of(name),), sub_index, modifiers, flags)

@@ -8,6 +8,7 @@ from ebl.transliteration.domain.sign import Sign, SignName
 
 class MemoizingSignRepository(SignRepository):
     def __init__(self, delegate: SignRepository):
+        self._delegate = delegate
         self._create = delegate.create
         self._find = pydash.memoize(delegate.find)
         self._find_many = delegate.find_many
@@ -21,8 +22,6 @@ class MemoizingSignRepository(SignRepository):
         self._search_by_lists_name = pydash.memoize(delegate.search_by_lists_name)
         self._search_by_lemma = pydash.memoize(delegate.search_by_lemma)
         self._list_all_signs = pydash.memoize(delegate.list_all_signs)
-        self._find_signs_by_order = pydash.memoize(delegate.find_signs_by_order)
-        self._get_unicode_from_atf = pydash.memoize(delegate.get_unicode_from_atf)
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)
@@ -60,7 +59,7 @@ class MemoizingSignRepository(SignRepository):
     def find_signs_by_order(
         self, name: SignName, sort_era: str
     ) -> Sequence[Sequence[Sign]]:
-        return self._find_signs_by_order(name, sort_era)
+        return self._delegate.find_signs_by_order(name, sort_era)
 
     def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
-        return self._get_unicode_from_atf(line)
+        return self._delegate.get_unicode_from_atf(line)

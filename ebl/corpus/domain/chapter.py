@@ -138,7 +138,7 @@ class Chapter:
     @property
     def extant_lines(
         self,
-    ) -> Mapping[Siglum, Mapping[Sequence[Label], Sequence[ExtantLine]]]:
+    ) -> Mapping[Siglum, Mapping[Tuple[Label, ...], Sequence[ExtantLine]]]:
         return {
             manuscript.siglum: self._get_extant_lines(manuscript.id)
             for manuscript in self.manuscripts
@@ -213,7 +213,7 @@ class Chapter:
 
     def _get_extant_lines(
         self, manuscript_id: int
-    ) -> Mapping[Sequence[Label], Sequence[ExtantLine]]:
+    ) -> Mapping[Tuple[Label, ...], Sequence[ExtantLine]]:
         return pydash.group_by(
             (
                 ExtantLine.of(line, manuscript_id)
@@ -221,7 +221,7 @@ class Chapter:
                 if manuscript_id in line.manuscript_ids
                 and line.get_manuscript_text_line(manuscript_id) is not None
             ),
-            lambda extant_line: extant_line.label,
+            lambda extant_line: tuple(extant_line.label),
         )
 
     def _get_manuscript_text_lines(

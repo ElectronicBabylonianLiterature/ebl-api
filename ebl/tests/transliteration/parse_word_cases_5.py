@@ -92,6 +92,6 @@ WORD_CASES = [
     ("KURₓ", Word.of([Logogram.of_name("KUR", None)])),
     (
         "kurₓ(KUR)",
-        Word.of([Reading.of_name("kur", None, sign=Grapheme.of(SignName("KUR")))]),
+        Word.of([Reading.of_name("kur", None).with_sign(Grapheme.of(SignName("KUR")))]),
     ),
 ]

@@ -97,7 +97,7 @@ EXPECTED_SUB_INDEX = 1
 
 @pytest.mark.parametrize("case", [NumberCase(*case) for case in CASES])
 def test_number(case: NumberCase) -> None:
-    number = Number.of(case.name_parts, case.modifiers, case.flags, case.sign)
+    number = Number.of(case.name_parts, case.modifiers, case.flags).with_sign(case.sign)
 
     sign = case.sign
     expected_parts: Tuple[Token, ...] = tuple(case.name_parts) + (

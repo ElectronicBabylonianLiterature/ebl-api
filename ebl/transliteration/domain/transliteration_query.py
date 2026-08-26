@@ -1,13 +1,16 @@
 from __future__ import annotations
 import re
 import attr
-from typing import cast, Optional, Sequence, Tuple, List
+from typing import cast, Sequence, Tuple, List
 from enum import Enum
 from collections import OrderedDict
 from ebl.errors import DataError
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import SignsCollectingVisitor
+from ebl.transliteration.domain.tokens import (
+    NullSignsCollectingVisitor,
+    SignsCollectingVisitor,
+)
 
 
 class Type(Enum):
@@ -44,7 +47,7 @@ def _build_query_regexp(query: "TransliterationQuery") -> str:
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
     string: str = attr.ib(converter=_strip_query_string)
-    visitor: Optional[SignsCollectingVisitor]
+    visitor: SignsCollectingVisitor
     type: Type = attr.ib(
         init=False, default=attr.Factory(_classify_query, takes_self=True)
     )
@@ -152,12 +155,11 @@ class TransliterationQueryText(TransliterationQuery):
         return rf"(\S+\/)*{re.escape(sign)}(?![^\s\/])"
 
     def _create_signs(self, transliteration: str) -> Sequence[str]:
-        visitor = self.visitor
-        if not transliteration or visitor is None:
+        if not transliteration:
             return []
-        visitor.reset()
-        self._parse(transliteration).accept(visitor)
-        return visitor.result_string
+        self.visitor.reset()
+        self._parse(transliteration).accept(self.visitor)
+        return self.visitor.result_string
 
     def _parse(self, transliteration: str) -> TextLine:
         from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
@@ -207,6 +209,6 @@ class TransliterationQueryLine(TransliterationQuery):
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryEmpty(TransliterationQuery):
     string: str = attr.ib(default="", converter=_strip_query_string)
-    visitor: Optional[SignsCollectingVisitor] = None
+    visitor: SignsCollectingVisitor = NullSignsCollectingVisitor()
     type: Type = Type.UNDEFINED
     regexp: str = r""

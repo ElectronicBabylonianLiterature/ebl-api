@@ -1,4 +1,4 @@
-from typing import Any, Dict, cast
+from typing import Any, Callable, Dict, cast
 
 from marshmallow import Schema, ValidationError, fields, post_load
 
@@ -22,6 +22,7 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import (
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 
 
@@ -37,11 +38,16 @@ class MuseumNumberString(fields.String):
             raise ValidationError("Invalid museum number.", attr) from error
 
 
-def _deserialize_transliteration(value):
-    try:
-        return parse_atf_lark(value)
-    except TransliterationError as error:
-        raise ValidationError(f"Invalid colophon: {value}.", "colophon") from error
+def _deserialize_transliteration(field_name: str) -> Callable[[str], Text]:
+    def deserialize(value: str) -> Text:
+        try:
+            return parse_atf_lark(value)
+        except TransliterationError as error:
+            raise ValidationError(
+                f"Invalid {field_name}: {value}.", field_name
+            ) from error
+
+    return deserialize
 
 
 class ApiOldSiglumSchema(OldSiglumSchema):
@@ -59,12 +65,12 @@ class ApiManuscriptSchema(ManuscriptSchema):
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
     colophon = fields.Function(
         lambda manuscript: manuscript.colophon.atf,
-        _deserialize_transliteration,
+        _deserialize_transliteration("colophon"),
         required=True,
     )
     unplaced_lines = fields.Function(
         lambda manuscript: manuscript.unplaced_lines.atf,
-        _deserialize_transliteration,
+        _deserialize_transliteration("unplacedLines"),
         required=True,
         data_key="unplacedLines",
     )

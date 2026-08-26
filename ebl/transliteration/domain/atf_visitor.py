@@ -9,7 +9,6 @@ from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
     DocumentOrientedGloss,
     Erasure,
-    IntentionalOmission,
     PerhapsBrokenAway,
     Removal,
     Emendation,
@@ -100,7 +99,7 @@ class AtfVisitor(TokenVisitor):
     def visit_omission(self, omission: AccidentalOmission) -> None:
         self._side(omission.side)(omission)
 
-    def visit_accidental_omission(self, omission: IntentionalOmission) -> None:
+    def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         self._side(omission.side)(omission)
 
     def visit_removal(self, removal: Removal) -> None:

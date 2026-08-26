@@ -6,3 +6,4 @@ source = ebl
 exclude_lines =
     @abstractmethod
     @abc.abstractmethod
+    if TYPE_CHECKING:

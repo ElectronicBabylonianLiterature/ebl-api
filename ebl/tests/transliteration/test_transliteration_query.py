@@ -2,7 +2,15 @@ import re
 
 import pytest
 
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.tokens import (
+    NullSignsCollectingVisitor,
+    ValueToken,
+)
+from ebl.transliteration.domain.transliteration_query import (
+    TransliterationQuery,
+    TransliterationQueryEmpty,
+    TransliterationQueryText,
+)
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 REGEXP_DATA = [
@@ -59,3 +67,28 @@ GET_IS_SEQUENCE_EMPTY_DATA = [
 def test_is_sequence_empty(string, expected, sign_repository):
     query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     assert expected == query.is_empty()
+
+
+def test_a_text_query_without_a_transliteration_collects_no_signs(sign_repository):
+    query = TransliterationQueryText(string="", visitor=SignsVisitor(sign_repository))
+
+    assert query._create_signs("") == []
+
+
+def test_the_null_visitor_collects_nothing() -> None:
+    visitor = NullSignsCollectingVisitor()
+    ValueToken.of("ku").accept(visitor)
+
+    assert visitor.result_string == ()
+
+    visitor.reset()
+
+    assert visitor.result_string == ()
+
+
+def test_an_empty_query_carries_the_null_visitor() -> None:
+    query = TransliterationQueryEmpty()
+
+    assert isinstance(query.visitor, NullSignsCollectingVisitor)
+    assert query.regexp == r""
+    assert query.is_empty()

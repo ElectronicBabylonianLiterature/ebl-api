@@ -133,7 +133,9 @@ class LanguagePart(MarkupPart):
         return LanguagePart(language, tokens_with_language)
 
 
-def _validate_reference(_instance, _attribute, value: Reference) -> None:
+def _validate_reference(
+    _instance: object, _attribute: object, value: Reference
+) -> None:
     is_type_invalid = value.type != ReferenceType.DISCUSSION
     is_notes_invalid = value.notes != ""
     is_lines_invalid = len(value.lines_cited) != 0

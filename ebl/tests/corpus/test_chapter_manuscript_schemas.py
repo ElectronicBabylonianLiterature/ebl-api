@@ -33,8 +33,25 @@ def test_museum_number_string_rejects_an_invalid_number() -> None:
 
 
 def test_deserialize_transliteration_rejects_an_invalid_colophon() -> None:
-    with pytest.raises(ValidationError, match="Invalid colophon"):
-        _deserialize_transliteration("1. $$$")
+    with pytest.raises(ValidationError, match="Invalid colophon") as error:
+        _deserialize_transliteration("colophon")("1. $$$")
+
+    assert error.value.messages == ["Invalid colophon: 1. $$$."]
+    assert error.value.field_name == "colophon"
+
+
+def test_deserialize_transliteration_names_the_field_it_was_built_for() -> None:
+    with pytest.raises(ValidationError, match="Invalid unplacedLines") as error:
+        _deserialize_transliteration("unplacedLines")("1. $$$")
+
+    assert error.value.messages == ["Invalid unplacedLines: 1. $$$."]
+    assert error.value.field_name == "unplacedLines"
+
+
+def test_deserialize_transliteration_parses_a_valid_transliteration() -> None:
+    text = _deserialize_transliteration("colophon")("1. ku")
+
+    assert text.atf == "1. ku"
 
 
 MANUSCRIPT_LINE_DATA = {

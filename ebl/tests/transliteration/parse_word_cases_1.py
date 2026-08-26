@@ -50,19 +50,19 @@ WORD_CASES = [
     ("GAL", Word.of([Logogram.of_name("GAL")])),
     (
         "kur(GAL)",
-        Word.of([Reading.of_name("kur", sign=Grapheme.of(SignName("GAL")))]),
+        Word.of([Reading.of_name("kur").with_sign(Grapheme.of(SignName("GAL")))]),
     ),
     (
         "KUR(GAL)",
-        Word.of([Logogram.of_name("KUR", sign=Grapheme.of(SignName("GAL")))]),
+        Word.of([Logogram.of_name("KUR").with_sign(Grapheme.of(SignName("GAL")))]),
     ),
     (
         "kur(|GAL|)",
-        Word.of([Reading.of_name("kur", sign=CompoundGrapheme.of(["GAL"]))]),
+        Word.of([Reading.of_name("kur").with_sign(CompoundGrapheme.of(["GAL"]))]),
     ),
     (
         "KUR(|GAL|)",
-        Word.of([Logogram.of_name("KUR", sign=CompoundGrapheme.of(["GAL"]))]),
+        Word.of([Logogram.of_name("KUR").with_sign(CompoundGrapheme.of(["GAL"]))]),
     ),
     ("|GAL|", Word.of([CompoundGrapheme.of(["GAL"])])),
     ("|U₄&KAM₂|", Word.of([CompoundGrapheme.of(["U₄&KAM₂"])])),

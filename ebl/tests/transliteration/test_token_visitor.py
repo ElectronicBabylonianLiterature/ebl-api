@@ -2,6 +2,7 @@ from typing import List
 
 import pytest
 
+from ebl.transliteration.domain.sign_tokens import NamedSign, Number
 from ebl.transliteration.domain.tokens import Token, TokenVisitor, ValueToken
 
 
@@ -54,17 +55,17 @@ def test_visit_methods_delegate_to_visit(method_name: str) -> None:
 def test_visit_number_delegates_through_visit_named_sign() -> None:
     class NamedSignRecordingVisitor(TokenVisitor):
         def __init__(self) -> None:
-            self.named_signs: List[Token] = []
+            self.named_signs: List[NamedSign] = []
 
-        def visit_named_sign(self, named_sign) -> None:
+        def visit_named_sign(self, named_sign: NamedSign) -> None:
             self.named_signs.append(named_sign)
 
     visitor = NamedSignRecordingVisitor()
-    token = ValueToken.of("kur")
+    number = Number.of_name("1")
 
-    visitor.visit_number(token)
+    visitor.visit_number(number)
 
-    assert visitor.named_signs == [token]
+    assert visitor.named_signs == [number]
 
 
 def test_base_visit_is_a_no_op() -> None:

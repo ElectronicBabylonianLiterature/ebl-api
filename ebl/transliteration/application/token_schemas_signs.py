@@ -1,7 +1,6 @@
 from abc import abstractmethod
-from typing import Any, Dict, List, Mapping, Optional, Sequence, cast
 
-from marshmallow import Schema, fields, post_load
+from marshmallow import fields, post_load
 
 from ebl.schemas import ValueEnumField
 from ebl.transliteration.application.token_schemas_enclosures import BaseTokenSchema
@@ -16,44 +15,22 @@ from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
     Grapheme,
     Logogram,
-    NamedSign,
     Number,
     Reading,
 )
 from ebl.transliteration.domain.tokens import (
     LineBreak,
-    Token,
     Variant,
 )
 
 
-_token_schema: Optional[Schema] = None
-
-
-def _get_token_schema() -> Schema:
-    global _token_schema
-    if _token_schema is None:
-        from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-
-        _token_schema = OneOfTokenSchema()
-    return _token_schema
-
-
-def _dump_name_parts(named_sign: NamedSign) -> List[Dict[str, Any]]:
-    return cast(
-        List[Dict[str, Any]],
-        _get_token_schema().dump(list(named_sign.name_tokens), many=True),
-    )
-
-
-def _load_name_parts(value: Sequence[Mapping[str, Any]]) -> List[Token]:
-    return cast(List[Token], _get_token_schema().load(value, many=True))
-
-
 class NamedSignSchema(BaseTokenSchema):
     name = fields.String(required=True)
-    name_parts = fields.Function(
-        _dump_name_parts, _load_name_parts, required=True, data_key="nameParts"
+    name_parts = fields.List(
+        fields.Nested("OneOfTokenSchema"),
+        required=True,
+        data_key="nameParts",
+        attribute="name_tokens",
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
@@ -66,12 +43,12 @@ class ReadingSchema(NamedSignSchema):
     def make_token(self, data, **kwargs):
         return (
             Reading.of(
-                data["name_parts"],
+                data["name_tokens"],
                 data["sub_index"],
                 data["modifiers"],
                 data["flags"],
-                data["sign"],
             )
+            .with_sign(data["sign"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
         )
@@ -84,12 +61,12 @@ class LogogramSchema(NamedSignSchema):
     def make_token(self, data, **kwargs):
         return (
             Logogram.of(
-                data["name_parts"],
+                data["name_tokens"],
                 data["sub_index"],
                 data["modifiers"],
                 data["flags"],
-                data["sign"],
             )
+            .with_sign(data["sign"])
             .with_surrogate(data["surrogate"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
@@ -101,12 +78,12 @@ class NumberSchema(NamedSignSchema):
     def make_token(self, data, **kwargs):
         return (
             Number.of(
-                data["name_parts"],
+                data["name_tokens"],
                 data["modifiers"],
                 data["flags"],
-                data["sign"],
                 data["sub_index"],
             )
+            .with_sign(data["sign"])
             .set_enclosure_type(frozenset(data["enclosure_type"]))
             .set_erasure(data["erasure"])
         )

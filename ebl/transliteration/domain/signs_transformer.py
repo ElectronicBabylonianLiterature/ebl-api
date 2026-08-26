@@ -62,7 +62,9 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(tuple(name.children), sub_index, modifiers, flags, sign)
+        return Reading.of(tuple(name.children), sub_index, modifiers, flags).with_sign(
+            sign
+        )
 
     @v_args()
     def ebl_atf_text_line__value_name_part(self, children):
@@ -70,7 +72,9 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__logogram(self, name, sub_index, modifiers, flags, sign=None):
-        return Logogram.of(tuple(name.children), sub_index, modifiers, flags, sign)
+        return Logogram.of(tuple(name.children), sub_index, modifiers, flags).with_sign(
+            sign
+        )
 
     @v_args(inline=True)
     def ebl_atf_text_line__surrogate(
@@ -86,7 +90,7 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__number(self, number, modifiers, flags, sign=None):
-        return Number.of(tuple(number.children), modifiers, flags, sign)
+        return Number.of(tuple(number.children), modifiers, flags).with_sign(sign)
 
     @v_args()
     def ebl_atf_text_line__number_name_head(self, children):

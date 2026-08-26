@@ -65,7 +65,7 @@ class EnclosureUpdater(TokenVisitor):
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         new_token = self._set_enclosure_type(named_sign)
         visited_parts: Sequence[Token] = self._visit_parts(named_sign.name_tokens)
-        self._append_token(attr.evolve(new_token, name_parts=visited_parts))
+        self._append_token(new_token.with_name_tokens(visited_parts))
 
     def visit_akkadian_word(self, word: AkkadianWord) -> None:
         new_token = self._set_enclosure_type(word)

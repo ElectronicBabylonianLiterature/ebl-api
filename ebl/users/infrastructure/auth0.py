@@ -63,7 +63,7 @@ class Auth0User(User):
 
 
 class Auth0Backend(JWTAuthBackend):
-    def __init__(self, public_key, audience, issuer, set_user):
+    def __init__(self, public_key, audience, issuer: str, set_user):
         super().__init__(
             lambda payload: payload,
             public_key,
@@ -75,6 +75,7 @@ class Auth0Backend(JWTAuthBackend):
             required_claims=["exp", "iat", "sub"],
         )
         self._set_user = set_user
+        self._issuer = issuer
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
@@ -83,7 +84,7 @@ class Auth0Backend(JWTAuthBackend):
             raise falcon.HTTPUnauthorized()
         self._set_user(sub)
         is_m2m = access_token.get("gty") == "client-credentials"
-        issuer = str(self.issuer)
+        issuer = self._issuer
         auth = req.auth
 
         def profile_factory() -> dict:

@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Sequence
 
 import attr
 
@@ -51,19 +51,15 @@ class Number(NamedSign):
         name: Sequence[Token],
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number._create(
-            NamedSignArguments(name, sub_index, modifiers, flags, sign)
-        )
+        return Number._create(NamedSignArguments(name, sub_index, modifiers, flags))
 
     @staticmethod
     def of_name(
         name: str,
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return Number.of((ValueToken.of(name),), modifiers, flags, sign, sub_index)
+        return Number.of((ValueToken.of(name),), modifiers, flags, sub_index)

@@ -124,32 +124,24 @@ def test_search_by_lemma(sign_repository, signs):
     assert first is second
 
 
-def test_find_signs_by_order_memoization(sign_repository, signs):
+def test_find_signs_by_order_delegates_without_caching(sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
 
     memoizing_sign_repository = MemoizingSignRepository(sign_repository)
 
     first = memoizing_sign_repository.find_signs_by_order(
-        SignName("SI"), "not_existing_era"
+        SignName("P₂"), "neo_assyrian_onset"
     )
     second = memoizing_sign_repository.find_signs_by_order(
-        SignName("SI"), "not_existing_era"
+        SignName("P₂"), "neo_assyrian_onset"
     )
 
-    assert first == []
-    assert first is second
-
-
-def test_get_unicode_from_atf_delegates(sign_repository, signs):
-    for sign in signs:
-        sign_repository.create(sign)
-
-    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
-
-    assert memoizing_sign_repository.get_unicode_from_atf(
-        "ši"
-    ) == sign_repository.get_unicode_from_atf("ši")
+    assert first == sign_repository.find_signs_by_order(
+        SignName("P₂"), "neo_assyrian_onset"
+    )
+    assert first == second
+    assert first is not second
 
 
 def test_list_all_signs_memoization(sign_repository, signs):
@@ -165,7 +157,7 @@ def test_list_all_signs_memoization(sign_repository, signs):
     assert first is second
 
 
-def test_get_unicode_from_atf_memoization(sign_repository, signs):
+def test_get_unicode_from_atf_delegates_without_caching(sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
 
@@ -174,4 +166,6 @@ def test_get_unicode_from_atf_memoization(sign_repository, signs):
     first = memoizing_sign_repository.get_unicode_from_atf("ši")
     second = memoizing_sign_repository.get_unicode_from_atf("ši")
 
-    assert first is second
+    assert first == sign_repository.get_unicode_from_atf("ši")
+    assert first == second
+    assert first is not second

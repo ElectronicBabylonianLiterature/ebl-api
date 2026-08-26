@@ -24,7 +24,9 @@ def prepare_reconstruction(tokens: Sequence[Token]) -> Sequence[Token]:
     return set_language(set_enclosure_type(tokens))
 
 
-def _validate_reconstruction(_instance, _attribute, value: Sequence[Token]) -> None:
+def _validate_reconstruction(
+    _instance: object, _attribute: object, value: Sequence[Token]
+) -> None:
     validate(value)
 
 

@@ -97,8 +97,8 @@ CASES = [
 @pytest.mark.parametrize("case", [ReadingCase(*case) for case in CASES])
 def test_reading(case: ReadingCase) -> None:
     reading = Reading.of(
-        case.name_parts, case.sub_index, case.modifiers, case.flags, case.sign
-    )
+        case.name_parts, case.sub_index, case.modifiers, case.flags
+    ).with_sign(case.sign)
 
     sign = case.sign
     expected_parts: Tuple[Token, ...] = tuple(case.name_parts) + (
