@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Any, Dict, List, Mapping, Sequence, cast
+from typing import Any, Dict, List, Mapping, Optional, Sequence, cast
 
-from marshmallow import fields, post_load
+from marshmallow import Schema, fields, post_load
 
 from ebl.schemas import ValueEnumField
 from ebl.transliteration.application.token_schemas_enclosures import BaseTokenSchema
@@ -27,19 +27,27 @@ from ebl.transliteration.domain.tokens import (
 )
 
 
-def _dump_name_parts(named_sign: NamedSign) -> List[Dict[str, Any]]:
-    from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+_token_schema: Optional[Schema] = None
 
+
+def _get_token_schema() -> Schema:
+    global _token_schema
+    if _token_schema is None:
+        from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+
+        _token_schema = OneOfTokenSchema()
+    return _token_schema
+
+
+def _dump_name_parts(named_sign: NamedSign) -> List[Dict[str, Any]]:
     return cast(
         List[Dict[str, Any]],
-        OneOfTokenSchema().dump(list(named_sign.name_tokens), many=True),
+        _get_token_schema().dump(list(named_sign.name_tokens), many=True),
     )
 
 
 def _load_name_parts(value: Sequence[Mapping[str, Any]]) -> List[Token]:
-    from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-
-    return cast(List[Token], OneOfTokenSchema().load(value, many=True))
+    return cast(List[Token], _get_token_schema().load(value, many=True))
 
 
 class NamedSignSchema(BaseTokenSchema):

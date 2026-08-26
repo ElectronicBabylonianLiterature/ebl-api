@@ -130,3 +130,18 @@ def test_merge_delegates_to_the_wrapped_token() -> None:
     new_token = ValueToken.of("gid₂")
 
     assert NamePart.of(ValueToken.of("ku")).merge(new_token) == new_token
+
+
+def test_a_name_contribution_that_disagrees_with_its_token_is_rejected() -> None:
+    with pytest.raises(ValueError, match="does not match"):
+        NamePart(
+            frozenset(),
+            ErasureState.NONE,
+            ValueToken.of("kur"),
+            "totally wrong",
+        )
+
+
+def test_a_bracket_may_not_claim_a_name_contribution() -> None:
+    with pytest.raises(ValueError, match="does not match"):
+        NamePart(frozenset(), ErasureState.NONE, BrokenAway.open(), "[")

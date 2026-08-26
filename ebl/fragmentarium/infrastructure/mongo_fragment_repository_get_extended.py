@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, cast
+from typing import Any, Dict, List, Optional, Sequence, cast
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -6,13 +6,12 @@ from marshmallow import EXCLUDE
 from ebl.common.domain.scopes import Scope
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
-from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
-from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.date import Date, DateSchema
@@ -195,7 +194,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             raise NotFoundError(f"Fragment {number} not found.") from error
 
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
-        fragment: dict = next(
+        fragment: Dict[str, Any] = next(
             self._fragments.find_many(
                 query_number_is(number), projection={"authorizedScopes": True}
             ),

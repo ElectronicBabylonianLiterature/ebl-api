@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import (
     Callable,
     Iterator,
@@ -35,9 +36,13 @@ def token_type(token: Token) -> str:
 class TransformerInternals(Protocol):
     __visit_tokens__: bool
 
-    def _transform_tree(self, tree: Tree) -> Branch: ...
+    @abstractmethod
+    def _transform_tree(self, tree: Tree) -> Branch:
+        raise NotImplementedError
 
-    def _call_userfunc_token(self, token: Token) -> Branch: ...
+    @abstractmethod
+    def _call_userfunc_token(self, token: Token) -> Branch:
+        raise NotImplementedError
 
 
 class LegacyTransformer(Transformer):

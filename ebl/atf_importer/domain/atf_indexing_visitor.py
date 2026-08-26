@@ -49,6 +49,7 @@ class IndexingVisitor(Visitor):
         return " ".join(
             self._tree_to_string(child) if isinstance(child, Tree) else str(child)
             for child in tree.children
+            if child is not None
         ).strip()
 
     def ebl_atf_at_line__legacy_column(self, tree: Tree) -> Tree:

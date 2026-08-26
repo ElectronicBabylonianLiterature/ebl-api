@@ -64,17 +64,17 @@ class EnclosureUpdater(TokenVisitor):
 
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         new_token = self._set_enclosure_type(named_sign)
-        visited_parts: Sequence = self._visit_parts(named_sign.name_tokens)
+        visited_parts: Sequence[Token] = self._visit_parts(named_sign.name_tokens)
         self._append_token(attr.evolve(new_token, name_parts=visited_parts))
 
     def visit_akkadian_word(self, word: AkkadianWord) -> None:
         new_token = self._set_enclosure_type(word)
-        visited_parts: Sequence = self._visit_parts(word.parts)
+        visited_parts: Sequence[Token] = self._visit_parts(word.parts)
         self._append_token(attr.evolve(new_token, parts=visited_parts))
 
     def visit_greek_word(self, word: GreekWord) -> None:
         new_token = self._set_enclosure_type(word)
-        visited_parts: Sequence = self._visit_parts(word.parts)
+        visited_parts: Sequence[Token] = self._visit_parts(word.parts)
         self._append_token(attr.evolve(new_token, parts=visited_parts))
 
     def visit_gloss(self, gloss: Gloss) -> None:

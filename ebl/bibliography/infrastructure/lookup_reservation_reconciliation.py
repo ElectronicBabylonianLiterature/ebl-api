@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import Callable
+from typing import Any, Callable, Dict
 
 from ebl.bibliography.application.lookup_reservation import LookupReservationState
 from ebl.mongo_collection import MongoCollection
@@ -18,7 +18,10 @@ class LookupReservationReconciler:
         self._collection = collection
 
     def reconcile(
-        self, reservation: dict, now: datetime, owns_value: Callable[[str, str], bool]
+        self,
+        reservation: Dict[str, Any],
+        now: datetime,
+        owns_value: Callable[[str, str], bool],
     ) -> None:
         value = reservation["_id"]
         entry_id = reservation["entryId"]
@@ -27,7 +30,7 @@ class LookupReservationReconciler:
         comparison_now = to_utc_datetime(now)
         if self._is_expired_pending(state, expires_at, comparison_now):
             if owns_value(entry_id, value):
-                self.commit_value(value, comparison_now)
+                self._commit_value(value, comparison_now)
             else:
                 self.abandon_value(value, comparison_now, entry_id, state)
         elif state == LookupReservationState.COMMITTED and not owns_value(
@@ -47,7 +50,7 @@ class LookupReservationReconciler:
             and to_utc_datetime(expires_at) <= comparison_now
         )
 
-    def commit_value(self, value: str, now: datetime) -> None:
+    def _commit_value(self, value: str, now: datetime) -> None:
         self._collection.update_one(
             {"_id": value, "state": LookupReservationState.PENDING.value},
             {

@@ -1,4 +1,4 @@
-from typing import AbstractSet, Iterable, Optional, Sequence, Tuple, TypeVar
+from typing import AbstractSet, Iterable, Optional, Sequence, Tuple, Type, TypeVar
 
 import attr
 
@@ -30,10 +30,23 @@ class AbstractSign(Token):
         return [flag.value for flag in self.flags]
 
 
+def name_contribution_of(token: Token) -> str:
+    return token.value if isinstance(token, ValueToken) else ""
+
+
+def _validate_name_contribution(instance, _attribute, value: str) -> None:
+    expected = name_contribution_of(instance.token)
+    if value != expected:
+        raise ValueError(
+            f"Name contribution {value!r} does not match "
+            f"the contribution {expected!r} of its token."
+        )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class NamePart(Token):
     token: Token
-    name_contribution: str
+    name_contribution: str = attr.ib(validator=_validate_name_contribution)
 
     @staticmethod
     def of(token: Token) -> "NamePart":
@@ -41,7 +54,7 @@ class NamePart(Token):
             token.enclosure_type,
             token.erasure,
             token,
-            token.value if isinstance(token, ValueToken) else "",
+            name_contribution_of(token),
         )
 
     @property
@@ -102,11 +115,35 @@ def _validate_sub_index(_instance, _attribute, value: Optional[int]) -> None:
         raise ValueError("Sub-index must be >= 0.")
 
 
+NamedSignT = TypeVar("NamedSignT", bound="NamedSign")
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class NamedSignArguments:
+    name: Sequence[Token]
+    sub_index: Optional[int] = 1
+    modifiers: Sequence[str] = ()
+    flags: Sequence[atf.Flag] = ()
+    sign: Optional[Token] = None
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class NamedSign(AbstractSign):
     name_parts: NameParts = attr.ib(converter=convert_name_parts)
     sub_index: Optional[int] = attr.ib(default=1, validator=_validate_sub_index)
     sign: Optional[Token] = None
+
+    @classmethod
+    def _create(cls: Type[NamedSignT], arguments: NamedSignArguments) -> NamedSignT:
+        return cls(
+            frozenset(),
+            ErasureState.NONE,
+            arguments.modifiers,
+            arguments.flags,
+            convert_name_parts(arguments.name),
+            arguments.sub_index,
+            arguments.sign,
+        )
 
     @property
     def name_tokens(self) -> Sequence[Token]:

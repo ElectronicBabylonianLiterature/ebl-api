@@ -1,38 +1,11 @@
-from typing import Optional, Sequence, Type, TypeVar
+from typing import Optional, Sequence
 
 import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.converters import convert_token_sequence
-from ebl.transliteration.domain.sign_token_base import NamedSign, convert_name_parts
-from ebl.transliteration.domain.tokens import (
-    ErasureState,
-    Token,
-    TokenVisitor,
-    ValueToken,
-)
-
-
-NamedSignT = TypeVar("NamedSignT", bound=NamedSign)
-
-
-def _create(
-    named_sign_type: Type[NamedSignT],
-    name: Sequence[Token],
-    sub_index: Optional[int],
-    modifiers: Sequence[str],
-    flags: Sequence[atf.Flag],
-    sign: Optional[Token],
-) -> NamedSignT:
-    return named_sign_type(
-        frozenset(),
-        ErasureState.NONE,
-        modifiers,
-        flags,
-        convert_name_parts(name),
-        sub_index,
-        sign,
-    )
+from ebl.transliteration.domain.sign_token_base import NamedSign, NamedSignArguments
+from ebl.transliteration.domain.tokens import Token, TokenVisitor, ValueToken
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -45,7 +18,9 @@ class Reading(NamedSign):
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Reading":
-        return _create(Reading, name, sub_index, modifiers, flags, sign)
+        return Reading._create(
+            NamedSignArguments(name, sub_index, modifiers, flags, sign)
+        )
 
     @staticmethod
     def of_name(
@@ -89,7 +64,9 @@ class Logogram(NamedSign):
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Logogram":
-        return _create(Logogram, name, sub_index, modifiers, flags, sign)
+        return Logogram._create(
+            NamedSignArguments(name, sub_index, modifiers, flags, sign)
+        )
 
     @staticmethod
     def of_name(
@@ -115,7 +92,9 @@ class Number(NamedSign):
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
-        return _create(Number, name, sub_index, modifiers, flags, sign)
+        return Number._create(
+            NamedSignArguments(name, sub_index, modifiers, flags, sign)
+        )
 
     @staticmethod
     def of_name(

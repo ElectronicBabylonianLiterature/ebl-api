@@ -1,5 +1,5 @@
 import re
-from typing import Any, Sequence, cast
+from typing import Any, List, Sequence, cast
 from lark import Tree
 from lark.visitors import Transformer, v_args
 
@@ -135,7 +135,7 @@ class SignTransformer(Transformer):
         return re.split(r"\.(?!(?:[^\(\)]*\)))", "".join(_children))
 
     def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
-        _children: list = []
+        _children: List[object] = []
         for part in children:
             if isinstance(part, Tree):
                 _children += self._flatten_grapheme_elements(part.children)

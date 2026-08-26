@@ -117,7 +117,7 @@ class ApiManuscriptLineSchema(Schema):
     )
 
     @post_load
-    def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
+    def make_manuscript_line(self, data: Dict[str, Any], **kwargs) -> ManuscriptLine:
         has_text_line = len(data["number"]) > 0
         lines = data["atf"].split("\n")
         provenance_service = self.context.get("provenance_service")
