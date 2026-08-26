@@ -14,7 +14,7 @@ from ebl.tests.fragmentarium.fragment_query_test_helpers import (
 )
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.sign import Sign, Value
+from ebl.transliteration.domain.sign import Sign, SignName, Value
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -129,7 +129,7 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
         ),
     )
     fragmentarium.create(fragment)
-    sign_repository.create(Sign("KUR₂", values=(Value("kur", 2),)))
+    sign_repository.create(Sign(SignName("KUR₂"), values=(Value("kur", 2),)))
 
     result = client.simulate_get(
         "/fragments/query",

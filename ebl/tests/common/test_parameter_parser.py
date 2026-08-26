@@ -18,7 +18,6 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from pydash import flow
 
-
 PARAMS = {
     "limit": "42",
     "pages": "3",
@@ -69,11 +68,21 @@ def test_parse_limit_missing():
     assert parse_limit({"number": "K.1"}) == {"number": "K.1"}
 
 
-@pytest.mark.parametrize("limit", ["0", "-1", str(MAX_QUERY_LIMIT + 1), "1000000"])
-def test_parse_limit_out_of_range(limit):
-    with pytest.raises(
-        DataError, match=f"limit must be between 1 and {MAX_QUERY_LIMIT}"
-    ):
+@pytest.mark.parametrize("limit", [MAX_QUERY_LIMIT + 1, 1000000])
+def test_parse_limit_clamps_above_the_maximum(limit):
+    assert parse_limit({"limit": str(limit)}) == {"limit": MAX_QUERY_LIMIT}
+
+
+def test_parse_limit_clamping_keeps_other_parameters():
+    assert parse_limit({"number": "K.1", "limit": "1000"}) == {
+        "number": "K.1",
+        "limit": MAX_QUERY_LIMIT,
+    }
+
+
+@pytest.mark.parametrize("limit", ["0", "-1", "-1000"])
+def test_parse_limit_rejects_non_positive(limit):
+    with pytest.raises(DataError, match="limit must be at least 1"):
         parse_limit({"limit": limit})
 
 

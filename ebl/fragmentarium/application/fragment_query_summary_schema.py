@@ -98,13 +98,11 @@ class FragmentQueryPreviewLineSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    type = fields.String()
+    index = fields.Integer(required=True)
     number = fields.String(required=True)
     prefix = fields.String(required=True)
     text = fields.String(required=True)
     tokens = fields.Nested(FragmentQueryPreviewTokenSchema, many=True, required=True)
-    lineNumber = fields.Dict()
-    content = fields.List(fields.Dict())
 
 
 class FragmentQueryMatchingLinePreviewSchema(Schema):
@@ -112,7 +110,7 @@ class FragmentQueryMatchingLinePreviewSchema(Schema):
         unknown = EXCLUDE
 
     lines = fields.Nested(FragmentQueryPreviewLineSchema, many=True, required=True)
-    parserVersion = fields.String(required=True)
+    parser_version = fields.String(required=True, data_key="parserVersion")
 
 
 class FragmentQuerySummarySchema(Schema):

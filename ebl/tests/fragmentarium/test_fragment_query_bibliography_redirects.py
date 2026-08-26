@@ -203,3 +203,25 @@ def test_many_occurrences_use_two_batches(spied_bibliography_repository):
     assert documents["RN1"]["id"] == "CANON_A"
     assert documents["RN2"]["id"] == "CANON_B"
     assert documents["RN3"]["id"] == "RN3"
+
+
+def test_unresolvable_flavours_follow_the_documented_contract(
+    spied_bibliography_repository,
+):
+    repository, _ = spied_bibliography_repository
+    dangling = create_entry(repository, "DANGLE", redirect_to="ABSENT")
+
+    documents = bibliography_documents_of(
+        [
+            summary_of(
+                "X.1",
+                reference_of("DANGLE"),
+                reference_of("NO_ENTRY_AT_ALL"),
+            )
+        ],
+        repository,
+    )
+
+    assert "NO_ENTRY_AT_ALL" not in documents
+    assert documents["DANGLE"] == dangling
+    assert documents["DANGLE"]["deprecated"] is True

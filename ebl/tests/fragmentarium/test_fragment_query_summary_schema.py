@@ -1,3 +1,5 @@
+from typing import cast
+
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.project import ResearchProject
@@ -28,6 +30,11 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
 )
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
+
+
+def dump_dict(schema, obj, **kwargs) -> dict:
+    return cast(dict, schema.dump(obj, **kwargs))
 
 
 def build_summary() -> FragmentQuerySummary:
@@ -45,8 +52,14 @@ def build_summary() -> FragmentQuerySummary:
         date=fragment.date,
         genres=fragment.genres,
         archaeology=FragmentQueryArchaeology(
-            excavation_number=MuseumNumberSchema().load(
-                MuseumNumberSchema().dump(fragment.archaeology.excavation_number)
+            excavation_number=cast(
+                MuseumNumber,
+                MuseumNumberSchema().load(
+                    dump_dict(
+                        MuseumNumberSchema(),
+                        fragment.archaeology.excavation_number,
+                    )
+                ),
             ),
             site=fragment.archaeology.site.long_name,
         ),
@@ -64,7 +77,8 @@ def build_summary() -> FragmentQuerySummary:
 
 def test_fragment_query_summary_schema_dump_exact_shape():
     summary = build_summary()
-    dumped = FragmentQuerySummarySchema().dump(summary)
+    archaeology = cast(FragmentQueryArchaeology, summary.archaeology)
+    dumped = dump_dict(FragmentQuerySummarySchema(), summary)
 
     assert set(dumped) == {
         "museumNumber",
@@ -96,9 +110,9 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         "genres": GenreSchema().dump(summary.genres, many=True),
         "archaeology": {
             "excavationNumber": MuseumNumberSchema().dump(
-                summary.archaeology.excavation_number
+                archaeology.excavation_number
             ),
-            "site": {"name": summary.archaeology.site},
+            "site": {"name": archaeology.site},
         },
         "references": ReferenceSchema().dump(summary.references, many=True),
         "projects": [
@@ -132,7 +146,9 @@ def test_fragment_query_summary_schema_roundtrip():
     summary = build_summary()
 
     assert (
-        FragmentQuerySummarySchema().load(FragmentQuerySummarySchema().dump(summary))
+        FragmentQuerySummarySchema().load(
+            dump_dict(FragmentQuerySummarySchema(), summary)
+        )
         == summary
     )
 
@@ -146,7 +162,10 @@ def test_fragment_query_summary_compares_with_compatible_query_item():
 
 
 def test_fragment_query_archaeology_schema_loads_non_dict_site():
-    archaeology = FragmentQueryArchaeologySchema().load({"site": "Nineveh"})
+    archaeology = cast(
+        FragmentQueryArchaeology,
+        FragmentQueryArchaeologySchema().load({"site": "Nineveh"}),
+    )
 
     assert archaeology.site == "Nineveh"
 
@@ -160,8 +179,11 @@ def test_matching_line_preview_skips_out_of_range_lines():
 
     assert len(preview["lines"]) == 1
     assert (
-        FragmentQueryMatchingLinePreviewSchema().load(
-            FragmentQueryMatchingLinePreviewSchema().dump(empty_preview)
+        cast(
+            dict,
+            FragmentQueryMatchingLinePreviewSchema().load(
+                dump_dict(FragmentQueryMatchingLinePreviewSchema(), empty_preview)
+            ),
         )["lines"]
         == []
     )
@@ -170,7 +192,7 @@ def test_matching_line_preview_skips_out_of_range_lines():
 def test_fragment_query_result_schema_roundtrip_and_compatibility():
     summary = build_summary()
     result = FragmentQueryResult((summary,), 7)
-    dumped = FragmentQueryResultSchema().dump(result)
+    dumped = dump_dict(FragmentQueryResultSchema(), result)
 
     assert dumped == {
         "items": [FragmentQuerySummarySchema().dump(summary)],

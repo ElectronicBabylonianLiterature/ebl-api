@@ -31,26 +31,18 @@ def query_preview(client) -> dict:
     return result.json["items"][0]["matchingLinePreview"]
 
 
-def test_preview_line_equals_detail_line(client, matched_fragment):
+def test_preview_line_identifies_the_detail_line_without_repeating_it(
+    client, matched_fragment
+):
     preview = query_preview(client)
     detail = client.simulate_get(f"/fragments/{matched_fragment.number}").json
+    line = preview["lines"][0]
 
-    assert (
-        preview["lines"][0]["content"]
-        == (detail["text"]["lines"][MATCHING_LINE_INDEX]["content"])
-    )
-    assert (
-        preview["lines"][0]["lineNumber"]
-        == (detail["text"]["lines"][MATCHING_LINE_INDEX]["lineNumber"])
-    )
-    assert (
-        preview["lines"][0]["type"]
-        == (detail["text"]["lines"][MATCHING_LINE_INDEX]["type"])
-    )
-    assert (
-        preview["lines"][0]["prefix"]
-        == (detail["text"]["lines"][MATCHING_LINE_INDEX]["prefix"])
-    )
+    assert line["index"] == MATCHING_LINE_INDEX
+    assert line["prefix"] == (detail["text"]["lines"][MATCHING_LINE_INDEX]["prefix"])
+    assert "content" not in line
+    assert "lineNumber" not in line
+    assert "type" not in line
 
 
 def test_preview_contains_only_matching_lines(client, matched_fragment):
@@ -122,17 +114,18 @@ def test_preview_deduplicates_overlapping_multiline_matches(
     ]
 
 
-def test_preview_keeps_compact_and_structured_fields(client, matched_fragment):
+def test_preview_keeps_only_the_compact_fields(client, matched_fragment):
     line = query_preview(client)["lines"][0]
 
-    assert set(line) == {
-        "type",
-        "number",
-        "prefix",
-        "text",
-        "tokens",
-        "lineNumber",
-        "content",
-    }
-    assert line["tokens"][0]["value"] == line["content"][0]["value"]
-    assert line["content"][0]["parts"]
+    assert set(line) == {"index", "number", "prefix", "text", "tokens"}
+    assert line["text"].startswith(line["tokens"][0]["value"])
+
+
+def test_preview_line_index_points_into_matching_lines(client, matched_fragment):
+    result = client.simulate_get(
+        "/fragments/query", params={"transliteration": "ma-tu₂", "limit": "10"}
+    )
+    item = result.json["items"][0]
+    preview_indexes = [line["index"] for line in item["matchingLinePreview"]["lines"]]
+
+    assert preview_indexes == item["matchingLines"][: len(preview_indexes)]

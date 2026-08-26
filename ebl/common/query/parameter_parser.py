@@ -40,9 +40,11 @@ def parse_non_negative_integer_field(field: str) -> Callable[[Dict], Dict]:
 
 def parse_limit(parameters: Dict) -> Dict:
     parameters = parse_integer_field("limit")(parameters)
-    if "limit" in parameters and not 1 <= parameters["limit"] <= MAX_QUERY_LIMIT:
-        raise DataError(f"limit must be between 1 and {MAX_QUERY_LIMIT}")
-    return parameters
+    if "limit" not in parameters:
+        return parameters
+    if parameters["limit"] < 1:
+        raise DataError(f"limit must be at least 1, got {parameters['limit']} instead")
+    return {**parameters, "limit": min(parameters["limit"], MAX_QUERY_LIMIT)}
 
 
 def parse_lines(lines: Sequence[str]) -> Sequence[int]:

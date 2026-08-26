@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
+from typing import Optional, Sequence, Union, cast
 
 from marshmallow import EXCLUDE
 from pymongo.collation import Collation
@@ -6,22 +6,24 @@ from pymongo.collation import Collation
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
 from ebl.common.query.query_schemas import (
-    QueryResultSchema,
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_query_preview import (
-    matching_line_preview_of_data,
-)
-from ebl.fragmentarium.application.fragment_query_summary_schema import (
-    FragmentQueryResultSchema,
-)
 from ebl.fragmentarium.domain.archaeology import ExcavationNumber
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_query_summary import FragmentQueryResult
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
-    MongoFragmentRepositoryBase,
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_summary import (
+    MongoFragmentRepositoryGetSummary,
+    load_museum_number,
+    load_query_result,
 )
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository_pipelines import (
+    aggregate_counts,
+    chapter_lemma_pipeline,
+    filter_fragment_lines,
+    fragment_lemma_pipeline,
+    omit_text_lines,
+)
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.infrastructure.fragment_pattern_matcher import PatternMatcher
 from ebl.fragmentarium.infrastructure.queries import (
@@ -40,287 +42,19 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended imp
 )
 
 RETRIEVE_ALL_LIMIT = 1000
-FRAGMENT_QUERY_SUMMARY_PROJECTION = {
-    "_id": True,
-    "accession": True,
-    "archaeology.excavationNumber": True,
-    "archaeology.site": True,
-    "date": True,
-    "description": True,
-    "dossiers": True,
-    "genres": True,
-    "museumNumber": True,
-    "projects": True,
-    "references": True,
-    "script": True,
-    "text.lines": True,
-    "text.parser_version": True,
-}
 
 
-def load_museum_number(data: dict) -> MuseumNumber:
-    return MuseumNumberSchema().load(data.get("museumNumber", data))
-
-
-def load_query_result(cursor: Iterator) -> QueryResult:
-    data = next(cursor, None)
-    return QueryResultSchema().load(data) if data else QueryResult.create_empty()
-
-
-def fragment_photo_filename(museum_number: Union[dict, MuseumNumber]) -> str:
-    if isinstance(museum_number, MuseumNumber):
-        return f"{museum_number}.jpg"
-
-    suffix = museum_number.get("suffix") or ""
-    suffix_part = f".{suffix}" if suffix else ""
-    return f"{museum_number.get('prefix', '')}.{museum_number.get('number', '')}{suffix_part}.jpg"
-
-
-def chapter_lemma_pipeline(clean_values: List[str]) -> List[dict]:
-    return [
-        {
-            "$project": {
-                "_id": 1,
-                "lines.variants.reconstruction": {
-                    "cleanValue": 1,
-                    "uniqueLemma": 1,
-                },
-                "lines.variants.manuscripts.line.content": {
-                    "cleanValue": 1,
-                    "uniqueLemma": 1,
-                },
-            }
-        },
-        {"$unwind": "$lines"},
-        {"$unwind": "$lines.variants"},
-        {
-            "$project": {
-                "reconstruction": "$lines.variants.reconstruction",
-                "manuscripts": "$lines.variants.manuscripts",
-            }
-        },
-        {
-            "$facet": {
-                "reconstructionLemmas": [
-                    {"$project": {"_id": False, "reconstruction": True}},
-                    {"$unwind": "$reconstruction"},
-                    {"$replaceRoot": {"newRoot": "$reconstruction"}},
-                    {
-                        "$match": {
-                            "uniqueLemma.0": {"$exists": True},
-                            "cleanValue": {"$in": clean_values},
-                        }
-                    },
-                ],
-                "manuscriptLemmas": [
-                    {"$project": {"_id": False, "manuscripts": True}},
-                    {"$unwind": "$manuscripts"},
-                    {"$unwind": "$manuscripts.line.content"},
-                    {"$replaceRoot": {"newRoot": "$manuscripts.line.content"}},
-                    {
-                        "$match": {
-                            "uniqueLemma.0": {"$exists": True},
-                            "cleanValue": {"$in": clean_values},
-                        }
-                    },
-                ],
-            }
-        },
-        {
-            "$project": {
-                "combinedLemmas": {
-                    "$concatArrays": ["$reconstructionLemmas", "$manuscriptLemmas"]
-                }
-            }
-        },
-        {"$unwind": "$combinedLemmas"},
-        {"$replaceRoot": {"newRoot": "$combinedLemmas"}},
-    ]
-
-
-def fragment_lemma_pipeline(clean_values: List[str]) -> List[dict]:
-    return [
-        {
-            "$match": {
-                "text.lines.content": {
-                    "$elemMatch": {
-                        "cleanValue": {"$in": clean_values},
-                        "uniqueLemma.0": {"$exists": True},
-                    }
-                }
-            }
-        },
-        {"$project": {"_id": False, "text.lines": True}},
-        {"$unwind": "$text.lines"},
-        {"$project": {"tokens": "$text.lines.content"}},
-        {"$unwind": "$tokens"},
-        {
-            "$project": {
-                "cleanValue": "$tokens.cleanValue",
-                "uniqueLemma": "$tokens.uniqueLemma",
-            }
-        },
-        {
-            "$match": {
-                "uniqueLemma.0": {"$exists": True},
-                "cleanValue": {"$in": clean_values},
-            }
-        },
-    ]
-
-
-def aggregate_counts() -> List[dict]:
-    return [
-        {
-            "$group": {
-                "_id": {"cleanValue": "$cleanValue", "uniqueLemma": "$uniqueLemma"},
-                "count": {"$sum": 1},
-            }
-        },
-        {
-            "$project": {
-                "_id": 0,
-                "cleanValue": "$_id.cleanValue",
-                "uniqueLemma": "$_id.uniqueLemma",
-                "count": True,
-            }
-        },
-        {"$sort": {"count": -1}},
-        {
-            "$group": {
-                "_id": "$cleanValue",
-                "lemmatizations": {
-                    "$addToSet": {"uniqueLemma": "$uniqueLemma", "count": "$count"}
-                },
-            }
-        },
-    ]
-
-
-class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
-    def _omit_text_lines(self) -> List:
-        return [{"$addFields": {"text.lines": []}}]
-
-    def _filter_fragment_lines(self, lines: Optional[Sequence[int]]) -> List:
-        return (
-            [
-                {
-                    "$addFields": {
-                        "text.lines": (
-                            {
-                                "$map": {
-                                    "input": lines,
-                                    "as": "i",
-                                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
-                                }
-                            }
-                        )
-                    }
-                }
-            ]
-            if lines
-            else []
-        )
-
-    def _find_fragment_query_summary_data(
-        self, fragment_ids: Sequence[Any]
-    ) -> Dict[Any, dict]:
-        return {
-            fragment["_id"]: fragment
-            for fragment in self._fragments.find_many(
-                {"_id": {"$in": list(fragment_ids)}},
-                projection=FRAGMENT_QUERY_SUMMARY_PROJECTION,
-            )
-        }
-
-    def _find_fragment_query_photo_filenames(
-        self, items: Sequence[dict]
-    ) -> Sequence[str]:
-        filenames = [
-            fragment_photo_filename(item["museumNumber"])
-            for item in items
-            if item.get("museumNumber")
-        ]
-        return [
-            photo["filename"]
-            for photo in self._photo_files.find_many(
-                {"filename": {"$in": filenames}},
-                projection={"filename": True},
-            )
-        ]
-
-    def _hydrate_fragment_query_item(
-        self,
-        item: dict,
-        fragments_by_id: Dict[Any, dict],
-        photo_filenames: Sequence[str],
-    ) -> dict:
-        fragment = fragments_by_id.get(item["_id"])
-        if fragment is None:
-            raise NotFoundError(
-                f"Fragment summary data for {item.get('museumNumber')} not found."
-            )
-
-        matching_lines = item.get("matchingLines") or []
-        museum_number = fragment.get("museumNumber", item.get("museumNumber"))
-        return {
-            "museumNumber": museum_number,
-            "accession": fragment.get("accession"),
-            "description": fragment.get("description", ""),
-            "script": fragment.get(
-                "script",
-                {"period": "", "periodModifier": "None", "uncertain": False},
-            ),
-            "date": fragment.get("date"),
-            "genres": fragment.get("genres", []),
-            "archaeology": fragment.get("archaeology"),
-            "references": fragment.get("references", []),
-            "projects": fragment.get("projects", []),
-            "dossiers": fragment.get("dossiers", []),
-            "matchingLines": matching_lines,
-            "matchingLinePreview": matching_line_preview_of_data(
-                fragment.get("text") or {}, matching_lines
-            ),
-            "matchCount": item.get("matchCount", 0),
-            "hasPhoto": fragment_photo_filename(museum_number) in photo_filenames,
-        }
-
-    def _load_fragment_query_result(self, data: Optional[dict]) -> FragmentQueryResult:
-        if not data:
-            return FragmentQueryResult.create_empty()
-
-        items = data.get("items", [])
-        fragment_ids = [item["_id"] for item in items]
-        fragments_by_id = self._find_fragment_query_summary_data(fragment_ids)
-        photo_filenames = self._find_fragment_query_photo_filenames(items)
-        return FragmentQueryResultSchema().load(
-            {
-                "items": [
-                    self._hydrate_fragment_query_item(
-                        item, fragments_by_id, photo_filenames
-                    )
-                    for item in items
-                ],
-                "matchCountTotal": data.get("matchCountTotal", 0),
-                "isMatchCountTotalExact": data.get("isMatchCountTotalExact", True),
-                "hasNextPage": data.get("hasNextPage"),
-            }
-        )
-
+class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryGetSummary):
     def query_by_museum_number(
         self,
         number: Union[MuseumNumber, ExcavationNumber],
         lines: Optional[Sequence[int]] = None,
-        exclude_lines=False,
-    ):
+        exclude_lines: bool = False,
+    ) -> Fragment:
         data = self._fragments.aggregate(
             [
                 {"$match": query_number_is(number)},
-                *(
-                    self._omit_text_lines()
-                    if exclude_lines
-                    else self._filter_fragment_lines(lines)
-                ),
+                *(omit_text_lines() if exclude_lines else filter_fragment_lines(lines)),
                 *join_findspots(),
                 *join_reference_documents(),
                 *join_joins(),
@@ -328,17 +62,19 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         )
         try:
             fragment_data = next(data)
-            return self._schema(unknown=EXCLUDE).load(fragment_data)
+            return cast(Fragment, self._schema(unknown=EXCLUDE).load(fragment_data))
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
     def query_museum_numbers(self, prefix: str, number_regex: str) -> Sequence[dict]:
-        return self._fragments.find_many(
-            {
-                "museumNumber.prefix": prefix,
-                "museumNumber.number": {"$regex": number_regex},
-            },
-            projection={"museumNumber": True},
+        return list(
+            self._fragments.find_many(
+                {
+                    "museumNumber.prefix": prefix,
+                    "museumNumber.number": {"$regex": number_regex},
+                },
+                projection={"museumNumber": True},
+            )
         )
 
     def query_by_sort_key(self, key: int) -> MuseumNumber:
@@ -429,7 +165,10 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         )
         data = self._fragments.aggregate(pipeline)
         return (
-            AfORegisterToFragmentQueryResultSchema().load({"items": data})
+            cast(
+                AfORegisterToFragmentQueryResult,
+                AfORegisterToFragmentQueryResultSchema().load({"items": data}),
+            )
             if data
             else AfORegisterToFragmentQueryResult.create_empty()
         )
