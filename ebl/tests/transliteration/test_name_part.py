@@ -1,29 +1,16 @@
-from typing import List
+from typing import Any, Dict, List, cast
 
 import pytest
 
-from ebl.dictionary.domain.word import WordId
-from ebl.lemmatization.domain.lemmatization import (
-    LemmatizationError,
-    LemmatizationToken,
-)
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.application.token_schemas_signs import NamedSignSchema
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.sign_token_base import NamePart
-from ebl.transliteration.domain.tokens import (
-    ErasureState,
-    Token,
-    TokenVisitor,
-    ValueToken,
+from ebl.transliteration.domain.sign_token_base import (
+    NamePart,
+    convert_name_parts,
 )
-
-
-class RecordingVisitor(TokenVisitor):
-    def __init__(self) -> None:
-        self.visited: List[Token] = []
-
-    def visit(self, token: Token) -> None:
-        self.visited.append(token)
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.tokens import Token, ValueToken
 
 
 def test_a_value_token_contributes_its_text_to_the_name() -> None:
@@ -41,107 +28,43 @@ def test_a_bracket_contributes_nothing_to_the_name() -> None:
     assert part.value == bracket.value
 
 
-def test_parts_delegate_to_the_wrapped_token() -> None:
-    token = ValueToken.of("ku")
-
-    assert NamePart.of(token).parts == token.parts
-
-
-def test_accept_delegates_to_the_wrapped_token() -> None:
-    token = ValueToken.of("ku")
-    visitor = RecordingVisitor()
-
-    NamePart.of(token).accept(visitor)
-
-    assert visitor.visited == [token]
-
-
-def test_wrapping_is_idempotent() -> None:
-    part = NamePart.of(ValueToken.of("ku"))
-
-    assert NamePart.of(part).token is part
-
-
-def test_clean_value_delegates_to_the_wrapped_token() -> None:
-    bracket = BrokenAway.open()
-
-    assert NamePart.of(bracket).clean_value == bracket.clean_value == ""
-
-
-def test_get_key_delegates_to_the_wrapped_token() -> None:
-    bracket = BrokenAway.open()
-
-    assert NamePart.of(bracket).get_key() == bracket.get_key()
-
-
-def test_lemmatizable_delegates_to_the_wrapped_token() -> None:
-    token = ValueToken.of("ku")
-
-    assert NamePart.of(token).lemmatizable == token.lemmatizable
-
-
-def test_alignable_delegates_to_the_wrapped_token() -> None:
-    token = ValueToken.of("ku")
-
-    assert NamePart.of(token).alignable == token.alignable
-
-
-def test_set_unique_lemma_delegates_to_the_wrapped_token() -> None:
-    token = ValueToken.of("ku")
-    lemma = LemmatizationToken("ku")
-
-    updated = NamePart.of(token).set_unique_lemma(lemma)
-
-    assert updated.token == token.set_unique_lemma(lemma)
-
-
-def test_set_unique_lemma_propagates_the_wrapped_token_error() -> None:
-    part = NamePart.of(ValueToken.of("ku"))
-
-    with pytest.raises(LemmatizationError):
-        part.set_unique_lemma(LemmatizationToken("gid₂", (WordId("gid"),)))
-
-
-def test_update_alignment_delegates_to_the_wrapped_token() -> None:
-    token = ValueToken.of("ku")
-
-    updated = NamePart.of(token).update_alignment([0])
-
-    assert updated.token == token.update_alignment([0])
-
-
-def test_set_enclosure_type_keeps_wrapper_and_token_in_step() -> None:
-    enclosure = frozenset({EnclosureType.BROKEN_AWAY})
-
-    part = NamePart.of(ValueToken.of("ku")).set_enclosure_type(enclosure)
-
-    assert part.enclosure_type == enclosure
-    assert part.token.enclosure_type == enclosure
-
-
-def test_set_erasure_keeps_wrapper_and_token_in_step() -> None:
-    part = NamePart.of(ValueToken.of("ku")).set_erasure(ErasureState.ERASED)
-
-    assert part.erasure == ErasureState.ERASED
-    assert part.token.erasure == ErasureState.ERASED
-
-
-def test_merge_delegates_to_the_wrapped_token() -> None:
-    new_token = ValueToken.of("gid₂")
-
-    assert NamePart.of(ValueToken.of("ku")).merge(new_token) == new_token
-
-
 def test_a_name_contribution_that_disagrees_with_its_token_is_rejected() -> None:
     with pytest.raises(ValueError, match="does not match"):
-        NamePart(
-            frozenset(),
-            ErasureState.NONE,
-            ValueToken.of("kur"),
-            "totally wrong",
-        )
+        NamePart(ValueToken.of("kur"), "totally wrong")
 
 
 def test_a_bracket_may_not_claim_a_name_contribution() -> None:
     with pytest.raises(ValueError, match="does not match"):
-        NamePart(frozenset(), ErasureState.NONE, BrokenAway.open(), "[")
+        NamePart(BrokenAway.open(), "[")
+
+
+def test_converting_name_parts_is_idempotent() -> None:
+    tokens = (ValueToken.of("ku"), BrokenAway.open(), ValueToken.of("r"))
+    converted = convert_name_parts(tokens)
+
+    assert convert_name_parts(converted) == converted
+    assert tuple(part.token for part in converted) == tokens
+
+
+def test_a_name_part_is_not_a_token() -> None:
+    part = NamePart.of(ValueToken.of("ku"))
+
+    assert not isinstance(part, Token)
+
+
+def test_a_named_sign_serializes_its_name_tokens_not_its_name_parts() -> None:
+    reading = Reading.of((ValueToken.of("ku"), BrokenAway.open(), ValueToken.of("r")))
+    dumped = cast(Dict[str, Any], NamedSignSchema().dump(reading))
+
+    assert dumped["nameParts"] == OneOfTokenSchema().dump(
+        list(reading.name_tokens), many=True
+    )
+
+
+def test_a_name_part_is_not_serializable_as_a_token() -> None:
+    part = NamePart.of(ValueToken.of("ku"))
+
+    dumped = cast(List[Any], OneOfTokenSchema().dump([part], many=True))
+
+    assert dumped != OneOfTokenSchema().dump([part.token], many=True)
+    assert dumped[0][1] == {"_schema": "Unsupported object type: NamePart"}

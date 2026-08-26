@@ -163,3 +163,15 @@ def test_list_all_signs_memoization(sign_repository, signs):
 
     assert first == sorted(sign.name for sign in signs)
     assert first is second
+
+
+def test_get_unicode_from_atf_memoization(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+
+    first = memoizing_sign_repository.get_unicode_from_atf("ši")
+    second = memoizing_sign_repository.get_unicode_from_atf("ši")
+
+    assert first is second

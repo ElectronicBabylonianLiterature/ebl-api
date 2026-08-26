@@ -1,5 +1,5 @@
 from functools import reduce, singledispatch
-from typing import Sequence, Tuple
+from typing import List, Sequence, Tuple
 
 import attr
 from functools import singledispatchmethod
@@ -152,7 +152,7 @@ def split_lines(lines: Sequence[Line]) -> Tuple[Tuple[Line, ...], ...]:
 def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
     list_of_lines = split_lines(lines)
     line_to_vec_result = []
-    line_to_vec_intermediate_result: list[LineToVecEncoding] = []
+    line_to_vec_intermediate_result: List[LineToVecEncoding] = []
     for lines in list_of_lines:
         first_line = True
         for line in lines:

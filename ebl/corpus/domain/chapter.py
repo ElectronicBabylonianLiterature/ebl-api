@@ -1,7 +1,6 @@
 from enum import Enum, unique
 from functools import singledispatchmethod
 from typing import Iterator, Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
-from typing import cast
 
 import attr
 import pydash
@@ -14,6 +13,7 @@ from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.record import Record
 from ebl.errors import NotFoundError
 from ebl.merger import Merger
+from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.markup import MarkupPart, to_title
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.common.domain.stage import Stage
@@ -136,7 +136,9 @@ class Chapter:
         ]
 
     @property
-    def extant_lines(self) -> Mapping[Siglum, Mapping[ManuscriptLineLabel, ExtantLine]]:
+    def extant_lines(
+        self,
+    ) -> Mapping[Siglum, Mapping[Sequence[Label], Sequence[ExtantLine]]]:
         return {
             manuscript.siglum: self._get_extant_lines(manuscript.id)
             for manuscript in self.manuscripts
@@ -211,8 +213,8 @@ class Chapter:
 
     def _get_extant_lines(
         self, manuscript_id: int
-    ) -> Mapping[ManuscriptLineLabel, ExtantLine]:
-        grouped = pydash.group_by(
+    ) -> Mapping[Sequence[Label], Sequence[ExtantLine]]:
+        return pydash.group_by(
             (
                 ExtantLine.of(line, manuscript_id)
                 for line in self.lines
@@ -221,7 +223,6 @@ class Chapter:
             ),
             lambda extant_line: extant_line.label,
         )
-        return cast(Mapping[ManuscriptLineLabel, ExtantLine], grouped)
 
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript

@@ -22,7 +22,7 @@ class MemoizingSignRepository(SignRepository):
         self._search_by_lemma = pydash.memoize(delegate.search_by_lemma)
         self._list_all_signs = pydash.memoize(delegate.list_all_signs)
         self._find_signs_by_order = pydash.memoize(delegate.find_signs_by_order)
-        self._get_unicode_from_atf = delegate.get_unicode_from_atf
+        self._get_unicode_from_atf = pydash.memoize(delegate.get_unicode_from_atf)
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)

@@ -4,37 +4,21 @@ import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.converters import convert_token_sequence
-from ebl.transliteration.domain.sign_token_base import NamedSign, NamedSignArguments
+from ebl.transliteration.domain.sign_token_base import (
+    NamedSign,
+    NamedSignArguments,
+    NamedSignWithLeadingSubIndex,
+)
 from ebl.transliteration.domain.tokens import Token, TokenVisitor, ValueToken
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Reading(NamedSign):
-    @staticmethod
-    def of(
-        name: Sequence[Token],
-        sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = (),
-        flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
-    ) -> "Reading":
-        return Reading._create(
-            NamedSignArguments(name, sub_index, modifiers, flags, sign)
-        )
-
-    @staticmethod
-    def of_name(
-        name: str,
-        sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = (),
-        flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
-    ) -> "Reading":
-        return Reading.of((ValueToken.of(name),), sub_index, modifiers, flags, sign)
+class Reading(NamedSignWithLeadingSubIndex):
+    pass
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Logogram(NamedSign):
+class Logogram(NamedSignWithLeadingSubIndex):
     surrogate: Sequence[Token] = attr.ib(default=(), converter=convert_token_sequence)
 
     @property
@@ -55,28 +39,6 @@ class Logogram(NamedSign):
 
     def with_surrogate(self, surrogate: Sequence[Token]) -> "Logogram":
         return attr.evolve(self, surrogate=surrogate)
-
-    @staticmethod
-    def of(
-        name: Sequence[Token],
-        sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = (),
-        flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
-    ) -> "Logogram":
-        return Logogram._create(
-            NamedSignArguments(name, sub_index, modifiers, flags, sign)
-        )
-
-    @staticmethod
-    def of_name(
-        name: str,
-        sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = (),
-        flags: Sequence[atf.Flag] = (),
-        sign: Optional[Token] = None,
-    ) -> "Logogram":
-        return Logogram.of((ValueToken.of(name),), sub_index, modifiers, flags, sign)
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -1,5 +1,5 @@
 import random
-from typing import Sequence as TypingSequence
+from typing import List as TypingList, Sequence as TypingSequence
 
 import factory.fuzzy
 from factory.declarations import Iterator, List, Sequence, SubFactory
@@ -73,7 +73,7 @@ DEFAULT_PROJECTS = (
     ResearchProject.AMPS,
     ResearchProject.RECC,
 )
-DEFAULT_AUTHORIZED_SCOPES: list[Scope] = []
+DEFAULT_AUTHORIZED_SCOPES: TypingList[Scope] = []
 
 
 FragmentFactory = make_factory(
