@@ -1,5 +1,7 @@
 from typing import List
 
+from ebl.common.query.aggregation_matchers import match_all, text_id_pairs
+
 from ebl.corpus.domain.chapter import ChapterId
 
 from ebl.transliteration.infrastructure.collections import (
@@ -74,17 +76,7 @@ def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
                 "from": CHAPTERS_COLLECTION,
                 "let": {"genre": "$genre", "category": "$category", "index": "$index"},
                 "pipeline": [
-                    {
-                        "$match": {
-                            "$expr": {
-                                "$and": [
-                                    {"$eq": ["$textId.genre", "$$genre"]},
-                                    {"$eq": ["$textId.category", "$$category"]},
-                                    {"$eq": ["$textId.index", "$$index"]},
-                                ]
-                            }
-                        }
-                    },
+                    match_all(text_id_pairs("$textId.", "$$")),
                     {"$addFields": {"firstLine": {"$first": "$lines"}}},
                     {
                         "$project": {
@@ -152,32 +144,7 @@ def join_text() -> List[dict]:
                 "from": TEXTS_COLLECTION,
                 "let": {"textId": "$chapterId.textId"},
                 "pipeline": [
-                    {
-                        "$match": {
-                            "$expr": {
-                                "$and": [
-                                    {
-                                        "$eq": [
-                                            "$genre",
-                                            "$$textId.genre",
-                                        ]
-                                    },
-                                    {
-                                        "$eq": [
-                                            "$category",
-                                            "$$textId.category",
-                                        ]
-                                    },
-                                    {
-                                        "$eq": [
-                                            "$index",
-                                            "$$textId.index",
-                                        ]
-                                    },
-                                ]
-                            }
-                        }
-                    },
+                    match_all(text_id_pairs("$", "$$textId.")),
                     *join_chapters(False),
                     {"$limit": 1},
                 ],
@@ -197,17 +164,7 @@ def join_text_title() -> dict:
                 "index": "$textId.index",
             },
             "pipeline": [
-                {
-                    "$match": {
-                        "$expr": {
-                            "$and": [
-                                {"$eq": ["$genre", "$$genre"]},
-                                {"$eq": ["$category", "$$category"]},
-                                {"$eq": ["$index", "$$index"]},
-                            ]
-                        }
-                    }
-                },
+                match_all(text_id_pairs("$", "$$")),
                 {"$project": {"_id": False, "name": True}},
             ],
             "as": "textName",

@@ -185,9 +185,37 @@ passes before committing:
 8. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
    errors in the changed files (a pre-existing error in a file you touched is
    not acceptable; fix it)
+9. `qlty smells <changed files>` — **zero blocking issues.** See the hard gate
+   below.
 
 Never commit if any gate fails or was skipped. Never commit if the user did not
 ask you to — see the hard gate above.
+
+### HARD GATE: qlty Must Be Clean
+
+qlty runs on every PR and its verdict is part of the build. **A commit must not
+introduce a qlty issue, and must not leave a blocking one standing.**
+
+- Run `qlty smells <changed files>` before every commit. `qlty check --no-fix`
+  additionally runs the plugins. Zero blocking issues is the bar.
+- `.qlty/` is git-ignored, so a fresh checkout has no local config. Create one
+  with `qlty init --yes --skip-plugins` — it writes only ignored files and
+  changes nothing tracked.
+- **Every remaining finding must be fixed or explicitly justified in the task
+  log** — `similar-code`, `function-parameters`, `return-statements`,
+  `complex`, `nested`, all of them. "qlty did not mark it blocking" is not a
+  reason to leave a real duplication in place.
+- Justification is only ever for a finding that is genuinely not a defect —
+  two unrelated `__all__` lists that happen to have the same shape, say. It is
+  never for a duplication you could remove but would rather not.
+- **Never silence qlty**: no `qlty.toml` threshold edits, no `# qlty-ignore`,
+  no exclusion patterns. Same rule as the linters and type checkers — fix the
+  code, not the tool.
+- A qlty verdict on the PR page describes the **pushed** commit. If local work
+  is unpushed, that verdict is stale; say so rather than treating it as current.
+- Local qlty findings can differ from qlty Cloud's, which uses the project's
+  own configuration. When they disagree, treat the stricter of the two as the
+  gate.
 
 ### HARD GATE: All Three Type Checkers Must Pass
 

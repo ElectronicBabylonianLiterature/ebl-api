@@ -1,6 +1,7 @@
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
 from pymongo.collation import Collation
 
+from ebl.common.query.aggregation_matchers import match_all, text_id_pairs
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.schemas import (
@@ -52,22 +53,12 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
                     "$lookup": {
                         "from": "texts",
                         "let": {
-                            "chapterGenre": "$textId.genre",
-                            "chapterCategory": "$textId.category",
-                            "chapterIndex": "$textId.index",
+                            "genre": "$textId.genre",
+                            "category": "$textId.category",
+                            "index": "$textId.index",
                         },
                         "pipeline": [
-                            {
-                                "$match": {
-                                    "$expr": {
-                                        "$and": [
-                                            {"$eq": ["$genre", "$$chapterGenre"]},
-                                            {"$eq": ["$category", "$$chapterCategory"]},
-                                            {"$eq": ["$index", "$$chapterIndex"]},
-                                        ]
-                                    }
-                                }
-                            },
+                            match_all(text_id_pairs("$", "$$")),
                             {"$project": {"name": 1, "_id": 0}},
                         ],
                         "as": "textNames",
