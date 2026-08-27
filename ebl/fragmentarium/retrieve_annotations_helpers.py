@@ -33,7 +33,9 @@ def filter_empty_annotation(annotation: Annotation) -> bool:
         return True
 
 
-def filter_annotation(annotation: Annotation, to_filter) -> bool:
+def filter_annotation(
+    annotation: Annotation, to_filter: Sequence[AnnotationValueType]
+) -> bool:
     return annotation.data.type not in to_filter and filter_empty_annotation(annotation)
 
 
@@ -61,12 +63,29 @@ MANUAL_SIGN_NAME_FIXES = {
 }
 
 
-def sign_to_sign_ground_truth(annotation_data: AnnotationData) -> str:
+def _match_ground_truth(annotation_data: AnnotationData) -> str:
     annotation_type = annotation_data.type
     if annotation_type in TYPES_MATCHED_BY_NAME:
         return annotation_type.name
     suffix = "?" if annotation_type == AnnotationValueType.PARTIALLY_BROKEN else ""
     return f"{parse_annotations(annotation_data)}{suffix}"
+
+
+def _is_degenerate_label(ground_truth: str) -> bool:
+    return ground_truth in ("", "?") or ground_truth.islower()
+
+
+def sign_to_sign_ground_truth(annotation_data: AnnotationData) -> str:
+    ground_truth = _match_ground_truth(annotation_data)
+    if _is_degenerate_label(ground_truth):
+        raise ValueError(
+            f"AnnotationData with id: '{annotation_data.id}', "
+            f"value: '{annotation_data.value}', "
+            f"sign: '{annotation_data.sign_name}' and "
+            f"type: '{annotation_data.type.value}' "
+            f"results in an empty ground truth label"
+        )
+    return ground_truth
 
 
 def parse_annotations(annotation_data: AnnotationData) -> str:

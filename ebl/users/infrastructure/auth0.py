@@ -1,5 +1,5 @@
 import copy
-from typing import Any, Callable, List
+from typing import Any, Callable, List, cast
 
 import falcon
 import pydash
@@ -75,7 +75,6 @@ class Auth0Backend(JWTAuthBackend):
             required_claims=["exp", "iat", "sub"],
         )
         self._set_user = set_user
-        self._issuer = issuer
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
@@ -87,6 +86,10 @@ class Auth0Backend(JWTAuthBackend):
         auth = req.auth
 
         def profile_factory() -> dict:
-            return {"name": sub} if is_m2m else fetch_user_profile(self._issuer, auth)
+            return (
+                {"name": sub}
+                if is_m2m
+                else fetch_user_profile(cast(str, self.issuer), auth)
+            )
 
         return Auth0User(access_token, profile_factory)

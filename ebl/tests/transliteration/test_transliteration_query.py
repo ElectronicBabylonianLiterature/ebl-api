@@ -92,3 +92,26 @@ def test_an_empty_query_carries_the_null_visitor() -> None:
     assert isinstance(query.visitor, NullSignsCollectingVisitor)
     assert query.regexp == r""
     assert query.is_empty()
+
+
+def test_queries_are_hashable_regardless_of_their_visitor(sign_repository):
+    text_query = TransliterationQueryText(
+        string="ku", visitor=SignsVisitor(sign_repository)
+    )
+
+    assert {text_query, TransliterationQueryEmpty()}
+
+
+def test_equal_queries_hash_equally(sign_repository):
+    query = TransliterationQueryText(string="ku", visitor=SignsVisitor(sign_repository))
+    same = TransliterationQueryText(string="ku", visitor=SignsVisitor(sign_repository))
+
+    assert query == same
+    assert hash(query) == hash(same)
+
+
+def test_queries_over_different_strings_differ(sign_repository):
+    query = TransliterationQueryText(string="ku", visitor=SignsVisitor(sign_repository))
+    other = TransliterationQueryText(string="nu", visitor=SignsVisitor(sign_repository))
+
+    assert query != other

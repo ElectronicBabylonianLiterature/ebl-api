@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Dict
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from ebl.transliteration.domain.sign import (
@@ -19,7 +19,7 @@ class SignListRecordSchema(Schema):
     number = fields.String(required=True)
 
     @post_load
-    def make_sign_list_record(self, data, **kwargs):
+    def make_sign_list_record(self, data: Dict[str, Any], **kwargs) -> SignListRecord:
         return SignListRecord(**data)
 
 
@@ -28,11 +28,11 @@ class ValueSchema(Schema):
     sub_index = fields.Int(load_default=None, data_key="subIndex")
 
     @post_load
-    def make_value(self, data, **kwargs):
+    def make_value(self, data: Dict[str, Any], **kwargs) -> Value:
         return Value(**data)
 
     @post_dump
-    def filter_none(self, data, **kwargs):
+    def filter_none(self, data: Dict[str, Any], **kwargs) -> Dict[str, Any]:
         return {key: value for key, value in data.items() if value is not None}
 
 
@@ -50,7 +50,7 @@ class LogogramSchema(Schema):
     unicode = fields.String()
 
     @post_load
-    def make_logogram(self, data, **kwargs) -> Logogram:
+    def make_logogram(self, data: Dict[str, Any], **kwargs) -> Logogram:
         data["word_id"] = tuple(data["word_id"])
         return Logogram(**data)
 
@@ -73,7 +73,7 @@ class FosseySchema(Schema):
     sign = fields.String(required=True)
 
     @post_load
-    def make_fossey(self, data, **kwargs):
+    def make_fossey(self, data: Dict[str, Any], **kwargs) -> Fossey:
         return Fossey(**data)
 
 
@@ -104,7 +104,7 @@ class SortKeysSchema(Schema):
     )
 
     @post_load
-    def make_sort_keys(self, data, **kwargs) -> SortKeys:
+    def make_sort_keys(self, data: Dict[str, Any], **kwargs) -> SortKeys:
         return SortKeys(**data)
 
 
@@ -128,7 +128,7 @@ class SignSchema(Schema):
     )
 
     @post_load
-    def make_sign(self, data, **kwargs) -> Sign:
+    def make_sign(self, data: Dict[str, Any], **kwargs) -> Sign:
         data["lists"] = tuple(data["lists"])
         data["values"] = tuple(data["values"])
         data["logograms"] = tuple(data["logograms"])
@@ -137,12 +137,12 @@ class SignSchema(Schema):
         return Sign(**data)
 
     @post_dump
-    def filter_none(self, data, **kwargs):
+    def filter_none(self, data: Dict[str, Any], **kwargs) -> Dict[str, Any]:
         return {key: value for key, value in data.items() if value is not None}
 
 
 class SignDtoSchema(SignSchema):
     @post_dump
-    def make_sign_dto(self, data, **kwargs) -> Dict:
+    def make_sign_dto(self, data: Dict[str, Any], **kwargs) -> Dict[str, Any]:
         data["name"] = data.pop("_id")
         return {key: value for key, value in data.items() if value is not None}

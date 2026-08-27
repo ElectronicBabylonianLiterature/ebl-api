@@ -47,7 +47,7 @@ def _build_query_regexp(query: "TransliterationQuery") -> str:
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
     string: str = attr.ib(converter=_strip_query_string)
-    visitor: SignsCollectingVisitor
+    visitor: SignsCollectingVisitor = attr.ib(eq=False)
     type: Type = attr.ib(
         init=False, default=attr.Factory(_classify_query, takes_self=True)
     )
@@ -209,6 +209,8 @@ class TransliterationQueryLine(TransliterationQuery):
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryEmpty(TransliterationQuery):
     string: str = attr.ib(default="", converter=_strip_query_string)
-    visitor: SignsCollectingVisitor = NullSignsCollectingVisitor()
+    visitor: SignsCollectingVisitor = attr.ib(
+        default=NullSignsCollectingVisitor(), eq=False
+    )
     type: Type = Type.UNDEFINED
     regexp: str = r""

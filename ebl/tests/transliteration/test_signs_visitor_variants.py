@@ -31,10 +31,12 @@ def test_a_variant_keeps_each_sign_separate_in_unicode(sign_repository, signs) -
     parse_line("1. nu").accept(other)
 
     unicode_result: Sequence[int] = visitor.result_unicode
+    head_length = len(plain.result_unicode)
+    tail_length = len(other.result_unicode)
 
-    assert unicode_result[: len(plain.result_unicode)] == plain.result_unicode
-    assert unicode_result[-len(other.result_unicode) :] == other.result_unicode
-    assert len(unicode_result) > len(plain.result_unicode) + len(other.result_unicode)
+    assert unicode_result[:head_length] == plain.result_unicode
+    assert unicode_result[-tail_length:] == other.result_unicode
+    assert len(unicode_result) > head_length + tail_length
 
 
 def test_a_unicode_variant_puts_a_separator_between_its_signs(

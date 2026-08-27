@@ -2,6 +2,7 @@ import pytest
 
 from ebl.fragmentarium.domain.annotation import AnnotationValueType
 from ebl.fragmentarium.retrieve_annotations_helpers import (
+    MANUAL_SIGN_NAME_FIXES,
     MINIMUM_BOUNDING_BOX_SIZE,
     create_directory,
     filter_empty_annotation,
@@ -64,6 +65,34 @@ def test_sign_to_sign_ground_truth_falls_through_to_the_parsed_sign() -> None:
     )
 
     assert sign_to_sign_ground_truth(data) == "NUN"
+
+
+@pytest.mark.parametrize("degenerate", ["", "?", "nun"])
+def test_sign_to_sign_ground_truth_rejects_a_degenerate_label(
+    monkeypatch, degenerate: str
+) -> None:
+    monkeypatch.setitem(MANUAL_SIGN_NAME_FIXES, "broken", degenerate)
+    data = AnnotationDataFactory.build(
+        type=AnnotationValueType.HAS_SIGN, sign_name="broken", value="broken"
+    )
+
+    with pytest.raises(ValueError, match="empty ground truth label"):
+        sign_to_sign_ground_truth(data)
+
+
+def test_sign_to_sign_ground_truth_names_the_offending_annotation(
+    monkeypatch,
+) -> None:
+    monkeypatch.setitem(MANUAL_SIGN_NAME_FIXES, "broken", "")
+    data = AnnotationDataFactory.build(
+        type=AnnotationValueType.HAS_SIGN, sign_name="broken", value="broken"
+    )
+
+    with pytest.raises(ValueError) as error:
+        sign_to_sign_ground_truth(data)
+
+    assert data.id in str(error.value)
+    assert "broken" in str(error.value)
 
 
 def test_parse_annotations_maps_a_lowercase_sign_name() -> None:

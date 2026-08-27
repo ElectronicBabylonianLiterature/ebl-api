@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Sequence, cast
+from typing import Any, Callable, Dict, Optional, Sequence, cast
 
 from marshmallow import Schema, ValidationError, fields, post_load
 
@@ -27,10 +27,12 @@ from ebl.transliteration.domain.text_line import TextLine
 
 
 class MuseumNumberString(fields.String):
-    def _serialize(self, value, attr, obj, **kwargs):
+    def _serialize(self, value: Any, attr: Any, obj: Any, **kwargs) -> Optional[str]:
         return super()._serialize(str(value) if value else "", attr, obj, **kwargs)
 
-    def _deserialize(self, value, attr, data, **kwargs):
+    def _deserialize(
+        self, value: Any, attr: Any, data: Any, **kwargs
+    ) -> Optional[MuseumNumber]:
         try:
             deserialized = super()._deserialize(value, attr, data, **kwargs)
             return MuseumNumber.of(deserialized) if deserialized else None

@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import List, Sequence, Iterator, Tuple, cast
+from typing import List, Optional, Sequence, Iterator, Tuple, cast
 import re
 
 import pydash
@@ -206,8 +206,11 @@ def clean_line(line: str):
     return line
 
 
+ParsedLine = Tuple[Optional[Line], Optional[ErrorAnnotation]]
+
+
 def parse_atf_lark(atf_: str) -> Text:
-    def parse_line_(line: str, line_number: int):
+    def parse_line_(line: str, line_number: int) -> ParsedLine:
         try:
             line = clean_line(line)
             parsed_line = parse_line(line) if line else EmptyLine()
@@ -216,7 +219,7 @@ def parse_atf_lark(atf_: str) -> Text:
         except PARSE_ERRORS as ex:
             return (None, create_transliteration_error_data(ex, line, line_number))
 
-    def check_errors(pairs) -> Tuple[Line, ...]:
+    def check_errors(pairs: Sequence[ParsedLine]) -> Tuple[Line, ...]:
         errors = [error for _, error in pairs if error is not None]
         if errors:
             raise TransliterationError(errors)
