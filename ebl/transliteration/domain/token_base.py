@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import auto, Enum
-from typing import TYPE_CHECKING, AbstractSet, Sequence, Type, TypeVar
+from typing import AbstractSet, Sequence, Type, TypeVar
 
 import attr
 
@@ -10,123 +10,86 @@ from ebl.lemmatization.domain.lemmatization import (
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 
-if TYPE_CHECKING:
-    from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
-        EgyptianMetricalFeetSeparator,
-    )
-    from ebl.transliteration.domain.enclosure_tokens import (
-        AccidentalOmission,
-        BrokenAway,
-        DocumentOrientedGloss,
-        Emendation,
-        Erasure,
-        Gloss,
-        IntentionalOmission,
-        PerhapsBrokenAway,
-        Removal,
-    )
-    from ebl.transliteration.domain.greek_tokens import GreekWord
-    from ebl.transliteration.domain.normalized_akkadian import (
-        AkkadianWord,
-        Caesura,
-        MetricalFootSeparator,
-    )
-    from ebl.transliteration.domain.sign_tokens import (
-        CompoundGrapheme,
-        Divider,
-        Grapheme,
-        NamedSign,
-        Number,
-    )
-    from ebl.transliteration.domain.tokens import (
-        CommentaryProtocol,
-        LanguageShift,
-        LineBreak,
-        Variant,
-    )
-    from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
-    from ebl.transliteration.domain.word_tokens import Word
-
 
 class TokenVisitor(ABC):  # noqa: B024
     def visit(self, token: "Token") -> None:  # noqa: B027
         pass
 
-    def visit_word(self, word: "Word") -> None:
+    def visit_word(self, word) -> None:
         self.visit(word)
 
-    def visit_language_shift(self, shift: "LanguageShift") -> None:
+    def visit_language_shift(self, shift) -> None:
         self.visit(shift)
 
-    def visit_document_oriented_gloss(self, gloss: "DocumentOrientedGloss") -> None:
+    def visit_document_oriented_gloss(self, gloss) -> None:
         self.visit(gloss)
 
-    def visit_broken_away(self, broken_away: "BrokenAway") -> None:
+    def visit_broken_away(self, broken_away) -> None:
         self.visit(broken_away)
 
-    def visit_perhaps_broken_away(self, broken_away: "PerhapsBrokenAway") -> None:
+    def visit_perhaps_broken_away(self, broken_away) -> None:
         self.visit(broken_away)
 
-    def visit_accidental_omission(self, omission: "AccidentalOmission") -> None:
+    def visit_accidental_omission(self, omission) -> None:
         self.visit(omission)
 
-    def visit_intentional_omission(self, omission: "IntentionalOmission") -> None:
+    def visit_intentional_omission(self, omission) -> None:
         self.visit(omission)
 
-    def visit_removal(self, removal: "Removal") -> None:
+    def visit_removal(self, removal) -> None:
         self.visit(removal)
 
-    def visit_emendation(self, emendation: "Emendation") -> None:
+    def visit_emendation(self, emendation) -> None:
         self.visit(emendation)
 
-    def visit_erasure(self, erasure: "Erasure") -> None:
+    def visit_erasure(self, erasure) -> None:
         self.visit(erasure)
 
-    def visit_divider(self, divider: "Divider") -> None:
+    def visit_divider(self, divider) -> None:
         self.visit(divider)
 
     def visit_egyptian_metrical_feet_separator(
-        self, egyptian_metrical_feet_separator: "EgyptianMetricalFeetSeparator"
+        self, egyptian_metrical_feet_separator
     ) -> None:
         self.visit(egyptian_metrical_feet_separator)
 
-    def visit_line_break(self, line_break: "LineBreak") -> None:
+    def visit_line_break(self, line_break) -> None:
         self.visit(line_break)
 
-    def visit_commentary_protocol(self, protocol: "CommentaryProtocol") -> None:
+    def visit_commentary_protocol(self, protocol) -> None:
         self.visit(protocol)
 
-    def visit_variant(self, variant: "Variant") -> None:
+    def visit_variant(self, variant) -> None:
         self.visit(variant)
 
-    def visit_gloss(self, gloss: "Gloss") -> None:
+    def visit_gloss(self, gloss) -> None:
         self.visit(gloss)
 
-    def visit_named_sign(self, named_sign: "NamedSign") -> None:
+    def visit_named_sign(self, named_sign) -> None:
         self.visit(named_sign)
 
-    def visit_number(self, number: "Number") -> None:
+    def visit_number(self, number) -> None:
         self.visit_named_sign(number)
 
-    def visit_grapheme(self, grapheme: "Grapheme") -> None:
+    def visit_grapheme(self, grapheme) -> None:
         self.visit(grapheme)
 
-    def visit_compound_grapheme(self, grapheme: "CompoundGrapheme") -> None:
+    def visit_compound_grapheme(self, grapheme) -> None:
         self.visit(grapheme)
 
-    def visit_unknown_sign(self, sign: "UnknownSign") -> None:
+    def visit_unknown_sign(self, sign) -> None:
         self.visit(sign)
 
-    def visit_akkadian_word(self, word: "AkkadianWord") -> None:
+    def visit_akkadian_word(self, word) -> None:
         self.visit(word)
 
-    def visit_greek_word(self, word: "GreekWord") -> None:
+    def visit_greek_word(self, word) -> None:
         self.visit(word)
 
-    def visit_metrical_foot_separator(self, separator: "MetricalFootSeparator") -> None:
+    def visit_metrical_foot_separator(self, separator) -> None:
         self.visit(separator)
 
-    def visit_caesura(self, caesura: "Caesura") -> None:
+    def visit_caesura(self, caesura) -> None:
         self.visit(caesura)
 
 
