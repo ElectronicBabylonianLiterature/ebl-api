@@ -5,7 +5,6 @@ from ebl.fragmentarium.retrieve_annotations_helpers import (
     MINIMUM_BOUNDING_BOX_SIZE,
     create_directory,
     filter_empty_annotation,
-    match,
     parse_annotations,
     prepare_annotations,
     sign_to_sign_ground_truth,
@@ -45,26 +44,26 @@ def test_filter_empty_annotation_keeps_a_box_at_or_above_the_minimum() -> None:
         AnnotationValueType.UnclearSign,
     ],
 )
-def test_match_returns_the_type_name(annotation_type) -> None:
+def test_sign_to_sign_ground_truth_returns_the_type_name(annotation_type) -> None:
     data = AnnotationDataFactory.build(type=annotation_type)
 
-    assert match(data) == annotation_type.name
+    assert sign_to_sign_ground_truth(data) == annotation_type.name
 
 
-def test_match_marks_a_partially_broken_sign() -> None:
+def test_sign_to_sign_ground_truth_marks_a_partially_broken_sign() -> None:
     data = AnnotationDataFactory.build(
         type=AnnotationValueType.PARTIALLY_BROKEN, sign_name="NUN", value="nun"
     )
 
-    assert match(data) == "NUN?"
+    assert sign_to_sign_ground_truth(data) == "NUN?"
 
 
-def test_match_falls_through_to_the_parsed_sign() -> None:
+def test_sign_to_sign_ground_truth_falls_through_to_the_parsed_sign() -> None:
     data = AnnotationDataFactory.build(
         type=AnnotationValueType.HAS_SIGN, sign_name="NUN", value="nun"
     )
 
-    assert match(data) == "NUN"
+    assert sign_to_sign_ground_truth(data) == "NUN"
 
 
 def test_parse_annotations_maps_a_lowercase_sign_name() -> None:

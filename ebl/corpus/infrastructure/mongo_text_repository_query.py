@@ -195,22 +195,19 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
     def query_manuscripts_with_joins_by_chapter(
         self, id_: ChapterId
     ) -> List[Manuscript]:
-        try:
-            return cast(
-                List[Manuscript],
-                self._manuscript_schema().load(
-                    self._chapters.aggregate(
-                        [
-                            {"$match": chapter_id_query(id_)},
-                            {"$project": {"manuscripts": True}},
-                            {"$unwind": "$manuscripts"},
-                            {"$replaceRoot": {"newRoot": "$manuscripts"}},
-                            *join_joins(),
-                            *is_in_fragmentarium("museumNumber", "isInFragmentarium"),
-                        ]
-                    ),
-                    many=True,
+        return cast(
+            List[Manuscript],
+            self._manuscript_schema().load(
+                self._chapters.aggregate(
+                    [
+                        {"$match": chapter_id_query(id_)},
+                        {"$project": {"manuscripts": True}},
+                        {"$unwind": "$manuscripts"},
+                        {"$replaceRoot": {"newRoot": "$manuscripts"}},
+                        *join_joins(),
+                        *is_in_fragmentarium("museumNumber", "isInFragmentarium"),
+                    ]
                 ),
-            )
-        except NotFoundError as error:
-            raise chapter_not_found(id_) from error
+                many=True,
+            ),
+        )

@@ -43,7 +43,7 @@ class EnclosureValidator(TokenVisitor):
     def enclosures(self) -> FrozenSet[EnclosureType]:
         return self._state.enclosures
 
-    def done(self):
+    def done(self) -> None:
         if self._state.has_enclosures:
             raise EnclosureError()
 
@@ -106,7 +106,7 @@ class EnclosureValidator(TokenVisitor):
     def visit_document_oriented_gloss(self, gloss: DocumentOrientedGloss) -> None:
         self._update_state(gloss, EnclosureType.DOCUMENT_ORIENTED_GLOSS)
 
-    def _update_state(self, token: Enclosure, enclosure: EnclosureType):
+    def _update_state(self, token: Enclosure, enclosure: EnclosureType) -> None:
         self._state = (
             self._state.open(enclosure)
             if token.is_open

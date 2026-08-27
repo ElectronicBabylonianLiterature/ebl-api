@@ -46,7 +46,22 @@ TYPES_MATCHED_BY_NAME = (
 )
 
 
-def match(annotation_data: AnnotationData) -> str:
+MANUAL_SIGN_NAME_FIXES = {
+    "ni": "NI",
+    "pa": "PA",
+    "šam": "U₂",
+    "ti": "TI",
+    "li": "LI",
+    "NUN": "NUN",
+    "ŠU": "ŠU",
+    "GUR": "GUR",
+    "engur": "LAGAB×HAL",
+    "BE": "BAD",
+    "NA": "NA",
+}
+
+
+def sign_to_sign_ground_truth(annotation_data: AnnotationData) -> str:
     annotation_type = annotation_data.type
     if annotation_type in TYPES_MATCHED_BY_NAME:
         return annotation_type.name
@@ -55,38 +70,21 @@ def match(annotation_data: AnnotationData) -> str:
 
 
 def parse_annotations(annotation_data: AnnotationData) -> str:
-    MANUEL_FIX = {
-        "ni": "NI",
-        "pa": "PA",
-        "šam": "U₂",
-        "ti": "TI",
-        "li": "LI",
-        "NUN": "NUN",
-        "ŠU": "ŠU",
-        "GUR": "GUR",
-        "engur": "LAGAB×HAL",
-        "BE": "BAD",
-        "NA": "NA",
-    }
     try:
         if annotation_data.sign_name != "":
             return (
-                MANUEL_FIX[annotation_data.sign_name]
+                MANUAL_SIGN_NAME_FIXES[annotation_data.sign_name]
                 if annotation_data.sign_name.islower()
                 else annotation_data.sign_name
             )
         if annotation_data.value.isdigit():
             return annotation_data.value
         else:
-            return MANUEL_FIX[annotation_data.value]
+            return MANUAL_SIGN_NAME_FIXES[annotation_data.value]
     except (KeyError, AttributeError) as e:
         print(e)
         print(annotation_data)
         return AnnotationValueType.UnclearSign.name
-
-
-def sign_to_sign_ground_truth(annotation_data: AnnotationData) -> str:
-    return match(annotation_data)
 
 
 def prepare_annotations(

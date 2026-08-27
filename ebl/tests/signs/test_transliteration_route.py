@@ -54,6 +54,25 @@ def test_a_broken_away_name_part_contributes_nothing(
     assert result.json == [NU, NU, NU]
 
 
+def test_a_reading_broken_in_the_middle_is_looked_up_whole(
+    client, sign_repository, signs
+) -> None:
+    _seed(sign_repository, signs)
+
+    result = _get(client, "[k]u")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [KU, BA]
+
+
+def test_a_reading_broken_in_the_middle_matches_the_unbroken_reading(
+    client, sign_repository, signs
+) -> None:
+    _seed(sign_repository, signs)
+
+    assert _get(client, "[k]u").json == _get(client, "ku").json
+
+
 def test_an_unknown_reading_yields_nothing(client, sign_repository, signs) -> None:
     _seed(sign_repository, signs)
 

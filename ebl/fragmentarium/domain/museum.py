@@ -108,5 +108,5 @@ class Museum(Enum):
     VATICAN_MUSEUMS = museum_entries_t_y.VATICAN_MUSEUMS
     VORDERASIATISCHES_MUSEUM = museum_entries_t_y.VORDERASIATISCHES_MUSEUM
     YALE_PEABODY_COLLECTION = museum_entries_t_y.YALE_PEABODY_COLLECTION
-    UNKNOWN = ("UNKNOWN",)
-    HYPERURANION = ("HYPERURANION",)
+    UNKNOWN = museum_entries_t_y.UNKNOWN
+    HYPERURANION = museum_entries_a_l.HYPERURANION

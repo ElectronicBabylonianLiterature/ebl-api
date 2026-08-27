@@ -96,9 +96,6 @@ class AtfVisitor(TokenVisitor):
     def visit_perhaps_broken_away(self, broken_away: PerhapsBrokenAway) -> None:
         self._side(broken_away.side)(broken_away)
 
-    def visit_omission(self, omission: AccidentalOmission) -> None:
-        self._side(omission.side)(omission)
-
     def visit_accidental_omission(self, omission: AccidentalOmission) -> None:
         self._side(omission.side)(omission)
 

@@ -11,7 +11,7 @@ class EnclosureVisitorState:
     enclosures: FrozenSet[EnclosureType] = frozenset()
 
     @property
-    def has_enclosures(self) -> int:
+    def has_enclosures(self) -> bool:
         return len(self.enclosures) > 0
 
     def is_open(self, enclosure: EnclosureType) -> bool:

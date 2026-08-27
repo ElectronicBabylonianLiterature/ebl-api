@@ -17,8 +17,8 @@ ValueSubIndex = Tuple[str, Optional[int]]
 def extract_word_sub_indexes(word: Token) -> Iterable[ValueSubIndex]:
     for part in word.parts:
         sign = part.parts[0] if isinstance(part, Determinative) else part
-        if isinstance(sign, NamedSign) and sign.name_parts:
-            yield (sign.name_parts[0].name_contribution, sign.sub_index)
+        if isinstance(sign, NamedSign) and sign.name:
+            yield (sign.name, sign.sub_index)
     yield (WHITESPACE, 1)
 
 

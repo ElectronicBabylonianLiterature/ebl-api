@@ -189,7 +189,7 @@ class Joiner(Token):
 
     @staticmethod
     def comma():
-        return Joiner.of(atf.Joiner.PLUS)
+        return Joiner.of(atf.Joiner.COMMA)
 
     @staticmethod
     def of(joiner: atf.Joiner):

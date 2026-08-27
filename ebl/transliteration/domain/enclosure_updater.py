@@ -131,7 +131,7 @@ class EnclosureUpdater(TokenVisitor):
 
         return part_visitor.tokens
 
-    def _update_enclosures(self, token: Enclosure, enclosure: EnclosureType):
+    def _update_enclosures(self, token: Enclosure, enclosure: EnclosureType) -> None:
         self._enclosures = (
             self._enclosures.union({enclosure})
             if token.is_open

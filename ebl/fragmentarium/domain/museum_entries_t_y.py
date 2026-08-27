@@ -1,6 +1,6 @@
 """Museum entries with names starting with T-Y."""
 
-from ebl.fragmentarium.domain.museum_entry import MuseumEntry
+from ebl.fragmentarium.domain.museum_entry import MuseumEntry, MuseumEntryNameOnly
 
 THE_BRITISH_MUSEUM: MuseumEntry = (
     "The British Museum",
@@ -56,6 +56,7 @@ TURIN_DEPARTMENT_ARCHAEOLOGY: MuseumEntry = (
     "IT",
     "https://www.dipstudistorici.unito.it/",
 )
+UNKNOWN: MuseumEntryNameOnly = ("UNKNOWN",)
 URUK_WARKA_SAMMLUNG: MuseumEntry = (
     "Uruk-Warka-Sammlung",
     "Heidelberg",

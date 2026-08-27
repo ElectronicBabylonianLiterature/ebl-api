@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, cast
+from typing import Any, Callable, Dict, Sequence, cast
 
 from marshmallow import Schema, ValidationError, fields, post_load
 
@@ -107,9 +107,11 @@ def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
     ).strip()
 
 
-def _serialize_atf_tokens(manuscript_line) -> Any:
+def _serialize_atf_tokens(
+    manuscript_line: ManuscriptLine,
+) -> Sequence[Dict[str, Any]]:
     dumped = cast(Dict[str, Any], OneOfLineSchema().dump(manuscript_line.line))
-    return dumped["content"]
+    return cast(Sequence[Dict[str, Any]], dumped["content"])
 
 
 class ApiManuscriptLineSchema(Schema):

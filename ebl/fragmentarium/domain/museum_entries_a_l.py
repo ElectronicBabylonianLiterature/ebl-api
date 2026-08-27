@@ -1,6 +1,6 @@
 """Museum entries with names starting with A-L."""
 
-from ebl.fragmentarium.domain.museum_entry import MuseumEntry
+from ebl.fragmentarium.domain.museum_entry import MuseumEntry, MuseumEntryNameOnly
 
 ABBEY_MUSEUM: MuseumEntry = (
     "Abbey Museum",
@@ -130,6 +130,7 @@ HILPRECHT_COLLECTION: MuseumEntry = (
     "institut-fuer-orientalistik-indogermanistik-ur-und-"
     "fruehgeschichtliche-archaeologie/altorientalistik/hilprecht-sammlung",
 )
+HYPERURANION: MuseumEntryNameOnly = ("HYPERURANION",)
 ISTANBUL_ARKEOLOJI_MUSEUM: MuseumEntry = (
     "İstanbul Arkeoloji Müzeleri",
     "Istanbul",

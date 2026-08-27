@@ -17,21 +17,15 @@ from ebl.transliteration.domain.sign_tokens import (
     Number,
     Reading,
 )
-from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 
 
 def tree_to_string(tree: Tree) -> str:
-    _children = []
-    for part in tree.scan_values(bool):
-        if hasattr(part, "value"):
-            _children.append(cast(Any, part).value)
-        elif isinstance(part, Tree):
-            _children.append(tree_to_string(part))
-        else:
-            _children.append(str(part))
-    return "".join(_children)
+    return "".join(
+        cast(Any, part).value if hasattr(part, "value") else str(part)
+        for part in tree.scan_values(bool)
+    )
 
 
 class SignTransformer(Transformer):
@@ -55,10 +49,6 @@ class SignTransformer(Transformer):
     @v_args(inline=True)
     def ebl_atf_text_line__unknown_number_of_signs(self, _):
         return UnknownNumberOfSigns.of()
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__joiner(self, symbol):
-        return Joiner.of(atf.Joiner(str(symbol)))
 
     @v_args(inline=True)
     def ebl_atf_text_line__reading(self, name, sub_index, modifiers, flags, sign=None):

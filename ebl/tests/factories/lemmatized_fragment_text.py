@@ -15,7 +15,17 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
 )
 from ebl.tests.factories.first_text_line import FIRST_TEXT_LINE
-from ebl.transliteration.domain.atf import Flag
+from ebl.tests.factories.fragment_text_words import (
+    ba_ma_ti,
+    broken_away_gap,
+    broken_away_gap_end,
+    broken_away_gap_start,
+    damaged_unclear_sign,
+    ki_du,
+    mu,
+    ta_ma_tu,
+    u,
+)
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
     LooseDollarLine,
@@ -24,7 +34,6 @@ from ebl.transliteration.domain.dollar_line import (
     SealDollarLine,
     StateDollarLine,
 )
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.genre import Genre as CorpusGenre
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.language import Language
@@ -49,12 +58,10 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,
-    UnknownNumberOfSigns,
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
-from ebl.transliteration.domain.word_tokens import InWordNewline, Word
+from ebl.transliteration.domain.word_tokens import Word
 
 
 LEMMATIZED_FRAGMENT_TEXT = Text(
@@ -63,7 +70,7 @@ LEMMATIZED_FRAGMENT_TEXT = Text(
         TextLine.of_iterable(
             LineNumber(2, True),
             (
-                Word.of([BrokenAway.open(), UnknownNumberOfSigns.of()]),
+                Word.of(broken_away_gap_start()),
                 Word.of([Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),)),
                 Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana I"),)),
                 Word.of(
@@ -74,70 +81,26 @@ LEMMATIZED_FRAGMENT_TEXT = Text(
                     ],
                     unique_lemma=(WordId("ūsu I"),),
                 ),
-                Word.of([UnknownNumberOfSigns.of(), BrokenAway.close()]),
+                Word.of(broken_away_gap_end()),
             ),
         ),
         TextLine.of_iterable(
             LineNumber(3, True),
             (
-                Word.of([BrokenAway.open(), UnknownNumberOfSigns.of()]),
-                Word.of(
-                    unique_lemma=(WordId("kīdu I"),),
-                    parts=[
-                        Reading.of(
-                            (
-                                ValueToken.of("k"),
-                                BrokenAway.close(),
-                                ValueToken.of("i"),
-                            )
-                        ),
-                        Joiner.hyphen(),
-                        Reading.of_name("du"),
-                    ],
-                ),
-                Word.of(unique_lemma=(WordId("u I"),), parts=[Reading.of_name("u")]),
-                Word.of(
-                    unique_lemma=(WordId("bamātu I"),),
-                    parts=[
-                        Reading.of_name("ba"),
-                        Joiner.hyphen(),
-                        Reading.of_name("ma"),
-                        Joiner.hyphen(),
-                        Reading.of(
-                            (
-                                ValueToken.of("t"),
-                                BrokenAway.open(),
-                                ValueToken.of("i"),
-                            )
-                        ),
-                    ],
-                ),
-                Word.of([UnknownNumberOfSigns.of(), BrokenAway.close()]),
+                Word.of(broken_away_gap_start()),
+                Word.of(ki_du(), unique_lemma=(WordId("kīdu I"),)),
+                Word.of(u(), unique_lemma=(WordId("u I"),)),
+                Word.of(ba_ma_ti(), unique_lemma=(WordId("bamātu I"),)),
+                Word.of(broken_away_gap_end()),
             ),
         ),
         TextLine.of_iterable(
             LineNumber(6, True),
             (
-                Word.of(
-                    [
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
-                    ]
-                ),
-                Word.of([UnclearSign.of([Flag.DAMAGE])]),
-                Word.of(unique_lemma=(WordId("mu I"),), parts=[Reading.of_name("mu")]),
-                Word.of(
-                    unique_lemma=(WordId("tamalāku I"),),
-                    parts=[
-                        Reading.of_name("ta"),
-                        Joiner.hyphen(),
-                        Reading.of_name("ma"),
-                        InWordNewline.of(),
-                        Joiner.hyphen(),
-                        Reading.of_name("tu", 2),
-                    ],
-                ),
+                Word.of(broken_away_gap()),
+                Word.of(damaged_unclear_sign()),
+                Word.of(mu(), unique_lemma=(WordId("mu I"),)),
+                Word.of(ta_ma_tu(), unique_lemma=(WordId("tamalāku I"),)),
             ),
         ),
         TextLine.of_iterable(

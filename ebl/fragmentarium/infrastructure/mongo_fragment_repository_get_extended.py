@@ -179,19 +179,16 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         )
 
     def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
-        try:
-            if date := self._fragments.find_one(
-                {
-                    "museumNumber.prefix": number.prefix,
-                    "museumNumber.number": number.number,
-                    "museumNumber.suffix": number.suffix,
-                },
-                projection={"date": True},
-            ).get("date"):
-                return cast(Date, DateSchema(unknown=EXCLUDE).load(date))
-            return None
-        except StopIteration as error:
-            raise NotFoundError(f"Fragment {number} not found.") from error
+        if date := self._fragments.find_one(
+            {
+                "museumNumber.prefix": number.prefix,
+                "museumNumber.number": number.number,
+                "museumNumber.suffix": number.suffix,
+            },
+            projection={"date": True},
+        ).get("date"):
+            return cast(Date, DateSchema(unknown=EXCLUDE).load(date))
+        return None
 
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         fragment: Dict[str, Any] = next(

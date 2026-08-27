@@ -34,7 +34,6 @@ class SignsResource:
                 fosseysBase64.append(attr.evolve(fossey, sign=b64))
             else:
                 fosseysBase64.append(fossey)
-        attr.evolve(sign, fossey=fosseysBase64)
         resp.media = SignDtoSchema().dump(attr.evolve(sign, fossey=fosseysBase64))
 
 

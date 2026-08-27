@@ -1,5 +1,15 @@
 from ebl.tests.factories.first_text_line import FIRST_TEXT_LINE
-from ebl.transliteration.domain.atf import Flag
+from ebl.tests.factories.fragment_text_words import (
+    ba_ma_ti,
+    broken_away_gap,
+    broken_away_gap_end,
+    broken_away_gap_start,
+    damaged_unclear_sign,
+    ki_du,
+    mu,
+    ta_ma_tu,
+    u,
+)
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import (
@@ -9,11 +19,9 @@ from ebl.transliteration.domain.sign_tokens import (
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
     Joiner,
-    UnknownNumberOfSigns,
     ValueToken,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
-from ebl.transliteration.domain.word_tokens import InWordNewline, Word
+from ebl.transliteration.domain.word_tokens import Word
 
 
 FIRST_TEXT_LINES = (
@@ -21,13 +29,7 @@ FIRST_TEXT_LINES = (
     TextLine.of_iterable(
         LineNumber(2, True),
         (
-            Word.of(
-                [
-                    BrokenAway.open(),
-                    UnknownNumberOfSigns.of(),
-                    BrokenAway.close(),
-                ]
-            ),
+            Word.of(broken_away_gap()),
             Word.of([Logogram.of_name("GI", 6)]),
             Word.of([Reading.of_name("ana")]),
             Word.of(
@@ -43,67 +45,26 @@ FIRST_TEXT_LINES = (
                     ),
                 ]
             ),
-            Word.of([UnknownNumberOfSigns.of(), BrokenAway.close()]),
+            Word.of(broken_away_gap_end()),
         ),
     ),
     TextLine.of_iterable(
         LineNumber(3, True),
         (
-            Word.of([BrokenAway.open(), UnknownNumberOfSigns.of()]),
-            Word.of(
-                [
-                    Reading.of(
-                        (
-                            ValueToken.of("k"),
-                            BrokenAway.close(),
-                            ValueToken.of("i"),
-                        )
-                    ),
-                    Joiner.hyphen(),
-                    Reading.of_name("du"),
-                ]
-            ),
-            Word.of([Reading.of_name("u")]),
-            Word.of(
-                [
-                    Reading.of_name("ba"),
-                    Joiner.hyphen(),
-                    Reading.of_name("ma"),
-                    Joiner.hyphen(),
-                    Reading.of(
-                        (
-                            ValueToken.of("t"),
-                            BrokenAway.open(),
-                            ValueToken.of("i"),
-                        )
-                    ),
-                ]
-            ),
-            Word.of([UnknownNumberOfSigns.of(), BrokenAway.close()]),
+            Word.of(broken_away_gap_start()),
+            Word.of(ki_du()),
+            Word.of(u()),
+            Word.of(ba_ma_ti()),
+            Word.of(broken_away_gap_end()),
         ),
     ),
     TextLine.of_iterable(
         LineNumber(6, True),
         (
-            Word.of(
-                [
-                    BrokenAway.open(),
-                    UnknownNumberOfSigns.of(),
-                    BrokenAway.close(),
-                ]
-            ),
-            Word.of([UnclearSign.of([Flag.DAMAGE])]),
-            Word.of([Reading.of_name("mu")]),
-            Word.of(
-                [
-                    Reading.of_name("ta"),
-                    Joiner.hyphen(),
-                    Reading.of_name("ma"),
-                    InWordNewline.of(),
-                    Joiner.hyphen(),
-                    Reading.of_name("tu", 2),
-                ]
-            ),
+            Word.of(broken_away_gap()),
+            Word.of(damaged_unclear_sign()),
+            Word.of(mu()),
+            Word.of(ta_ma_tu()),
         ),
     ),
 )
