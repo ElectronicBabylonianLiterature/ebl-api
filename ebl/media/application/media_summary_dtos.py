@@ -62,6 +62,15 @@ class FragmentMediaSummaryDto:
     def of(
         cls, fragment_id: MuseumNumber, media: Sequence[Media]
     ) -> "FragmentMediaSummaryDto":
+        """Summarize one fragment's media for a query/list row.
+
+        Every media in `media` must be associated with `fragment_id`, the
+        precondition `media_selection` documents; an unassociated one raises
+        `ValueError`. This runs per row inside a fragment query response, so
+        the sequence must come from that row's own key of
+        `MediaReader.find_by_fragments` — a mis-keyed batch fails the whole
+        page rather than quietly degrading one summary.
+        """
         return cls(
             media_summary=MediaSummaryDto.of(fragment_id, media),
             has_photo=has_photo(fragment_id, media),

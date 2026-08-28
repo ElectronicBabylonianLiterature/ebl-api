@@ -124,7 +124,7 @@ def test_backfill_report_carries_a_resume_token_and_typed_categories() -> None:
         created=38,
         failed=2,
         next_resume_token="cursor-2",
-        reports={BackfillCategory.UNKNOWN_FRAGMENT: ["K.999"]},
+        report_entries=((BackfillCategory.UNKNOWN_FRAGMENT, ["K.999"]),),
     )
 
     assert report.next_resume_token == "cursor-2"
@@ -133,7 +133,9 @@ def test_backfill_report_carries_a_resume_token_and_typed_categories() -> None:
 
 def test_backfill_report_collections_cannot_be_mutated_by_the_caller() -> None:
     entries = ["K.999"]
-    report = BackfillReport(reports={BackfillCategory.UNKNOWN_FRAGMENT: entries})
+    report = BackfillReport(
+        report_entries=((BackfillCategory.UNKNOWN_FRAGMENT, entries),)
+    )
 
     entries.append("K.1000")
 

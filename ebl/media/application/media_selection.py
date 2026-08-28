@@ -1,3 +1,15 @@
+"""Fragment-scoped selection over media.
+
+Every function here has one precondition: each media in `media` must be
+associated with `fragment_id`. Selection is defined by that fragment's
+association — its sort order and primary flag — so media that has no such
+association has no defined position and raises `ValueError` rather than being
+silently skipped. Callers obtain correctly scoped sequences from
+`MediaReader.find_by_fragment` or from one key of `MediaReader.find_by_fragments`;
+passing another fragment's sequence is a caller defect, and failing loudly is
+what keeps it from turning into a wrong primary or a wrong `hasPhoto`.
+"""
+
 from typing import Optional, Sequence
 
 from ebl.media.domain import Media, MediaType
@@ -24,8 +36,10 @@ def primary_media_for(
 
 
 def has_photo(fragment_id: MuseumNumber, media: Sequence[Media]) -> bool:
-    fragment_types = tuple(_fragment_media_type(fragment_id, item) for item in media)
-    return MediaType.PHOTO in fragment_types
+    return any(
+        item.type is MediaType.PHOTO
+        for item in fragment_media_in_order(fragment_id, media)
+    )
 
 
 def _first_primary(
@@ -42,11 +56,6 @@ def _first_primary(
         ),
         None,
     )
-
-
-def _fragment_media_type(fragment_id: MuseumNumber, media: Media) -> MediaType:
-    media.association_for(fragment_id)
-    return media.type
 
 
 def _sort_key(fragment_id: MuseumNumber, media: Media) -> tuple[int, str]:

@@ -4,7 +4,12 @@ from typing import Mapping, Optional, Sequence
 
 import attr
 
-from ebl.media.domain.validation import not_blank, tuple_or_empty
+from ebl.media.domain.validation import (
+    not_blank,
+    positive_int,
+    strict_bool,
+    tuple_or_empty,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -48,18 +53,21 @@ class BackfillCategory(Enum):
 def _museum_numbers_of(
     value: Optional[Sequence[MuseumNumber]],
 ) -> tuple[MuseumNumber, ...]:
-    return tuple_or_empty(value)
+    return tuple(dict.fromkeys(tuple_or_empty(value)))
 
 
 def _strings_of(value: Optional[Sequence[str]]) -> tuple[str, ...]:
     return tuple_or_empty(value)
 
 
-def _frozen_reports(
-    value: Optional[Mapping[BackfillCategory, Sequence[str]]],
-) -> Mapping[BackfillCategory, Sequence[str]]:
-    return MappingProxyType(
-        {category: tuple(entries) for category, entries in (value or {}).items()}
+def _report_entries_of(
+    value: Optional[Sequence[tuple[BackfillCategory, Sequence[str]]]],
+) -> tuple[tuple[BackfillCategory, tuple[str, ...]], ...]:
+    return tuple(
+        sorted(
+            ((category, tuple(entries)) for category, entries in value or ()),
+            key=lambda entry: entry[0].value,
+        )
     )
 
 
@@ -68,6 +76,11 @@ class ImportRequest:
     """One import run. `mode` decides what happens to sources that already have
     a media record, as defined by `ImportMode`; `dry_run` is orthogonal to the
     mode, so any mode can be previewed.
+
+    `fragment_ids` is deduplicated in first-seen order: naming a fragment twice
+    describes one fragment, not two units of work. Without that, `REPLACE` would
+    replace the same source twice in one run and `ImportReport` would count it
+    twice.
     """
 
     mode: ImportMode = attr.ib(validator=attr.validators.instance_of(ImportMode))
@@ -75,7 +88,7 @@ class ImportRequest:
     fragment_ids: Sequence[MuseumNumber] = attr.ib(
         factory=tuple, converter=_museum_numbers_of
     )
-    dry_run: bool = attr.ib(default=False, kw_only=True)
+    dry_run: bool = attr.ib(default=False, kw_only=True, validator=strict_bool)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -90,9 +103,23 @@ class ImportReport:
 
 @attr.s(auto_attribs=True, frozen=True)
 class BackfillRequest:
-    dry_run: bool = True
-    batch_size: Optional[int] = None
-    resume_after: Optional[str] = None
+    """One bounded backfill batch.
+
+    `dry_run` defaults to true and is the guard that keeps a run from mutating
+    production data, so it is a strict boolean: a truthy string must not pass
+    for it. `batch_size` bounds the batch and must be positive — a batch that
+    processes nothing is a caller error, not an empty run. `resume_after` is the
+    opaque cursor from `BackfillReport.next_resume_token`; `None` starts at the
+    beginning, and an empty string is not a cursor.
+    """
+
+    dry_run: bool = attr.ib(default=True, validator=strict_bool)
+    batch_size: Optional[int] = attr.ib(
+        default=None, validator=attr.validators.optional(positive_int)
+    )
+    resume_after: Optional[str] = attr.ib(
+        default=None, validator=attr.validators.optional(not_blank)
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -102,6 +129,12 @@ class BackfillReport:
     `next_resume_token` is `None` when the scan finished; otherwise it is the
     opaque cursor to pass back as `BackfillRequest.resume_after` to continue
     after the last completed boundary.
+
+    Audit findings are given as `(category, entries)` pairs and stored in
+    canonical category order; read them back through the `reports` mapping.
+    Pairs rather than a mapping keep the report hashable like every other media
+    value object, and the canonical order keeps two reports with the same
+    findings equal and equally hashed whatever order they were built in.
     """
 
     scanned: int = 0
@@ -111,6 +144,10 @@ class BackfillReport:
     skipped: int = 0
     failed: int = 0
     next_resume_token: Optional[str] = None
-    reports: Mapping[BackfillCategory, Sequence[str]] = attr.ib(
-        factory=dict, converter=_frozen_reports
+    report_entries: Sequence[tuple[BackfillCategory, Sequence[str]]] = attr.ib(
+        factory=tuple, converter=_report_entries_of
     )
+
+    @property
+    def reports(self) -> Mapping[BackfillCategory, Sequence[str]]:
+        return MappingProxyType(dict(self.report_entries))
