@@ -238,3 +238,12 @@ def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
     assert summary.description == ""
     assert summary.script == Script()
     assert len(summary.matching_line_preview["lines"]) == 1
+
+
+def test_query_fragmentarium_limit_summary_missing_museum_number_fails_clearly(
+    fragment_repository,
+):
+    with pytest.raises(NotFoundError, match="Fragment summary data"):
+        fragment_repository._hydrate_fragment_query_item(
+            {"_id": "K.1", "matchingLines": []}, {"K.1": {"text": {"lines": []}}}, ()
+        )

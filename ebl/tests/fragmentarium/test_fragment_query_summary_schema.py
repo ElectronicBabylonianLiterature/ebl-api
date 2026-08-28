@@ -9,6 +9,7 @@ from ebl.fragmentarium.application.fragment_fields_schemas import (
 )
 from ebl.fragmentarium.application.fragment_query_preview import (
     matching_line_preview_of,
+    matching_line_preview_of_data,
 )
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryArchaeologySchema,
@@ -29,6 +30,7 @@ from ebl.tests.factories.fragment import (
     FragmentDossierReferenceFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import dumped_text
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -173,20 +175,14 @@ def test_fragment_query_archaeology_schema_loads_non_dict_site():
 def test_matching_line_preview_skips_out_of_range_lines():
     fragment = TransliteratedFragmentFactory.build()
     line_count = len(fragment.text.lines)
+    text_data = dumped_text(fragment)
 
-    preview = matching_line_preview_of(fragment.text, (0, line_count))
-    empty_preview = matching_line_preview_of(fragment.text, (line_count,))
+    preview = matching_line_preview_of_data(text_data, (0, line_count))
+    empty_preview = matching_line_preview_of_data(text_data, (line_count,))
 
     assert len(preview["lines"]) == 1
-    assert (
-        cast(
-            dict,
-            FragmentQueryMatchingLinePreviewSchema().load(
-                dump_dict(FragmentQueryMatchingLinePreviewSchema(), empty_preview)
-            ),
-        )["lines"]
-        == []
-    )
+    schema = FragmentQueryMatchingLinePreviewSchema()
+    assert cast(dict, schema.dump(schema.load(empty_preview)))["lines"] == []
 
 
 def test_fragment_query_result_schema_roundtrip_and_compatibility():

@@ -99,7 +99,11 @@ class MongoFragmentRepositoryGetSummary(MongoFragmentRepositoryBase):
             )
 
         matching_lines = item.get("matchingLines") or []
-        museum_number = fragment.get("museumNumber") or item["museumNumber"]
+        museum_number = fragment.get("museumNumber", item.get("museumNumber"))
+        if museum_number is None:
+            raise NotFoundError(
+                f"Fragment summary data for {item.get('museumNumber')} not found."
+            )
         return {
             "museumNumber": museum_number,
             "accession": fragment.get("accession"),
