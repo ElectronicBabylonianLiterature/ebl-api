@@ -1,3 +1,10 @@
+"""Primitive-level recovery tests for `update_with_identity_claims`.
+
+The reachable identity-change recovery path (through `manage_identity`) is
+covered by `test_bibliography_identity_management_recovery.py`; these exercise
+the shared `_persist_with_identity_claims` bookkeeping directly.
+"""
+
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
@@ -5,6 +12,10 @@ import pytest
 from pymongo.database import Database
 
 from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.bibliography_identity import (
+    BibliographyIdentityContext,
+    update_with_identity_claims,
+)
 from ebl.bibliography.application.lookup_reservation import (
     LookupReservationOperation,
     LookupReservationState,
@@ -64,6 +75,17 @@ def reclaim(bibliography_repository, value: str):
     )
 
 
+def update_identity(context: "BibliographyIdentityUpdateContext", entry: dict) -> None:
+    update_with_identity_claims(
+        BibliographyIdentityContext(
+            context.bibliography_repository,
+            context.changelog,
+        ),
+        entry,
+        context.user,
+    )
+
+
 def fail_once(monkeypatch, target, name: str, message: str):
     original = getattr(target, name)
     calls = {"count": 0}
@@ -96,8 +118,7 @@ def test_update_commit_failure_recovers_new_claims_and_retires_old(
         "commit failed",
     )
 
-    with pytest.raises(RuntimeError, match="commit failed"):
-        context.bibliography.update(new_entry, context.user)
+    update_identity(context, new_entry)
 
     assert context.bibliography_repository.query_by_id(old_entry["id"]) == new_entry
     assert (
@@ -122,7 +143,7 @@ def test_update_commit_failure_recovers_new_claims_and_retires_old(
         == LookupReservationState.ABANDONED.value
     )
     assert context.bibliography.find("new-update-alias") == new_entry
-    context.bibliography.update(new_entry, context.user)
+    update_identity(context, new_entry)
     assert (
         context.database["bibliography"].count_documents({"_id": old_entry["id"]}) == 1
     )
@@ -142,8 +163,7 @@ def test_update_retirement_failure_reconciles_stale_old_claim(
         "retire failed",
     )
 
-    with pytest.raises(RuntimeError, match="retire failed"):
-        context.bibliography.update(new_entry, context.user)
+    update_identity(context, new_entry)
 
     assert context.bibliography.find(new_entry["citationKey"]) == new_entry
     assert (
@@ -175,8 +195,7 @@ def test_update_changelog_failure_keeps_persisted_update(
     context.bibliography.create(old_entry, context.user)
     fail_once(monkeypatch, context.changelog, "create", "changelog failed")
 
-    with pytest.raises(RuntimeError, match="changelog failed"):
-        context.bibliography.update(new_entry, context.user)
+    update_identity(context, new_entry)
 
     assert context.bibliography_repository.query_by_id(old_entry["id"]) == new_entry
     assert (
@@ -188,7 +207,7 @@ def test_update_changelog_failure_keeps_persisted_update(
         == LookupReservationState.ABANDONED.value
     )
     context.bibliography_repository.reconcile_lookup_reservations(FUTURE)
-    context.bibliography.update(new_entry, context.user)
+    update_identity(context, new_entry)
 
     with pytest.raises(NotFoundError):
         context.bibliography.find(old_entry["citationKey"])

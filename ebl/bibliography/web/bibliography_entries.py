@@ -3,6 +3,7 @@ from falcon_caching import Cache
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 import json
+from typing import Mapping, Sequence
 from ebl.cache.application.cache import DAILY_TIMEOUT
 
 from ebl.bibliography.domain.bibliography_entry import (
@@ -14,8 +15,38 @@ from ebl.bibliography.domain.bibliography_entry import (
 )
 from ebl.errors import DataError
 from ebl.users.web.require_scope import require_scope
+from ebl.users.web.user_request import UserRequest
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.duplicate_override import DuplicateOverrideError
+
+
+def submitted_server_owned_fields(
+    candidate_entries: Sequence[Mapping[str, object]],
+) -> list[str]:
+    return sorted(
+        {
+            field
+            for entry in candidate_entries
+            for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+            if field in entry
+        }
+    )
+
+
+IDENTITY_LIFECYCLE_FIELDS = ("deprecated", "redirectTo")
+
+
+def reject_born_identity_lifecycle_fields(req, _resp, _resource, _params) -> None:
+    media = req.media
+    if not isinstance(media, dict):
+        return
+
+    forbidden = sorted(field for field in IDENTITY_LIFECYCLE_FIELDS if field in media)
+    if forbidden:
+        raise DataError(
+            "A new bibliography entry may not carry identity-lifecycle fields "
+            f"({', '.join(forbidden)}); use POST /bibliography/{{id}}/identity."
+        )
 
 
 def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
@@ -27,15 +58,7 @@ def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
     if isinstance(media.get("bibliographyEntry"), dict):
         candidate_entries.append(media["bibliographyEntry"])
 
-    forbidden_fields = sorted(
-        {
-            field
-            for entry in candidate_entries
-            for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
-            if field in entry
-        }
-    )
-    if forbidden_fields:
+    if forbidden_fields := submitted_server_owned_fields(candidate_entries):
         raise DataError(
             "Partner bibliography payload may not include server-owned fields: "
             f"{', '.join(forbidden_fields)}."
@@ -50,8 +73,9 @@ class BibliographyResource:
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(reject_born_identity_lifecycle_fields)
     @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response) -> None:
+    def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media
         self._bibliography.create(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
@@ -68,9 +92,9 @@ class BibliographyEntriesResource:
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response, id_: str) -> None:
+    def on_post(self, req: UserRequest, resp: Response, id_: str) -> None:
         entry = {**req.media, "id": id_}
-        self._bibliography.update(entry, req.context.user)
+        self._bibliography.update_metadata(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT
 
 
@@ -122,7 +146,7 @@ class PartnerBibliographyResource:
     @falcon.before(require_scope, "write:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response) -> None:
+    def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media
         if duplicate_result := self._bibliography.create_partner_entry(
             bibliography_entry, req.context.user
@@ -146,7 +170,9 @@ class PartnerBibliographyEntryResource:
     @falcon.before(require_scope, "write:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response, id_or_citation_key: str) -> None:
+    def on_post(
+        self, req: UserRequest, resp: Response, id_or_citation_key: str
+    ) -> None:
         if duplicate_result := self._bibliography.update_partner_entry(
             id_or_citation_key, req.media, req.context.user
         ):
@@ -178,7 +204,7 @@ class PartnerBibliographyDuplicateOverrideResource:
     @falcon.before(require_scope, "write:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
-    def on_post(self, req: Request, resp: Response) -> None:
+    def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media["bibliographyEntry"]
         override = req.media["override"]
 

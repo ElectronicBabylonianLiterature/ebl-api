@@ -102,6 +102,10 @@ Fragmentarium:
 
 Bibliography:
 `write:bibliography`,
+`admin:bibliography` (identity management only — **not yet provisioned to
+any credential**; grant only to a trusted internal operator, never to a
+partner M2M client; see
+`docs/handoffs/admin-bibliography-scope-provisioning.md` before granting it),
 
 Dictionary:
 `write:words`,

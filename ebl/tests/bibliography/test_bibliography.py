@@ -199,7 +199,7 @@ def test_update(
         )
         .thenReturn()
     )
-    (when(bibliography_repository).update(bibliography_entry).thenReturn())
+    (when(bibliography_repository).update(bibliography_entry, {}).thenReturn())
     bibliography.update(bibliography_entry, user)
 
 
@@ -232,7 +232,7 @@ def test_canonicalize_references_invalid(
     bibliography.create(valid_reference.document, user)
     (when(bibliography).find(valid_reference.id).thenReturn(valid_reference.document))
     (when(bibliography).find(first_invalid.id).thenRaise(NotFoundError))
-    (when(bibliography).find(second_invalid.id).thenRaise(NotFoundError))
+    (when(bibliography).find(second_invalid.id).thenRaise(DuplicateError))
 
     expected_error = (
         f"Unknown bibliography entries: {first_invalid.id}, {second_invalid.id}."

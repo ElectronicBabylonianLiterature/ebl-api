@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
@@ -48,10 +48,20 @@ class FakeBibliographyRepository(BibliographyRepository):
     def query_by_alias(self, alias: str) -> Any:
         raise NotImplementedError
 
+    def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
+        raise NotImplementedError
+
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
         raise NotImplementedError
 
-    def update(self, entry: Any) -> None:
+    def update(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        raise NotImplementedError
+
+    def update_identity_fields(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
         raise NotImplementedError
 
     def query_by_author_year_and_title(
