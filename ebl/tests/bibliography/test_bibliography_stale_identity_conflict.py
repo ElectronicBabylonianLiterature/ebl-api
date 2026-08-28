@@ -49,9 +49,7 @@ def identity_operation(bibliography, bibliography_repository, changelog, user):
 
     def operate(entry: dict) -> None:
         update_with_identity_claims(
-            BibliographyIdentityContext(
-                bibliography_repository, changelog, bibliography.find
-            ),
+            BibliographyIdentityContext(bibliography_repository, changelog),
             entry,
             user,
         )
@@ -222,7 +220,7 @@ def test_a_stale_body_cannot_resurrect_a_tombstoned_entry(tombstone_conflict_con
         {"_id": context.aliased_entry["id"]}
     )
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert "is deprecated" in result.text
     assert stored_entry["deprecated"] is True
     assert stored_entry["redirectTo"] == CANONICAL_ID

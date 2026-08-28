@@ -69,12 +69,8 @@ class RepositorySpy:
         self.released_owners.append(owner)
 
 
-def identity_context(repository, changelog, find):
-    return BibliographyIdentityContext(repository, changelog, find)
-
-
-def missing_lookup(_value):
-    raise NotFoundError("missing")
+def identity_context(repository, changelog):
+    return BibliographyIdentityContext(repository, changelog)
 
 
 def test_create_releases_claims_when_post_claim_lookup_finds_existing_entry(user):
@@ -82,7 +78,7 @@ def test_create_releases_claims_when_post_claim_lookup_finds_existing_entry(user
 
     with pytest.raises(LookupValueInUseError):
         create_with_identity_claims(
-            identity_context(repository, ChangelogSpy(), missing_lookup),
+            identity_context(repository, ChangelogSpy()),
             {"id": "Q30000000", "type": "book"},
             user,
         )
@@ -144,7 +140,7 @@ def test_update_claims_added_alias_and_retires_removed_citation_key(user):
     repository = UpdateRepositorySpy(old_entry)
 
     update_with_identity_claims(
-        identity_context(repository, ChangelogNoop(), missing_lookup), new_entry, user
+        identity_context(repository, ChangelogNoop()), new_entry, user
     )
 
     assert repository.claimed_values == ["new-alias"]
@@ -158,7 +154,7 @@ def test_update_failure_releases_new_claims_without_retiring_old_claims(user):
 
     with pytest.raises(RuntimeError, match="update failed"):
         update_with_identity_claims(
-            identity_context(repository, ChangelogSpy(), missing_lookup),
+            identity_context(repository, ChangelogSpy()),
             new_entry,
             user,
         )
@@ -173,7 +169,7 @@ def test_create_releases_claims_when_repository_insert_fails(user):
 
     with pytest.raises(RuntimeError, match="insert failed"):
         create_with_identity_claims(
-            identity_context(repository, ChangelogSpy(), missing_lookup),
+            identity_context(repository, ChangelogSpy()),
             {"id": "Q30000000", "type": "book"},
             user,
         )
@@ -186,7 +182,7 @@ def test_update_rejects_a_stored_entry_for_a_different_record(user):
 
     with pytest.raises(Defect, match="does not match"):
         update_with_identity_claims(
-            identity_context(repository, ChangelogSpy(), missing_lookup),
+            identity_context(repository, ChangelogSpy()),
             {"id": "Q30000000", "type": "book"},
             user,
             {"id": "OTHER", "type": "book"},
@@ -207,7 +203,7 @@ def test_update_passes_stored_server_owned_state_to_the_repository(user):
     repository = UpdateRepositorySpy(old_entry)
 
     update_with_identity_claims(
-        identity_context(repository, ChangelogNoop(), missing_lookup),
+        identity_context(repository, ChangelogNoop()),
         {"id": "Q30000000", "type": "book", "citationKey": "new-key"},
         user,
     )

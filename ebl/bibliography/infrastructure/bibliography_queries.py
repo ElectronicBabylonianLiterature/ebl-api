@@ -9,11 +9,6 @@ ACTIVE_BIBLIOGRAPHY_FILTER = {"deprecated": {"$ne": True}}
 
 
 def expected_field_match(value: Any) -> Any:
-    """Match exactly the stored value, distinguishing null from absent.
-
-    A bare ``None`` also matches documents where the field is missing, which
-    would let a concurrent removal slip past the compare-and-set.
-    """
     return {"$type": "null"} if value is None else value
 
 
@@ -34,10 +29,6 @@ def server_owned_state_filter(
 
 
 def server_owned_state_update(entry: Mapping[str, Any]) -> Dict[str, Any]:
-    """A `$set`/`$unset` update touching only the server-owned identity fields
-    of `entry`, so persisting an identity change never overwrites any other
-    field of the stored document.
-    """
     set_fields = {
         field: entry[field]
         for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS

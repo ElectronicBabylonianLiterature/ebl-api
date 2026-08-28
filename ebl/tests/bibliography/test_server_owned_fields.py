@@ -196,3 +196,21 @@ def test_changed_server_owned_fields_accepts_null_matching_absent_stored_field()
     entry = {"id": "RN1", "type": "book", "redirectTo": None}
 
     assert changed_server_owned_fields(entry, {"id": "RN1", "type": "book"}) == []
+
+
+def test_changed_server_owned_fields_ignores_alias_ordering():
+    two_aliases = [
+        {"value": "first", "normalizedValue": "first"},
+        {"value": "second", "normalizedValue": "second"},
+    ]
+    stored = {**STORED, "aliases": two_aliases}
+    entry = {**stored, "aliases": list(reversed(two_aliases)), "title": "Corrected"}
+
+    assert changed_server_owned_fields(entry, stored) == []
+
+
+def test_changed_server_owned_fields_still_reports_a_genuine_alias_change():
+    stored = {**STORED, "aliases": [{"value": "keep", "normalizedValue": "keep"}]}
+    entry = {**stored, "aliases": [{"value": "swapped", "normalizedValue": "swapped"}]}
+
+    assert changed_server_owned_fields(entry, stored) == ["aliases"]

@@ -1,9 +1,4 @@
-"""Applying trusted identity commands to a stored bibliography entry.
-
-Every function here is pure: it turns a stored entry plus a validated command
-payload into the intended new entry. Nothing is claimed, persisted or logged,
-so the result can be validated before any write happens.
-"""
+"""Pure application of trusted identity commands to a stored bibliography entry."""
 
 from copy import deepcopy
 from typing import Any, Mapping, MutableMapping, Sequence

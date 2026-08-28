@@ -70,10 +70,25 @@ def test_create_entry_invalid(transform, client):
     assert put_result.status == falcon.HTTP_BAD_REQUEST
 
 
-def test_create_deprecated_entry_requires_redirect_target(client):
-    bibliography_entry = BibliographyEntryFactory.build(deprecated=True)
+@pytest.mark.parametrize(
+    "identity_fields",
+    [
+        {"deprecated": True},
+        {"redirectTo": "Q30000001"},
+        {"deprecated": True, "redirectTo": "Q30000001"},
+    ],
+)
+def test_create_rejects_identity_lifecycle_fields(client, identity_fields):
+    bibliography_entry = {**BibliographyEntryFactory.build(), **identity_fields}
 
     result = client.simulate_post("/bibliography", json=bibliography_entry)
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "identity-lifecycle fields" in result.json["description"]
+
+
+def test_create_rejects_a_non_object_body(client):
+    result = client.simulate_post("/bibliography", body=json.dumps(["not-an-object"]))
 
     assert result.status == falcon.HTTP_BAD_REQUEST
 
@@ -133,87 +148,9 @@ def test_search(client, saved_entry, params):
     assert result.status == falcon.HTTP_OK
 
 
-def test_list_all_bibliography(client, saved_entry):
-    result = client.simulate_get("/bibliography/all")
-
-    assert result.json == [saved_entry["id"]]
-    assert result.status == falcon.HTTP_OK
-
-
-def test_list_all_bibliography_excludes_deprecated(client, bibliography, user):
-    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
-    deprecated_entry = BibliographyEntryFactory.build(
-        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
-    )
-    bibliography.create(canonical_entry, user)
-    bibliography.create(deprecated_entry, user)
-
-    result = client.simulate_get("/bibliography/all")
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [canonical_entry["id"]]
-
-
-def test_list_bibliography(client, saved_entries):
-    ids = [entry["id"] for entry in saved_entries]
-    result = client.simulate_get(f"/bibliography/list?ids={','.join(ids)}")
-
-    assert result.json == saved_entries
-    assert result.status == falcon.HTTP_OK
-
-
-def test_list_bibliography_resolves_deprecated_ids(client, bibliography, user):
-    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
-    deprecated_entry = BibliographyEntryFactory.build(
-        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
-    )
-    bibliography.create(canonical_entry, user)
-    bibliography.create(deprecated_entry, user)
-
-    result = client.simulate_get(
-        "/bibliography/list", params={"ids": deprecated_entry["id"]}
-    )
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [canonical_entry]
-
-
-def test_list_bibliography_deduplicates_redirected_canonical_entries(
-    client, bibliography, user
-):
-    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
-    deprecated_entry = BibliographyEntryFactory.build(
-        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
-    )
-    bibliography.create(canonical_entry, user)
-    bibliography.create(deprecated_entry, user)
-
-    result = client.simulate_get(
-        "/bibliography/list",
-        params={"ids": f"{deprecated_entry['id']},{canonical_entry['id']}"},
-    )
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [canonical_entry]
-
-
 def test_update_entry_rejects_a_non_object_body(client, saved_entry):
     result = client.simulate_post(
         f"/bibliography/{saved_entry['id']}", body=json.dumps([saved_entry])
     )
 
     assert result.status == falcon.HTTP_BAD_REQUEST
-
-
-def test_list_bibliography_serves_the_cached_response(
-    cached_client, bibliography, user
-):
-    entry = BibliographyEntryFactory.build(id="Q30000123")
-    bibliography.create(entry, user)
-    url = "/bibliography/list"
-
-    first_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
-    second_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
-
-    assert first_result.status == falcon.HTTP_OK
-    assert second_result.json == first_result.json

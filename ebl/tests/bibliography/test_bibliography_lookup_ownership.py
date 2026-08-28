@@ -50,9 +50,7 @@ def identity_fixtures(
 def apply_identity(fixtures: IdentityFixtures, entry_id: str, **changes):
     stored = fixtures.repository.query_by_id(entry_id)
     update_with_identity_claims(
-        BibliographyIdentityContext(
-            fixtures.repository, fixtures.changelog, fixtures.bibliography.find
-        ),
+        BibliographyIdentityContext(fixtures.repository, fixtures.changelog),
         {**stored, **changes},
         fixtures.user,
         stored,

@@ -1,16 +1,4 @@
-"""Splitting a bibliography entry into client-owned and server-owned parts.
-
-Two helpers rebuild an entry from a submission plus stored state and are easy
-to confuse:
-
-* `preserve_server_owned_fields` keeps every submitted key except the
-  server-owned ones and overlays the stored server-owned values. Callers that
-  have already projected the submission to known metadata use it.
-* `preserve_persisted_fields` keeps only submitted keys that are client
-  editable and overlays everything else the stored document holds, including
-  keys outside the CSL schema. The generic update uses it so unknown persisted
-  fields survive an edit.
-"""
+"""Splitting a bibliography entry into client-owned and server-owned parts."""
 
 from copy import deepcopy
 from typing import Any, Mapping, cast
@@ -80,11 +68,23 @@ def preserve_persisted_fields(
     }
 
 
+def _comparable_server_owned_value(field: str, value: Any) -> Any:
+    if (
+        field == "aliases"
+        and isinstance(value, list)
+        and all(isinstance(item, Mapping) for item in value)
+    ):
+        return sorted(tuple(sorted(item.items())) for item in value)
+    return value
+
+
 def changed_server_owned_fields(
     entry: Mapping[str, Any], stored_entry: Mapping[str, Any]
 ) -> list[str]:
     return sorted(
         field
         for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
-        if field in entry and entry[field] != stored_entry.get(field)
+        if field in entry
+        and _comparable_server_owned_value(field, entry[field])
+        != _comparable_server_owned_value(field, stored_entry.get(field))
     )

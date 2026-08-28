@@ -35,7 +35,7 @@ def create_bibliography_routes(api: falcon.App, context: Context):
     duplicate_candidates = BibliographyDuplicateCandidatesResource(bibliography)
     bibliography_identity = BibliographyIdentityResource(
         BibliographyIdentityManagement(
-            context.bibliography_repository, context.changelog, bibliography.find
+            context.bibliography_repository, context.changelog
         )
     )
     partner_bibliography = PartnerBibliographyResource(bibliography)

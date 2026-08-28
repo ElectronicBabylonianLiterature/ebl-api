@@ -10,6 +10,7 @@ from ebl.tests.bibliography.identity_preservation_test_helpers import (
     post_entry,
     reservations,
 )
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
 def test_metadata_update_preserves_aliases_and_citation_key(
@@ -141,6 +142,25 @@ def test_round_tripped_entry_is_accepted(client, bibliography, aliased_entry):
         **fetched_entry,
         "title": CORRECTED_TITLE,
     }
+
+
+def test_a_reordered_alias_list_is_not_a_conflict(client, bibliography, user):
+    two_aliases = [
+        {"value": "alpha", "normalizedValue": "alpha"},
+        {"value": "omega", "normalizedValue": "omega"},
+    ]
+    bibliography.create(
+        BibliographyEntryFactory.build(id="Q30000700", aliases=two_aliases), user
+    )
+    fetched_entry = client.simulate_get("/bibliography/Q30000700").json
+
+    result = post_entry(
+        client,
+        {**fetched_entry, "aliases": list(reversed(two_aliases)), "title": "Reordered"},
+    )
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert bibliography.find("Q30000700")["title"] == "Reordered"
 
 
 def test_round_tripped_entry_keeps_identity_resolvable(

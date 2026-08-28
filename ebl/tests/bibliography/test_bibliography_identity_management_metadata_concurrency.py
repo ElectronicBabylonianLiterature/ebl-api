@@ -36,9 +36,7 @@ def client(context):
 
 @pytest.fixture
 def identity_management(bibliography_repository, changelog, bibliography):
-    return BibliographyIdentityManagement(
-        bibliography_repository, changelog, bibliography.find
-    )
+    return BibliographyIdentityManagement(bibliography_repository, changelog)
 
 
 @dataclass(frozen=True)

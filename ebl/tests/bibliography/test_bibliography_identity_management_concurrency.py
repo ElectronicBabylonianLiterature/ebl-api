@@ -32,9 +32,7 @@ def client(context):
 
 @pytest.fixture
 def identity_management(bibliography_repository, changelog, bibliography):
-    return BibliographyIdentityManagement(
-        bibliography_repository, changelog, bibliography.find
-    )
+    return BibliographyIdentityManagement(bibliography_repository, changelog)
 
 
 @dataclass(frozen=True)
@@ -167,3 +165,31 @@ def test_stale_stored_entry_raises_a_conflict(
             {**bibliography_repository.query_by_id("Q30000094"), "title": "Stale"},
             {"citationKey": "stale1999Key"},
         )
+
+
+def test_a_concurrent_cross_record_redirect_break_is_rolled_back(
+    monkeypatch, concurrency_context
+):
+    context = concurrency_context
+    entry(context.bibliography, context.user, "Q30000095")
+    entry(context.bibliography, context.user, "Q30000096")
+
+    real_persist = identity_module.update_identity_fields_only
+    calls = {"count": 0}
+
+    def persist(identity, entry_, user, stored_entry):
+        if calls["count"] == 0:
+            calls["count"] += 1
+            context.database["bibliography"].update_one(
+                {"_id": "Q30000096"},
+                {"$set": {"deprecated": True, "redirectTo": "Q30000095"}},
+            )
+        real_persist(identity, entry_, user, stored_entry)
+
+    monkeypatch.setattr(identity_module, "update_identity_fields_only", persist)
+
+    result = manage_identity(context.client, "Q30000095", {"deprecateTo": "Q30000096"})
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert "deprecated" not in stored(context.database, "Q30000095")
+    assert stored(context.database, "Q30000096")["redirectTo"] == "Q30000095"

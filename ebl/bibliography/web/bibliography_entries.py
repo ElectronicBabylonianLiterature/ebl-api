@@ -33,6 +33,22 @@ def submitted_server_owned_fields(
     )
 
 
+IDENTITY_LIFECYCLE_FIELDS = ("deprecated", "redirectTo")
+
+
+def reject_born_identity_lifecycle_fields(req, _resp, _resource, _params) -> None:
+    media = req.media
+    if not isinstance(media, dict):
+        return
+
+    forbidden = sorted(field for field in IDENTITY_LIFECYCLE_FIELDS if field in media)
+    if forbidden:
+        raise DataError(
+            "A new bibliography entry may not carry identity-lifecycle fields "
+            f"({', '.join(forbidden)}); use POST /bibliography/{{id}}/identity."
+        )
+
+
 def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
     media = req.media
     if not isinstance(media, dict):
@@ -57,6 +73,7 @@ class BibliographyResource:
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(reject_born_identity_lifecycle_fields)
     @validate(CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media

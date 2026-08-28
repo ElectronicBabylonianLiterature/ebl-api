@@ -137,3 +137,13 @@ def test_inbound_predecessor_within_the_limit_is_accepted():
     predecessor = {"id": "X", "type": "book", "deprecated": True, "redirectTo": "Q1"}
 
     validate_identity_state(entry, *records({"id": "Q2", "type": "book"}, predecessor))
+
+
+def test_a_pre_existing_inbound_cycle_does_not_loop_the_backward_walk():
+    entry = {"id": "E", "type": "book", "deprecated": True, "redirectTo": "T"}
+    stored_e = {"id": "E", "type": "book", "deprecated": True, "redirectTo": "B"}
+    stored_b = {"id": "B", "type": "book", "deprecated": True, "redirectTo": "E"}
+
+    validate_identity_state(
+        entry, *records(stored_e, stored_b, {"id": "T", "type": "book"})
+    )

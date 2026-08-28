@@ -1,25 +1,6 @@
-"""The trusted bibliography identity operation.
+"""The trusted bibliography identity operation."""
 
-This is the deliberate replacement for identity mutation through the ordinary
-metadata route, which was made metadata-only. It is the only reachable caller
-allowed to change `aliases`, `citationKey`, `deprecated` and `redirectTo` on an
-existing record.
-
-Ordering is fixed by `update_identity_fields_only` and is not reimplemented
-here: validate, claim the new lookup values, persist, commit the claims, retire
-the removed ones, write the changelog. This service only decides *what* the new
-identity state is and refuses to persist an unacceptable one. Persistence
-touches only the four identity fields -- `stored_entry` is read once, before
-the validation and claim steps below do further I/O, and a full-document write
-built from that stale copy would silently overwrite any CSL edit a concurrent
-metadata update made in between.
-
-The canonical `_id` is never renamed. The new entry is built from the stored
-record, so its id is the loaded one by construction, and the primitive raises
-`Defect` if that ever stops holding.
-"""
-
-from typing import Any, Callable, Mapping
+from typing import Any, Mapping
 
 from ebl.bibliography.application.bibliography_identity import (
     BibliographyIdentityContext,
@@ -27,10 +8,12 @@ from ebl.bibliography.application.bibliography_identity import (
 )
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyRepository,
+    BibliographyUpdateConflictError,
 )
 from ebl.bibliography.application.identity_state import apply_identity_commands
 from ebl.bibliography.application.identity_validation import validate_identity_state
 from ebl.changelog import Changelog
+from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
 
 
@@ -39,23 +22,44 @@ class BibliographyIdentityManagement:
         self,
         repository: BibliographyRepository,
         changelog: Changelog,
-        find: Callable[[str], dict],
     ):
         self._repository = repository
-        self._identity = BibliographyIdentityContext(repository, changelog, find)
+        self._identity = BibliographyIdentityContext(repository, changelog)
 
     def manage_identity(
         self, id_: str, commands: Mapping[str, Any], user: User
     ) -> dict[str, Any]:
-        stored_entry = self._repository.query_by_id(id_)
+        stored_entry = self._stored_entry(id_)
         entry = apply_identity_commands(stored_entry, commands)
+        self._validate(entry)
+
+        if entry != stored_entry:
+            update_identity_fields_only(self._identity, entry, user, stored_entry)
+            self._reject_concurrent_redirect_break(entry, stored_entry, user)
+
+        return entry
+
+    def _stored_entry(self, id_: str) -> dict[str, Any]:
+        try:
+            return self._repository.query_by_id(id_)
+        except NotFoundError:
+            raise NotFoundError(f"Bibliography entry {id_} not found.") from None
+
+    def _validate(self, entry: Mapping[str, Any]) -> None:
         validate_identity_state(
             entry,
             self._repository.query_by_id,
             self._repository.query_by_redirect_target,
         )
 
-        if entry != stored_entry:
-            update_identity_fields_only(self._identity, entry, user, stored_entry)
-
-        return entry
+    def _reject_concurrent_redirect_break(
+        self,
+        entry: dict[str, Any],
+        stored_entry: dict[str, Any],
+        user: User,
+    ) -> None:
+        try:
+            self._validate(entry)
+        except DataError as error:
+            update_identity_fields_only(self._identity, stored_entry, user, entry)
+            raise BibliographyUpdateConflictError(entry["id"]) from error

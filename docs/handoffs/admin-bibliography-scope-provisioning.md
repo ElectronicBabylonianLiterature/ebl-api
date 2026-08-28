@@ -14,7 +14,7 @@ unprovisioned until someone with Auth0 access confirms otherwise.
 
 ## Why this was tracked as a blocker before provisioning
 
-Three defects that made early provisioning unsafe were found and fixed on
+Several defects that made early provisioning unsafe were found and fixed on
 this branch:
 
 - a legacy identity value (no reservation row — true of all pre-migration
@@ -43,26 +43,39 @@ reason to withhold provisioning.
 
 Per-record compare-and-set correctly serializes two identity operations on
 the *same* record, but it cannot serialize two identity operations on
-*different* records. Two concurrent requests — one setting `A`'s
-`redirectTo` to `B`, the other concurrently setting `B`'s `redirectTo` to
-`A` — each validate against the other record's current, not-yet-changed
-state and can both pass and both persist, producing an undetected two-record
-redirect cycle. The next read of either `A` or `B` then fails with a
-redirect-loop error, making both records unreadable via ordinary lookup
-until an operator manually repairs one of them (e.g. `POST
-.../{id}/identity` with `{"reactivate": true}`, which does not depend on
-redirect resolution). No MongoDB transaction or lock spans the two writes,
-and none is being added by this branch — building that machinery is out of
-scope for now (see `ebl/bibliography/application/identity_validation.py`'s
-module docstring).
+*different* records. Two concurrent requests can each validate against the
+other record's current, not-yet-changed state and both pass their own CAS.
+Two shapes are reachable:
 
-**Operational consequence: until cross-record redirect serialization
-exists, `admin:bibliography` must be treated as a single-writer curator
-capability** — granted to one trusted operator/process at a time, or to an
-operator workflow that does not issue concurrent redirect-changing requests
-against different records. This is a real, tracked limitation, not
-theoretical: it is not covered by a regression test (a genuine race is hard
-to make deterministic) and is not otherwise enforced by the code.
+- a **two-record cycle** — one request sets `A.redirectTo = B` while the
+  other sets `B.redirectTo = A`;
+- an **over-depth chain** — two curators extend redirect chains that share a
+  downstream node, pushing an inbound predecessor past
+  `MAX_REDIRECT_DEPTH`; no mutual redirect is required.
+
+Either shape makes the affected records unresolvable: a direct read returns
+`409` (`GET /bibliography/{id}`), a `GET /bibliography/list` batch that
+includes an affected id now silently drops that id rather than failing the
+whole batch, and corpus / fragment reference resolution
+(`Bibliography.find_many`, `Bibliography.canonicalize_references`) skips the
+unresolvable reference instead of raising.
+
+**Mitigation on this branch (narrows, does not close, the window):** after a
+successful identity write, `BibliographyIdentityManagement` re-resolves the
+changed entry and its inbound chains; if the concurrent change broke
+resolution, it rolls the write back (an identity-only compare-and-set
+restore) and returns `409`. Every interleaving now converges to a consistent
+state — the second request to reach the post-write re-check loses. A genuine
+double-persist-before-either-re-check remains theoretically possible.
+Regression coverage:
+`test_bibliography_identity_management_concurrency.py::test_a_concurrent_cross_record_redirect_break_is_rolled_back`.
+
+**Operational consequence: until a transaction or lock spans both records,
+`admin:bibliography` should still be treated as a single-writer curator
+capability** — granted to one trusted operator/process at a time. Follow-up:
+open an issue for cross-record redirect serialization (MongoDB multi-document
+transaction around validate + persist for `deprecateTo`) before the scope is
+granted to more than one writer.
 
 ## Still worth doing first, not a hard blocker
 

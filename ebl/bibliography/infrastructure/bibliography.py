@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import Any, Dict, Mapping, Optional, Sequence
+from typing import Any, Dict, Mapping, NoReturn, Optional, Sequence
 
 import pymongo
 
@@ -131,9 +131,7 @@ class MongoBibliographyRepository(BibliographyRepository):
                 filter_=server_owned_state_filter(id_, expected_server_owned_fields),
             )
         except NotFoundError as error:
-            if not self._collection.exists({"_id": id_}):
-                raise
-            raise BibliographyUpdateConflictError(id_) from error
+            self._raise_update_failure(id_, error)
 
     def update_identity_fields(
         self, entry, expected_server_owned_fields: Mapping[str, Any]
@@ -146,9 +144,12 @@ class MongoBibliographyRepository(BibliographyRepository):
                 server_owned_state_update(mongo_entry),
             )
         except NotFoundError as error:
-            if not self._collection.exists({"_id": id_}):
-                raise
+            self._raise_update_failure(id_, error)
+
+    def _raise_update_failure(self, id_: str, error: NotFoundError) -> NoReturn:
+        if self._collection.exists({"_id": id_}):
             raise BibliographyUpdateConflictError(id_) from error
+        raise NotFoundError(f"Bibliography entry {id_} not found.") from error
 
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]

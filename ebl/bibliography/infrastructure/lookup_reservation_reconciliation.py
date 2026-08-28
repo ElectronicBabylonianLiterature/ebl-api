@@ -21,15 +21,6 @@ def reconcile_reservation(
     now: datetime,
     owns_value: Callable[[str, str], bool],
 ) -> None:
-    """Advance a stale/committed reservation candidate to its next state.
-
-    A concurrent reconciler may have already advanced the same candidate
-    between the read that produced `reservation` and this write, so the
-    conditional update below can legitimately match zero documents -- that
-    means the transition already happened, not that anything failed.
-    Suppressed the same way `retire`/`release_pending` already suppress it
-    for their own no-longer-matching updates.
-    """
     value = reservation["_id"]
     entry_id = reservation["entryId"]
     state = LookupReservationState(reservation["state"])
