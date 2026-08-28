@@ -11,7 +11,6 @@ from ebl.bibliography.application.bibliography_repository import (
 )
 from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
 from ebl.bibliography.application.lookup_reservation import (
-    LookupReservationOperation,
     new_lookup_reservation_operation,
 )
 from ebl.bibliography.application.serialization import create_mongo_entry
@@ -90,23 +89,11 @@ def _persist_with_identity_claims(
     except Exception:
         repository.release_pending_lookup_values(operation.owner)
         raise
-    _finalize_identity_write(
-        context, operation, entry, stored_entry, values_to_retire, user
-    )
 
-
-def _finalize_identity_write(
-    context: BibliographyIdentityContext,
-    operation: LookupReservationOperation,
-    entry: dict[str, Any],
-    stored_entry: dict[str, Any],
-    values_to_retire: Sequence[str],
-    user: User,
-) -> None:
     now = datetime.now(timezone.utc)
     try:
-        context.repository.commit_lookup_values(operation, now)
-        context.repository.retire_lookup_values(entry["id"], values_to_retire, now)
+        repository.commit_lookup_values(operation, now)
+        repository.retire_lookup_values(entry["id"], values_to_retire, now)
         context.changelog.create(
             COLLECTION,
             user.profile,
