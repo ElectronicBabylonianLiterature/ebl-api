@@ -68,6 +68,19 @@ def test_update_without_a_body_id_takes_the_id_from_the_url(
     assert stored(database, id_)["title"] == "URL id wins"
 
 
+def test_update_ignores_a_body_id_that_differs_from_the_url(
+    client, database, saved_entry
+):
+    id_ = saved_entry["id"]
+    body = {**saved_entry, "id": "SOMETHING-ELSE", "title": "URL id wins"}
+
+    result = client.simulate_post(f"/bibliography/{id_}", body=json.dumps(body))
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert stored(database, id_)["title"] == "URL id wins"
+    assert database["bibliography"].find_one({"_id": "SOMETHING-ELSE"}) is None
+
+
 def test_get_resolves_a_citation_key_that_update_does_not_address(
     client, aliased_entry
 ):

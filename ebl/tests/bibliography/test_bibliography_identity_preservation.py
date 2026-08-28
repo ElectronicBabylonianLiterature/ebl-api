@@ -108,7 +108,8 @@ def test_update_preserves_unknown_persisted_fields(
 def test_update_does_not_accept_unknown_fields_from_the_client(client, saved_entry):
     result = post_entry(client, {**saved_entry, "DPO": "10.1086/719864"})
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "DPO" in result.text
 
 
 @pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": None}, {"id": 47}])

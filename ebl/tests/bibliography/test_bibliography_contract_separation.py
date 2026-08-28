@@ -89,7 +89,8 @@ def test_update_rejects_identity_commands(client, entry):
         f"/bibliography/{ID}", json={**entry, **IDENTITY_COMMANDS}
     )
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "addAliases" in result.text
 
 
 def test_the_identity_endpoint_is_not_a_general_csl_editor(context, entry):

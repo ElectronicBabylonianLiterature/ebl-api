@@ -14,7 +14,7 @@ from ebl.tests.factories.bibliography import BibliographyEntryFactory
 SERVER_OWNED_PAYLOADS = {
     "aliases": [{"value": "attacker-alias", "normalizedValue": "attacker-alias"}],
     "citationKey": "different",
-    "deprecated": False,
+    "deprecated": True,
     "redirectTo": "other-record",
 }
 

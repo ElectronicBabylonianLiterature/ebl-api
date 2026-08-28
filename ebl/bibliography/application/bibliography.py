@@ -28,6 +28,7 @@ from ebl.bibliography.application.server_owned_fields import (
     changed_server_owned_fields,
     preserve_persisted_fields,
     reject_submitted_server_owned_fields,
+    reject_unknown_metadata_fields,
 )
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
@@ -101,10 +102,12 @@ class Bibliography:
         """Edit the metadata of an entry on behalf of a client.
 
         Same persistence as `update`, but a submitted server-owned field that
-        disagrees with stored state is reported as a conflict instead of being
+        disagrees with stored state is reported as a conflict, and a key the
+        contract does not recognise is rejected, instead of either being
         silently dropped.
         """
         stored_entry = self._stored_entry_for_update(entry)
+        reject_unknown_metadata_fields(entry, stored_entry)
         self._reject_changed_server_owned_fields(entry, stored_entry)
         self._persist_update(entry, stored_entry, user)
 

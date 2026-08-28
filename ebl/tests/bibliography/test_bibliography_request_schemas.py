@@ -105,10 +105,18 @@ def test_duplicate_candidate_contract_accepts_a_partner_style_id():
     )
 
 
-@pytest.mark.parametrize("name", ["create", "update"])
-def test_both_contracts_require_a_canonical_id(name):
-    assert SCHEMAS[name]["required"] == ["type", "id"]
-    assert SCHEMAS[name]["additionalProperties"] is False
+def test_create_requires_a_canonical_id_and_rejects_extra_properties():
+    assert INTERNAL_CREATE_JSON_SCHEMA["required"] == ["type", "id"]
+    assert INTERNAL_CREATE_JSON_SCHEMA["additionalProperties"] is False
+
+
+def test_update_takes_its_id_from_the_url_and_tolerates_persisted_keys():
+    assert INTERNAL_METADATA_UPDATE_JSON_SCHEMA["required"] == ["type"]
+    assert INTERNAL_METADATA_UPDATE_JSON_SCHEMA["additionalProperties"] is True
+    jsonschema.validate(
+        {"type": "book", "legacyOnlyField": "keep-me"},
+        INTERNAL_METADATA_UPDATE_JSON_SCHEMA,
+    )
 
 
 @pytest.mark.parametrize("name", REQUEST_CONTRACTS)

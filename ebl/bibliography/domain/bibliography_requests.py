@@ -75,11 +75,15 @@ INTERNAL_METADATA_UPDATE_JSON_SCHEMA = {
     "description": (
         "Ordinary internal metadata edit. Server-owned fields are accepted in "
         "the body only so the editor can round-trip a previous GET; a value "
-        "that disagrees with stored state is a conflict, not a mutation."
+        "that disagrees with stored state is a conflict, not a mutation. The "
+        "id comes from the URL, and additional properties are tolerated at the "
+        "schema layer because a GET body carries persisted keys outside the "
+        "CSL schema (legacy documents); the application rejects any that are "
+        "not an exact round-trip."
     ),
     "properties": _stored_properties(),
-    "required": ["type", "id"],
-    "additionalProperties": False,
+    "required": ["type"],
+    "additionalProperties": True,
 }
 
 DUPLICATE_CANDIDATE_JSON_SCHEMA = {
