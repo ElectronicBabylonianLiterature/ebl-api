@@ -107,16 +107,14 @@ class BackfillRequest:
 
     `dry_run` defaults to true and is the guard that keeps a run from mutating
     production data, so it is a strict boolean: a truthy string must not pass
-    for it. `batch_size` bounds the batch and must be positive — a batch that
-    processes nothing is a caller error, not an empty run. `resume_after` is the
-    opaque cursor from `BackfillReport.next_resume_token`; `None` starts at the
-    beginning, and an empty string is not a cursor.
+    for it. `batch_size` always bounds the batch and must be positive — a batch
+    that processes nothing is a caller error, not an empty run. `resume_after`
+    is the opaque cursor from `BackfillReport.next_resume_token`; `None` starts
+    at the beginning, and an empty string is not a cursor.
     """
 
     dry_run: bool = attr.ib(default=True, validator=strict_bool)
-    batch_size: Optional[int] = attr.ib(
-        default=None, validator=attr.validators.optional(positive_int)
-    )
+    batch_size: int = attr.ib(default=100, validator=positive_int)
     resume_after: Optional[str] = attr.ib(
         default=None, validator=attr.validators.optional(not_blank)
     )

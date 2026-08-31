@@ -39,11 +39,11 @@ def test_import_request_accepts_both_boolean_dry_run_values() -> None:
     assert import_request().dry_run is False
 
 
-def test_backfill_request_defaults_to_a_full_unbounded_dry_run() -> None:
+def test_backfill_request_defaults_to_a_bounded_dry_run() -> None:
     request = BackfillRequest()
 
     assert request.dry_run is True
-    assert request.batch_size is None
+    assert request.batch_size == 100
     assert request.resume_after is None
 
 
@@ -61,6 +61,11 @@ def test_backfill_request_rejects_a_non_positive_batch_size(batch_size: int) -> 
 def test_backfill_request_rejects_a_non_integer_batch_size() -> None:
     with pytest.raises(ValueError, match="batch_size must be an integer"):
         BackfillRequest(batch_size=True)
+
+
+def test_backfill_request_rejects_an_absent_batch_size() -> None:
+    with pytest.raises(ValueError, match="batch_size must be an integer"):
+        BackfillRequest(batch_size=cast(int, None))
 
 
 def test_backfill_request_rejects_a_blank_resume_cursor() -> None:

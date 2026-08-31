@@ -64,9 +64,20 @@ class InMemoryMediaRepository(MediaRepository):
     def find_by_fragments(
         self, fragment_ids: Sequence[MuseumNumber]
     ) -> Mapping[MuseumNumber, Sequence[Media]]:
+        requested_fragment_ids = tuple(dict.fromkeys(fragment_ids))
+        requested_fragment_id_set = set(requested_fragment_ids)
+        media_by_fragment: Dict[MuseumNumber, List[Media]] = {
+            fragment_id: [] for fragment_id in requested_fragment_ids
+        }
+        for stored_media in self._media.values():
+            for association in stored_media.media.associations:
+                if association.fragment_id in requested_fragment_id_set:
+                    media_by_fragment[association.fragment_id].append(
+                        stored_media.media
+                    )
         return {
-            fragment_id: self.find_by_fragment(fragment_id)
-            for fragment_id in fragment_ids
+            fragment_id: fragment_media_in_order(fragment_id, media)
+            for fragment_id, media in media_by_fragment.items()
         }
 
     def find_in_fragment(

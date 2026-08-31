@@ -2,6 +2,7 @@ from typing import cast
 
 import pytest
 
+from ebl.common.domain.project import ResearchProject
 from ebl.media.domain import (
     MediaAssociation,
     MediaId,
@@ -15,6 +16,7 @@ from ebl.media.domain import (
 from ebl.tests.media.factories import (
     contract_media,
     original_representation,
+    photo_media,
     thumbnail_representation,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -132,6 +134,16 @@ def test_blank_original_filename_is_rejected(value: str) -> None:
             (MediaAssociation(K1, 0, True),),
             original_filename=value,
         )
+
+
+def test_media_projects_reject_non_project_members() -> None:
+    with pytest.raises(TypeError):
+        photo_media(projects=(cast(ResearchProject, "CAIC"),))
+
+
+def test_media_references_reject_non_reference_members() -> None:
+    with pytest.raises(TypeError):
+        photo_media(references=(cast(MediaReference, "bib-id"),))
 
 
 def test_import_source_container_is_optional_for_sources_without_one() -> None:

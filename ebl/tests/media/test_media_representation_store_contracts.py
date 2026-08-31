@@ -179,7 +179,7 @@ def test_backfill_request_defaults_to_dry_run() -> None:
     request = BackfillRequest()
 
     assert request.dry_run is True
-    assert request.batch_size is None
+    assert request.batch_size == 100
     assert request.resume_after is None
 
 

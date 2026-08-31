@@ -1,3 +1,4 @@
+from typing import Sequence
 from types import MappingProxyType
 
 from ebl.media.application import BackfillCategory, BackfillReport, ImportReport
@@ -85,6 +86,20 @@ def test_shared_media_appears_under_every_requested_fragment() -> None:
     result = service.find_media_by_fragments((K1, SM2))
 
     assert result[K1] == result[SM2] == (photo,)
+
+
+def test_batch_fragment_read_does_not_delegate_to_per_fragment_reads() -> None:
+    class BatchOnlyRepository(InMemoryMediaRepository):
+        def find_by_fragment(self, fragment_id: MuseumNumber) -> Sequence[Media]:
+            raise AssertionError("per-fragment read used")
+
+    photo = shared_photo()
+    repository = BatchOnlyRepository(stored_media_sequence(photo))
+
+    assert repository.find_by_fragments((K1, SM2)) == {
+        K1: (photo,),
+        SM2: (photo,),
+    }
 
 
 def test_import_report_distinguishes_every_outcome() -> None:

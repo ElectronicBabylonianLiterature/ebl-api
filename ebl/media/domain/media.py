@@ -145,9 +145,19 @@ class Media:
     associations: Sequence[MediaAssociation] = attr.ib(
         factory=tuple, converter=_associations_of, validator=_validate_associations
     )
-    projects: Sequence[ResearchProject] = attr.ib(factory=tuple, converter=_projects_of)
+    projects: Sequence[ResearchProject] = attr.ib(
+        factory=tuple,
+        converter=_projects_of,
+        validator=attr.validators.deep_iterable(
+            member_validator=attr.validators.instance_of(ResearchProject)
+        ),
+    )
     references: Sequence[MediaReference] = attr.ib(
-        factory=tuple, converter=_references_of
+        factory=tuple,
+        converter=_references_of,
+        validator=attr.validators.deep_iterable(
+            member_validator=attr.validators.instance_of(MediaReference)
+        ),
     )
     caption: Optional[str] = None
     attribution: Optional[str] = None
