@@ -150,3 +150,26 @@ def test_all_signs_route(client, sign_repository, signs):
     get_result = client.simulate_get("/signs/all")
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == sorted([sign.name for sign in signs])
+
+
+def test_list_all_returns_the_sign_names(client, sign_repository, signs) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get("/signs", params={"listAll": "true"})
+
+    assert result.status == falcon.HTTP_OK
+    assert sorted(result.json) == sorted(sign.name for sign in signs)
+
+
+def test_list_all_with_any_other_parameter_is_not_a_listing(client) -> None:
+    result = client.simulate_get("/signs", params={"listAll": "true", "value": "ku"})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_a_non_numeric_sub_index_is_unprocessable(client) -> None:
+    result = client.simulate_get("/signs", params={"value": "ku", "subIndex": "abc"})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "has to be a number" in result.json["description"]

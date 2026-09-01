@@ -8,6 +8,7 @@ from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain.alignment_map import AlignmentMap
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 
 
@@ -163,7 +164,7 @@ class Token(ABC):
                 f"Incompatible lemmatization token {lemma} for {self}"
             )
 
-    def update_alignment(self: T, alignment_map: object) -> T:
+    def update_alignment(self: T, alignment_map: AlignmentMap) -> T:
         return self
 
     def set_enclosure_type(self: T, enclosure_type: AbstractSet[EnclosureType]) -> T:

@@ -8,7 +8,8 @@ from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.text_line import AlignmentMap, TextLine
+from ebl.transliteration.domain.alignment_map import AlignmentMap
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.atf import Atf

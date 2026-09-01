@@ -41,7 +41,10 @@ __all__ = [
     "ApiManuscriptLineSchema",
     "ApiManuscriptSchema",
     "ApiOldSiglumSchema",
+    "LineNumberString",
     "MuseumNumberString",
+    "RECONSTRUCTION_ERRORS",
+    "deserialize_translation",
 ]
 
 

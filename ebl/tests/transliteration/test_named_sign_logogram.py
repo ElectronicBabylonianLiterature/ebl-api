@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from typing import NamedTuple, Optional, Sequence, Tuple
 
 import pytest
@@ -115,8 +116,11 @@ CASES = [
 
 @pytest.mark.parametrize("case", [LogogramCase(*case) for case in CASES])
 def test_logogram(case: LogogramCase) -> None:
+    arguments = name_arguments(
+        case.name_parts, case.sub_index, case.modifiers, case.flags
+    )
     logogram = (
-        Logogram.of(case.name_parts, case.sub_index, case.modifiers, case.flags)
+        Logogram.of_arguments(arguments)
         .with_sign(case.sign)
         .with_surrogate(case.surrogate)
     )
@@ -142,7 +146,8 @@ def test_logogram(case: LogogramCase) -> None:
     serialized = {
         "type": "Logogram",
         "name": case.expected_name,
-        "nameParts": OneOfTokenSchema().dump(case.name_parts, many=True),
+        "nameParts": OneOfTokenSchema().dump(arguments.name, many=True),
+        "nameBreaks": OneOfTokenSchema().dump(arguments.name_breaks, many=True),
         "subIndex": case.sub_index,
         "modifiers": case.modifiers,
         "flags": [flag.value for flag in case.flags],

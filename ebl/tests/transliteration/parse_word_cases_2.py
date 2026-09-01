@@ -1,5 +1,6 @@
 """Parsed-word test cases, part 2 of 5."""
 
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -55,8 +56,10 @@ WORD_CASES = [
             [
                 Variant.of(
                     UnclearSign.of(),
-                    Reading.of(
-                        (ValueToken.of("m"), BrokenAway.open(), ValueToken.of("a"))
+                    Reading.of_arguments(
+                        name_arguments(
+                            (ValueToken.of("m"), BrokenAway.open(), ValueToken.of("a"))
+                        )
                     ),
                 )
             ]
@@ -155,15 +158,19 @@ WORD_CASES = [
                 Determinative.of([Reading.of_name("d", flags=[atf.Flag.UNCERTAIN])]),
                 Reading.of_name("nu", flags=[atf.Flag.UNCERTAIN]),
                 Joiner.hyphen(),
-                Reading.of(
-                    (ValueToken.of("di"), BrokenAway.close(), ValueToken.of("m")),
-                    2,
-                    flags=[atf.Flag.UNCERTAIN],
+                Reading.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("di"), BrokenAway.close(), ValueToken.of("m")),
+                        2,
+                        flags=[atf.Flag.UNCERTAIN],
+                    )
                 ),
                 Joiner.hyphen(),
-                Reading.of(
-                    (ValueToken.of("mu"), BrokenAway.open(), ValueToken.of("d")),
-                    flags=[atf.Flag.UNCERTAIN],
+                Reading.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("mu"), BrokenAway.open(), ValueToken.of("d")),
+                        flags=[atf.Flag.UNCERTAIN],
+                    )
                 ),
             ]
         ),

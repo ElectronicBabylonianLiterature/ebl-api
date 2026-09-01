@@ -16,7 +16,7 @@ from ebl.fragmentarium.infrastructure.fragment_query_result_projection import (
     items_pipeline,
     result_projection,
 )
-from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.provenance.application.provenance_lookup import ProvenanceLookup
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
@@ -26,7 +26,7 @@ class PatternMatcher:
     def __init__(
         self,
         query: Dict,
-        provenance_service: ProvenanceService,
+        provenance_service: ProvenanceLookup,
         user_scopes: Sequence[Scope] = (),
     ):
         self._query = query

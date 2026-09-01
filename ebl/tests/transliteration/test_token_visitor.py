@@ -79,4 +79,4 @@ def test_base_visit_is_a_no_op() -> None:
 def test_update_alignment_returns_the_token_unchanged() -> None:
     token = ValueToken.of("kur")
 
-    assert token.update_alignment({}) is token
+    assert token.update_alignment(()) is token

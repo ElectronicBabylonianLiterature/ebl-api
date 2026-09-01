@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 import attr
 import pytest
 
@@ -106,14 +107,16 @@ def test_query_lemmas_multiple(fragment_repository, lemma_repository):
         ),
         (
             [
-                Reading.of(
-                    [
-                        ValueToken.of("a"),
-                        BrokenAway.open(),
-                        ValueToken.of("n"),
-                        PerhapsBrokenAway.close(),
-                        ValueToken.of("a"),
-                    ]
+                Reading.of_arguments(
+                    name_arguments(
+                        [
+                            ValueToken.of("a"),
+                            BrokenAway.open(),
+                            ValueToken.of("n"),
+                            PerhapsBrokenAway.close(),
+                            ValueToken.of("a"),
+                        ]
+                    )
                 )
             ],
             [["ana I"]],

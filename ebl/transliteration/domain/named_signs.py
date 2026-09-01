@@ -48,12 +48,14 @@ class Number(NamedSign):
 
     @staticmethod
     def of(
-        name: Sequence[Token],
+        name: Sequence[ValueToken],
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
         sub_index: int = 1,
     ) -> "Number":
-        return Number._create(NamedSignArguments(name, sub_index, modifiers, flags))
+        return Number.of_arguments(
+            NamedSignArguments(name, sub_index, modifiers, flags)
+        )
 
     @staticmethod
     def of_name(

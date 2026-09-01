@@ -1,5 +1,5 @@
 import re
-from typing import Any, List, Sequence, cast
+from typing import Any, List, Optional, Sequence, cast
 from lark import Tree
 from lark.visitors import Transformer, v_args
 
@@ -17,8 +17,29 @@ from ebl.transliteration.domain.sign_tokens import (
     Number,
     Reading,
 )
-from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.sign_token_base import NamedSignArguments
+from ebl.transliteration.domain.tokens import (
+    Token,
+    UnknownNumberOfSigns,
+    ValueToken,
+)
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
+
+
+def name_arguments(
+    tokens: Sequence[Token],
+    sub_index: Optional[int] = 1,
+    modifiers: Sequence[str] = (),
+    flags: Sequence[atf.Flag] = (),
+) -> NamedSignArguments:
+    return NamedSignArguments(
+        tuple(cast(Sequence[ValueToken], tokens[0::2])),
+        sub_index,
+        modifiers,
+        flags,
+        tuple(cast(Sequence[BrokenAway], tokens[1::2])),
+    )
 
 
 def tree_to_string(tree: Tree) -> str:
@@ -52,9 +73,9 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(tuple(name.children), sub_index, modifiers, flags).with_sign(
-            sign
-        )
+        return Reading.of_arguments(
+            name_arguments(name.children, sub_index, modifiers, flags)
+        ).with_sign(sign)
 
     @v_args()
     def ebl_atf_text_line__value_name_part(self, children):
@@ -62,16 +83,16 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__logogram(self, name, sub_index, modifiers, flags, sign=None):
-        return Logogram.of(tuple(name.children), sub_index, modifiers, flags).with_sign(
-            sign
-        )
+        return Logogram.of_arguments(
+            name_arguments(name.children, sub_index, modifiers, flags)
+        ).with_sign(sign)
 
     @v_args(inline=True)
     def ebl_atf_text_line__surrogate(
         self, name, sub_index, modifiers, flags, surrogate
     ):
-        return Logogram.of(
-            tuple(name.children), sub_index, modifiers, flags
+        return Logogram.of_arguments(
+            name_arguments(name.children, sub_index, modifiers, flags)
         ).with_surrogate(surrogate.children)
 
     @v_args()
@@ -80,7 +101,9 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__number(self, number, modifiers, flags, sign=None):
-        return Number.of(tuple(number.children), modifiers, flags).with_sign(sign)
+        return Number.of_arguments(
+            name_arguments(number.children, 1, modifiers, flags)
+        ).with_sign(sign)
 
     @v_args()
     def ebl_atf_text_line__number_name_head(self, children):

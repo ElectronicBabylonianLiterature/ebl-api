@@ -9,8 +9,6 @@ from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.sign_token_base import (
     AbstractSign,
     NamedSign,
-    NamePart,
-    NameParts,
 )
 from ebl.transliteration.domain.tokens import (
     ErasureState,
@@ -26,8 +24,6 @@ __all__ = [
     "Grapheme",
     "Logogram",
     "NamedSign",
-    "NamePart",
-    "NameParts",
     "Number",
     "Reading",
 ]
@@ -51,10 +47,6 @@ class Divider(AbstractSign):
     def clean_value(self) -> str:
         modifiers = "".join(self.modifiers)
         return f"{self.divider}{modifiers}"
-
-    @property
-    def string_flags(self) -> Sequence[str]:
-        return [flag.value for flag in self.flags]
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_divider(self)

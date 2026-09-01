@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.tests.factories.first_text_line import FIRST_TEXT_LINE
 from ebl.tests.factories.fragment_text_words import (
     ba_ma_ti,
@@ -36,11 +37,13 @@ FIRST_TEXT_LINES = (
                 [
                     Reading.of_name("u", 4),
                     Joiner.hyphen(),
-                    Reading.of(
-                        (
-                            ValueToken.of("š"),
-                            BrokenAway.open(),
-                            ValueToken.of("u"),
+                    Reading.of_arguments(
+                        name_arguments(
+                            (
+                                ValueToken.of("š"),
+                                BrokenAway.open(),
+                                ValueToken.of("u"),
+                            )
                         )
                     ),
                 ]

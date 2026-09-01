@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from typing import List
 
 from ebl.transliteration.domain.atf import Flag
@@ -31,7 +32,9 @@ def damaged_unclear_sign() -> List[Token]:
 
 def ki_du() -> List[Token]:
     return [
-        Reading.of((ValueToken.of("k"), BrokenAway.close(), ValueToken.of("i"))),
+        Reading.of_arguments(
+            name_arguments((ValueToken.of("k"), BrokenAway.close(), ValueToken.of("i")))
+        ),
         Joiner.hyphen(),
         Reading.of_name("du"),
     ]
@@ -47,7 +50,9 @@ def ba_ma_ti() -> List[Token]:
         Joiner.hyphen(),
         Reading.of_name("ma"),
         Joiner.hyphen(),
-        Reading.of((ValueToken.of("t"), BrokenAway.open(), ValueToken.of("i"))),
+        Reading.of_arguments(
+            name_arguments((ValueToken.of("t"), BrokenAway.open(), ValueToken.of("i")))
+        ),
     ]
 
 

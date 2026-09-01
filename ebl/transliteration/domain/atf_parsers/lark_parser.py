@@ -4,7 +4,7 @@ import re
 
 import pydash
 from lark.exceptions import ParseError
-from lark.lark import Lark
+from lark.lark import Lark, LarkOptions
 from lark.tree import Tree
 
 from ebl.transliteration.domain import atf
@@ -72,12 +72,9 @@ class _StartParser:
     def parse(self, text: str) -> Tree:
         return self._parser.parse(text, start=self._start)
 
-    def __getattr__(self, name: str) -> object:
-        try:
-            parser = self.__dict__["_parser"]
-        except KeyError:
-            raise AttributeError(name)
-        return getattr(parser, name)
+    @property
+    def options(self) -> LarkOptions:
+        return self._parser.options
 
 
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start=ATF_GRAMMAR_STARTS)

@@ -22,24 +22,25 @@ def test_parse_uses_default_start() -> None:
     assert tree == LINE_PARSER.parse("kur", start="any_word")
 
 
-def test_getattr_delegates_to_wrapped_parser() -> None:
+def _attribute(target: object, name: str) -> object:
+    return getattr(target, name)
+
+
+def test_options_are_the_wrapped_parsers_options() -> None:
     assert isinstance(WORD_PARSER.options, LarkOptions)
     assert WORD_PARSER.options is LINE_PARSER.options
 
 
-def test_getattr_raises_for_missing_attribute() -> None:
-    missing_attribute = "does_not_exist"
-
+def test_the_wrapper_does_not_delegate_unknown_attributes() -> None:
     with pytest.raises(AttributeError):
-        getattr(WORD_PARSER, missing_attribute)
+        _attribute(WORD_PARSER, "does_not_exist")
 
 
-def test_getattr_without_initialised_parser_raises_attribute_error() -> None:
+def test_an_uninitialised_wrapper_raises_attribute_error() -> None:
     uninitialised = _StartParser.__new__(_StartParser)
-    delegated_attribute = "parse_interactive"
 
     with pytest.raises(AttributeError):
-        getattr(uninitialised, delegated_attribute)
+        _attribute(uninitialised, "parse_interactive")
 
 
 def test_wrapper_is_copyable() -> None:

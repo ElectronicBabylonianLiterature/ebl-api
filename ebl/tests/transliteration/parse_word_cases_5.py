@@ -1,5 +1,6 @@
 """Parsed-word test cases, part 5 of 5."""
 
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
@@ -47,9 +48,11 @@ WORD_CASES = [
             [
                 CompoundGrapheme.of(["UM×(ME.DA)"]),
                 Joiner.hyphen(),
-                Reading.of(
-                    (ValueToken.of("b"), BrokenAway.open(), ValueToken.of("i")),
-                    flags=[atf.Flag.UNCERTAIN],
+                Reading.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("b"), BrokenAway.open(), ValueToken.of("i")),
+                        flags=[atf.Flag.UNCERTAIN],
+                    )
                 ),
             ]
         ),

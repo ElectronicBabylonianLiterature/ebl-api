@@ -1,5 +1,6 @@
 """Parsed-word test cases, part 3 of 5."""
 
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -46,8 +47,10 @@ WORD_CASES = [
                 Joiner.dot(),
                 Logogram.of_name("SAR"),
                 Joiner.hyphen(),
-                Logogram.of(
-                    (ValueToken.of("M"), BrokenAway.open(), ValueToken.of("EŠ"))
+                Logogram.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("M"), BrokenAway.open(), ValueToken.of("EŠ"))
+                    )
                 ),
             ]
         ),
@@ -116,11 +119,13 @@ WORD_CASES = [
                 BrokenAway.open(),
                 Determinative.of(
                     [
-                        Reading.of(
-                            (
-                                ValueToken.of("i"),
-                                BrokenAway.close(),
-                                ValueToken.of("ti"),
+                        Reading.of_arguments(
+                            name_arguments(
+                                (
+                                    ValueToken.of("i"),
+                                    BrokenAway.close(),
+                                    ValueToken.of("ti"),
+                                )
                             )
                         )
                     ]

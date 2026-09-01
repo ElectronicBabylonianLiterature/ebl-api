@@ -1,5 +1,6 @@
 """Lone-determinative parsed-word test cases."""
 
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -30,13 +31,15 @@ LONE_DETERMINATIVE_CASES = [
             [
                 Determinative.of(
                     [
-                        Reading.of(
-                            (
-                                ValueToken.of("ud"),
-                                BrokenAway.close(),
-                                ValueToken.of("u"),
-                            ),
-                            flags=[atf.Flag.UNCERTAIN],
+                        Reading.of_arguments(
+                            name_arguments(
+                                (
+                                    ValueToken.of("ud"),
+                                    BrokenAway.close(),
+                                    ValueToken.of("u"),
+                                ),
+                                flags=[atf.Flag.UNCERTAIN],
+                            )
                         )
                     ]
                 )
@@ -61,11 +64,13 @@ LONE_DETERMINATIVE_CASES = [
             [
                 Determinative.of(
                     [
-                        Reading.of(
-                            (
-                                ValueToken.of("k"),
-                                BrokenAway.open(),
-                                ValueToken.of("i"),
+                        Reading.of_arguments(
+                            name_arguments(
+                                (
+                                    ValueToken.of("k"),
+                                    BrokenAway.open(),
+                                    ValueToken.of("i"),
+                                )
                             )
                         )
                     ]
@@ -81,11 +86,13 @@ LONE_DETERMINATIVE_CASES = [
                 BrokenAway.open(),
                 Determinative.of(
                     [
-                        Reading.of(
-                            (
-                                ValueToken.of("k"),
-                                BrokenAway.close(),
-                                ValueToken.of("i"),
+                        Reading.of_arguments(
+                            name_arguments(
+                                (
+                                    ValueToken.of("k"),
+                                    BrokenAway.close(),
+                                    ValueToken.of("i"),
+                                )
                             )
                         )
                     ]

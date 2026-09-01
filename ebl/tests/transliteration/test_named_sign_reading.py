@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from typing import NamedTuple, Optional, Sequence, Tuple
 
 import pytest
@@ -96,9 +97,10 @@ CASES = [
 
 @pytest.mark.parametrize("case", [ReadingCase(*case) for case in CASES])
 def test_reading(case: ReadingCase) -> None:
-    reading = Reading.of(
+    arguments = name_arguments(
         case.name_parts, case.sub_index, case.modifiers, case.flags
-    ).with_sign(case.sign)
+    )
+    reading = Reading.of_arguments(arguments).with_sign(case.sign)
 
     sign = case.sign
     expected_parts: Tuple[Token, ...] = tuple(case.name_parts) + (
@@ -120,7 +122,8 @@ def test_reading(case: ReadingCase) -> None:
     serialized = {
         "type": "Reading",
         "name": case.expected_name,
-        "nameParts": OneOfTokenSchema().dump(case.name_parts, many=True),
+        "nameParts": OneOfTokenSchema().dump(arguments.name, many=True),
+        "nameBreaks": OneOfTokenSchema().dump(arguments.name_breaks, many=True),
         "subIndex": case.sub_index,
         "modifiers": case.modifiers,
         "flags": [flag.value for flag in case.flags],

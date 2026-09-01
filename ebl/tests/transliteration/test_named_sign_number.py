@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from typing import NamedTuple, Optional, Sequence, Tuple
 
 import pytest
@@ -97,7 +98,8 @@ EXPECTED_SUB_INDEX = 1
 
 @pytest.mark.parametrize("case", [NumberCase(*case) for case in CASES])
 def test_number(case: NumberCase) -> None:
-    number = Number.of(case.name_parts, case.modifiers, case.flags).with_sign(case.sign)
+    arguments = name_arguments(case.name_parts, 1, case.modifiers, case.flags)
+    number = Number.of_arguments(arguments).with_sign(case.sign)
 
     sign = case.sign
     expected_parts: Tuple[Token, ...] = tuple(case.name_parts) + (
@@ -120,7 +122,8 @@ def test_number(case: NumberCase) -> None:
     serialized = {
         "type": "Number",
         "name": case.expected_name,
-        "nameParts": OneOfTokenSchema().dump(case.name_parts, many=True),
+        "nameParts": OneOfTokenSchema().dump(arguments.name, many=True),
+        "nameBreaks": OneOfTokenSchema().dump(arguments.name_breaks, many=True),
         "modifiers": case.modifiers,
         "subIndex": EXPECTED_SUB_INDEX,
         "flags": [flag.value for flag in case.flags],

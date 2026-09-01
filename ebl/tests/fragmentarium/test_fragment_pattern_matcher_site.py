@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional, Sequence
 
 from ebl.fragmentarium.infrastructure.fragment_pattern_matcher import PatternMatcher
+from ebl.provenance.application.provenance_lookup import ProvenanceLookup
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 BABYLONIA = ProvenanceRecord(id="BABYLONIA", long_name="Babylonia", abbreviation="Bab")
@@ -25,15 +26,12 @@ class _StubProvenanceService:
     def find_by_id(self, id_: str) -> Optional[ProvenanceRecord]:
         return next((record for record in self._records if record.id == id_), None)
 
-    def find_children(self, long_name: str) -> List[ProvenanceRecord]:
-        return [record for record in self._records if record.parent == long_name]
+    def find_children(self, parent: str) -> List[ProvenanceRecord]:
+        return [record for record in self._records if record.parent == parent]
 
 
-def _site_filter(site: str, service=None) -> Dict:
-    matcher = PatternMatcher(
-        {"site": site},
-        service or _StubProvenanceService(),  # type: ignore[arg-type]
-    )
+def _site_filter(site: str, service: Optional[ProvenanceLookup] = None) -> Dict:
+    matcher = PatternMatcher({"site": site}, service or _StubProvenanceService())
     return matcher._filter_by_site()
 
 
@@ -60,6 +58,6 @@ def test_a_leaf_site_matches_only_itself() -> None:
 
 
 def test_no_site_in_the_query_adds_no_filter() -> None:
-    matcher = PatternMatcher({}, _StubProvenanceService())  # type: ignore[arg-type]
+    matcher = PatternMatcher({}, _StubProvenanceService())
 
     assert matcher._filter_by_site() == {}

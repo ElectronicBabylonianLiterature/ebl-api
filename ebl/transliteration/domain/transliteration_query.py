@@ -210,7 +210,7 @@ class TransliterationQueryLine(TransliterationQuery):
 class TransliterationQueryEmpty(TransliterationQuery):
     string: str = attr.ib(default="", converter=_strip_query_string)
     visitor: SignsCollectingVisitor = attr.ib(
-        default=NullSignsCollectingVisitor(), eq=False
+        default=attr.Factory(NullSignsCollectingVisitor), eq=False
     )
     type: Type = Type.UNDEFINED
     regexp: str = r""

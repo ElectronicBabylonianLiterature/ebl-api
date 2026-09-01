@@ -1,3 +1,4 @@
+from itertools import zip_longest
 from typing import FrozenSet, Iterable, List, Sequence, TypeVar
 
 import attr
@@ -17,7 +18,12 @@ from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import NamedSign
-from ebl.transliteration.domain.tokens import Token, TokenVisitor, Variant
+from ebl.transliteration.domain.tokens import (
+    Token,
+    TokenVisitor,
+    ValueToken,
+    Variant,
+)
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -64,8 +70,16 @@ class EnclosureUpdater(TokenVisitor):
 
     def visit_named_sign(self, named_sign: NamedSign) -> None:
         new_token = self._set_enclosure_type(named_sign)
-        visited_parts: Sequence[Token] = self._visit_parts(named_sign.name_tokens)
-        self._append_token(new_token.with_name_tokens(visited_parts))
+        name_parts: List[ValueToken] = []
+        name_breaks: List[BrokenAway] = []
+        for part, name_break in zip_longest(
+            named_sign.name_parts, named_sign.name_breaks
+        ):
+            name_parts.append(self._set_enclosure_type(part))
+            if name_break is not None:
+                name_breaks.append(self._set_enclosure_type(name_break))
+                self._update_enclosures(name_break, EnclosureType.BROKEN_AWAY)
+        self._append_token(new_token.with_name(name_parts, name_breaks))
 
     def visit_akkadian_word(self, word: AkkadianWord) -> None:
         new_token = self._set_enclosure_type(word)

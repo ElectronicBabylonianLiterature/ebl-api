@@ -1,5 +1,6 @@
 """Parsed-word test cases, part 1 of 5."""
 
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_tokens import (
     BrokenAway,
@@ -36,13 +37,31 @@ WORD_CASES = [
     (
         "1]2",
         Word.of(
-            [Number.of((ValueToken.of("1"), BrokenAway.close(), ValueToken.of("2")))]
+            [
+                Number.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("1"), BrokenAway.close(), ValueToken.of("2")),
+                        1,
+                        (),
+                        (),
+                    )
+                )
+            ]
         ),
     ),
     (
         "1[2",
         Word.of(
-            [Number.of((ValueToken.of("1"), BrokenAway.open(), ValueToken.of("2")))]
+            [
+                Number.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("1"), BrokenAway.open(), ValueToken.of("2")),
+                        1,
+                        (),
+                        (),
+                    )
+                )
+            ]
         ),
     ),
     ("ʾ", Word.of([Reading.of_name("ʾ")])),
@@ -80,8 +99,10 @@ WORD_CASES = [
         "r]u-u₂-qu",
         Word.of(
             [
-                Reading.of(
-                    (ValueToken.of("r"), BrokenAway.close(), ValueToken.of("u"))
+                Reading.of_arguments(
+                    name_arguments(
+                        (ValueToken.of("r"), BrokenAway.close(), ValueToken.of("u"))
+                    )
                 ),
                 Joiner.hyphen(),
                 Reading.of_name("u", 2),
