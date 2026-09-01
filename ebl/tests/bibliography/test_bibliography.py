@@ -199,7 +199,7 @@ def test_update(
         )
         .thenReturn()
     )
-    (when(bibliography_repository).update(bibliography_entry).thenReturn())
+    (when(bibliography_repository).update(bibliography_entry, {}).thenReturn())
     bibliography.update(bibliography_entry, user)
 
 

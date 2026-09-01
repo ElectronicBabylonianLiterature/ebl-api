@@ -13,6 +13,12 @@ from ebl.bibliography.web.bibliography_entries import (
     PartnerBibliographyResolveResource,
     PartnerBibliographyResource,
 )
+from ebl.bibliography.application.identity_management import (
+    BibliographyIdentityManagement,
+)
+from ebl.bibliography.web.bibliography_identity_management import (
+    BibliographyIdentityResource,
+)
 from ebl.context import Context
 
 
@@ -27,6 +33,11 @@ def create_bibliography_routes(api: falcon.App, context: Context):
     bibliography_all = BibliographyAll(bibliography)
     bibliography_list = BibliographyList(bibliography, context.cache)
     duplicate_candidates = BibliographyDuplicateCandidatesResource(bibliography)
+    bibliography_identity = BibliographyIdentityResource(
+        BibliographyIdentityManagement(
+            context.bibliography_repository, context.changelog, bibliography.find
+        )
+    )
     partner_bibliography = PartnerBibliographyResource(bibliography)
     partner_bibliography_duplicate_override = (
         PartnerBibliographyDuplicateOverrideResource(bibliography)
@@ -38,6 +49,7 @@ def create_bibliography_routes(api: falcon.App, context: Context):
     api.add_route("/bibliography/all", bibliography_all)
     api.add_route("/bibliography/list", bibliography_list)
     api.add_route("/bibliography/{id_}", bibliography_entries)
+    api.add_route("/bibliography/{id_}/identity", bibliography_identity)
     api.add_route("/api/v1/bibliography/duplicate-candidates", duplicate_candidates)
     api.add_route("/api/v1/bibliography", partner_bibliography)
     api.add_route(
