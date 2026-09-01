@@ -56,6 +56,34 @@ def test_update_edits_metadata_while_preserving_the_non_csl_key(
     assert document[LEGACY_KEY] == "keep-me"
 
 
+def test_update_rejects_a_new_null_valued_non_csl_key(client, database, saved_entry):
+    id_ = saved_entry["id"]
+
+    result = client.simulate_post(
+        f"/bibliography/{id_}",
+        body=json.dumps({**saved_entry, "inventedField": None}),
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "inventedField" in result.text
+    assert "inventedField" not in stored(database, id_)
+
+
+def test_update_round_trips_a_persisted_null_valued_non_csl_key(
+    client, database, saved_entry
+):
+    id_ = saved_entry["id"]
+    database["bibliography"].update_one({"_id": id_}, {"$set": {LEGACY_KEY: None}})
+    fetched = client.simulate_get(f"/bibliography/{id_}").json
+
+    result = client.simulate_post(f"/bibliography/{id_}", body=json.dumps(fetched))
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    document = stored(database, id_)
+    assert LEGACY_KEY in document
+    assert document[LEGACY_KEY] is None
+
+
 def test_update_without_a_body_id_takes_the_id_from_the_url(
     client, database, saved_entry
 ):

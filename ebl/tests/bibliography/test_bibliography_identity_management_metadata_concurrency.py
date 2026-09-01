@@ -21,6 +21,7 @@ from ebl.bibliography.application.identity_management import (
 from ebl.tests.bibliography.identity_management_test_helpers import (
     admin_client,
     alias,
+    body,
     changelog_entries,
     entry,
     manage_identity,
@@ -87,6 +88,7 @@ def test_concurrent_title_edit_survives_an_alias_addition(
     result = manage_identity(client, "Q30000160", {"addAliases": [alias("new-alias")]})
 
     assert result.status == falcon.HTTP_OK
+    assert body(result)["title"] == "Concurrent title"
     stored_entry = stored(database, "Q30000160")
     assert stored_entry["title"] == "Concurrent title"
     assert stored_entry["aliases"] == [alias("new-alias")]

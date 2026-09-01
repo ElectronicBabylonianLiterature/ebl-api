@@ -112,8 +112,7 @@ def test_update_commit_failure_recovers_new_claims_and_retires_old(
         "commit failed",
     )
 
-    with pytest.raises(RuntimeError, match="commit failed"):
-        update_identity(context, new_entry)
+    update_identity(context, new_entry)
 
     assert context.bibliography_repository.query_by_id(old_entry["id"]) == new_entry
     assert (
@@ -158,8 +157,7 @@ def test_update_retirement_failure_reconciles_stale_old_claim(
         "retire failed",
     )
 
-    with pytest.raises(RuntimeError, match="retire failed"):
-        update_identity(context, new_entry)
+    update_identity(context, new_entry)
 
     assert context.bibliography.find(new_entry["citationKey"]) == new_entry
     assert (
@@ -191,8 +189,7 @@ def test_update_changelog_failure_keeps_persisted_update(
     context.bibliography.create(old_entry, context.user)
     fail_once(monkeypatch, context.changelog, "create", "changelog failed")
 
-    with pytest.raises(RuntimeError, match="changelog failed"):
-        update_identity(context, new_entry)
+    update_identity(context, new_entry)
 
     assert context.bibliography_repository.query_by_id(old_entry["id"]) == new_entry
     assert (

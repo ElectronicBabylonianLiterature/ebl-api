@@ -20,6 +20,7 @@ Callers that need to mutate identity must supply the new values themselves
 rather than routing through the metadata editor.
 """
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable, Mapping, Optional, Sequence
@@ -101,16 +102,18 @@ def _claim_persist_and_record(
     values_to_retire = sorted(old_values - new_values)
     now = datetime.now(timezone.utc)
     operation = new_lookup_reservation_operation(entry["id"], now)
-    updated = False
     try:
         repository.claim_lookup_values(operation, values_to_claim)
         ensure_lookup_values_available(repository, values_to_claim, entry["id"])
         persist(entry, expected_server_owned_fields)
-        updated = True
-        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
-        repository.retire_lookup_values(
-            entry["id"], values_to_retire, datetime.now(timezone.utc)
-        )
+    except Exception:
+        repository.release_pending_lookup_values(operation.owner)
+        raise
+
+    now = datetime.now(timezone.utc)
+    try:
+        repository.commit_lookup_values(operation, now)
+        repository.retire_lookup_values(entry["id"], values_to_retire, now)
         context.changelog.create(
             COLLECTION,
             user.profile,
@@ -118,9 +121,12 @@ def _claim_persist_and_record(
             create_mongo_entry(entry),
         )
     except Exception:
-        if not updated:
-            repository.release_pending_lookup_values(operation.owner)
-        raise
+        logging.exception(
+            "Bibliography identity write for %s persisted but finalization failed; "
+            "lookup reservations will be reconciled and the changelog entry may "
+            "be missing",
+            entry["id"],
+        )
 
 
 def update_with_identity_claims(

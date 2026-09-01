@@ -130,7 +130,8 @@ def unknown_nonroundtrip_fields(
     return sorted(
         key
         for key, value in entry.items()
-        if key not in _KNOWN_METADATA_UPDATE_FIELDS and value != stored_entry.get(key)
+        if key not in _KNOWN_METADATA_UPDATE_FIELDS
+        and (key not in stored_entry or value != stored_entry[key])
     )
 
 

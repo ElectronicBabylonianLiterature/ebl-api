@@ -27,10 +27,12 @@ from ebl.bibliography.application.bibliography_identity import (
 )
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyRepository,
+    BibliographyUpdateConflictError,
 )
 from ebl.bibliography.application.identity_state import apply_identity_commands
 from ebl.bibliography.application.identity_validation import validate_identity_state
 from ebl.changelog import Changelog
+from ebl.errors import DataError
 from ebl.users.domain.user import User
 
 
@@ -57,5 +59,22 @@ class BibliographyIdentityManagement:
 
         if entry != stored_entry:
             update_identity_fields_only(self._identity, entry, user, stored_entry)
+            self._rollback_concurrent_redirect_break(entry, stored_entry, user)
 
-        return entry
+        return self._repository.query_by_id(id_)
+
+    def _rollback_concurrent_redirect_break(
+        self,
+        entry: dict[str, Any],
+        stored_entry: dict[str, Any],
+        user: User,
+    ) -> None:
+        try:
+            validate_identity_state(
+                entry,
+                self._repository.query_by_id,
+                self._repository.query_by_redirect_target,
+            )
+        except DataError as error:
+            update_identity_fields_only(self._identity, stored_entry, user, entry)
+            raise BibliographyUpdateConflictError(entry["id"]) from error
