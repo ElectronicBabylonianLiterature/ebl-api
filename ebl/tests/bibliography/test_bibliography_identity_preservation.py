@@ -105,10 +105,32 @@ def test_update_preserves_unknown_persisted_fields(
     assert stored_entry["title"] == "Legacy corrected"
 
 
-def test_update_does_not_accept_unknown_fields_from_the_client(client, saved_entry):
+@pytest.mark.parametrize(
+    "unknown_field,value", [("DPO", "10.1086/719864"), ("pages", "129-143")]
+)
+def test_round_tripped_entry_with_unknown_persisted_field_is_accepted(
+    unknown_field, value, client, database, saved_entry
+):
+    database["bibliography"].update_one(
+        {"_id": saved_entry["id"]}, {"$set": {unknown_field: value}}
+    )
+    fetched_entry = client.simulate_get(f"/bibliography/{saved_entry['id']}").json
+
+    result = post_entry(client, {**fetched_entry, "title": "Legacy corrected"})
+    stored_entry = database["bibliography"].find_one({"_id": saved_entry["id"]})
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert stored_entry[unknown_field] == value
+    assert stored_entry["title"] == "Legacy corrected"
+
+
+def test_update_ignores_an_unknown_field_the_client_invents(
+    client, bibliography, saved_entry
+):
     result = post_entry(client, {**saved_entry, "DPO": "10.1086/719864"})
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert "DPO" not in bibliography.find(saved_entry["id"])
 
 
 @pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": None}, {"id": 47}])

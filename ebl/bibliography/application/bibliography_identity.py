@@ -3,10 +3,14 @@
 `update_with_identity_claims` is the only path allowed to change the
 server-owned identity of an entry: it diffs the lookup values, claims the added
 ones, retires the removed ones, and recovers reservations when persistence
-fails. `Bibliography.update` is the generic CSL metadata editor and deliberately
-calls this primitive with identity preserved, so a metadata edit never claims or
-retires anything. Callers that need to mutate identity must supply the new
-values themselves rather than routing through the metadata editor.
+fails. `Bibliography.update_metadata` is the generic CSL metadata editor and
+deliberately calls this primitive with identity preserved, so a metadata edit
+never claims or retires anything.
+
+The claim/retire path itself is parked for a future identity-management
+endpoint (deprecate, redirect, repair identity) — no caller supplying new
+identity values exists yet. Such a caller would supply them directly rather
+than routing through the metadata editor.
 """
 
 from dataclasses import dataclass

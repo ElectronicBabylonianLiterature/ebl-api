@@ -7,8 +7,18 @@ that submitted `deprecated` with `'redirectTo' is a required property` — a `40
 about a field the client does not own, raised before the application could give
 the real answer, that the submitted state simply disagrees with what is stored.
 Dropping the rule from this one route lets that reach `update_metadata` and come
-back as a conflict. Every property keeps its shape, so an editor can still post
-back the whole entry it fetched, and `CSL_JSON_SCHEMA` itself is untouched.
+back as a conflict. Every property keeps its shape, and `CSL_JSON_SCHEMA` itself
+is untouched.
+
+It also allows additional properties, unlike the stored schema. GET serialises
+the whole stored document, and a persisted entry can carry keys outside
+`CSL_JSON_SCHEMA` that `preserve_persisted_fields` deliberately keeps across an
+edit instead of destroying them. Rejecting those keys here would mean an editor
+can fetch an entry and then fail to save it back unchanged. This does not open
+the door to a client inventing a new unknown field: `preserve_persisted_fields`
+only reads submitted keys that are already client-editable, so an unrecognised
+key in the request body is silently ignored either way — the schema accepting
+it only stops a spurious `400` on the legitimate round trip.
 """
 
 import falcon
@@ -34,7 +44,8 @@ from ebl.bibliography.application.duplicate_override import DuplicateOverrideErr
 
 
 METADATA_UPDATE_JSON_SCHEMA = {
-    key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"
+    **{key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"},
+    "additionalProperties": True,
 }
 
 
