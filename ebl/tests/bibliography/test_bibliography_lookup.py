@@ -1,7 +1,7 @@
 import pytest
 from mockito import verify
 
-from ebl.bibliography.application.bibliography import MAX_REDIRECT_DEPTH
+from ebl.bibliography.application.redirect_resolution import MAX_REDIRECT_DEPTH
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
