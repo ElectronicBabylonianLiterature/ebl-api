@@ -1,0 +1,82 @@
+[
+  {
+    "findspotId": 704,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "EN",
+    "sector": "",
+    "map": "heinrich1982die@234",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 940,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "TA gen.",
+    "sector": "",
+    "map": "RN2747@pl5",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 946,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "EN gen.",
+    "sector": "",
+    "map": "heinrich1982die@234",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 2518,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "EN",
+    "sector": "Religious Quarter",
+    "map": "heinrich1982die@234",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 2528,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "IT",
+    "sector": "Religious Quarter",
+    "map": "heinrich1982die@234",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 3176,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "",
+    "sector": "Religious Quarter",
+    "map": "heinrich1982die@234",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4263,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "WB",
+    "sector": "West Mound",
+    "map": "gibson1978excavations@fig49",
+    "status": "needs-human-curation",
+    "requiredDecision": "Resolve conflicting polygon matches across duplicate source rows."
+  },
+  {
+    "findspotId": 4305,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "ZB 4",
+    "sector": "",
+    "map": "-",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  }
+]

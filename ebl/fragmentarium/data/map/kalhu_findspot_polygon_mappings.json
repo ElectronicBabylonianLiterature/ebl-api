@@ -1,0 +1,82 @@
+[
+  {
+    "findspotId": 228,
+    "polygonIds": [
+      "kalhu-ekal-m-arti-fort-shalmaneser-d7b0dc777aa9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 300,
+    "polygonIds": [
+      "kalhu-ezida-118147b1d10a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 310,
+    "polygonIds": [
+      "kalhu-burnt-palace-89837a3195e9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 341,
+    "polygonIds": [
+      "kalhu-north-west-palace-a8934874262c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 360,
+    "polygonIds": [
+      "kalhu-d-xii-f1ec2958239a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 371,
+    "polygonIds": [
+      "kalhu-zt-654e87f7811b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 373,
+    "polygonIds": [
+      "kalhu-zte-25-e9fcf31fe8c3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 474,
+    "polygonIds": [
+      "kalhu-ztw-4-2036effc54d9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Kalhu Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  }
+]

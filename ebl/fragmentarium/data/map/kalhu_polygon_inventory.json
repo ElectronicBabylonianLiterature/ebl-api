@@ -1,0 +1,98 @@
+[
+  {
+    "polygonId": "kalhu-burnt-palace-89837a3195e9",
+    "name": "Burnt Palace",
+    "areaName": "Burnt Palace",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "89837a3195e9"
+  },
+  {
+    "polygonId": "kalhu-central-palace-5a32d4b3f1ac",
+    "name": "Central Palace",
+    "areaName": "Central Palace",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "5a32d4b3f1ac"
+  },
+  {
+    "polygonId": "kalhu-d-xii-f1ec2958239a",
+    "name": "D XII",
+    "areaName": "D XII",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "f1ec2958239a"
+  },
+  {
+    "polygonId": "kalhu-ekal-m-arti-fort-shalmaneser-d7b0dc777aa9",
+    "name": "ekal māšarti (Fort Shalmaneser)",
+    "areaName": "ekal māšarti (Fort Shalmaneser)",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "d7b0dc777aa9"
+  },
+  {
+    "polygonId": "kalhu-ezida-118147b1d10a",
+    "name": "Ezida",
+    "areaName": "Ezida",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "118147b1d10a"
+  },
+  {
+    "polygonId": "kalhu-governors-palace-875a12990aea",
+    "name": "Governors Palace",
+    "areaName": "Governors Palace",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "875a12990aea"
+  },
+  {
+    "polygonId": "kalhu-kalhu-17049d0f312c",
+    "name": "Kalhu",
+    "areaName": "Kalhu",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "17049d0f312c"
+  },
+  {
+    "polygonId": "kalhu-north-west-palace-a8934874262c",
+    "name": "North-West Palace",
+    "areaName": "North-West Palace",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "a8934874262c"
+  },
+  {
+    "polygonId": "kalhu-southwest-palace-37b77bce76e8",
+    "name": "Southwest Palace",
+    "areaName": "Southwest Palace",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "37b77bce76e8"
+  },
+  {
+    "polygonId": "kalhu-zt-654e87f7811b",
+    "name": "ZT",
+    "areaName": "ZT",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "654e87f7811b"
+  },
+  {
+    "polygonId": "kalhu-zte-25-e9fcf31fe8c3",
+    "name": "ZTE 25",
+    "areaName": "ZTE 25",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "e9fcf31fe8c3"
+  },
+  {
+    "polygonId": "kalhu-ztw-4-2036effc54d9",
+    "name": "ZTW 4",
+    "areaName": "ZTW 4",
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "geometryChecksum": "2036effc54d9"
+  }
+]
