@@ -1,0 +1,122 @@
+[
+  {
+    "findspotId": 2,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 540,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "",
+    "map": "LS220@Taf35",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 555,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 779,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "",
+    "map": "LS220@Taf35",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 1336,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "XVIII/1",
+    "sector": "",
+    "map": "",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 1448,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "Pd XVI/4",
+    "sector": "",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4017,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "Stadtgebiet",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4158,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "Oc",
+    "sector": "",
+    "map": "",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4259,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4313,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "",
+    "sector": "Eanna",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4333,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "Pe XV/5",
+    "sector": "",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4341,
+    "siteId": "URUK",
+    "siteName": "Uruk",
+    "area": "Pd XVI/1",
+    "sector": "",
+    "map": "eichmann1989uruk@Abb2",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  }
+]
