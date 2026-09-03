@@ -1,0 +1,3172 @@
+[
+  {
+    "findspotId": 1406,
+    "polygonIds": [
+      "assur-dd9iv-ab130cd33b86"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4384,
+    "polygonIds": [
+      "assur-fe5iii-6bff491dc11f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4385,
+    "polygonIds": [
+      "assur-fb5ii-c2ef37047215"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4386,
+    "polygonIds": [
+      "assur-ga5ii-3088de6caaf3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4387,
+    "polygonIds": [
+      "assur-ga5iii-21acb7b27aa6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4388,
+    "polygonIds": [
+      "assur-fc5iii-6eb6aba7b1e1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4389,
+    "polygonIds": [
+      "assur-fe5ii-3e9fb1eb128a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4390,
+    "polygonIds": [
+      "assur-hb4ii-984bc19a4843"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4391,
+    "polygonIds": [
+      "assur-gd4ii-9be07638fbff"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4392,
+    "polygonIds": [
+      "assur-gb4ii-4e46b9b143ad"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4393,
+    "polygonIds": [
+      "assur-ga4i-1423b39dd202"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4394,
+    "polygonIds": [
+      "assur-ga4ii-40b5cc297561"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4395,
+    "polygonIds": [
+      "assur-gb3v-cbe161c398e8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4397,
+    "polygonIds": [
+      "assur-ga4ii-40b5cc297561"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4398,
+    "polygonIds": [
+      "assur-g4-35f877be9450"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4399,
+    "polygonIds": [
+      "assur-eb6i-a69f84fae394"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4400,
+    "polygonIds": [
+      "assur-eb6i-a69f84fae394"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4401,
+    "polygonIds": [
+      "assur-de5v-b4930efd61c1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4402,
+    "polygonIds": [
+      "assur-ee5iv-898e94441cbf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4403,
+    "polygonIds": [
+      "assur-ee5v-302a510c01d2"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4404,
+    "polygonIds": [
+      "assur-ee5iv-898e94441cbf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4405,
+    "polygonIds": [
+      "assur-ea5v-d293ab969788"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4406,
+    "polygonIds": [
+      "assur-ee5ii-ab93b4168d31"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4407,
+    "polygonIds": [
+      "assur-ea6i-a66d4d602381"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4408,
+    "polygonIds": [
+      "assur-ea5v-d293ab969788"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4409,
+    "polygonIds": [
+      "assur-ea6ii-2f294f57d786"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4410,
+    "polygonIds": [
+      "assur-eb5v-71efa0213895"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4411,
+    "polygonIds": [
+      "assur-ea5v-d293ab969788"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4412,
+    "polygonIds": [
+      "assur-ea5v-d293ab969788"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4413,
+    "polygonIds": [
+      "assur-de5iv-bde9abf49c29"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4415,
+    "polygonIds": [
+      "assur-ed6v-57cae57f5031"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4416,
+    "polygonIds": [
+      "assur-ea6ii-2f294f57d786"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4417,
+    "polygonIds": [
+      "assur-ea6ii-2f294f57d786"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4418,
+    "polygonIds": [
+      "assur-ea6ii-2f294f57d786"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4419,
+    "polygonIds": [
+      "assur-dd6ii-08e487e4fda3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4420,
+    "polygonIds": [
+      "assur-ed5iii-6a03df7cfbfc"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4421,
+    "polygonIds": [
+      "assur-da5iv-a4ab08f22278"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4422,
+    "polygonIds": [
+      "assur-da5iii-6a62aeabdf81"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4423,
+    "polygonIds": [
+      "assur-gc4v-1985c493b282"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4424,
+    "polygonIds": [
+      "assur-gc4v-1985c493b282"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4425,
+    "polygonIds": [
+      "assur-eb7ii-f72a9729f147"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4426,
+    "polygonIds": [
+      "assur-ga4v-f6ca1aebcd97"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4428,
+    "polygonIds": [
+      "assur-fc5iii-6eb6aba7b1e1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4429,
+    "polygonIds": [
+      "assur-gd5ii-fecfb9950eb0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4430,
+    "polygonIds": [
+      "assur-gd5ii-fecfb9950eb0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4431,
+    "polygonIds": [
+      "assur-gd5ii-fecfb9950eb0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4432,
+    "polygonIds": [
+      "assur-gc5i-9d7eec32dfdd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4433,
+    "polygonIds": [
+      "assur-gb5ii-6ad615e8405b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4434,
+    "polygonIds": [
+      "assur-gb5i-61fb399ff411"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4435,
+    "polygonIds": [
+      "assur-gb5i-61fb399ff411"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4436,
+    "polygonIds": [
+      "assur-gc5v-2798b87e53dc"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4437,
+    "polygonIds": [
+      "assur-gb5ii-6ad615e8405b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4438,
+    "polygonIds": [
+      "assur-gb5ii-6ad615e8405b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4439,
+    "polygonIds": [
+      "assur-ea7iii-c01b12def1aa"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4440,
+    "polygonIds": [
+      "assur-ea7iii-c01b12def1aa"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4441,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4442,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4443,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4444,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4445,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4446,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4447,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4448,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4449,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4450,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4451,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4452,
+    "polygonIds": [
+      "assur-he4iii-484562f8f1ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4454,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4455,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4456,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4457,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4458,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4459,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4460,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4461,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4462,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4463,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4464,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4465,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4466,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4467,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4468,
+    "polygonIds": [
+      "assur-ee5iv-898e94441cbf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4469,
+    "polygonIds": [
+      "assur-ee5iv-898e94441cbf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4471,
+    "polygonIds": [
+      "assur-ee5iii-43ee169f4603"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4472,
+    "polygonIds": [
+      "assur-ee6v-64ea5b739a46"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4473,
+    "polygonIds": [
+      "assur-ee6v-64ea5b739a46"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4474,
+    "polygonIds": [
+      "assur-ee6v-7i-9d2184703a67"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4475,
+    "polygonIds": [
+      "assur-ee7i-a5f5979278de"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4476,
+    "polygonIds": [
+      "assur-fa6v-c87b4cbab63d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4477,
+    "polygonIds": [
+      "assur-fa6v-c87b4cbab63d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4478,
+    "polygonIds": [
+      "assur-ee6v-64ea5b739a46"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4479,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4480,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4481,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4482,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4483,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4484,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4485,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4486,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4487,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4488,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4489,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4490,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4491,
+    "polygonIds": [
+      "assur-bb6i-3d76dc1e02af"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4492,
+    "polygonIds": [
+      "assur-ia8i-6aa9d256700b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4493,
+    "polygonIds": [
+      "assur-ia8i-6aa9d256700b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4494,
+    "polygonIds": [
+      "assur-da8i-6b5ce207f9c1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4495,
+    "polygonIds": [
+      "assur-de7iv-fb89af1923be"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4496,
+    "polygonIds": [
+      "assur-de7iv-fb89af1923be"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4497,
+    "polygonIds": [
+      "assur-de7iv-fb89af1923be"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4498,
+    "polygonIds": [
+      "assur-ea9i-5e10d62f21ea"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4499,
+    "polygonIds": [
+      "assur-ea9i-5e10d62f21ea"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4500,
+    "polygonIds": [
+      "assur-ec9i-e68eedba1579"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4501,
+    "polygonIds": [
+      "assur-ec9i-e68eedba1579"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4502,
+    "polygonIds": [
+      "assur-fe10i-3c7ed857e189"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4503,
+    "polygonIds": [
+      "assur-fe10i-3c7ed857e189"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4504,
+    "polygonIds": [
+      "assur-fe10i-3c7ed857e189"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4505,
+    "polygonIds": [
+      "assur-fe10i-3c7ed857e189"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4506,
+    "polygonIds": [
+      "assur-ga10i-a13746659919"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4507,
+    "polygonIds": [
+      "assur-fe10i-3c7ed857e189"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4508,
+    "polygonIds": [
+      "assur-fe9v-51de8f60bedc"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4509,
+    "polygonIds": [
+      "assur-fe9v-51de8f60bedc"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4510,
+    "polygonIds": [
+      "assur-ga5iii-21acb7b27aa6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4511,
+    "polygonIds": [
+      "assur-eb5iii-36f55ad7d8f3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4512,
+    "polygonIds": [
+      "assur-id3v-b2da9fe54e6d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4513,
+    "polygonIds": [
+      "assur-be5i-f5ecbd35972a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4514,
+    "polygonIds": [
+      "assur-ib7i-ee0365a27ee5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4515,
+    "polygonIds": [
+      "assur-dc9v-2d4f68a5e8c3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4516,
+    "polygonIds": [
+      "assur-da6ii-016b9bbe05f4"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4517,
+    "polygonIds": [
+      "assur-da6iv-e2f748bf874e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4518,
+    "polygonIds": [
+      "assur-ic4v-6332648aea16"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4519,
+    "polygonIds": [
+      "assur-id4v-b45c39108b04"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4520,
+    "polygonIds": [
+      "assur-id4v-b45c39108b04"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4522,
+    "polygonIds": [
+      "assur-id5i-9cf249acf23a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4523,
+    "polygonIds": [
+      "assur-ic4v-6332648aea16"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4524,
+    "polygonIds": [
+      "assur-ic4v-6332648aea16"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4525,
+    "polygonIds": [
+      "assur-id4iv-becfbc958fce"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4526,
+    "polygonIds": [
+      "assur-ic4iv-c0a218a92708"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4527,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4528,
+    "polygonIds": [
+      "assur-hc4v-478fa3bdc4c8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4529,
+    "polygonIds": [
+      "assur-hc4iv-f2f64d75d970"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4530,
+    "polygonIds": [
+      "assur-ha3v-5e86c360cff0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4531,
+    "polygonIds": [
+      "assur-hd4ii-5f535f7de6ba"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4532,
+    "polygonIds": [
+      "assur-hd4i-0ed0e29b0f09"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4533,
+    "polygonIds": [
+      "assur-hd4i-0ed0e29b0f09"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4534,
+    "polygonIds": [
+      "assur-he4i-030d5af2f188"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4535,
+    "polygonIds": [
+      "assur-he4ii-f0314ef9a16b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4536,
+    "polygonIds": [
+      "assur-hd4i-0ed0e29b0f09"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4537,
+    "polygonIds": [
+      "assur-hd4i-0ed0e29b0f09"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4538,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4539,
+    "polygonIds": [
+      "assur-he4ii-f0314ef9a16b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4540,
+    "polygonIds": [
+      "assur-hb5iii-f3a81030678e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4541,
+    "polygonIds": [
+      "assur-hd4i-0ed0e29b0f09"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4542,
+    "polygonIds": [
+      "assur-hc3v-e656693e7ee1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4544,
+    "polygonIds": [
+      "assur-hc4i-88e7d0f8b8c5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4545,
+    "polygonIds": [
+      "assur-gb4ii-4e46b9b143ad"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4546,
+    "polygonIds": [
+      "assur-hc4i-88e7d0f8b8c5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4547,
+    "polygonIds": [
+      "assur-hc4i-88e7d0f8b8c5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4548,
+    "polygonIds": [
+      "assur-hc4i-88e7d0f8b8c5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4549,
+    "polygonIds": [
+      "assur-gc4i-d54b77ef4c6e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4550,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4551,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4552,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4553,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4554,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4555,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4556,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4557,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4558,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4559,
+    "polygonIds": [
+      "assur-ic4v-6332648aea16"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4560,
+    "polygonIds": [
+      "assur-hd3v-eb5d4942ef7a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4561,
+    "polygonIds": [
+      "assur-ib4iv-a6b663a19751"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4562,
+    "polygonIds": [
+      "assur-ib4iv-a6b663a19751"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4563,
+    "polygonIds": [
+      "assur-ib4iv-a6b663a19751"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4564,
+    "polygonIds": [
+      "assur-hd4v-96ead1e90c88"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4565,
+    "polygonIds": [
+      "assur-ib4iv-a6b663a19751"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4566,
+    "polygonIds": [
+      "assur-ib4iv-a6b663a19751"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4567,
+    "polygonIds": [
+      "assur-ia4iv-b128914b08d6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4569,
+    "polygonIds": [
+      "assur-ia4v-bcc63bb63b4d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4570,
+    "polygonIds": [
+      "assur-ia4ii-4ea6406187c8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4571,
+    "polygonIds": [
+      "assur-ib4ii-6d81d4c48c28"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4572,
+    "polygonIds": [
+      "assur-ia4i-43241c493419"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4573,
+    "polygonIds": [
+      "assur-ib4iii-0a4e3a9fea3c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4574,
+    "polygonIds": [
+      "assur-he4i-030d5af2f188"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4576,
+    "polygonIds": [
+      "assur-ia3iv-954858445363"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4577,
+    "polygonIds": [
+      "assur-ia3iv-954858445363"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4578,
+    "polygonIds": [
+      "assur-ic4i-df9fe989b4ff"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4579,
+    "polygonIds": [
+      "assur-ic3ii-b81d7278c59c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4580,
+    "polygonIds": [
+      "assur-ib4ii-6d81d4c48c28"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4581,
+    "polygonIds": [
+      "assur-ic4iv-c0a218a92708"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4582,
+    "polygonIds": [
+      "assur-ic4iii-6b755722331e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4583,
+    "polygonIds": [
+      "assur-ic4iii-6b755722331e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4584,
+    "polygonIds": [
+      "assur-id3iv-5388a6fdd9f3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4585,
+    "polygonIds": [
+      "assur-ib3ii-5f955c916bd6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4586,
+    "polygonIds": [
+      "assur-ic3ii-b81d7278c59c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4587,
+    "polygonIds": [
+      "assur-ic4ii-12e470b76085"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4588,
+    "polygonIds": [
+      "assur-ib4i-69c767eaaa9b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4589,
+    "polygonIds": [
+      "assur-ib4i-69c767eaaa9b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4590,
+    "polygonIds": [
+      "assur-ib4i-69c767eaaa9b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4591,
+    "polygonIds": [
+      "assur-ib3iv-5d5a2ab832b9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4592,
+    "polygonIds": [
+      "assur-ib3iii-9c0254833076"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4593,
+    "polygonIds": [
+      "assur-hd4i-0ed0e29b0f09"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4594,
+    "polygonIds": [
+      "assur-ib4iv-a6b663a19751"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4595,
+    "polygonIds": [
+      "assur-id4v-b45c39108b04"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4596,
+    "polygonIds": [
+      "assur-ib4v-a8f3256907f1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4597,
+    "polygonIds": [
+      "assur-ic5i-5cb3680f11f1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4598,
+    "polygonIds": [
+      "assur-id4v-b45c39108b04"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4599,
+    "polygonIds": [
+      "assur-id4v-b45c39108b04"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4600,
+    "polygonIds": [
+      "assur-gd5ii-fecfb9950eb0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4601,
+    "polygonIds": [
+      "assur-id5i-9cf249acf23a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4603,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4604,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4605,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4606,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4607,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4608,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4609,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4610,
+    "polygonIds": [
+      "assur-h4-d61258ca24f6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4611,
+    "polygonIds": [
+      "assur-hb4v-dda5f259287d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4612,
+    "polygonIds": [
+      "assur-ic6iii-26ecdd95a8d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4613,
+    "polygonIds": [
+      "assur-ib6iii-a1259d123f1e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4614,
+    "polygonIds": [
+      "assur-ib6iii-a1259d123f1e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4615,
+    "polygonIds": [
+      "assur-ic6iii-26ecdd95a8d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4616,
+    "polygonIds": [
+      "assur-ib6iii-a1259d123f1e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4617,
+    "polygonIds": [
+      "assur-ic6iii-26ecdd95a8d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4618,
+    "polygonIds": [
+      "assur-ic6iii-26ecdd95a8d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4619,
+    "polygonIds": [
+      "assur-ib6iii-a1259d123f1e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4620,
+    "polygonIds": [
+      "assur-ib6iii-a1259d123f1e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4621,
+    "polygonIds": [
+      "assur-ic6iii-26ecdd95a8d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4622,
+    "polygonIds": [
+      "assur-ic6iii-26ecdd95a8d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4623,
+    "polygonIds": [
+      "assur-he8i-e1127cc93dfe"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4624,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4625,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4626,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4627,
+    "polygonIds": [
+      "assur-he8i-e1127cc93dfe"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4628,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4629,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4630,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4631,
+    "polygonIds": [
+      "assur-hc8i-7c55133a9d29"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4632,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4633,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4634,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4635,
+    "polygonIds": [
+      "assur-hd8i-04d1913af44c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4638,
+    "polygonIds": [
+      "assur-l9-081650a81622"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4639,
+    "polygonIds": [
+      "assur-l9-081650a81622"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4640,
+    "polygonIds": [
+      "assur-la9ii-a1ccc873746b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4641,
+    "polygonIds": [
+      "assur-l8-d809790a6828"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4642,
+    "polygonIds": [
+      "assur-l8-d809790a6828"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4643,
+    "polygonIds": [
+      "assur-la9ii-a1ccc873746b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4644,
+    "polygonIds": [
+      "assur-la9ii-a1ccc873746b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4645,
+    "polygonIds": [
+      "assur-la9ii-a1ccc873746b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4646,
+    "polygonIds": [
+      "assur-la9ii-a1ccc873746b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4647,
+    "polygonIds": [
+      "assur-la9ii-a1ccc873746b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4648,
+    "polygonIds": [
+      "assur-l9-081650a81622"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4649,
+    "polygonIds": [
+      "assur-l9-081650a81622"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4650,
+    "polygonIds": [
+      "assur-l9-081650a81622"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4651,
+    "polygonIds": [
+      "assur-hc10iv-e9ba6785720f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4652,
+    "polygonIds": [
+      "assur-cd9ii-35f1792f2c59"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4653,
+    "polygonIds": [
+      "assur-cd9i-70cce66085df"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4654,
+    "polygonIds": [
+      "assur-ed10i-122e56db4bf8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4655,
+    "polygonIds": [
+      "assur-be4v-797c28d39cb5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4656,
+    "polygonIds": [
+      "assur-be4v-797c28d39cb5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4657,
+    "polygonIds": [
+      "assur-be4v-797c28d39cb5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4658,
+    "polygonIds": [
+      "assur-be4v-797c28d39cb5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4659,
+    "polygonIds": [
+      "assur-be5i-f5ecbd35972a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4660,
+    "polygonIds": [
+      "assur-be5i-f5ecbd35972a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4661,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4663,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4664,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4665,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4666,
+    "polygonIds": [
+      "assur-be5i-f5ecbd35972a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4667,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4668,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4669,
+    "polygonIds": [
+      "assur-bd5i-1106b4b8fc7c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4670,
+    "polygonIds": [
+      "assur-bc5ii-310134341079"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4671,
+    "polygonIds": [
+      "assur-bc5iii-9496f1c01d5b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4672,
+    "polygonIds": [
+      "assur-bc5ii-310134341079"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4673,
+    "polygonIds": [
+      "assur-de5v-b4930efd61c1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4674,
+    "polygonIds": [
+      "assur-ea5v-d293ab969788"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4675,
+    "polygonIds": [
+      "assur-eb5v-71efa0213895"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4676,
+    "polygonIds": [
+      "assur-db5iv-3f293e1fa0bd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4677,
+    "polygonIds": [
+      "assur-db5iv-3f293e1fa0bd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4678,
+    "polygonIds": [
+      "assur-db5iv-3f293e1fa0bd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4679,
+    "polygonIds": [
+      "assur-db5iv-3f293e1fa0bd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4680,
+    "polygonIds": [
+      "assur-cd6i-18c98d0c1647"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4681,
+    "polygonIds": [
+      "assur-da6ii-016b9bbe05f4"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4682,
+    "polygonIds": [
+      "assur-da6iv-e2f748bf874e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4683,
+    "polygonIds": [
+      "assur-da6iv-e2f748bf874e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4684,
+    "polygonIds": [
+      "assur-da6iv-e2f748bf874e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4685,
+    "polygonIds": [
+      "assur-ce6iv-d9f48276e9ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4686,
+    "polygonIds": [
+      "assur-ce6iv-d9f48276e9ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4687,
+    "polygonIds": [
+      "assur-ce6iv-d9f48276e9ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4688,
+    "polygonIds": [
+      "assur-ce6iv-d9f48276e9ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4689,
+    "polygonIds": [
+      "assur-ce6iv-d9f48276e9ab"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4690,
+    "polygonIds": [
+      "assur-ce6iii-01ed729cc729"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4691,
+    "polygonIds": [
+      "assur-ce6iii-01ed729cc729"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4692,
+    "polygonIds": [
+      "assur-c6-1047f1e15a68"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4693,
+    "polygonIds": [
+      "assur-be7i-38ce66f15dcd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4694,
+    "polygonIds": [
+      "assur-be8i-6f4ff2e5c4aa"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4695,
+    "polygonIds": [
+      "assur-be8i-6f4ff2e5c4aa"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4696,
+    "polygonIds": [
+      "assur-bd8ii-66e6a0a429d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4697,
+    "polygonIds": [
+      "assur-cc9i-af66f2996084"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4698,
+    "polygonIds": [
+      "assur-cd9ii-35f1792f2c59"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4699,
+    "polygonIds": [
+      "assur-da9iii-d31b8edb8af6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4700,
+    "polygonIds": [
+      "assur-da9iii-d31b8edb8af6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4701,
+    "polygonIds": [
+      "assur-da9iii-d31b8edb8af6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4702,
+    "polygonIds": [
+      "assur-dd9iv-ab130cd33b86"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4703,
+    "polygonIds": [
+      "assur-de9v-d6499ffb6a89"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4704,
+    "polygonIds": [
+      "assur-ea7ii-8e7d7e44b6f4"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4705,
+    "polygonIds": [
+      "assur-ge9i-f06fc5d649e6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4706,
+    "polygonIds": [
+      "assur-fc8i-713e9a4a2d5d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4707,
+    "polygonIds": [
+      "assur-fd8i-554d058cd5c7"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4708,
+    "polygonIds": [
+      "assur-id8i-d16dd7b3c388"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4709,
+    "polygonIds": [
+      "assur-fd8i-554d058cd5c7"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4710,
+    "polygonIds": [
+      "assur-fd8i-554d058cd5c7"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4711,
+    "polygonIds": [
+      "assur-gb9i-f02183f4767e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4712,
+    "polygonIds": [
+      "assur-gd10i-10d1c2f64360"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Assur Tafeln.ods",
+    "sourceRevision": "2026-07-27"
+  }
+]
