@@ -5,9 +5,6 @@ from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
-from ebl.fragmentarium.application.fragment_query_preview import (
-    matching_line_preview_of,
-)
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQuerySummarySchema,
 )
@@ -18,6 +15,9 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQuerySummary,
 )
 from ebl.tests.factories.provenance import build_provenance_records
+from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
+    matching_line_preview_of,
+)
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 

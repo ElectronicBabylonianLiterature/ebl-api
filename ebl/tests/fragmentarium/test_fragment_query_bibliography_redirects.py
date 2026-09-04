@@ -144,7 +144,7 @@ def test_chained_redirects_share_one_batch_per_hop(spied_bibliography_repository
     assert calls == [["OLD1", "OLD2"], ["MID"], ["CANON"]]
 
 
-def test_chain_longer_than_the_redirect_depth_stops_safely(
+def test_chain_longer_than_the_redirect_depth_is_omitted(
     spied_bibliography_repository,
 ):
     repository, calls = spied_bibliography_repository
@@ -156,8 +156,22 @@ def test_chain_longer_than_the_redirect_depth_stops_safely(
     )
 
     assert len(calls) == MAX_REDIRECT_DEPTH + 1
-    assert documents[ids[0]]["id"] == ids[MAX_REDIRECT_DEPTH]
-    assert set(documents) == {ids[0]}
+    assert documents == {}
+
+
+def test_chain_at_exactly_the_redirect_depth_still_resolves(
+    spied_bibliography_repository,
+):
+    repository, calls = spied_bibliography_repository
+    ids = [f"HOP{index}" for index in range(MAX_REDIRECT_DEPTH + 1)]
+    canonical = create_chain(repository, ids)
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of(ids[0]))], repository
+    )
+
+    assert len(calls) == MAX_REDIRECT_DEPTH + 1
+    assert documents == {ids[0]: canonical}
 
 
 def test_redirect_cycle_terminates_without_extra_queries(

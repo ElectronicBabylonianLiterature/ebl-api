@@ -1,9 +1,7 @@
 from itertools import islice
-from typing import Any, Dict, List, Sequence, Tuple, cast
+from typing import Any, Dict, List, Sequence, Tuple
 
-from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
-from ebl.transliteration.domain.text import Text
 
 MAX_PREVIEW_LINES = 5
 
@@ -33,28 +31,10 @@ def selected_lines(
 def matching_line_preview_of_data(
     text: dict, matching_lines: Sequence[int]
 ) -> Dict[str, Any]:
-    # Production hydration path. Output is fed through schema load, so the
-    # key is the wire name ``parserVersion``.
     return {
         "lines": [
             preview_line_of(index, line)
             for index, line in selected_lines(text.get("lines") or [], matching_lines)
         ],
         "parserVersion": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
-    }
-
-
-def matching_line_preview_of(
-    text: Text, matching_lines: Sequence[int]
-) -> Dict[str, Any]:
-    # Domain-Text builder, currently exercised only by tests. Output goes
-    # straight onto the domain object, so the key is the attribute name
-    # ``parser_version``.
-    schema = OneOfLineSchema()
-    return {
-        "lines": [
-            preview_line_of(index, cast(dict, schema.dump(line)))
-            for index, line in selected_lines(text.lines, matching_lines)
-        ],
-        "parser_version": text.parser_version or DEFAULT_ATF_PARSER_VERSION,
     }

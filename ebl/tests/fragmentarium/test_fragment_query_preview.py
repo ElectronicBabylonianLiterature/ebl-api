@@ -1,13 +1,11 @@
 import pytest
 
-from ebl.fragmentarium.application.fragment_query_preview import (
-    matching_line_preview_of,
-    preview_line_of,
-)
+from ebl.fragmentarium.application.fragment_query_preview import preview_line_of
 from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
     COMPLEX_ATF,
     PREVIEW_LINE_FIELDS,
     dumped,
+    matching_line_preview_of,
 )
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 

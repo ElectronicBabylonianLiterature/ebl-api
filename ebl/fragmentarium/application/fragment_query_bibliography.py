@@ -27,13 +27,15 @@ def pending_targets_of(documents: Iterable[dict], requested: Set[str]) -> List[s
     return list(targets)
 
 
-def resolved_document(document: dict, fetched: Dict[str, dict]) -> dict:
+def resolved_document(document: dict, fetched: Dict[str, dict]) -> Optional[dict]:
     seen: Set[str] = set()
     while (target := redirect_target_of(document)) and target not in seen:
         seen.add(target)
         if target not in fetched:
             break
         document = fetched[target]
+    if len(seen) >= MAX_REDIRECT_DEPTH and redirect_target_of(document):
+        return None
     return document
 
 
@@ -61,6 +63,7 @@ def bibliography_documents_of(
         requested.update(targets)
         batch = documents_by_id(targets, repository)
         fetched.update(batch)
-    return {
+    resolved = {
         id_: resolved_document(document, fetched) for id_, document in documents.items()
     }
+    return {id_: document for id_, document in resolved.items() if document is not None}

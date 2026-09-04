@@ -2,13 +2,13 @@ import pytest
 
 from ebl.fragmentarium.application.fragment_query_preview import (
     MAX_PREVIEW_LINES,
-    matching_line_preview_of,
     matching_line_preview_of_data,
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
     COMPLEX_ATF,
     dumped_text,
+    matching_line_preview_of,
     numbered_atf,
 )
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark

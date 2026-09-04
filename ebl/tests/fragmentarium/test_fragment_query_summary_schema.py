@@ -8,7 +8,6 @@ from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.fragment_query_preview import (
-    matching_line_preview_of,
     matching_line_preview_of_data,
 )
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
@@ -30,7 +29,10 @@ from ebl.tests.factories.fragment import (
     FragmentDossierReferenceFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import dumped_text
+from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
+    dumped_text,
+    matching_line_preview_of,
+)
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 

@@ -168,9 +168,9 @@ class FragmentsQueryResource:
 
         resp.media = (
             FragmentQueryResultSchema(include_count_metadata=True).dump(
-                self._enrich(cast(FragmentQueryResult, result))
+                self._enrich(result)
             )
-            if "limit" in query
+            if isinstance(result, FragmentQueryResult)
             else QueryResultSchema(include_count_metadata=True).dump(result)
         )
 
