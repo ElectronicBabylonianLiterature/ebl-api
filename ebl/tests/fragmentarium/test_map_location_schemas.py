@@ -1,4 +1,5 @@
-import attr
+from typing import cast
+
 import pytest
 from marshmallow import ValidationError
 
@@ -22,50 +23,35 @@ def _map_location(*polygon_ids, source="Assur Tafeln.ods", revision="2026-07-27"
     )
 
 
-@pytest.mark.parametrize("polygon_ids", [("assur-1",), ("assur-1", "assur-2")])
-def test_map_location_schema_round_trip(polygon_ids):
-    schema = MapLocationSchema()
-    payload = {
-        "polygonIds": list(polygon_ids),
+def _payload(**changes) -> dict:
+    return {
+        "polygonIds": ["assur-1"],
         "locationPrecision": "excavation-area",
         "matchMethod": "verified-source",
         "source": "Assur Tafeln.ods",
         "sourceRevision": "2026-07-27",
+        **changes,
     }
+
+
+@pytest.mark.parametrize("polygon_ids", [["assur-1"], ["assur-1", "assur-2"]])
+def test_map_location_schema_round_trip(polygon_ids):
+    schema = MapLocationSchema()
+    payload = _payload(polygonIds=polygon_ids)
+
     assert schema.dump(schema.load(payload)) == payload
 
 
 @pytest.mark.parametrize(
     "payload",
     [
-        {
-            "polygonIds": [],
-            "locationPrecision": "excavation-area",
-            "matchMethod": "verified-source",
-            "source": "Assur Tafeln.ods",
-            "sourceRevision": "2026-07-27",
-        },
-        {
-            "polygonIds": ["assur-1", "assur-1"],
-            "locationPrecision": "excavation-area",
-            "matchMethod": "verified-source",
-            "source": "Assur Tafeln.ods",
-            "sourceRevision": "2026-07-27",
-        },
-        {
-            "polygonIds": ["assur-1"],
-            "locationPrecision": "not-a-precision",
-            "matchMethod": "verified-source",
-            "source": "Assur Tafeln.ods",
-            "sourceRevision": "2026-07-27",
-        },
-        {
-            "polygonIds": ["assur-1"],
-            "locationPrecision": "excavation-area",
-            "matchMethod": "not-a-method",
-            "source": "Assur Tafeln.ods",
-            "sourceRevision": "2026-07-27",
-        },
+        _payload(polygonIds=[]),
+        _payload(polygonIds=["assur-1", "assur-1"]),
+        _payload(polygonIds=["assur-1", "  "]),
+        _payload(locationPrecision="not-a-precision"),
+        _payload(matchMethod="not-a-method"),
+        _payload(source="   "),
+        _payload(sourceRevision="  "),
     ],
 )
 def test_map_location_schema_rejects_invalid_payload(payload):
@@ -73,20 +59,27 @@ def test_map_location_schema_rejects_invalid_payload(payload):
         MapLocationSchema().load(payload)
 
 
-def test_findspot_schema_omits_missing_map_location(seeded_provenance_service):
-    site = seeded_provenance_service.find_by_id("ASSUR")
-    findspot = attr.evolve(FindspotFactory.build(site=site, map_location=None))
-    schema = FindspotSchema(context={"provenance_service": seeded_provenance_service})
+def test_map_location_schema_rejects_unknown_field():
+    with pytest.raises(ValidationError):
+        MapLocationSchema().load(_payload(unknown="value"))
 
-    assert "mapLocation" not in schema.dump(findspot)
-    assert schema.load(schema.dump(findspot)).map_location is None
+
+def test_findspot_schema_omits_missing_map_location(seeded_provenance_service):
+    findspot = FindspotFactory.build(
+        site=seeded_provenance_service.find_by_id("ASSUR"), map_location=None
+    )
+    schema = FindspotSchema(context={"provenance_service": seeded_provenance_service})
+    dumped = cast(dict, schema.dump(findspot))
+
+    assert "mapLocation" not in dumped
+    assert schema.load(dumped) == findspot
 
 
 def test_findspot_schema_round_trip_with_map_location(seeded_provenance_service):
-    site = seeded_provenance_service.find_by_id("ASSUR")
-    findspot = attr.evolve(
-        FindspotFactory.build(site=site, map_location=_map_location("assur-1"))
+    findspot = FindspotFactory.build(
+        site=seeded_provenance_service.find_by_id("ASSUR"),
+        map_location=_map_location("assur-1"),
     )
     schema = FindspotSchema(context={"provenance_service": seeded_provenance_service})
 
-    assert schema.load(schema.dump(findspot)) == findspot
+    assert schema.load(cast(dict, schema.dump(findspot))) == findspot
