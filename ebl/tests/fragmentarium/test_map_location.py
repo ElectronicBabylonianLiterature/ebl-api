@@ -34,6 +34,22 @@ def test_map_location_is_hashable():
     assert hash(_map_location()) == hash(_map_location())
 
 
+def test_map_location_accepts_polygon_id_sequence():
+    assert _map_location(polygon_ids=["assur-1", "assur-2"]).polygon_ids == (
+        "assur-1",
+        "assur-2",
+    )
+
+
+def test_map_location_normalizes_source_whitespace():
+    map_location = _map_location(
+        source="  Assur Tafeln.ods  ", source_revision=" 2026-07-27 "
+    )
+
+    assert map_location.source == "Assur Tafeln.ods"
+    assert map_location.source_revision == "2026-07-27"
+
+
 @pytest.mark.parametrize(
     "changes,message",
     [

@@ -49,7 +49,4 @@ class MapLocationSchema(Schema):
 
     @post_load
     def create_map_location(self, data, **kwargs) -> MapLocation:
-        data["polygon_ids"] = tuple(data["polygon_ids"])
-        data["source"] = data["source"].strip()
-        data["source_revision"] = data["source_revision"].strip()
         return MapLocation(**data)

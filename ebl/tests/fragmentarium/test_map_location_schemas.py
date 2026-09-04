@@ -64,6 +64,18 @@ def test_map_location_schema_rejects_unknown_field():
         MapLocationSchema().load(_payload(unknown="value"))
 
 
+def test_map_location_schema_normalizes_source_whitespace():
+    loaded = cast(
+        MapLocation,
+        MapLocationSchema().load(
+            _payload(source="  Assur Tafeln.ods  ", sourceRevision=" 2026-07-27 ")
+        ),
+    )
+
+    assert loaded.source == "Assur Tafeln.ods"
+    assert loaded.source_revision == "2026-07-27"
+
+
 def test_findspot_schema_omits_missing_map_location(seeded_provenance_service):
     findspot = FindspotFactory.build(
         site=seeded_provenance_service.find_by_id("ASSUR"), map_location=None
