@@ -13,6 +13,9 @@ from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.application.map_artifact_repository import (
+    MapArtifactRepository,
+)
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
@@ -61,6 +64,7 @@ class Context:
     provenance_repository: ProvenanceRepository
     provenance_service: ProvenanceService
     realia_repository: RealiaRepository
+    map_artifact_repository: MapArtifactRepository = attr.Factory(MapArtifactRepository)
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)
