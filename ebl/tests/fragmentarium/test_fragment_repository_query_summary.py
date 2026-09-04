@@ -54,7 +54,15 @@ def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
                                     "number": "1",
                                     "suffix": "",
                                 },
-                                "text": {"lines": [{"prefix": "1.", "content": []}]},
+                                "text": {
+                                    "lines": [
+                                        {
+                                            "type": "TextLine",
+                                            "prefix": "1.",
+                                            "content": [],
+                                        }
+                                    ]
+                                },
                             }
                         },
                         (),

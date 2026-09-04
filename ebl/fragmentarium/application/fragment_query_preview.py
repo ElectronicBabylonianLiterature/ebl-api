@@ -8,37 +8,22 @@ from ebl.transliteration.domain.text import Text
 MAX_PREVIEW_LINES = 5
 
 
-def preview_token_of(token: dict) -> Dict[str, Any]:
-    data = {
-        "value": token.get("value"),
-        "cleanValue": token.get("cleanValue"),
-        "uniqueLemma": token.get("uniqueLemma"),
-        "type": token.get("type"),
-    }
-    return {
-        key: value
-        for key, value in data.items()
-        if value is not None and (key != "uniqueLemma" or value)
-    }
+def is_text_line(line: Any) -> bool:
+    type_name = line.get("type") if isinstance(line, dict) else type(line).__name__
+    return type_name == "TextLine"
 
 
 def preview_line_of(index: int, line: dict) -> Dict[str, Any]:
-    content = line.get("content") or []
-    prefix = line.get("prefix") or ""
-    return {
-        "index": index,
-        "number": prefix,
-        "prefix": prefix,
-        "text": " ".join(token.get("value", "") for token in content),
-        "tokens": [preview_token_of(token) for token in content],
-    }
+    return {**line, "index": index}
 
 
 def selected_lines(
     lines: Sequence, matching_lines: Sequence[int]
 ) -> List[Tuple[int, Any]]:
     unique_indices = dict.fromkeys(
-        index for index in matching_lines if 0 <= index < len(lines)
+        index
+        for index in matching_lines
+        if 0 <= index < len(lines) and is_text_line(lines[index])
     )
     return [
         (index, lines[index]) for index in islice(unique_indices, MAX_PREVIEW_LINES)

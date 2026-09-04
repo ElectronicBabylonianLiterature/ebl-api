@@ -54,7 +54,7 @@ def test_preview_serializes_only_selected_lines():
     preview = matching_line_preview_of(text, (0, 4))
 
     assert len(text.lines) == 20
-    assert [line["number"] for line in preview["lines"]] == ["1.", "5."]
+    assert [line["prefix"] for line in preview["lines"]] == ["1.", "5."]
 
 
 def test_preview_carries_the_source_index_of_each_line():
@@ -62,7 +62,7 @@ def test_preview_carries_the_source_index_of_each_line():
     preview = matching_line_preview_of(text, (0, 4, 11))
 
     assert [line["index"] for line in preview["lines"]] == [0, 4, 11]
-    assert [line["number"] for line in preview["lines"]] == ["1.", "5.", "12."]
+    assert [line["prefix"] for line in preview["lines"]] == ["1.", "5.", "12."]
 
 
 def test_preview_index_survives_deduplication_and_capping(long_text):
@@ -103,7 +103,7 @@ def test_preview_caps_line_count(long_text, matching_count, expected):
 def test_preview_cap_keeps_the_first_matching_lines_in_order(long_text):
     preview = matching_line_preview_of(long_text, tuple(range(30)))
 
-    assert [line["number"] for line in preview["lines"]] == [
+    assert [line["prefix"] for line in preview["lines"]] == [
         f"{index}." for index in range(1, MAX_PREVIEW_LINES + 1)
     ]
 
@@ -111,7 +111,7 @@ def test_preview_cap_keeps_the_first_matching_lines_in_order(long_text):
 def test_preview_cap_skips_out_of_range_before_capping(long_text):
     preview = matching_line_preview_of(long_text, (99, 0, 1, 2, 3, 4, 5))
 
-    assert [line["number"] for line in preview["lines"]] == [
+    assert [line["prefix"] for line in preview["lines"]] == [
         f"{index}." for index in range(1, MAX_PREVIEW_LINES + 1)
     ]
 
@@ -130,7 +130,7 @@ def test_preview_deduplicates_matching_indexes(
 ):
     preview = matching_line_preview_of(long_text, matching_lines)
 
-    assert [line["number"] for line in preview["lines"]] == expected_numbers
+    assert [line["prefix"] for line in preview["lines"]] == expected_numbers
 
 
 def test_stored_data_preview_applies_the_same_cap():

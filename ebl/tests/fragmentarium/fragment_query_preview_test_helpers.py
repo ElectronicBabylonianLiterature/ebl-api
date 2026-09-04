@@ -4,7 +4,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 COMPLEX_ATF = "1'. [ku]-nu-uš KUR# {d}INANA ⸢ki⸣ %sux gu-du/gu₂"
-PREVIEW_LINE_FIELDS = {"index", "number", "prefix", "text", "tokens"}
+PREVIEW_LINE_FIELDS = {"index", "type", "prefix", "content", "lineNumber"}
 
 
 def dumped(line) -> dict:

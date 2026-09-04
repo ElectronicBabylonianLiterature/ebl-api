@@ -22,29 +22,23 @@ def complex_preview(complex_line):
     return preview_line_of(0, dumped(complex_line))
 
 
-def test_preview_line_carries_only_the_compact_fields(complex_preview):
+def test_preview_line_carries_the_full_line_and_the_source_index(complex_preview):
     assert set(complex_preview) == PREVIEW_LINE_FIELDS
+    assert complex_preview["index"] == 0
+    assert complex_preview["type"] == "TextLine"
 
 
-def test_preview_line_omits_the_detail_representation(complex_line):
+def test_preview_line_preserves_the_detail_representation(complex_line):
     detail = dumped(complex_line)
     preview = preview_line_of(0, detail)
 
-    assert "content" in detail
-    assert "lineNumber" in detail
-    assert "content" not in preview
-    assert "lineNumber" not in preview
-    assert "type" not in preview
+    assert preview["content"] == detail["content"]
+    assert preview["lineNumber"] == detail["lineNumber"]
+    assert preview["prefix"] == detail["prefix"]
 
 
-def test_preview_keeps_compact_fields(complex_preview):
-    assert complex_preview["number"] == "1'."
-    assert complex_preview["prefix"] == "1'."
-    assert complex_preview["text"] == "[ku]-nu-uš KUR# {d}INANA ⸢ki⸣ %sux gu-du/gu₂"
-
-
-def test_preview_keeps_every_token_type(complex_preview):
-    assert [token["type"] for token in complex_preview["tokens"]] == [
+def test_preview_line_keeps_the_full_tokens_including_nested_parts(complex_preview):
+    assert [token["type"] for token in complex_preview["content"]] == [
         "Word",
         "Word",
         "Word",
@@ -52,56 +46,26 @@ def test_preview_keeps_every_token_type(complex_preview):
         "LanguageShift",
         "Word",
     ]
+    assert complex_preview["content"][0]["parts"]
 
 
-def test_preview_keeps_token_values_and_clean_values(complex_preview):
-    assert [token["value"] for token in complex_preview["tokens"]] == [
-        "[ku]-nu-uš",
-        "KUR#",
-        "{d}INANA",
-        "⸢ki⸣",
-        "%sux",
-        "gu-du/gu₂",
-    ]
-    assert complex_preview["tokens"][0]["cleanValue"] == "ku-nu-uš"
-    assert complex_preview["tokens"][1]["cleanValue"] == "KUR"
-
-
-def test_preview_token_omits_empty_unique_lemma(complex_preview):
-    assert all("uniqueLemma" not in token for token in complex_preview["tokens"])
-
-
-def test_preview_token_keeps_a_present_unique_lemma():
-    preview = preview_line_of(
-        0, {"prefix": "1.", "content": [{"value": "ku", "uniqueLemma": ["ku I"]}]}
-    )
-
-    assert preview["tokens"] == [{"value": "ku", "uniqueLemma": ["ku I"]}]
-
-
-def test_preview_keeps_a_line_number_range_as_the_number():
+def test_preview_line_keeps_a_line_number_range():
     line = parse_atf_lark("1-2. ku-nu-uš").lines[0]
     preview = preview_line_of(0, dumped(line))
 
-    assert preview["number"] == "1-2."
+    assert preview["lineNumber"]["type"] == "LineNumberRange"
     assert preview["prefix"] == "1-2."
 
 
-def test_preview_keeps_the_compact_shape_for_a_non_text_line():
+def test_preview_excludes_non_text_lines():
     text = parse_atf_lark("1. ku\n$ (end of side)")
-    preview = matching_line_preview_of(text, (1, 7))
+    preview = matching_line_preview_of(text, (0, 1))
 
-    assert len(preview["lines"]) == 1
-    assert set(preview["lines"][0]) == PREVIEW_LINE_FIELDS
-    assert preview["lines"][0]["number"] == "$"
-    assert preview["lines"][0]["text"] == " end of side"
+    assert [line["prefix"] for line in preview["lines"]] == ["1."]
+    assert all(line["type"] == "TextLine" for line in preview["lines"])
 
 
-def test_preview_of_a_line_without_content():
-    assert preview_line_of(2, {"prefix": "1."}) == {
-        "index": 2,
-        "number": "1.",
-        "prefix": "1.",
-        "text": "",
-        "tokens": [],
-    }
+def test_preview_of_a_line_without_extra_fields():
+    line = {"type": "TextLine", "prefix": "1.", "content": []}
+
+    assert preview_line_of(2, line) == {**line, "index": 2}

@@ -145,11 +145,11 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
     assert "script" in result.json["items"][0]
     assert "hasPhoto" in result.json["items"][0]
     preview_line = result.json["items"][0]["matchingLinePreview"]["lines"][0]
-    assert preview_line["text"] == "kur₂"
-    assert preview_line["tokens"][0]["value"] == "kur₂"
-    assert preview_line["tokens"][0]["cleanValue"] == "kur₂"
-    assert preview_line["tokens"][0]["type"] == "Word"
-    assert "parts" not in preview_line["tokens"][0]
+    assert preview_line["type"] == "TextLine"
+    assert preview_line["content"][0]["value"] == "kur₂"
+    assert preview_line["content"][0]["cleanValue"] == "kur₂"
+    assert preview_line["content"][0]["type"] == "Word"
+    assert preview_line["content"][0]["parts"]
 
 
 @pytest.mark.parametrize(

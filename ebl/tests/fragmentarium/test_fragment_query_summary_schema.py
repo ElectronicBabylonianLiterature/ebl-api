@@ -130,15 +130,16 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         "hasPhoto": True,
         "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
     }
+    preview_line = dumped["matchingLinePreview"]["lines"][0]
     assert (
-        dumped["matchingLinePreview"]["lines"][0]["prefix"]
-        == (summary.matching_line_preview["lines"][0]["prefix"])
+        preview_line["prefix"] == (summary.matching_line_preview["lines"][0]["prefix"])
     )
-    assert dumped["matchingLinePreview"]["lines"][0]["text"]
-    assert dumped["matchingLinePreview"]["lines"][0]["tokens"][0]["value"]
+    assert preview_line["type"] == "TextLine"
+    assert preview_line["lineNumber"]
+    assert preview_line["content"][0]["value"]
+    assert preview_line["index"] == 0
     assert dumped["matchingLinePreview"]["parserVersion"]
     assert "parser_version" not in dumped["matchingLinePreview"]
-    assert "parts" not in dumped["matchingLinePreview"]["lines"][0]["tokens"][0]
     assert "text" not in dumped
     assert "record" not in dumped
     assert "atf" not in dumped

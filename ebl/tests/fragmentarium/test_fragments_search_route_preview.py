@@ -31,18 +31,17 @@ def query_preview(client) -> dict:
     return result.json["items"][0]["matchingLinePreview"]
 
 
-def test_preview_line_identifies_the_detail_line_without_repeating_it(
-    client, matched_fragment
-):
+def test_preview_line_carries_the_full_detail_line(client, matched_fragment):
     preview = query_preview(client)
     detail = client.simulate_get(f"/fragments/{matched_fragment.number}").json
     line = preview["lines"][0]
+    detail_line = detail["text"]["lines"][MATCHING_LINE_INDEX]
 
     assert line["index"] == MATCHING_LINE_INDEX
-    assert line["prefix"] == (detail["text"]["lines"][MATCHING_LINE_INDEX]["prefix"])
-    assert "content" not in line
-    assert "lineNumber" not in line
-    assert "type" not in line
+    assert line["type"] == "TextLine"
+    assert line["prefix"] == detail_line["prefix"]
+    assert line["lineNumber"] == detail_line["lineNumber"]
+    assert line["content"] == detail_line["content"]
 
 
 def test_preview_contains_only_matching_lines(client, matched_fragment):
@@ -50,7 +49,7 @@ def test_preview_contains_only_matching_lines(client, matched_fragment):
 
     assert len(matched_fragment.text.lines) > len(preview["lines"])
     assert len(preview["lines"]) == 1
-    assert preview["lines"][0]["number"] == (
+    assert preview["lines"][0]["prefix"] == (
         matched_fragment.text.lines[MATCHING_LINE_INDEX].line_number.atf
     )
 
@@ -94,7 +93,7 @@ def test_preview_is_capped_while_match_count_stays_complete(
     assert len(item["matchingLines"]) == MATCHING_LINE_COUNT
     assert result.json["matchCountTotal"] == MATCHING_LINE_COUNT
     assert len(item["matchingLinePreview"]["lines"]) == MAX_PREVIEW_LINES
-    assert [line["number"] for line in item["matchingLinePreview"]["lines"]] == [
+    assert [line["prefix"] for line in item["matchingLinePreview"]["lines"]] == [
         f"{index}." for index in range(1, MAX_PREVIEW_LINES + 1)
     ]
 
@@ -109,16 +108,16 @@ def test_preview_deduplicates_overlapping_multiline_matches(
 
     assert result.status == falcon.HTTP_OK
     assert len(item["matchingLines"]) > len(set(item["matchingLines"]))
-    assert [line["number"] for line in item["matchingLinePreview"]["lines"]] == [
+    assert [line["prefix"] for line in item["matchingLinePreview"]["lines"]] == [
         f"{index}." for index in range(1, MAX_PREVIEW_LINES + 1)
     ]
 
 
-def test_preview_keeps_only_the_compact_fields(client, matched_fragment):
+def test_preview_keeps_the_full_line_shape(client, matched_fragment):
     line = query_preview(client)["lines"][0]
 
-    assert set(line) == {"index", "number", "prefix", "text", "tokens"}
-    assert line["text"].startswith(line["tokens"][0]["value"])
+    assert set(line) == {"index", "type", "prefix", "content", "lineNumber"}
+    assert line["content"][0]["value"]
 
 
 def test_preview_line_index_points_into_matching_lines(client, matched_fragment):
