@@ -34,7 +34,7 @@ class ExcavationPlanSchema(Schema):
         return ExcavationPlan(**data)
 
 
-class ProvenanceSiteMixin:
+class ProvenanceSiteMixin(Schema):
     def serialize_site(self, obj):
         return getattr(obj.site, "long_name", None)
 

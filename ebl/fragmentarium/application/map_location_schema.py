@@ -1,5 +1,4 @@
 from marshmallow import (
-    EXCLUDE,
     Schema,
     ValidationError,
     fields,
@@ -16,17 +15,7 @@ from ebl.fragmentarium.domain.map_location import (
 from ebl.schemas import ValueEnumField
 
 
-def _strip_or_none(value: str | None) -> str | None:
-    if value is None:
-        return None
-    stripped = value.strip()
-    return stripped or None
-
-
 class MapLocationSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
     polygon_ids = fields.List(
         fields.String(validate=validate.Length(min=1)),
         required=True,
@@ -46,16 +35,16 @@ class MapLocationSchema(Schema):
 
     @validates_schema
     def validate_map_location(self, data, **kwargs) -> None:
-        polygon_ids = data.get("polygon_ids", ())
+        polygon_ids = data["polygon_ids"]
         if len(set(polygon_ids)) != len(polygon_ids):
             raise ValidationError("polygonIds must be unique.", "polygonIds")
         if any(not polygon_id.strip() for polygon_id in polygon_ids):
             raise ValidationError(
                 "polygonIds must not contain empty values.", "polygonIds"
             )
-        if _strip_or_none(data.get("source")) is None:
+        if not data["source"].strip():
             raise ValidationError("source must not be empty.", "source")
-        if _strip_or_none(data.get("source_revision")) is None:
+        if not data["source_revision"].strip():
             raise ValidationError("sourceRevision must not be empty.", "sourceRevision")
 
     @post_load
