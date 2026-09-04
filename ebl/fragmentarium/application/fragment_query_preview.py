@@ -48,6 +48,8 @@ def selected_lines(
 def matching_line_preview_of_data(
     text: dict, matching_lines: Sequence[int]
 ) -> Dict[str, Any]:
+    # Production hydration path. Output is fed through schema load, so the
+    # key is the wire name ``parserVersion``.
     return {
         "lines": [
             preview_line_of(index, line)
@@ -60,6 +62,9 @@ def matching_line_preview_of_data(
 def matching_line_preview_of(
     text: Text, matching_lines: Sequence[int]
 ) -> Dict[str, Any]:
+    # Domain-Text builder, currently exercised only by tests. Output goes
+    # straight onto the domain object, so the key is the attribute name
+    # ``parser_version``.
     schema = OneOfLineSchema()
     return {
         "lines": [
