@@ -1,6 +1,6 @@
 from typing import Dict, Iterable, List, Optional, Sequence, Set
 
-from ebl.bibliography.application.bibliography import MAX_REDIRECT_DEPTH
+from ebl.bibliography.application.redirect_resolution import MAX_REDIRECT_DEPTH
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.fragmentarium.domain.fragment_query_summary import FragmentQuerySummary
 

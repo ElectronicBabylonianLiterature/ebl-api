@@ -1,4 +1,4 @@
-from ebl.bibliography.application.bibliography import MAX_REDIRECT_DEPTH
+from ebl.bibliography.application.redirect_resolution import MAX_REDIRECT_DEPTH
 from ebl.fragmentarium.application.fragment_query_bibliography import (
     bibliography_documents_of,
 )
