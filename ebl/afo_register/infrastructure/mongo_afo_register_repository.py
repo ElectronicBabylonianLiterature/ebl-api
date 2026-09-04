@@ -1,9 +1,10 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
-from typing import Dict, List, Optional, Tuple, cast, Sequence
+from typing import Dict, List, Optional, Set, Tuple, cast, Sequence
 from pymongo.database import Database
 import pymongo
 from natsort import natsorted
 
+from ebl.errors import DataError
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecord,
@@ -14,6 +15,12 @@ from ebl.common.query.query_collation import make_query_params
 
 
 COLLECTION = "afo_register"
+MAX_CANDIDATES = 10000
+TOO_MANY_CANDIDATES_MESSAGE = (
+    "The submitted queries expand to more than "
+    f"{MAX_CANDIDATES} text and number combinations."
+)
+NON_STRING_QUERY_MESSAGE = "Each query must be a string."
 
 
 def create_search_query(query):
@@ -37,17 +44,14 @@ def cast_with_sorting(
     )
 
 
-def split_text_and_number(query: str) -> Optional[Tuple[str, str]]:
+def candidate_splits(query: object) -> List[Tuple[str, str]]:
     if not isinstance(query, str):
-        return None
-    normalized_query = " ".join(query.strip().split())
-    split_query = normalized_query.rsplit(" ", 1)
-    if len(split_query) != 2:
-        return None
-    text, text_number = split_query
-    if not text or not text_number:
-        return None
-    return text, text_number
+        raise DataError(NON_STRING_QUERY_MESSAGE)
+    tokens = query.strip().split()
+    return [
+        (" ".join(tokens[:index]), " ".join(tokens[index:]))
+        for index in range(1, len(tokens))
+    ]
 
 
 class AfoRegisterRecordSchema(Schema):
@@ -95,56 +99,39 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
 
     def search(self, query, *args, **kwargs) -> Sequence[AfoRegisterRecord]:
         data = self._afo_register.find_many(create_search_query(query))
-        records = AfoRegisterRecordSchema().load(data, many=True)
+        records = cast(
+            Sequence[AfoRegisterRecord],
+            AfoRegisterRecordSchema().load(data, many=True),
+        )
         return cast_with_sorting(records)
 
-    def _build_indexed_query(
+    def _build_candidate_query(
         self, query_list: Sequence[str]
     ) -> Optional[Dict[str, List[Dict[str, str]]]]:
-        parsed_pairs = [split_text_and_number(query) for query in query_list]
-        valid_pairs = [pair for pair in parsed_pairs if pair is not None]
-        if len(valid_pairs) != len(parsed_pairs):
-            return None
-
-        return {
-            "$or": [
-                {"text": text, "textNumber": text_number}
-                for text, text_number in valid_pairs
-            ]
-        }
-
-    def _build_fallback_pipeline(self, query_list: Sequence[str]) -> List[dict]:
-        return [
-            {
-                "$addFields": {
-                    "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
-                }
-            },
-            {"$match": {"combined_field": {"$in": query_list}}},
-            {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
-            {"$replaceRoot": {"newRoot": "$document"}},
-            {"$project": {"combined_field": 0}},
-        ]
+        seen: Set[Tuple[str, str]] = set()
+        candidates: List[Dict[str, str]] = []
+        for query in query_list:
+            for text, text_number in candidate_splits(query):
+                if (text, text_number) in seen:
+                    continue
+                if len(candidates) >= MAX_CANDIDATES:
+                    raise DataError(TOO_MANY_CANDIDATES_MESSAGE)
+                seen.add((text, text_number))
+                candidates.append({"text": text, "textNumber": text_number})
+        return {"$or": candidates} if candidates else None
 
     def search_by_texts_and_numbers(
         self, query_list: Sequence[str], *args, **kwargs
     ) -> Sequence[AfoRegisterRecord]:
-        if not query_list:
+        candidate_query = self._build_candidate_query(query_list)
+        if candidate_query is None:
             return []
 
-        normalized_query_list = [
-            " ".join(query.strip().split()) for query in query_list
-        ]
-
-        indexed_query = self._build_indexed_query(normalized_query_list)
-        if indexed_query is not None:
-            data = self._afo_register.find_many(indexed_query)
-        else:
-            data = self._afo_register.aggregate(
-                self._build_fallback_pipeline(normalized_query_list)
-            )
-
-        records = AfoRegisterRecordSchema().load(data, many=True)
+        data = self._afo_register.find_many(candidate_query)
+        records = cast(
+            Sequence[AfoRegisterRecord],
+            AfoRegisterRecordSchema().load(data, many=True),
+        )
         return cast_with_sorting(records)
 
     def search_suggestions(
