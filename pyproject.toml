@@ -39,6 +39,7 @@ ruff = "^0.15.0"
 attr = "^0.3.2"
 idna = "3.15"
 pyjwt = "2.13.0"
+pyproj = "^3.7.2"
 
 
 [tool.poetry.group.dev]
