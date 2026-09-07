@@ -4,6 +4,7 @@ genres = (
     ("ARCHIVAL", "Administrative", "Expenditure"),
     ("ARCHIVAL", "Administrative", "Expenditure", "Messenger Text"),
     ("ARCHIVAL", "Administrative", "Field Plan"),
+    ("ARCHIVAL", "Administrative", "Income"),
     ("ARCHIVAL", "Administrative", "Inventories"),
     ("ARCHIVAL", "Administrative", "Inventories", "Balanced Accounts"),
     ("ARCHIVAL", "Administrative", "Inventories", "Basket Labels"),
