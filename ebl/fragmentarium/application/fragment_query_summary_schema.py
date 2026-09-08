@@ -84,31 +84,11 @@ class FragmentQueryArchaeologySchema(Schema):
         return data or None
 
 
-class FragmentQueryPreviewTokenSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    value = fields.String(required=True)
-    cleanValue = fields.String(allow_none=True)
-    uniqueLemma = fields.List(fields.String())
-    type = fields.String()
-
-
-class FragmentQueryPreviewLineSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    number = fields.String(required=True)
-    prefix = fields.String(required=True)
-    text = fields.String(required=True)
-    tokens = fields.Nested(FragmentQueryPreviewTokenSchema, many=True, required=True)
-
-
 class FragmentQueryMatchingLinePreviewSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    lines = fields.Nested(FragmentQueryPreviewLineSchema, many=True, required=True)
+    lines = fields.List(fields.Raw(), required=True)
     parser_version = fields.String(required=True, data_key="parserVersion")
 
 
@@ -180,6 +160,12 @@ class FragmentQueryResultSchema(QueryResultSchema):
         unknown = EXCLUDE
 
     items = fields.Nested(FragmentQuerySummarySchema, many=True, required=True)
+    bibliography_documents = fields.Dict(
+        keys=fields.String(),
+        values=fields.Dict(),
+        load_default=dict,
+        data_key="bibliographyDocuments",
+    )
 
     @post_load
     def make_query_result(self, data, **kwargs) -> FragmentQueryResult:
