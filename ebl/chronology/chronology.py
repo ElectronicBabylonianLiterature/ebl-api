@@ -1,6 +1,6 @@
 import attr
 import json
-from typing import Sequence, Optional
+from typing import Sequence, Optional, cast
 from marshmallow import Schema, fields, post_load, post_dump
 
 
@@ -105,4 +105,4 @@ class ChronologySchema(Schema):
 
 with open("ebl/chronology/brinkmanKings.json", "r", encoding="utf-8") as file:
     data = json.load(file)
-    chronology = ChronologySchema().load({"kings": data})
+    chronology = cast(Chronology, ChronologySchema().load({"kings": data}))

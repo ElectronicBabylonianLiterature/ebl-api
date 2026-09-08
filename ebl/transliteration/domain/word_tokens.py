@@ -11,6 +11,7 @@ from ebl.lemmatization.domain.lemmatization import (
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.language import Language
+from ebl.transliteration.domain.alignment_map import AlignmentMap
 from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
 A = TypeVar("A", bound="AbstractWord")
@@ -88,11 +89,11 @@ class AbstractWord(Token):
     def set_has_omitted_alignment(self: A, has_omitted_alignment: bool) -> A:
         return attr.evolve(self, has_omitted_alignment=has_omitted_alignment)
 
-    def update_alignment(self: A, alignment_map) -> A:
+    def update_alignment(self: A, alignment_map: AlignmentMap) -> A:
+        alignment = self.alignment
         new_alignment = (
-            alignment_map[self.alignment]
-            if self.alignment is not None
-            and cast(int, self.alignment) < len(alignment_map)
+            alignment_map[alignment]
+            if alignment is not None and alignment < len(alignment_map)
             else None
         )
         return attr.evolve(

@@ -1,5 +1,5 @@
 import attr
-from typing import Mapping, Sequence, Union
+from typing import Dict, Mapping, Sequence, Union
 from marshmallow import Schema, fields, post_load
 from ebl.transliteration.domain.text_line import TextLine, L
 from ebl.corpus.domain.manuscript import Manuscript
@@ -12,7 +12,7 @@ class ChapterQueryColophonLines:
     def get_matching_lines(
         self, manuscripts: Sequence[Manuscript]
     ) -> Mapping[int, Sequence[TextLine]]:
-        matching_colophon_lines = {}
+        matching_colophon_lines: Dict[int, Sequence[TextLine]] = {}
         for manuscript in manuscripts:
             if str(manuscript.id) in self.colophon_lines_in_query:
                 matching_colophon_lines = {

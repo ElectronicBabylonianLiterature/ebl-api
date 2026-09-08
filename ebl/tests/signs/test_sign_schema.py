@@ -1,4 +1,4 @@
-from ebl.signs.infrastructure.mongo_sign_repository import (
+from ebl.signs.infrastructure.sign_schemas import (
     SignSchema,
     LogogramSchema,
     SortKeysSchema,

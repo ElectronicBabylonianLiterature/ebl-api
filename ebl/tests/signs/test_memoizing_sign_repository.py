@@ -1,4 +1,7 @@
-from ebl.signs.infrastructure.memoizing_sign_repository import MemoizingSignRepository
+from ebl.signs.infrastructure.memoizing_sign_repository import (
+    MemoizingSignRepository,
+)
+from ebl.transliteration.domain.sign import SignName
 
 
 def test_find_memoization(sign_repository, signs, when):
@@ -119,3 +122,50 @@ def test_search_by_lemma(sign_repository, signs):
 
     assert [sign] == first
     assert first is second
+
+
+def test_find_signs_by_order_delegates_without_caching(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+
+    first = memoizing_sign_repository.find_signs_by_order(
+        SignName("P₂"), "neo_assyrian_onset"
+    )
+    second = memoizing_sign_repository.find_signs_by_order(
+        SignName("P₂"), "neo_assyrian_onset"
+    )
+
+    assert first == sign_repository.find_signs_by_order(
+        SignName("P₂"), "neo_assyrian_onset"
+    )
+    assert first == second
+    assert first is not second
+
+
+def test_list_all_signs_memoization(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+
+    first = memoizing_sign_repository.list_all_signs()
+    second = memoizing_sign_repository.list_all_signs()
+
+    assert first == sorted(sign.name for sign in signs)
+    assert first is second
+
+
+def test_get_unicode_from_atf_delegates_without_caching(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+
+    first = memoizing_sign_repository.get_unicode_from_atf("ši")
+    second = memoizing_sign_repository.get_unicode_from_atf("ši")
+
+    assert first == sign_repository.get_unicode_from_atf("ši")
+    assert first == second
+    assert first is not second

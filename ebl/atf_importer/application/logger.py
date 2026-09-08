@@ -53,13 +53,17 @@ class Logger:
         self._append_to_data(text, key)
 
     def write_logs(self) -> None:
-        if self.logdir:
+        logdir = self.logdir
+        if logdir:
             for key in self.log_keys:
-                self._write_log(f"{key}.txt", self.data[key])
+                self._write_log(logdir, f"{key}.txt", self.data[key])
 
-    def _write_log(self, filename: str, data: List[str]) -> None:
-        Path(self.logdir).mkdir(parents=True, exist_ok=True)  # pyre-ignore[6]
-        with open(f"{self.logdir}/{filename}", "w", encoding="utf8") as outputfile:
+    def _write_log(
+        self, logdir: Union[PathLike[str], str], filename: str, data: List[str]
+    ) -> None:
+        directory = Path(logdir)
+        directory.mkdir(parents=True, exist_ok=True)
+        with open(directory / filename, "w", encoding="utf8") as outputfile:
             outputfile.write("\n".join(data))
 
     def _append_to_data(self, text: str, key: Optional[LogKey] = None) -> None:

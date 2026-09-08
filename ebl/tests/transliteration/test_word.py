@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.signs_transformer import name_arguments
 from typing import List, Optional, Tuple
 
 from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
@@ -126,20 +127,36 @@ def test_clean_value() -> None:
             Erasure.open(),
             Reading.of_name("ra").set_erasure(ErasureState.ERASED),
             Erasure.center(),
-            Reading.of(
-                [ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")]
+            Reading.of_arguments(
+                name_arguments(
+                    [ValueToken.of("ku"), BrokenAway.close(), ValueToken.of("r")]
+                )
             ).set_erasure(ErasureState.OVER_ERASED),
             Erasure.close(),
             Joiner.hyphen(),
             Variant.of(
-                Reading.of([ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]),
-                Reading.of([ValueToken.of("p"), BrokenAway.open(), ValueToken.of("a")]),
+                Reading.of_arguments(
+                    name_arguments(
+                        [ValueToken.of("r"), BrokenAway.open(), ValueToken.of("a")]
+                    )
+                ),
+                Reading.of_arguments(
+                    name_arguments(
+                        [ValueToken.of("p"), BrokenAway.open(), ValueToken.of("a")]
+                    )
+                ),
             ),
             PerhapsBrokenAway.open(),
             Determinative.of(
                 [
-                    Logogram.of(
-                        [ValueToken.of("KU"), BrokenAway.close(), ValueToken.of("R")]
+                    Logogram.of_arguments(
+                        name_arguments(
+                            [
+                                ValueToken.of("KU"),
+                                BrokenAway.close(),
+                                ValueToken.of("R"),
+                            ]
+                        )
                     )
                 ]
             ),

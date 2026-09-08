@@ -10,8 +10,8 @@ from ebl.atf_importer.application.glossary import Glossary
 class QueryArgs(TypedDict, total=False):
     lemma_field: str
     lemma_value: Union[str, List[str]]
-    guideword_field: str = ""
-    guideword_value: str = ""
+    guideword_field: str
+    guideword_value: str
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -71,7 +71,8 @@ class LemmaLookup:
             "Annotate the following token:\n"
             f"Transliteration: '{lemmatization_token.transliteration}' lemma: '{lemmatization_token.lemma}'; "
             f"guide word: '{lemmatization_token.guideword}'; POS: '{lemmatization_token.pos}'\n"
-            "Manually enter the eBL lemma id (e.g. 'bītu I') and press enter. To skip lemmatization, leave the field blank."
+            "Manually enter the eBL lemma id (e.g. 'bītu I') and press enter. "
+            "To skip lemmatization, leave the field blank."
         )
         lemma_id = input().strip(" ")
         if not lemma_id:
