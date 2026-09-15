@@ -67,7 +67,7 @@ Two sets of files on this branch are **temporary and must not be merged**:
 >
 > ```bash
 > git rm task_743_migrate_name_breaks.py task_743_migrate_name_breaks_test.py
-> git rm TASK-743*.md TASK-744*.md
+> git rm TASK-743*.md TASK-744*.md TASK-745*.md
 > ```
 >
 > Reviewers: check the file list before approving. `master` must contain none

@@ -17,7 +17,9 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain.tokens import ValueToken
 
-BROKEN_NAME = (ValueToken.of("k"), BrokenAway.close(), ValueToken.of("u"))
+CLOSE = BrokenAway.close()
+KU = ValueToken.of("ku")
+BROKEN_NAME = (ValueToken.of("k"), CLOSE, ValueToken.of("u"))
 
 
 def _broken_reading() -> Reading:
@@ -35,9 +37,10 @@ def test_a_break_is_held_in_its_own_array() -> None:
     reading = _broken_reading()
 
     name_breaks = reading.name_breaks
+    values = [token.value for token in name_breaks]
 
-    assert name_breaks == (BrokenAway.close(),)
-    assert [token.value for token in name_breaks] == ["]"]
+    assert name_breaks == (CLOSE,)
+    assert values == ["]"]
 
 
 def test_a_break_contributes_nothing_to_the_name() -> None:
@@ -72,8 +75,8 @@ def test_a_trailing_break_is_kept_in_written_order() -> None:
     name_parts = reading.name_parts
     name_breaks = reading.name_breaks
 
-    assert name_parts == (ValueToken.of("ku"),)
-    assert name_breaks == (BrokenAway.close(),)
+    assert name_parts == (KU,)
+    assert name_breaks == (CLOSE,)
     assert reading.name == "ku"
     assert reading.value == "ku]"
 

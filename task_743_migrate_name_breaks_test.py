@@ -134,19 +134,14 @@ def test_migrate_reports_every_present_collection(database, fragments) -> None:
     assert set(counts) <= {"fragments", "texts", "chapters"}
 
 
-def test_batches_larger_than_the_batch_size_are_written(fragments) -> None:
-    import task_743_migrate_name_breaks as migrate_name_breaks
-
+def test_batches_larger_than_the_batch_size_are_written(fragments, monkeypatch):
     fragments.delete_many({})
     fragments.insert_many(
         [{"_id": f"K.{index}", **_legacy_fragment()} for index in range(3)]
     )
-    monkey = migrate_name_breaks.BATCH_SIZE
-    migrate_name_breaks.BATCH_SIZE = 2
-    try:
-        assert migrate_collection(fragments, dry_run=False) == 3
-    finally:
-        migrate_name_breaks.BATCH_SIZE = monkey
+    monkeypatch.setattr(MODULE + ".BATCH_SIZE", 2)
+
+    assert migrate_collection(fragments, dry_run=False) == 3
 
     for index in range(3):
         stored = fragments.find_one({"_id": f"K.{index}"})

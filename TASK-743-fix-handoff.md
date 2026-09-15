@@ -124,7 +124,7 @@ The task documents are now committed too, so they fall under the same gate:
 
 ```bash
 git rm task_743_migrate_name_breaks.py task_743_migrate_name_breaks_test.py
-git rm TASK-743*.md TASK-744*.md
+git rm TASK-743*.md TASK-744*.md TASK-745*.md
 ```
 
 A merge that carries any of them into `master` is a defect regardless of what
