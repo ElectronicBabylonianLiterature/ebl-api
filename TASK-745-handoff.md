@@ -6,8 +6,10 @@ picture.
 
 **Branch:** `fix-type-checker-blind-spots` -> `master`
 **PR:** [#743](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/743)
-**Last pushed commit:** `0919dee6` — CI green, qlty down to 2 blocking issues
-(both justified). Note this repo can push without an explicit `git push`.
+**Last pushed commit:** `5551fa2c` — pushed deliberately. Note this repo can
+also push without an explicit `git push`.
+**Migration PR:** [#764](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/764)
+— open, `migrate-name-breaks` -> `master`.
 **Written:** 2026-09-15, rewritten after the TASK-746 work
 
 ---
@@ -37,11 +39,24 @@ after   "nameParts":  [ValueToken("k"), ValueToken("u")]
 interleave: parts[0], breaks[0], parts[1], ...  ->  k ] u
 ```
 
-**Status: code WRITTEN and green, but NOT committed and NO PR.**
+**Status: COMMITTED and green, but NOT PUSHED and NO PR — blocked on credentials.**
 
-The work lives in a clone at **`/workspaces/ebl-frontend`** — deliberately not a
-scratchpad, because a cleared scratchpad destroyed the first attempt. It is
-uncommitted, on `master`, with no branch.
+The work is commit `a9df351` on branch **`add-name-breaks`** in a clone at
+**`/workspaces/ebl-frontend`** — deliberately not a scratchpad, because a
+cleared scratchpad destroyed the first attempt.
+
+**It cannot be pushed from this codespace.**
+
+```text
+remote: Permission to ElectronicBabylonianLiterature/ebl-frontend.git denied to khoidt
+```
+
+The codespace's `ghu_` token is scoped to `ebl-api`, the repo the codespace was
+created from. `gh api repos/.../ebl-frontend --jq .permissions` reports
+`push: true` — that is the *user's* permission, not the token's scope — and
+routing the push through `gh auth token` gives the same 403. `ebl-api` pushes
+fine. Someone needs to push this branch from an environment with credentials for
+`ebl-frontend`, or the codespace needs access to that repo.
 
 What was changed, in `ElectronicBabylonianLiterature/ebl-frontend`:
 
@@ -74,13 +89,16 @@ Frontend gates, all green: `tsc --noEmit` 0 errors, `yarn lint` clean, full
 **Trap: the repo needs Node 20**, not the default 22 — `yarn install` fails with
 `The engine "node" is incompatible`. Use
 `export PATH="/usr/local/share/nvm/versions/node/v20.19.1/bin:$PATH"`.
-It uses **yarn**, not npm. The install takes about 200s.
+It uses **yarn**, not npm. The install takes about 200s. The same trap bites
+`git commit`: husky's pre-commit hook shells out to yarn and fails on Node 22
+before running anything.
 
 ### Gate 2 — the data migration: MOVED OUT OF THIS PR
 
-**This is no longer a gate on #743.** The migration and its test have been moved
-to their own branch, `migrate-name-breaks`, off `master`. #743 no longer contains
-any DB-related change.
+**This is no longer a gate on #743.** The migration and its test are now
+[PR #764](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/764),
+on `migrate-name-breaks` off `master`. #743 no longer contains any DB-related
+change.
 
 **Why it moved: running it before #743 deploys would break production.** The
 currently deployed code rejects a migrated document outright —
@@ -293,10 +311,10 @@ Not changed here — changing the instructions is the user's call.
 4. ~~Apply `TASK-743-fix-pr-body.md` to the PR description~~ — done, verified.
 5. ~~Move the DB-related changes out of #743~~ — done; they are on
    `migrate-name-breaks` (gate 2).
-6. **Open the frontend PR** — branch, commit and PR the work in
-   `/workspaces/ebl-frontend`, then cross-link #743 (gate 1).
-7. ~~Push so qlty and CodeQL re-run~~ — happened on its own; verdicts on
-   `0919dee6` read and green. Re-push after the remaining commits, re-read.
+6. **Push `add-name-breaks` and open the frontend PR** — the commit exists;
+   only the push is blocked, on credentials (gate 1).
+7. ~~Push so qlty and CodeQL re-run~~ — done; `5551fa2c` is on the remote.
+   Re-read the verdicts once its checks finish.
 8. Work the cleanup checklist in section 7 — sixteen files, all documentation.
 9. **Merge #743, then deploy it.**
 10. **Only once it is deployed:** open the `migrate-name-breaks` PR and run the

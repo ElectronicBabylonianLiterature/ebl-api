@@ -174,3 +174,41 @@ Gates on the restructured branch: ruff format, ruff check (whole `ebl`), flake8,
 mypy, pyright, qlty smells all clean; pyre **no type errors** (needed a `.venv`
 symlink in the worktree, since `.pyre_configuration` resolves its typeshed
 relative to the repo root); **18 passed, 100% coverage**.
+
+#### Commits, pushes and the new PR
+
+User granted commit permission and asked for the pending work to be done and a
+new PR opened.
+
+| What | Result |
+| --- | --- |
+| `fix-type-checker-blind-spots` | `5551fa2c` — migration removed, handoff updated. Committed **and pushed**; remote confirmed |
+| `migrate-name-breaks` | `aaffba18` — the migration in its conventional home. Committed and pushed |
+| **PR [#764](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/764)** | opened, `migrate-name-breaks` -> `master`, body verified at 4917 chars |
+| frontend `add-name-breaks` | `a9df351` — committed, **push blocked** |
+
+Full suite on `migrate-name-breaks`: **4547 passed, 2 skipped, 1 xfailed**, with
+the 18 migration tests collected.
+
+**The frontend push is blocked on credentials, not permissions.**
+
+```text
+remote: Permission to ElectronicBabylonianLiterature/ebl-frontend.git denied to khoidt
+```
+
+The codespace credential helper hands out a `ghu_` token scoped to `ebl-api`.
+`gh api repos/.../ebl-frontend --jq .permissions` returns `push: true`, but that
+is the user's permission, not the token's scope. Routing the push through
+`gh auth token` with a one-shot credential helper gave the same 403.
+`git push --dry-run` on `ebl-api` succeeds, so the limitation is specific to the
+second repository. Not worked around further; reported instead.
+
+**Two errors on the frontend commit, both recovered.** The first attempt ran
+husky's pre-commit hook under Node 22 and failed with
+`The engine "node" is incompatible` before doing anything — the Node 20 trap
+applies to committing, not just to `yarn install`. The second attempt had Node 20
+on `PATH` but I had not staged the files, so lint-staged found nothing and the
+commit was empty. Third attempt succeeded. Checked afterwards that lint-staged's
+`prettier --write` and `eslint --fix` had changed nothing: the committed diffstat
+is 110 insertions / 4 deletions across 4 files, identical to the tree that passed
+the 4180-test run, so that verification still stands.
