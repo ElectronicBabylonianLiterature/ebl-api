@@ -14,6 +14,7 @@ from typing import Any, Dict
 import pytest
 
 from task_743_migrate_name_breaks import (
+    NonAlternatingName,
     get_database,
     main,
     migrate,
@@ -55,6 +56,31 @@ def test_separating_takes_alternating_positions() -> None:
 
 def test_separating_an_unbroken_name_yields_no_breaks() -> None:
     assert separate_name_parts([LEGACY_PART]) == ([LEGACY_PART], [])
+
+
+def test_two_adjacent_parts_are_refused_rather_than_mis_split() -> None:
+    with pytest.raises(NonAlternatingName, match="position 1"):
+        separate_name_parts([LEGACY_PART, LEGACY_TAIL])
+
+
+def test_a_break_in_a_part_position_is_refused() -> None:
+    with pytest.raises(NonAlternatingName, match="position 0"):
+        separate_name_parts([LEGACY_BREAK, LEGACY_PART])
+
+
+def test_a_name_part_that_is_not_a_mapping_is_refused() -> None:
+    with pytest.raises(NonAlternatingName, match="position 0"):
+        separate_name_parts(["ku"])
+
+
+def test_a_refused_name_stops_the_document(fragments) -> None:
+    fragments.update_one(
+        {"_id": "K.1"},
+        {"$set": {"text.lines.0.content.0.parts.0.nameParts": [LEGACY_PART] * 2}},
+    )
+
+    with pytest.raises(NonAlternatingName):
+        migrate_collection(fragments, dry_run=True)
 
 
 def test_a_nested_legacy_name_is_separated() -> None:

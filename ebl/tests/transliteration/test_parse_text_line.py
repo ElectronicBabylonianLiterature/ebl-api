@@ -1,4 +1,5 @@
 from typing import List
+from ebl.tests.transliteration.language_shift_cases import LANGUAGE_SHIFT_CASES
 from ebl.tests.transliteration.parse_text_line_cases_1 import PARSE_TEXT_LINE_CASES_1
 from ebl.tests.transliteration.parse_text_line_cases_2 import PARSE_TEXT_LINE_CASES_2
 from ebl.tests.transliteration.parse_text_line_cases_3 import PARSE_TEXT_LINE_CASES_3
@@ -84,25 +85,7 @@ def test_parse_dividers() -> None:
 
 @pytest.mark.parametrize(
     "code,expected_language",
-    [
-        ("%ma", Language.AKKADIAN),
-        ("%mb", Language.AKKADIAN),
-        ("%na", Language.AKKADIAN),
-        ("%nb", Language.AKKADIAN),
-        ("%lb", Language.AKKADIAN),
-        ("%sb", Language.AKKADIAN),
-        ("%a", Language.AKKADIAN),
-        ("%akk", Language.AKKADIAN),
-        ("%eakk", Language.AKKADIAN),
-        ("%oakk", Language.AKKADIAN),
-        ("%ur3akk", Language.AKKADIAN),
-        ("%oa", Language.AKKADIAN),
-        ("%ob", Language.AKKADIAN),
-        ("%sux", Language.SUMERIAN),
-        ("%es", Language.EMESAL),
-        ("%hit", Language.HITTITE),
-        ("%foo", DEFAULT_LANGUAGE),
-    ],
+    LANGUAGE_SHIFT_CASES,
 )
 def test_parse_atf_language_shifts(code: str, expected_language: Language) -> None:
     word = "ha-am"

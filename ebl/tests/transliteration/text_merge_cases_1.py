@@ -1,4 +1,7 @@
-from ebl.transliteration.domain.signs_transformer import name_arguments
+from ebl.tests.transliteration.broken_variant_fixtures import (
+    VARIANT_WITH_PARSED_BREAK,
+    VARIANT_WITH_UNPARSED_BREAK,
+)
 
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain import atf
@@ -9,7 +12,7 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner, ValueToken, Variant
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 
 
@@ -130,14 +133,7 @@ TEXT_MERGE_CASES_1 = [
                 TextLine.of_iterable(
                     LineNumber(1),
                     [
-                        Word.of(
-                            [
-                                Variant.of(
-                                    Reading.of([ValueToken.of("k[ur")]),
-                                    Reading.of([ValueToken.of("r[a")]),
-                                )
-                            ]
-                        ),
+                        Word.of([VARIANT_WITH_UNPARSED_BREAK]),
                         BrokenAway.close(),
                     ],
                 )
@@ -148,30 +144,7 @@ TEXT_MERGE_CASES_1 = [
                 TextLine.of_iterable(
                     LineNumber(1),
                     [
-                        Word.of(
-                            [
-                                Variant.of(
-                                    Reading.of_arguments(
-                                        name_arguments(
-                                            [
-                                                ValueToken.of("k"),
-                                                BrokenAway.open(),
-                                                ValueToken.of("ur"),
-                                            ]
-                                        )
-                                    ),
-                                    Reading.of_arguments(
-                                        name_arguments(
-                                            [
-                                                ValueToken.of("r"),
-                                                BrokenAway.open(),
-                                                ValueToken.of("a"),
-                                            ]
-                                        )
-                                    ),
-                                )
-                            ]
-                        ),
+                        Word.of([VARIANT_WITH_PARSED_BREAK]),
                         BrokenAway.close(),
                     ],
                 )

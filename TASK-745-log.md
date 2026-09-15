@@ -110,3 +110,37 @@ Two facts it records that were not previously written down anywhere:
 4543 passed with 100% coverage on every changed source module, which predates
 these fixes. The affected modules were run individually instead. Recorded here
 rather than claimed as a full pass.
+
+### 6. Post-push verification of `589684d`
+
+Both problems introduced on `2a77229` are resolved on the remote:
+
+- **CodeQL: pass** (was fail with three alerts).
+- **qlty coverage diff: 100.0%** (was 99.8%).
+
+All test matrices, `Analyze (python)` and GitGuardian pass.
+
+### 7. qlty's "5 blocking issues" could not be enumerated — recorded as blocked
+
+Tried four routes, all inconclusive:
+
+| Route | Result |
+| --- | --- |
+| `qlty smells` over all 159 PR Python files | 2 findings |
+| `qlty check --no-fix` over the same files | "No issues" |
+| qlty inline PR comments | newest 2026-09-02, from the `2b3b0668` push |
+| qlty PR reviews | nothing newer than 2026-09-02 |
+
+The two local findings are both accounted for — the `__all__` pair (justified,
+the instructions' own example) and the pre-existing 12-parameter `Word.of`.
+Three remain invisible from the CLI.
+
+The plausible explanation is that qlty Cloud's count is cumulative and stale:
+it fell 10 -> 5 when eight duplications were fixed, and no qlty comment has
+appeared on the last two commits. **This is an inference and is written up as
+one, not as a finding.** The handoff asks for the page to be opened and the
+five confirmed stale or fixed.
+
+Separately, `gh api code-scanning/alerts` returns 403 for this token, so zero
+open CodeQL alerts on the branch could not be confirmed either — only that the
+check passes on `589684d`.

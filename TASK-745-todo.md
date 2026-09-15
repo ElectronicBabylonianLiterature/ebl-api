@@ -43,10 +43,19 @@ Status legend: `[ ]` pending, `[~]` in progress, `[x]` done, `[!]` blocked
 
 ## 5. Still open
 
-- [ ] Enumerate qlty Cloud's remaining 5 blocking issues (local shows 2)
-- [ ] Full suite with coverage, green
-- [x] Commit
-- [ ] Ask before pushing
+- [x] Enumerate qlty Cloud's blocking issues — **superseded by TASK-746.** The
+      blockage was local tooling, not the qlty page: `.qlty/` had been created
+      with `--skip-plugins` so `qlty check` ran no linters, and `qlty smells`
+      hides test-file duplication without `--include-tests`. Four duplications
+      were found; two justified, two fixed. See `TASK-745-handoff.md` 3.3
+- [ ] One thing remains: Cloud says **5**, the reproduction finds **4**. Needs
+      the login-only issues page. Do NOT assume the fifth is stale
+- [x] Commit — `589684d`
+- [x] Pushed; CI green except the qlty count
+- [x] CodeQL now passes (was failing on `2a77229`); the three alert comments
+      dated 2026-09-15 are stale, anchored to `2a77229`
+- [x] Diff coverage back to 100.0% (was 99.8%)
+- [x] Full local suite has now run: **4548 passed, 2 skipped, 1 xfailed**
 
 ## 6. Cleanup before merge
 

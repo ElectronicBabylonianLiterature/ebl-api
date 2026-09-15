@@ -23,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 COLLECTIONS = ("fragments", "texts", "chapters")
 BATCH_SIZE = 500
+NAME_PART_TYPE = "ValueToken"
+NAME_BREAK_TYPE = "BrokenAway"
 
 
 def get_database() -> Database:
@@ -30,7 +32,27 @@ def get_database() -> Database:
     return client.get_database(os.environ.get("MONGODB_DB"))
 
 
+class NonAlternatingName(ValueError):
+    """A legacy nameParts array that does not alternate part, break, part."""
+
+
+def _expected_type(index: int) -> str:
+    return NAME_PART_TYPE if index % 2 == 0 else NAME_BREAK_TYPE
+
+
+def _validate_alternating(name_parts: Sequence[Any]) -> None:
+    for index, token in enumerate(name_parts):
+        expected = _expected_type(index)
+        if not isinstance(token, Mapping) or token.get("type") != expected:
+            raise NonAlternatingName(
+                f"Expected a {expected} at position {index} of nameParts, "
+                f"found {token!r}. Splitting by position would move it into "
+                f"the wrong array; refusing to migrate."
+            )
+
+
 def separate_name_parts(name_parts: Sequence[Any]) -> Tuple[List[Any], List[Any]]:
+    _validate_alternating(name_parts)
     return list(name_parts[0::2]), list(name_parts[1::2])
 
 

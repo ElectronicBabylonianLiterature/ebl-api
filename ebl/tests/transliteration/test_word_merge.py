@@ -1,4 +1,7 @@
-from ebl.transliteration.domain.signs_transformer import name_arguments
+from ebl.tests.transliteration.broken_variant_fixtures import (
+    VARIANT_WITH_PARSED_BREAK,
+    VARIANT_WITH_UNPARSED_BREAK,
+)
 import pytest
 
 from ebl.dictionary.domain.word import WordId
@@ -13,7 +16,6 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.tokens import (
     Joiner,
     UnknownNumberOfSigns,
-    ValueToken,
     Variant,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
@@ -121,62 +123,9 @@ def test_set_alignment() -> None:
             ),
         ),
         (
-            Word.of(
-                [
-                    Variant.of(
-                        Reading.of([ValueToken.of("k[ur")]),
-                        Reading.of([ValueToken.of("r[a")]),
-                    )
-                ]
-            ),
-            Word.of(
-                [
-                    Variant.of(
-                        Reading.of_arguments(
-                            name_arguments(
-                                [
-                                    ValueToken.of("k"),
-                                    BrokenAway.open(),
-                                    ValueToken.of("ur"),
-                                ]
-                            )
-                        ),
-                        Reading.of_arguments(
-                            name_arguments(
-                                [
-                                    ValueToken.of("r"),
-                                    BrokenAway.open(),
-                                    ValueToken.of("a"),
-                                ]
-                            )
-                        ),
-                    )
-                ]
-            ),
-            Word.of(
-                [
-                    Variant.of(
-                        Reading.of_arguments(
-                            name_arguments(
-                                [
-                                    ValueToken.of("k"),
-                                    BrokenAway.open(),
-                                    ValueToken.of("ur"),
-                                ]
-                            )
-                        ),
-                        Reading.of_arguments(
-                            name_arguments(
-                                [
-                                    ValueToken.of("r"),
-                                    BrokenAway.open(),
-                                    ValueToken.of("a"),
-                                ]
-                            )
-                        ),
-                    )
-                ]
-            ),
+            Word.of([VARIANT_WITH_UNPARSED_BREAK]),
+            Word.of([VARIANT_WITH_PARSED_BREAK]),
+            Word.of([VARIANT_WITH_PARSED_BREAK]),
         ),
     ],
 )
