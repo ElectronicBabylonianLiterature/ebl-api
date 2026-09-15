@@ -24,6 +24,24 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
 from ebl.transliteration.domain.word_tokens import Word
 
+
+EMENDATION = frozenset({EnclosureType.EMENDATION})
+
+
+def emended_separator(atf, separator):
+    return (
+        atf,
+        (
+            LanguageShift.normalized_akkadian(),
+            Emendation.open(),
+            UnknownNumberOfSigns(EMENDATION, ErasureState.NONE),
+            separator.set_enclosure_type(EMENDATION),
+            UnknownNumberOfSigns(EMENDATION, ErasureState.NONE),
+            Emendation.close().set_enclosure_type(EMENDATION),
+        ),
+    )
+
+
 ENCLOSURE_VISITOR_TYPES_CASES_2 = [
     (
         "ku[r/12[3-x ...]",
@@ -142,40 +160,6 @@ ENCLOSURE_VISITOR_TYPES_CASES_2 = [
             ),
         ),
     ),
-    (
-        "%n <... | ...>",
-        (
-            LanguageShift.normalized_akkadian(),
-            Emendation.open(),
-            UnknownNumberOfSigns(
-                frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
-            ),
-            MetricalFootSeparator.certain().set_enclosure_type(
-                frozenset({EnclosureType.EMENDATION})
-            ),
-            UnknownNumberOfSigns(
-                frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
-            ),
-            Emendation.close().set_enclosure_type(
-                frozenset({EnclosureType.EMENDATION})
-            ),
-        ),
-    ),
-    (
-        "%n <... || ...>",
-        (
-            LanguageShift.normalized_akkadian(),
-            Emendation.open(),
-            UnknownNumberOfSigns(
-                frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
-            ),
-            Caesura.certain().set_enclosure_type(frozenset({EnclosureType.EMENDATION})),
-            UnknownNumberOfSigns(
-                frozenset({EnclosureType.EMENDATION}), ErasureState.NONE
-            ),
-            Emendation.close().set_enclosure_type(
-                frozenset({EnclosureType.EMENDATION})
-            ),
-        ),
-    ),
+    emended_separator("%n <... | ...>", MetricalFootSeparator.certain()),
+    emended_separator("%n <... || ...>", Caesura.certain()),
 ]

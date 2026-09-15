@@ -11,46 +11,45 @@ from ebl.tests.corpus.chapter_merge_fixtures import (
     MANUSCRIPT_ID,
 )
 
+
+def _variant(word, has_variant_alignment, alignment, variant):
+    return LineVariant(
+        (
+            AkkadianWord.of(
+                (ValueToken.of(word),), has_variant_alignment=has_variant_alignment
+            ),
+        ),
+        manuscripts=(
+            ManuscriptLine(
+                MANUSCRIPT_ID,
+                LABELS,
+                TextLine(
+                    LineNumber(1),
+                    (
+                        Word.of(
+                            [Reading.of_name("kur")],
+                            alignment=alignment,
+                            variant=variant,
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    )
+
+
+def aligned_variant(word):
+    return _variant(word, True, 0, Word.of([Reading.of_name("kur")]))
+
+
+def unaligned_variant(word):
+    return _variant(word, False, None, None)
+
+
 CHAPTER_MERGE_CASES_1_1 = [
     (
-        LineVariant(
-            (AkkadianWord.of((ValueToken.of("buāru"),), has_variant_alignment=True),),
-            manuscripts=(
-                ManuscriptLine(
-                    MANUSCRIPT_ID,
-                    LABELS,
-                    TextLine(
-                        LineNumber(1),
-                        (
-                            Word.of(
-                                [Reading.of_name("kur")],
-                                alignment=0,
-                                variant=Word.of([Reading.of_name("kur")]),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-        LineVariant(
-            (AkkadianWord.of((ValueToken.of("kurkur"),), has_variant_alignment=False),),
-            manuscripts=(
-                ManuscriptLine(
-                    MANUSCRIPT_ID,
-                    LABELS,
-                    TextLine(
-                        LineNumber(1),
-                        (
-                            Word.of(
-                                [Reading.of_name("kur")],
-                                alignment=None,
-                                variant=None,
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
+        aligned_variant("buāru"),
+        unaligned_variant("kurkur"),
         LineVariant(
             (AkkadianWord.of((ValueToken.of("kurkur"),), has_variant_alignment=True),),
             manuscripts=(

@@ -8,11 +8,14 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
+
+def unchanged(old, new):
+    """A merge whose result is the new value itself."""
+    return (old, new, new)
+
+
 TEXT_MERGE_CASES_2 = [
-    (
-        Text.of_iterable(
-            [TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])])]
-        ),
+    unchanged(
         Text.of_iterable(
             [TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])])]
         ),
@@ -20,34 +23,21 @@ TEXT_MERGE_CASES_2 = [
             [TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])])]
         ),
     ),
-    (
+    unchanged(
         Text.of_iterable([NoteLine((StringPart("this is a note "),))]),
         Text.of_iterable([NoteLine((StringPart("this is another note "),))]),
-        Text.of_iterable([NoteLine((StringPart("this is another note "),))]),
     ),
-    (
+    unchanged(
         Text.of_iterable([NoteLine((StringPart("this is a note "),))]),
         Text.of_iterable([NoteLine((EmphasisPart("this is a note "),))]),
-        Text.of_iterable([NoteLine((EmphasisPart("this is a note "),))]),
     ),
-    (
+    unchanged(
         Text.of_iterable(
             [
                 NoteLine(
                     (
                         LanguagePart.of_transliteration(
                             Language.AKKADIAN, (ValueToken.of("bu"),)
-                        ),
-                    )
-                )
-            ]
-        ),
-        Text.of_iterable(
-            [
-                NoteLine(
-                    (
-                        LanguagePart.of_transliteration(
-                            Language.AKKADIAN, (Word.of([Reading.of_name("bu")]),)
                         ),
                     )
                 )

@@ -2,7 +2,7 @@ from typing import Any, Dict, Sequence, cast
 
 import pytest
 
-import ebl.transliteration.application.token_schemas  # noqa: F401
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.application.token_schemas_signs import (
     NamedSignSchema,
     ReadingSchema,
@@ -34,8 +34,10 @@ def test_the_name_is_the_value_tokens_only() -> None:
 def test_a_break_is_held_in_its_own_array() -> None:
     reading = _broken_reading()
 
-    assert reading.name_breaks == (BrokenAway.close(),)
-    assert reading.name_breaks[0].value == "]"
+    name_breaks = reading.name_breaks
+
+    assert name_breaks == (BrokenAway.close(),)
+    assert [token.value for token in name_breaks] == ["]"]
 
 
 def test_a_break_contributes_nothing_to_the_name() -> None:
@@ -67,8 +69,11 @@ def test_a_trailing_break_is_kept_in_written_order() -> None:
         name_arguments((ValueToken.of("ku"), BrokenAway.close()))
     )
 
-    assert reading.name_parts == (ValueToken.of("ku"),)
-    assert reading.name_breaks == (BrokenAway.close(),)
+    name_parts = reading.name_parts
+    name_breaks = reading.name_breaks
+
+    assert name_parts == (ValueToken.of("ku"),)
+    assert name_breaks == (BrokenAway.close(),)
     assert reading.name == "ku"
     assert reading.value == "ku]"
 
@@ -95,6 +100,18 @@ def test_a_named_sign_serializes_the_two_arrays_separately() -> None:
     assert [part["value"] for part in dumped["nameBreaks"]] == ["]"]
     assert all(part["type"] == "ValueToken" for part in dumped["nameParts"])
     assert all(part["type"] == "BrokenAway" for part in dumped["nameBreaks"])
+
+
+def test_the_two_arrays_carry_what_the_single_array_used_to() -> None:
+    reading = _broken_reading()
+    dumped = cast(Dict[str, Any], NamedSignSchema().dump(reading))
+    interleaved = [
+        dumped["nameParts"][0],
+        dumped["nameBreaks"][0],
+        dumped["nameParts"][1],
+    ]
+
+    assert interleaved == OneOfTokenSchema().dump(list(reading.name_tokens), many=True)
 
 
 def test_a_break_in_the_name_parts_is_rejected_on_load() -> None:

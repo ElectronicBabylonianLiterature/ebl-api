@@ -18,6 +18,9 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
+from ebl.transliteration.domain.signs_transformer import name_arguments
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.genre import Genre
 
@@ -216,4 +219,28 @@ OLD_LINE = Line(
     OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
+)
+
+
+LEMMATIZED_MANUSCRIPT_LINE = ManuscriptLine(
+    MANUSCRIPT_ID,
+    LABELS,
+    TextLine(
+        LineNumber(1),
+        (
+            Word.of(
+                [
+                    Reading.of_arguments(
+                        name_arguments([ValueToken.of("ku"), BrokenAway.close()])
+                    ),
+                    Joiner.hyphen(),
+                    Reading.of_name("nu"),
+                    Joiner.hyphen(),
+                    Reading.of_name("si"),
+                ],
+                unique_lemma=(WordId("word"),),
+                alignment=0,
+            ),
+        ),
+    ),
 )

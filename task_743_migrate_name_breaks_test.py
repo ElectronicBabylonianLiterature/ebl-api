@@ -1,12 +1,19 @@
+"""TEMPORARY — branch-only. MUST NOT BE MERGED TO master. See
+`task_743_migrate_name_breaks.py`.
+"""
+
+import os
 import runpy
 import sys
+import uuid
 
 import pymongo
+from pymongo import MongoClient
 from typing import Any, Dict
 
 import pytest
 
-from ebl.transliteration.migrate_name_breaks import (
+from task_743_migrate_name_breaks import (
     get_database,
     main,
     migrate,
@@ -15,7 +22,7 @@ from ebl.transliteration.migrate_name_breaks import (
     separate_name_parts,
 )
 
-MODULE = "ebl.transliteration.migrate_name_breaks"
+MODULE = "task_743_migrate_name_breaks"
 LEGACY_PART = {"value": "k", "type": "ValueToken"}
 LEGACY_BREAK = {"value": "]", "type": "BrokenAway", "side": "RIGHT"}
 LEGACY_TAIL = {"value": "u", "type": "ValueToken"}
@@ -72,6 +79,24 @@ def test_a_document_without_names_is_left_alone() -> None:
     assert migrate_document([{"a": 1}, "b", 3]) is False
 
 
+@pytest.fixture(scope="module")
+def mongo_client():
+    if os.getenv("CI") == "true":
+        return MongoClient(os.environ["MONGODB_URI"])
+    os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
+    os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")
+    from pymongo_inmemory import MongoClient as InMemoryMongoClient
+
+    return InMemoryMongoClient()
+
+
+@pytest.fixture
+def database(mongo_client):
+    name = str(uuid.uuid4())
+    yield mongo_client[name]
+    mongo_client.drop_database(name)
+
+
 @pytest.fixture
 def fragments(database):
     database.fragments.delete_many({})
@@ -110,7 +135,7 @@ def test_migrate_reports_every_present_collection(database, fragments) -> None:
 
 
 def test_batches_larger_than_the_batch_size_are_written(fragments) -> None:
-    from ebl.transliteration import migrate_name_breaks
+    import task_743_migrate_name_breaks as migrate_name_breaks
 
     fragments.delete_many({})
     fragments.insert_many(

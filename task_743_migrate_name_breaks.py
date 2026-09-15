@@ -1,3 +1,14 @@
+"""TEMPORARY — branch-only. MUST NOT BE MERGED TO master.
+
+One-off migration for the nameParts/nameBreaks split on PR #743. It exists to
+be run once against a database and then deleted, along with its test module
+`task_743_migrate_name_breaks_test.py`. Removing both is a blocking gate on
+that pull request.
+
+    poetry run python task_743_migrate_name_breaks.py           # dry run
+    poetry run python task_743_migrate_name_breaks.py --apply   # writes
+"""
+
 import argparse
 import logging
 import os

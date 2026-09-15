@@ -22,9 +22,18 @@ from ebl.tests.corpus.chapter_merge_fixtures import (
     VERSION,
 )
 
+
+def unchanged(old, new):
+    """A merge whose result is the new value itself."""
+    return (old, new, new)
+
+
 CHAPTER_MERGE_CASES_3_1 = [
-    (CHAPTER, CHAPTER, CHAPTER),
-    (
+    unchanged(
+        CHAPTER,
+        CHAPTER,
+    ),
+    unchanged(
         Chapter(
             TEXT_ID,
             CLASSIFICATION,
@@ -33,17 +42,6 @@ CHAPTER_MERGE_CASES_3_1 = [
             CHAPTER_NAME,
             ORDER,
             (MANUSCRIPT,),
-            (MUSEUM_NUMBER,),
-            (LINE,),
-        ),
-        Chapter(
-            TEXT_ID,
-            NEW_CLASSIFICATION,
-            NEW_STAGE,
-            NEW_VERSION,
-            NEW_CHAPTER_NAME,
-            NEW_ORDER,
-            (MANUSCRIPT, NEW_MANUSCRIPT),
             (MUSEUM_NUMBER,),
             (LINE,),
         ),
@@ -94,19 +92,8 @@ CHAPTER_MERGE_CASES_3_1 = [
             (OLD_LINE.merge(NEW_LINE), LINE.merge(ANOTHER_NEW_LINE)),
         ),
     ),
-    (
+    unchanged(
         CHAPTER,
-        Chapter(
-            TEXT_ID,
-            CLASSIFICATION,
-            STAGE,
-            VERSION,
-            CHAPTER_NAME,
-            ORDER,
-            (MANUSCRIPT,),
-            (MUSEUM_NUMBER,),
-            (NEW_PARATEXT,),
-        ),
         Chapter(
             TEXT_ID,
             CLASSIFICATION,
