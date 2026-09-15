@@ -34,8 +34,8 @@
 
 ## 7. Needs the user
 
-- [ ] Commit and push these changes
-- [ ] Re-apply `TASK-743-fix-pr-body.md` to the #743 description
+- [x] Commit and push these changes — `5c94f201`
+- [x] Applied `TASK-743-fix-pr-body.md` to the #743 description, verified
 - [ ] Optionally reply to / resolve the Sourcery thread on GitHub
 - [ ] Gate 3 cleanup — deliberately NOT done: it deletes the handoff the
       frontend push still depends on

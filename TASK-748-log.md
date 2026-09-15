@@ -118,3 +118,21 @@ is right: 4548 was the count at `0919dee6`, *before* the migration files left
 the branch, and removing them took 18 migration tests with it. I quoted the
 pre-removal number by mistake; the post-removal baseline established on the
 reduced branch was already 4530.
+
+#### PR description applied
+
+User asked for it. Fetched the live body first (544 lines) and diffed it against
+the file before overwriting: the change is **purely additive**, 33 lines
+appended, nothing else touched.
+
+Applied with `gh api repos/.../pulls/743 -X PATCH -F body=@TASK-743-fix-pr-body.md`
+— not `gh pr edit --body`, which fails silently in this repo. Re-fetched and
+diffed afterwards: identical apart from the trailing newline the API adds.
+**Verified.** The Review findings section is live at line 545 of the
+description, so the reasoning for the two accepted qlty findings now survives
+the gate 3 cleanup that deletes the task files.
+
+#### Commit
+
+`5c94f201` — committed and pushed; local and remote verified identical, working
+tree clean.

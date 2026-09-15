@@ -214,7 +214,7 @@ deploy, any fragment saved by a new instance is unreadable by an old instance
 still serving traffic — the same `Unknown field` error. This argues for a fast
 cutover rather than a long mixed-version window.
 
-### Gate 3 — sixteen branch-only files must not reach `master`
+### Gate 3 — twenty-three branch-only files must not reach `master`
 
 See section 7 for the full list, the commands, and how to verify.
 Two non-`ebl` files are **real changes that must stay**:
@@ -333,7 +333,7 @@ Not changed here — changing the instructions is the user's call.
    only the push is blocked, on credentials (gate 1).
 7. ~~Push so qlty and CodeQL re-run~~ — done; `5551fa2c` is on the remote.
    Re-read the verdicts once its checks finish.
-8. Work the cleanup checklist in section 7 — sixteen files, all documentation.
+8. Work the cleanup checklist in section 7 — twenty-three files.
 9. **Merge #743, then deploy it.**
 10. **Only once it is deployed:** open the `migrate-name-breaks` PR and run the
     migration against a named real database. Dry run first and read it: the
@@ -397,7 +397,7 @@ All of them are deleted by gate 3 — see section 7.
 
 ## 7. Cleanup checklist — delete before merge
 
-Sixteen files, all documentation. Tick them off; none may reach `master`.
+Twenty-three files, all documentation and hand-off artefacts. Tick them off; none may reach `master`.
 
 ### Round-12 review task (3 files)
 
@@ -433,11 +433,28 @@ Sixteen files, all documentation. Tick them off; none may reach `master`.
 - [ ] `TASK-747-todo.md`
 - [ ] `TASK-747-log.md`
 
+### TASK-748 task (2 files)
+
+- [ ] `TASK-748-todo.md`
+- [ ] `TASK-748-log.md`
+
+### TASK-749 task (5 files)
+
+- [ ] `TASK-749-todo.md`
+- [ ] `TASK-749-log.md`
+- [ ] `TASK-749-frontend-brief.md` — **save a copy before deleting**; it is the
+      standalone brief for the frontend work
+- [ ] `TASK-749-frontend.patch` — **save a copy before deleting**; it reproduces
+      the frontend commit `a9df351`
+- [ ] `TASK-749-frontend-pr-body.md` — **save a copy before deleting**
+
 ### Commands
 
 ```bash
-git rm TASK-743*.md TASK-744*.md TASK-745*.md TASK-746*.md TASK-747*.md
+git rm TASK-743* TASK-744* TASK-745* TASK-746* TASK-747* TASK-748* TASK-749*
 ```
+
+Note the glob is no longer `*.md` — `TASK-749-frontend.patch` is not markdown.
 
 ### MUST NOT be deleted
 
