@@ -406,3 +406,31 @@ duplication. Flagged, not changed; editing the instructions is the user's call.
    their PR verdicts describe `589684d` only.
 5. **The cleanup checklist has not been run** (gate 3) and must not be until the
    migration has run.
+
+### Step 3f — the qlty count is RESOLVED (post-push, 2026-09-15)
+
+The `0919dee6` commit reached GitHub without an explicit `git push` — the
+auto-push behaviour this repo has shown before. That re-ran the hosted checks,
+which answers the question the CLI could not.
+
+**qlty check on `0919dee6`: 2 blocking issues**, down from 5 on `589684d`.
+
+That reconciles the "5 vs 4" discrepancy exactly. qlty Cloud counts **one issue
+per file involved** in a duplication, not one per distinct duplication. The four
+duplications found locally spanned five changed files:
+
+| Cloud issue | File | Duplication |
+| --- | --- | --- |
+| 1 | `ebl/transliteration/domain/tokens.py` | A — justified |
+| 2 | `ebl/tests/factories/fragment.py` | B — justified |
+| 3 | `ebl/tests/transliteration/test_parse_text_line.py` | C — fixed |
+| 4 | `ebl/tests/transliteration/test_word_merge.py` | D — fixed |
+| 5 | `ebl/tests/transliteration/text_merge_cases_1.py` | D — fixed |
+
+Fixing C and D removed three; the two that remain are A and B, both justified
+above. **The enumeration was complete and correct** — the count simply used a
+different unit. No fifth unexplained finding exists.
+
+Also on `0919dee6`: all six test matrices pass, CodeQL passes, coverage diff
+100.0%, coverage 96.6%. qlty added no new PR comments, consistent with it
+commenting only on issues it has not already reported.
