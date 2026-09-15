@@ -541,3 +541,37 @@ already used for `test_parse_word.py`:
 `test_name_part.py` tested the deleted `NamePart` wrapper, so it is rewritten as
 `test_named_sign_name.py`. Every assertion was translated rather than dropped;
 the file went from 10 to 14 tests.
+
+## Review findings
+
+### Accepted qlty findings
+
+qlty reports **2 blocking issues**, both `similar-code`. Both are accepted, and
+the reasoning is recorded here rather than in a task file so it survives the
+merge:
+
+| Location | Paired with | Why it is not a defect |
+| --- | --- | --- |
+| `ebl/transliteration/domain/tokens.py` | `ebl/fragmentarium/domain/fragment.py` | Two `__all__` re-export lists that happen to have the same shape. Deduplicating them would mean leaving one facade incomplete, which was review finding F2. |
+| `ebl/tests/factories/fragment.py` | `ebl/tests/fragmentarium/test_museum_number.py` | An `__all__` export list against `PREFIXES`, a list of museum-number prefixes. Identical shape — a sorted list of short string literals — and no shared meaning. There is nothing to extract. |
+
+Four duplications were found in total; the other two were real and are fixed, by
+extracting `ebl/tests/transliteration/language_shift_cases.py` and
+`ebl/tests/transliteration/broken_variant_fixtures.py`.
+
+> [!TIP]
+> `qlty smells` **excludes test files unless `--include-tests` is passed**, and
+> every finding on this PR was in `ebl/tests/`. Running it over the changed-file
+> list alone also hides a duplication between a changed file and an untouched
+> one. The command that actually enumerates them is
+> `qlty smells --all --include-tests`, diffed against the same run on `master`.
+
+### Sourcery: `merge` return type and cast
+
+Sourcery raised that `TextLine.merge` returning `cast(L, TextLine.of_iterable(...))`
+is unsound if `L` is a subclass of `TextLine`.
+
+The concern cannot occur here: **this PR declares `TextLine` `@final`**, so no
+such subclass can be written, and the type checkers enforce it. No subclass
+exists in the tree. The `-> L` signature and the `cast` both predate this branch;
+what changed here is that the hole is now closed.

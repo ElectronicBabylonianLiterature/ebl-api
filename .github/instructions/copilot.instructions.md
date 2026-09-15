@@ -185,8 +185,9 @@ passes before committing:
 8. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
    errors in the changed files (a pre-existing error in a file you touched is
    not acceptable; fix it)
-9. `qlty smells <changed files>` — **zero blocking issues.** See the hard gate
-   below.
+9. `qlty smells --include-tests <changed files>` — **zero blocking issues.**
+   The flag is not optional; without it qlty cannot see test files. See the
+   hard gate below.
 
 Never commit if any gate fails or was skipped. Never commit if the user did not
 ask you to — see the hard gate above.
@@ -196,11 +197,27 @@ ask you to — see the hard gate above.
 qlty runs on every PR and its verdict is part of the build. **A commit must not
 introduce a qlty issue, and must not leave a blocking one standing.**
 
-- Run `qlty smells <changed files>` before every commit. `qlty check --no-fix`
-  additionally runs the plugins. Zero blocking issues is the bar.
+- Run `qlty smells --include-tests <changed files>` before every commit.
+  Zero blocking issues is the bar.
+- **`--include-tests` is mandatory.** `qlty smells` silently **excludes test
+  files** without it. qlty Cloud does not, so leaving it off means running a
+  different, weaker check than the one gating the build — and in a repo where
+  most duplication lives in test fixtures and parametrize tables, that is where
+  the findings are.
+- **Scope it to the whole repo, not the changed files, when reconciling with
+  Cloud.** A duplication between a changed file and an untouched one is
+  invisible to a changed-files run. To enumerate what a branch actually
+  introduces, run `qlty smells --all --include-tests` at `HEAD` and again in a
+  detached worktree at `origin/master`, and diff the two.
+- **qlty Cloud counts one issue per file involved in a duplication**, not one
+  per distinct duplication. A single duplication spanning two files is two
+  issues in its count. Reconcile on that basis before concluding a number is
+  stale.
 - `.qlty/` is git-ignored, so a fresh checkout has no local config. Create one
   with `qlty init --yes --skip-plugins` — it writes only ignored files and
-  changes nothing tracked.
+  changes nothing tracked. Note this installs **no plugins**, so a local
+  `qlty check` reports nothing and proves nothing; only `qlty smells` is
+  meaningful under that setup.
 - **Every remaining finding must be fixed or explicitly justified in the task
   log** — `similar-code`, `function-parameters`, `return-statements`,
   `complex`, `nested`, all of them. "qlty did not mark it blocking" is not a
