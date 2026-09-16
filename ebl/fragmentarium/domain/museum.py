@@ -93,6 +93,12 @@ class Museum(Enum):
         "TR",
         "https://erimtanmuseum.org/",
     )
+    GAZIANTEP_MUSEUM = (
+        "Gaziantep Museum",
+        "Gaziantep",
+        "TR",
+        "https://muze.gov.tr/muze-detay?SectionId=GZA01&DistId=MRK",
+    )
     HARVARD_MUSEUM = (
         "Harvard Museum of the Ancient Near East",
         "Cambridge",
