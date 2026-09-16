@@ -33,6 +33,9 @@ class FakeRealiaRepository(RealiaRepository):
     def search(self, query: str) -> Sequence[RealiaEntry]:
         raise NotImplementedError()
 
+    def list_non_redirect_ids(self) -> Sequence[str]:
+        raise NotImplementedError()
+
     def find_by_realia_ids(self, realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
         self.calls.append(list(realia_ids))
         return [self._entries[id_] for id_ in realia_ids if id_ in self._entries]
