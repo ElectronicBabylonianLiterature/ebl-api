@@ -87,6 +87,12 @@ class Museum(Enum):
         "FR",
         "https://www.ephe.psl.eu/",
     )
+    ERIMTAN_MUSEUM = (
+        "Erimtan Museum",
+        "Ankara",
+        "TR",
+        "https://erimtanmuseum.org/",
+    )
     HARVARD_MUSEUM = (
         "Harvard Museum of the Ancient Near East",
         "Cambridge",
@@ -140,6 +146,12 @@ class Museum(Enum):
         "Cape Town",
         "ZA",
         "https://www.iziko.org.za/",
+    )
+    KAHRAMANMARAS_MUZESI = (
+        "Kahramanmaraş Müzesi",
+        "Kahramanmaraş",
+        "TR",
+        "https://muze.gov.tr/muze-detay?SectionId=KMM01&DistId=MRK",
     )
     KATZ_CENTER = (
         "Katz Center for Advanced Judaic Studies",
