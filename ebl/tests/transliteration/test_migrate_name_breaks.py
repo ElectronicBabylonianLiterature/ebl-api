@@ -1,46 +1,26 @@
-import os
 import runpy
 import sys
-import uuid
-
-import pymongo
-from pymongo import MongoClient
 from typing import Any, Dict
 
+import pymongo
 import pytest
 
+from ebl.tests.transliteration.legacy_named_sign import (
+    LEGACY_BREAK,
+    LEGACY_PART,
+    LEGACY_TAIL,
+    legacy_fragment,
+    named_sign,
+)
 from ebl.transliteration.migrate_name_breaks import (
     NonAlternatingName,
     get_database,
     main,
-    migrate,
-    migrate_collection,
     migrate_document,
     separate_name_parts,
 )
 
 MODULE = "ebl.transliteration.migrate_name_breaks"
-LEGACY_PART = {"value": "k", "type": "ValueToken"}
-LEGACY_BREAK = {"value": "]", "type": "BrokenAway", "side": "RIGHT"}
-LEGACY_TAIL = {"value": "u", "type": "ValueToken"}
-
-
-def _legacy_fragment() -> Dict[str, Any]:
-    return {
-        "text": {
-            "lines": [
-                {
-                    "content": [
-                        {
-                            "parts": [
-                                {"nameParts": [LEGACY_PART, LEGACY_BREAK, LEGACY_TAIL]}
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    }
 
 
 def test_separating_takes_alternating_positions() -> None:
@@ -69,28 +49,23 @@ def test_a_name_part_that_is_not_a_mapping_is_refused() -> None:
         separate_name_parts(["ku"])
 
 
-def test_a_refused_name_stops_the_document(fragments) -> None:
-    fragments.update_one(
-        {"_id": "K.1"},
-        {"$set": {"text.lines.0.content.0.parts.0.nameParts": [LEGACY_PART] * 2}},
-    )
-
-    with pytest.raises(NonAlternatingName):
-        migrate_collection(fragments, dry_run=True)
+@pytest.mark.parametrize("name_parts", [None, "ku", 7, {"type": "ValueToken"}])
+def test_name_parts_that_is_not_an_array_is_refused(name_parts) -> None:
+    with pytest.raises(NonAlternatingName, match="to be an array"):
+        separate_name_parts(name_parts)
 
 
 def test_a_nested_legacy_name_is_separated() -> None:
-    document = _legacy_fragment()
+    document = legacy_fragment()
 
     assert migrate_document(document) is True
 
-    named_sign = document["text"]["lines"][0]["content"][0]["parts"][0]
-    assert named_sign["nameParts"] == [LEGACY_PART, LEGACY_TAIL]
-    assert named_sign["nameBreaks"] == [LEGACY_BREAK]
+    assert named_sign(document)["nameParts"] == [LEGACY_PART, LEGACY_TAIL]
+    assert named_sign(document)["nameBreaks"] == [LEGACY_BREAK]
 
 
 def test_an_already_migrated_document_is_left_alone() -> None:
-    document = _legacy_fragment()
+    document = legacy_fragment()
     migrate_document(document)
 
     assert migrate_document(document) is False
@@ -101,81 +76,22 @@ def test_a_document_without_names_is_left_alone() -> None:
     assert migrate_document([{"a": 1}, "b", 3]) is False
 
 
-@pytest.fixture(scope="module")
-def mongo_client():
-    if os.getenv("CI") == "true":
-        return MongoClient(os.environ["MONGODB_URI"])
-    os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
-    os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")
-    from pymongo_inmemory import MongoClient as InMemoryMongoClient
-
-    return InMemoryMongoClient()
-
-
-@pytest.fixture
-def database(mongo_client):
-    name = str(uuid.uuid4())
-    yield mongo_client[name]
-    mongo_client.drop_database(name)
-
-
-@pytest.fixture
-def fragments(database):
-    database.fragments.delete_many({})
-    database.fragments.insert_one({"_id": "K.1", **_legacy_fragment()})
-    return database.fragments
-
-
-def test_a_dry_run_reports_without_writing(fragments) -> None:
-    assert migrate_collection(fragments, dry_run=True) == 1
-
-    stored = fragments.find_one({"_id": "K.1"})
-    named_sign = stored["text"]["lines"][0]["content"][0]["parts"][0]
-    assert "nameBreaks" not in named_sign
-
-
-def test_applying_writes_the_separated_arrays(fragments) -> None:
-    assert migrate_collection(fragments, dry_run=False) == 1
-
-    stored = fragments.find_one({"_id": "K.1"})
-    named_sign = stored["text"]["lines"][0]["content"][0]["parts"][0]
-    assert named_sign["nameParts"] == [LEGACY_PART, LEGACY_TAIL]
-    assert named_sign["nameBreaks"] == [LEGACY_BREAK]
-
-
-def test_migrating_again_changes_nothing(fragments) -> None:
-    migrate_collection(fragments, dry_run=False)
-
-    assert migrate_collection(fragments, dry_run=False) == 0
-
-
-def test_migrate_reports_every_present_collection(database, fragments) -> None:
-    counts = migrate(database, dry_run=True)
-
-    assert counts["fragments"] == 1
-    assert set(counts) <= {"fragments", "texts", "chapters"}
-
-
-def test_batches_larger_than_the_batch_size_are_written(fragments, monkeypatch):
-    fragments.delete_many({})
-    fragments.insert_many(
-        [{"_id": f"K.{index}", **_legacy_fragment()} for index in range(3)]
-    )
-    monkeypatch.setattr(MODULE + ".BATCH_SIZE", 2)
-
-    assert migrate_collection(fragments, dry_run=False) == 3
-
-    for index in range(3):
-        stored = fragments.find_one({"_id": f"K.{index}"})
-        named_sign = stored["text"]["lines"][0]["content"][0]["parts"][0]
-        assert named_sign["nameBreaks"] == [LEGACY_BREAK]
-
-
-def test_get_database_uses_the_environment(monkeypatch, database) -> None:
+def test_get_database_uses_the_environment(monkeypatch) -> None:
     monkeypatch.setenv("MONGODB_URI", "mongodb://127.0.0.1:27017")
     monkeypatch.setenv("MONGODB_DB", "ebl_migrate_name_breaks_probe")
 
-    assert get_database().name == "ebl_migrate_name_breaks_probe"
+    database = get_database()
+
+    assert database.name == "ebl_migrate_name_breaks_probe"
+    database.client.close()
+
+
+def test_get_database_requires_the_database_name(monkeypatch) -> None:
+    monkeypatch.setenv("MONGODB_URI", "mongodb://127.0.0.1:27017")
+    monkeypatch.delenv("MONGODB_DB", raising=False)
+
+    with pytest.raises(KeyError, match="MONGODB_DB"):
+        get_database()
 
 
 @pytest.fixture
@@ -205,6 +121,8 @@ def test_main_applies_when_asked(recorded_migrate) -> None:
 
 def test_running_the_module_as_a_script_invokes_main(monkeypatch) -> None:
     class _Database:
+        name = "ebl_migrate_probe"
+
         def list_collection_names(self):
             return []
 
