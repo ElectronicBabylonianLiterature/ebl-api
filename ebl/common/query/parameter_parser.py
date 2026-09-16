@@ -6,6 +6,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 
 COUNT_MODES = ("exact", "none", "page")
+MAX_FINDSPOT_IDS = 200
 
 
 def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
@@ -106,6 +107,30 @@ def parse_genre(parameters: Dict) -> Dict:
     genre = parameters.get("genre", "").split(":")
 
     return {**parameters, "genre": genre} if any(genre) else parameters
+
+
+def parse_findspot_ids(parameters: Dict) -> Dict:
+    if "findspotIds" not in parameters:
+        return parameters
+
+    raw = parameters["findspotIds"]
+    values = [item.strip() for item in raw.split(",") if item.strip()]
+    if not values:
+        raise DataError("findspotIds must not be empty.")
+    if len(values) > MAX_FINDSPOT_IDS:
+        raise DataError(
+            f"findspotIds must not contain more than {MAX_FINDSPOT_IDS} values."
+        )
+    try:
+        ids = [int(value) for value in values]
+    except ValueError as error:
+        raise DataError(
+            f"findspotIds must be a comma-separated list of integers, got {raw!r}"
+        ) from error
+    if any(value < 0 for value in ids):
+        raise DataError("findspotIds must be non-negative.")
+
+    return {**parameters, "findspotIds": sorted(set(ids))}
 
 
 def parse_count(parameters: Dict) -> Dict:
