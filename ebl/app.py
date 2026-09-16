@@ -57,6 +57,7 @@ from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     MongoDossiersRepository,
 )
 from ebl.users.domain.user import Guest
+from ebl.users.web.user_request import UserRequest
 from ebl.users.infrastructure.auth0 import Auth0Backend
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
@@ -127,7 +128,9 @@ def create_context():
 def create_api(context: Context) -> falcon.App:
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
     api = falcon.App(
-        cors_enable=True, middleware=[auth_middleware, context.cache.middleware]
+        cors_enable=True,
+        middleware=[auth_middleware, context.cache.middleware],
+        request_type=UserRequest,
     )
     ebl.error_handler.set_up(api)
     return api

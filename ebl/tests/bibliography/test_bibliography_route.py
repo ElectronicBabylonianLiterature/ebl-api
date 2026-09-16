@@ -195,3 +195,25 @@ def test_list_bibliography_deduplicates_redirected_canonical_entries(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [canonical_entry]
+
+
+def test_update_entry_rejects_a_non_object_body(client, saved_entry):
+    result = client.simulate_post(
+        f"/bibliography/{saved_entry['id']}", body=json.dumps([saved_entry])
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_list_bibliography_serves_the_cached_response(
+    cached_client, bibliography, user
+):
+    entry = BibliographyEntryFactory.build(id="Q30000123")
+    bibliography.create(entry, user)
+    url = "/bibliography/list"
+
+    first_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
+    second_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
+
+    assert first_result.status == falcon.HTTP_OK
+    assert second_result.json == first_result.json

@@ -86,6 +86,18 @@ ECOLE_PRATIQUE_DES_HAUTES_ETUDES: MuseumEntry = (
     "FR",
     "https://www.ephe.psl.eu/",
 )
+ERIMTAN_MUSEUM: MuseumEntry = (
+    "Erimtan Museum",
+    "Ankara",
+    "TR",
+    "https://erimtanmuseum.org/",
+)
+GAZIANTEP_MUSEUM: MuseumEntry = (
+    "Gaziantep Museum",
+    "Gaziantep",
+    "TR",
+    "https://muze.gov.tr/muze-detay?SectionId=GZA01&DistId=MRK",
+)
 HARVARD_ART_MUSEUMS: MuseumEntry = (
     "Harvard Art Museums",
     "Cambridge",
@@ -142,6 +154,12 @@ IZIKO_MUSEUMS_OF_SOUTH_AFRICA: MuseumEntry = (
     "Cape Town",
     "ZA",
     "https://www.iziko.org.za/",
+)
+KAHRAMANMARAS_MUZESI: MuseumEntry = (
+    "Kahramanmaraş Müzesi",
+    "Kahramanmaraş",
+    "TR",
+    "https://muze.gov.tr/muze-detay?SectionId=KMM01&DistId=MRK",
 )
 KATZ_CENTER: MuseumEntry = (
     "Katz Center for Advanced Judaic Studies",

@@ -227,4 +227,4 @@ class MongoWordRepository(WordRepository):
         return self._collection.get_all_values("_id")
 
     def update(self, word) -> None:
-        self._collection.update_one({"_id": word["_id"]}, {"$set": word})
+        self._collection.update_one_by_id(word["_id"], {"$set": word})
