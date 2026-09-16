@@ -1,9 +1,14 @@
+from typing import cast
+
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.project import ResearchProject
 from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
+)
+from ebl.fragmentarium.application.fragment_query_preview import (
+    matching_line_preview_of_data,
 )
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryArchaeologySchema,
@@ -17,7 +22,6 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQueryResult,
     FragmentQuerySummary,
-    matching_line_preview_of,
 )
 from ebl.schemas import ResearchProjectField
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -25,7 +29,16 @@ from ebl.tests.factories.fragment import (
     FragmentDossierReferenceFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
+    dumped_text,
+    matching_line_preview_of,
+)
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
+
+
+def dump_dict(schema, obj, **kwargs) -> dict:
+    return cast(dict, schema.dump(obj, **kwargs))
 
 
 def build_summary() -> FragmentQuerySummary:
@@ -43,8 +56,14 @@ def build_summary() -> FragmentQuerySummary:
         date=fragment.date,
         genres=fragment.genres,
         archaeology=FragmentQueryArchaeology(
-            excavation_number=MuseumNumberSchema().load(
-                MuseumNumberSchema().dump(fragment.archaeology.excavation_number)
+            excavation_number=cast(
+                MuseumNumber,
+                MuseumNumberSchema().load(
+                    dump_dict(
+                        MuseumNumberSchema(),
+                        fragment.archaeology.excavation_number,
+                    )
+                ),
             ),
             site=fragment.archaeology.site.long_name,
         ),
@@ -62,7 +81,8 @@ def build_summary() -> FragmentQuerySummary:
 
 def test_fragment_query_summary_schema_dump_exact_shape():
     summary = build_summary()
-    dumped = FragmentQuerySummarySchema().dump(summary)
+    archaeology = cast(FragmentQueryArchaeology, summary.archaeology)
+    dumped = dump_dict(FragmentQuerySummarySchema(), summary)
 
     assert set(dumped) == {
         "museumNumber",
@@ -94,9 +114,9 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         "genres": GenreSchema().dump(summary.genres, many=True),
         "archaeology": {
             "excavationNumber": MuseumNumberSchema().dump(
-                summary.archaeology.excavation_number
+                archaeology.excavation_number
             ),
-            "site": {"name": summary.archaeology.site},
+            "site": {"name": archaeology.site},
         },
         "references": ReferenceSchema().dump(summary.references, many=True),
         "projects": [
@@ -112,15 +132,16 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         "hasPhoto": True,
         "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
     }
+    preview_line = dumped["matchingLinePreview"]["lines"][0]
     assert (
-        dumped["matchingLinePreview"]["lines"][0]["prefix"]
-        == (summary.matching_line_preview["lines"][0]["prefix"])
+        preview_line["prefix"] == (summary.matching_line_preview["lines"][0]["prefix"])
     )
-    assert dumped["matchingLinePreview"]["lines"][0]["text"]
-    assert dumped["matchingLinePreview"]["lines"][0]["tokens"][0]["value"]
+    assert preview_line["type"] == "TextLine"
+    assert preview_line["lineNumber"]
+    assert preview_line["content"][0]["value"]
+    assert preview_line["index"] == 0
     assert dumped["matchingLinePreview"]["parserVersion"]
     assert "parser_version" not in dumped["matchingLinePreview"]
-    assert "parts" not in dumped["matchingLinePreview"]["lines"][0]["tokens"][0]
     assert "text" not in dumped
     assert "record" not in dumped
     assert "atf" not in dumped
@@ -130,7 +151,9 @@ def test_fragment_query_summary_schema_roundtrip():
     summary = build_summary()
 
     assert (
-        FragmentQuerySummarySchema().load(FragmentQuerySummarySchema().dump(summary))
+        FragmentQuerySummarySchema().load(
+            dump_dict(FragmentQuerySummarySchema(), summary)
+        )
         == summary
     )
 
@@ -144,7 +167,10 @@ def test_fragment_query_summary_compares_with_compatible_query_item():
 
 
 def test_fragment_query_archaeology_schema_loads_non_dict_site():
-    archaeology = FragmentQueryArchaeologySchema().load({"site": "Nineveh"})
+    archaeology = cast(
+        FragmentQueryArchaeology,
+        FragmentQueryArchaeologySchema().load({"site": "Nineveh"}),
+    )
 
     assert archaeology.site == "Nineveh"
 
@@ -152,27 +178,25 @@ def test_fragment_query_archaeology_schema_loads_non_dict_site():
 def test_matching_line_preview_skips_out_of_range_lines():
     fragment = TransliteratedFragmentFactory.build()
     line_count = len(fragment.text.lines)
+    text_data = dumped_text(fragment)
 
-    preview = matching_line_preview_of(fragment.text, (0, line_count))
-    empty_preview = matching_line_preview_of(fragment.text, (line_count,))
+    preview = matching_line_preview_of_data(text_data, (0, line_count))
+    empty_preview = matching_line_preview_of_data(text_data, (line_count,))
 
     assert len(preview["lines"]) == 1
-    assert (
-        FragmentQueryMatchingLinePreviewSchema().load(
-            FragmentQueryMatchingLinePreviewSchema().dump(empty_preview)
-        )["lines"]
-        == []
-    )
+    schema = FragmentQueryMatchingLinePreviewSchema()
+    assert cast(dict, schema.dump(schema.load(empty_preview)))["lines"] == []
 
 
 def test_fragment_query_result_schema_roundtrip_and_compatibility():
     summary = build_summary()
     result = FragmentQueryResult((summary,), 7)
-    dumped = FragmentQueryResultSchema().dump(result)
+    dumped = dump_dict(FragmentQueryResultSchema(), result)
 
     assert dumped == {
         "items": [FragmentQuerySummarySchema().dump(summary)],
         "matchCountTotal": 7,
+        "bibliographyDocuments": {},
     }
     assert FragmentQueryResultSchema().load(dumped) == result
 
@@ -188,6 +212,7 @@ def test_fragment_query_result_schema_roundtrip_and_compatibility():
         "matchCountTotal": 7,
         "isMatchCountTotalExact": True,
         "hasNextPage": None,
+        "bibliographyDocuments": {},
     }
 
 

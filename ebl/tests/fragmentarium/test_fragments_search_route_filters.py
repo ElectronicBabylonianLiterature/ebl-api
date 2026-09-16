@@ -58,9 +58,11 @@ def test_search_with_scopes_limit_summary(client, guest_client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_summary_of(fragment)], 0)
+    assert result.json == query_result_of(
+        [query_summary_of(fragment)], 0, bibliography_documents={}
+    )
     assert guest_result.status == falcon.HTTP_OK
-    assert guest_result.json == query_result_of([], 0)
+    assert guest_result.json == query_result_of([], 0, bibliography_documents={})
 
 
 @pytest.mark.parametrize(

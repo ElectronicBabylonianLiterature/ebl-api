@@ -1,7 +1,9 @@
 import pytest
 import re
 from ebl.common.query.parameter_parser import (
+    MAX_QUERY_LIMIT,
     parse_integer_field,
+    parse_limit,
     parse_non_negative_integer_field,
     parse_pages,
     parse_lemmas,
@@ -15,7 +17,6 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from pydash import flow
-
 
 PARAMS = {
     "limit": "42",
@@ -40,6 +41,12 @@ def test_parse_integer_field_invalid():
         parse({"invalid_field": "not an int"})
 
 
+def test_parse_integer_field_duplicate_query_param():
+    parse = parse_integer_field("limit")
+    with pytest.raises(DataError, match="limit must be integer"):
+        parse({"limit": ["1", "300"]})
+
+
 def test_parse_non_negative_integer_field():
     parse = parse_non_negative_integer_field("offset")
     assert parse({"offset": "0"}) == {"offset": 0}
@@ -50,6 +57,44 @@ def test_parse_non_negative_integer_field_negative():
     parse = parse_non_negative_integer_field("offset")
     with pytest.raises(DataError, match="offset must be non-negative"):
         parse({"offset": "-1"})
+
+
+@pytest.mark.parametrize("limit", [1, 25, 50, 100, 101, MAX_QUERY_LIMIT])
+def test_parse_limit(limit):
+    assert parse_limit({"limit": str(limit)}) == {"limit": limit}
+
+
+def test_parse_limit_missing():
+    assert parse_limit({"number": "K.1"}) == {"number": "K.1"}
+
+
+@pytest.mark.parametrize("limit", [MAX_QUERY_LIMIT + 1, 1000000])
+def test_parse_limit_clamps_above_the_maximum(limit):
+    assert parse_limit({"limit": str(limit)}) == {"limit": MAX_QUERY_LIMIT}
+
+
+def test_parse_limit_clamping_keeps_other_parameters():
+    assert parse_limit({"number": "K.1", "limit": "1000"}) == {
+        "number": "K.1",
+        "limit": MAX_QUERY_LIMIT,
+    }
+
+
+@pytest.mark.parametrize("limit", ["0", "-1", "-1000"])
+def test_parse_limit_rejects_non_positive(limit):
+    with pytest.raises(DataError, match="limit must be at least 1"):
+        parse_limit({"limit": limit})
+
+
+@pytest.mark.parametrize("limit", ["not an int", "1.5"])
+def test_parse_limit_invalid(limit):
+    with pytest.raises(DataError, match="limit must be integer"):
+        parse_limit({"limit": limit})
+
+
+def test_parse_limit_duplicate_query_param():
+    with pytest.raises(DataError, match="limit must be integer"):
+        parse_limit({"limit": ["1", "300"]})
 
 
 @pytest.mark.parametrize("count", ["exact", "none", "page"])

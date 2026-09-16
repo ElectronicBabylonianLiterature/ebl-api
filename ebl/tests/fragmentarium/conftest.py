@@ -32,6 +32,19 @@ def route_context(client, fragmentarium, user, database) -> RouteContext:
 
 
 @pytest.fixture
+def spied_bibliography_repository(monkeypatch, bibliography_repository):
+    calls = []
+    original_query_by_ids = bibliography_repository.query_by_ids
+
+    def query_by_ids(ids):
+        calls.append(list(ids))
+        return original_query_by_ids(ids)
+
+    monkeypatch.setattr(bibliography_repository, "query_by_ids", query_by_ids)
+    return bibliography_repository, calls
+
+
+@pytest.fixture
 def stored_realia(realia_repository) -> List[str]:
     realia_ids = [KNOWN_REALIA_ID, OTHER_REALIA_ID]
     for realia_id in realia_ids:
