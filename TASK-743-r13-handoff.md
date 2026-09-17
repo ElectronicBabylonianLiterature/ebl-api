@@ -81,7 +81,16 @@ The migration lives in **#764**, not here. Order matters:
 ### 5. Smaller things, nobody is blocked on them
 
 - **A pre-existing mixed array.** `manuscript_line.paratext` is `Sequence[Union[DollarLine, NoteLine]]` and uses an `isinstance` probe to tell them apart — the same defect this PR spent 26 commits fixing for `nameParts`. Untouched here and out of scope, but the obvious next candidate.
-- **Two accepted qlty findings.** Both are lists of bare strings that happen to look alike (`__all__` against `__all__`, and `__all__` against a list of museum-number prefixes). Nothing to extract. Justified in the PR description, and their threads were left open on purpose so the justification stays visible.
+- **Two accepted qlty findings.** Both are lists of bare strings that happen to look alike (`__all__` against `__all__`, and `__all__` against a list of museum-number prefixes). Justified in the PR description, and their threads were left open on purpose so the justification stays visible.
+
+  **Do not re-open this without reading the cost.** It was investigated properly on 2026-09-17:
+  - `__all__` is load-bearing — delete it and ruff reports F401 on every re-exported import.
+  - `tokens.py` and `tests/factories/fragment.py` are in `FACADE_MODULES`, so they must keep theirs unless test cases are deleted.
+  - The PEP 484 redundant-alias form (`from x import y as y`) fixes it for ruff, pyright and mypy, but **flake8 rejects it** — pyflakes only honours that form in `__init__.py`. Gate 7 fails.
+  - The only honest fix left is deleting the re-export facades, which costs **53 consumer-file rewrites** (37 for `fragmentarium/domain/fragment.py`, 16 for `tests/factories/fragment.py`).
+  - A partial shrink to slip under qlty's mass threshold is detector-dodging and is forbidden, same as editing `qlty.toml`.
+
+  The user weighed that against a branch that is green and `mergeable: clean` after 13 rounds, and chose to keep the justification.
 - **An error message.** A payload with two `nameParts` and no `nameBreaks` returns 422, which is correct — it is invalid as old format too — but the message describes the split rather than the missing field. Improving it would mean inspecting the array's contents to guess its format, which the data rules forbid. Left alone on purpose.
 
 ## Next steps, in order
@@ -95,7 +104,7 @@ The migration lives in **#764**, not here. Order matters:
 ## Traps worth knowing
 
 - **`task type-pyright` only checks committed files.** It diffs `origin/master...HEAD`, so uncommitted work passes without being looked at. Run `npx pyright@1.1.411 <files>` directly while iterating. This hid six real errors in round 13.
-- **Pyre can fail spuriously.** An internal `End_of_file` under CPU contention looks like a broken gate. Re-run with nothing else going; it was clean both times afterwards.
+- **Pyre dies locally on this box, and it is not contention.** `Pyre encountered an internal exception: End_of_file`, consistently at roughly 5800 of 7739 functions, with nothing else running. The machine has 7.8Gi and **no swap**, and VS Code alone holds ~1.8Gi, so pyre runs out of headroom. It is not a type error: CI runs `poetry run pyre check` as the Type Check step of the Test Python jobs (`.github/workflows/main.yml:80`), and those jobs pass. Treat a green CI Test Python job as the authoritative pyre result, and close editors or free memory before trusting a local run.
 - **`qlty smells` silently skips test files without `--include-tests`**, and a changed-files run cannot see a duplication against an untouched file. Use `--all --include-tests` and compare against a base worktree.
 - **`gh pr edit --body` fails in this repo.** Patch the description with `gh api repos/.../pulls/743 -X PATCH -F body=@file`.
 - **Never source `.env` for local runs** — it points at the production cluster. Use `mongodb://127.0.0.1:27017`.

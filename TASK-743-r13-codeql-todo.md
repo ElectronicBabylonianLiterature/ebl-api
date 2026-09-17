@@ -15,16 +15,16 @@ tree and I ask.
 
 ## Findings to address
 
-- [ ] 1. Create TODO + log
-- [ ] 2. **CodeQL: `assert` with a side-effect** in `test_named_sign_errors.py` — already patched in the tree, needs full re-verification
-- [ ] 3. Two unreported `assert _status_for(...)` route tests — already patched, same
-- [ ] 4. Read the six Test Python job conclusions; address anything they report
-- [ ] 5. Re-check every other check and status on the pushed head
-- [ ] 6. Confirm no NEW review threads or comments since the push
-- [ ] 7. Full gates in order: format, lint, pyre, type-pyright (run directly), test, coverage, flake8, mypy, qlty, lint-md
-- [ ] 8. Re-verify at runtime — the previous service run is void after a rewrite
-- [ ] 9. Update the review, handoff and logs with what changed
-- [ ] 10. Report and **ask** before committing or pushing
+- [x] 1. Create TODO + log
+- [x] 2. **CodeQL: `assert` with a side-effect** in `test_named_sign_errors.py` — already patched in the tree, needs full re-verification
+- [x] 3. Two unreported `assert _status_for(...)` route tests — already patched, same
+- [x] 4. Read the six Test Python job conclusions; address anything they report
+- [x] 5. Re-check every other check and status on the pushed head
+- [x] 6. Confirm no NEW review threads or comments since the push
+- [x] 7. Full gates in order: format, lint, pyre, type-pyright (run directly), test, coverage, flake8, mypy, qlty, lint-md
+- [x] 8. Re-verify at runtime — the previous service run is void after a rewrite
+- [x] 9. Update the review, handoff and logs with what changed
+- [x] 10. Report and **ask** before committing or pushing
 
 ## Standing decisions, not to be reopened
 

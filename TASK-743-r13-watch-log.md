@@ -53,3 +53,25 @@ assert loaded.name_breaks == (BrokenAway.close(),)
 Left alone: the pre-existing `assert`-with-call lines in `test_named_sign_name.py` and `test_named_sign_validation.py`. CodeQL did not flag them on this run, they are not new, and rewriting them would be churn beyond this task.
 
 Gates after the fix: pytest 5 passed, ruff format, ruff, flake8, mypy, pyright all clean.
+
+### Tracking after the push of `6d0f2829` (2026-09-17)
+
+`git ls-remote` = local `HEAD` = `6d0f2829`, 0 unpushed.
+
+**Every check run completed:**
+
+| Conclusion | Checks |
+| --- | --- |
+| success | **CodeQL**, `Analyze (python)`, GitGuardian Security Checks, GitGuardian scan ×2, Test Python 3.11 ×2, 3.12 ×2, pypy-3.11 ×2 |
+| skipped | Sourcery review, docker ×2 |
+| failure | **none** |
+
+**Commit statuses:** overall `success` — `qlty check` success ("2 blocking issues", the two justified duplications), `qlty coverage diff` **100.0%** against a 75% threshold, `qlty coverage` 96.7% (+0.7%).
+
+**PR:** `mergeable: true`, `mergeable_state: **clean**` — up from `blocked`, so branch protection is satisfied. 29 commits, 212 files, +15868/−6928.
+
+**CodeQL went from failure to success**, confirming the assert fix cleared the alert. No new alert appeared.
+
+**Review threads:** two unresolved, both `qltysh` (`tests/factories/fragment.py`, `transliteration/domain/tokens.py`) — the accepted duplications, left open on purpose. No new reviews or inline comments since the push.
+
+**Noted from the push output, not this PR's doing:** GitHub reports 1 high-severity Dependabot alert on the **default branch** (alert 75). Out of scope here; raised with the user.
