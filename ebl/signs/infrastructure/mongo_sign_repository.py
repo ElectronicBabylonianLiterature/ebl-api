@@ -16,7 +16,14 @@ from ebl.signs.infrastructure.sign_schemas import (
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign, SignName
 
-__all__ = ["COLLECTION", "MongoSignRepository", "SignDtoSchema", "SignSchema"]
+__all__ = [
+    "COLLECTION",
+    "MongoSignRepository",
+    "OrderedSignSchema",
+    "SignDtoSchema",
+    "SignSchema",
+    "get_unicode_from_atf",
+]
 
 
 class MongoSignRepository(SignRepository):
