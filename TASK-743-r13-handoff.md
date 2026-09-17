@@ -9,10 +9,11 @@ Written for whoever picks this PR up next. It says where the branch stands, what
 
 | | |
 | --- | --- |
-| Local `HEAD` | `5935b154` — merge of `origin/master`, plus this commit |
-| Remote branch | was `549d45ae` before this commit; **check `git ls-remote` before assuming anything is unpushed** |
-| PR page verdicts | describe `549d45ae`. **Stale** until the branch is pushed |
-| Mergeability on GitHub | still shows conflicted until the merge is pushed |
+| Local `HEAD` | `13b80d92`, **pushed** — remote matches |
+| PR page verdicts | current, they describe `13b80d92` |
+| Mergeability on GitHub | **`mergeable: true`** — the conflict is gone. `mergeable_state: blocked` is branch protection awaiting checks and review |
+| CI on `13b80d92` | all six Test Python jobs green, GitGuardian green, `Analyze (python)` green, qlty green. **CodeQL failed** — see the open item below |
+| Uncommitted | a fix for that CodeQL alert, verified but **not committed or pushed** |
 | Local gates | all green — see the table at the bottom |
 
 ## What this PR does, in plain words
@@ -32,9 +33,20 @@ The one change that affects data: a sign's name used to be stored in a single `n
 
 ## What is still open
 
-### 1. The branch is not pushed
+### 1. CodeQL is failing, and the fix is not committed (blocking)
 
-Everything above is local. Until it is pushed, the PR still shows the conflict and the old check results, and no reviewer can see any of it.
+The push turned CodeQL red with one new error alert:
+
+```text
+ebl/tests/transliteration/test_named_sign_errors.py:72
+An assert statement has a side-effect
+```
+
+`assert loaded.name_breaks == (BrokenAway.close(),)` puts a call inside an `assert`. Under `python -O` the whole statement is stripped, so the call stops happening. `test_named_sign_name.py` already avoids this with module constants; that pattern was not followed when the file was written.
+
+**Fixed in the working tree** — `K`, `U` and `CLOSE` are module constants now. Two further asserts the tool did *not* flag were fixed at the same time: both route tests read `assert _status_for(payload) == ...`, and `_status_for` builds a falcon app and simulates a request, so under `-O` they would assert nothing and never exercise the route.
+
+**This is not committed or pushed.** CodeQL stays red until it is.
 
 ### 2. The task documents must not reach `master` (blocking)
 
@@ -74,12 +86,11 @@ The migration lives in **#764**, not here. Order matters:
 
 ## Next steps, in order
 
-1. Push the branch.
-2. Wait for CI, qlty and CodeQL to re-run against the merge.
-3. Dry-run #764's migration against production; confirm it reports nothing.
-4. Re-request review.
-5. Immediately before merging: `git rm 'TASK-*.md' TASK-749-frontend.patch` on both this branch and #764, and confirm the verification query is empty.
-6. Merge this PR, then apply #764's migration.
+1. Commit and push the CodeQL fix; confirm CodeQL goes green.
+2. Dry-run #764's migration against production; confirm it reports nothing.
+3. Re-request review.
+4. Immediately before merging: `git rm 'TASK-*.md' TASK-749-frontend.patch` on both this branch and #764, and confirm the verification query is empty.
+5. Merge this PR, then apply #764's migration.
 
 ## Traps worth knowing
 
@@ -88,6 +99,8 @@ The migration lives in **#764**, not here. Order matters:
 - **`qlty smells` silently skips test files without `--include-tests`**, and a changed-files run cannot see a duplication against an untouched file. Use `--all --include-tests` and compare against a base worktree.
 - **`gh pr edit --body` fails in this repo.** Patch the description with `gh api repos/.../pulls/743 -X PATCH -F body=@file`.
 - **Never source `.env` for local runs** — it points at the production cluster. Use `mongodb://127.0.0.1:27017`.
+- **CodeQL's code-scanning alerts API is 403 for a normal token.** To see what a failing CodeQL run actually found, read the check run's annotations: `gh api repos/.../check-runs/<id>/annotations`.
+- **Never put a call inside an `assert` in a test.** CodeQL fails the build for it, and `python -O` would delete the statement. Hoist to a module constant or a local first.
 - **A commit here has reached GitHub without a `git push`.** Always check `git ls-remote` before claiming anything is unpushed.
 
 ## Gate results at this commit

@@ -16,7 +16,10 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.signs_transformer import name_arguments
 from ebl.transliteration.domain.tokens import ValueToken
 
-BROKEN_NAME = (ValueToken.of("k"), BrokenAway.close(), ValueToken.of("u"))
+K = ValueToken.of("k")
+U = ValueToken.of("u")
+CLOSE = BrokenAway.close()
+BROKEN_NAME = (K, CLOSE, U)
 
 
 def _dumped_reading() -> Dict[str, Any]:
@@ -47,14 +50,18 @@ def test_more_breaks_than_parts_is_unprocessable_on_a_route() -> None:
     payload = _dumped_reading()
     payload["nameBreaks"] = payload["nameBreaks"] * 3
 
-    assert _status_for(payload) == falcon.HTTP_UNPROCESSABLE_ENTITY
+    status = _status_for(payload)
+
+    assert status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_a_negative_sub_index_is_unprocessable_on_a_route() -> None:
     payload = _dumped_reading()
     payload["subIndex"] = -1
 
-    assert _status_for(payload) == falcon.HTTP_UNPROCESSABLE_ENTITY
+    status = _status_for(payload)
+
+    assert status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_absent_name_breaks_is_read_as_the_legacy_interleaved_format() -> None:
@@ -68,8 +75,8 @@ def test_absent_name_breaks_is_read_as_the_legacy_interleaved_format() -> None:
 
     loaded = cast(Reading, ReadingSchema().load(legacy))
 
-    assert loaded.name_parts == (ValueToken.of("k"), ValueToken.of("u"))
-    assert loaded.name_breaks == (BrokenAway.close(),)
+    assert loaded.name_parts == (K, U)
+    assert loaded.name_breaks == (CLOSE,)
 
 
 def test_name_breaks_is_required_when_name_parts_cannot_be_separated() -> None:
