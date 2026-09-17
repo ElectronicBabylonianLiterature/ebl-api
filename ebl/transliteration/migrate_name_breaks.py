@@ -27,7 +27,8 @@ import argparse
 import copy
 import logging
 import os
-from typing import Any, Dict, Iterator, List, Mapping, Optional, Sequence, Tuple
+from collections.abc import Iterator, Mapping, Sequence
+from typing import Any, Optional
 
 from pymongo import MongoClient, UpdateOne
 from pymongo.collection import Collection
@@ -79,7 +80,7 @@ def _validate_alternating(name_parts: Sequence[Any]) -> None:
 
 def separate_name_parts(
     name_parts: Any,
-) -> Tuple[List[NameToken], List[NameToken]]:
+) -> tuple[list[NameToken], list[NameToken]]:
     _validate_is_an_array(name_parts)
     _validate_alternating(name_parts)
     return list(name_parts[0::2]), list(name_parts[1::2])
@@ -103,7 +104,7 @@ def migrate_document(document: Any) -> bool:
 
 def _migrate_copy(
     collection: Collection, document: MongoDocument
-) -> Optional[Dict[str, Any]]:
+) -> Optional[dict[str, Any]]:
     migrated = copy.deepcopy(dict(document))
     try:
         changed = migrate_document(migrated)
@@ -120,7 +121,7 @@ def _update_for(original: MongoDocument, migrated: MongoDocument) -> UpdateOne:
         for key, value in migrated.items()
         if key != "_id" and value != original[key]
     }
-    unchanged_since_read: Dict[str, Any] = {"_id": original["_id"]}
+    unchanged_since_read: dict[str, Any] = {"_id": original["_id"]}
     for key in changed:
         unchanged_since_read[key] = original[key]
     return UpdateOne(unchanged_since_read, {"$set": changed})
@@ -136,7 +137,7 @@ def _pending_updates(collection: Collection) -> Iterator[UpdateOne]:
 def _apply_updates(collection: Collection, updates: Iterator[UpdateOne]) -> int:
     attempted = 0
     written = 0
-    batch: List[UpdateOne] = []
+    batch: list[UpdateOne] = []
     for update in updates:
         attempted += 1
         batch.append(update)
@@ -166,7 +167,7 @@ def migrate_collection(collection: Collection, dry_run: bool) -> int:
 
 
 def migrate(database: Database, dry_run: bool) -> Mapping[str, int]:
-    counts: Dict[str, int] = {}
+    counts: dict[str, int] = {}
     existing = set(database.list_collection_names())
     for name in COLLECTIONS:
         if name not in existing:
