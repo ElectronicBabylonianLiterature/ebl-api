@@ -8,470 +8,457 @@
 | PR | [#743](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/743) — Make the ATF parser visible to the type checkers |
 | Repository | `ElectronicBabylonianLiterature/ebl-api` |
 | Branch | `fix-type-checker-blind-spots` → `master` |
-| Commit reviewed | `16a84e20059bd631a106f4862d594b95c23f8772` ("Address the round-11 review on PR #743", 2026-08-27) |
+| Commit reviewed | `549d45ae922b2f090cb4938ebfba113b3f897916` ("Add a standalone brief for the frontend change") |
 | Merge base | `c2b0a5ef4210ba83652e26d9852e1866fd6e430a` ("Add new manuscript types (#749)") |
-| Local tree vs remote | identical — `git ls-remote` and local `HEAD` both at `16a84e20`; nothing unpushed, so the qlty/CodeQL verdicts on the PR page are current |
-| Size | 142 files, +6770 / −4072 (62 added, 64 modified, 16 pure renames) |
-| Review date | 2026-09-01 |
-| Review round | 12 |
-| Mergeability | `MERGEABLE`, `mergeStateStatus: CLEAN` |
-| CI | all checks green (see Findings → CI and external analysers) |
-| **Verdict** | **Request changes** — three open items, all of them raised in the 2026-09-01 review and none yet in the branch. Everything else is non-blocking. |
-| Blocking findings | F1, F2, F3 |
-| Non-blocking findings | F4 – F14 |
+| `origin/master` now | `e92b43d23791e398487e8a6904f482bb7ec37348` — master has moved 4 commits past the merge base (#763–#766) |
+| Local tree vs remote | identical — local `HEAD` and `git ls-remote` both at `549d45ae`. Nothing unpushed, so the qlty and CodeQL verdicts on the PR page are **current**, not stale |
+| Size | 202 files, +15047 / −6910 (108 added, 78 modified, 16 renames) — of which **23 files and 4507 lines are stray task artefacts** |
+| Commits | 26 (9 since the round-12 review) |
+| Review date | 2026-09-16 |
+| Review round | 13 |
+| Mergeability | **`MERGEABLE: false`, `mergeStateStatus: dirty`** — conflict in `ebl/fragmentarium/domain/museum.py` |
+| CI | all 14 check runs `success` or `skipped`; `qlty check` status `success` with description "2 blocking issues" |
+| Last human review | `Fabdulla1`, **APPROVED** 2026-09-01 at `16a84e20` — **9 commits stale** |
+| **Verdict** | **Request changes** at `549d45ae`. **B2 and B3 have since been addressed locally** (see Resolution); B1 is deferred to merge time by the author's decision. The work is **not pushed**, so the PR page still shows the pre-fix state. |
+| Blocking findings | B1, B2, B3 |
+| Non-blocking findings | N1 – N6 |
+| Informational | I1 – I4 |
 
 ## Summary
 
-This is a genuinely good PR and it has clearly had a lot of care put into it. The core insight — that a module and a directory with the same dotted name meant the ATF parser was never actually type-checked — is a real and slightly alarming discovery, and the follow-through is thorough: pyre, pyright, mypy, ruff, flake8 and qlty are all clean, the full suite passes 4494 tests, and I could not find a single test that was quietly dropped along the way (1530 → 1688 test function names, nothing missing). I booted the service against a throwaway database and walked the affected routes; the `422` fix, the erasure path and the non-text-line path all behave exactly as the description says.
+Good news first: every one of the three blocking findings from round 12 is genuinely fixed, and I checked each against the tree rather than taking the commit messages on trust. The `nameParts` array really is split now — `name_parts` and `name_breaks` are two separate fields with a validator each, the wire has two keys, and `OneOfTokenSchema` is gone from that path. `tokens.py`'s `__all__` is whole again. Both `# type: ignore` comments are gone, and the branch adds no new suppressions anywhere. Two bonus fixes landed too: `/signs?listAll=true` and `/markup` on bad input both used to return 500 and now return 200 and 422.
 
-So the remaining work is small. The three points from the 2026-09-01 review are all still open — the last commit predates that review by five days — and I confirmed each of them against the tree rather than taking them on trust. `NamePart` really does still probe with `isinstance`, `tokens.py`'s `__all__` really does drop the nine classes the module defines, and the two `# type: ignore` comments really are load-bearing (removing them produces two pyright errors and two mypy errors). Fix those three and this is ready.
+The thing I liked most is the `@final` on `TextLine`. Sourcery's old complaint about the `cast` in `merge` was that it would lie for a subclass; marking the class final means the compiler now guarantees there can't be one. That's fixing the cause instead of the symptom, and it quietly closes a thread that had been open since July.
 
-A couple of smaller things worth a look while you're in there: `GET /signs?listAll=true` returns a 500, and `/markup` still 500s on unparsable input — the exact defect this PR just fixed on the sibling `/signs/transliteration` route. Both are pre-existing rather than caused here, so treat them as your call.
+I wanted hard evidence that splitting the array didn't change what the parser produces, so I built a 60-case ATF probe — broken-away brackets in every position, determinatives, `⸢⸣`, `<>`, `<<>>`, flags, sub-indices, compound graphemes — and ran it at the merge base and at this commit. The output is byte-for-byte identical on both sides. Then I booted the service against a throwaway database, seeded a fragment in the **old** interleaved format that production still holds, and fetched it: HTTP 200, split correctly, values preserved. The compatibility shim works on a real route, not just in unit tests.
 
-One thing to flag on process: the PR modifies `.github/instructions/copilot.instructions.md` (adding the qlty hard gate), while the description states the PR "touches no configuration file at all". The change itself is a good one — it just deserves a mention, since a reader trusting the description would not know the repo rules moved.
+What's holding it up is mostly housekeeping rather than code. The branch now carries 22 `TASK-*.md` files and a `.patch` into `master` — 4507 lines of working notes that the PR's own Gate 3 says must never land, and the cleanup command written in the description only covers about half of them. The PR has also gone into conflict since the museum PRs merged this morning. And there's one real code gap: a malformed `nameBreaks` array raises a bare `ValueError` that nothing maps, so it surfaces as a 500 where every neighbouring validation error gives a 422.
+
+None of that is hard to fix, and none of it undoes the work. Clear the artefacts, rebase, register `ValueError`, and I think this is ready.
 
 ### Specifically checked
 
 | Check | Result |
 | --- | --- |
-| **Dev container configuration** | **No warning needed.** `.devcontainer/` is byte-identical between the merge base and this branch — all five files (`README.md`, `devcontainer.json`, `setup.sh`, `sync-env.py`, `test_sync_env.py`) unchanged. `git diff --name-status <base> HEAD -- .devcontainer` is empty. Nothing to scrutinise. |
-| **New `.md` files** | **None.** `git diff --diff-filter=A --name-only <base> HEAD -- '*.md'` is empty. Two markdown files are modified, neither added: `docs/ebl-atf.md` (a one-line grammar path update, correct) and `.github/instructions/copilot.instructions.md` (see F4). |
-| **Failing checks** | None. All 14 check runs on `16a84e20` conclude `success` or `skipped`. |
-| **qlty** | Clean. qlty Cloud: "No blocking issues"; coverage diff 100.0%. Local `qlty smells` over all 123 changed `.py` files: zero findings. |
-| **CodeQL** | Clean. "No new alerts in code changed by this pull request". All five historical inline alerts are on lines that no longer exist in that form. |
-
-The `TASK-743-todo.md`, `TASK-743-log.md` and `TASK-743-review.md` files in the working tree are my own untracked review artefacts. They are not part of the PR and must be deleted before merge.
-
-### Details
-
-#### F1 — `NamePart` does not satisfy the one-array/one-type hard gate — Blocking
-
-**Status:** open. Raised in the 2026-09-01 review; confirmed against `16a84e20`.
-
-The wrapper relocates the type question instead of answering it. At all three levels the data is still two types travelling as one:
-
-- [`ebl/transliteration/domain/sign_token_base.py:29-30`](ebl/transliteration/domain/sign_token_base.py#L29-L30) — `name_contribution_of` is `token.value if isinstance(token, ValueToken) else ""`. This is exactly the "never discriminate by probing" case: a reader still has to ask the value what it is.
-- [`ebl/transliteration/domain/sign_token_base.py:34-35`](ebl/transliteration/domain/sign_token_base.py#L34-L35) — `NamePart.token: Token` holds an arbitrary token. `Sequence[NamePart]` is homogeneous only in the wrapper; the payload inside it is not.
-- [`ebl/transliteration/domain/sign_token_base.py:101-103`](ebl/transliteration/domain/sign_token_base.py#L101-L103) — `NamedSign.name_tokens` unwraps straight back to `Sequence[Token]`, which is the shape the gate objects to.
-- [`ebl/transliteration/application/token_schemas_signs.py:29-33`](ebl/transliteration/application/token_schemas_signs.py#L29-L33) — `nameParts` is `fields.List(fields.Nested("OneOfTokenSchema"), attribute="name_tokens")`. The wire array still interleaves `ValueToken`, `BrokenAway`, `ValueToken`, told apart by a `OneOfSchema` discriminator.
-
-The instructions name this precise signal: *"Reaching for a `OneOfSchema` to tell two types apart inside one array is the signal to split the array instead."* And *"An optional field present for one type and absent for another means you have two types in one array. Split the array."*
-
-There is also a description/code mismatch of the same kind round 11 flagged. Part 5 of the PR body says "The `NamePart` converter no longer probes." That is true of `convert_name_parts`, which now takes `Iterable[NamePart]` only — but `name_contribution_of` immediately below it still probes, so the claim reads as broader than it is. A reviewer taking the description at face value would sign off on a gate that is not met.
-
-The honest fix is the structural one the gate asks for: two arrays on the domain object and two keys on the wire — the readings/value tokens in one, the broken-away markers in the other — with the ordering that reconstructs the interleaved ATF carried explicitly rather than by array position across two types. That is a wire-format change, so if it is too large for this PR it should be split out into its own, with the gate deviation recorded explicitly rather than described as satisfied.
-
-#### F2 — `tokens.py`'s `__all__` silently narrows the module's public API — Blocking
-
-**Status:** open. Raised in the 2026-09-01 review; confirmed against `16a84e20`.
-
-[`ebl/transliteration/domain/tokens.py:16-23`](ebl/transliteration/domain/tokens.py#L16-L23) declares:
-
-```python
-__all__ = [
-    "ErasureState",
-    "NullSignsCollectingVisitor",
-    "SignsCollectingVisitor",
-    "Token",
-    "TokenVisitor",
-    "ValueToken",
-]
-```
-
-Every name in it is re-exported from `token_base`. The nine classes the module actually defines are omitted: `LanguageShift`, `UnknownNumberOfSigns`, `WordOmitted`, `Tabulation`, `CommentaryProtocol`, `Column`, `Variant`, `Joiner`, `LineBreak` (lines 27, 47, 62, 77, 92, 109, 126, 150, 191).
-
-`master` has no `__all__` in this file at all, so `from ...tokens import *` exported all fifteen public names. It now exports six.
-
-Two things make this worth fixing rather than waving through:
-
-1. **It is inconsistent with its own siblings.** [`sign_tokens.py:22-33`](ebl/transliteration/domain/sign_tokens.py#L22-L33) lists its locally defined `CompoundGrapheme`, `Divider` and `Grapheme` alongside the re-exports, and [`enclosure_visitor.py:30-35`](ebl/transliteration/domain/enclosure_visitor.py#L30-L35) lists its locally defined `EnclosureValidator`. `tokens.py` is the only facade in the set that lists re-exports only. That inconsistency is the kind of thing that gets copied.
-2. **`__all__` is not only about `import *`.** It is the module's declared public surface, and it is what IDEs, `pydoc` and downstream consumers read.
-
-Nothing breaks today: `grep -rn "import \*" ebl` finds no star import anywhere in the repository, so this is a latent API narrowing rather than a live bug.
-
-Restoring the nine local names is the fix. The regression test Fabdulla1 suggested is a good idea and cheap — assert that each facade module's `__all__` covers every public name defined in it plus everything it re-exports, which would pin all four facades at once rather than just this one.
-
-#### F3 — Two `# type: ignore` comments contradict the PR's own claim and the repo rule — Blocking
-
-**Status:** open. Raised in the 2026-09-01 review; confirmed against `16a84e20`.
-
-[`ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py:35`](ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py#L35) and [`:63`](ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py#L63) both carry `# type: ignore[arg-type]`. These are the only two suppressions the diff adds, and they are load-bearing — I removed them in a scratch copy and both checkers fail:
-
-```text
-pyright: test_fragment_pattern_matcher_site.py:35:9 - error: Argument of type "Unknown | _StubProvenanceService" cannot be assigned to parameter "provenance_service" of type "ProvenanceService" (reportArgumentType)
-pyright: test_fragment_pattern_matcher_site.py:63:34 - error: Argument of type "_StubProvenanceService" cannot be assigned to parameter "provenance_service" of type "ProvenanceService" (reportArgumentType)
-mypy:    test_fragment_pattern_matcher_site.py:35: error: Argument 2 to "PatternMatcher" has incompatible type "Any | _StubProvenanceService"; expected "ProvenanceService"  [arg-type]
-mypy:    test_fragment_pattern_matcher_site.py:63: error: Argument 2 to "PatternMatcher" has incompatible type "_StubProvenanceService"; expected "ProvenanceService"  [arg-type]
-```
-
-Part 2 of the PR description says the 149 pyright errors are "all now fixed **structurally** — no `# type: ignore`, no `# pyright: ignore`, and no type-checker or linter configuration was relaxed". That is not accurate for these two lines, and the description is the thing a reviewer reads first.
-
-There is a second, smaller problem in the same helper. [`:32`](ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py#L32) is `def _site_filter(site: str, service=None) -> Dict:` — `service` has no annotation, which the coding standards require, and it is precisely why pyright's line-35 message reads `Unknown | _StubProvenanceService` rather than a clean type.
-
-The fix Fabdulla1 suggested is the right one: either declare a `Protocol` covering the three methods `PatternMatcher` actually uses (`find_by_name`, `find_by_id`, `find_children`) and widen `PatternMatcher`'s parameter to it, or make `_StubProvenanceService` a real subclass of `ProvenanceService`. Either removes both suppressions and lets `service: Optional[ProvenanceService] = None` be annotated properly. The `Protocol` route is the better design — it is what the collaborator relationship actually is — and it would let other tests stub the service without a suppression too.
-
-#### F4 — The PR edits the repo instruction file while claiming to touch no configuration — Non-blocking
-
-[`.github/instructions/copilot.instructions.md`](.github/instructions/copilot.instructions.md) is modified by this branch: it adds gate 9 (`qlty smells <changed files>`) to the pre-commit list and a new `### HARD GATE: qlty Must Be Clean` section (about 30 lines).
-
-Part 5 of the description says: *"This PR touches no configuration file at all — no `.coveragerc`, no `pyproject.toml`, no `mypy.ini`, no `ruff.toml`, no `.markdownlint*`, no `Taskfile`, no `.devcontainer/`, no `.github/workflows/`."* Every item in that list is individually true — I verified all of them, and `git diff --name-status` over those paths is empty. But the sentence's headline claim is not, and the file that *is* changed is the one that defines the repo's rules, which is a more consequential thing to change unannounced than any of the files listed.
-
-The change itself is good and I would keep it. It just needs a line in the description, or — cleaner — its own small PR, so that a rules change is reviewed as a rules change rather than arriving inside a 142-file typing PR.
-
-#### F5 — `GET /signs?listAll=true` returns 500 — Non-blocking, pre-existing
-
-Found while exercising the running service:
-
-```text
-GET /signs?listAll=true  ->  500  {"title": "500 Internal Server Error"}
-```
-
-```text
-File "ebl/signs/web/sign_search.py", line 53, in on_get
-  resp.media = SignDtoSchema().dump(signs, many=True)
-File "ebl/signs/infrastructure/sign_schemas.py", line 147, in make_sign_dto
-  data["name"] = data.pop("_id")
-KeyError: '_id'
-```
-
-`list_all_signs()` returns `Sequence[str]` (sign ids), but the `listAll` dispatcher branch feeds it through `SignDtoSchema().dump(..., many=True)`, whose `@post_dump make_sign_dto` expects a dumped sign document.
-
-**This is not introduced here.** The identical `make_sign_dto` body is on `master` at `mongo_sign_repository.py:154-156`, and both `sign_search.py` and `list_all_signs` are untouched by this PR (`git diff` over them is empty). It surfaces in this review only because the line moved into the new `sign_schemas.py`.
-
-I raise it because this PR *is* the one that added the `LINE_PARSE_ERRORS → DataError` mapping for the sibling route, and because the route is currently unreachable in practice. Fixing it is a couple of lines — have the `listAll` branch bypass `SignDtoSchema` and return the ids directly — but it changes a response shape, so it may belong in its own PR. Either fix it or add it to the "known pre-existing 500s" list in the description alongside the empty-transliteration one.
-
-#### F6 — `/markup` and `/cached-markup` 500 on unparsable input — Non-blocking, pre-existing
-
-```text
-GET /markup?text=@i{italic text}   ->  200  [{"text": "italic text", "type": "EmphasisPart"}]
-GET /markup?text=hello             ->  200  [{"text": "hello", "type": "StringPart"}]
-GET /markup?text=@i@kur@i@         ->  500
-GET /cached-markup?text=@i{...}    ->  200
-```
-
-[`ebl/markup/web/bootstrap.py`](ebl/markup/web/bootstrap.py) calls `markup_string_to_json(req.params["text"])` with no error mapping, so a lark parse error reaches the generic handler.
-
-This is character-for-character the defect this PR fixed at [`ebl/signs/web/signs.py:61-64`](ebl/signs/web/signs.py#L61-L64):
-
-```python
-try:
-    resp.media = self.sign_repository.get_unicode_from_atf(line)
-except LINE_PARSE_ERRORS as error:
-    raise DataError(f'Invalid transliteration: "{line}"') from error
-```
-
-The markup route is outside this PR's diff so it is legitimately out of scope, but it is the closest possible neighbour and the fix is the same four lines. Worth a follow-up issue at minimum.
-
-#### F7 — Redundant `cast` left behind in `TextLine.merge` — Non-blocking
-
-[`ebl/transliteration/domain/text_line.py:148-159`](ebl/transliteration/domain/text_line.py#L148-L159):
-
-```python
-def merge(self, other: L) -> L:
-    if not isinstance(other, TextLine):
-        return other
-
-    other_text_line = cast(TextLine, other)     # <- redundant
-    return cast(L, TextLine.of_iterable(...))
-```
-
-The `isinstance` guard on the line above already narrows `other`, and `@final` on `TextLine` (added by this PR, correctly, and it does resolve Sourcery's soundness concern about the outer `cast(L, ...)`) makes that narrowing exact.
-
-Verified removable: I deleted `other_text_line` and read `other.line_number` / `other.content` directly, and both pyright and mypy stayed at zero errors on the file. (I did not re-run pyre for this one variant, so run `task type` before committing it.)
-
-Small, but this PR's whole thesis is removing unnecessary escapes from the type system, so leaving one in the file it just marked `@final` is a bit of a loose end.
-
-#### F8 — `Token.update_alignment` is typed `object`, erasing the real contract — Non-blocking
-
-[`ebl/transliteration/domain/token_base.py:166`](ebl/transliteration/domain/token_base.py#L166):
-
-```python
-def update_alignment(self: T, alignment_map: object) -> T:
-    return self
-```
-
-The real argument is `AlignmentMap = Sequence[Optional[int]]` ([`text_line.py:61`](ebl/transliteration/domain/text_line.py#L61)), and the call site at [`text_line.py:163`](ebl/transliteration/domain/text_line.py#L163) passes exactly that. Typing the parameter `object` means any argument type-checks — `token.update_alignment("nonsense")` is accepted by all three checkers.
-
-The override at [`word_tokens.py:91`](ebl/transliteration/domain/word_tokens.py#L91) — `def update_alignment(self: A, alignment_map) -> A:` — is still unannotated, so neither end of that call is checked.
-
-`master` had the base parameter unannotated too, so `object` is not a regression; it is the same blind spot in a different notation. Given the PR's title, annotating both as `AlignmentMap` would be the natural finish. (`AlignmentMap` lives in `text_line`, which imports tokens, so it likely needs to move to a small shared module — that is the only reason I am not calling this trivial.)
-
-#### F9 — `_StartParser.__getattr__` returns `object`, hiding the seven module-level parsers — Non-blocking
-
-[`ebl/transliteration/domain/atf_parsers/lark_parser.py:75-80`](ebl/transliteration/domain/atf_parsers/lark_parser.py#L75-L80) (the wrapper class starts at line 67):
-
-```python
-def __getattr__(self, name: str) -> object:
-    try:
-        parser = self.__dict__["_parser"]
-    except KeyError:
-        raise AttributeError(name)
-    return getattr(parser, name)
-```
-
-A `__getattr__` returning `object` makes *every* attribute access on `_StartParser` type-check, including misspellings — statically, `WORD_PARSER.parse_intractive` is a valid `object`. The test at [`test_start_parser.py:26`](ebl/tests/transliteration/test_start_parser.py#L26) has to use `isinstance(WORD_PARSER.options, LarkOptions)` to get a usable type back, which is the symptom.
-
-Seven module-level parsers go through this wrapper (`WORD_PARSER`, `NOTE_LINE_PARSER`, `MARKUP_PARSER`, `PARALLEL_LINE_PARSER`, `TRANSLATION_LINE_PARSER`, `PARATEXT_PARSER`, `LABEL_PARSER`), so this is a blind spot over the whole parser surface — in the PR whose stated purpose is removing exactly that.
-
-The `except KeyError` branch is fine and needed: `copy.deepcopy` touches attributes on a not-yet-initialised instance, which `test_wrapper_is_copyable` covers.
-
-If the delegation is only ever used for `options` in practice, an explicit `@property options -> LarkOptions` and no `__getattr__` at all would type properly. If broader delegation is genuinely needed, `-> Any` at least says so honestly rather than lying with a precise-looking `object`.
-
-#### F10 — Shared class-body default visitor — Non-blocking
-
-[`ebl/transliteration/domain/transliteration_query.py:210-216`](ebl/transliteration/domain/transliteration_query.py#L210-L216):
-
-```python
-class TransliterationQueryEmpty(TransliterationQuery):
-    string: str = attr.ib(default="", converter=_strip_query_string)
-    visitor: SignsCollectingVisitor = attr.ib(
-        default=NullSignsCollectingVisitor(), eq=False
-    )
-```
-
-`NullSignsCollectingVisitor()` is constructed once at import and shared by every `TransliterationQueryEmpty` instance. Harmless today — the class is stateless, which is exactly the point of it — but `attr.Factory(NullSignsCollectingVisitor)` is the idiom, costs nothing, and stays correct if the class ever grows a field. Worth changing while the file is open.
-
-(Unrelated but noted for completeness: `TransliterationQueryFactory` shares one mutable `SignsVisitor` across every query it creates, and `TransliterationQuery` is now `frozen=True` and hashable while holding it. `transliteration_query_factory.py` is byte-identical to `master`, so this is squarely pre-existing and out of scope — but the `eq=False` change in this PR makes these objects usable as dict keys, which is a good reason to look at the sharing separately.)
-
-#### F11 — Annotation coverage is uneven across the files this PR rewrote — Non-blocking
-
-Round 11 annotated the nine marshmallow hooks in `sign_schemas.py`. The equivalent hooks in a file this PR also rewrote were not:
-
-- [`token_schemas_signs.py:43`](ebl/transliteration/application/token_schemas_signs.py#L43), [`:61`](ebl/transliteration/application/token_schemas_signs.py#L61) and [`:78`](ebl/transliteration/application/token_schemas_signs.py#L78) — `ReadingSchema.make_token`, `LogogramSchema.make_token` and `NumberSchema.make_token`. This PR rewrote all three bodies (swapping `data["name_parts"]` for `data["name_tokens"]` and moving `sign` / `surrogate` onto the new withers) but left `def make_token(self, data, **kwargs):` unannotated. `GlossSchema.make_token` in the same file is annotated `-> Gloss`, so the convention exists here already.
-
-Same pattern in the relocated token modules:
-
-- [`token_base.py:193-195`](ebl/transliteration/domain/token_base.py#L193-L195) — `ValueToken.parts` has no return annotation, while the `Token.parts` it overrides is `Sequence["Token"]`.
-- [`tokens.py:52-54`](ebl/transliteration/domain/tokens.py#L52-L54) — `UnknownNumberOfSigns.parts`, likewise; and `LanguageShift.language` (line 31), `.normalized` (line 35) and `.normalized_akkadian` (line 42) are unannotated.
-- [`sign_tokens.py:46-48`](ebl/transliteration/domain/sign_tokens.py#L46-L48) — `Divider.parts`, likewise.
-
-All of these are moved-not-new code, so nothing regressed. But the coding standard is "all functions and methods have appropriate type hints", and a moved line is a touched line. Since the checkers are already green, these are one-liners.
-
-#### F12 — `Divider.string_flags` duplicates its own base class — Non-blocking, pre-existing
-
-[`sign_tokens.py:55-57`](ebl/transliteration/domain/sign_tokens.py#L55-L57) is character-for-character [`sign_token_base.py:24-26`](ebl/transliteration/domain/sign_token_base.py#L24-L26), and `Divider` extends `AbstractSign`, so the override is dead code. It was dead on `master` too — but the two copies used to sit twenty lines apart in one file and now sit in two different files, which is the version that survives longer. Deleting the override is a three-line change with no behaviour effect.
-
-#### F13 — `ChapterVisitor.visit` became a `singledispatchmethod` — Informational
-
-[`ebl/corpus/domain/chapter.py:32-35`](ebl/corpus/domain/chapter.py#L32-L35). This is a good change: all three subclasses (`ChapterUpdater`, `TextValidator`, `ManuscriptReferenceInjector`) already declared their own `@singledispatchmethod visit`, so the base was the odd one out, and each subclass has its own dispatcher — nothing is shared.
-
-One behaviour change worth knowing about: `singledispatchmethod` requires the dispatch argument to be **positional**. `visitor.visit(item=x)` raised nothing on `master` and now raises `TypeError`. No call site in the repository uses a keyword there, so there is no impact; noting it so it is not a surprise later.
-
-#### F14 — `lark_parser.py` sits exactly at the 250-line limit — Informational
-
-`ebl/transliteration/domain/atf_parsers/lark_parser.py` is 250 lines — compliant, but the next line added to it fails the gate. The other two closest changed files are `legacy_atf_converter.py` (249) and `chapter.py` (245). Nothing to do now; just be aware the margin is gone.
+| **Dev container configuration** | **No warning needed — nothing changed.** `git diff c2b0a5ef..HEAD -- .devcontainer` is empty. All five files (`README.md`, `devcontainer.json`, `setup.sh`, `sync-env.py`, `test_sync_env.py`) are byte-identical to the merge base. No `Dockerfile`, `docker-compose`, `.github/workflows/`, `pyproject.toml`, `Taskfile` or lockfile change either. The only config-adjacent edit is `.github/instructions/copilot.instructions.md`, and it is disclosed in the description. |
+| **New `.md` files** | **Failed — 22 added, plus `TASK-749-frontend.patch`.** See B1. Round 12 reported none; this is a regression. |
+| **Failing checks** | None. All 14 check runs on `549d45ae` are `success` or `skipped`. |
+| **qlty** | 2 blocking issues, both `similar-code`, both justified and both genuinely false positives — see N3. Reconciled against the base: the branch **introduces 2** duplications and **removes 24**. |
+| **CodeQL** | No open alerts observable. `CodeQL` and `Analyze (python)` check runs pass; all 14 CodeQL review threads are resolved. Caveat in I3. |
+| **Mergeability** | **Failed** — conflict with master. See B2. |
+| **Data hard gate** | Passed for everything this PR touches. Two pre-existing mixed arrays remain elsewhere, untouched — see I1. |
+| **File length (250 lines)** | Passed. Longest changed file is `legacy_atf_converter.py` at 249. |
+| **Tests removed** | None. 1647 → 1823 test functions; 3 apparent losses are renames with assertions intact. |
 
 ## Findings
 
-| # | Finding | File | Severity | Status |
-| --- | --- | --- | --- | --- |
-| F1 | `NamePart` still probes with `isinstance`; `nameParts` still a `OneOfTokenSchema` array — one-array/one-type gate not met | `sign_token_base.py`, `token_schemas_signs.py` | High | Open — blocking |
-| F2 | `tokens.py` `__all__` omits the nine classes the module defines; narrows the public API vs `master` | `tokens.py` | Medium | Open — blocking |
-| F3 | Two load-bearing `# type: ignore[arg-type]` contradict the PR's "no `# type: ignore`" claim; `service` parameter unannotated | `test_fragment_pattern_matcher_site.py` | Medium | Open — blocking |
-| F4 | Repo instruction file changed while the description says no configuration file is touched | `.github/instructions/copilot.instructions.md` | Low | Open |
-| F5 | `GET /signs?listAll=true` returns 500 (`KeyError: '_id'`) | `sign_schemas.py`, `sign_search.py` | Medium | Pre-existing |
-| F6 | `/markup` and `/cached-markup` 500 on unparsable markup — the defect this PR fixed next door | `ebl/markup/web/bootstrap.py` | Low | Pre-existing |
-| F7 | Redundant `cast(TextLine, other)` after an `isinstance` guard | `text_line.py:152` | Low | Open |
-| F8 | `Token.update_alignment(alignment_map: object)` erases the `AlignmentMap` contract; the `Word` override is unannotated | `token_base.py:166`, `word_tokens.py:91` | Low | Open |
-| F9 | `_StartParser.__getattr__ -> object` makes every delegated attribute untyped across seven parsers | `lark_parser.py:75-80` | Low | Open |
-| F10 | `NullSignsCollectingVisitor()` as a shared class-body default instead of `attr.Factory` | `transliteration_query.py:212-214` | Low | Open |
-| F11 | Unannotated marshmallow hooks and properties in files this PR rewrote | `token_schemas_signs.py`, `token_base.py`, `tokens.py`, `sign_tokens.py` | Low | Open |
-| F12 | `Divider.string_flags` duplicates `AbstractSign.string_flags`, now across two files | `sign_tokens.py:55-57` | Low | Pre-existing |
-| F13 | `ChapterVisitor.visit` now requires a positional argument | `chapter.py:32-35` | Informational | Accepted |
-| F14 | `lark_parser.py` at exactly 250 lines | `lark_parser.py` | Informational | Accepted |
+### Details
 
-### Existing PR feedback — disposition
+#### B1 — the branch carries 23 task artefacts into `master`
 
-Every submitted review, inline comment and conversation comment on #743 was fetched via `gh api` and is accounted for below — 12 reviews, 22 inline comments and 2 conversation comments, from Fabdulla1, three bots (Sourcery, qlty, CodeQL) and your own clarification reply of 2026-08-25.
+**Severity: High (blocking).**
 
-The only merges into `fix-type-checker-blind-spots` are two merges of `master` (`525c4979`, `05051576`); both second parents are ancestors of `origin/master`, so no other PR's branch was merged in directly. The description notes this work was split out of #740, which merged to `master` on 2026-08-04, so I fetched that PR's feedback too: it is merged and approved, and every item on it (`ebl/fragmentarium/web/dtos.py`, `test_realia_info*`, the `fragment_updater` tests, `token_schemas_words.py`) is against a file this PR does not touch. Nothing to carry over.
+`git diff --diff-filter=A --name-only c2b0a5ef..HEAD` lists 23 added files at the repository root that are not code:
 
-No other PR's branch has been merged into `fix-type-checker-blind-spots`. The branch carries two merge commits, `05051576` and `525c4979`, and both second parents are plain `master` commits (`#749`, which is the merge base, and `#748`, which `git merge-base --is-ancestor` confirms is already inside it). This PR was split out of #740, which is merged and covers unrelated realia work; grepping all of its reviews, inline comments and conversation comments for `lark`, `atf_parser`, `type check`, `pyright`, `pyre`, `mypy`, `NamePart`, `__all__`, `token_base` and file-size terms returns nothing, so there is no upstream feedback to carry over.
+`TASK-743-fix-handoff.md`, `TASK-743-fix-log.md`, `TASK-743-fix-pr-body.md`, `TASK-743-fix-todo.md`, `TASK-743-log.md`, `TASK-743-review.md`, `TASK-743-todo.md`, `TASK-744-log.md`, `TASK-744-todo.md`, `TASK-745-handoff.md`, `TASK-745-log.md`, `TASK-745-todo.md`, `TASK-746-log.md`, `TASK-746-todo.md`, `TASK-747-log.md`, `TASK-747-todo.md`, `TASK-748-log.md`, `TASK-748-todo.md`, `TASK-749-frontend-brief.md`, `TASK-749-frontend-pr-body.md`, `TASK-749-frontend.patch`, `TASK-749-log.md`, `TASK-749-todo.md`.
 
-**One point of note on the latest review's state:** it is marked `APPROVED` (2026-09-01), but its body raises three items that read as prerequisites — "just small changes that need to be done and then it should be good to merge after". The last commit on the branch, `16a84e20`, is dated 2026-08-27, five days earlier, so none of the three has been addressed. Treating the green approval as clearance to merge would ship all three.
+That is 4507 lines of markdown — roughly a third of the PR's insertions — and it is exactly what the PR's own **Gate 3** forbids: *"A merge that carries any of them into `master` is a defect, regardless of whether everything else is green."*
 
-| Source | Item | Disposition |
+Two compounding problems:
+
+1. **The documented cleanup command is now incomplete.** Gate 3 says:
+
+   ```bash
+   git rm task_743_migrate_name_breaks.py task_743_migrate_name_breaks_test.py
+   git rm TASK-743*.md TASK-744*.md TASK-745*.md
+   ```
+
+   The migration scripts are already gone (moved to #764), so that first line is a no-op. The second line misses **TASK-746, TASK-747, TASK-748 and TASK-749 entirely** — 8 markdown files — and misses `TASK-749-frontend.patch`, which is not a `.md` file and no glob in that command would catch.
+
+2. **`TASK-743-review.md` — this file — is itself among them.** A review document committed to the branch it reviews will land in `master` alongside the code it was meant to gate.
+
+At round 12 this query returned nothing. The artefacts were introduced by the nine commits since.
+
+#### B2 — the PR is in conflict with `master`
+
+**Severity: High (blocking).**
+
+The GitHub API reports `mergeable: false`, `mergeable_state: dirty`. Reproduced locally:
+
+```text
+$ git merge-tree --write-tree --name-only origin/master HEAD
+ebl/fragmentarium/domain/museum.py
+CONFLICT (content): Merge conflict in ebl/fragmentarium/domain/museum.py
+```
+
+`master` moved to `e92b43d2` on 2026-09-16 when **#765 (Erimtan and Marash Museums)** and **#766 (Gaziantep)** merged, both adding `Museum` entries. This branch restructured `museum.py` during the split, so the two edits collide.
+
+This also means every green check on the PR page describes `549d45ae` in isolation, not the merge result. After resolving, re-run at minimum `task type` and `task test` — the conflict is in the file whose enum shape a previous review round already raised questions about.
+
+#### B3 — a malformed `nameBreaks` array returns 500, not 422
+
+**Severity: Medium-High (blocking).**
+
+`_validate_name_breaks` in [ebl/transliteration/domain/sign_token_base.py:56-63](ebl/transliteration/domain/sign_token_base.py#L56-L63) raises a bare `ValueError`:
+
+```python
+def _validate_name_breaks(instance, _attribute, value):
+    if len(value) > len(instance.name_parts):
+        raise ValueError(
+            f"A name with {len(instance.name_parts)} parts takes at most "
+            f"{len(instance.name_parts)} breaks, not {len(value)}."
+        )
+```
+
+It fires inside marshmallow's `@post_load`, which does not convert `ValueError`. [ebl/error_handler.py](ebl/error_handler.py) registers `AlignmentError`, `DispatchError`, `LemmatizationError`, `NotFoundError`, `DuplicateError` and `DataError` — **not `ValueError`** — so it falls through to the catch-all `unexpected_error` and becomes `500 Internal Server Error`.
+
+Verified against the running service (seeded document `K.3`, `nameBreaks` of length 3 against `nameParts` of length 1):
+
+```text
+GET /fragments/K.3  ->  HTTP 500
+ValueError: A name with 1 parts takes at most 1 breaks, not 3.
+```
+
+Every sibling validation failure in the same schema gives a clean 422 — `nameParts` holding a `BrokenAway`, a non-alternating legacy array, a missing field. This one is the odd one out, and `name_breaks` is new in this PR, so the path is new too.
+
+The neighbouring `_validate_sub_index` has the same shape but predates the PR (`_check_sub_index` at the merge base), so a negative `subIndex` already 500s today. Fixing both together would be natural: raise `DataError` instead of `ValueError`, or register `ValueError` in `error_handler.py`.
+
+#### N1 — the legacy shim rejects a valid new-format payload that omits `nameBreaks`
+
+**Severity: Low.**
+
+`separate_legacy_name_parts` in [ebl/transliteration/application/token_schemas_signs.py:72-84](ebl/transliteration/application/token_schemas_signs.py#L72-L84) decides a payload is legacy by the **absence of `nameBreaks`**, then splits `nameParts` by even/odd index.
+
+`name_breaks` declares `load_default=()`, which advertises the key as optional. But a new-format payload with two or more `nameParts` and no `nameBreaks` is a legal domain object (`_validate_name_parts` permits any number of `ValueToken`s, `_validate_name_breaks` permits zero breaks) — and the shim splits it anyway:
+
+```text
+{"nameParts": [ValueToken("ku"), ValueToken("r")]}   ->  422
+  nameBreaks: {0: {'side': ['Missing data for required field.'],
+                   'type': ['Must be equal to BrokenAway.']}}
+```
+
+Low reachability in practice: `dump` always emits `nameBreaks`, so anything the backend wrote round-trips correctly, and the parser never produces two adjacent `ValueToken`s. It bites only a hand-written client payload. Worth either making `nameBreaks` `required=True` on load so the optionality is honest, or keying the shim on something other than absence.
+
+#### N2 — a non-alternating legacy document now 500s where master reads it
+
+**Severity: Low (mitigated).**
+
+The even/odd split assumes legacy `nameParts` strictly alternates `ValueToken, BrokenAway, …` starting with a `ValueToken`. I probed the merge-base parser across every broken-away position I could construct and it does, always — so the assumption holds for parser-produced data. But master's type was `Sequence[Union[ValueToken, BrokenAway]]` with no ordering constraint, so a document with a leading `BrokenAway` is *valid* on master and unreadable here:
+
+```text
+GET /fragments/K.2  ->  HTTP 500
+ValidationError: {'text': {'lines': {0: {'content': {0: {'parts': {0:
+  {'nameParts': {0: {'type': ['Must be equal to ValueToken.']}}, ...
+```
+
+**This is properly mitigated**, and credit where it's due: PR #764's migration raises `NonAlternatingName` naming the offending collection and `_id` rather than guessing. So the safe sequence is to dry-run #764's migration against production first — if it reports nothing, this risk is empirically zero. Worth stating that ordering explicitly in Gate 2 of the description, since right now the two PRs describe the dependency from opposite ends.
+
+#### N3 — qlty's "2 blocking issues" are real findings but not real defects
+
+**Severity: Low.**
+
+The `qlty check` commit status reads `success` with the description **"2 blocking issues"**. I reconciled it properly, per the repo rule that a changed-files run cannot see a duplication against an untouched file: `qlty smells --all --include-tests` at `HEAD` gives **106** findings, the same command in a detached worktree at `c2b0a5ef` gives **126**. Diffed, the branch **introduces 2 duplications spanning 4 files and removes 24 findings** — a net improvement of 20.
+
+| Duplication | Files | What it is |
 | --- | --- | --- |
-| Fabdulla1, 2026-09-01 (APPROVED) | `NamePart` does not satisfy the one-array/one-type gate | **Confirmed, still open** — F1 |
-| Fabdulla1, 2026-09-01 | `tokens.py` `__all__` drops nine locally defined classes | **Confirmed, still open** — F2 |
-| Fabdulla1, 2026-09-01 | Two suppressions in `test_fragment_pattern_matcher_site.py` | **Confirmed, still open** — F3 |
-| Fabdulla1, 2026-08-07 (CHANGES_REQUESTED) | `/signs/transliteration` 422 fix not in the branch | **Resolved.** Present at `signs.py:61-64`; verified live — `$$$` returns 422 |
-| Fabdulla1, 2026-08-07 | 169-char URL line in `annotations_service.py:120` | **Resolved.** No line over 120 chars in any changed file |
-| Fabdulla1, 2026-08-07 | Five `Museum` entries changed enum `.value` shape | **Resolved.** Dumped every member's value on base and HEAD: byte-identical, 72 members |
-| Fabdulla1, 2026-08-07 | Add a focused `SignsVisitor.reset()` test | **Resolved.** `test_signs_visitor.py:126,137` |
-| Fabdulla1, 2026-08-07 | Add a test for `_StartParser.parse(start=...)` | **Resolved differently, and correctly.** That parameter no longer exists — `parse` takes only `text`. `test_start_parser.py` pins the replacement behaviour. The reasoning was posted to the PR on 2026-08-25 |
-| Fabdulla1, 2026-08-07 | "the qlty comments just need to be addressed" | **Resolved.** qlty Cloud reports "No blocking issues"; local `qlty smells` over all 123 changed files returns zero |
-| sourcery-ai, 2026-07-23 | `merge`'s `cast(L, ...)` unsound for `TextLine` subclasses | **Resolved.** `@final` on `TextLine` makes the narrowing exact. See F7 for the leftover inner cast |
-| sourcery-ai, 2026-07-23 | Reviewer's Guide (conversation comment) | Informational, no action |
-| qltysh, 7 reviews / 16 inline comments | `return-statements` ×1, `similar-code` ×6, `function-parameters` ×9 | **All resolved.** All 16 anchor to lines that no longer exist in that form; qlty Cloud and local `qlty smells` both clean |
-| github-advanced-security, 3 reviews / 5 inline comments | Unnecessary lambda ×1, statement-has-no-effect ×4 | **All resolved.** CodeQL on the head commit: "No new alerts in code changed by this pull request" |
+| A, 17 lines, mass 64 | `ebl/transliteration/domain/tokens.py` ↔ `ebl/fragmentarium/domain/fragment.py` | Two unrelated `__all__` export lists that happen to be the same length and shape |
+| B, 22 lines, mass 84 | `ebl/tests/factories/fragment.py` ↔ `ebl/tests/fragmentarium/test_museum_number.py` | An `__all__` list against `PREFIXES`, a list of museum-number prefix strings |
 
-### CI and external analysers
+Both are lists of bare string literals with no shared meaning and nothing extractable — precisely the carve-out the instructions name ("two unrelated `__all__` lists that happen to have the same shape"). I agree with accepting them. The justification is recorded in the PR description, which survives the artefact cleanup — that was the right call.
 
-All checks on `16a84e20` pass. Local `HEAD` equals the remote branch tip, so these verdicts describe the code reviewed here — they are not stale.
+One stale claim to fix: the description's gate table still says `qlty smells` | **"0 findings in any file this PR touches"**. That is no longer true, and it sits above a later section that correctly reports 2. Delete the earlier row.
 
-| Check | Result |
+#### N4 — the description contradicts itself on the wire format
+
+**Severity: Low.**
+
+The description has accreted round by round and now states both:
+
+- line 6: *"This PR changes the `nameParts` wire format **and** the stored MongoDB shape."* — correct.
+- line 187: *"**The `nameParts` wire format is unchanged** — verified by diffing the …"* — a round-5 statement, now false.
+
+A reader can't tell which is current without reading the code. Round 11's headline finding was a description that had drifted from the branch; this is the same failure mode, just from staleness rather than error. Prune the superseded round sections, or mark them as historical.
+
+#### N5 — the approval is nine commits old
+
+**Severity: Low (process).**
+
+`Fabdulla1` approved on 2026-09-01 at `16a84e20`. Nine commits have landed since, including the `nameParts`/`nameBreaks` split itself, a CodeQL round, a qlty round, and the removal of the migration. The approving review's three named items are all fixed, but the approval predates the change that most deserves a second human look. Worth a re-request before merge.
+
+#### N6 — the companion PR has the same artefact problem
+
+**Severity: Low.**
+
+[#764](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/764) (`migrate-name-breaks`, the migration this PR depends on) adds **14 `TASK-764-*.md` files** alongside its 4 code files. Same cleanup is needed there before it merges. Flagging it here because the two PRs must be sequenced together and it would be easy to clean one and forget the other.
+
+#### I1 — two pre-existing mixed arrays remain, untouched
+
+**Severity: Informational.**
+
+Sweeping the diff for the data hard gate, two mixed-type sequences survive in changed files:
+
+- [ebl/corpus/domain/manuscript_line.py:26](ebl/corpus/domain/manuscript_line.py#L26) — `paratext: Sequence[Union[DollarLine, NoteLine]]`, with an `isinstance(line, DollarLine)` probe at line 61 to tell them apart.
+- [ebl/corpus/domain/chapter_query.py:41](ebl/corpus/domain/chapter_query.py#L41) — `Sequence[Union["TextLine", L]]`.
+
+Both are **byte-identical at the merge base** and untouched by this PR, so they fall outside the gate's "new models and any model you touch" scope. No action requested here. But `paratext` is the same defect class this PR just spent 26 commits fixing for `nameParts`, down to the `isinstance` probe, so it is the obvious next candidate if anyone wants a follow-up issue.
+
+`Branch = Union[str, Tree]` and `TreeChild = Optional[Union[Tree, Token]]` in `legacy_transformer_base.py` are new, but they describe lark's own parse-tree shape rather than a domain model. Fine as they are.
+
+#### I2 — `_StartParser` no longer delegates arbitrary attributes
+
+**Severity: Informational.**
+
+The wrapper's `__getattr__` was replaced by an explicit `options` property — which is the whole point of the PR, since `__getattr__` is exactly what a type checker cannot see through. The three tests that covered the old behaviour were renamed, not dropped, with assertions intact:
+
+| Base | HEAD |
 | --- | --- |
-| Test Python 3.11 / 3.12 / pypy-3.11 (both workflows) | success |
-| Analyze (python) | success |
-| CodeQL | success — "No new alerts in code changed by this pull request" |
-| GitGuardian scan / Security Checks | success — no secrets detected |
-| qlty check | success — "No blocking issues" |
-| qlty coverage | success — 96.6% (+0.8% change) |
-| qlty coverage diff | success — 100.0% (75% threshold) |
-| docker, Sourcery review | skipped |
+| `test_getattr_delegates_to_wrapped_parser` | `test_options_are_the_wrapped_parsers_options` |
+| `test_getattr_raises_for_missing_attribute` | `test_the_wrapper_does_not_delegate_unknown_attributes` |
+| `test_getattr_without_initialised_parser_raises_attribute_error` | `test_an_uninitialised_wrapper_raises_attribute_error` |
 
-### Local gate results
+Consequence worth knowing: `WORD_PARSER`, `MARKUP_PARSER` and their siblings now expose only `parse` and `options`. Any future code reaching for another Lark method on them gets an `AttributeError` instead of silent delegation — which is the improvement, but it is a behaviour change.
 
-Run against a clean working tree at `16a84e20`.
+#### I3 — CodeQL was verified indirectly
 
-| Gate | Result |
+**Severity: Informational.**
+
+`GET /repos/.../code-scanning/alerts?ref=refs/heads/fix-type-checker-blind-spots` returns `403 Resource not accessible by integration` for the token available here, so I could not enumerate alerts directly. What I could verify: the `CodeQL` and `Analyze (python)` check runs on `549d45ae` both conclude `success`; all 14 `github-advanced-security` review threads are resolved; and the most recent advanced-security review (2026-09-15, at `2a772298`) carries an empty body, whereas the one that found problems (2026-08-27) carried the "found more than 20 potential problems" text. Consistent with zero open alerts, but stated as inference rather than as a direct reading.
+
+#### I4 — the diff is very large for what it does
+
+**Severity: Informational.**
+
+202 files and +15047/−6910. Removing B1's artefacts takes 4507 insertions off that immediately. The rest is genuine: 16 renames from the module/directory split, 108 new files mostly from splitting oversized modules and test files to satisfy the 250-line gate. Not a request to change anything — just context for whoever does the final read-through, and one more reason to land B1 first so the file list reflects the actual work.
+
+### Feedback already on the PR — disposition
+
+Fetched via `gh api` for reviews, inline diff comments and issue comments, per the review gate. 15 submitted reviews, 41 inline comments across 41 threads, 2 issue comments.
+
+| Source | Item | Status |
+| --- | --- | --- |
+| `Fabdulla1` (2026-08-07, CHANGES_REQUESTED) | `/signs/transliteration` 422 missing | **Fixed** — verified live: valid → 200, garbage → 422 |
+| `Fabdulla1` | 169-char URL line in `annotations_service.py` | **Fixed** — flake8 at 120 cols is clean over all 160 changed files |
+| `Fabdulla1` | Five `Museum` enum `.value` shapes changed | **Fixed** — 72 members verified value-identical in round 12 |
+| `Fabdulla1` | `SignsVisitor.reset()` and `_StartParser.parse(start=…)` need focused tests | **Fixed** — both present |
+| `Fabdulla1` (2026-09-01, APPROVED) | `NamePart` violates the one-array/one-type gate | **Fixed** — see below |
+| `Fabdulla1` | `tokens.py` `__all__` drops nine classes | **Fixed** — all 16 names present |
+| `Fabdulla1` | Two `# type: ignore` in `test_fragment_pattern_matcher_site.py` | **Fixed** — none in the file; PR adds zero new suppressions repo-wide |
+| `sourcery-ai` (2026-07-23) | `TextLine.merge` cast unsound for subclasses | **Resolved structurally** — `@final` added to `TextLine`. Thread still shows unresolved on GitHub; worth closing it manually |
+| `qltysh` ×26 | duplication / parameter-count findings | 24 resolved; 2 open and justified — see N3 |
+| `github-advanced-security` ×14 | CodeQL findings | All 14 resolved |
+| Author issue comment (2026-08-25) | — | No open request |
+
+Round-12 findings re-verified against `549d45ae`:
+
+| Round 12 | Status at `549d45ae` |
 | --- | --- |
-| `task format` | 863 files already formatted |
-| `task lint` (ruff) | All checks passed |
-| `task type` (**pyre** — the CI gate) | No type errors found |
-| `task type-pyright` | 0 errors, 0 warnings, 0 informations |
-| `task test` | **4494 passed, 2 skipped, 1 xfailed** in 323s |
-| `flake8 --max-line-length=120` over 123 changed files | 0 errors |
-| `mypy --ignore-missing-imports` over 123 changed files | Success, 0 issues |
-| `qlty smells` over 123 changed files | 0 findings |
-| `qlty check --no-fix` over 123 changed files | **No issues** (runs the plugins as well) |
-| `task lint-md` | 0 errors |
-| 250-line limit on changed `*.py` | all within limit; max is 250 (F14) |
-| Coverage on changed source modules | **100% on all 63 of them** — see below |
-| Coverage repository-wide | 96% (18026 statements, 637 missed) |
-
-**Coverage detail.** `poetry run pytest --cov=ebl --cov-report=term-missing` (full suite, 4494 passed / 2 skipped / 1 xfailed in 580s under instrumentation). Of the 123 changed `.py` files, 63 are source modules and all 63 appear in the coverage table at exactly `100%` — zero missed statements across every file this PR adds or modifies. The remaining 60 are test modules, which `.coveragerc` excludes from the report. This matches the PR description's claim and qlty Cloud's `coverage diff` verdict of 100.0%.
-
-### Things that are right and worth saying
-
-- **No test was lost in the splits.** Comparing every `def test_*` name between the merge base and the head: 1530 → 1688, and the set difference in the "removed" direction is empty. Ten test modules were split and not one assertion went missing.
-- **The `Museum` split is genuinely value-preserving.** Dumping `{member.name: member.value}` for all 72 members on both sides gives identical output, including the five `PRIVATE_COLLECTION_*` three-tuples that were queried in review.
-- **The 422 fix works, and so do the two latent 500s the description claims.** Verified live: `$$$` → 422, the erasure line `°nu : ši\ku°` → 200, and a dollar line → 200. All three raised on `master`.
-- **The renamed grammar directory works end to end.** ATF parsed through the real service via `/signs/transliteration/...` and `/markup`.
-- **Coverage is genuinely complete on the changed set,** not merely above a threshold: every one of the 63 changed source modules is at 100%, including the newly extracted `token_base.py`, `sign_token_base.py`, `named_signs.py`, `enclosure_state.py`, `enclosure_updater.py`, `sign_schemas.py`, `sign_unicode_lookup.py`, `retrieve_annotations_helpers.py`, `lookup_reservation_reconciliation.py` and the three `museum_entries_*` modules.
-- **The core diagnosis is excellent.** A module and a directory sharing a dotted name, CPython preferring the module and the checkers preferring the namespace package, is a subtle failure mode, and "the noise trained us to ignore those errors" is exactly the right reading of why it survived.
+| **F1** mixed `nameParts`, `isinstance` probe, `OneOfTokenSchema` on the wire | **Fixed.** `NamePart` wrapper gone. `name_parts: Sequence[ValueToken]` and `name_breaks: Sequence[BrokenAway]` are separate fields with a validator each; wire keys `nameParts` / `nameBreaks` use `NameValueTokenSchema` / `NameBreakSchema`. No discriminator, no probe, domain split matches wire split. A payload putting one type in the other array is a 422, as the gate requires |
+| **F2** narrowed `__all__` | **Fixed.** All 16 names listed, including the nine locally defined classes |
+| **F3** load-bearing suppressions | **Fixed.** Zero in the file; zero new suppression comments added by the PR |
+| **F4** instruction file undisclosed | **Fixed.** Disclosed at description line 324 |
+| **F5** `GET /signs?listAll=true` → 500 | **Fixed.** Now 200 |
+| **F6** `GET /markup` unparsable → 500 | **Fixed.** Now 422, `Invalid markup: "@i@kur@i@"` |
+| **F7** redundant inner cast | **Fixed.** Removed; `@final` added on top |
 
 ## Severity
 
-| Severity | Definition | Findings |
+| Severity | Meaning | Findings |
 | --- | --- | --- |
-| High | Violates a repo hard gate, or a correctness/security defect in changed code | F1 |
-| Medium | Contradicts a stated rule or a claim in the PR description; or a broken route | F2, F3, F5 |
-| Low | Type-safety or hygiene gap that does not change behaviour | F4, F6, F7, F8, F9, F10, F11, F12 |
-| Informational | Noted for awareness; no action requested | F13, F14 |
+| High | Must not merge as-is | B1, B2 |
+| Medium-High | A new code path returns the wrong status | B3 |
+| Low | Contract sharpness, stale description, process | N1, N2, N3, N4, N5, N6 |
+| Informational | Noted for awareness; no action requested | I1, I2, I3, I4 |
 
-Overall risk: **low**. The blocking items are correctness-of-contract and description-accuracy issues, not runtime defects. Nothing in this PR breaks a route that worked before — verified against the running service.
+Overall risk: **low**. No runtime regression that this PR causes is reachable from parser-produced data — I tested that rather than assuming it. B1 and B2 are hygiene; B3 is a wrong status code on an input that should not occur but is not currently impossible.
 
 ## Reproduction Steps
 
-All steps were run from a clean checkout of `fix-type-checker-blind-spots` at `16a84e20`, with `.env` deliberately not sourced (it points at production).
+All commands run from `fix-type-checker-blind-spots` at `549d45ae`, with `.env` deliberately **not** sourced — it points at the production cluster.
 
-### F1 — the probe and the polymorphic wire array
-
-```bash
-sed -n '29,46p'  ebl/transliteration/domain/sign_token_base.py        # isinstance probe, NamePart.token: Token
-sed -n '101,103p' ebl/transliteration/domain/sign_token_base.py       # name_tokens unwraps to Sequence[Token]
-sed -n '27,33p'  ebl/transliteration/application/token_schemas_signs.py  # nameParts -> OneOfTokenSchema list
-```
-
-### F2 — the narrowed `__all__`
+### B1 — the artefacts
 
 ```bash
-sed -n '16,23p' ebl/transliteration/domain/tokens.py                  # six names, all re-exports
-grep -nE '^class ' ebl/transliteration/domain/tokens.py               # nine locally defined classes, none listed
-git show <merge-base>:ebl/transliteration/domain/tokens.py | grep -c '^__all__'   # -> 0, master has none
-sed -n '22,33p' ebl/transliteration/domain/sign_tokens.py             # sibling facade does list its local classes
-grep -rn "import \*" --include=*.py ebl                               # -> no matches, nothing breaks today
+git diff --diff-filter=A --name-only -M c2b0a5ef..HEAD | grep -v '^ebl/'     # 23 files
+git diff --numstat c2b0a5ef..HEAD -- 'TASK-*.md' | awk '{a+=$1} END {print a}'  # 4507
 ```
 
-### F3 — the suppressions are load-bearing
+### B2 — the conflict
 
 ```bash
-cp ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py /tmp/orig.py
-sed -i 's|  # type: ignore\[arg-type\]||' ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py
-npx --yes pyright@1.1.411 ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py   # -> 2 errors
-poetry run mypy ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py --ignore-missing-imports  # -> 2 errors
-cp /tmp/orig.py ebl/tests/fragmentarium/test_fragment_pattern_matcher_site.py
+git fetch origin
+git merge-tree --write-tree --name-only origin/master HEAD
+# CONFLICT (content): Merge conflict in ebl/fragmentarium/domain/museum.py
+gh api repos/ElectronicBabylonianLiterature/ebl-api/pulls/743 -q '.mergeable, .mergeable_state'
+# false / dirty
 ```
 
-### F4 — the instruction file is in the diff
+### B3, N1, N2 — schema behaviour
 
 ```bash
-git diff --name-status <merge-base> HEAD -- '.devcontainer/*' '.github/*' '*.toml' '*.ini' '*.cfg' '.coveragerc' 'Taskfile*' '.markdownlint*'
-# -> M  .github/instructions/copilot.instructions.md   (and nothing else)
+poetry run python - <<'PY'
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+VT = lambda v: {"type":"ValueToken","value":v,"enclosureType":[],"erasure":"NONE"}
+BA = lambda v,s: {"type":"BrokenAway","value":v,"side":s,"enclosureType":[],"erasure":"NONE"}
+def reading(parts, breaks=None):
+    d = {"type":"Reading","value":"kur","name":"kur","nameParts":parts,"subIndex":1,
+         "modifiers":[],"flags":[],"sign":None,"enclosureType":[],"erasure":"NONE"}
+    if breaks is not None: d["nameBreaks"] = breaks
+    return d
+OneOfTokenSchema().load(reading([VT("ku"),BA("[","LEFT"),VT("r")]))   # legacy -> OK
+OneOfTokenSchema().load(reading([BA("[","LEFT"),VT("kur")]))          # N2 -> ValidationError
+OneOfTokenSchema().load(reading([VT("ku"),VT("r")]))                  # N1 -> ValidationError
+OneOfTokenSchema().load(reading([VT("kur")], [BA("[","LEFT")]*2))     # B3 -> bare ValueError
+PY
 ```
 
-### F5, F6 and the live route verification
-
-Boot the service against a throwaway database:
+### Live service verification
 
 ```bash
 export PYTHONPATH=/workspaces/ebl-api
-export MONGODB_URI="mongodb://127.0.0.1:27017"      # local; NOT the URI in .env
-export MONGODB_DB="ebl_task743_review_throwaway"
+export MONGODB_URI="mongodb://127.0.0.1:27017"          # local; NOT the URI in .env
+export MONGODB_DB="ebl_t743_r13"
 export EBL_AI_API="http://127.0.0.1:9/unused"
 export AUTH0_PEM="$(base64 -w0 <throwaway RSA public key PEM>)"
 export AUTH0_AUDIENCE="https://example.invalid/api"
 export AUTH0_ISSUER="https://example.invalid/"
 export SENTRY_DSN="" CACHE_TYPE="NullCache"
 poetry run python -c "
-from waitress import serve
-from ebl.app import create_context, create_app
-import os
+import os; from waitress import serve; from ebl.app import create_context, create_app
 serve(create_app(create_context(), os.environ['AUTH0_ISSUER'], os.environ['AUTH0_AUDIENCE']),
       host='127.0.0.1', port=8123, threads=4)"
 ```
 
-Then, with two signs seeded (`KUR`/`kur` → 74266, `RA`/`ra` → 74588):
+Seed `K.1` from `FragmentFactory` with `nameParts` re-interleaved into the legacy shape, `K.2` with a leading `BrokenAway`, `K.3` with more breaks than parts. Then, with an RS256 JWT signed by the throwaway key (`scope: read:fragments read:words read:bibliography`):
 
-```bash
-curl -s -w ' %{http_code}\n' 'http://127.0.0.1:8123/signs/transliteration/kur'       # [{"unicode":[74266]}] 200
-curl -s -w ' %{http_code}\n' 'http://127.0.0.1:8123/signs/transliteration/%24%24%24' # 422  <- the fix
-curl -s -w ' %{http_code}\n' --get 'http://127.0.0.1:8123/signs' -d 'listAll=true'   # 500  <- F5
-curl -s -w ' %{http_code}\n' --get 'http://127.0.0.1:8123/markup' -d 'text=@i{italic text}'  # 200
-curl -s -w ' %{http_code}\n' --get 'http://127.0.0.1:8123/markup' -d 'text=@i@kur@i@'        # 500  <- F6
+```text
+GET /fragments/K.1                       200   nameParts=[VT,VT]  nameBreaks=[BA]   values ku[r, k[u]r, K]UR
+GET /fragments/K.2                       500   ValidationError (N2)
+GET /fragments/K.3                       500   ValueError (B3)
+GET /signs/transliteration/kur           200
+GET /signs/transliteration/%24%24%24      422   <- the headline fix
+GET /signs?listAll=true                  200   <- was 500 at round 12 (F5)
+GET /markup --data-urlencode 'text=@i{italic text}'  200
+GET /markup --data-urlencode 'text=@i@kur@i@'        422  <- was 500 at round 12 (F6)
 ```
 
-For the erasure and dollar-line cases, URL-encode `°nu : ši\ku°` and `nu` + newline + `$ blank` (the inputs `ebl/tests/signs/test_transliteration_route.py` uses) — both return 200.
+Note: seed without `archaeology`, or seed the `provenances` collection — otherwise every fragment GET fails with `Invalid provenance: Assyria`, which is an artefact of the empty throwaway database and nothing to do with this PR.
 
-### F7 — the inner cast is redundant
+### Parser equivalence — 60 ATF cases, both sides
 
 ```bash
-# delete `other_text_line = cast(TextLine, other)` and read other.line_number / other.content directly
-npx --yes pyright@1.1.411 ebl/transliteration/domain/text_line.py                       # -> 0 errors
-poetry run mypy ebl/transliteration/domain/text_line.py --ignore-missing-imports        # -> Success
+git worktree add --detach /tmp/base c2b0a5ef
+# run the same probe in each tree, dumping value / clean_value / name / Line.atf as JSON
+diff /tmp/equiv_base.json /tmp/equiv_head.json    # -> identical (51 parsed, 9 rejected, both sides)
 ```
+
+Cases covered: `kur`, `ku[r]`, `[k]ur`, `[kur]`, `k[u]r`, `[ku]r`, `ku[r`, `k]ur`, `[k]u[r]`, `[k]u[r]a`, `KUR`, `[K]UR`, `KU[R]`, `1`, `10`, `1[0]`, `[1]0`, `{d}kur`, `{d}[k]ur`, `{[d]}kur`, `kur{d}`, `[k]ur#`, `[k]ur!`, `[k]ur?`, `[k]ur*`, `kur(KUR)`, `[k]ur(KUR)`, `⸢kur⸣`, `⸢k⸣ur`, `<kur>`, `<<kur>>`, `kur-ra`, `kur.ra`, `°kur\ra°`, `...`, `[...]`, `x`, `X`, `n`, `|KUR.RA|`, `kur₂`, `kurₓ`, `4(diš)`, `1/2(diš)` and others.
+
+### qlty reconciliation
+
+```bash
+qlty smells --all --include-tests                          # HEAD  -> 106 findings
+git worktree add --detach /tmp/base c2b0a5ef && cd /tmp/base
+qlty smells --all --include-tests                          # base  -> 126 findings
+# diff the two -> introduces 2 duplications (4 files), removes 24
+```
+
+### Local gates
+
+| Gate | Command | Result |
+| --- | --- | --- |
+| format | `task format` (`ruff format --check ebl`) | 886 files already formatted |
+| lint | `task lint` (`ruff check ebl`) | All checks passed |
+| **pyre** | `task type` | **No type errors found** |
+| pyright | `task type-pyright` | 0 errors, 0 warnings, 0 informations |
+| test | `task test` | **4530 passed, 2 skipped, 1 xfailed** in 282s |
+| lint-md | `task lint-md` | 0 errors over 28 files |
+| flake8 | `flake8 <160 changed> --max-line-length=120` | exit 0 |
+| mypy | `mypy <160 changed> --ignore-missing-imports` | Success, no issues in 160 files |
+
+`task test-all` exits 0. The 2 skips and 1 xfail are all pre-existing at the merge base; none added here.
 
 ### No test was lost
 
 ```bash
-git grep -h -oE '^def (test_[A-Za-z0-9_]+)' <merge-base> -- 'ebl/tests/*.py' | sort -u > /tmp/base.txt
-git grep -h -oE '^def (test_[A-Za-z0-9_]+)' HEAD         -- 'ebl/tests/*.py' | sort -u > /tmp/head.txt
-comm -23 /tmp/base.txt /tmp/head.txt    # -> empty
-```
-
-### `Museum` values are preserved
-
-```bash
-git worktree add /tmp/base <merge-base> --detach
-# dump {member.name: [repr(v) for v in member.value]} on each side and diff -> identical, 72 members
+git grep -h -oE '^\s*def (test_[A-Za-z0-9_]+)' c2b0a5ef -- 'ebl/tests/*.py' | sed 's/.*def //' | sort -u > /tmp/base.txt
+git grep -h -oE '^\s*def (test_[A-Za-z0-9_]+)' HEAD      -- 'ebl/tests/*.py' | sed 's/.*def //' | sort -u > /tmp/head.txt
+wc -l /tmp/base.txt /tmp/head.txt        # 1647 -> 1823
+comm -23 /tmp/base.txt /tmp/head.txt     # 3 names, all renames (see I2)
 ```
 
 ## Recommendation
 
-**Request changes.** Three items, all of them from the 2026-09-01 review, all confirmed still open against `16a84e20`:
+**Request changes.** The engineering is done and it is good. Three things stand between this and merge, and two of them are not code.
 
-1. **F1 — split the `nameParts` array for real, or say plainly that it is not split.** The wrapper moved the probe rather than removing it, and the wire format still relies on `OneOfTokenSchema` to tell two types apart inside one array. If the wire change is too large for this PR, that is a fine answer — but it should be a stated deviation with a follow-up, not a claim in the description that the gate is met.
-2. **F2 — restore the nine locally defined classes to `tokens.py`'s `__all__`,** and add the facade regression test. Asserting that each split module's `__all__` covers everything public it defines plus everything it re-exports would pin all four facades at once.
-3. **F3 — remove both `# type: ignore[arg-type]` comments** by giving `PatternMatcher` a `Protocol` for the provenance collaborator (preferred) or making the stub a real subclass, and annotate `_site_filter`'s `service` parameter while you are there. Then the description's "no `# type: ignore`" claim becomes true.
+1. **B1 — remove all 23 artefacts, and fix the command in Gate 3.** The current one misses TASK-746 through TASK-749 and the `.patch`:
 
-Once those land, this is ready to merge. Everything else is a judgement call:
+   ```bash
+   git rm 'TASK-*.md' TASK-749-frontend.patch
+   ```
 
-- **Worth doing in this PR** (all small, all in files already open): F7 the redundant cast, F10 the shared default visitor, F11 the missing annotations.
-- **Worth a follow-up issue rather than more scope here:** F5 the `listAll` 500, F6 the markup 500, F8 the `AlignmentMap` contract, F9 the `_StartParser` delegation, F12 the duplicated `string_flags`.
-- **Worth one sentence in the description:** F4, that the PR also updates the repo instruction file with the new qlty gate.
+   Then re-check with `git diff --diff-filter=A --name-only -M c2b0a5ef..HEAD | grep -v '^ebl/'` and confirm it is empty. Do the same on **#764** (N6), which has 14 of its own.
 
-Please also correct the two description passages that no longer match the branch — the `NamePart` "no longer probes" claim in Part 5 and the "touches no configuration file at all" claim in the same part. Round 11's headline finding was a description that had drifted from the code; both of these are the same failure recurring, and the description is what a reviewer trusts first.
+2. **B2 — resolve the `museum.py` conflict against `origin/master`.** #765 and #766 added museum entries this morning. After resolving, re-run `task test-all`; the green checks on the PR page describe `549d45ae` alone, not the merge result.
 
-**Before merging:** delete `TASK-743-todo.md`, `TASK-743-log.md` and `TASK-743-review.md` from the working tree. They are review artefacts and must not reach `master`.
+3. **B3 — map the `ValueError` to a 422.** Either raise `DataError` from `_validate_name_breaks` and `_validate_sub_index`, or register `ValueError` in `error_handler.py`. Today a malformed `nameBreaks` is the only validation failure in this schema that returns 500.
+
+Worth doing in this PR, all small:
+
+- **N3** — delete the stale `qlty smells | 0 findings` row from the description's gate table; the accurate count is already stated further down.
+- **N4** — prune or date-stamp the superseded description sections, so "the wire format is unchanged" no longer sits 180 lines below "this PR changes the wire format".
+- **N2** — state the deploy order in Gate 2 explicitly: dry-run #764's migration first; if `NonAlternatingName` reports nothing, the compatibility risk is empirically zero.
+- Close Sourcery's `text_line.py` thread by hand — `@final` answered it, but GitHub still shows it open.
+
+Worth a follow-up issue rather than more scope here:
+
+- **N1** — make `nameBreaks` `required=True` on load, or key the legacy shim on something other than the field's absence.
+- **I1** — `manuscript_line.paratext` is the same mixed-array defect this PR just fixed for `nameParts`, `isinstance` probe included.
+
+**Before merging:** delete `TASK-743-review.md` (this file), `TASK-743-review-todo.md` and `TASK-743-review-log.md` along with everything in B1. They are review artefacts and must not reach `master`.
+
+## Resolution — what was done after this review (2026-09-16)
+
+Work applied locally on top of `549d45ae`. **Nothing is pushed**, so every verdict on the PR page still describes `549d45ae` and is stale with respect to the state below.
+
+| Finding | Status | What was done |
+| --- | --- | --- |
+| **B1** artefacts | **Deferred by decision, and now larger** | The author chose to leave them until merge time. The round-13 task and handoff documents add five more, so the branch now carries **28** root artefacts, not 23. The `git rm 'TASK-*.md'` glob still covers them all. Gate 3's cleanup command in the description was wrong — it covered 12 files — and has been **corrected** to `git rm 'TASK-*.md' TASK-749-frontend.patch`, with the reviewer's verification query and a note that #764 needs the same for its 14 files. |
+| **B2** conflict | **Fixed locally** (commit `5935b154`) | `origin/master` merged in. The conflict was structural: the branch moved museum entries into `museum_entries_a_l/m_s/t_y.py`, master added three museums inline. Resolved by keeping the branch's structure and folding master's `ERIMTAN_MUSEUM`, `GAZIANTEP_MUSEUM` and `KAHRAMANMARAS_MUZESI` into it. Verified by building the enum on all three sides: **identical to `origin/master`** (75 members, identical values), and against the branch only those three added — nothing removed, nothing changed. |
+| **B3** 500 not 422 | **Fixed** | All three validators in `sign_token_base.py` now raise `DataError`, already mapped to 422, instead of a bare `ValueError`. This also fixes the pre-existing negative-`subIndex` 500. Confirmed on the running service: `GET /fragments/K.3` went **500 → 422**, and the legacy fragment still returns 200. |
+| **N1** shim contract | **Fixed** | `nameBreaks` is now `required=True`, so the schema states what the adapter already assumed. No content-probing was added — the data hard gate forbids it, and an ambiguous payload is invalid under both readings anyway. |
+| **N2** deploy order | **Fixed in the description** | Gate 2 now spells out the order: dry-run #764's migration **before** merging this PR, since `NonAlternatingName` is what proves no un-splittable document exists; then merge; then apply. |
+| **N3** stale qlty row | **Fixed in the description** | The gate table's "0 findings in any file this PR touches" is replaced by the reconciled figure — 2 accepted `similar-code` findings, repo-wide 126 → 106. |
+| **N4** contradiction | **Fixed in the description** | The round-5 "the `nameParts` wire format is unchanged" passage is marked **Superseded**, pointing at the breaking-change notice at the top. |
+| **N5** stale approval | **Not done** | Re-requesting review was offered and not selected. |
+| **N6** #764's artefacts | **Noted only** | Another branch; recorded in this PR's description rather than changed from here. |
+| **I1–I4** | **No action** | Informational, as stated. |
+| Sourcery thread | **Resolved** | `text_line.py` thread resolved on GitHub; `@final` had answered it structurally. The two `qltysh` threads were left open on purpose — they are the accepted-with-justification duplications, and leaving them visible is more honest than resolving them. |
+
+### Tests added
+
+`ebl/tests/transliteration/test_named_sign_errors.py`, five tests: the `DataError` class itself, **422 on a real falcon route** through the real error handler for both the breaks-over-parts and the negative-sub-index cases, the legacy interpretation of an absent `nameBreaks`, and the required-field message. Three existing tests moved from `ValueError` to `DataError` to match the new contract — none removed, skipped or disabled.
+
+### Gates after the merge and the fixes
+
+| Gate | Result |
+| --- | --- |
+| `ruff format --check ebl` | 912 files already formatted |
+| `ruff check ebl` | All checks passed |
+| **pyre** | **No type errors found** |
+| pyright (run directly on the changed files) | 0 errors, 0 warnings, 0 informations |
+| `pytest` | **4773 passed**, 2 skipped, 1 xfailed |
+| Coverage | `sign_token_base.py` and `token_schemas_signs.py` both **100%** |
+| flake8 (120 cols) | clean |
+| mypy | Success |
+| `qlty smells --all --include-tests` | 106 findings, unchanged; zero on the two resolved files |
+| `task lint-md` | 0 errors |
+| ATF equivalence probe | still byte-for-byte identical to the merge base across 60 cases |
+
+Two gate caveats worth carrying forward:
+
+- **`task type-pyright` diffs `origin/master...HEAD`, so it only sees committed files.** It passed while checking none of the uncommitted work. Running pyright directly on the changed files found 6 real errors, fixed with a `cast` rather than a suppression.
+- **Pyre failed once with an internal `End_of_file`**, which was contention with a parallel pytest run, not a type error. Clean on a quiet re-run.
+
+### State
+
+Local `HEAD` is `5935b154` (the merge commit). The remote branch is still `549d45ae`, and **the B3/N1 fixes and the new tests are uncommitted in the working tree**. Nothing has been pushed. Until it is, the PR's mergeability and all its check verdicts describe the pre-fix commit.

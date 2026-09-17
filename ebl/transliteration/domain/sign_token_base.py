@@ -3,6 +3,7 @@ from typing import Iterator, Optional, Sequence, Tuple, Type, TypeVar
 
 import attr
 
+from ebl.errors import DataError
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.atf import to_sub_index
 from ebl.transliteration.domain.converters import (
@@ -40,7 +41,7 @@ def _validate_sub_index(
     _instance: object, _attribute: object, value: Optional[int]
 ) -> None:
     if value is not None and value < 0:
-        raise ValueError("Sub-index must be >= 0.")
+        raise DataError("Sub-index must be >= 0.")
 
 
 def _validate_name_parts(
@@ -48,7 +49,7 @@ def _validate_name_parts(
 ) -> None:
     wrong = [token for token in value if not isinstance(token, ValueToken)]
     if wrong:
-        raise ValueError(
+        raise DataError(
             "name_parts holds value tokens only; "
             f"{type(wrong[0]).__name__} belongs in name_breaks."
         )
@@ -58,7 +59,7 @@ def _validate_name_breaks(
     instance: "NamedSign", _attribute: object, value: Sequence[BrokenAway]
 ) -> None:
     if len(value) > len(instance.name_parts):
-        raise ValueError(
+        raise DataError(
             f"A name with {len(instance.name_parts)} parts takes at most "
             f"{len(instance.name_parts)} breaks, not {len(value)}."
         )

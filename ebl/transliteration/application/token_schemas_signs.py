@@ -62,7 +62,7 @@ class NamedSignSchema(BaseTokenSchema):
         fields.Nested(NameValueTokenSchema), required=True, data_key="nameParts"
     )
     name_breaks = fields.List(
-        fields.Nested(NameBreakSchema), load_default=(), data_key="nameBreaks"
+        fields.Nested(NameBreakSchema), required=True, data_key="nameBreaks"
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)

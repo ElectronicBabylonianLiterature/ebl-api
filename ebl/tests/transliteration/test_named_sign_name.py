@@ -2,6 +2,7 @@ from typing import Any, Dict, Sequence, cast
 
 import pytest
 
+from ebl.errors import DataError
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.application.token_schemas_signs import (
     NamedSignSchema,
@@ -58,7 +59,7 @@ def test_the_two_arrays_interleave_back_into_the_written_order() -> None:
 
 
 def test_a_name_never_takes_more_breaks_than_parts() -> None:
-    with pytest.raises(ValueError, match="at most 1 breaks, not 2"):
+    with pytest.raises(DataError, match="at most 1 breaks, not 2"):
         Reading.of_arguments(
             NamedSignArguments(
                 (ValueToken.of("ku"),),
@@ -84,7 +85,7 @@ def test_a_trailing_break_is_kept_in_written_order() -> None:
 def test_a_break_cannot_be_put_in_the_name_parts() -> None:
     mixed = cast(Sequence[ValueToken], (ValueToken.of("ku"), BrokenAway.close()))
 
-    with pytest.raises(ValueError, match="belongs in name_breaks"):
+    with pytest.raises(DataError, match="belongs in name_breaks"):
         Reading.of_arguments(NamedSignArguments(mixed))
 
 
