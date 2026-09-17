@@ -1,5 +1,6 @@
 import pytest
 
+from ebl.tests.transliteration.language_shift_cases import LANGUAGE_SHIFT_CASES
 from ebl.dictionary.domain.word import WordId
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
@@ -32,25 +33,7 @@ LINE_NUMBER = LineNumber(1)
 
 @pytest.mark.parametrize(
     "code,language",
-    [
-        ("%ma", Language.AKKADIAN),
-        ("%mb", Language.AKKADIAN),
-        ("%na", Language.AKKADIAN),
-        ("%nb", Language.AKKADIAN),
-        ("%lb", Language.AKKADIAN),
-        ("%sb", Language.AKKADIAN),
-        ("%a", Language.AKKADIAN),
-        ("%akk", Language.AKKADIAN),
-        ("%eakk", Language.AKKADIAN),
-        ("%oakk", Language.AKKADIAN),
-        ("%ur3akk", Language.AKKADIAN),
-        ("%oa", Language.AKKADIAN),
-        ("%ob", Language.AKKADIAN),
-        ("%sux", Language.SUMERIAN),
-        ("%es", Language.EMESAL),
-        ("%hit", Language.HITTITE),
-        ("%foo", DEFAULT_LANGUAGE),
-    ],
+    LANGUAGE_SHIFT_CASES,
 )
 def test_text_line_of_iterable(code: str, language: Language) -> None:
     tokens = [

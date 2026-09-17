@@ -1,7 +1,7 @@
 import codecs
 from lark import Lark, ParseError
-from lark.visitors import Tree
-from typing import Tuple, Optional, List, Dict, Type, Any
+from lark.tree import Tree
+from typing import Tuple, Optional, List, Dict, Any, cast
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.atf_importer.domain.legacy_atf_visitor import (
     LegacyAtfVisitor,
@@ -20,10 +20,8 @@ from ebl.transliteration.domain.line import EmptyLine, ControlLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.atf_importer.application.lemmatization import LemmaLookup
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
-from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
-from ebl.transliteration.domain.transliteration_error import TransliterationError
-from ebl.transliteration.domain.transliteration_error import (
-    ExtentLabelError,
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
+    LINE_PARSE_ERRORS,
 )
 from ebl.atf_importer.domain.legacy_atf_line_validator import LegacyAtfLineValidator
 from ebl.atf_importer.application.glossary import Glossary
@@ -40,7 +38,7 @@ def include_line(line_instance) -> bool:
 
 class LegacyAtfConverter:
     ebl_parser = Lark.open(
-        "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark",
+        "../../transliteration/domain/atf_parsers/atf_grammar/ebl_atf.lark",
         maybe_placeholders=True,
         rel_to=__file__,
     )
@@ -129,7 +127,7 @@ class LegacyAtfConverter:
 
     def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         self.indexing_visitor.reset()
-        lines_data = []
+        lines_data: List[Dict[str, Any]] = []
         for line in lines:
             lines_data = self._parse_line(line, lines_data)
         return lines_data
@@ -159,21 +157,22 @@ class LegacyAtfConverter:
     def _parse_and_validate_line(self, line: str) -> Tree:
         try:
             line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
+            first_child = cast(Tree, line_tree.children[0])
             if (
-                line_tree.children[0].data == "legacy_translation_line"
+                first_child.data == "legacy_translation_line"
                 and not self.translation_block_transformer.active
                 and "legacy_translation_block_at_line"
-                not in line_tree.children[0].children[0].data
+                not in cast(Tree, first_child.children[0]).data
             ):
                 raise ParseError
-            elif line_tree.children[0].data == "text_line":
-                if error := self.validate_text_line(line_tree.children[0]):
+            elif first_child.data == "text_line":
+                if error := self.validate_text_line(first_child):
                     return self._report_and_correct_errors(line, error)
             return line_tree
-        except (*PARSE_ERRORS, TransliterationError, ExtentLabelError) as error:
+        except LINE_PARSE_ERRORS as error:
             return self._report_and_correct_errors(line, error)
 
-    def _report_and_correct_errors(self, line: str, error: Type[Exception]) -> Tree:
+    def _report_and_correct_errors(self, line: str, error: Exception) -> Tree:
         warning = (
             f"Error: {str(error)}\nThe following text line cannot be parsed:\n{line}"
         )

@@ -6,8 +6,8 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.markup import EmphasisPart, LanguagePart, StringPart
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.tokens import (
-    EnclosureType,
     ErasureState,
     LanguageShift,
     Token,

@@ -1,7 +1,9 @@
 import re
-from typing import Sequence
+from typing import Any, List, Optional, Sequence, cast
 from lark import Tree
 from lark.visitors import Transformer, v_args
+
+from ebl.transliteration.domain.sign import SignName
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import sub_index_to_int, to_sub_index
@@ -15,21 +17,36 @@ from ebl.transliteration.domain.sign_tokens import (
     Number,
     Reading,
 )
-from ebl.transliteration.domain.tokens import Joiner
-from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
+from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.sign_token_base import NamedSignArguments
+from ebl.transliteration.domain.tokens import (
+    Token,
+    UnknownNumberOfSigns,
+    ValueToken,
+)
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 
 
+def name_arguments(
+    tokens: Sequence[Token],
+    sub_index: Optional[int] = 1,
+    modifiers: Sequence[str] = (),
+    flags: Sequence[atf.Flag] = (),
+) -> NamedSignArguments:
+    return NamedSignArguments(
+        tuple(cast(Sequence[ValueToken], tokens[0::2])),
+        sub_index,
+        modifiers,
+        flags,
+        tuple(cast(Sequence[BrokenAway], tokens[1::2])),
+    )
+
+
 def tree_to_string(tree: Tree) -> str:
-    _children = []
-    for part in tree.scan_values(lambda x: x):
-        if hasattr(part, "value"):
-            _children.append(part.value)
-        elif isinstance(part, Tree):
-            _children.append(tree_to_string(part))
-        else:
-            _children.append(str(part))
-    return "".join(_children)
+    return "".join(
+        cast(Any, part).value if hasattr(part, "value") else str(part)
+        for part in tree.scan_values(bool)
+    )
 
 
 class SignTransformer(Transformer):
@@ -55,12 +72,10 @@ class SignTransformer(Transformer):
         return UnknownNumberOfSigns.of()
 
     @v_args(inline=True)
-    def ebl_atf_text_line__joiner(self, symbol):
-        return Joiner.of(atf.Joiner(str(symbol)))
-
-    @v_args(inline=True)
     def ebl_atf_text_line__reading(self, name, sub_index, modifiers, flags, sign=None):
-        return Reading.of(tuple(name.children), sub_index, modifiers, flags, sign)
+        return Reading.of_arguments(
+            name_arguments(name.children, sub_index, modifiers, flags)
+        ).with_sign(sign)
 
     @v_args()
     def ebl_atf_text_line__value_name_part(self, children):
@@ -68,15 +83,17 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__logogram(self, name, sub_index, modifiers, flags, sign=None):
-        return Logogram.of(tuple(name.children), sub_index, modifiers, flags, sign)
+        return Logogram.of_arguments(
+            name_arguments(name.children, sub_index, modifiers, flags)
+        ).with_sign(sign)
 
     @v_args(inline=True)
     def ebl_atf_text_line__surrogate(
         self, name, sub_index, modifiers, flags, surrogate
     ):
-        return Logogram.of(
-            tuple(name.children), sub_index, modifiers, flags, None, surrogate.children
-        )
+        return Logogram.of_arguments(
+            name_arguments(name.children, sub_index, modifiers, flags)
+        ).with_surrogate(surrogate.children)
 
     @v_args()
     def ebl_atf_text_line__logogram_name_part(self, children):
@@ -84,7 +101,9 @@ class SignTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__number(self, number, modifiers, flags, sign=None):
-        return Number.of(tuple(number.children), modifiers, flags, sign)
+        return Number.of_arguments(
+            name_arguments(number.children, 1, modifiers, flags)
+        ).with_sign(sign)
 
     @v_args()
     def ebl_atf_text_line__number_name_head(self, children):
@@ -111,7 +130,7 @@ class SignTransformer(Transformer):
     def ebl_atf_text_line__grapheme(self, name, sub_index, modifiers, flags):
         _name = tree_to_string(name)
         _sub_index = to_sub_index(sub_index) if sub_index and sub_index != 1 else ""
-        return Grapheme.of(_name + _sub_index, modifiers, flags)
+        return Grapheme.of(SignName(_name + _sub_index), modifiers, flags)
 
     def ebl_atf_text_line__sub_compound(self, children):
         return Tree("ebl_atf_text_line__sub_compound", ["(", *children, ")"])
@@ -133,7 +152,7 @@ class SignTransformer(Transformer):
         return re.split(r"\.(?!(?:[^\(\)]*\)))", "".join(_children))
 
     def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
-        _children = []
+        _children: List[object] = []
         for part in children:
             if isinstance(part, Tree):
                 _children += self._flatten_grapheme_elements(part.children)
