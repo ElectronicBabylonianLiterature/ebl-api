@@ -67,7 +67,7 @@ def _persist_with_identity_claims(
     user: User,
     stored_entry: dict[str, Any],
     persist: Callable[[dict[str, Any], dict[str, Any]], None],
-) -> None:
+) -> str:
     repository = context.repository
     if stored_entry.get("id") != entry["id"]:
         raise Defect(
@@ -107,6 +107,7 @@ def _persist_with_identity_claims(
             "be reconciled and the changelog entry may be missing",
             entry["id"],
         )
+    return operation.owner
 
 
 def update_with_identity_claims(
@@ -130,8 +131,8 @@ def update_identity_fields_only(
     entry: dict[str, Any],
     user: User,
     stored_entry: dict[str, Any],
-) -> None:
-    _persist_with_identity_claims(
+) -> str:
+    return _persist_with_identity_claims(
         context,
         entry,
         user,

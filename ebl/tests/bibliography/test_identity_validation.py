@@ -82,7 +82,7 @@ def test_cycle_raises_a_data_error():
         {"id": "Q2", "type": "book", "deprecated": True, "redirectTo": "Q1"}
     )
 
-    with pytest.raises(DataError, match="redirect loop"):
+    with pytest.raises(DataError, match="redirect loop from Q1 closes at Q1"):
         validate_identity_state(entry, *query)
 
 

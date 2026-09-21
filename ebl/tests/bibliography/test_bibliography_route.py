@@ -5,6 +5,10 @@ import pydash
 import pytest
 
 from ebl.tests.bibliography.bibliography_route_test_helpers import INVALID_ENTRIES
+from ebl.tests.bibliography.identity_management_test_helpers import (
+    admin_client,
+    manage_identity,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
@@ -73,18 +77,38 @@ def test_create_entry_invalid(transform, client):
 @pytest.mark.parametrize(
     "identity_fields",
     [
+        {"citationKey": "protected-key"},
+        {"aliases": [{"value": "protected-alias"}]},
         {"deprecated": True},
         {"redirectTo": "Q30000001"},
         {"deprecated": True, "redirectTo": "Q30000001"},
     ],
 )
-def test_create_rejects_identity_lifecycle_fields(client, identity_fields):
+def test_create_rejects_server_owned_fields(client, identity_fields):
     bibliography_entry = {**BibliographyEntryFactory.build(), **identity_fields}
 
     result = client.simulate_post("/bibliography", json=bibliography_entry)
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert "identity-lifecycle fields" in result.json["description"]
+    assert "server-owned fields" in result.json["description"]
+
+
+def test_writer_creates_metadata_then_admin_assigns_identity(client, context):
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000199")
+
+    create_result = client.simulate_post("/bibliography", json=bibliography_entry)
+    identity_result = manage_identity(
+        admin_client(context),
+        bibliography_entry["id"],
+        {"citationKey": "admin-assigned-key"},
+    )
+
+    assert create_result.status == falcon.HTTP_CREATED
+    assert identity_result.status == falcon.HTTP_OK
+    assert identity_result.json == {
+        **bibliography_entry,
+        "citationKey": "admin-assigned-key",
+    }
 
 
 def test_create_rejects_a_non_object_body(client):

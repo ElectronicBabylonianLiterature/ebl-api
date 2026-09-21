@@ -31,8 +31,9 @@ def reconcile_reservation(
         and isinstance(expires_at, datetime)
         and _to_utc_datetime(expires_at) <= comparison_now
     ):
+        is_owner = owns_value(entry_id, value)
         with suppress(NotFoundError):
-            if owns_value(entry_id, value):
+            if is_owner:
                 commit_value(collection, value, comparison_now)
             else:
                 abandon_value(collection, value, comparison_now, entry_id, state)

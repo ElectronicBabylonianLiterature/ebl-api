@@ -1,3 +1,24 @@
+"""`METADATA_UPDATE_JSON_SCHEMA` is `CSL_JSON_SCHEMA` without its lifecycle rule.
+The stored schema requires `redirectTo` whenever `deprecated` is true, which is
+an invariant of a *stored* entry. Applied to an update body it answered a client
+that submitted `deprecated` with `'redirectTo' is a required property` — a `400`
+about a field the client does not own, raised before the application could give
+the real answer, that the submitted state simply disagrees with what is stored.
+Dropping the rule from this one route lets that reach `update_metadata` and come
+back as a conflict. Every property keeps its shape, and `CSL_JSON_SCHEMA` itself
+is untouched.
+
+It also allows additional properties, unlike the stored schema. GET serialises
+the whole stored document, and a persisted entry can carry keys outside
+`CSL_JSON_SCHEMA` that `preserve_persisted_fields` deliberately keeps across an
+edit instead of destroying them. Rejecting those keys here would mean an editor
+can fetch an entry and then fail to save it back unchanged. This does not open
+the door to a client inventing a new unknown field: `preserve_persisted_fields`
+only reads submitted keys that are already client-editable, so an unrecognised
+key in the request body is silently ignored either way — the schema accepting
+it only stops a spurious `400` on the legitimate round trip.
+"""
+
 import falcon
 from falcon_caching import Cache
 from falcon import Request, Response
@@ -20,6 +41,12 @@ from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.duplicate_override import DuplicateOverrideError
 
 
+METADATA_UPDATE_JSON_SCHEMA = {
+    **{key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"},
+    "additionalProperties": True,
+}
+
+
 def submitted_server_owned_fields(
     candidate_entries: Sequence[Mapping[str, object]],
 ) -> list[str]:
@@ -33,19 +60,16 @@ def submitted_server_owned_fields(
     )
 
 
-IDENTITY_LIFECYCLE_FIELDS = ("deprecated", "redirectTo")
-
-
-def reject_born_identity_lifecycle_fields(req, _resp, _resource, _params) -> None:
+def reject_server_owned_create_fields(req, _resp, _resource, _params) -> None:
     media = req.media
     if not isinstance(media, dict):
         return
 
-    forbidden = sorted(field for field in IDENTITY_LIFECYCLE_FIELDS if field in media)
-    if forbidden:
+    if forbidden_fields := submitted_server_owned_fields([media]):
         raise DataError(
-            "A new bibliography entry may not carry identity-lifecycle fields "
-            f"({', '.join(forbidden)}); use POST /bibliography/{{id}}/identity."
+            "A new bibliography entry may not include server-owned fields: "
+            f"{', '.join(forbidden_fields)}; use "
+            "POST /bibliography/{id}/identity."
         )
 
 
@@ -73,7 +97,7 @@ class BibliographyResource:
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(reject_born_identity_lifecycle_fields)
+    @falcon.before(reject_server_owned_create_fields)
     @validate(CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media
@@ -91,7 +115,7 @@ class BibliographyEntriesResource:
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
+    @validate(METADATA_UPDATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response, id_: str) -> None:
         entry = {**req.media, "id": id_}
         self._bibliography.update_metadata(entry, req.context.user)
@@ -144,6 +168,7 @@ class PartnerBibliographyResource:
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
@@ -168,6 +193,7 @@ class PartnerBibliographyEntryResource:
         resp.media = self._bibliography.find_partner_entry(id_or_citation_key)
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(
@@ -202,6 +228,7 @@ class PartnerBibliographyDuplicateOverrideResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:

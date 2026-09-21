@@ -1,5 +1,6 @@
 """The trusted bibliography identity operation."""
 
+import logging
 from typing import Any, Mapping
 
 from ebl.bibliography.application.bibliography_identity import (
@@ -34,10 +35,14 @@ class BibliographyIdentityManagement:
         self._validate(entry)
 
         if entry != stored_entry:
-            update_identity_fields_only(self._identity, entry, user, stored_entry)
-            self._reject_concurrent_redirect_break(entry, stored_entry, user)
+            reservation_owner = update_identity_fields_only(
+                self._identity, entry, user, stored_entry
+            )
+            self._reject_concurrent_redirect_break(
+                entry, stored_entry, user, reservation_owner
+            )
 
-        return entry
+        return self._stored_entry(id_)
 
     def _stored_entry(self, id_: str) -> dict[str, Any]:
         try:
@@ -57,9 +62,19 @@ class BibliographyIdentityManagement:
         entry: dict[str, Any],
         stored_entry: dict[str, Any],
         user: User,
+        reservation_owner: str,
     ) -> None:
         try:
             self._validate(entry)
-        except DataError as error:
-            update_identity_fields_only(self._identity, stored_entry, user, entry)
-            raise BibliographyUpdateConflictError(entry["id"]) from error
+        except DataError as validation_error:
+            try:
+                update_identity_fields_only(self._identity, stored_entry, user, entry)
+                self._repository.release_pending_lookup_values(reservation_owner)
+            except Exception:
+                logging.exception(
+                    "Failed to fully recover bibliography identity write for %s "
+                    "after post-write redirect validation failed (%s)",
+                    entry["id"],
+                    validation_error,
+                )
+            raise BibliographyUpdateConflictError(entry["id"]) from validation_error

@@ -1,7 +1,28 @@
-"""Splitting a bibliography entry into client-owned and server-owned parts."""
+"""Splitting a bibliography entry into client-owned and server-owned parts.
 
+Two helpers rebuild an entry from a submission plus stored state and are easy
+to confuse:
+
+* `preserve_server_owned_fields` keeps every submitted key except the
+  server-owned ones and overlays the stored server-owned values. Callers that
+  have already projected the submission to known metadata use it.
+* `preserve_persisted_fields` keeps only submitted keys that are client
+  editable and overlays everything else the stored document holds, including
+  keys outside the CSL schema. The generic update uses it so unknown persisted
+  fields survive an edit.
+
+`changed_server_owned_fields` reports which of them a submission disagrees with.
+It compares `aliases` as an order-insensitive multiset, because no production
+code reads an alias by position: lookup values are collected into a set, and
+Mongo matches `aliases.normalizedValue` against the array as a whole. An editor
+that re-serialises the list in another order has not changed the identity, so it
+is not a conflict, while an alias added, removed, duplicated or edited still is.
+Only the comparison is canonicalised — the stored order is never rewritten.
+"""
+
+import json
 from copy import deepcopy
-from typing import Any, Mapping, cast
+from typing import Any, Mapping, Sequence, cast
 
 from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
@@ -68,14 +89,16 @@ def preserve_persisted_fields(
     }
 
 
-def _comparable_server_owned_value(field: str, value: Any) -> Any:
-    if (
-        field == "aliases"
-        and isinstance(value, list)
-        and all(isinstance(item, Mapping) for item in value)
-    ):
-        return sorted(tuple(sorted(item.items())) for item in value)
-    return value
+def canonical_aliases(aliases: Sequence[Any]) -> list[str]:
+    return sorted(json.dumps(alias, sort_keys=True, default=str) for alias in aliases)
+
+
+def comparable_server_owned_value(field: str, value: Any) -> Any:
+    return (
+        canonical_aliases(value)
+        if field == "aliases" and isinstance(value, list)
+        else value
+    )
 
 
 def changed_server_owned_fields(
@@ -85,6 +108,6 @@ def changed_server_owned_fields(
         field
         for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
         if field in entry
-        and _comparable_server_owned_value(field, entry[field])
-        != _comparable_server_owned_value(field, stored_entry.get(field))
+        and comparable_server_owned_value(field, entry[field])
+        != comparable_server_owned_value(field, stored_entry.get(field))
     )

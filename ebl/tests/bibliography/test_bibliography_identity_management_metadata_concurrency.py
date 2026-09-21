@@ -75,7 +75,7 @@ def interleave_metadata_edit(monkeypatch, bibliography, user, id_: str, **change
 
 
 def test_concurrent_title_edit_survives_an_alias_addition(
-    monkeypatch, client, database, bibliography, user
+    monkeypatch, client, database, bibliography, bibliography_repository, user
 ):
     entry(bibliography, user, "Q30000160")
     interleave_metadata_edit(
@@ -86,8 +86,36 @@ def test_concurrent_title_edit_survives_an_alias_addition(
 
     assert result.status == falcon.HTTP_OK
     stored_entry = stored(database, "Q30000160")
+    assert result.json == bibliography_repository.query_by_id("Q30000160")
     assert stored_entry["title"] == "Concurrent title"
     assert stored_entry["aliases"] == [alias("new-alias")]
+
+
+def test_noop_returns_an_authoritative_concurrent_metadata_edit(
+    monkeypatch,
+    bibliography,
+    bibliography_repository,
+    identity_management,
+    user,
+):
+    bibliography_entry = entry(bibliography, user, "Q30000167")
+    original_apply = identity_module.apply_identity_commands
+
+    def apply_with_concurrent_edit(stored_entry, commands):
+        updated_entry = original_apply(stored_entry, commands)
+        bibliography.update_metadata(
+            {**bibliography_entry, "title": "Concurrent title"}, user
+        )
+        return updated_entry
+
+    monkeypatch.setattr(
+        identity_module, "apply_identity_commands", apply_with_concurrent_edit
+    )
+
+    result = identity_management.manage_identity("Q30000167", {}, user)
+
+    assert result == bibliography_repository.query_by_id("Q30000167")
+    assert result["title"] == "Concurrent title"
 
 
 def test_concurrent_title_edit_survives_a_citation_key_change(

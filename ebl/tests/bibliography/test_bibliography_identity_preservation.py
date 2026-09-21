@@ -10,7 +10,6 @@ from ebl.tests.bibliography.identity_preservation_test_helpers import (
     post_entry,
     reservations,
 )
-from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
 def test_metadata_update_preserves_aliases_and_citation_key(
@@ -106,21 +105,43 @@ def test_update_preserves_unknown_persisted_fields(
     assert stored_entry["title"] == "Legacy corrected"
 
 
-def test_update_does_not_accept_unknown_fields_from_the_client(client, saved_entry):
+@pytest.mark.parametrize(
+    "unknown_field,value", [("DPO", "10.1086/719864"), ("pages", "129-143")]
+)
+def test_round_tripped_entry_with_unknown_persisted_field_is_accepted(
+    unknown_field, value, client, database, saved_entry
+):
+    database["bibliography"].update_one(
+        {"_id": saved_entry["id"]}, {"$set": {unknown_field: value}}
+    )
+    fetched_entry = client.simulate_get(f"/bibliography/{saved_entry['id']}").json
+
+    result = post_entry(client, {**fetched_entry, "title": "Legacy corrected"})
+    stored_entry = database["bibliography"].find_one({"_id": saved_entry["id"]})
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert stored_entry[unknown_field] == value
+    assert stored_entry["title"] == "Legacy corrected"
+
+
+def test_update_ignores_an_unknown_field_the_client_invents(
+    client, bibliography, saved_entry
+):
     result = post_entry(client, {**saved_entry, "DPO": "10.1086/719864"})
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_NO_CONTENT
+    assert "DPO" not in bibliography.find(saved_entry["id"])
 
 
 @pytest.mark.parametrize("entry", [{}, {"id": ""}, {"id": None}, {"id": 47}])
 def test_update_without_a_usable_id_is_rejected(entry, bibliography, user):
     with pytest.raises(DataError, match="id is required"):
-        bibliography.update({**entry, "type": "book"}, user)
+        bibliography.update_metadata({**entry, "type": "book"}, user)
 
 
 def test_update_of_unknown_id_is_not_found(bibliography, user):
     with pytest.raises(NotFoundError):
-        bibliography.update({"id": "does-not-exist", "type": "book"}, user)
+        bibliography.update_metadata({"id": "does-not-exist", "type": "book"}, user)
 
 
 def test_get_returns_the_server_owned_fields_the_editor_round_trips(
@@ -142,25 +163,6 @@ def test_round_tripped_entry_is_accepted(client, bibliography, aliased_entry):
         **fetched_entry,
         "title": CORRECTED_TITLE,
     }
-
-
-def test_a_reordered_alias_list_is_not_a_conflict(client, bibliography, user):
-    two_aliases = [
-        {"value": "alpha", "normalizedValue": "alpha"},
-        {"value": "omega", "normalizedValue": "omega"},
-    ]
-    bibliography.create(
-        BibliographyEntryFactory.build(id="Q30000700", aliases=two_aliases), user
-    )
-    fetched_entry = client.simulate_get("/bibliography/Q30000700").json
-
-    result = post_entry(
-        client,
-        {**fetched_entry, "aliases": list(reversed(two_aliases)), "title": "Reordered"},
-    )
-
-    assert result.status == falcon.HTTP_NO_CONTENT
-    assert bibliography.find("Q30000700")["title"] == "Reordered"
 
 
 def test_round_tripped_entry_keeps_identity_resolvable(

@@ -219,6 +219,7 @@ def test_a_stale_body_cannot_resurrect_a_tombstoned_entry(tombstone_conflict_con
     stored_entry = context.database["bibliography"].find_one(
         {"_id": context.aliased_entry["id"]}
     )
+    assert stored_entry is not None
 
     assert result.status == falcon.HTTP_CONFLICT
     assert "is deprecated" in result.text

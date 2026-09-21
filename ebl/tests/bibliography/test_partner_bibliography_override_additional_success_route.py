@@ -58,7 +58,7 @@ def test_partner_bibliography_duplicate_override_reruns_duplicate_detection(
     assert preflight.status == falcon.HTTP_OK
     assert preflight.json["candidates"][0]["id"] == existing_entry["id"]
 
-    bibliography.update(
+    bibliography.update_metadata(
         {
             **existing_entry,
             "type": "book",

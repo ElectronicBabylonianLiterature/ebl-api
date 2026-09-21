@@ -69,12 +69,27 @@ def test_update_cannot_tombstone_an_active_record(client, bibliography, aliased_
     assert stored_entry.get("redirectTo") is None
 
 
-def test_update_rejects_deprecating_without_a_redirect_target(client, aliased_entry):
+def test_deprecating_without_a_redirect_target_is_a_conflict_not_a_schema_error(
+    client, bibliography, aliased_entry
+):
+    """`deprecated` is server-owned, so the answer is about state, not shape.
+
+    The stored schema requires `redirectTo` alongside `deprecated`, which used
+    to make this a `400` complaining about a property the client does not own.
+    The route contract drops that stored-entry rule so the request reaches the
+    application and gets the same answer every other server-owned mismatch
+    gets.
+    """
     payload = {**metadata_only_payload(aliased_entry), "deprecated": True}
 
     result = post_entry(client, payload)
+    stored_entry = bibliography.find(aliased_entry["id"])
 
-    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert result.status == falcon.HTTP_CONFLICT
+    assert "deprecated" in result.text
+    assert stored_entry.get("deprecated") is None
+    assert stored_entry.get("redirectTo") is None
+    assert stored_entry["title"] == aliased_entry["title"]
 
 
 def test_update_cannot_steal_an_alias_from_another_record(
