@@ -29,11 +29,6 @@ from ebl.users.domain.user import User
 
 
 @pytest.fixture
-def client(context):
-    return admin_client(context)
-
-
-@pytest.fixture
 def identity_management(bibliography_repository, changelog, bibliography):
     return BibliographyIdentityManagement(bibliography_repository, changelog)
 
@@ -50,13 +45,13 @@ class ConcurrencyContext:
 
 @pytest.fixture
 def concurrency_context(
-    client, database, bibliography, bibliography_repository, identity_management, user
+    context, database, bibliography, identity_management, user
 ) -> ConcurrencyContext:
     return ConcurrencyContext(
-        client,
+        admin_client(context),
         database,
         bibliography,
-        bibliography_repository,
+        context.bibliography_repository,
         identity_management,
         user,
     )

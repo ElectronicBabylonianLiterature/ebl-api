@@ -1,7 +1,12 @@
+from dataclasses import dataclass
+
 import pytest
+from pymongo.database import Database
 
 from ebl.bibliography.application import identity_management as identity_module
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
     BibliographyUpdateConflictError,
 )
 from ebl.bibliography.application.identity_management import (
@@ -13,23 +18,39 @@ from ebl.tests.bibliography.identity_management_test_helpers import (
     entry,
     stored,
 )
+from ebl.users.domain.user import User
+
+
+@dataclass(frozen=True)
+class ComposedRecoveryContext:
+    bibliography: Bibliography
+    bibliography_repository: BibliographyRepository
+    database: Database
+    identity_management: BibliographyIdentityManagement
+    user: User
 
 
 @pytest.fixture
-def identity_management(bibliography_repository, changelog):
-    return BibliographyIdentityManagement(bibliography_repository, changelog)
+def recovery_context(context, database, user) -> ComposedRecoveryContext:
+    return ComposedRecoveryContext(
+        context.get_bibliography(),
+        context.bibliography_repository,
+        database,
+        BibliographyIdentityManagement(
+            context.bibliography_repository, context.changelog
+        ),
+        user,
+    )
 
 
 def test_failed_commit_then_redirect_race_releases_forward_alias_claim(
-    monkeypatch,
-    bibliography,
-    bibliography_repository,
-    database,
-    identity_management,
-    user,
+    monkeypatch, recovery_context
 ):
-    source = entry(bibliography, user, "Q30000160")
-    entry(bibliography, user, "Q30000161")
+    context = recovery_context
+    bibliography_repository = context.bibliography_repository
+    database = context.database
+    source = entry(context.bibliography, context.user, "Q30000160")
+    entry(context.bibliography, context.user, "Q30000161")
     original_commit = bibliography_repository.commit_lookup_values
     original_release = bibliography_repository.release_pending_lookup_values
     commit_calls = {"count": 0}
@@ -70,13 +91,13 @@ def test_failed_commit_then_redirect_race_releases_forward_alias_claim(
     )
 
     with pytest.raises(BibliographyUpdateConflictError):
-        identity_management.manage_identity(
+        context.identity_management.manage_identity(
             source["id"],
             {
                 "addAliases": [alias("composed-recovery-alias")],
                 "deprecateTo": "Q30000161",
             },
-            user,
+            context.user,
         )
 
     assert bibliography_repository.query_by_id(source["id"]) == source

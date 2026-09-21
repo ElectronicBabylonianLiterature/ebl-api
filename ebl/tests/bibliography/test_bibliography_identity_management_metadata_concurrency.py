@@ -15,6 +15,9 @@ from pymongo.database import Database
 
 from ebl.bibliography.application import identity_management as identity_module
 from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+)
 from ebl.bibliography.application.identity_management import (
     BibliographyIdentityManagement,
 )
@@ -44,16 +47,22 @@ class ReactivationContext:
     client: testing.TestClient
     database: Database
     bibliography: Bibliography
+    bibliography_repository: BibliographyRepository
     identity_management: BibliographyIdentityManagement
     user: User
 
 
 @pytest.fixture
 def reactivation_context(
-    client, database, bibliography, identity_management, user
+    context, database, bibliography, identity_management, user
 ) -> ReactivationContext:
     return ReactivationContext(
-        client, database, bibliography, identity_management, user
+        admin_client(context),
+        database,
+        bibliography,
+        context.bibliography_repository,
+        identity_management,
+        user,
     )
 
 
@@ -75,18 +84,25 @@ def interleave_metadata_edit(monkeypatch, bibliography, user, id_: str, **change
 
 
 def test_concurrent_title_edit_survives_an_alias_addition(
-    monkeypatch, client, database, bibliography, bibliography_repository, user
+    monkeypatch, reactivation_context
 ):
-    entry(bibliography, user, "Q30000160")
+    context = reactivation_context
+    entry(context.bibliography, context.user, "Q30000160")
     interleave_metadata_edit(
-        monkeypatch, bibliography, user, "Q30000160", title="Concurrent title"
+        monkeypatch,
+        context.bibliography,
+        context.user,
+        "Q30000160",
+        title="Concurrent title",
     )
 
-    result = manage_identity(client, "Q30000160", {"addAliases": [alias("new-alias")]})
+    result = manage_identity(
+        context.client, "Q30000160", {"addAliases": [alias("new-alias")]}
+    )
 
     assert result.status == falcon.HTTP_OK
-    stored_entry = stored(database, "Q30000160")
-    assert result.json == bibliography_repository.query_by_id("Q30000160")
+    stored_entry = stored(context.database, "Q30000160")
+    assert result.json == context.bibliography_repository.query_by_id("Q30000160")
     assert stored_entry["title"] == "Concurrent title"
     assert stored_entry["aliases"] == [alias("new-alias")]
 
