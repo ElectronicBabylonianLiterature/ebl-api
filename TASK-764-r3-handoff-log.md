@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-r3-handoff — Work Log
 
 ## Entries
@@ -57,3 +55,5 @@
 - `git diff --diff-filter=A --name-only -M origin/master...HEAD` filtered to
   non-`ebl/` paths now returns **0** on this branch.
 - No task document was committed. All of them remain untracked by design.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

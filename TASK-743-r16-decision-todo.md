@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r16-decision — TODO
 
 Record the decision on R14-4, the last round-14 finding awaiting a call:
@@ -20,3 +18,5 @@ the `.github/instructions/copilot.instructions.md` change **stays in PR #743**.
 - [x] 3. Close item 8 in `TASK-764-r2-audit-todo.md`
 - [x] 4. Confirm no round-14 finding is left without a status
 - [x] 5. Report the final position on both PRs
+
+<!-- markdownlint-configure-file { "MD013": false } -->

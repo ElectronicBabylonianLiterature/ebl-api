@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-r3-handoff — TODO
 
 Refresh the documentation and the handoff so they carry every finding that
@@ -23,3 +21,5 @@ remains and the next steps, then commit the staged #764 work.
 - [x] 5. Commit the 14 deletions and the F10 change
 - [x] 6. Confirm nothing was pushed
 - [x] 7. Summarise in plain words
+
+<!-- markdownlint-configure-file { "MD013": false } -->

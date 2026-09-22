@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-r2-audit — Work Log
 
 Records what was actually done, including every error and how it was recovered.
@@ -112,3 +110,5 @@ actually ship.
 Nothing was committed or pushed this round. The working tree holds the 14 staged
 deletions and the F10 edit. The commit authorization given earlier was single-use
 and was spent on `6e627647` on the other branch.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

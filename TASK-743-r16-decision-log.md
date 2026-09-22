@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r16-decision — Work Log
 
 ## Entries
@@ -34,3 +32,5 @@
 Every round-14 finding now has a status. R14-2 (the frontend `nameBreaks`
 change) is the only one still open, and it cannot be closed from this
 repository. Nothing was committed or pushed.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

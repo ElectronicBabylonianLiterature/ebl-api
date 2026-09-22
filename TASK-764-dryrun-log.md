@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-dryrun — Work Log
 
 Records what was actually done, including every error and how it was recovered.
@@ -80,3 +78,5 @@ that writes the new shape is still unmerged.
 PR #743's Gate 2 is satisfied for `ebldev`: a clean dry run exists, and the
 stronger census shows no document anywhere in the database would be mis-split
 by the positional adapter. Nothing was written. `--apply` was not run.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

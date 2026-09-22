@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r15-fix — Work Log
 
 Records what was actually done, including every error and how it was recovered.
@@ -143,3 +141,5 @@ position against `master` is still **109 vs 132** — 23 findings lighter.
   reads the PR page and concludes otherwise.
 - The six round-14 / round-15 task documents are deliberately left **untracked**,
   so that committing them does not reopen the very gate this round closed.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

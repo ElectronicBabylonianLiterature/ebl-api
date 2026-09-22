@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r15 — Handoff
 
 State of PR #743 (`fix-type-checker-blind-spots` → `master`) after the round-14
@@ -85,3 +83,5 @@ sequencing that cannot be done from this repository.
 - [ ] Commit `6e627647` pushed
 - [ ] No `TASK-*.md` file tracked on the branch
 - [ ] #764's own `TASK-764-*.md` files removed
+
+<!-- markdownlint-configure-file { "MD013": false } -->

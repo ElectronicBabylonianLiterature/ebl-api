@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-r4-docs — Work Log
 
 ## Entries
@@ -41,3 +39,5 @@
 now returns the task documents on `migrate-name-breaks` instead of nothing. The
 gate that check enforces is unchanged — nothing may reach `master` — so the
 cleanup simply moves to merge time, and the handoff carries the command.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r15-fix — TODO
 
 Address R14-1 and the non-blocking findings from `TASK-743-r14-review.md`,
@@ -33,3 +31,5 @@ then comment on PR #743 about the two remaining blocking gates.
 - [x] 13. Verify the changed behaviour against the running backend service
 - [x] 14. Post a short comment on PR #743 covering R14-2 and R14-3 only
 - [x] 15. Report; remind that the r14/r15 task documents still need removing before merge
+
+<!-- markdownlint-configure-file { "MD013": false } -->

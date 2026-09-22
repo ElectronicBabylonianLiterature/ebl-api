@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r14-review — TODO
 
 Review of PR #743 "Make the ATF parser visible to the type checkers"
@@ -39,3 +37,5 @@ Review of PR #743 "Make the ATF parser visible to the type checkers"
       pastes cleanly; keep `task lint-md` green
 - [x] 17. Never refer to `khoidt` in the third person — that is the user
 - [x] 18. Remind about removing TASK-*.md files before merge
+
+<!-- markdownlint-configure-file { "MD013": false } -->

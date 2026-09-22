@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # Handoff — PRs #743 and #764, as of 2026-09-17
 
 One document for both pull requests. It supersedes `TASK-743-r15-handoff.md`.
@@ -20,6 +18,7 @@ too. The same rule as before: no `TASK-*.md` may reach `master`.
 | Local head | `6e627647` | `d83582a2` |
 | Pushed head | `a0b74092` — **local commit not pushed** | `31929977` |
 | Review decision | `APPROVED`, but given 12 commits back | `REVIEW_REQUIRED` |
+| Blocking findings | **none left** | none; needs a human approval |
 | CI | all green | all green, qlty clean, coverage diff 100% |
 
 They ship together. #743 teaches the backend to read both the old and the new
@@ -29,19 +28,31 @@ field.
 
 ## What remains to address
 
-### 1. The frontend must read `nameBreaks` — the only real blocker
+### 1. The frontend `nameBreaks` change — DONE, and it removes the lock-step
 
-Brackets that fall *inside* a sign name are no longer in `nameParts`; they are in
-a sibling `nameBreaks` array, and the client must interleave the two.
+`ebl-frontend` PR #817 merged on 2026-09-16 as `e281f7ba`, which is `master`
+(verified by compare: *identical*). `nameTokens()` in
+`src/transliteration/domain/token.ts` interleaves the two arrays:
 
-Verified on the running service, this branch against `master`, same document:
-24 named signs on both, identical `name`, `value` and `cleanValue` throughout —
-but on `master` three of them carry one mixed array. A client that reads only
-`nameParts` renders `šu`, `ki`, `ti` where the text says `š[u`, `k]i`, `t[i`.
-That is a **wrong reading**, not a cosmetic loss.
+```ts
+const { nameParts, nameBreaks } = namedSign
+if (!nameBreaks) {
+  return nameParts
+}
+return _.zip(nameParts, nameBreaks).flatMap(...)
+```
 
-**Next step:** merge or queue the matching frontend change, and say so on #743.
-Nothing in this repository can close this.
+The early return is the important part. With `nameBreaks` absent or `null` it
+hands back `nameParts` untouched, so the **new frontend renders the old backend
+shape correctly**. Both call sites that walk a name — `extractEnclosureTypes` in
+`token.ts` and `addAccents` in `accents.ts` — go through it.
+
+**Consequence: the two repositories no longer have to deploy in lock-step.** The
+frontend can ship before or after the API. This was R14-2, the last blocking
+finding on #743, and it is closed.
+
+**Caveat:** merged is not deployed. Confirm the frontend build carrying
+`e281f7ba` is actually out before assuming users see the new rendering.
 
 ### 2. Push what is already committed
 
@@ -128,24 +139,38 @@ database needs its own run.
 
 ## The right order
 
-1. Push `6e627647` and `d83582a2`.
-2. Frontend change merged or queued.
-3. Merge #743 and deploy it.
-4. `poetry run python -m ebl.transliteration.migrate_name_breaks --apply`.
-5. Merge #764, which deletes the migration.
-6. Rotate the Mongo credential.
+The frontend is out of the ordering now. What remains is a **backend-to-database**
+constraint, which no frontend change can affect:
+
+> `migrate_name_breaks.py`: *"Run it only after the backend that understands both
+> shapes is deployed: older code rejects an unknown `nameBreaks` field outright."*
+
+The migration writes `nameBreaks` into stored documents. An API without #743's
+schema raises on the unknown field when it loads them. So:
+
+1. Merge #743 and **deploy** it. No gates left on it.
+2. `poetry run python -m ebl.transliteration.migrate_name_breaks --apply`,
+   with `MONGODB_DB` set. Dry run already clean.
+3. Remove the 17 `TASK-*.md` from `migrate-name-breaks`: `git rm 'TASK-*.md'`.
+4. Merge #764, which deletes the migration.
+5. Rotate the Mongo credential.
+
+The frontend may ship at any point, before or after step 1.
 
 ## Merge checklist
 
-- [ ] Frontend `nameBreaks` change merged or queued, confirmed on #743
+- [x] Frontend `nameBreaks` change merged — `ebl-frontend` #817, `e281f7ba`, on master
+- [ ] Frontend build carrying `e281f7ba` actually deployed
 - [x] #764 migration dry run executed, clean
 - [x] Dry-run result recorded in #743's description
 - [x] Decision recorded on the `copilot.instructions.md` change — keep in #743
-- [ ] `6e627647` pushed
+- [x] `6e627647` pushed
 - [x] #764 work committed as `d83582a2`
-- [ ] `d83582a2` pushed
+- [x] `18f386a0` pushed
 - [ ] `git diff --diff-filter=A --name-only -M origin/master...HEAD | grep -v '^ebl/'` empty on **both** branches (currently non-empty on `migrate-name-breaks` by choice, see above)
 - [ ] No `TASK-*.md` tracked on either branch — **note: the session's task
       documents are now committed on `migrate-name-breaks` and must be removed
       with `git rm 'TASK-*.md'` before #764 merges**
 - [ ] Production Mongo credential rotated
+
+<!-- markdownlint-configure-file { "MD013": false } -->

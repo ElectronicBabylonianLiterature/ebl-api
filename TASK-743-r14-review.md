@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r14 — Review of PR #743
 
 | Field | Value |
@@ -13,8 +11,9 @@
 | **Review round** | 14 |
 | **Review date** | 2026-09-17 |
 | **Reviewed by** | Claude Code (automated review) |
-| **Verdict** | **Code approved — do not merge yet.** No correctness defect found. Three release gates are still open, and one of them (the task documents) is a repository-hygiene blocker that can be closed on this branch today. |
+| **Verdict (2026-09-17)** | **Code approved — do not merge yet.** No correctness defect found. Three release gates are still open, and one of them (the task documents) is a repository-hygiene blocker that can be closed on this branch today. |
 | **Blocking to merge** | R14-1 (34 stray files), R14-2 (frontend `nameBreaks`), R14-3 (#764 migration dry run) |
+| **Status 2026-09-22** | **All three closed.** R14-1 in `6e627647`; R14-3 by a clean dry run and census; R14-2 by `ebl-frontend` #817. Nothing blocking remains on #743. |
 | **Non-blocking findings** | 4 low, 3 informational |
 | **Dev container configuration** | **No changes.** Verified — see "Dev container check" below. |
 | **CI at head** | All green: Test Python 3.11 / 3.12 / pypy-3.11, CodeQL, Analyze (python), GitGuardian ×2. `qlty check` — *No blocking issues*. |
@@ -51,7 +50,7 @@ git diff --diff-filter=A --name-only -M origin/master...HEAD | grep -v '^ebl/'
 
 **Action:** `git rm 'TASK-*.md' TASK-749-frontend.patch`, delete the round-14 files, and update the "28" in the PR description to 34 so the gate text matches reality.
 
-#### R14-2 — The frontend must read `nameBreaks` before this merges (Blocker · external)
+#### R14-2 — The frontend must read `nameBreaks` before this merges (Blocker · external) — *closed 2026-09-16*
 
 Confirmed live rather than from the description. The same fragment document, read through both services:
 
@@ -63,6 +62,8 @@ Confirmed live rather than from the description. The same fragment document, rea
 The three affected signs were `šu` → parts `['š','u']` / breaks `['[']`, `ki` → `['k','i']` / `[']']`, `ti` → `['t','i']` / `['[']`. On master each was a single `nameParts` array interleaving `ValueToken` and `BrokenAway`. A client that reads only `nameParts` will now render `šu`, `ki`, `ti` — silently dropping the break, which is a wrong reading of the text, not a cosmetic loss.
 
 `name`, `value` and `cleanValue` were identical across all 24 signs on both services, so the separation itself is lossless. Nothing to fix here; this is a cross-repository sequencing gate.
+
+**Closed.** `ebl-frontend` #817 merged on 2026-09-16 as `e281f7ba`, verified to be `master`. Its `nameTokens()` returns `nameParts` untouched when `nameBreaks` is absent or `null`, so it renders both shapes and the two repositories no longer have to deploy in lock-step. With R14-1 and R14-3 already closed, **#743 has no blocking findings left.**
 
 #### R14-3 — The #764 migration must be dry-run against production first (Blocker · external)
 
@@ -192,7 +193,7 @@ The PR is not mergeable yet, for reasons that are procedural rather than technic
 | ID | Finding | Category | Severity | Blocking |
 | --- | --- | --- | --- | --- |
 | R14-1 | 34 non-`ebl/` files added (33 `TASK-*.md` + `TASK-749-frontend.patch`); the PR's own gate says 28 | Repository hygiene | High | **Yes** |
-| R14-2 | `nameParts` wire format changed; a client that ignores `nameBreaks` renders a wrong reading | API contract | High | **Yes** (external) |
+| R14-2 | `nameParts` wire format changed; a client that ignores `nameBreaks` renders a wrong reading | API contract | High | ~~Yes~~ **Closed 2026-09-16** — `ebl-frontend` #817 (`e281f7ba`) merged |
 | R14-3 | #764's migration must be dry-run against production before merge | Data migration | High | **Yes** (external) |
 | R14-4 | `.github/instructions/copilot.instructions.md` (+45) is unrelated to this PR's purpose | Scope | Low | No — **decided: keep in #743** |
 | R14-5 | `_StartParser.options` has no production consumer; two tests pin behaviour that no longer exists | Dead code / test value | Low | No |
@@ -306,3 +307,5 @@ Before the next round:
 A note for whoever merges: `reviewDecision` on GitHub reads `APPROVED`, but that approval was given on `16a84e20`, twelve commits before the reviewed head, and it listed three findings as conditions. All three are resolved in the current tree, but the approval predates the fixes rather than confirming them.
 
 **Before merge, delete this file along with the other task documents** — `TASK-743-r14-review.md`, `TASK-743-r14-review-todo.md` and `TASK-743-r14-review-log.md` fall under R14-1 too.
+
+<!-- markdownlint-configure-file { "MD013": false } -->

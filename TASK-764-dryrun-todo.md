@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-dryrun — TODO
 
 Run the `nameParts` / `nameBreaks` migration in dry-run mode, on branch
@@ -33,3 +31,5 @@ Run the `nameParts` / `nameBreaks` migration in dry-run mode, on branch
 - [x] 5. Run the dry run against production
 - [x] 6. Record the counts, and any `NonAlternatingName` findings, in the log
 - [x] 7. Report the result, and what it means for PR #743's Gate 2
+
+<!-- markdownlint-configure-file { "MD013": false } -->

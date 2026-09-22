@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-r2-audit — TODO
 
 Account for every outstanding finding, on both PRs. Triggered by "Did you
@@ -29,3 +27,5 @@ fetched first, which has never been done in this session.
 - [x] 8. Resolve R14-4 — decided 2026-09-17: keep it in #743 (split the instructions change, or record the decision)
 - [x] 9. Run the gates over anything changed
 - [x] 10. Report: what was outstanding, what is fixed, what remains and why
+
+<!-- markdownlint-configure-file { "MD013": false } -->

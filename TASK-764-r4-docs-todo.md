@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-764-r4-docs — TODO
 
 Add the task documentation to commit `d83582a2`, at the user's explicit request.
@@ -26,3 +24,5 @@ This reverses the earlier call to keep them untracked.
 - [x] 6. Amend the commit
 - [x] 7. Confirm nothing was pushed, and report the consequence for the
       stray-files gate
+
+<!-- markdownlint-configure-file { "MD013": false } -->

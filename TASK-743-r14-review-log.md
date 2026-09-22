@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # TASK-743-r14-review — Work Log
 
 Round-14 review of PR #743. Records what was actually done, including errors and recoveries.
@@ -115,3 +113,5 @@ Round-14 review of PR #743. Records what was actually done, including errors and
   migration dry run).
 - Nothing was committed or pushed. The working tree holds only the three new
   untracked round-14 task documents.
+
+<!-- markdownlint-configure-file { "MD013": false } -->
