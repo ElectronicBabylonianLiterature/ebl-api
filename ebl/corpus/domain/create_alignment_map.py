@@ -1,9 +1,9 @@
 import difflib
-from typing import Callable, Sequence
+from typing import Callable, List, Optional, Sequence
 
 import pydash
 
-from ebl.transliteration.domain.text_line import AlignmentMap
+from ebl.transliteration.domain.alignment_map import AlignmentMap
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
@@ -20,7 +20,7 @@ class Mapper:
         )
         self._alignment = 0
         self._removals = 0
-        self._result = []
+        self._result: List[Optional[int]] = []
 
     def map_(self) -> AlignmentMap:
         self._alignment = 0

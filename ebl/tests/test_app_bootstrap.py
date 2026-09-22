@@ -62,8 +62,9 @@ def test_create_context_helpers(monkeypatch: pytest.MonkeyPatch) -> None:
         context.get_transliteration_query_factory(), TransliterationQueryFactory
     )
 
+    frozen_attribute = "ebl_ai_client"
     with pytest.raises(FrozenInstanceError):
-        context.ebl_ai_client = EblAiClient("http://localhost:8001")
+        setattr(context, frozen_attribute, EblAiClient("http://localhost:8001"))
 
 
 def test_create_context_bootstraps_cache_indexes(
