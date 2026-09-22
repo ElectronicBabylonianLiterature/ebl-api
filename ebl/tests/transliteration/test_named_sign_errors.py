@@ -38,6 +38,24 @@ def _status_for(payload: Dict[str, Any]) -> str:
     return testing.TestClient(api).simulate_get("/reading").status
 
 
+def test_a_value_token_in_name_breaks_is_a_data_error() -> None:
+    with pytest.raises(DataError, match="belongs in name_parts"):
+        Reading.of_arguments(name_arguments((K, U)))
+
+
+def test_name_breaks_names_the_offending_type_and_the_right_array() -> None:
+    with pytest.raises(DataError) as error:
+        Reading.of_arguments(name_arguments((K, U)))
+
+    assert "ValueToken" in str(error.value)
+    assert "name_breaks" in str(error.value)
+
+
+def test_a_break_first_name_is_rejected_rather_than_silently_reordered() -> None:
+    with pytest.raises(DataError, match="belongs in name_breaks"):
+        Reading.of_arguments(name_arguments((CLOSE, K, U)))
+
+
 def test_more_breaks_than_parts_is_a_data_error_not_a_value_error() -> None:
     payload = _dumped_reading()
     payload["nameBreaks"] = payload["nameBreaks"] * 3

@@ -44,20 +44,35 @@ def _validate_sub_index(
         raise DataError("Sub-index must be >= 0.")
 
 
+def _reject_foreign_tokens(
+    tokens: Sequence[Token],
+    allowed: Type[Token],
+    description: str,
+    holder: str,
+    other_holder: str,
+) -> None:
+    wrong = [token for token in tokens if not isinstance(token, allowed)]
+    if wrong:
+        raise DataError(
+            f"{holder} holds {description} only; "
+            f"{type(wrong[0]).__name__} belongs in {other_holder}."
+        )
+
+
 def _validate_name_parts(
     _instance: object, _attribute: object, value: Sequence[ValueToken]
 ) -> None:
-    wrong = [token for token in value if not isinstance(token, ValueToken)]
-    if wrong:
-        raise DataError(
-            "name_parts holds value tokens only; "
-            f"{type(wrong[0]).__name__} belongs in name_breaks."
-        )
+    _reject_foreign_tokens(
+        value, ValueToken, "value tokens", "name_parts", "name_breaks"
+    )
 
 
 def _validate_name_breaks(
     instance: "NamedSign", _attribute: object, value: Sequence[BrokenAway]
 ) -> None:
+    _reject_foreign_tokens(
+        value, BrokenAway, "broken away tokens", "name_breaks", "name_parts"
+    )
     if len(value) > len(instance.name_parts):
         raise DataError(
             f"A name with {len(instance.name_parts)} parts takes at most "

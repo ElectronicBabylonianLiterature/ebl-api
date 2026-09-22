@@ -113,7 +113,7 @@ def test_query_lemmas_multiple(fragment_repository, lemma_repository):
                             ValueToken.of("a"),
                             BrokenAway.open(),
                             ValueToken.of("n"),
-                            PerhapsBrokenAway.close(),
+                            BrokenAway.close(),
                             ValueToken.of("a"),
                         ]
                     )
