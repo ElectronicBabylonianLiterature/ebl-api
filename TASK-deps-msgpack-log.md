@@ -35,3 +35,7 @@
 - User approved commit and push (once each); notes included, as on the
   other branches. PR opening was approved earlier. PR creation and CI
   results come after this log is committed, so they are not recorded here.
+- (After the commit.) Pushed `00349282`, opened #768 (3 files, body read
+  back). CI on #768: 15 pass, 2 skipped. CI on #767 `55bc281d`: 15 pass,
+  2 skipped; Sourcery approved #767. Sourcery on #768: one nitpick that the
+  TASK notes are in the PR (expected; delete before merge).
