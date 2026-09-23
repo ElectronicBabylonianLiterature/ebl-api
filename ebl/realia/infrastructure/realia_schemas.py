@@ -1,6 +1,6 @@
 from typing import Optional
 
-from marshmallow import Schema, fields, post_load, EXCLUDE
+from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import (
@@ -18,10 +18,10 @@ from ebl.realia.domain.realia_entry import (
 
 
 class ReallexikonReferenceField(fields.Field):
-    def _serialize(self, value, attr_name, obj, **kwargs):
+    def _serialize(self, value, attr, obj, **kwargs):
         return None if value is None else ApiReferenceSchema().dump(value)
 
-    def _deserialize(self, value, attr_name, data, **kwargs):
+    def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, str):
             return self._from_id(value, "")
         if isinstance(value, dict):
@@ -124,6 +124,12 @@ class RealiaEntrySchema(Schema):
         data_key="afoCrossReferences",
         load_default=list,
     )
+
+    @pre_load
+    def treat_null_as_absent(self, data: object, **kwargs) -> object:
+        if not isinstance(data, dict):
+            return data
+        return {key: value for key, value in data.items() if value is not None}
 
     @post_load
     def make_entry(self, data, **kwargs) -> RealiaEntry:
