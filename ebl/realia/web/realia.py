@@ -1,4 +1,7 @@
+from typing import Sequence
+
 from falcon import HTTP_OK, HTTPMethodNotAllowed, Request, Response
+from falcon_caching import Cache
 
 from ebl.cache.application.cache import DEFAULT_TIMEOUT, cache_control
 from ebl.realia.application.realia_repository import RealiaRepository
@@ -50,9 +53,13 @@ class RealiaSearchResource:
 
 
 class RealiaListResource:
-    def __init__(self, realia_repository: RealiaRepository) -> None:
-        self._realia_repository = realia_repository
+    def __init__(self, realia_repository: RealiaRepository, cache: Cache) -> None:
+        @cache.memoize(DEFAULT_TIMEOUT)
+        def list_non_redirect_ids() -> Sequence[str]:
+            return realia_repository.list_non_redirect_ids()
+
+        self._list_non_redirect_ids = list_non_redirect_ids
 
     @cache_control(["public", f"max-age={DEFAULT_TIMEOUT}"])
     def on_get(self, _req: Request, resp: Response) -> None:
-        resp.media = self._realia_repository.list_non_redirect_ids()
+        resp.media = self._list_non_redirect_ids()

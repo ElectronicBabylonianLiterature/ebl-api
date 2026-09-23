@@ -80,8 +80,22 @@ def test_list_non_redirect_ids_orders_equivalent_ids_deterministically(
     "field,value",
     [
         ("afoRegister", [{"mainWord": "x"}]),
-        ("references", [{"id": "bib_1"}]),
-        ("afoCrossReferences", [{"id": "a", "lemma": "b"}]),
+        (
+            "references",
+            [
+                {
+                    "id": "bib_1",
+                    "type": "DISCUSSION",
+                    "pages": "",
+                    "notes": "",
+                    "linesCited": [],
+                }
+            ],
+        ),
+        (
+            "afoCrossReferences",
+            [{"id": "a", "lemma": "b", "afoVolume": "1", "page": "2"}],
+        ),
     ],
 )
 def test_list_non_redirect_ids_lists_entries_with_own_content(

@@ -366,6 +366,24 @@ def on_get(self, req, resp):
     ...
 ```
 
+On a cache hit `cache.cached` returns the stored body without running the
+responder or its hooks, so a `cache_control` header is not added to cached
+responses. When the header must always be sent, memoize the data instead and
+keep the responder uncached:
+
+```python
+def __init__(self, repository, cache):
+    @cache.memoize(DEFAULT_TIMEOUT)
+    def list_ids():
+        return repository.list_ids()
+
+    self._list_ids = list_ids
+
+@cache_control(['public', 'max-age=600'])
+def on_get(self, req, resp):
+    resp.media = self._list_ids()
+```
+
 ### Authentication and Authorization
 
 [Auth0](https://auth0.com) and [falcon-auth](https://github.com/vertexcover-io/falcon-auth)

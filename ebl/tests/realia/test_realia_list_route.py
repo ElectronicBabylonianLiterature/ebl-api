@@ -92,3 +92,21 @@ def test_every_listed_id_is_retrievable(
         entry = client.simulate_get(f"/realia/{identifier}")
         assert entry.status == falcon.HTTP_OK
         assert entry.json["_id"] == identifier
+
+
+def test_list_is_cached_server_side(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    cached_client,
+) -> None:
+    _seed_entry(realia_repository, bibliography_repository, id="Anu")
+    first_result = cached_client.simulate_get(LIST_ROUTE)
+    _seed_entry(realia_repository, bibliography_repository, id="Pig")
+
+    second_result = cached_client.simulate_get(LIST_ROUTE)
+
+    assert first_result.json == ["Anu"]
+    assert second_result.json == first_result.json
+    assert second_result.headers["Cache-Control"] == (
+        f"public, max-age={DEFAULT_TIMEOUT}"
+    )

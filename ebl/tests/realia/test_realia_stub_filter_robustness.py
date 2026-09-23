@@ -1,12 +1,22 @@
 import pytest
 
 from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
-from ebl.realia.infrastructure.realia_document_shape import ARRAY_FIELDS
 from ebl.realia.infrastructure.realia_stub_filter import OWN_CONTENT_ARRAY_FIELDS
 from ebl.tests.realia.realia_repository_helpers import insert_stored
 
 CANONICAL_CROSS_REFERENCE = {"id": "Canonical", "lemma": "Canonical"}
 HEALTHY_IDENTIFIER = "Anu"
+
+ARRAY_FIELDS = (
+    "afoRegister",
+    "references",
+    "afoCrossReferences",
+    "relatedTerms",
+    "type",
+    "wikidataId",
+    "crossReferences",
+    "reallexikon",
+)
 
 NON_ARRAY_VALUES = ["a string", 7, {"id": "a"}, True]
 
