@@ -24,6 +24,7 @@ StoredRepresentationMissingError = _media_errors.StoredRepresentationMissingErro
 BackfillCategory = _media_requests.BackfillCategory
 BackfillReport = _media_requests.BackfillReport
 BackfillRequest = _media_requests.BackfillRequest
+MAX_BACKFILL_BATCH_SIZE = _media_requests.MAX_BACKFILL_BATCH_SIZE
 ImportMode = _media_requests.ImportMode
 ImportReport = _media_requests.ImportReport
 ImportRequest = _media_requests.ImportRequest

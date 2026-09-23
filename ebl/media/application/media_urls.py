@@ -12,6 +12,10 @@ concentrates it: when the routes are registered, add a test asserting the
 registered Falcon templates and these builders agree.
 
 Encoding policy: the media builders percent-encode every dynamic path segment.
+Falcon 3.1.3 decodes `%2F` before matching routes, so this encoding does not make
+a museum number containing a slash routable through one `{number}` segment. The
+future route must use a slash-safe identifier representation or a query
+parameter rather than relying on percent-encoding alone.
 `legacy_fragment_thumbnail_url` deliberately does not, because it reproduces an
 existing public contract byte for byte. The two therefore disagree for a museum
 number containing a slash — `MuseumNumber("A/B", "1")` yields

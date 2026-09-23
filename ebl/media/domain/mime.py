@@ -30,6 +30,8 @@ SUPPORTED_RASTER_MIME_TYPES = frozenset(
 
 
 def normalize_mime_type(value: str) -> str:
+    if not isinstance(value, str):
+        raise ValueError("MIME type must be a string.")
     return value.split(";", 1)[0].strip().lower()
 
 

@@ -5,7 +5,12 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.media.domain.mime import normalize_mime_type
-from ebl.media.domain.validation import not_blank, positive_int, tuple_or_empty
+from ebl.media.domain.validation import (
+    not_blank,
+    optional_instance_of,
+    positive_int,
+    tuple_or_empty,
+)
 
 SHA256 = "sha256"
 
@@ -38,13 +43,18 @@ class MediaRepresentation:
     width: int = attr.ib(validator=positive_int)
     height: int = attr.ib(validator=positive_int)
     file_size: int = attr.ib(validator=positive_int)
-    checksum: Optional[MediaChecksum] = None
+    checksum: Optional[MediaChecksum] = attr.ib(
+        default=None, validator=optional_instance_of(MediaChecksum)
+    )
 
 
 def _thumbnails_of(
     value: Optional[Sequence[tuple[ThumbnailSize, "MediaRepresentation"]]],
 ) -> tuple[tuple[ThumbnailSize, "MediaRepresentation"], ...]:
-    return tuple_or_empty(value)
+    try:
+        return tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError("Thumbnails must be a sequence.") from error
 
 
 def _validate_thumbnails(
@@ -68,23 +78,26 @@ def _validate_thumbnails(
         raise ValueError("Media cannot contain duplicate thumbnail sizes.")
 
 
+def _validate_original(
+    _instance: object, _attribute: attr.Attribute, value: object
+) -> None:
+    if not isinstance(value, MediaRepresentation):
+        raise ValueError("Media must contain an original representation.")
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class MediaRepresentations:
-    original: MediaRepresentation = attr.ib()
+    original: MediaRepresentation = attr.ib(validator=_validate_original)
     thumbnails: Sequence[tuple[ThumbnailSize, MediaRepresentation]] = attr.ib(
         factory=tuple, converter=_thumbnails_of, validator=_validate_thumbnails
     )
     display: Optional[MediaRepresentation] = attr.ib(
         default=None,
         kw_only=True,
-        validator=attr.validators.optional(
-            attr.validators.instance_of(MediaRepresentation)
-        ),
+        validator=optional_instance_of(MediaRepresentation),
     )
 
     def __attrs_post_init__(self) -> None:
-        if not isinstance(self.original, MediaRepresentation):
-            raise ValueError("Media must contain an original representation.")
         if self.original.checksum is None:
             raise ValueError("Original representation must contain a checksum.")
 

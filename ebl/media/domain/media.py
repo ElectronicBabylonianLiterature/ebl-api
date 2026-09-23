@@ -8,16 +8,23 @@ from ebl.common.domain.project import ResearchProject
 from ebl.media.domain.mime import is_supported_raster_mime_type, is_svg_mime_type
 from ebl.media.domain.representations import MediaRepresentations
 from ebl.media.domain.validation import (
+    instance_of,
+    items_instance_of,
     non_negative_int,
     not_blank,
+    optional_instance_of,
     strict_bool,
     tuple_or_empty,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def _museum_number_of(value: str | MuseumNumber) -> MuseumNumber:
-    return value if isinstance(value, MuseumNumber) else MuseumNumber.of(value)
+def _museum_number_of(value: object) -> MuseumNumber:
+    if isinstance(value, MuseumNumber):
+        return value
+    if isinstance(value, str):
+        return MuseumNumber.of(value)
+    raise ValueError("Fragment id must be a string or MuseumNumber.")
 
 
 def _media_id_of(value: Union[str, "MediaId"]) -> "MediaId":
@@ -27,19 +34,28 @@ def _media_id_of(value: Union[str, "MediaId"]) -> "MediaId":
 def _associations_of(
     value: Optional[Sequence["MediaAssociation"]],
 ) -> tuple["MediaAssociation", ...]:
-    return tuple_or_empty(value)
+    try:
+        return tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError("Associations must be a sequence.") from error
 
 
 def _projects_of(
     value: Optional[Sequence[ResearchProject]],
 ) -> tuple[ResearchProject, ...]:
-    return tuple_or_empty(value)
+    try:
+        return tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError("Projects must be a sequence.") from error
 
 
 def _references_of(
     value: Optional[Sequence["MediaReference"]],
 ) -> tuple["MediaReference", ...]:
-    return tuple_or_empty(value)
+    try:
+        return tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError("References must be a sequence.") from error
 
 
 def _validate_associations(
@@ -47,6 +63,11 @@ def _validate_associations(
 ) -> None:
     if not value:
         raise ValueError(f"Attribute {attribute.name} must contain at least one item.")
+
+    if any(not isinstance(association, MediaAssociation) for association in value):
+        raise ValueError(
+            f"Attribute {attribute.name} must contain only MediaAssociation values."
+        )
 
     fragment_ids = [association.fragment_id for association in value]
     if len(fragment_ids) != len(set(fragment_ids)):
@@ -139,29 +160,31 @@ class MediaImportSource:
 @attr.s(auto_attribs=True, frozen=True)
 class Media:
     id: MediaId = attr.ib(converter=_media_id_of)
-    type: MediaType = attr.ib(validator=attr.validators.instance_of(MediaType))
+    type: MediaType = attr.ib(validator=instance_of(MediaType))
     original_filename: str = attr.ib(validator=not_blank)
-    representations: MediaRepresentations = attr.ib(validator=_validate_mime_policy)
+    representations: MediaRepresentations = attr.ib(
+        validator=[instance_of(MediaRepresentations), _validate_mime_policy]
+    )
     associations: Sequence[MediaAssociation] = attr.ib(
         factory=tuple, converter=_associations_of, validator=_validate_associations
     )
     projects: Sequence[ResearchProject] = attr.ib(
         factory=tuple,
         converter=_projects_of,
-        validator=attr.validators.deep_iterable(
-            member_validator=attr.validators.instance_of(ResearchProject)
-        ),
+        validator=items_instance_of(ResearchProject),
     )
     references: Sequence[MediaReference] = attr.ib(
         factory=tuple,
         converter=_references_of,
-        validator=attr.validators.deep_iterable(
-            member_validator=attr.validators.instance_of(MediaReference)
-        ),
+        validator=items_instance_of(MediaReference),
     )
-    caption: Optional[str] = None
-    attribution: Optional[str] = None
-    import_source: Optional[MediaImportSource] = None
+    caption: Optional[str] = attr.ib(default=None, validator=optional_instance_of(str))
+    attribution: Optional[str] = attr.ib(
+        default=None, validator=optional_instance_of(str)
+    )
+    import_source: Optional[MediaImportSource] = attr.ib(
+        default=None, validator=optional_instance_of(MediaImportSource)
+    )
 
     def __attrs_post_init__(self) -> None:
         object.__setattr__(

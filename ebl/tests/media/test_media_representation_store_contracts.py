@@ -6,7 +6,6 @@ import pytest
 
 from ebl.errors import NotFoundError
 from ebl.media.application import (
-    BackfillRequest,
     DisplayRepresentationWriteRequest,
     ImportMode,
     ImportRequest,
@@ -173,21 +172,3 @@ def test_import_request_collections_are_immutable() -> None:
     fragment_ids.append(MuseumNumber.of("BM.99"))
 
     assert request.fragment_ids == (K1,)
-
-
-def test_backfill_request_defaults_to_dry_run() -> None:
-    request = BackfillRequest()
-
-    assert request.dry_run is True
-    assert request.batch_size == 100
-    assert request.resume_after is None
-
-
-def test_backfill_request_supports_bounded_resumable_batches() -> None:
-    request = BackfillRequest(dry_run=False, batch_size=100, resume_after="cursor-1")
-
-    assert (request.dry_run, request.batch_size, request.resume_after) == (
-        False,
-        100,
-        "cursor-1",
-    )

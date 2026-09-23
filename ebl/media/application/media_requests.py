@@ -5,12 +5,15 @@ from typing import Mapping, Optional, Sequence
 import attr
 
 from ebl.media.domain.validation import (
+    non_negative_int,
     not_blank,
     positive_int,
     strict_bool,
     tuple_or_empty,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
+
+MAX_BACKFILL_BATCH_SIZE = 1_000
 
 
 class ImportMode(Enum):
@@ -53,22 +56,68 @@ class BackfillCategory(Enum):
 def _museum_numbers_of(
     value: Optional[Sequence[MuseumNumber]],
 ) -> tuple[MuseumNumber, ...]:
-    return tuple(dict.fromkeys(tuple_or_empty(value)))
+    if isinstance(value, str):
+        raise ValueError("Attribute fragment_ids must be a sequence of museum numbers.")
+    try:
+        fragment_ids = tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError(
+            "Attribute fragment_ids must be a sequence of museum numbers."
+        ) from error
+    if any(not isinstance(fragment_id, MuseumNumber) for fragment_id in fragment_ids):
+        raise ValueError("Attribute fragment_ids must contain only museum numbers.")
+    return tuple(dict.fromkeys(fragment_ids))
 
 
 def _strings_of(value: Optional[Sequence[str]]) -> tuple[str, ...]:
-    return tuple_or_empty(value)
+    if isinstance(value, str):
+        raise ValueError("String collections must be sequences of strings.")
+    try:
+        strings = tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError("String collections must be sequences of strings.") from error
+    if any(not isinstance(item, str) for item in strings):
+        raise ValueError("String collections must contain only strings.")
+    return strings
 
 
 def _report_entries_of(
     value: Optional[Sequence[tuple[BackfillCategory, Sequence[str]]]],
 ) -> tuple[tuple[BackfillCategory, tuple[str, ...]], ...]:
+    if isinstance(value, str):
+        raise ValueError("Report entries must be a sequence of pairs.")
+    try:
+        report_entries = tuple_or_empty(value)
+    except TypeError as error:
+        raise ValueError("Report entries must be a sequence of pairs.") from error
+
+    merged: dict[BackfillCategory, list[str]] = {}
+    for item in report_entries:
+        if not isinstance(item, tuple) or len(item) != 2:
+            raise ValueError(
+                "Each report entry must be a (BackfillCategory, entries) pair."
+            )
+        category, entries = item
+        if not isinstance(category, BackfillCategory):
+            raise ValueError("Report categories must be BackfillCategory members.")
+        merged.setdefault(category, []).extend(_strings_of(entries))
+
     return tuple(
-        sorted(
-            ((category, tuple(entries)) for category, entries in value or ()),
-            key=lambda entry: entry[0].value,
+        (category, tuple(sorted(entries)))
+        for category, entries in sorted(
+            merged.items(), key=lambda entry: entry[0].value
         )
     )
+
+
+def _bounded_batch_size(
+    instance: object, attribute: attr.Attribute, value: object
+) -> None:
+    positive_int(instance, attribute, value)
+    if isinstance(value, int) and value > MAX_BACKFILL_BATCH_SIZE:
+        raise ValueError(
+            f"Attribute {attribute.name} must be at most {MAX_BACKFILL_BATCH_SIZE}."
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -93,10 +142,10 @@ class ImportRequest:
 
 @attr.s(auto_attribs=True, frozen=True)
 class ImportReport:
-    created: int = 0
-    skipped: int = 0
-    replaced: int = 0
-    failed: int = 0
+    created: int = attr.ib(default=0, validator=non_negative_int)
+    skipped: int = attr.ib(default=0, validator=non_negative_int)
+    replaced: int = attr.ib(default=0, validator=non_negative_int)
+    failed: int = attr.ib(default=0, validator=non_negative_int)
     errors: Sequence[str] = attr.ib(factory=tuple, converter=_strings_of)
     warnings: Sequence[str] = attr.ib(factory=tuple, converter=_strings_of)
 
@@ -107,14 +156,15 @@ class BackfillRequest:
 
     `dry_run` defaults to true and is the guard that keeps a run from mutating
     production data, so it is a strict boolean: a truthy string must not pass
-    for it. `batch_size` always bounds the batch and must be positive — a batch
-    that processes nothing is a caller error, not an empty run. `resume_after`
-    is the opaque cursor from `BackfillReport.next_resume_token`; `None` starts
-    at the beginning, and an empty string is not a cursor.
+    for it. `batch_size` always bounds the batch, must be positive, and cannot
+    exceed `MAX_BACKFILL_BATCH_SIZE`; a batch that processes nothing is a caller
+    error, not an empty run. `resume_after` is the opaque cursor from
+    `BackfillReport.next_resume_token`; `None` starts at the beginning, and an
+    empty string is not a cursor.
     """
 
     dry_run: bool = attr.ib(default=True, validator=strict_bool)
-    batch_size: int = attr.ib(default=100, validator=positive_int)
+    batch_size: int = attr.ib(default=100, validator=_bounded_batch_size)
     resume_after: Optional[str] = attr.ib(
         default=None, validator=attr.validators.optional(not_blank)
     )
@@ -128,20 +178,23 @@ class BackfillReport:
     opaque cursor to pass back as `BackfillRequest.resume_after` to continue
     after the last completed boundary.
 
-    Audit findings are given as `(category, entries)` pairs and stored in
-    canonical category order; read them back through the `reports` mapping.
-    Pairs rather than a mapping keep the report hashable like every other media
-    value object, and the canonical order keeps two reports with the same
-    findings equal and equally hashed whatever order they were built in.
+    Audit findings are given as `(category, entries)` pairs. Repeated categories
+    are merged, and their entries and categories are stored in canonical order;
+    read them back through the `reports` mapping. Pairs rather than a mapping
+    keep the report hashable like every other media value object, and the
+    canonical order keeps two reports with the same findings equal and equally
+    hashed whatever order they were built in.
     """
 
-    scanned: int = 0
-    candidates: int = 0
-    created: int = 0
-    replaced: int = 0
-    skipped: int = 0
-    failed: int = 0
-    next_resume_token: Optional[str] = None
+    scanned: int = attr.ib(default=0, validator=non_negative_int)
+    candidates: int = attr.ib(default=0, validator=non_negative_int)
+    created: int = attr.ib(default=0, validator=non_negative_int)
+    replaced: int = attr.ib(default=0, validator=non_negative_int)
+    skipped: int = attr.ib(default=0, validator=non_negative_int)
+    failed: int = attr.ib(default=0, validator=non_negative_int)
+    next_resume_token: Optional[str] = attr.ib(
+        default=None, validator=attr.validators.optional(not_blank)
+    )
     report_entries: Sequence[tuple[BackfillCategory, Sequence[str]]] = attr.ib(
         factory=tuple, converter=_report_entries_of
     )

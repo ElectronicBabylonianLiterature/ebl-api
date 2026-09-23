@@ -137,12 +137,12 @@ def test_blank_original_filename_is_rejected(value: str) -> None:
 
 
 def test_media_projects_reject_non_project_members() -> None:
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         photo_media(projects=(cast(ResearchProject, "CAIC"),))
 
 
 def test_media_references_reject_non_reference_members() -> None:
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         photo_media(references=(cast(MediaReference, "bib-id"),))
 
 
@@ -187,7 +187,7 @@ def test_created_media_ids_are_canonical() -> None:
 
 
 def test_media_type_must_be_a_media_type_member() -> None:
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         contract_media(
             PHOTO_ID, cast(MediaType, "PHOTO"), (MediaAssociation(K1, 0, True),)
         )
