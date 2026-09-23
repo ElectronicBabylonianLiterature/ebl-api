@@ -90,6 +90,50 @@ def test_query_omits_missing_bibliography_documents(
     assert calls == [["RN52", "RN99"]]
 
 
+def test_query_returns_only_resolved_canonical_bibliography_documents(
+    client, fragmentarium, spied_bibliography_repository
+):
+    repository, calls = spied_bibliography_repository
+    active = BibliographyEntryFactory.build(id="ACTIVE")
+    redirected = BibliographyEntryFactory.build(
+        id="OLD", deprecated=True, redirectTo="CANONICAL"
+    )
+    canonical = BibliographyEntryFactory.build(id="CANONICAL")
+    dangling = BibliographyEntryFactory.build(
+        id="DANGLING", deprecated=True, redirectTo="ABSENT"
+    )
+    cycle_a = BibliographyEntryFactory.build(
+        id="CYCLE_A", deprecated=True, redirectTo="CYCLE_B"
+    )
+    cycle_b = BibliographyEntryFactory.build(
+        id="CYCLE_B", deprecated=True, redirectTo="CYCLE_A"
+    )
+    for entry in (active, redirected, canonical, dangling, cycle_a, cycle_b):
+        repository.create(entry)
+    fragmentarium.create(
+        build_fragment(
+            "X.1",
+            reference_of("ACTIVE"),
+            reference_of("OLD"),
+            reference_of("DANGLING"),
+            reference_of("CYCLE_A"),
+            reference_of("MISSING"),
+        )
+    )
+
+    result = client.simulate_get("/fragments/query", params={"limit": "10"})
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["bibliographyDocuments"] == {
+        "ACTIVE": active,
+        "OLD": canonical,
+    }
+    assert calls == [
+        ["ACTIVE", "OLD", "DANGLING", "CYCLE_A", "MISSING"],
+        ["CANONICAL", "ABSENT", "CYCLE_B"],
+    ]
+
+
 def test_query_bibliography_documents_are_page_bounded(
     client, fragmentarium, spied_bibliography_repository
 ):

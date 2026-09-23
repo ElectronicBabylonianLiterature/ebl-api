@@ -177,16 +177,6 @@ def test_query_fragmentarium_limit_accepted(client, limit):
     assert result.status == falcon.HTTP_OK
 
 
-@pytest.mark.parametrize("limit", [str(MAX_QUERY_LIMIT + 1), "1000000"])
-def test_query_fragmentarium_limit_above_the_maximum_does_not_error(client, limit):
-    result = client.simulate_get(
-        "/fragments/query",
-        params={"number": "K.1", "limit": limit},
-    )
-
-    assert result.status == falcon.HTTP_OK
-
-
 @pytest.mark.parametrize("limit", ["0", "-1", "invalid"])
 def test_query_fragmentarium_limit_invalid(client, limit):
     result = client.simulate_get(

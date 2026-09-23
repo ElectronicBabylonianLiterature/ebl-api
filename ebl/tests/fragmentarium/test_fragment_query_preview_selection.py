@@ -4,6 +4,9 @@ from ebl.fragmentarium.application.fragment_query_preview import (
     MAX_PREVIEW_LINES,
     matching_line_preview_of_data,
 )
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryMatchingLinePreviewSchema,
+)
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
     COMPLEX_ATF,
@@ -19,13 +22,13 @@ def long_text():
     return parse_atf_lark(numbered_atf(30))
 
 
-def test_preview_of_stored_data_matches_domain_preview():
+def test_preview_of_stored_data_adds_only_source_index():
     fragment = FragmentFactory.build(text=parse_atf_lark(COMPLEX_ATF))
+    stored_line = dumped_text(fragment.text)["lines"][0]
 
-    assert (
-        matching_line_preview_of_data(dumped_text(fragment), (0,))["lines"]
-        == matching_line_preview_of(fragment.text, (0,))["lines"]
-    )
+    assert matching_line_preview_of_data(dumped_text(fragment.text), (0,))["lines"] == [
+        {**stored_line, "index": 0}
+    ]
 
 
 def test_data_builder_uses_the_wire_key_and_domain_builder_the_attribute_name():
@@ -33,7 +36,7 @@ def test_data_builder_uses_the_wire_key_and_domain_builder_the_attribute_name():
     version = fragment.text.parser_version
 
     assert (
-        matching_line_preview_of_data(dumped_text(fragment), (0,))["parserVersion"]
+        matching_line_preview_of_data(dumped_text(fragment.text), (0,))["parserVersion"]
         == version
     )
     assert matching_line_preview_of(fragment.text, (0,))["parser_version"] == version
@@ -41,12 +44,12 @@ def test_data_builder_uses_the_wire_key_and_domain_builder_the_attribute_name():
 
 def test_the_two_builders_differ_only_in_the_parser_version_key():
     fragment = FragmentFactory.build(text=parse_atf_lark("1. ku"))
-    from_data = matching_line_preview_of_data(dumped_text(fragment), (0,))
+    from_data = matching_line_preview_of_data(dumped_text(fragment.text), (0,))
     from_domain = matching_line_preview_of(fragment.text, (0,))
 
     assert set(from_data) == {"lines", "parserVersion"}
     assert set(from_domain) == {"lines", "parser_version"}
-    assert from_data["lines"] == from_domain["lines"]
+    assert FragmentQueryMatchingLinePreviewSchema().dump(from_domain) == from_data
 
 
 def test_preview_serializes_only_selected_lines():
@@ -78,7 +81,7 @@ def test_stored_data_preview_carries_the_same_indexes():
     assert [
         line["index"]
         for line in matching_line_preview_of_data(
-            dumped_text(fragment), matching_lines
+            dumped_text(fragment.text), matching_lines
         )["lines"]
     ] == [5, 2, 8]
 
@@ -136,19 +139,29 @@ def test_preview_deduplicates_matching_indexes(
 def test_stored_data_preview_applies_the_same_cap():
     fragment = FragmentFactory.build(text=parse_atf_lark(numbered_atf(30, "ku")))
     matching_lines = tuple(range(30))
-    lines = matching_line_preview_of_data(dumped_text(fragment), matching_lines)[
+    lines = matching_line_preview_of_data(dumped_text(fragment.text), matching_lines)[
         "lines"
     ]
 
-    assert lines == matching_line_preview_of(fragment.text, matching_lines)["lines"]
     assert len(lines) == MAX_PREVIEW_LINES
+    assert [line["index"] for line in lines] == list(range(MAX_PREVIEW_LINES))
 
 
 def test_stored_data_preview_deduplicates_the_same_way():
     fragment = FragmentFactory.build(text=parse_atf_lark(numbered_atf(30, "ku")))
     matching_lines = (0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5)
 
-    assert (
-        matching_line_preview_of_data(dumped_text(fragment), matching_lines)["lines"]
-        == matching_line_preview_of(fragment.text, matching_lines)["lines"]
+    preview = matching_line_preview_of_data(dumped_text(fragment.text), matching_lines)
+
+    assert [line["index"] for line in preview["lines"]] == list(
+        range(MAX_PREVIEW_LINES)
     )
+
+
+def test_preview_selects_only_text_lines_by_stored_type():
+    text = parse_atf_lark("1. ku\n$ (end of side)\n2. nu")
+
+    preview = matching_line_preview_of_data(dumped_text(text), (0, 1, 2))
+
+    assert [line["index"] for line in preview["lines"]] == [0, 2]
+    assert [line["prefix"] for line in preview["lines"]] == ["1.", "2."]

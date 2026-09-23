@@ -6,9 +6,8 @@ from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 MAX_PREVIEW_LINES = 5
 
 
-def is_text_line(line: Any) -> bool:
-    type_name = line.get("type") if isinstance(line, dict) else type(line).__name__
-    return type_name == "TextLine"
+def is_text_line(line: dict) -> bool:
+    return line.get("type") == "TextLine"
 
 
 def preview_line_of(index: int, line: dict) -> Dict[str, Any]:
@@ -16,8 +15,8 @@ def preview_line_of(index: int, line: dict) -> Dict[str, Any]:
 
 
 def selected_lines(
-    lines: Sequence, matching_lines: Sequence[int]
-) -> List[Tuple[int, Any]]:
+    lines: Sequence[dict], matching_lines: Sequence[int]
+) -> List[Tuple[int, dict]]:
     unique_indices = dict.fromkeys(
         index
         for index in matching_lines

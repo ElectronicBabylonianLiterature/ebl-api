@@ -110,3 +110,88 @@ def test_documents_are_returned_as_stored(spied_bibliography_repository, entry):
     )
 
     assert documents == {"RN52": entry}
+
+
+@pytest.mark.parametrize("cycle_length", [1, 2, 5])
+def test_redirect_cycles_are_omitted(spied_bibliography_repository, cycle_length):
+    repository, calls = spied_bibliography_repository
+    ids = [f"CYCLE{index}" for index in range(cycle_length)]
+    for index, id_ in enumerate(ids):
+        repository.create(
+            BibliographyEntryFactory.build(
+                id=id_, deprecated=True, redirectTo=ids[(index + 1) % cycle_length]
+            )
+        )
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of(ids[0]))], repository
+    )
+
+    assert documents == {}
+    assert calls == [[id_] for id_ in ids]
+
+
+@pytest.mark.parametrize("redirect_to", [None, "", 42])
+def test_deprecated_document_without_usable_target_is_omitted(
+    spied_bibliography_repository, redirect_to
+):
+    repository, calls = spied_bibliography_repository
+    entry = BibliographyEntryFactory.build(id="OLD", deprecated=True)
+    if redirect_to is not None:
+        entry["redirectTo"] = redirect_to
+    repository.create(entry)
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of("OLD"))], repository
+    )
+
+    assert documents == {}
+    assert calls == [["OLD"]]
+
+
+def test_late_dangling_redirect_is_omitted(spied_bibliography_repository):
+    repository, calls = spied_bibliography_repository
+    ids = [f"LATE{index}" for index in range(5)]
+    for index, current in enumerate(ids):
+        target = ids[index + 1] if index + 1 < len(ids) else "MISSING"
+        repository.create(
+            BibliographyEntryFactory.build(
+                id=current, deprecated=True, redirectTo=target
+            )
+        )
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of(ids[0]))], repository
+    )
+
+    assert documents == {}
+    assert calls == [[id_] for id_ in [*ids, "MISSING"]]
+
+
+def test_confirmed_missing_id_is_not_queried_as_a_redirect_target(
+    spied_bibliography_repository,
+):
+    repository, calls = spied_bibliography_repository
+    repository.create(
+        BibliographyEntryFactory.build(id="OLD", deprecated=True, redirectTo="MISSING")
+    )
+
+    documents = bibliography_documents_of(
+        [summary_of("X.1", reference_of("MISSING"), reference_of("OLD"))],
+        repository,
+    )
+
+    assert documents == {}
+    assert calls == [["MISSING", "OLD"]]
+
+
+def test_repository_failures_propagate(monkeypatch, bibliography_repository):
+    def fail_query(ids):
+        raise RuntimeError("bibliography unavailable")
+
+    monkeypatch.setattr(bibliography_repository, "query_by_ids", fail_query)
+
+    with pytest.raises(RuntimeError, match="bibliography unavailable"):
+        bibliography_documents_of(
+            [summary_of("X.1", reference_of("RN52"))], bibliography_repository
+        )

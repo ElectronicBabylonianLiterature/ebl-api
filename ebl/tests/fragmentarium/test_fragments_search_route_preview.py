@@ -38,10 +38,7 @@ def test_preview_line_carries_the_full_detail_line(client, matched_fragment):
     detail_line = detail["text"]["lines"][MATCHING_LINE_INDEX]
 
     assert line["index"] == MATCHING_LINE_INDEX
-    assert line["type"] == "TextLine"
-    assert line["prefix"] == detail_line["prefix"]
-    assert line["lineNumber"] == detail_line["lineNumber"]
-    assert line["content"] == detail_line["content"]
+    assert {key: value for key, value in line.items() if key != "index"} == detail_line
 
 
 def test_preview_contains_only_matching_lines(client, matched_fragment):

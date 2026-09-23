@@ -29,32 +29,42 @@ def pending_targets_of(documents: Iterable[dict], requested: Set[str]) -> List[s
 
 def resolved_document(document: dict, fetched: Dict[str, dict]) -> Optional[dict]:
     seen: Set[str] = set()
-    while (target := redirect_target_of(document)) and target not in seen:
-        seen.add(target)
+    redirects_followed = 0
+    while document.get("deprecated", False):
+        current_id = document.get("id")
+        target = redirect_target_of(document)
+        if target is None or not isinstance(current_id, str):
+            return None
+        if current_id in seen or target in seen:
+            return None
+        if redirects_followed >= MAX_REDIRECT_DEPTH:
+            return None
+        seen.add(current_id)
         if target not in fetched:
-            break
+            return None
         document = fetched[target]
-    if len(seen) >= MAX_REDIRECT_DEPTH and redirect_target_of(document):
-        return None
+        redirects_followed += 1
     return document
 
 
 def documents_by_id(
     ids: Sequence[str], repository: BibliographyRepository
 ) -> Dict[str, dict]:
-    return (
-        {document["id"]: document for document in repository.query_by_ids(list(ids))}
-        if ids
-        else {}
-    )
+    if not ids:
+        return {}
+    returned = {
+        document["id"]: document for document in repository.query_by_ids(list(ids))
+    }
+    return {id_: returned[id_] for id_ in ids if id_ in returned}
 
 
 def bibliography_documents_of(
     items: Sequence[FragmentQuerySummary], repository: BibliographyRepository
 ) -> Dict[str, dict]:
-    documents = documents_by_id(bibliography_ids_of(items), repository)
+    bibliography_ids = bibliography_ids_of(items)
+    documents = documents_by_id(bibliography_ids, repository)
     fetched = dict(documents)
-    requested = set(fetched)
+    requested = set(bibliography_ids)
     batch = documents
     for _ in range(MAX_REDIRECT_DEPTH):
         targets = pending_targets_of(batch.values(), requested)

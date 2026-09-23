@@ -1,6 +1,7 @@
 from typing import cast
 
 import pytest
+from marshmallow import ValidationError
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
@@ -60,6 +61,13 @@ def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
                                             "type": "TextLine",
                                             "prefix": "1.",
                                             "content": [],
+                                            "lineNumber": {
+                                                "type": "LineNumber",
+                                                "number": 1,
+                                                "hasPrime": False,
+                                                "prefixModifier": None,
+                                                "suffixModifier": None,
+                                            },
                                         }
                                     ]
                                 },
@@ -77,6 +85,41 @@ def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
     assert summary.description == ""
     assert summary.script == Script()
     assert len(summary.matching_line_preview["lines"]) == 1
+
+
+def test_query_fragmentarium_limit_summary_rejects_malformed_preview_line(
+    fragment_repository,
+):
+    with pytest.raises(ValidationError, match="lineNumber"):
+        FragmentQueryResultSchema().load(
+            {
+                "items": [
+                    fragment_repository._hydrate_fragment_query_item(
+                        {"_id": "K.1", "matchingLines": [0]},
+                        {
+                            "K.1": {
+                                "museumNumber": {
+                                    "prefix": "K",
+                                    "number": "1",
+                                    "suffix": "",
+                                },
+                                "text": {
+                                    "lines": [
+                                        {
+                                            "type": "TextLine",
+                                            "prefix": "1.",
+                                            "content": [],
+                                        }
+                                    ]
+                                },
+                            }
+                        },
+                        (),
+                    )
+                ],
+                "matchCountTotal": 0,
+            }
+        )
 
 
 def test_query_fragmentarium_limit_summary_missing_museum_number_fails_clearly(

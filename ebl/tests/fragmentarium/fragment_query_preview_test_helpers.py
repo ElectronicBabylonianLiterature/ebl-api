@@ -1,12 +1,13 @@
 from typing import Any, Dict, Sequence, cast
 
 from ebl.fragmentarium.application.fragment_query_preview import (
-    preview_line_of,
-    selected_lines,
+    matching_line_preview_of_data,
 )
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryMatchingLinePreviewSchema,
+)
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.text import Text
 
 COMPLEX_ATF = "1'. [ku]-nu-uš KUR# {d}INANA ⸢ki⸣ %sux gu-du/gu₂"
@@ -17,8 +18,8 @@ def dumped(line) -> dict:
     return cast(dict, OneOfLineSchema().dump(line))
 
 
-def dumped_text(fragment) -> dict:
-    return cast(dict, FragmentSchema(exclude=["joins"]).dump(fragment))["text"]
+def dumped_text(text: Text) -> dict:
+    return cast(dict, TextSchema().dump(text))
 
 
 def numbered_atf(count: int, word: str = "ku-nu-uš") -> str:
@@ -28,11 +29,9 @@ def numbered_atf(count: int, word: str = "ku-nu-uš") -> str:
 def matching_line_preview_of(
     text: Text, matching_lines: Sequence[int]
 ) -> Dict[str, Any]:
-    schema = OneOfLineSchema()
-    return {
-        "lines": [
-            preview_line_of(index, cast(dict, schema.dump(line)))
-            for index, line in selected_lines(text.lines, matching_lines)
-        ],
-        "parser_version": text.parser_version or DEFAULT_ATF_PARSER_VERSION,
-    }
+    return cast(
+        Dict[str, Any],
+        FragmentQueryMatchingLinePreviewSchema().load(
+            matching_line_preview_of_data(dumped_text(text), matching_lines)
+        ),
+    )

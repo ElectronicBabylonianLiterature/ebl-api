@@ -178,7 +178,7 @@ def test_fragment_query_archaeology_schema_loads_non_dict_site():
 def test_matching_line_preview_skips_out_of_range_lines():
     fragment = TransliteratedFragmentFactory.build()
     line_count = len(fragment.text.lines)
-    text_data = dumped_text(fragment)
+    text_data = dumped_text(fragment.text)
 
     preview = matching_line_preview_of_data(text_data, (0, line_count))
     empty_preview = matching_line_preview_of_data(text_data, (line_count,))

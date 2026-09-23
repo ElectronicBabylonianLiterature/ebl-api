@@ -80,7 +80,7 @@ def test_search_with_scopes_limit_summary(client, guest_client, fragmentarium):
         ({"scriptPeriod": Period.NEO_BABYLONIAN.long_name}, [0]),
     ],
 )
-def test_search_script_period(client, fragmentarium, params, expected):
+def test_search_script_period(client, fragmentarium, params: dict, expected: list[int]):
     fragments = [
         FragmentFactory.build(script=Script(Period.NEO_BABYLONIAN)),
         FragmentFactory.build(script=Script(Period.OLD_ASSYRIAN, PeriodModifier.EARLY)),

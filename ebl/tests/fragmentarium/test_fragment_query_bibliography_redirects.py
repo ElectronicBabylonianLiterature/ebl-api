@@ -97,15 +97,15 @@ def test_missing_requested_id_is_omitted(spied_bibliography_repository):
     assert calls == [["ACTIVE2", "GONE"]]
 
 
-def test_dangling_redirect_keeps_the_stored_record(spied_bibliography_repository):
+def test_dangling_redirect_is_omitted(spied_bibliography_repository):
     repository, calls = spied_bibliography_repository
-    deprecated = create_entry(repository, "OLD1", redirect_to="DOES_NOT_EXIST")
+    create_entry(repository, "OLD1", redirect_to="DOES_NOT_EXIST")
 
     documents = bibliography_documents_of(
         [summary_of("X.1", reference_of("OLD1"))], repository
     )
 
-    assert documents == {"OLD1": deprecated}
+    assert documents == {}
     assert calls == [["OLD1"], ["DOES_NOT_EXIST"]]
 
 
@@ -144,18 +144,18 @@ def test_chained_redirects_share_one_batch_per_hop(spied_bibliography_repository
     assert calls == [["OLD1", "OLD2"], ["MID"], ["CANON"]]
 
 
-def test_chain_longer_than_the_redirect_depth_is_omitted(
+def test_chain_with_six_redirects_is_omitted(
     spied_bibliography_repository,
 ):
     repository, calls = spied_bibliography_repository
-    ids = [f"HOP{index}" for index in range(MAX_REDIRECT_DEPTH + 3)]
+    ids = [f"HOP{index}" for index in range(MAX_REDIRECT_DEPTH + 2)]
     create_chain(repository, ids)
 
     documents = bibliography_documents_of(
         [summary_of("X.1", reference_of(ids[0]))], repository
     )
 
-    assert len(calls) == MAX_REDIRECT_DEPTH + 1
+    assert calls == [[id_] for id_ in ids[:-1]]
     assert documents == {}
 
 
@@ -170,7 +170,7 @@ def test_chain_at_exactly_the_redirect_depth_still_resolves(
         [summary_of("X.1", reference_of(ids[0]))], repository
     )
 
-    assert len(calls) == MAX_REDIRECT_DEPTH + 1
+    assert calls == [[id_] for id_ in ids]
     assert documents == {ids[0]: canonical}
 
 
@@ -186,7 +186,7 @@ def test_redirect_cycle_terminates_without_extra_queries(
     )
 
     assert calls == [["A"], ["B"]]
-    assert set(documents) == {"A"}
+    assert documents == {}
 
 
 def test_many_occurrences_use_two_batches(spied_bibliography_repository):
@@ -223,7 +223,7 @@ def test_unresolvable_flavours_follow_the_documented_contract(
     spied_bibliography_repository,
 ):
     repository, _ = spied_bibliography_repository
-    dangling = create_entry(repository, "DANGLE", redirect_to="ABSENT")
+    create_entry(repository, "DANGLE", redirect_to="ABSENT")
 
     documents = bibliography_documents_of(
         [
@@ -236,6 +236,4 @@ def test_unresolvable_flavours_follow_the_documented_contract(
         repository,
     )
 
-    assert "NO_ENTRY_AT_ALL" not in documents
-    assert documents["DANGLE"] == dangling
-    assert documents["DANGLE"]["deprecated"] is True
+    assert documents == {}
