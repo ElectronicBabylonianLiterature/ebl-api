@@ -1,10 +1,38 @@
 import pytest
 from mockito import ANY, verify
 
+from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+)
+from ebl.changelog import Changelog
 from ebl.errors import DataError, Defect, DuplicateError, NotFoundError
+from ebl.tests.bibliography.bibliography_test_helpers import (
+    BibliographyFixtures,
+    MongoEntryFactory,
+    assert_two_part_search,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
+from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
+
+
+@pytest.fixture
+def bibliography_fixtures(
+    bibliography: Bibliography,
+    bibliography_repository: BibliographyRepository,
+    user: User,
+    changelog: Changelog,
+    create_mongo_bibliography_entry: MongoEntryFactory,
+) -> BibliographyFixtures:
+    return BibliographyFixtures(
+        bibliography,
+        bibliography_repository,
+        user,
+        changelog,
+        create_mongo_bibliography_entry,
+    )
 
 
 def allow_identity_create(bibliography_repository, when, entry):
@@ -21,44 +49,24 @@ def allow_identity_update(bibliography_repository, when, entry):
     when(bibliography_repository).query_by_id(entry["id"]).thenReturn(entry)
 
 
-def test_search_container_short_collection_number(
-    bibliography, bibliography_repository, when
-):
-    bibliography_entry = BibliographyEntryFactory.build()
-    container_title = bibliography_entry["container-title-short"]
-    collection_number = bibliography_entry["collection-number"]
-    query = f"{container_title} {collection_number}"
-    (
-        when(bibliography_repository)
-        .query_by_author_year_and_title(container_title, int(collection_number), None)
-        .thenReturn([])
+def test_search_container_short_collection_number(bibliography_fixtures, when):
+    assert_two_part_search(
+        bibliography_fixtures,
+        when,
+        "container-title-short",
+        "collection-number",
+        "container",
     )
-    (
-        when(bibliography_repository)
-        .query_by_container_title_and_collection_number(
-            container_title, collection_number
-        )
-        .thenReturn([bibliography_entry])
-    )
-    assert [bibliography_entry] == bibliography.search(query)
 
 
-def test_search_title_short_volume(bibliography, bibliography_repository, when):
-    bibliography_entry = BibliographyEntryFactory.build()
-    title_short = bibliography_entry["title-short"]
-    volume = bibliography_entry["volume"]
-    query = f"{title_short} {volume}"
-    (
-        when(bibliography_repository)
-        .query_by_author_year_and_title(title_short, int(volume), None)
-        .thenReturn([])
+def test_search_title_short_volume(bibliography_fixtures, when):
+    assert_two_part_search(
+        bibliography_fixtures,
+        when,
+        "title-short",
+        "volume",
+        "title",
     )
-    (
-        when(bibliography_repository)
-        .query_by_title_short_and_volume(title_short, volume)
-        .thenReturn([bibliography_entry])
-    )
-    assert [bibliography_entry] == bibliography.search(query)
 
 
 def test_search_author_title_year(bibliography, bibliography_repository, when):
@@ -99,14 +107,10 @@ def test_search_excludes_deprecated_entries(
     assert bibliography.search(f"{author} {year} {title}") == [canonical_entry]
 
 
-def test_create(
-    bibliography,
-    bibliography_repository,
-    user,
-    changelog,
-    when,
-    create_mongo_bibliography_entry,
-):
+def test_create(bibliography_fixtures, when):
+    bibliography, bibliography_repository, user, changelog, create_mongo_entry = (
+        bibliography_fixtures
+    )
     bibliography_entry = BibliographyEntryFactory.build()
     created_id = bibliography_entry["id"]
     allow_identity_create(bibliography_repository, when, bibliography_entry)
@@ -117,7 +121,7 @@ def test_create(
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
-            create_mongo_bibliography_entry(),
+            create_mongo_entry(),
         )
         .thenReturn()
     )
@@ -142,14 +146,10 @@ def test_create_rejects_mismatched_repository_id(
         bibliography.create(bibliography_entry, user)
 
 
-def test_create_duplicate(
-    bibliography,
-    user,
-    when,
-    changelog,
-    bibliography_repository,
-    create_mongo_bibliography_entry,
-):
+def test_create_duplicate(bibliography_fixtures, when):
+    bibliography, bibliography_repository, user, changelog, create_mongo_entry = (
+        bibliography_fixtures
+    )
     bibliography_entry = BibliographyEntryFactory.build()
     allow_identity_create(bibliography_repository, when, bibliography_entry)
     when(bibliography_repository).release_pending_lookup_values(ANY).thenReturn()
@@ -159,7 +159,7 @@ def test_create_duplicate(
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
-            create_mongo_bibliography_entry(),
+            create_mongo_entry(),
         )
         .thenReturn()
     )
@@ -171,18 +171,14 @@ def test_create_duplicate(
         COLLECTION,
         user.profile,
         {"_id": bibliography_entry["id"]},
-        create_mongo_bibliography_entry(),
+        create_mongo_entry(),
     )
 
 
-def test_update(
-    bibliography,
-    bibliography_repository,
-    user,
-    when,
-    changelog,
-    create_mongo_bibliography_entry,
-):
+def test_update(bibliography_fixtures, when):
+    bibliography, bibliography_repository, user, changelog, create_mongo_entry = (
+        bibliography_fixtures
+    )
     bibliography_entry = BibliographyEntryFactory.build()
     allow_identity_update(bibliography_repository, when, bibliography_entry)
     when(bibliography_repository).commit_lookup_values(ANY, ANY).thenReturn()
@@ -194,8 +190,8 @@ def test_update(
         .create(
             COLLECTION,
             user.profile,
-            create_mongo_bibliography_entry(),
-            create_mongo_bibliography_entry(),
+            create_mongo_entry(),
+            create_mongo_entry(),
         )
         .thenReturn()
     )

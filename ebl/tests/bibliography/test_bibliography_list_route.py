@@ -87,7 +87,7 @@ def test_list_bibliography_skips_an_entry_with_a_broken_redirect(
     assert result.json == [valid_entry]
 
 
-def test_list_bibliography_serves_the_cached_response(
+def test_list_bibliography_returns_a_consistent_response(
     cached_client, bibliography, user
 ):
     entry = BibliographyEntryFactory.build(id="Q30000123")
@@ -99,3 +99,20 @@ def test_list_bibliography_serves_the_cached_response(
 
     assert first_result.status == falcon.HTTP_OK
     assert second_result.json == first_result.json
+
+
+def test_metadata_update_does_not_serve_a_stale_cached_batch_entry(
+    cached_client, bibliography, user
+):
+    entry = BibliographyEntryFactory.build(id="Q30000123", title="Old title")
+    bibliography.create(entry, user)
+    url = "/bibliography/list"
+    cached_client.simulate_get(url, params={"ids": entry["id"]})
+
+    update_result = cached_client.simulate_post(
+        f"/bibliography/{entry['id']}", json={**entry, "title": "New title"}
+    )
+    result = cached_client.simulate_get(url, params={"ids": entry["id"]})
+
+    assert update_result.status == falcon.HTTP_NO_CONTENT
+    assert result.json[0]["title"] == "New title"

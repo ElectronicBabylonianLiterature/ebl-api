@@ -14,6 +14,7 @@ from ebl.bibliography.application.serialization import (
     create_mongo_entry,
     create_object_entry,
 )
+from ebl.bibliography.application.server_owned_fields import stored_server_owned_fields
 from ebl.bibliography.infrastructure.bibliography_queries import (
     ACTIVE_BIBLIOGRAPHY_FILTER,
     author_year_title_match,
@@ -138,12 +139,17 @@ class MongoBibliographyRepository(BibliographyRepository):
     ) -> None:
         mongo_entry = create_mongo_entry(entry)
         id_ = mongo_entry["_id"]
+        intended_server_owned_fields = stored_server_owned_fields(entry)
         try:
             self._collection.update_one(
                 server_owned_state_filter(id_, expected_server_owned_fields),
                 server_owned_state_update(mongo_entry),
             )
         except NotFoundError as error:
+            if self._collection.exists(
+                server_owned_state_filter(id_, intended_server_owned_fields)
+            ):
+                return
             self._raise_update_failure(id_, error)
 
     def _raise_update_failure(self, id_: str, error: NotFoundError) -> NoReturn:

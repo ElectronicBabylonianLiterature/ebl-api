@@ -9,6 +9,7 @@ from typing import (
     Type,
     TypeVar,
     cast,
+    final,
 )
 
 import attr
@@ -21,6 +22,7 @@ from ebl.lemmatization.domain.lemmatization import (
 )
 from ebl.merger import Merger
 from ebl.transliteration.domain.alignment import AlignmentError, AlignmentToken
+from ebl.transliteration.domain.alignment_map import AlignmentMap
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
@@ -57,15 +59,13 @@ def merge_tokens(old: Sequence[Token], new: Sequence[Token]) -> Sequence[Token]:
     return Merger(map_, inner_merge).merge(old, new)
 
 
-AlignmentMap = Sequence[Optional[int]]
-
-
 def annotation_ids(
     token_map: Mapping[str, List[str]], token_id: Optional[str]
 ) -> List[str]:
     return token_map.get(token_id, []) if token_id else []
 
 
+@final
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
     line_number: AbstractLineNumber
@@ -147,12 +147,11 @@ class TextLine(Line):
         if not isinstance(other, TextLine):
             return other
 
-        other_text_line = cast(TextLine, other)
         return cast(
             L,
             TextLine.of_iterable(
-                other_text_line.line_number,
-                merge_tokens(self.content, other_text_line.content),
+                other.line_number,
+                merge_tokens(self.content, other.content),
             ),
         )
 

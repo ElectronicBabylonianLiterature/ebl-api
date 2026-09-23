@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta, timezone
 from typing import NoReturn
 
 import pytest
@@ -8,18 +7,17 @@ from ebl.bibliography.application.lookup_reservation import (
     LookupReservationState,
 )
 from ebl.errors import NotFoundError
-
-COLLECTION = "bibliography_lookup_reservations"
-NOW = datetime(2099, 1, 1, tzinfo=timezone.utc)
-LATER = NOW + timedelta(minutes=10)
-
-
-def mongo_datetime(value: datetime) -> datetime:
-    return value.replace(tzinfo=None)
-
-
-def operation(owner: str, entry_id: str = "Q30000000") -> LookupReservationOperation:
-    return LookupReservationOperation(owner, entry_id, LATER)
+from ebl.tests.bibliography.lookup_reservation_test_helpers import (
+    COLLECTION,
+    LATER,
+    NOW,
+    assert_duplicate_alias_reservation_fails_closed,
+    assert_duplicate_citation_key_reservations_are_reconciled,
+    assert_expired_pending_reservation_is_committed,
+    assert_ttl_deleted_abandoned_reservation_is_reclaimed,
+    mongo_datetime,
+    operation,
+)
 
 
 def test_reconcile_abandons_expired_pending_reservation(
@@ -48,20 +46,9 @@ def test_reconcile_retains_unexpired_pending_reservation(
 def test_reconcile_commits_expired_pending_reservation_with_entry(
     database, bibliography_repository, create_mongo_bibliography_entry
 ):
-    bibliography_repository.claim_lookup_values(
-        LookupReservationOperation("owner", "Q30000000", NOW), ["legacy-id"]
+    assert_expired_pending_reservation_is_committed(
+        database, bibliography_repository, create_mongo_bibliography_entry
     )
-    database["bibliography"].insert_one(
-        create_mongo_bibliography_entry(
-            {"id": "Q30000000", "type": "book", "aliases": [{"value": "legacy-id"}]}
-        )
-    )
-
-    assert bibliography_repository.reconcile_lookup_reservations(LATER) == 1
-
-    reservation = database[COLLECTION].find_one({"_id": "legacy-id"})
-    assert reservation["state"] == LookupReservationState.COMMITTED.value
-    assert "expiresAt" not in reservation
 
 
 def test_expired_pending_ownership_lookup_not_found_is_not_suppressed(
@@ -85,67 +72,16 @@ def test_expired_pending_ownership_lookup_not_found_is_not_suppressed(
 def test_reconcile_abandons_duplicate_citation_key_reservation_and_keeps_unique_one(
     database, bibliography_repository, create_mongo_bibliography_entry
 ):
-    bibliography_repository.claim_lookup_values(
-        LookupReservationOperation("owner-a", "Q30000000", NOW), ["shared-key"]
-    )
-    bibliography_repository.claim_lookup_values(
-        LookupReservationOperation("owner-b", "Q30000002", NOW), ["unique-key"]
-    )
-    database["bibliography"].insert_many(
-        [
-            create_mongo_bibliography_entry(
-                {"id": "Q30000000", "type": "book", "citationKey": "shared-key"}
-            ),
-            create_mongo_bibliography_entry(
-                {"id": "Q30000001", "type": "book", "citationKey": "shared-key"}
-            ),
-            create_mongo_bibliography_entry(
-                {"id": "Q30000002", "type": "book", "citationKey": "unique-key"}
-            ),
-        ]
-    )
-
-    assert bibliography_repository.reconcile_lookup_reservations(LATER) == 2
-
-    assert (
-        database[COLLECTION].find_one({"_id": "shared-key"})["state"]
-        == LookupReservationState.ABANDONED.value
-    )
-    assert (
-        database[COLLECTION].find_one({"_id": "unique-key"})["state"]
-        == LookupReservationState.COMMITTED.value
+    assert_duplicate_citation_key_reservations_are_reconciled(
+        database, bibliography_repository, create_mongo_bibliography_entry
     )
 
 
 def test_lookup_value_is_reserved_fails_closed_for_duplicate_alias(
     database, bibliography_repository, create_mongo_bibliography_entry
 ):
-    current_operation = operation("owner", entry_id="Q30000000")
-    bibliography_repository.claim_lookup_values(current_operation, ["legacy-id"])
-    bibliography_repository.commit_lookup_values(current_operation, NOW)
-    database["bibliography"].insert_many(
-        [
-            create_mongo_bibliography_entry(
-                {
-                    "id": "Q30000000",
-                    "type": "book",
-                    "aliases": [{"value": "legacy-id", "normalizedValue": "legacy-id"}],
-                }
-            ),
-            create_mongo_bibliography_entry(
-                {
-                    "id": "Q30000001",
-                    "type": "book",
-                    "aliases": [{"value": "legacy-id", "normalizedValue": "legacy-id"}],
-                }
-            ),
-        ]
-    )
-
-    assert bibliography_repository.lookup_value_is_reserved("legacy-id") is False
-    assert (
-        database[COLLECTION].find_one({"_id": "legacy-id"})["state"]
-        == LookupReservationState.ABANDONED.value
+    assert_duplicate_alias_reservation_fails_closed(
+        database, bibliography_repository, create_mongo_bibliography_entry
     )
 
 
@@ -193,24 +129,9 @@ def test_expired_abandoned_reservation_can_be_reclaimed(
 def test_reclaim_survives_abandoned_reservation_ttl_delete(
     monkeypatch, database, bibliography_repository
 ):
-    bibliography_repository.claim_lookup_values(
-        LookupReservationOperation("owner", "Q30000000", NOW), ["legacy-id"]
+    assert_ttl_deleted_abandoned_reservation_is_reclaimed(
+        monkeypatch, database, bibliography_repository
     )
-    bibliography_repository.reconcile_lookup_reservations(LATER)
-    collection = bibliography_repository._lookup_reservations._collection
-    original_replace_one = collection.replace_one
-
-    def replace_after_ttl_delete(document, filter_=None, upsert=False):
-        database[COLLECTION].delete_one(filter_)
-        return original_replace_one(document, filter_, upsert)
-
-    monkeypatch.setattr(collection, "replace_one", replace_after_ttl_delete)
-
-    bibliography_repository.claim_lookup_values(operation("other"), ["legacy-id"])
-
-    reservation = database[COLLECTION].find_one({"_id": "legacy-id"})
-    assert reservation["owner"] == "other"
-    assert reservation["state"] == LookupReservationState.PENDING.value
 
 
 def test_retire_lookup_values_abandons_only_matching_committed_claim(

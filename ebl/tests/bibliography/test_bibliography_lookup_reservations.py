@@ -1,26 +1,23 @@
-from datetime import datetime, timedelta, timezone
+from unittest.mock import Mock
 
 import pytest
+from pymongo.database import Database
+from pymongo.errors import AutoReconnect
 
 from ebl.bibliography.application.bibliography_repository import (
     LookupValueReservationError,
 )
 from ebl.bibliography.application.lookup_reservation import (
-    LookupReservationOperation,
     LookupReservationState,
 )
-
-COLLECTION = "bibliography_lookup_reservations"
-NOW = datetime(2099, 1, 1, tzinfo=timezone.utc)
-LATER = NOW + timedelta(minutes=10)
-
-
-def mongo_datetime(value: datetime) -> datetime:
-    return value.replace(tzinfo=None)
-
-
-def operation(owner: str, entry_id: str = "Q30000000") -> LookupReservationOperation:
-    return LookupReservationOperation(owner, entry_id, LATER)
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
+from ebl.tests.bibliography.lookup_reservation_test_helpers import (
+    COLLECTION,
+    LATER,
+    NOW,
+    mongo_datetime,
+    operation,
+)
 
 
 def test_claim_lookup_values_creates_pending_reservation(
@@ -94,3 +91,45 @@ def test_committed_claim_is_not_released_as_pending(database, bibliography_repos
     bibliography_repository.release_pending_lookup_values("owner")
 
     assert database[COLLECTION].count_documents({"_id": "legacy-id"}) == 1
+
+
+def test_ambiguous_insert_does_not_accept_another_operations_pending_claim(
+    monkeypatch: pytest.MonkeyPatch,
+    database: Database,
+    bibliography_repository: MongoBibliographyRepository,
+) -> None:
+    collection = bibliography_repository._lookup_reservations._collection
+    raw_collection = database[COLLECTION]
+    mocked_collection = Mock(wraps=raw_collection)
+    insert_calls = {"count": 0}
+
+    def ambiguous_insert(document: dict[str, object]) -> object:
+        insert_calls["count"] += 1
+        if insert_calls["count"] == 1:
+            raw_collection.insert_one(
+                {
+                    **document,
+                    "entryId": "Q30000001",
+                    "owner": "other-owner",
+                }
+            )
+            raise AutoReconnect("insert outcome unknown")
+        return raw_collection.insert_one(document)
+
+    mocked_collection.insert_one.side_effect = ambiguous_insert
+    monkeypatch.setattr(
+        collection,
+        "_MongoCollection__get_collection",
+        lambda: mocked_collection,
+    )
+
+    with pytest.raises(LookupValueReservationError):
+        bibliography_repository.claim_lookup_values(
+            operation("request-owner"), ["legacy-id"]
+        )
+
+    stored_reservation = raw_collection.find_one({"_id": "legacy-id"})
+    assert insert_calls["count"] == 2
+    assert stored_reservation is not None
+    assert stored_reservation["owner"] == "other-owner"
+    assert stored_reservation["entryId"] == "Q30000001"

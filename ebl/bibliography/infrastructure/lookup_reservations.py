@@ -4,6 +4,8 @@ from datetime import datetime
 from typing import Callable, Sequence
 
 import pymongo
+from pymongo.database import Database
+from pymongo.errors import DuplicateKeyError
 
 from ebl.bibliography.application.bibliography_repository import (
     LookupValueReservationError,
@@ -13,8 +15,7 @@ from ebl.bibliography.application.lookup_reservation import (
     LookupReservationState,
 )
 from ebl.bibliography.infrastructure.lookup_reservation_reconciliation import (
-    abandon_value,
-    reconcile_reservation,
+    LookupReservationReconciler,
 )
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -30,8 +31,9 @@ class LookupReservationClaim:
 
 
 class MongoLookupReservations:
-    def __init__(self, database):
+    def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
+        self._reconciler = LookupReservationReconciler(self._collection)
 
     def create_indexes(self) -> None:
         self._collection.create_index(
@@ -90,12 +92,8 @@ class MongoLookupReservations:
     def retire(self, entry_id: str, values: Sequence[str], now: datetime) -> None:
         for value in dict.fromkeys(values):
             with suppress(NotFoundError):
-                abandon_value(
-                    self._collection,
-                    value,
-                    now,
-                    entry_id,
-                    LookupReservationState.COMMITTED,
+                self._reconciler.abandon_value(
+                    value, now, entry_id, LookupReservationState.COMMITTED
                 )
 
     def is_active(
@@ -125,7 +123,7 @@ class MongoLookupReservations:
             ).limit(limit)
         )
         for reservation in candidates:
-            reconcile_reservation(self._collection, reservation, now, owns_value)
+            self._reconciler.reconcile(reservation, now, owns_value)
         return len(candidates)
 
     def reconcile_value(
@@ -135,48 +133,86 @@ class MongoLookupReservations:
             reservation = self._collection.find_one_by_id(value)
         except NotFoundError:
             return
-        reconcile_reservation(self._collection, reservation, now, owns_value)
+        self._reconciler.reconcile(reservation, now, owns_value)
 
     def _insert_pending(
         self,
         claim: LookupReservationClaim,
         owns_value: Callable[[str, str], bool],
     ) -> None:
-        try:
-            self._collection.insert_one(self._pending_document(claim))
-        except DuplicateError as error:
-            self._handle_existing_reservation(claim, owns_value, error)
+        last_error: DuplicateError | None = None
+        for _ in range(2):
+            try:
+                self._collection.insert_one(self._pending_document(claim))
+            except DuplicateError as error:
+                last_error = error
+            else:
+                try:
+                    reservation = self._collection.find_one_by_id(claim.value)
+                except NotFoundError:
+                    last_error = DuplicateError(
+                        f"Lookup reservation {claim.value} disappeared after insertion."
+                    )
+                    continue
+                if self._is_pending_claim(reservation, claim):
+                    return
+                last_error = DuplicateError(
+                    f"Lookup reservation {claim.value} changed during insertion."
+                )
+            assert last_error is not None
+            if self._handle_existing_reservation(claim, owns_value, last_error):
+                return
+        assert last_error is not None
+        raise LookupValueReservationError(claim.value) from last_error
 
     def _handle_existing_reservation(
         self,
         claim: LookupReservationClaim,
         owns_value: Callable[[str, str], bool],
         error: DuplicateError,
-    ) -> None:
+    ) -> bool:
         operation = claim.operation
         value = claim.value
-        reservation = self._collection.find_one_by_id(value)
+        try:
+            reservation = self._collection.find_one_by_id(value)
+        except NotFoundError:
+            return False
         if (
             reservation.get("owner") == operation.owner
+            and reservation.get("entryId") == operation.entry_id
             and reservation.get("state") == LookupReservationState.PENDING.value
         ):
-            return
+            return True
         if (
             reservation.get("entryId") == operation.entry_id
             and reservation.get("state") == LookupReservationState.COMMITTED.value
             and owns_value(operation.entry_id, value)
         ):
-            return
-        reconcile_reservation(self._collection, reservation, claim.now, owns_value)
-        reservation = self._collection.find_one_by_id(value)
+            return True
+        self._reconciler.reconcile(reservation, claim.now, owns_value)
+        try:
+            reservation = self._collection.find_one_by_id(value)
+        except NotFoundError:
+            return False
         if reservation.get("state") == LookupReservationState.ABANDONED.value:
-            self._collection.replace_one(
-                self._pending_document(claim),
-                {"_id": value, "state": LookupReservationState.ABANDONED.value},
-                upsert=True,
-            )
-            return
+            try:
+                self._collection.replace_one(
+                    self._pending_document(claim),
+                    {"_id": value, "state": LookupReservationState.ABANDONED.value},
+                    upsert=True,
+                )
+            except DuplicateKeyError as concurrent_error:
+                raise LookupValueReservationError(value) from concurrent_error
+            return True
         raise LookupValueReservationError(value) from error
+
+    @staticmethod
+    def _is_pending_claim(reservation: dict, claim: LookupReservationClaim) -> bool:
+        return (
+            reservation.get("owner") == claim.operation.owner
+            and reservation.get("entryId") == claim.operation.entry_id
+            and reservation.get("state") == LookupReservationState.PENDING.value
+        )
 
     def _pending_document(self, claim: LookupReservationClaim) -> dict:
         return {
