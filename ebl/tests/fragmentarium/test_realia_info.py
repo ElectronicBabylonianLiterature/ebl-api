@@ -2,6 +2,7 @@ import logging
 from types import SimpleNamespace
 from typing import List, Sequence, cast
 
+import pytest
 from pymongo.errors import PyMongoError
 
 from ebl.fragmentarium.application.realia_info import (
@@ -31,6 +32,9 @@ class FakeRealiaRepository(RealiaRepository):
         raise NotImplementedError()
 
     def search(self, query: str) -> Sequence[RealiaEntry]:
+        raise NotImplementedError()
+
+    def list_non_redirect_ids(self) -> Sequence[str]:
         raise NotImplementedError()
 
     def find_by_realia_ids(self, realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
@@ -132,3 +136,8 @@ def test_infrastructure_failure_is_logged(caplog):
 
     assert "Realia lookup failed for 1 id(s)" in caplog.text
     assert "realia store unavailable" in caplog.text
+
+
+def test_fake_repository_does_not_list_ids():
+    with pytest.raises(NotImplementedError):
+        FakeRealiaRepository([]).list_non_redirect_ids()
