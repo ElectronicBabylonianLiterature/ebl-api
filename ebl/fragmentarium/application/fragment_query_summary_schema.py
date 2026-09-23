@@ -1,4 +1,14 @@
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
+from types import SimpleNamespace
+
+from marshmallow import (
+    EXCLUDE,
+    Schema,
+    fields,
+    post_dump,
+    post_load,
+    pre_dump,
+    validate,
+)
 import pydash
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
@@ -18,6 +28,7 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     empty_matching_line_preview,
 )
 from ebl.schemas import ResearchProjectField, ValueEnumField
+from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 DEFAULT_THUMBNAIL_RESOLUTION = "small"
@@ -84,24 +95,17 @@ class FragmentQueryArchaeologySchema(Schema):
         return data or None
 
 
-class FragmentQueryPreviewTokenSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
+class FragmentQueryPreviewLineSchema(TextLineSchema):
+    type = fields.String(required=True, validate=validate.Equal("TextLine"))
+    index = fields.Integer(required=True)
 
-    value = fields.String(required=True)
-    cleanValue = fields.String(allow_none=True)
-    uniqueLemma = fields.List(fields.String())
-    type = fields.String()
+    @pre_dump
+    def prepare_line(self, data: dict, **kwargs) -> SimpleNamespace:
+        return SimpleNamespace(**data)
 
-
-class FragmentQueryPreviewLineSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    number = fields.String(required=True)
-    prefix = fields.String(required=True)
-    text = fields.String(required=True)
-    tokens = fields.Nested(FragmentQueryPreviewTokenSchema, many=True, required=True)
+    @post_load
+    def make_line(self, data, **kwargs) -> dict:
+        return data
 
 
 class FragmentQueryMatchingLinePreviewSchema(Schema):
@@ -180,6 +184,12 @@ class FragmentQueryResultSchema(QueryResultSchema):
         unknown = EXCLUDE
 
     items = fields.Nested(FragmentQuerySummarySchema, many=True, required=True)
+    bibliography_documents = fields.Dict(
+        keys=fields.String(),
+        values=fields.Dict(),
+        load_default=dict,
+        data_key="bibliographyDocuments",
+    )
 
     @post_load
     def make_query_result(self, data, **kwargs) -> FragmentQueryResult:

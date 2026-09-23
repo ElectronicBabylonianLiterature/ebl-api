@@ -14,7 +14,7 @@ from ebl.tests.fragmentarium.fragment_query_test_helpers import (
 )
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.sign import Sign, Value
+from ebl.transliteration.domain.sign import Sign, SignName, Value
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -129,7 +129,7 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
         ),
     )
     fragmentarium.create(fragment)
-    sign_repository.create(Sign("KUR₂", values=(Value("kur", 2),)))
+    sign_repository.create(Sign(SignName("KUR₂"), values=(Value("kur", 2),)))
 
     result = client.simulate_get(
         "/fragments/query",
@@ -138,18 +138,18 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_summary_of(fragment, matching_lines=[0])], 1
+        [query_summary_of(fragment, matching_lines=[0])], 1, bibliography_documents={}
     )
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
     assert "description" in result.json["items"][0]
     assert "script" in result.json["items"][0]
     assert "hasPhoto" in result.json["items"][0]
     preview_line = result.json["items"][0]["matchingLinePreview"]["lines"][0]
-    assert preview_line["text"] == "kur₂"
-    assert preview_line["tokens"][0]["value"] == "kur₂"
-    assert preview_line["tokens"][0]["cleanValue"] == "kur₂"
-    assert preview_line["tokens"][0]["type"] == "Word"
-    assert "parts" not in preview_line["tokens"][0]
+    assert preview_line["type"] == "TextLine"
+    assert preview_line["content"][0]["value"] == "kur₂"
+    assert preview_line["content"][0]["cleanValue"] == "kur₂"
+    assert preview_line["content"][0]["type"] == "Word"
+    assert preview_line["content"][0]["parts"]
 
 
 @pytest.mark.parametrize(

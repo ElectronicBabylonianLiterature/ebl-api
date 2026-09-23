@@ -58,9 +58,11 @@ def test_search_with_scopes_limit_summary(client, guest_client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_summary_of(fragment)], 0)
+    assert result.json == query_result_of(
+        [query_summary_of(fragment)], 0, bibliography_documents={}
+    )
     assert guest_result.status == falcon.HTTP_OK
-    assert guest_result.json == query_result_of([], 0)
+    assert guest_result.json == query_result_of([], 0, bibliography_documents={})
 
 
 @pytest.mark.parametrize(
@@ -78,7 +80,7 @@ def test_search_with_scopes_limit_summary(client, guest_client, fragmentarium):
         ({"scriptPeriod": Period.NEO_BABYLONIAN.long_name}, [0]),
     ],
 )
-def test_search_script_period(client, fragmentarium, params, expected):
+def test_search_script_period(client, fragmentarium, params: dict, expected: list[int]):
     fragments = [
         FragmentFactory.build(script=Script(Period.NEO_BABYLONIAN)),
         FragmentFactory.build(script=Script(Period.OLD_ASSYRIAN, PeriodModifier.EARLY)),
