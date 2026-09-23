@@ -1,6 +1,7 @@
-from typing import List, Optional, Tuple, Sequence, Dict
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
 from pymongo.collation import Collation
 
+from ebl.common.query.aggregation_matchers import match_all, text_id_pairs
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.schemas import (
@@ -52,22 +53,12 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
                     "$lookup": {
                         "from": "texts",
                         "let": {
-                            "chapterGenre": "$textId.genre",
-                            "chapterCategory": "$textId.category",
-                            "chapterIndex": "$textId.index",
+                            "genre": "$textId.genre",
+                            "category": "$textId.category",
+                            "index": "$textId.index",
                         },
                         "pipeline": [
-                            {
-                                "$match": {
-                                    "$expr": {
-                                        "$and": [
-                                            {"$eq": ["$genre", "$$chapterGenre"]},
-                                            {"$eq": ["$category", "$$chapterCategory"]},
-                                            {"$eq": ["$index", "$$chapterIndex"]},
-                                        ]
-                                    }
-                                }
-                            },
+                            match_all(text_id_pairs("$", "$$")),
                             {"$project": {"name": 1, "_id": 0}},
                         ],
                         "as": "textNames",
@@ -82,13 +73,15 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             ],
             allowDiskUse=True,
         )
-        return ChapterSchema(
-            context={"provenance_service": self._provenance_service}
-        ).load(
-            filter_query_by_transliteration(query, cursor), many=True
-        ), self._chapters.count_documents(mongo_query)
+        chapters = cast(
+            Sequence[Chapter],
+            ChapterSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(filter_query_by_transliteration(query, cursor), many=True),
+        )
+        return chapters, self._chapters.count_documents(mongo_query)
 
-    def _limit_by_genre(self, cursor: Sequence[Dict]) -> List[Dict]:
+    def _limit_by_genre(self, cursor: Iterable[Dict]) -> List[Dict]:
         LIMIT = 10
         limited_lines = []
         genre_counts = {genre.value: 0 for genre in Genre}
@@ -106,7 +99,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
     def query_by_lemma(
         self, lemma: str, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
-        lemma_query = {
+        lemma_query: Dict[str, Any] = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
                 {"lines.variants.manuscripts.line.content.uniqueLemma": lemma},
@@ -146,11 +139,11 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             ]
         )
 
-        return DictionaryLineSchema(
-            context={"provenance_service": self._provenance_service}
-        ).load(
-            self._limit_by_genre(lemma_lines),
-            many=True,
+        return cast(
+            Sequence[DictionaryLine],
+            DictionaryLineSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(self._limit_by_genre(lemma_lines), many=True),
         )
 
     def query(self, query: dict) -> CorpusQueryResult:
@@ -170,18 +163,22 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             data = None
 
         return (
-            CorpusQueryResultSchema().load(data)
+            cast(CorpusQueryResult, CorpusQueryResultSchema().load(data))
             if data
             else CorpusQueryResult.create_empty()
         )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
-            return self._manuscript_schema().load(
+            chapter = cast(
+                Dict[str, Any],
                 self._chapters.find_one(
                     chapter_id_query(id_), projection={"manuscripts": True}
-                )["manuscripts"],
-                many=True,
+                ),
+            )
+            return cast(
+                List[Manuscript],
+                self._manuscript_schema().load(chapter["manuscripts"], many=True),
             )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
@@ -189,8 +186,9 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
     def query_manuscripts_with_joins_by_chapter(
         self, id_: ChapterId
     ) -> List[Manuscript]:
-        try:
-            return self._manuscript_schema().load(
+        return cast(
+            List[Manuscript],
+            self._manuscript_schema().load(
                 self._chapters.aggregate(
                     [
                         {"$match": chapter_id_query(id_)},
@@ -202,6 +200,5 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
                     ]
                 ),
                 many=True,
-            )
-        except NotFoundError as error:
-            raise chapter_not_found(id_) from error
+            ),
+        )

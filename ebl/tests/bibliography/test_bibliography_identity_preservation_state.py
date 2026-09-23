@@ -1,3 +1,5 @@
+import datetime
+
 import falcon
 import pytest
 
@@ -6,6 +8,7 @@ from ebl.errors import DataError
 from ebl.tests.bibliography.identity_preservation_test_helpers import (
     CITATION_KEY,
     PARTNER_ALIAS,
+    RESERVATIONS,
     metadata_only_payload,
     post_entry,
     reservations,
@@ -17,6 +20,44 @@ DEPRECATED_ERROR = "RN2001 is deprecated; edit rla_9_388 instead"
 
 def deprecated_payload(deprecated_entry: dict, **overrides) -> dict:
     return {**metadata_only_payload(deprecated_entry), "id": "RN2001", **overrides}
+
+
+def test_reservations_hides_entries_awaiting_ttl_deletion(database) -> None:
+    database[RESERVATIONS].insert_one(
+        {
+            "_id": "condemned",
+            "state": LookupReservationState.ABANDONED.value,
+            "deleteAt": datetime.datetime(2000, 1, 1),
+        }
+    )
+
+    assert "condemned" not in reservations(database)
+
+
+def test_reservations_keeps_entries_with_no_delete_at(database) -> None:
+    database[RESERVATIONS].insert_one(
+        {"_id": "live", "state": LookupReservationState.COMMITTED.value}
+    )
+
+    assert "live" in reservations(database)
+
+
+def test_snapshot_survives_the_ttl_reaper_firing_between_reads(database) -> None:
+    database[RESERVATIONS].insert_many(
+        [
+            {"_id": "live", "state": LookupReservationState.COMMITTED.value},
+            {
+                "_id": "condemned",
+                "state": LookupReservationState.ABANDONED.value,
+                "deleteAt": datetime.datetime(2000, 1, 1),
+            },
+        ]
+    )
+    before = reservations(database)
+
+    database[RESERVATIONS].delete_one({"_id": "condemned"})
+
+    assert reservations(database) == before
 
 
 def test_metadata_update_keeps_every_reservation(client, database, aliased_entry):

@@ -70,16 +70,16 @@ class CorpusPatternMatcher:
             {"$sort": {"line": 1, "variant": 1}},
         ]
 
-    def _merge_pipelines(self) -> List[Dict]:
+    def _merge_pipelines(
+        self, lemma_matcher: CorpusLemmaMatcher, sign_matcher: CorpusSignMatcher
+    ) -> List[Dict]:
         return [
             {
                 "$facet": {
-                    "lemmas": self._lemma_matcher.build_pipeline(
+                    "lemmas": lemma_matcher.build_pipeline(
                         count_matches_per_item=False
                     ),
-                    "signs": self._sign_matcher.build_pipeline(
-                        count_matches_per_item=False
-                    ),
+                    "signs": sign_matcher.build_pipeline(count_matches_per_item=False),
                 }
             },
             {"$project": {"combined": {"$concatArrays": ["$lemmas", "$signs"]}}},
@@ -131,7 +131,9 @@ class CorpusPatternMatcher:
         pipeline = []
 
         if self._lemma_matcher and self._sign_matcher:
-            pipeline.extend(self._merge_pipelines())
+            pipeline.extend(
+                self._merge_pipelines(self._lemma_matcher, self._sign_matcher)
+            )
         elif self._lemma_matcher:
             pipeline.extend(self._lemma_matcher.build_pipeline())
         elif self._sign_matcher:
