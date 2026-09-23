@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Mapping, Optional
 
 from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE
 
@@ -127,7 +127,7 @@ class RealiaEntrySchema(Schema):
 
     @pre_load
     def treat_null_as_absent(self, data: object, **kwargs) -> object:
-        if not isinstance(data, dict):
+        if not isinstance(data, Mapping):
             return data
         return {key: value for key, value in data.items() if value is not None}
 

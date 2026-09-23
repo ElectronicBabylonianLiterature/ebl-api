@@ -1,3 +1,5 @@
+from types import MappingProxyType
+
 import falcon
 import pytest
 from marshmallow import ValidationError
@@ -22,6 +24,12 @@ NULLABLE_FIELDS = [
 @pytest.mark.parametrize("field", NULLABLE_FIELDS)
 def test_null_field_loads_as_absent(field: str) -> None:
     loaded = RealiaEntrySchema().load({"_id": "Anu", field: None})
+
+    assert loaded == RealiaEntrySchema().load({"_id": "Anu"})
+
+
+def test_null_field_in_non_dict_mapping_loads_as_absent() -> None:
+    loaded = RealiaEntrySchema().load(MappingProxyType({"_id": "Anu", "type": None}))
 
     assert loaded == RealiaEntrySchema().load({"_id": "Anu"})
 
