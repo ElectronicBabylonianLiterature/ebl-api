@@ -20,8 +20,9 @@ Two guards decide whether a metadata submission is allowed at all:
   value is not an exact round-trip of stored state; raised as a `DataError`.
 """
 
+import json
 from copy import deepcopy
-from typing import Any, Mapping, cast
+from typing import Any, Mapping, Sequence, cast
 
 from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
@@ -102,9 +103,13 @@ def _normalized_value(field: str, value: Any) -> Any:
     """
     if any(value == empty for empty in _EMPTY_SERVER_OWNED_VALUES):
         return None
-    if field == "aliases":
-        return sorted(tuple(sorted(alias.items())) for alias in value)
+    if field == "aliases" and isinstance(value, list):
+        return canonical_aliases(value)
     return value
+
+
+def canonical_aliases(aliases: Sequence[Any]) -> list[str]:
+    return sorted(json.dumps(alias, sort_keys=True, default=str) for alias in aliases)
 
 
 def changed_server_owned_fields(

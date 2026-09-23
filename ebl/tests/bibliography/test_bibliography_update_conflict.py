@@ -69,7 +69,9 @@ def inject_concurrent_write(
 
 
 def update_metadata(context: UpdateConflictContext) -> None:
-    context.bibliography.update(metadata_only_payload(context.entry), context.user)
+    context.bibliography.update_metadata(
+        metadata_only_payload(context.entry), context.user
+    )
 
 
 def stored(context: UpdateConflictContext) -> dict:
@@ -150,6 +152,31 @@ def test_conflict_is_reported_as_http_conflict(monkeypatch, conflict_context):
     )
 
     assert result.status == falcon.HTTP_CONFLICT
+
+
+def test_tombstone_race_during_the_request_is_a_conflict_not_a_rejection(
+    monkeypatch, conflict_context
+):
+    """The entry is live when the route reads it and is deprecated mid-request.
+
+    This differs from posting to an already-deprecated id (422, the entry is
+    deprecated before the route ever reads it): the CAS write below the route
+    finds the stored state changed out from under it and reports 409, the same
+    remedy as any other in-request identity race.
+    """
+    inject_concurrent_write(monkeypatch, conflict_context, DEPRECATE)
+    before = changelog_count(conflict_context)
+
+    result = post_entry(
+        conflict_context.client, metadata_only_payload(conflict_context.entry)
+    )
+    stored_entry = stored(conflict_context)
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert stored_entry["deprecated"] is True
+    assert stored_entry["redirectTo"] == "rla_9_388"
+    assert stored_entry["title"] == ORIGINAL_TITLE
+    assert changelog_count(conflict_context) == before
 
 
 def test_conflict_error_names_the_mismatched_fields():

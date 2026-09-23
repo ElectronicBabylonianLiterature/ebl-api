@@ -1,3 +1,10 @@
+"""Primitive-level recovery tests for `update_with_identity_claims`.
+
+The reachable identity-change recovery path (through `manage_identity`) is
+covered by `test_bibliography_identity_management_recovery.py`; these exercise
+the shared `_persist_with_identity_claims` bookkeeping directly.
+"""
+
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
@@ -73,7 +80,6 @@ def update_identity(context: "BibliographyIdentityUpdateContext", entry: dict) -
         BibliographyIdentityContext(
             context.bibliography_repository,
             context.changelog,
-            context.bibliography.find,
         ),
         entry,
         context.user,

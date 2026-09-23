@@ -1,25 +1,4 @@
-"""Validating an intended bibliography identity state before it is persisted.
-
-Redirect safety is checked by resolving the prospective entry through the same
-`follow_bibliography_redirect` used at read time, with the record under change
-substituted for its stored version. Reusing the reader keeps one redirect
-policy: the depth limit, the cycle rule and the missing-target rule cannot
-drift apart from what resolution actually enforces.
-
-`_validate_redirect` only walks forward from the entry being changed, so a
-change that is within the depth limit for that entry alone can still push an
-existing predecessor -- a tombstone that already redirects to it, directly or
-transitively -- over the limit. `_validate_inbound_chains` walks backward from
-the entry through `query_by_redirect_target` and re-resolves every such
-predecessor the same way, so that case is rejected too. It does not, and
-cannot on its own, protect against two such changes racing on different
-entries at once; that needs a lock or transaction spanning both records, which
-this module does not provide.
-
-A rejected request is reported as `DataError` (HTTP 422) rather than the
-reader's `NotFoundError`/`DuplicateError`, because it is the submitted
-identity state that is unacceptable, not the addressed record.
-"""
+"""Validating an intended bibliography identity state before it is persisted."""
 
 from copy import deepcopy
 from typing import Any, Callable, Mapping, Sequence

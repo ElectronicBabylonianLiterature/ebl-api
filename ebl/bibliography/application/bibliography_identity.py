@@ -1,29 +1,9 @@
-"""Trusted bibliography identity primitives.
-
-`update_with_identity_claims` and `update_identity_fields_only` are the two
-paths allowed to change the server-owned identity of an entry: both diff the
-lookup values, claim the added ones, retire the removed ones, and recover
-reservations when persistence fails. They differ only in what they persist.
-
-`update_with_identity_claims` replaces the whole document. `Bibliography.update`
-is the generic CSL metadata editor and deliberately calls it with identity
-preserved, so a metadata edit never claims or retires anything; the full
-replace is correct there because writing new CSL content is the point.
-
-`update_identity_fields_only` writes just the four identity fields via
-`$set`/`$unset`. The trusted identity operation reads a document once, does
-further I/O (redirect validation, lookup claims) before it can persist, and
-must never let that first read's copy of CSL content overwrite a metadata
-edit that lands in between -- a full replace would do exactly that.
-
-Callers that need to mutate identity must supply the new values themselves
-rather than routing through the metadata editor.
-"""
+"""Trusted bibliography identity primitives."""
 
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Callable, Mapping, Optional, Sequence
+from typing import Any, Callable, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyRepository,
@@ -46,7 +26,6 @@ COLLECTION = "bibliography"
 class BibliographyIdentityContext:
     repository: BibliographyRepository
     changelog: Changelog
-    find: Callable[[str], dict]
 
 
 def identity_values(entry: dict[str, Any]) -> set[str]:
@@ -82,26 +61,27 @@ def create_with_identity_claims(
         raise
 
 
-def _claim_persist_and_record(
+def _persist_with_identity_claims(
     context: BibliographyIdentityContext,
     entry: dict[str, Any],
     user: User,
-    old_entry: dict[str, Any],
-    persist: Callable[[dict[str, Any], Mapping[str, Any]], None],
-) -> None:
+    stored_entry: dict[str, Any],
+    persist: Callable[[dict[str, Any], dict[str, Any]], None],
+) -> str:
     repository = context.repository
-    if old_entry.get("id") != entry["id"]:
+    if stored_entry.get("id") != entry["id"]:
         raise Defect(
-            f"Stored bibliography {old_entry.get('id')} does not match "
+            f"Stored bibliography {stored_entry.get('id')} does not match "
             f"the entry being updated {entry['id']}."
         )
-    expected_server_owned_fields = stored_server_owned_fields(old_entry)
-    old_values = identity_values(old_entry)
+    expected_server_owned_fields = stored_server_owned_fields(stored_entry)
+    old_values = identity_values(stored_entry)
     new_values = identity_values(entry)
     values_to_claim = sorted(new_values - old_values)
     values_to_retire = sorted(old_values - new_values)
-    now = datetime.now(timezone.utc)
-    operation = new_lookup_reservation_operation(entry["id"], now)
+    operation = new_lookup_reservation_operation(
+        entry["id"], datetime.now(timezone.utc)
+    )
     try:
         repository.claim_lookup_values(operation, values_to_claim)
         ensure_lookup_values_available(repository, values_to_claim, entry["id"])
@@ -117,16 +97,17 @@ def _claim_persist_and_record(
         context.changelog.create(
             COLLECTION,
             user.profile,
-            create_mongo_entry(old_entry),
+            create_mongo_entry(stored_entry),
             create_mongo_entry(entry),
         )
     except Exception:
         logging.exception(
-            "Bibliography identity write for %s persisted but finalization failed; "
-            "lookup reservations will be reconciled and the changelog entry may "
-            "be missing",
+            "Bibliography identity write for %s persisted but finalization "
+            "(lookup-reservation commit / changelog) failed; reservations will "
+            "be reconciled and the changelog entry may be missing",
             entry["id"],
         )
+    return operation.owner
 
 
 def update_with_identity_claims(
@@ -135,13 +116,13 @@ def update_with_identity_claims(
     user: User,
     stored_entry: dict[str, Any] | None = None,
 ) -> None:
-    old_entry = (
-        context.repository.query_by_id(entry["id"])
-        if stored_entry is None
-        else stored_entry
+    resolved_stored_entry: dict[str, Any] = (
+        stored_entry
+        if stored_entry is not None
+        else context.repository.query_by_id(entry["id"])
     )
-    _claim_persist_and_record(
-        context, entry, user, old_entry, context.repository.update
+    _persist_with_identity_claims(
+        context, entry, user, resolved_stored_entry, context.repository.update
     )
 
 
@@ -150,22 +131,19 @@ def update_identity_fields_only(
     entry: dict[str, Any],
     user: User,
     stored_entry: dict[str, Any],
-) -> None:
-    _claim_persist_and_record(
-        context, entry, user, stored_entry, context.repository.update_identity_fields
+) -> str:
+    return _persist_with_identity_claims(
+        context,
+        entry,
+        user,
+        stored_entry,
+        context.repository.update_identity_fields,
     )
 
 
 def raw_lookup_owner(
     repository: BibliographyRepository, value: str
 ) -> Optional[dict[str, Any]]:
-    """The document that literally stores `value`, without following redirects.
-
-    A deprecated entry's own lookup values stay physically present on its
-    document until retired, even though reads resolve it to its redirect
-    target. An availability check based on the resolved read would see the
-    target as already owning the value and let the target claim it too.
-    """
     for query in (
         repository.query_by_id,
         repository.query_by_citation_key,

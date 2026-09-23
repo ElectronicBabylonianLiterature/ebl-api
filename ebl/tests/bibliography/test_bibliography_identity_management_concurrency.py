@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 
 import falcon
@@ -13,6 +14,8 @@ from ebl.bibliography.application.bibliography_repository import (
 from ebl.bibliography.application.identity_management import (
     BibliographyIdentityManagement,
 )
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
+from ebl.errors import DataError
 from ebl.tests.bibliography.identity_management_test_helpers import (
     RESERVATIONS,
     admin_client,
@@ -26,15 +29,8 @@ from ebl.users.domain.user import User
 
 
 @pytest.fixture
-def client(context):
-    return admin_client(context)
-
-
-@pytest.fixture
 def identity_management(bibliography_repository, changelog, bibliography):
-    return BibliographyIdentityManagement(
-        bibliography_repository, changelog, bibliography.find
-    )
+    return BibliographyIdentityManagement(bibliography_repository, changelog)
 
 
 @dataclass(frozen=True)
@@ -42,15 +38,23 @@ class ConcurrencyContext:
     client: testing.TestClient
     database: Database
     bibliography: Bibliography
+    bibliography_repository: MongoBibliographyRepository
     identity_management: BibliographyIdentityManagement
     user: User
 
 
 @pytest.fixture
 def concurrency_context(
-    client, database, bibliography, identity_management, user
+    context, database, bibliography, identity_management, user
 ) -> ConcurrencyContext:
-    return ConcurrencyContext(client, database, bibliography, identity_management, user)
+    return ConcurrencyContext(
+        admin_client(context),
+        database,
+        bibliography,
+        context.bibliography_repository,
+        identity_management,
+        user,
+    )
 
 
 def interleave(monkeypatch, concurrent_change):
@@ -169,10 +173,13 @@ def test_stale_stored_entry_raises_a_conflict(
         )
 
 
-def test_a_cross_record_redirect_race_is_rolled_back(monkeypatch, concurrency_context):
+def test_a_concurrent_cross_record_redirect_break_is_rolled_back(
+    monkeypatch, concurrency_context
+):
     context = concurrency_context
     entry(context.bibliography, context.user, "Q30000095")
     entry(context.bibliography, context.user, "Q30000096")
+
     real_persist = identity_module.update_identity_fields_only
     calls = {"count": 0}
 
@@ -193,3 +200,45 @@ def test_a_cross_record_redirect_race_is_rolled_back(monkeypatch, concurrency_co
     assert "deprecated" not in stored(context.database, "Q30000095")
     assert stored(context.database, "Q30000096")["redirectTo"] == "Q30000095"
     assert context.bibliography.find("Q30000096")["id"] == "Q30000095"
+
+
+def test_failed_redirect_rollback_logs_and_preserves_the_validation_conflict(
+    monkeypatch, caplog, concurrency_context
+):
+    context = concurrency_context
+    entry(context.bibliography, context.user, "Q30000097")
+    entry(context.bibliography, context.user, "Q30000098")
+    real_persist = identity_module.update_identity_fields_only
+    calls = {"count": 0}
+    released_owners = []
+
+    def persist(identity, entry_, user, stored_entry):
+        if calls["count"] == 0:
+            calls["count"] += 1
+            context.database["bibliography"].update_one(
+                {"_id": "Q30000098"},
+                {"$set": {"deprecated": True, "redirectTo": "Q30000097"}},
+            )
+            return real_persist(identity, entry_, user, stored_entry)
+        raise RuntimeError("rollback CAS lost")
+
+    monkeypatch.setattr(identity_module, "update_identity_fields_only", persist)
+    monkeypatch.setattr(
+        context.bibliography_repository,
+        "release_pending_lookup_values",
+        released_owners.append,
+    )
+
+    with (
+        caplog.at_level(logging.ERROR),
+        pytest.raises(BibliographyUpdateConflictError) as raised,
+    ):
+        context.identity_management.manage_identity(
+            "Q30000097", {"deprecateTo": "Q30000098"}, context.user
+        )
+
+    assert isinstance(raised.value.__cause__, DataError)
+    assert "Q30000097" in caplog.text
+    assert "rollback CAS lost" in caplog.text
+    assert stored(context.database, "Q30000097")["redirectTo"] == "Q30000098"
+    assert released_owners == []

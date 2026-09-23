@@ -19,13 +19,6 @@ class LookupValueInUseError(DuplicateError):
 
 
 class BibliographyUpdateConflictError(DuplicateError):
-    """The server-owned state the update was based on is no longer current.
-
-    Raised both when the submitted entry disagrees with the stored identity
-    state and when another operation changes it while the update runs. The
-    remedy is the same in either case: reload the entry and retry.
-    """
-
     def __init__(self, id_: str, fields: Sequence[str] = ()):
         self.id_ = id_
         self.fields = tuple(fields)
@@ -93,11 +86,6 @@ class BibliographyRepository(ABC):
 
     @abstractmethod
     def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
-        """Every stored entry whose `redirectTo` literally equals `id_`.
-
-        Direct predecessors only -- does not itself walk transitive inbound
-        chains.
-        """
         raise NotImplementedError
 
     @abstractmethod
@@ -114,12 +102,6 @@ class BibliographyRepository(ABC):
     def update_identity_fields(
         self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
     ) -> None:
-        """Persist only the server-owned identity fields of `entry`.
-
-        Unlike `update`, every other field of the stored document is left
-        untouched, so a concurrent edit to non-identity state cannot be
-        reverted by this write.
-        """
         raise NotImplementedError
 
     @abstractmethod

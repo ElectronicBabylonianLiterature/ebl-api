@@ -30,9 +30,10 @@ from ebl.bibliography.application.server_owned_fields import (
     reject_submitted_server_owned_fields,
     reject_unknown_metadata_fields,
 )
+from ebl.bibliography.application.update_target import stored_entry_for_update
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
-from ebl.errors import DataError, NotFoundError
+from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
 
@@ -41,9 +42,9 @@ class Bibliography:
         self._repository = repository
         self._changelog = changelog
         self._partner = PartnerBibliography(self, repository)
-        self._identity = BibliographyIdentityContext(repository, changelog, self.find)
+        self._identity = BibliographyIdentityContext(repository, changelog)
 
-    def create(self, entry, user: User) -> str:
+    def create(self, entry: dict, user: User) -> str:
         """Create an entry, claiming whatever identity state it carries.
 
         Trusted internal caller path, mirroring `update`: the identity fields
@@ -78,7 +79,10 @@ class Bibliography:
         resolved_entries: list[dict] = []
         seen_ids: set[str] = set()
         for entry in self._repository.query_by_ids(ids):
-            resolved_entry = self._follow_redirect(entry)
+            try:
+                resolved_entry = self._follow_redirect(entry)
+            except (NotFoundError, DuplicateError):
+                continue
             resolved_id = resolved_entry["id"]
             if resolved_id not in seen_ids:
                 resolved_entries.append(resolved_entry)
@@ -88,30 +92,25 @@ class Bibliography:
     def _follow_redirect(self, entry: dict) -> dict:
         return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
-    def update(self, entry: dict, user: User) -> None:
+    def update_metadata(self, entry: dict, user: User) -> None:
         """Edit the metadata of an entry, keeping its persisted identity state.
 
-        Trusted internal caller path: submitted server-owned fields are ignored
-        rather than rejected, because the caller (`PartnerBibliography`) has
-        already screened them out and rebuilt the entry from stored state.
-        """
-        stored_entry = self._stored_entry_for_update(entry)
-        self._persist_update(entry, stored_entry, user)
+        The only way to write an existing entry, for clients and for trusted
+        internal callers alike. Client-editable CSL fields are replaced by the
+        submission; `aliases`, `citationKey`, `deprecated`, `redirectTo` and
+        every other persisted field the client does not own are carried over
+        from the stored record.
 
-    def update_metadata(self, entry: dict, user: User) -> None:
-        """Edit the metadata of an entry on behalf of a client.
-
-        Same persistence as `update`, but a submitted server-owned field that
-        disagrees with stored state is reported as a conflict, and a key the
-        contract does not recognise is rejected, instead of either being
-        silently dropped.
+        A submitted server-owned field that disagrees with stored state is a
+        conflict: never a silent overwrite, and never a silent drop either, so a
+        caller holding a stale identity is told to reload rather than writing on
+        top of the newer state.
         """
-        stored_entry = self._stored_entry_for_update(entry)
+        stored_entry = stored_entry_for_update(
+            entry, self._repository.query_by_id, self.find
+        )
         reject_unknown_metadata_fields(entry, stored_entry)
         self._reject_changed_server_owned_fields(entry, stored_entry)
-        self._persist_update(entry, stored_entry, user)
-
-    def _persist_update(self, entry: dict, stored_entry: dict, user: User) -> None:
         update_with_identity_claims(
             self._identity,
             preserve_persisted_fields(entry, stored_entry),
@@ -123,18 +122,6 @@ class Bibliography:
     def _reject_changed_server_owned_fields(entry: dict, stored_entry: dict) -> None:
         if changed_fields := changed_server_owned_fields(entry, stored_entry):
             raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
-
-    def _stored_entry_for_update(self, entry: dict) -> dict:
-        id_ = entry.get("id")
-        if not isinstance(id_, str) or not id_:
-            raise DataError("Bibliography entry id is required.")
-        stored_entry = self._repository.query_by_id(id_)
-        if stored_entry.get("deprecated"):
-            raise DataError(
-                f"Bibliography entry {id_} is deprecated; "
-                f"edit {stored_entry.get('redirectTo')} instead."
-            )
-        return stored_entry
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []
@@ -225,7 +212,7 @@ class Bibliography:
         for reference in references:
             try:
                 entry = self.find(reference.id)
-            except NotFoundError:
+            except (NotFoundError, DuplicateError):
                 invalid_references.append(reference.id)
             else:
                 canonical_references.append(

@@ -1,12 +1,4 @@
-"""Internal route for the trusted bibliography identity operation.
-
-Kept out of `bibliography_entries.py` so that the privilege boundary is
-visible: `POST /bibliography/{id_}` remains metadata-only under
-`write:bibliography`, while identity changes live on a separate path behind
-`admin:bibliography`. That scope matters because internal and partner routes
-are served by one app behind one auth backend, so a partner M2M client holding
-`write:bibliography` would otherwise reach this operation.
-"""
+"""Internal route for the trusted bibliography identity operation."""
 
 import falcon
 from falcon import Response

@@ -15,6 +15,9 @@ from pymongo.database import Database
 
 from ebl.bibliography.application import identity_management as identity_module
 from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.bibliography_repository import (
+    BibliographyRepository,
+)
 from ebl.bibliography.application.identity_management import (
     BibliographyIdentityManagement,
 )
@@ -37,9 +40,7 @@ def client(context):
 
 @pytest.fixture
 def identity_management(bibliography_repository, changelog, bibliography):
-    return BibliographyIdentityManagement(
-        bibliography_repository, changelog, bibliography.find
-    )
+    return BibliographyIdentityManagement(bibliography_repository, changelog)
 
 
 @dataclass(frozen=True)
@@ -47,16 +48,22 @@ class ReactivationContext:
     client: testing.TestClient
     database: Database
     bibliography: Bibliography
+    bibliography_repository: BibliographyRepository
     identity_management: BibliographyIdentityManagement
     user: User
 
 
 @pytest.fixture
 def reactivation_context(
-    client, database, bibliography, identity_management, user
+    context, database, bibliography, identity_management, user
 ) -> ReactivationContext:
     return ReactivationContext(
-        client, database, bibliography, identity_management, user
+        admin_client(context),
+        database,
+        bibliography,
+        context.bibliography_repository,
+        identity_management,
+        user,
     )
 
 
@@ -78,20 +85,68 @@ def interleave_metadata_edit(monkeypatch, bibliography, user, id_: str, **change
 
 
 def test_concurrent_title_edit_survives_an_alias_addition(
-    monkeypatch, client, database, bibliography, user
+    monkeypatch, reactivation_context
 ):
-    entry(bibliography, user, "Q30000160")
+    context = reactivation_context
+    entry(context.bibliography, context.user, "Q30000160")
     interleave_metadata_edit(
-        monkeypatch, bibliography, user, "Q30000160", title="Concurrent title"
+        monkeypatch,
+        context.bibliography,
+        context.user,
+        "Q30000160",
+        title="Concurrent title",
     )
 
-    result = manage_identity(client, "Q30000160", {"addAliases": [alias("new-alias")]})
+    result = manage_identity(
+        context.client, "Q30000160", {"addAliases": [alias("new-alias")]}
+    )
 
     assert result.status == falcon.HTTP_OK
     assert body(result)["title"] == "Concurrent title"
-    stored_entry = stored(database, "Q30000160")
+    stored_entry = stored(context.database, "Q30000160")
+    assert result.json == context.bibliography_repository.query_by_id("Q30000160")
     assert stored_entry["title"] == "Concurrent title"
     assert stored_entry["aliases"] == [alias("new-alias")]
+
+
+def test_concurrent_metadata_edits_are_last_write_wins(
+    bibliography, bibliography_repository, user
+):
+    original = entry(bibliography, user, "Q30000168")
+    first_edit = {**original, "title": "First title"}
+    second_edit = {**original, "title": "Second title"}
+
+    bibliography.update_metadata(first_edit, user)
+    bibliography.update_metadata(second_edit, user)
+
+    assert bibliography_repository.query_by_id("Q30000168")["title"] == "Second title"
+
+
+def test_noop_returns_an_authoritative_concurrent_metadata_edit(
+    monkeypatch,
+    bibliography,
+    bibliography_repository,
+    identity_management,
+    user,
+):
+    bibliography_entry = entry(bibliography, user, "Q30000167")
+    original_apply = identity_module.apply_identity_commands
+
+    def apply_with_concurrent_edit(stored_entry, commands):
+        updated_entry = original_apply(stored_entry, commands)
+        bibliography.update_metadata(
+            {**bibliography_entry, "title": "Concurrent title"}, user
+        )
+        return updated_entry
+
+    monkeypatch.setattr(
+        identity_module, "apply_identity_commands", apply_with_concurrent_edit
+    )
+
+    result = identity_management.manage_identity("Q30000167", {}, user)
+
+    assert result == bibliography_repository.query_by_id("Q30000167")
+    assert result["title"] == "Concurrent title"
 
 
 def test_concurrent_title_edit_survives_a_citation_key_change(

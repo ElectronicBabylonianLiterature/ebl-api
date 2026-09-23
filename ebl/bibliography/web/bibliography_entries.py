@@ -1,10 +1,7 @@
 import falcon
-from falcon_caching import Cache
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
-import json
 from typing import Mapping, Sequence
-from ebl.cache.application.cache import DAILY_TIMEOUT
 
 from ebl.bibliography.application.server_owned_fields import (
     reject_submitted_server_owned_fields,
@@ -101,20 +98,12 @@ class BibliographyEntriesResource:
 
 
 class BibliographyList:
-    def __init__(self, bibliography: Bibliography, cache: Cache):
+    def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
-        self._cache = cache
 
     def on_get(self, req: Request, resp: Response) -> None:
         ids = req.params["ids"].split(",")
-        cache_key = ",".join(sorted(set(ids)))
-
-        if cached := self._cache.get(cache_key):
-            resp.text = cached
-        else:
-            data = json.dumps(self._bibliography.find_many(ids))
-            self._cache.set(cache_key, data, timeout=DAILY_TIMEOUT)
-            resp.text = data
+        resp.media = self._bibliography.find_many(ids)
 
 
 class BibliographyAll:
@@ -146,6 +135,7 @@ class PartnerBibliographyResource:
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
@@ -170,6 +160,7 @@ class PartnerBibliographyEntryResource:
         resp.media = self._bibliography.find_partner_entry(id_or_citation_key)
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(
@@ -204,6 +195,7 @@ class PartnerBibliographyDuplicateOverrideResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:

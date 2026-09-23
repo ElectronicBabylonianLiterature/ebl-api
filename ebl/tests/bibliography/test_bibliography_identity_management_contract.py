@@ -7,6 +7,7 @@ from ebl.tests.bibliography.identity_management_test_helpers import (
     admin_client,
     alias,
     body,
+    description,
     entry,
     manage_identity,
     stored,
@@ -80,6 +81,14 @@ def test_alias_without_a_value_is_rejected(client, subject):
     assert result.status == falcon.HTTP_BAD_REQUEST
 
 
+def test_alias_with_an_empty_value_is_rejected(client, subject):
+    result = manage_identity(
+        client, "Q30000110", {"addAliases": [{"value": "", "normalizedValue": ""}]}
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+
+
 def test_unknown_alias_field_is_rejected(client, subject):
     result = manage_identity(
         client, "Q30000110", {"addAliases": [{"value": "a", "project": "x"}]}
@@ -98,6 +107,7 @@ def test_unknown_record_is_not_found(client):
     result = manage_identity(client, "Q39999999", {"addAliases": [alias("orphan")]})
 
     assert result.status == falcon.HTTP_NOT_FOUND
+    assert description(result) == "Bibliography entry Q39999999 not found."
 
 
 def test_response_returns_the_resulting_entry(client, subject):

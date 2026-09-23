@@ -35,8 +35,26 @@ FUTURE = datetime(2099, 1, 1)
 
 @pytest.fixture
 def identity_management(bibliography_repository, changelog, bibliography):
-    return BibliographyIdentityManagement(
-        bibliography_repository, changelog, bibliography.find
+    return BibliographyIdentityManagement(bibliography_repository, changelog)
+
+
+@dataclass(frozen=True)
+class RecoveryServices:
+    identity_management: BibliographyIdentityManagement
+    bibliography_repository: MongoBibliographyRepository
+    changelog: Changelog
+    bibliography: Bibliography
+
+
+@pytest.fixture
+def recovery_services(
+    identity_management,
+    bibliography_repository,
+    changelog,
+    bibliography,
+) -> RecoveryServices:
+    return RecoveryServices(
+        identity_management, bibliography_repository, changelog, bibliography
     )
 
 
@@ -57,15 +75,20 @@ class RecoveryContext:
 
 
 @pytest.fixture
-def recovery_context(request: pytest.FixtureRequest) -> RecoveryContext:
+def recovery_context(
+    recovery_services: RecoveryServices,
+    database: Database,
+    user: User,
+    client: testing.TestClient,
+) -> RecoveryContext:
     return RecoveryContext(
-        request.getfixturevalue("identity_management"),
-        request.getfixturevalue("bibliography_repository"),
-        request.getfixturevalue("changelog"),
-        request.getfixturevalue("database"),
-        request.getfixturevalue("bibliography"),
-        request.getfixturevalue("user"),
-        request.getfixturevalue("client"),
+        recovery_services.identity_management,
+        recovery_services.bibliography_repository,
+        recovery_services.changelog,
+        database,
+        recovery_services.bibliography,
+        user,
+        client,
     )
 
 

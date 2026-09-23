@@ -69,7 +69,9 @@ def test_update_cannot_tombstone_an_active_record(client, bibliography, aliased_
     assert stored_entry.get("redirectTo") is None
 
 
-def test_update_reports_a_lifecycle_change_as_a_conflict(client, aliased_entry):
+def test_update_reports_a_lifecycle_change_as_a_conflict(
+    client, bibliography, aliased_entry
+):
     """A lone `deprecated` is a stale-state conflict, not a schema error.
 
     The stored-entry rule that `deprecated` requires `redirectTo` used to fire
@@ -79,10 +81,14 @@ def test_update_reports_a_lifecycle_change_as_a_conflict(client, aliased_entry):
     payload = {**metadata_only_payload(aliased_entry), "deprecated": True}
 
     result = post_entry(client, payload)
+    stored_entry = bibliography.find(aliased_entry["id"])
 
     assert result.status == falcon.HTTP_CONFLICT
     assert "deprecated" in result.text
     assert "redirectTo' is a required property" not in result.text
+    assert stored_entry.get("deprecated") is None
+    assert stored_entry.get("redirectTo") is None
+    assert stored_entry["title"] == aliased_entry["title"]
 
 
 def test_update_cannot_steal_an_alias_from_another_record(

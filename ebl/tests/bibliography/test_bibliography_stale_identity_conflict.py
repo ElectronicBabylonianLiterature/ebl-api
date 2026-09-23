@@ -1,12 +1,3 @@
-"""Cross-request conflict contract for the generic metadata update.
-
-A client can only submit server-owned state it fetched earlier, so when that
-state disagrees with what is stored the server cannot tell a stale editor from
-a client inventing an identity value. Both answer `409 Conflict` and neither
-persists the submitted value, which keeps the remedy the same as for a write
-that races the request: reload the entry and retry.
-"""
-
 from dataclasses import dataclass
 from typing import Callable
 
@@ -16,9 +7,9 @@ from falcon import testing
 from pymongo.database import Database
 
 from ebl.bibliography.application.bibliography import Bibliography
-from ebl.bibliography.application.bibliography_identity import (
-    BibliographyIdentityContext,
-    update_with_identity_claims,
+from ebl.tests.bibliography.identity_management_test_helpers import (
+    admin_client,
+    manage_identity,
 )
 from ebl.tests.bibliography.identity_preservation_test_helpers import (
     CITATION_KEY,
@@ -44,17 +35,26 @@ ADDED_ALIASES = [PARTNER_ALIAS, MERGED_ALIAS]
 
 
 @pytest.fixture
-def identity_operation(bibliography, bibliography_repository, changelog, user):
-    """Mutate identity the way a trusted operation would, bypassing the route."""
+def identity_operation(context, bibliography_repository):
+    client = admin_client(context)
 
-    def operate(entry: dict) -> None:
-        update_with_identity_claims(
-            BibliographyIdentityContext(
-                bibliography_repository, changelog, bibliography.find
-            ),
-            entry,
-            user,
-        )
+    def operate(desired_entry: dict) -> None:
+        current_entry = bibliography_repository.query_by_id(desired_entry["id"])
+        commands: dict[str, object] = {}
+        added_aliases = [
+            alias
+            for alias in desired_entry.get("aliases", [])
+            if alias not in current_entry.get("aliases", [])
+        ]
+        if added_aliases:
+            commands["addAliases"] = added_aliases
+        if desired_entry.get("citationKey") != current_entry.get("citationKey"):
+            commands["citationKey"] = desired_entry.get("citationKey")
+        if desired_entry.get("deprecated") is True:
+            commands["deprecateTo"] = desired_entry["redirectTo"]
+
+        result = manage_identity(client, desired_entry["id"], commands)
+        assert result.status == falcon.HTTP_OK
 
     return operate
 
@@ -221,8 +221,9 @@ def test_a_stale_body_cannot_resurrect_a_tombstoned_entry(tombstone_conflict_con
     stored_entry = context.database["bibliography"].find_one(
         {"_id": context.aliased_entry["id"]}
     )
+    assert stored_entry is not None
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert "is deprecated" in result.text
     assert stored_entry["deprecated"] is True
     assert stored_entry["redirectTo"] == CANONICAL_ID

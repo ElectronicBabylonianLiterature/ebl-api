@@ -126,3 +126,23 @@ def test_collision_writes_no_changelog_entry(
     manage_identity(client, "Q30000020", {"addAliases": [alias("blocked")]})
 
     assert database["changelog"].count_documents({"resource_id": "Q30000020"}) == before
+
+
+def test_claiming_a_value_stored_on_two_documents_is_a_conflict(
+    client, database, bibliography, user, subject
+):
+    entry(bibliography, user, "Q30000028")
+    entry(bibliography, user, "Q30000029")
+    database["bibliography"].update_one(
+        {"_id": "Q30000028"}, {"$set": {"citationKey": "double-key"}}
+    )
+    database["bibliography"].update_one(
+        {"_id": "Q30000029"}, {"$set": {"citationKey": "double-key"}}
+    )
+    before = stored(database, "Q30000020")
+
+    result = manage_identity(client, "Q30000020", {"citationKey": "double-key"})
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert_unchanged_identity(database, before)
+    assert database[RESERVATIONS].count_documents({"state": "pending"}) == 0

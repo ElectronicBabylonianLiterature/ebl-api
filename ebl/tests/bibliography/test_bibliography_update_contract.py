@@ -119,4 +119,5 @@ def test_get_resolves_a_citation_key_that_update_does_not_address(
     )
 
     assert get_result.status == falcon.HTTP_OK
-    assert post_result.status == falcon.HTTP_NOT_FOUND
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert aliased_entry["id"] in post_result.text

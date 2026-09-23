@@ -1,22 +1,63 @@
+import datetime
+
 import falcon
 import pytest
 
 from ebl.bibliography.application.lookup_reservation import LookupReservationState
-from ebl.errors import DataError
+from ebl.errors import DuplicateError
 from ebl.tests.bibliography.identity_preservation_test_helpers import (
     CITATION_KEY,
     PARTNER_ALIAS,
+    RESERVATIONS,
     metadata_only_payload,
     post_entry,
     reservations,
 )
 
 
-DEPRECATED_ERROR = "RN2001 is deprecated; edit rla_9_388 instead"
+DEPRECATED_ERROR = "RN2001 is deprecated; reload the entry and edit rla_9_388 instead"
 
 
 def deprecated_payload(deprecated_entry: dict, **overrides) -> dict:
     return {**metadata_only_payload(deprecated_entry), "id": "RN2001", **overrides}
+
+
+def test_reservations_hides_entries_awaiting_ttl_deletion(database) -> None:
+    database[RESERVATIONS].insert_one(
+        {
+            "_id": "condemned",
+            "state": LookupReservationState.ABANDONED.value,
+            "deleteAt": datetime.datetime(2000, 1, 1),
+        }
+    )
+
+    assert "condemned" not in reservations(database)
+
+
+def test_reservations_keeps_entries_with_no_delete_at(database) -> None:
+    database[RESERVATIONS].insert_one(
+        {"_id": "live", "state": LookupReservationState.COMMITTED.value}
+    )
+
+    assert "live" in reservations(database)
+
+
+def test_snapshot_survives_the_ttl_reaper_firing_between_reads(database) -> None:
+    database[RESERVATIONS].insert_many(
+        [
+            {"_id": "live", "state": LookupReservationState.COMMITTED.value},
+            {
+                "_id": "condemned",
+                "state": LookupReservationState.ABANDONED.value,
+                "deleteAt": datetime.datetime(2000, 1, 1),
+            },
+        ]
+    )
+    before = reservations(database)
+
+    database[RESERVATIONS].delete_one({"_id": "condemned"})
+
+    assert reservations(database) == before
 
 
 def test_metadata_update_keeps_every_reservation(client, database, aliased_entry):
@@ -63,15 +104,15 @@ def test_rejected_identity_input_adds_no_reservations(client, database, aliased_
 
 
 def test_deprecated_record_update_is_rejected(bibliography, user, deprecated_entry):
-    with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(deprecated_payload(deprecated_entry), user)
+    with pytest.raises(DuplicateError, match=DEPRECATED_ERROR):
+        bibliography.update_metadata(deprecated_payload(deprecated_entry), user)
 
 
 def test_rejected_deprecated_update_keeps_tombstone(
     bibliography, user, database, deprecated_entry
 ):
-    with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(deprecated_payload(deprecated_entry), user)
+    with pytest.raises(DuplicateError, match=DEPRECATED_ERROR):
+        bibliography.update_metadata(deprecated_payload(deprecated_entry), user)
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})
 
     assert stored_entry["deprecated"] is True
@@ -81,8 +122,8 @@ def test_rejected_deprecated_update_keeps_tombstone(
 def test_rejected_deprecated_update_keeps_redirect_working(
     bibliography, user, deprecated_entry
 ):
-    with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(deprecated_payload(deprecated_entry), user)
+    with pytest.raises(DuplicateError, match=DEPRECATED_ERROR):
+        bibliography.update_metadata(deprecated_payload(deprecated_entry), user)
 
     assert bibliography.find("RN2001")["id"] == "rla_9_388"
 
@@ -90,8 +131,8 @@ def test_rejected_deprecated_update_keeps_redirect_working(
 def test_deprecated_record_update_cannot_clear_tombstone_fields(
     bibliography, user, database, deprecated_entry
 ):
-    with pytest.raises(DataError, match=DEPRECATED_ERROR):
-        bibliography.update(
+    with pytest.raises(DuplicateError, match=DEPRECATED_ERROR):
+        bibliography.update_metadata(
             deprecated_payload(deprecated_entry, deprecated=False), user
         )
     stored_entry = database["bibliography"].find_one({"_id": "RN2001"})

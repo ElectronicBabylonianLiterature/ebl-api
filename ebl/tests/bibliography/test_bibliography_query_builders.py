@@ -30,6 +30,20 @@ def test_author_year_title_match_and_pipeline() -> None:
     assert pipeline[2]["$sort"]["title"] == 1
 
 
+@pytest.mark.parametrize(
+    "author,year,title,expected",
+    [
+        (None, 2003, "Gilgamesh", {"issued.date-parts.0.0", "$expr"}),
+        ("George", None, "Gilgamesh", {"author.0.family", "$expr"}),
+        ("George", 2003, None, {"author.0.family", "issued.date-parts.0.0"}),
+    ],
+)
+def test_author_year_title_match_omits_absent_filters(
+    author, year, title, expected
+) -> None:
+    assert set(author_year_title_match(author, year, title)) == expected
+
+
 def test_query_by_author_year_and_title_uses_title_sort(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

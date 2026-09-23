@@ -31,11 +31,11 @@ def create_bibliography_routes(api: falcon.App, context: Context):
     bibliography_resource = BibliographyResource(bibliography)
     bibliography_entries = BibliographyEntriesResource(bibliography)
     bibliography_all = BibliographyAll(bibliography)
-    bibliography_list = BibliographyList(bibliography, context.cache)
+    bibliography_list = BibliographyList(bibliography)
     duplicate_candidates = BibliographyDuplicateCandidatesResource(bibliography)
     bibliography_identity = BibliographyIdentityResource(
         BibliographyIdentityManagement(
-            context.bibliography_repository, context.changelog, bibliography.find
+            context.bibliography_repository, context.changelog
         )
     )
     partner_bibliography = PartnerBibliographyResource(bibliography)

@@ -6,6 +6,10 @@ import pytest
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.tests.bibliography.bibliography_route_test_helpers import INVALID_ENTRIES
+from ebl.tests.bibliography.identity_management_test_helpers import (
+    admin_client,
+    manage_identity,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
@@ -92,14 +96,51 @@ def test_create_entry_invalid(transform, client):
     assert put_result.status == falcon.HTTP_BAD_REQUEST
 
 
-def test_create_rejects_lifecycle_state_outright(client):
-    bibliography_entry = BibliographyEntryFactory.build(deprecated=True)
+@pytest.mark.parametrize(
+    "identity_fields",
+    [
+        {"citationKey": "protected-key"},
+        {"citationKey": ""},
+        {"aliases": [{"value": "protected-alias"}]},
+        {"aliases": []},
+        {"deprecated": True},
+        {"deprecated": False},
+        {"redirectTo": "Q30000001"},
+        {"redirectTo": None},
+        {"deprecated": True, "redirectTo": "Q30000001"},
+    ],
+)
+def test_create_rejects_server_owned_fields(client, identity_fields):
+    bibliography_entry = {**BibliographyEntryFactory.build(), **identity_fields}
 
     result = client.simulate_post("/bibliography", json=bibliography_entry)
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert "deprecated" in result.text
-    assert "identity" in result.text
+    assert "server-owned fields" in result.json["description"]
+
+
+def test_writer_creates_metadata_then_admin_assigns_identity(client, context):
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000199")
+
+    create_result = client.simulate_post("/bibliography", json=bibliography_entry)
+    identity_result = manage_identity(
+        admin_client(context),
+        bibliography_entry["id"],
+        {"citationKey": "admin-assigned-key"},
+    )
+
+    assert create_result.status == falcon.HTTP_CREATED
+    assert identity_result.status == falcon.HTTP_OK
+    assert identity_result.json == {
+        **bibliography_entry,
+        "citationKey": "admin-assigned-key",
+    }
+
+
+def test_create_rejects_a_non_object_body(client):
+    result = client.simulate_post("/bibliography", body=json.dumps(["not-an-object"]))
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
 
 
 def test_update_entry(client, saved_entry):
@@ -157,87 +198,9 @@ def test_search(client, saved_entry, params):
     assert result.status == falcon.HTTP_OK
 
 
-def test_list_all_bibliography(client, saved_entry):
-    result = client.simulate_get("/bibliography/all")
-
-    assert result.json == [saved_entry["id"]]
-    assert result.status == falcon.HTTP_OK
-
-
-def test_list_all_bibliography_excludes_deprecated(client, bibliography, user):
-    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
-    deprecated_entry = BibliographyEntryFactory.build(
-        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
-    )
-    bibliography.create(canonical_entry, user)
-    bibliography.create(deprecated_entry, user)
-
-    result = client.simulate_get("/bibliography/all")
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [canonical_entry["id"]]
-
-
-def test_list_bibliography(client, saved_entries):
-    ids = [entry["id"] for entry in saved_entries]
-    result = client.simulate_get(f"/bibliography/list?ids={','.join(ids)}")
-
-    assert result.json == saved_entries
-    assert result.status == falcon.HTTP_OK
-
-
-def test_list_bibliography_resolves_deprecated_ids(client, bibliography, user):
-    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
-    deprecated_entry = BibliographyEntryFactory.build(
-        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
-    )
-    bibliography.create(canonical_entry, user)
-    bibliography.create(deprecated_entry, user)
-
-    result = client.simulate_get(
-        "/bibliography/list", params={"ids": deprecated_entry["id"]}
-    )
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [canonical_entry]
-
-
-def test_list_bibliography_deduplicates_redirected_canonical_entries(
-    client, bibliography, user
-):
-    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
-    deprecated_entry = BibliographyEntryFactory.build(
-        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
-    )
-    bibliography.create(canonical_entry, user)
-    bibliography.create(deprecated_entry, user)
-
-    result = client.simulate_get(
-        "/bibliography/list",
-        params={"ids": f"{deprecated_entry['id']},{canonical_entry['id']}"},
-    )
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [canonical_entry]
-
-
 def test_update_entry_rejects_a_non_object_body(client, saved_entry):
     result = client.simulate_post(
         f"/bibliography/{saved_entry['id']}", body=json.dumps([saved_entry])
     )
 
     assert result.status == falcon.HTTP_BAD_REQUEST
-
-
-def test_list_bibliography_serves_the_cached_response(
-    cached_client, bibliography, user
-):
-    entry = BibliographyEntryFactory.build(id="Q30000123")
-    bibliography.create(entry, user)
-    url = "/bibliography/list"
-
-    first_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
-    second_result = cached_client.simulate_get(url, params={"ids": entry["id"]})
-
-    assert first_result.status == falcon.HTTP_OK
-    assert second_result.json == first_result.json
