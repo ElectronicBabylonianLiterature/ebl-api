@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Mapping, Optional, Sequence
 
 from ebl.media.application.media_stored import StoredMedia
-from ebl.media.domain import Media, MediaId
+from ebl.media.domain import Media, MediaId, MediaImportSource
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -18,6 +18,13 @@ class MediaReader(ABC):
 
         Must be consistent with `find_by_id`: both describe one current state.
         """
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_by_import_source(
+        self, import_source: MediaImportSource
+    ) -> Optional[Media]:
+        """Return the media with this complete import identity, or None."""
         raise NotImplementedError
 
     @abstractmethod
@@ -49,9 +56,10 @@ class MediaReader(ABC):
         """Return the media only when it is associated with `fragment_id`.
 
         Returns None when the media does not exist *or* is not associated with
-        that fragment. The fragment argument is an authorization boundary and
+        that fragment. The fragment argument is an object-scoping boundary and
         must never be ignored: returning media associated only with another
-        fragment is an IDOR defect.
+        fragment is an IDOR defect. The web layer must authenticate and
+        authorize the caller before invoking this repository operation.
         """
         raise NotImplementedError
 
@@ -83,10 +91,25 @@ class MediaReader(ABC):
 
 class MediaWriter(ABC):
     @abstractmethod
+    def set_primary(
+        self, fragment_id: MuseumNumber, media_id: MediaId
+    ) -> Sequence[Media]:
+        """Atomically promote one associated media and demote all its peers.
+
+        Raises `MediaNotFoundError` when the target is absent or outside the
+        fragment. The read, validation, and complete transition occur in one
+        repository operation so concurrent writers cannot leave stale or
+        multiple primary flags. Stored handles remain unchanged.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def create(self, media: StoredMedia) -> MediaId:
         """Insert complete stored state; never update.
 
-        Raises `MediaAlreadyExistsError` when the media id is already present.
+        Raises `MediaAlreadyExistsError` when the media id or non-null import
+        source is already present. Both uniqueness checks and insertion are one
+        atomic operation so concurrent imports cannot create duplicate sources.
         """
         raise NotImplementedError
 
@@ -97,6 +120,8 @@ class MediaWriter(ABC):
         The target must already exist, otherwise `MediaNotFoundError` is raised.
         Media identity is preserved. Domain metadata and stored handle
         references switch together, so no partial current state is observable.
+        A non-null import source remains unique across all media, checked in the
+        same atomic operation as the replacement.
 
         The return value is the state that was current *before* this call. Only
         `previous.superseded_by(replacement)` may be deleted afterwards; the
@@ -110,9 +135,8 @@ class MediaWriter(ABC):
         """Atomically replace several media; return their previous states in order.
 
         All targets are validated before anything mutates: duplicate media ids
-        are rejected and every target must already exist. Either every
-        replacement is applied or none is, so a caller cannot observe a
-        half-applied per-fragment primary transition.
+        and duplicate non-null import sources are rejected, and every target
+        must already exist. Either every replacement is applied or none is.
 
         The result is positional: index `i` is the state that was current before
         `media[i]` was applied, so callers may pair `previous[i]` with
@@ -124,10 +148,21 @@ class MediaWriter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def delete(self, media_id: MediaId) -> None:
-        """Delete media metadata only; idempotent, and a no-op when absent.
+    def delete(self, media_id: MediaId) -> Optional[StoredMedia]:
+        """Atomically hide metadata and retain its stored state for cleanup.
 
-        Stored binaries are removed separately, after this succeeds.
+        Repeated calls return the same tombstoned state until `finish_delete`.
+        Creation with the same media id is rejected while that tombstone exists.
+        This makes exact-handle binary cleanup retryable without allowing a
+        retry to delete a newly created generation.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def finish_delete(self, media: StoredMedia) -> None:
+        """Discard this exact tombstone after all its handles are deleted.
+
+        A stale completion is a no-op when a newer deletion generation exists.
         """
         raise NotImplementedError
 

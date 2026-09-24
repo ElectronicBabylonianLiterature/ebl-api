@@ -14,7 +14,7 @@ from ebl.media.application import (
     StoredRepresentationMissingError,
     ThumbnailRepresentationWriteRequest,
 )
-from ebl.media.domain import Media, MediaId, ThumbnailSize
+from ebl.media.domain import Media, MediaId, MediaRepresentation, ThumbnailSize
 from ebl.tests.media.factories import (
     association,
     media_id,
@@ -24,14 +24,20 @@ from ebl.tests.media.factories import (
 from ebl.tests.media.in_memory_media import (
     InMemoryRepresentationStore,
 )
+from ebl.tests.media.representation_helpers import representation_for_content
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 K1 = MuseumNumber.of("K.1")
+WRITE_CONTENT = b"media-bytes"
 
 
 def write_content() -> BytesIO:
-    return BytesIO(b"media-bytes")
+    return BytesIO(WRITE_CONTENT)
+
+
+def write_representation() -> MediaRepresentation:
+    return representation_for_content(WRITE_CONTENT, original_representation())
 
 
 def photo_with_small_thumbnail() -> Media:
@@ -76,13 +82,13 @@ def test_thumbnail_write_request_requires_thumbnail_size() -> None:
 
 def test_representation_store_writes_accept_operation_specific_requests() -> None:
     original_request = OriginalRepresentationWriteRequest(
-        media_id(), write_content(), original_representation()
+        media_id(), write_content(), write_representation()
     )
     display_request = DisplayRepresentationWriteRequest(
-        media_id(), write_content(), original_representation()
+        media_id(), write_content(), write_representation()
     )
     thumbnail_request = ThumbnailRepresentationWriteRequest(
-        media_id(), write_content(), original_representation(), ThumbnailSize.SMALL
+        media_id(), write_content(), write_representation(), ThumbnailSize.SMALL
     )
     store = InMemoryRepresentationStore()
 
@@ -99,7 +105,7 @@ def test_representation_store_writes_accept_operation_specific_requests() -> Non
 
 def test_representation_open_returns_a_streamable_handle() -> None:
     request = OriginalRepresentationWriteRequest(
-        PHOTO_ID, write_content(), original_representation()
+        PHOTO_ID, write_content(), write_representation()
     )
     store = InMemoryRepresentationStore()
 
@@ -108,12 +114,33 @@ def test_representation_open_returns_a_streamable_handle() -> None:
 
     assert handle.media_id == PHOTO_ID
     assert handle.representation.mime_type == "image/jpeg"
-    assert handle.content.read() == b"media-bytes"
+    assert handle.content.read() == WRITE_CONTENT
+
+
+def test_deleted_handle_value_is_never_reissued() -> None:
+    store = InMemoryRepresentationStore()
+    first = store.write_original(
+        OriginalRepresentationWriteRequest(
+            PHOTO_ID, write_content(), write_representation()
+        )
+    )
+    store.delete_representation(first)
+
+    second = store.write_original(
+        OriginalRepresentationWriteRequest(
+            PHOTO_ID, write_content(), write_representation()
+        )
+    )
+
+    assert second != first
+    assert second.value != first.value
 
 
 def test_opening_an_absent_handle_raises_a_storage_integrity_error() -> None:
     store = InMemoryRepresentationStore()
-    handle = StoredRepresentationHandle("secret-gridfs-object-id")
+    handle = StoredRepresentationHandle(
+        PHOTO_ID, "secret-gridfs-object-id", original_representation()
+    )
 
     with pytest.raises(StoredRepresentationMissingError) as error_info:
         store.open_representation(handle)

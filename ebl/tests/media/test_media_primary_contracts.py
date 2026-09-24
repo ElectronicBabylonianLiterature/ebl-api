@@ -90,7 +90,7 @@ def test_selection_rejects_media_from_another_fragment() -> None:
         has_photo(K1, (unrelated,))
 
 
-def test_service_owns_the_single_primary_per_fragment_invariant() -> None:
+def test_repository_owns_the_single_primary_per_fragment_invariant() -> None:
     repository = InMemoryMediaRepository(
         stored_media_sequence(photo(PHOTO_ID, 0, True), photo(SECOND_PHOTO_ID, 1, True))
     )

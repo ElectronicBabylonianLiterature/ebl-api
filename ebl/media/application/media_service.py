@@ -45,20 +45,19 @@ class MediaService(ABC):
     ) -> Sequence[Media]:
         """Promote one media and demote the fragment's others, atomically.
 
-        Rejects a target not associated with the fragment. Applies through one
-        batch replacement so the fragment never ends with two primaries or none.
-        Stored representation handles are unchanged: no binary is written and
-        nothing becomes superseded. Associations with other fragments are kept.
+        Rejects a target not associated with the fragment. Delegates the whole
+        transition to one atomic repository operation so concurrent callers
+        cannot leave stale or multiple primary flags. Stored representation
+        handles are unchanged and associations with other fragments are kept.
         """
         raise NotImplementedError
 
     @abstractmethod
     def delete_media(self, media_id: MediaId) -> None:
-        """Delete metadata first, then the stored binaries it owned.
+        """Tombstone metadata, delete its exact handles, then finish deletion.
 
-        That order is deliberate: binaries orphaned by a later failure stay
-        recoverable through the orphan audit, whereas live metadata pointing at
-        deleted binaries is not.
+        A failed binary delete leaves the tombstone available to a retry, while
+        ordinary reads no longer expose metadata pointing at missing bytes.
         """
         raise NotImplementedError
 
@@ -70,8 +69,8 @@ class MediaImporter(ABC):
 
         When `request.dry_run` is true the call MUST NOT mutate anything: no
         `write_original`, `write_display` or `write_thumbnail`; no `create`,
-        `replace`, `replace_many` or `delete`; no `delete_representation` or
-        `delete_representations`; no association or primary change. No binary
+        `replace`, `replace_many` or `delete`; no `delete_representation`; no
+        association or primary change. No binary
         may even be staged. Reads, validation, MIME inspection, duplicate
         detection and reporting are allowed, and the report must describe what
         the same request would have done with `dry_run` false.

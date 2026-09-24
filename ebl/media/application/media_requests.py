@@ -16,6 +16,7 @@ from ebl.media.domain.validation import (
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 MAX_BACKFILL_BATCH_SIZE = 1_000
+MAX_IMPORT_FRAGMENT_IDS = 1_000
 
 
 class ImportMode(Enum):
@@ -62,14 +63,14 @@ def _museum_numbers_of(
         raise ValueError("Attribute fragment_ids must be a sequence of museum numbers.")
     if value is not None and not isinstance(value, Sequence):
         raise ValueError("Attribute fragment_ids must be a sequence of museum numbers.")
-    try:
-        fragment_ids = tuple_or_empty(value)
-    except TypeError as error:
-        raise ValueError(
-            "Attribute fragment_ids must be a sequence of museum numbers."
-        ) from error
+    fragment_ids = tuple_or_empty(value)
     if any(not isinstance(fragment_id, MuseumNumber) for fragment_id in fragment_ids):
         raise ValueError("Attribute fragment_ids must contain only museum numbers.")
+    if len(fragment_ids) > MAX_IMPORT_FRAGMENT_IDS:
+        raise ValueError(
+            f"Attribute fragment_ids must contain at most {MAX_IMPORT_FRAGMENT_IDS} "
+            "museum numbers."
+        )
     return tuple(dict.fromkeys(fragment_ids))
 
 
@@ -78,10 +79,7 @@ def _strings_of(value: Optional[Sequence[str]]) -> tuple[str, ...]:
         raise ValueError("String collections must be sequences of strings.")
     if value is not None and not isinstance(value, Sequence):
         raise ValueError("String collections must be sequences of strings.")
-    try:
-        strings = tuple_or_empty(value)
-    except TypeError as error:
-        raise ValueError("String collections must be sequences of strings.") from error
+    strings = tuple_or_empty(value)
     if any(not isinstance(item, str) for item in strings):
         raise ValueError("String collections must contain only strings.")
     return strings
@@ -94,10 +92,7 @@ def _report_entries_of(
         raise ValueError("Report entries must be a sequence of pairs.")
     if value is not None and not isinstance(value, Sequence):
         raise ValueError("Report entries must be a sequence of pairs.")
-    try:
-        report_entries = tuple_or_empty(value)
-    except TypeError as error:
-        raise ValueError("Report entries must be a sequence of pairs.") from error
+    report_entries = tuple_or_empty(value)
 
     merged: dict[BackfillCategory, list[str]] = {}
     for item in report_entries:

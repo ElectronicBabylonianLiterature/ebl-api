@@ -4,10 +4,9 @@ from ebl.media.application.media_stored import (
     DisplayRepresentationWriteRequest,
     OpenRepresentation,
     OriginalRepresentationWriteRequest,
-    StoredRepresentationHandle,
     ThumbnailRepresentationWriteRequest,
 )
-from ebl.media.domain import MediaId
+from ebl.media.application.media_storage_identity import StoredRepresentationHandle
 
 
 class MediaRepresentationStore(ABC):
@@ -22,6 +21,9 @@ class MediaRepresentationStore(ABC):
         client error. The caller owns the returned stream and must close it.
         Implementations may stream rather than buffer, and callers must not
         assume the stream is seekable.
+
+        The returned media id and byte length must match the requested handle's
+        owner and representation metadata.
         """
         raise NotImplementedError
 
@@ -32,12 +34,18 @@ class MediaRepresentationStore(ABC):
         """Store an original and return a NEW logical version handle.
 
         Every successful write creates a new independently addressable logical
-        stored version, and returns a handle different from every still-live
-        handle it replaces. Existing handles keep identifying their existing
-        bytes until that exact handle is deleted. A provider may deduplicate
-        physical bytes only if deleting one logical handle cannot break another.
-        Returning a stable handle whose bytes were overwritten is a defect: it
-        makes replacement destroy the current version.
+        stored version. Its opaque handle value must never have been returned by
+        any previous write, even after deletion. Existing handles keep
+        identifying their existing bytes until that exact handle is deleted. A
+        provider may deduplicate physical bytes only if deleting one logical
+        handle cannot break another. Returning or reissuing a stable handle
+        whose bytes were overwritten is a defect: stale cleanup could delete a
+        newer generation.
+
+        Implementations must enforce upload limits while streaming, determine
+        the actual MIME type, and verify the byte count and SHA-256 checksum
+        against the supplied representation metadata before committing. SVG
+        originals must be sanitized before they become readable.
         """
         raise NotImplementedError
 
@@ -45,14 +53,14 @@ class MediaRepresentationStore(ABC):
     def write_display(
         self, request: DisplayRepresentationWriteRequest
     ) -> StoredRepresentationHandle:
-        """Store a display representation. New logical version per `write_original`."""
+        """Store a display with all integrity checks defined by `write_original`."""
         raise NotImplementedError
 
     @abstractmethod
     def write_thumbnail(
         self, request: ThumbnailRepresentationWriteRequest
     ) -> StoredRepresentationHandle:
-        """Store one thumbnail. New logical version per `write_original`."""
+        """Store a thumbnail with all integrity checks defined by `write_original`."""
         raise NotImplementedError
 
     @abstractmethod
@@ -60,13 +68,5 @@ class MediaRepresentationStore(ABC):
         """Delete exactly the one logical version named; idempotent when absent.
 
         Must not affect any other handle, including handles that share bytes.
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def delete_representations(self, media_id: MediaId) -> None:
-        """Delete every logical version owned by this media; idempotent.
-
-        Must never touch versions owned by another media id.
         """
         raise NotImplementedError

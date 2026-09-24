@@ -5,30 +5,59 @@ from ebl.media.application import (
     StoredMedia,
     StoredMediaRepresentations,
     StoredRepresentationHandle,
+    StoredRepresentationRole,
     StoredThumbnailRepresentation,
 )
 from ebl.media.domain import Media, MediaId, ThumbnailSize
-from ebl.tests.media.factories import photo_media, representations, stored_media
+from ebl.tests.media.factories import (
+    display_representation,
+    original_representation,
+    photo_media,
+    representations,
+    stored_media,
+    thumbnail_representation,
+)
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 
 
-def handle(value: str) -> StoredRepresentationHandle:
-    return StoredRepresentationHandle(value)
+def handle(
+    value: str,
+    role: StoredRepresentationRole = StoredRepresentationRole.ORIGINAL,
+) -> StoredRepresentationHandle:
+    representation = (
+        display_representation()
+        if role is StoredRepresentationRole.DISPLAY
+        else original_representation()
+    )
+    return StoredRepresentationHandle(PHOTO_ID, value, representation, role=role)
+
+
+def thumbnail_handle(value: str) -> StoredRepresentationHandle:
+    return StoredRepresentationHandle(
+        PHOTO_ID,
+        value,
+        thumbnail_representation(),
+        role=StoredRepresentationRole.THUMBNAIL,
+        thumbnail_size=ThumbnailSize.SMALL,
+    )
 
 
 def state(original: str, small: str) -> StoredMediaRepresentations:
     return StoredMediaRepresentations(
         handle(original),
-        (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle(small)),),
+        (StoredThumbnailRepresentation(ThumbnailSize.SMALL, thumbnail_handle(small)),),
     )
 
 
 def state_with_display(
     original: str, small: str, display: str
 ) -> StoredMediaRepresentations:
-    return attr.evolve(state(original, small), display=handle(display))
+    return attr.evolve(
+        state(original, small),
+        display=handle(display, StoredRepresentationRole.DISPLAY),
+    )
 
 
 def photo_with_small_thumbnail() -> Media:
@@ -53,7 +82,7 @@ def test_replacing_every_binary_supersedes_every_previous_handle() -> None:
 
     assert set(previous.superseded_by(replacement)) == {
         handle("old-original"),
-        handle("old-small"),
+        thumbnail_handle("old-small"),
     }
 
 
@@ -85,18 +114,18 @@ def test_superseded_handles_never_include_a_current_handle() -> None:
     superseded = previous.superseded_by(replacement)
 
     assert set(superseded).isdisjoint(set(replacement.representations.handles))
-    assert handle("kept-small") not in superseded
+    assert thumbnail_handle("kept-small") not in superseded
 
 
-def test_a_handle_that_migrates_between_roles_is_still_current() -> None:
+def test_a_provider_key_cannot_migrate_between_roles_as_the_same_handle() -> None:
     media = photo_with_small_thumbnail()
     previous = stored(media, state("old-original", "migrating"))
     replacement = stored(media, state("migrating", "new-small"))
 
     superseded = previous.superseded_by(replacement)
 
-    assert handle("migrating") not in superseded
-    assert superseded == (handle("old-original"),)
+    assert handle("migrating") != thumbnail_handle("migrating")
+    assert superseded == (handle("old-original"), thumbnail_handle("migrating"))
 
 
 def test_representation_state_exposes_no_public_supersession_primitive() -> None:

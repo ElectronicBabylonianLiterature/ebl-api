@@ -1,5 +1,5 @@
 from ebl.errors import Defect, DuplicateError, NotFoundError
-from ebl.media.application.media_stored import StoredRepresentationHandle
+from ebl.media.application.media_storage_identity import StoredRepresentationHandle
 from ebl.media.domain import MediaId, ThumbnailSize
 
 

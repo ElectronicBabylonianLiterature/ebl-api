@@ -9,20 +9,27 @@ from ebl.media.application import (
     StoredMedia,
     StoredMediaRepresentations,
     StoredRepresentationHandle,
+    StoredRepresentationRole,
     StoredThumbnailRepresentation,
 )
 from ebl.media.domain import MediaId, ThumbnailSize
 from ebl.tests.media.factories import (
     SECOND_PHOTO_MEDIA_ID,
     display_representation,
+    original_representation,
     photo_media,
     representations,
     stored_media,
+    thumbnail_representation,
 )
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 OTHER_ID = MediaId(SECOND_PHOTO_MEDIA_ID)
+
+
+def handle(value: str, media_id: MediaId = PHOTO_ID) -> StoredRepresentationHandle:
+    return StoredRepresentationHandle(media_id, value, original_representation())
 
 
 def test_stored_state_requires_original_handle() -> None:
@@ -31,33 +38,33 @@ def test_stored_state_requires_original_handle() -> None:
 
 
 def test_stored_state_allows_optional_display_and_zero_thumbnails() -> None:
-    state = StoredMediaRepresentations(StoredRepresentationHandle("original"))
+    state = StoredMediaRepresentations(handle("original"))
 
     assert state.display is None
     assert state.thumbnails == ()
-    assert state.handles == (StoredRepresentationHandle("original"),)
+    assert state.handles == (handle("original"),)
 
 
 def test_stored_state_maps_thumbnail_sizes_to_handles() -> None:
-    small = StoredRepresentationHandle("small")
-    medium = StoredRepresentationHandle("medium")
-    large = StoredRepresentationHandle("large")
+    small = handle("small")
+    medium = handle("medium")
+    large = handle("large")
     state = StoredMediaRepresentations(
-        StoredRepresentationHandle("original"),
+        handle("original"),
         (
             StoredThumbnailRepresentation(ThumbnailSize.SMALL, small),
             StoredThumbnailRepresentation(ThumbnailSize.MEDIUM, medium),
             StoredThumbnailRepresentation(ThumbnailSize.LARGE, large),
         ),
-        display=StoredRepresentationHandle("display"),
+        display=handle("display"),
     )
 
     assert state.thumbnail(ThumbnailSize.SMALL) == small
     assert state.thumbnail(ThumbnailSize.MEDIUM) == medium
     assert state.thumbnail(ThumbnailSize.LARGE) == large
     assert state.handles == (
-        StoredRepresentationHandle("original"),
-        StoredRepresentationHandle("display"),
+        handle("original"),
+        handle("display"),
         small,
         medium,
         large,
@@ -67,55 +74,51 @@ def test_stored_state_maps_thumbnail_sizes_to_handles() -> None:
 def test_stored_state_rejects_duplicate_thumbnail_sizes() -> None:
     with pytest.raises(ValueError, match="duplicate thumbnail sizes"):
         StoredMediaRepresentations(
-            StoredRepresentationHandle("original"),
+            handle("original"),
             (
-                StoredThumbnailRepresentation(
-                    ThumbnailSize.SMALL, StoredRepresentationHandle("small-1")
-                ),
-                StoredThumbnailRepresentation(
-                    ThumbnailSize.SMALL, StoredRepresentationHandle("small-2")
-                ),
+                StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle("small-1")),
+                StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle("small-2")),
             ),
         )
 
 
 def test_stored_state_rejects_original_display_handle_reuse() -> None:
-    handle = StoredRepresentationHandle("same")
+    reused_handle = handle("same")
 
     with pytest.raises(ValueError, match="duplicate representation handles"):
-        StoredMediaRepresentations(handle, display=handle)
+        StoredMediaRepresentations(reused_handle, display=reused_handle)
 
 
 def test_stored_state_rejects_original_thumbnail_handle_reuse() -> None:
-    handle = StoredRepresentationHandle("same")
+    reused_handle = handle("same")
 
     with pytest.raises(ValueError, match="duplicate representation handles"):
         StoredMediaRepresentations(
-            handle,
-            (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle),),
+            reused_handle,
+            (StoredThumbnailRepresentation(ThumbnailSize.SMALL, reused_handle),),
         )
 
 
 def test_stored_state_rejects_display_thumbnail_handle_reuse() -> None:
-    handle = StoredRepresentationHandle("same")
+    reused_handle = handle("same")
 
     with pytest.raises(ValueError, match="duplicate representation handles"):
         StoredMediaRepresentations(
-            StoredRepresentationHandle("original"),
-            (StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle),),
-            display=handle,
+            handle("original"),
+            (StoredThumbnailRepresentation(ThumbnailSize.SMALL, reused_handle),),
+            display=reused_handle,
         )
 
 
 def test_stored_state_rejects_small_medium_handle_reuse() -> None:
-    handle = StoredRepresentationHandle("same")
+    reused_handle = handle("same")
 
     with pytest.raises(ValueError, match="duplicate representation handles"):
         StoredMediaRepresentations(
-            StoredRepresentationHandle("original"),
+            handle("original"),
             (
-                StoredThumbnailRepresentation(ThumbnailSize.SMALL, handle),
-                StoredThumbnailRepresentation(ThumbnailSize.MEDIUM, handle),
+                StoredThumbnailRepresentation(ThumbnailSize.SMALL, reused_handle),
+                StoredThumbnailRepresentation(ThumbnailSize.MEDIUM, reused_handle),
             ),
         )
 
@@ -125,9 +128,9 @@ def test_stored_state_is_immutable() -> None:
 
     with pytest.raises(attr.exceptions.FrozenInstanceError):
         setattr(
-            StoredMediaRepresentations(StoredRepresentationHandle("original")),
+            StoredMediaRepresentations(handle("original")),
             field,
-            StoredRepresentationHandle("display"),
+            handle("display"),
         )
 
 
@@ -140,7 +143,7 @@ def test_stored_media_rejects_representation_shape_mismatch() -> None:
     with pytest.raises(ValueError, match="must match media metadata"):
         StoredMedia(
             media,
-            StoredMediaRepresentations(StoredRepresentationHandle("original")),
+            StoredMediaRepresentations(handle("original")),
         )
 
 
@@ -169,11 +172,15 @@ def test_repository_contract_reads_current_role_handles() -> None:
     current = repository.find_stored_by_id(PHOTO_ID)
 
     assert current is not None
-    assert current.representations.original == StoredRepresentationHandle(
-        "current-original"
-    )
+    assert current.representations.original == handle("current-original")
     assert current.representations.thumbnail(ThumbnailSize.SMALL) == (
-        StoredRepresentationHandle("current-small")
+        StoredRepresentationHandle(
+            PHOTO_ID,
+            "current-small",
+            thumbnail_representation(),
+            role=StoredRepresentationRole.THUMBNAIL,
+            thumbnail_size=ThumbnailSize.SMALL,
+        )
     )
     assert not hasattr(current.media.representations.original, "handle")
 

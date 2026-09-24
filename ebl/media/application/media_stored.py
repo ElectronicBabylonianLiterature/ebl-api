@@ -6,9 +6,12 @@ from ebl.media.domain import Media, MediaId, MediaRepresentation, ThumbnailSize
 from ebl.media.domain.mime import is_supported_raster_mime_type
 from ebl.media.domain.validation import (
     instance_of,
-    not_blank,
     positive_int,
     tuple_or_empty,
+)
+from ebl.media.application.media_storage_identity import (
+    StoredRepresentationHandle,
+    StoredRepresentationRole,
 )
 
 
@@ -64,20 +67,6 @@ def _superseded_handles(
     """
     current = set(replacement.handles)
     return tuple(handle for handle in previous.handles if handle not in current)
-
-
-@attr.s(auto_attribs=True, frozen=True, str=False)
-class StoredRepresentationHandle:
-    """Opaque, server-internal reference to one immutable logical stored version.
-
-    Never a route parameter, bearer capability, public DTO field, or part of a
-    user-facing error message.
-    """
-
-    value: str = attr.ib(validator=not_blank)
-
-    def __str__(self) -> str:
-        return self.value
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -143,6 +132,30 @@ class StoredMedia:
     )
 
     def __attrs_post_init__(self) -> None:
+        media_thumbnails = dict(self.media.representations.thumbnails)
+        if any(
+            handle.media_id != self.media.id for handle in self.representations.handles
+        ):
+            raise ValueError("Stored representation handles must belong to the media.")
+        if (
+            self.representations.original.role is not StoredRepresentationRole.ORIGINAL
+            or self.representations.original.representation
+            != self.media.representations.original
+        ):
+            raise ValueError("Stored original role and metadata must match.")
+        if self.representations.display is not None and (
+            self.representations.display.role is not StoredRepresentationRole.DISPLAY
+            or self.representations.display.representation
+            != self.media.representations.display
+        ):
+            raise ValueError("Stored display role and metadata must match.")
+        if any(
+            thumbnail.handle.role is not StoredRepresentationRole.THUMBNAIL
+            or thumbnail.handle.thumbnail_size is not thumbnail.size
+            or thumbnail.handle.representation != media_thumbnails.get(thumbnail.size)
+            for thumbnail in self.representations.thumbnails
+        ):
+            raise ValueError("Stored thumbnail role and metadata must match.")
         display_mismatch = (
             self.media.representations.display is None
             and self.representations.display is not None
@@ -192,6 +205,12 @@ class OpenRepresentation:
     )
     content: BinaryIO = attr.ib(validator=_readable_content)
     length: int = attr.ib(validator=positive_int)
+
+    def __attrs_post_init__(self) -> None:
+        if self.length != self.representation.file_size:
+            raise ValueError(
+                "Opened content length must match representation metadata."
+            )
 
 
 @attr.s(auto_attribs=True, frozen=True)

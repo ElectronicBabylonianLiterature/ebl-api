@@ -4,6 +4,7 @@ from ebl.media.application import media_requests as _media_requests
 from ebl.media.application import media_selection as _media_selection
 from ebl.media.application import media_service as _media_service
 from ebl.media.application import media_store as _media_store
+from ebl.media.application import media_storage_identity as _media_storage_identity
 from ebl.media.application import media_stored as _media_stored
 
 MediaReader = _media_repository.MediaReader
@@ -25,6 +26,7 @@ BackfillCategory = _media_requests.BackfillCategory
 BackfillReport = _media_requests.BackfillReport
 BackfillRequest = _media_requests.BackfillRequest
 MAX_BACKFILL_BATCH_SIZE = _media_requests.MAX_BACKFILL_BATCH_SIZE
+MAX_IMPORT_FRAGMENT_IDS = _media_requests.MAX_IMPORT_FRAGMENT_IDS
 ImportMode = _media_requests.ImportMode
 ImportReport = _media_requests.ImportReport
 ImportRequest = _media_requests.ImportRequest
@@ -34,7 +36,8 @@ OpenRepresentation = _media_stored.OpenRepresentation
 OriginalRepresentationWriteRequest = _media_stored.OriginalRepresentationWriteRequest
 StoredMedia = _media_stored.StoredMedia
 StoredMediaRepresentations = _media_stored.StoredMediaRepresentations
-StoredRepresentationHandle = _media_stored.StoredRepresentationHandle
+StoredRepresentationHandle = _media_storage_identity.StoredRepresentationHandle
+StoredRepresentationRole = _media_storage_identity.StoredRepresentationRole
 StoredThumbnailRepresentation = _media_stored.StoredThumbnailRepresentation
 ThumbnailRepresentationWriteRequest = _media_stored.ThumbnailRepresentationWriteRequest
 
@@ -42,3 +45,4 @@ fragment_media_in_order = _media_selection.fragment_media_in_order
 has_photo = _media_selection.has_photo
 primary_media_for = _media_selection.primary_media_for
 primary_photo_for = _media_selection.primary_photo_for
+with_primary = _media_selection.with_primary

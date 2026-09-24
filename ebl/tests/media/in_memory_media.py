@@ -1,35 +1,25 @@
-from io import BytesIO
 from typing import Dict, List, Mapping, Optional, Sequence
 
 import attr
 
 from ebl.media.application import (
-    DisplayRepresentationWriteRequest,
     MediaAlreadyExistsError,
     MediaNotFoundError,
     MediaRepository,
-    MediaRepresentationStore,
-    OpenRepresentation,
-    OriginalRepresentationWriteRequest,
     StoredMedia,
-    StoredRepresentationHandle,
-    StoredRepresentationMissingError,
-    ThumbnailRepresentationWriteRequest,
     fragment_media_in_order,
     primary_media_for,
     primary_photo_for,
+    with_primary,
 )
-from ebl.media.domain import Media, MediaId, MediaRepresentation
+from ebl.media.domain import Media, MediaId, MediaImportSource
+from ebl.tests.media.in_memory_media_validation import require_unique_import_sources
+from ebl.tests.media.in_memory_representation_store import (
+    InMemoryRepresentationStore as InMemoryRepresentationStore,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-REPRESENTATION_BYTES = b"media-bytes"
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class StoredRepresentationRecord:
-    media_id: MediaId
-    representation: MediaRepresentation
-    content: bytes
+__all__ = ["InMemoryMediaRepository", "InMemoryRepresentationStore"]
 
 
 class InMemoryMediaRepository(MediaRepository):
@@ -43,6 +33,7 @@ class InMemoryMediaRepository(MediaRepository):
         self._media: Dict[MediaId, StoredMedia] = {
             stored_media.media.id: stored_media for stored_media in media
         }
+        self._deleting: Dict[MediaId, StoredMedia] = {}
 
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
         stored_media = self.find_stored_by_id(media_id)
@@ -50,6 +41,18 @@ class InMemoryMediaRepository(MediaRepository):
 
     def find_stored_by_id(self, media_id: MediaId) -> Optional[StoredMedia]:
         return self._media.get(media_id)
+
+    def find_by_import_source(
+        self, import_source: MediaImportSource
+    ) -> Optional[Media]:
+        return next(
+            (
+                item.media
+                for item in self._media.values()
+                if item.media.import_source == import_source
+            ),
+            None,
+        )
 
     def find_by_fragment(self, fragment_id: MuseumNumber) -> Sequence[Media]:
         return fragment_media_in_order(
@@ -102,8 +105,32 @@ class InMemoryMediaRepository(MediaRepository):
     def find_primary_photo(self, fragment_id: MuseumNumber) -> Optional[Media]:
         return primary_photo_for(fragment_id, self.find_by_fragment(fragment_id))
 
+    def set_primary(
+        self, fragment_id: MuseumNumber, media_id: MediaId
+    ) -> Sequence[Media]:
+        if self.find_stored_in_fragment(media_id, fragment_id) is None:
+            raise MediaNotFoundError(media_id)
+        replacements = tuple(
+            attr.evolve(
+                item,
+                media=with_primary(item.media, fragment_id, item.media.id == media_id),
+            )
+            for item in self._media.values()
+            if item.media.is_associated_with(fragment_id)
+        )
+        self.replace_many(replacements)
+        return self.find_by_fragment(fragment_id)
+
     def create(self, media: StoredMedia) -> MediaId:
-        if media.media.id in self._media:
+        duplicate_source = (
+            media.media.import_source is not None
+            and self.find_by_import_source(media.media.import_source) is not None
+        )
+        if (
+            media.media.id in self._media
+            or media.media.id in self._deleting
+            or duplicate_source
+        ):
             raise MediaAlreadyExistsError(media.media.id)
         self._media[media.media.id] = media
         return media.media.id
@@ -118,6 +145,7 @@ class InMemoryMediaRepository(MediaRepository):
         for media_id in media_ids:
             if media_id not in self._media:
                 raise MediaNotFoundError(media_id)
+        require_unique_import_sources(self._media, media)
         if self.fail_next_replace:
             self.fail_next_replace = False
             raise RuntimeError("Metadata replacement failed.")
@@ -127,89 +155,14 @@ class InMemoryMediaRepository(MediaRepository):
             self._media[item.media.id] = item
         return previous
 
-    def delete(self, media_id: MediaId) -> None:
+    def delete(self, media_id: MediaId) -> Optional[StoredMedia]:
         self.call_log.append("repository.delete")
-        self._media.pop(media_id, None)
+        deleted = self._media.pop(media_id, None)
+        if deleted is not None:
+            self._deleting[media_id] = deleted
+        return self._deleting.get(media_id)
 
-
-class InMemoryRepresentationStore(MediaRepresentationStore):
-    def __init__(self, call_log: Optional[List[str]] = None) -> None:
-        self.written_originals: List[object] = []
-        self.written_displays: List[object] = []
-        self.written_thumbnails: List[object] = []
-        self.deleted_handles: List[StoredRepresentationHandle] = []
-        self.deleted_media_ids: List[MediaId] = []
-        self.delete_failures: List[StoredRepresentationHandle] = []
-        self.call_log = call_log if call_log is not None else []
-        self._records: Dict[StoredRepresentationHandle, StoredRepresentationRecord] = {}
-        self._next_handle = 0
-
-    def open_representation(
-        self, handle: StoredRepresentationHandle
-    ) -> OpenRepresentation:
-        try:
-            record = self._records[handle]
-        except KeyError as error:
-            raise StoredRepresentationMissingError(handle) from error
-        return _open_representation(record)
-
-    def write_original(
-        self, request: OriginalRepresentationWriteRequest
-    ) -> StoredRepresentationHandle:
-        self.written_originals.append(request)
-        return self._write(request)
-
-    def write_display(
-        self, request: DisplayRepresentationWriteRequest
-    ) -> StoredRepresentationHandle:
-        self.written_displays.append(request)
-        return self._write(request)
-
-    def write_thumbnail(
-        self, request: ThumbnailRepresentationWriteRequest
-    ) -> StoredRepresentationHandle:
-        self.written_thumbnails.append(request)
-        return self._write(request)
-
-    def delete_representation(self, handle: StoredRepresentationHandle) -> None:
-        if handle in self.delete_failures:
-            raise RuntimeError("Stored representation delete failed.")
-        self.deleted_handles.append(handle)
-        self._records.pop(handle, None)
-
-    def delete_representations(self, media_id: MediaId) -> None:
-        self.call_log.append("store.delete_representations")
-        self.deleted_media_ids.append(media_id)
-        for handle, record in tuple(self._records.items()):
-            if record.media_id == media_id:
-                self.delete_representation(handle)
-
-    def fail_deleting(self, handle: StoredRepresentationHandle) -> None:
-        self.delete_failures.append(handle)
-
-    def contains(self, handle: StoredRepresentationHandle) -> bool:
-        return handle in self._records
-
-    def _write(
-        self,
-        request: OriginalRepresentationWriteRequest
-        | DisplayRepresentationWriteRequest
-        | ThumbnailRepresentationWriteRequest,
-    ) -> StoredRepresentationHandle:
-        self._next_handle += 1
-        handle = StoredRepresentationHandle(
-            f"stored-representation-{self._next_handle}"
-        )
-        self._records[handle] = StoredRepresentationRecord(
-            request.media_id, request.representation, request.content.read()
-        )
-        return handle
-
-
-def _open_representation(record: StoredRepresentationRecord) -> OpenRepresentation:
-    return OpenRepresentation(
-        media_id=record.media_id,
-        representation=record.representation,
-        content=BytesIO(record.content),
-        length=len(record.content),
-    )
+    def finish_delete(self, media: StoredMedia) -> None:
+        self.call_log.append("repository.finish_delete")
+        if self._deleting.get(media.media.id) == media:
+            self._deleting.pop(media.media.id)

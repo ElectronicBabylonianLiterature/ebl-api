@@ -7,7 +7,6 @@ from ebl.media.application import (
     MediaAlreadyExistsError,
     MediaNotFoundError,
     MediaRepository,
-    OpenRepresentation,
     OriginalRepresentationWriteRequest,
 )
 from ebl.media.domain import MediaAssociation, MediaId, MediaType
@@ -22,6 +21,7 @@ from ebl.tests.media.factories import (
     stored_media_sequence,
 )
 from ebl.tests.media.in_memory_media import InMemoryMediaRepository
+from ebl.tests.media.representation_helpers import representation_for_content
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
@@ -143,20 +143,6 @@ def test_repository_contract_does_not_expose_representation_reads() -> None:
     assert not hasattr(MediaRepository, "find_display")
 
 
-def test_open_representation_carries_readable_content_and_domain_mime() -> None:
-    representation = original_representation()
-    opened = OpenRepresentation(
-        media_id=PHOTO_ID,
-        representation=representation,
-        content=BytesIO(b"media-bytes"),
-        length=len(b"media-bytes"),
-    )
-
-    assert opened.content.read() == b"media-bytes"
-    assert opened.representation.mime_type == representation.mime_type
-    assert not hasattr(opened, "content_type")
-
-
 def test_repository_contract_batch_replaces_and_returns_previous_states() -> None:
     first = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
     second = contract_media(COPY_ID, MediaType.COPY, (MediaAssociation(K1, 1, False),))
@@ -231,14 +217,20 @@ def test_representation_store_contract_holds_for_any_implementation(
     representation_store_factory: RepresentationStoreFactory,
 ) -> None:
     store = representation_store_factory()
+    first_content = b"bytes"
     request = OriginalRepresentationWriteRequest(
-        PHOTO_ID, BytesIO(b"bytes"), original_representation()
+        PHOTO_ID,
+        BytesIO(first_content),
+        representation_for_content(first_content, original_representation()),
     )
 
     first = store.write_original(request)
+    second_content = b"other"
     second = store.write_original(
         OriginalRepresentationWriteRequest(
-            PHOTO_ID, BytesIO(b"other"), original_representation()
+            PHOTO_ID,
+            BytesIO(second_content),
+            representation_for_content(second_content, original_representation()),
         )
     )
 

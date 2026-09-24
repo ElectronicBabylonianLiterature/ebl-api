@@ -8,6 +8,7 @@ from ebl.media.application import (
     StoredMedia,
     StoredMediaRepresentations,
     StoredRepresentationHandle,
+    StoredRepresentationRole,
     StoredThumbnailRepresentation,
 )
 from ebl.media.domain import (
@@ -127,23 +128,35 @@ def media_import_source(
     return MediaImportSource(system, file_id, container=container)
 
 
-def stored_handle(value: str = "stored-original") -> StoredRepresentationHandle:
-    return StoredRepresentationHandle(value)
-
-
 def stored_representations(
     media_: Media, handle_prefix: str = "stored"
 ) -> StoredMediaRepresentations:
     return StoredMediaRepresentations(
-        StoredRepresentationHandle(f"{handle_prefix}-original"),
+        StoredRepresentationHandle(
+            media_.id,
+            f"{handle_prefix}-original",
+            media_.representations.original,
+        ),
         tuple(
             StoredThumbnailRepresentation(
-                size, StoredRepresentationHandle(f"{handle_prefix}-{size.value}")
+                size,
+                StoredRepresentationHandle(
+                    media_.id,
+                    f"{handle_prefix}-{size.value}",
+                    representation,
+                    role=StoredRepresentationRole.THUMBNAIL,
+                    thumbnail_size=size,
+                ),
             )
-            for size, _ in media_.representations.thumbnails
+            for size, representation in media_.representations.thumbnails
         ),
         display=(
-            StoredRepresentationHandle(f"{handle_prefix}-display")
+            StoredRepresentationHandle(
+                media_.id,
+                f"{handle_prefix}-display",
+                media_.representations.display,
+                role=StoredRepresentationRole.DISPLAY,
+            )
             if media_.representations.display is not None
             else None
         ),

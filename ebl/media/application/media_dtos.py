@@ -42,21 +42,38 @@ def _read_only_thumbnails(
     return MappingProxyType(dict(value))
 
 
+def _references_of(
+    value: Sequence[MediaReferenceDto],
+) -> tuple[MediaReferenceDto, ...]:
+    return tuple(value)
+
+
+def _media_items_of(
+    value: Sequence["FragmentMediaItemDto"],
+) -> tuple["FragmentMediaItemDto", ...]:
+    return tuple(value)
+
+
 @attr.s(auto_attribs=True, frozen=True, hash=False)
 class MediaRepresentationsDto:
-    __hash__ = None
-
     original: MediaRepresentationDto
     display: Optional[MediaRepresentationDto] = None
     thumbnails: Mapping[str, MediaRepresentationDto] = attr.ib(
         factory=dict, converter=_read_only_thumbnails
     )
 
+    def __hash__(self) -> int:
+        return hash(
+            (
+                self.original,
+                self.display,
+                tuple(sorted(self.thumbnails.items())),
+            )
+        )
 
-@attr.s(auto_attribs=True, frozen=True, hash=False)
+
+@attr.s(auto_attribs=True, frozen=True)
 class FragmentMediaItemDto:
-    __hash__ = None
-
     id: str
     type: MediaType
     sort_order: int
@@ -64,7 +81,9 @@ class FragmentMediaItemDto:
     representations: MediaRepresentationsDto
     caption: Optional[str] = None
     attribution: Optional[str] = None
-    references: Sequence[MediaReferenceDto] = ()
+    references: Sequence[MediaReferenceDto] = attr.ib(
+        factory=tuple, converter=_references_of
+    )
 
     @classmethod
     def of(cls, fragment_id: MuseumNumber, media: Media) -> "FragmentMediaItemDto":
@@ -105,11 +124,9 @@ class FragmentMediaItemDto:
         )
 
 
-@attr.s(auto_attribs=True, frozen=True, hash=False)
+@attr.s(auto_attribs=True, frozen=True)
 class FragmentMediaResponseDto:
-    __hash__ = None
-
-    media: Sequence[FragmentMediaItemDto]
+    media: Sequence[FragmentMediaItemDto] = attr.ib(converter=_media_items_of)
 
     @classmethod
     def of(

@@ -8,10 +8,11 @@ from ebl.media.application import (
     StoredMedia,
     StoredMediaRepresentations,
     StoredRepresentationHandle,
+    StoredRepresentationRole,
     StoredThumbnailRepresentation,
     ThumbnailRepresentationWriteRequest,
 )
-from ebl.media.domain import MediaId, ThumbnailSize
+from ebl.media.domain import MediaId, MediaRepresentations, ThumbnailSize
 from ebl.tests.media.factories import (
     display_representation,
     original_representation,
@@ -23,21 +24,42 @@ from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
     InMemoryRepresentationStore,
 )
+from ebl.tests.media.representation_helpers import representation_for_content
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
+
+
+def handle(
+    value: str,
+    role: StoredRepresentationRole = StoredRepresentationRole.ORIGINAL,
+) -> StoredRepresentationHandle:
+    representation = original_representation()
+    if role is StoredRepresentationRole.DISPLAY:
+        representation = display_representation()
+    elif role is StoredRepresentationRole.THUMBNAIL:
+        representation = thumbnail_representation()
+    return StoredRepresentationHandle(
+        PHOTO_ID,
+        value,
+        representation,
+        role=role,
+        thumbnail_size=(
+            ThumbnailSize.SMALL if role is StoredRepresentationRole.THUMBNAIL else None
+        ),
+    )
 
 
 def test_stored_representation_handle_rejects_blank_values() -> None:
     for value in ("", " ", "\t", "\n"):
         with pytest.raises(ValueError, match="value"):
-            StoredRepresentationHandle(value)
+            handle(value)
 
 
 def test_stored_handle_stringifies_to_its_raw_value_for_internal_logs() -> None:
-    handle = StoredRepresentationHandle("gridfs-object-id")
+    stored_handle = handle("gridfs-object-id")
 
-    assert str(handle) == "gridfs-object-id"
-    assert f"{handle}" == "gridfs-object-id"
+    assert str(stored_handle) == "gridfs-object-id"
+    assert f"{stored_handle}" == "gridfs-object-id"
 
 
 def test_write_returns_distinct_handles_for_the_same_media_role() -> None:
@@ -66,12 +88,12 @@ def test_targeted_delete_removes_only_the_selected_handle() -> None:
 def test_targeted_delete_of_missing_handle_is_a_noop() -> None:
     store = InMemoryRepresentationStore()
 
-    store.delete_representation(StoredRepresentationHandle("already-gone"))
-    store.delete_representation(StoredRepresentationHandle("already-gone"))
+    store.delete_representation(handle("already-gone"))
+    store.delete_representation(handle("already-gone"))
 
     assert store.deleted_handles == [
-        StoredRepresentationHandle("already-gone"),
-        StoredRepresentationHandle("already-gone"),
+        handle("already-gone"),
+        handle("already-gone"),
     ]
 
 
@@ -80,10 +102,11 @@ def test_empty_batch_replacement_is_a_noop_returning_nothing() -> None:
     stored = StoredMedia(
         media,
         StoredMediaRepresentations(
-            StoredRepresentationHandle("current-original"),
+            handle("current-original"),
             (
                 StoredThumbnailRepresentation(
-                    ThumbnailSize.SMALL, StoredRepresentationHandle("current-small")
+                    ThumbnailSize.SMALL,
+                    handle("current-small", StoredRepresentationRole.THUMBNAIL),
                 ),
             ),
         ),
@@ -133,34 +156,45 @@ def test_cleanup_failure_does_not_roll_back_successful_metadata_switch() -> None
 
 
 def _stored_media(store: InMemoryRepresentationStore, prefix: str) -> StoredMedia:
+    original_request = _original_write(f"{prefix}-original".encode())
+    thumbnail_request = _thumbnail_write(f"{prefix}-small".encode())
+    display_request = _display_write(f"{prefix}-display".encode())
     media = photo_media(
         media_id_=PHOTO_ID,
-        media_representations=representations(display_mime_type="image/jpeg"),
+        media_representations=MediaRepresentations(
+            original_request.representation,
+            ((ThumbnailSize.SMALL, thumbnail_request.representation),),
+            display=display_request.representation,
+        ),
     )
     return StoredMedia(
         media,
         StoredMediaRepresentations(
-            store.write_original(_original_write(f"{prefix}-original".encode())),
+            store.write_original(original_request),
             (
                 StoredThumbnailRepresentation(
                     ThumbnailSize.SMALL,
-                    store.write_thumbnail(_thumbnail_write(f"{prefix}-small".encode())),
+                    store.write_thumbnail(thumbnail_request),
                 ),
             ),
-            display=store.write_display(_display_write(f"{prefix}-display".encode())),
+            display=store.write_display(display_request),
         ),
     )
 
 
 def _original_write(content: bytes) -> OriginalRepresentationWriteRequest:
     return OriginalRepresentationWriteRequest(
-        PHOTO_ID, BytesIO(content), original_representation()
+        PHOTO_ID,
+        BytesIO(content),
+        representation_for_content(content, original_representation()),
     )
 
 
 def _display_write(content: bytes) -> DisplayRepresentationWriteRequest:
     return DisplayRepresentationWriteRequest(
-        PHOTO_ID, BytesIO(content), display_representation()
+        PHOTO_ID,
+        BytesIO(content),
+        representation_for_content(content, display_representation()),
     )
 
 
@@ -168,6 +202,6 @@ def _thumbnail_write(content: bytes) -> ThumbnailRepresentationWriteRequest:
     return ThumbnailRepresentationWriteRequest(
         PHOTO_ID,
         BytesIO(content),
-        thumbnail_representation(),
+        representation_for_content(content, thumbnail_representation()),
         ThumbnailSize.SMALL,
     )

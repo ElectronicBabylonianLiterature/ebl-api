@@ -12,6 +12,8 @@ what keeps it from turning into a wrong primary or a wrong `hasPhoto`.
 
 from typing import Optional, Sequence
 
+import attr
+
 from ebl.media.domain import Media, MediaType
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -39,6 +41,19 @@ def has_photo(fragment_id: MuseumNumber, media: Sequence[Media]) -> bool:
     return any(
         item.type is MediaType.PHOTO
         for item in fragment_media_in_order(fragment_id, media)
+    )
+
+
+def with_primary(media: Media, fragment_id: MuseumNumber, is_primary: bool) -> Media:
+    media.association_for(fragment_id)
+    return attr.evolve(
+        media,
+        associations=tuple(
+            attr.evolve(association, is_primary=is_primary)
+            if association.fragment_id == fragment_id
+            else association
+            for association in media.associations
+        ),
     )
 
 

@@ -193,15 +193,14 @@ def test_fragment_media_response_thumbnail_mapping_is_immutable() -> None:
         thumbnails["small"] = object()
 
 
-def test_fragment_media_response_container_dtos_are_explicitly_unhashable() -> None:
-    response = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
+def test_fragment_media_response_container_dtos_have_structural_hashes() -> None:
+    first = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
+    second = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
 
-    with pytest.raises(TypeError):
-        hash(response.media[0].representations)
-    with pytest.raises(TypeError):
-        hash(response.media[0])
-    with pytest.raises(TypeError):
-        hash(response)
+    assert first == second
+    assert hash(first.media[0].representations) == hash(second.media[0].representations)
+    assert hash(first.media[0]) == hash(second.media[0])
+    assert hash(first) == hash(second)
 
 
 def test_fragment_media_response_supports_svg_original_with_raster_display() -> None:
