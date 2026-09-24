@@ -19,21 +19,14 @@ class LookupValueInUseError(DuplicateError):
 
 
 class BibliographyUpdateConflictError(DuplicateError):
-    """The server-owned state the update was based on is no longer current.
-
-    Raised both when the submitted entry disagrees with the stored identity
-    state and when another operation changes it while the update runs. The
-    remedy is the same in either case: reload the entry and retry.
-    """
-
     def __init__(self, id_: str, fields: Sequence[str] = ()):
         self.id_ = id_
         self.fields = tuple(fields)
-        super().__init__(id_, fields)
+        super().__init__(id_, self.fields)
 
     def __str__(self) -> str:
         cause = (
-            f"does not match the stored server-owned state ({', '.join(self.fields)})"
+            f"does not match the stored state ({', '.join(self.fields)})"
             if self.fields
             else "was changed by another operation"
         )
@@ -92,11 +85,25 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_by_legacy_alias(self, alias: str) -> Any:
+        raise NotImplementedError
+
+    @abstractmethod
+    def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
         raise NotImplementedError
 
     @abstractmethod
     def update(
+        self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_identity_fields(
         self, entry: Any, expected_server_owned_fields: Mapping[str, Any]
     ) -> None:
         raise NotImplementedError

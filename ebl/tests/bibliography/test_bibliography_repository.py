@@ -20,6 +20,7 @@ def test_create_indexes(database, bibliography_repository):
     assert [("citationKey", 1)] in index_keys
     assert [("aliases.value", 1)] in index_keys
     assert [("aliases.normalizedValue", 1)] in index_keys
+    assert [("redirectTo", 1)] in index_keys
     reservation_indexes = database[
         "bibliography_lookup_reservations"
     ].index_information()

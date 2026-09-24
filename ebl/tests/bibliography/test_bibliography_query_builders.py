@@ -9,6 +9,7 @@ from ebl.bibliography.infrastructure.bibliography import (
 )
 from ebl.bibliography.infrastructure.bibliography_queries import (
     server_owned_state_filter,
+    server_owned_state_update,
 )
 
 
@@ -27,6 +28,20 @@ def test_author_year_title_match_and_pipeline() -> None:
     assert match["issued.date-parts.0.0"] == {"$gte": 2003, "$lt": 2004}
     assert pipeline[0] == {"$match": {**match, **ACTIVE_BIBLIOGRAPHY_FILTER}}
     assert pipeline[2]["$sort"]["title"] == 1
+
+
+@pytest.mark.parametrize(
+    "author,year,title,expected",
+    [
+        (None, 2003, "Gilgamesh", {"issued.date-parts.0.0", "$expr"}),
+        ("George", None, "Gilgamesh", {"author.0.family", "$expr"}),
+        ("George", 2003, None, {"author.0.family", "issued.date-parts.0.0"}),
+    ],
+)
+def test_author_year_title_match_omits_absent_filters(
+    author, year, title, expected
+) -> None:
+    assert set(author_year_title_match(author, year, title)) == expected
 
 
 def test_query_by_author_year_and_title_uses_title_sort(
@@ -71,3 +86,33 @@ def test_server_owned_state_filter_separates_a_stored_null_from_an_absent_field(
     filter_ = server_owned_state_filter("Q30000024", {"redirectTo": None})
 
     assert filter_["redirectTo"] == {"$type": "null"}
+
+
+def test_server_owned_state_update_sets_present_identity_fields() -> None:
+    update = server_owned_state_update(
+        {"_id": "Q30000024", "type": "book", "citationKey": "dossin1967La"}
+    )
+
+    assert update["$set"] == {"citationKey": "dossin1967La"}
+
+
+def test_server_owned_state_update_unsets_absent_identity_fields() -> None:
+    update = server_owned_state_update({"_id": "Q30000024", "citationKey": "key"})
+
+    assert update["$unset"] == {
+        "aliases": "",
+        "deprecated": "",
+        "redirectTo": "",
+    }
+    assert "citationKey" not in update["$unset"]
+
+
+def test_server_owned_state_update_never_names_a_non_identity_field() -> None:
+    update = server_owned_state_update(
+        {"_id": "Q30000024", "type": "book", "title": "New title"}
+    )
+
+    assert "type" not in update.get("$set", {})
+    assert "title" not in update.get("$set", {})
+    assert "type" not in update.get("$unset", {})
+    assert "title" not in update.get("$unset", {})

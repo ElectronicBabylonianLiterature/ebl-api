@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import Any, Dict, Mapping, Optional, Sequence
+from typing import Any, Dict, Mapping, NoReturn, Optional, Sequence
 
 import pymongo
 
@@ -14,16 +14,19 @@ from ebl.bibliography.application.serialization import (
     create_mongo_entry,
     create_object_entry,
 )
+from ebl.bibliography.application.server_owned_fields import stored_server_owned_fields
 from ebl.bibliography.infrastructure.bibliography_queries import (
     ACTIVE_BIBLIOGRAPHY_FILTER,
     author_year_title_match,
     bibliography_query_pipeline,
     server_owned_state_filter,
+    server_owned_state_update,
 )
 from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
     duplicate_candidate_queries,
 )
 from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
+from ebl.bibliography.infrastructure.legacy_alias_lookup import MongoLegacyAliasLookup
 from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -38,11 +41,13 @@ class MongoBibliographyRepository(BibliographyRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
         self._lookup_reservations = MongoLookupReservations(database)
+        self._legacy_alias_lookup = MongoLegacyAliasLookup(database)
 
     def create_indexes(self) -> None:
         self._collection.create_index([("citationKey", pymongo.ASCENDING)])
         self._collection.create_index([(ALIASES_VALUE_FIELD, pymongo.ASCENDING)])
         self._collection.create_index([("aliases.normalizedValue", pymongo.ASCENDING)])
+        self._collection.create_index([("redirectTo", pymongo.ASCENDING)])
         self._lookup_reservations.create_indexes()
 
     def claim_lookup_values(
@@ -65,7 +70,9 @@ class MongoBibliographyRepository(BibliographyRepository):
     def retire_lookup_values(
         self, entry_id: str, values: Sequence[str], now: datetime
     ) -> None:
-        self._lookup_reservations.retire(entry_id, values, now)
+        self._lookup_reservations.retire(
+            entry_id, values, now, self._entry_owns_lookup_value
+        )
 
     def lookup_value_is_reserved(self, value: str) -> bool:
         return self._lookup_reservations.is_active(
@@ -112,6 +119,13 @@ class MongoBibliographyRepository(BibliographyRepository):
             raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
         return create_object_entry(data[0])
 
+    def query_by_legacy_alias(self, alias: str) -> dict:
+        return self._legacy_alias_lookup.query(alias)
+
+    def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
+        data = self._collection.find_many({"redirectTo": id_})
+        return [create_object_entry(item) for item in data]
+
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})
         return [create_object_entry(item) for item in data]
@@ -125,9 +139,30 @@ class MongoBibliographyRepository(BibliographyRepository):
                 filter_=server_owned_state_filter(id_, expected_server_owned_fields),
             )
         except NotFoundError as error:
-            if not self._collection.exists({"_id": id_}):
-                raise
+            self._raise_update_failure(id_, error)
+
+    def update_identity_fields(
+        self, entry, expected_server_owned_fields: Mapping[str, Any]
+    ) -> None:
+        mongo_entry = create_mongo_entry(entry)
+        id_ = mongo_entry["_id"]
+        intended_server_owned_fields = stored_server_owned_fields(entry)
+        try:
+            self._collection.update_one(
+                server_owned_state_filter(id_, expected_server_owned_fields),
+                server_owned_state_update(mongo_entry),
+            )
+        except NotFoundError as error:
+            if self._collection.exists(
+                server_owned_state_filter(id_, intended_server_owned_fields)
+            ):
+                return
+            self._raise_update_failure(id_, error)
+
+    def _raise_update_failure(self, id_: str, error: NotFoundError) -> NoReturn:
+        if self._collection.exists({"_id": id_}):
             raise BibliographyUpdateConflictError(id_) from error
+        raise NotFoundError(f"Bibliography entry {id_} not found.") from error
 
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]
