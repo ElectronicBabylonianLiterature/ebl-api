@@ -89,12 +89,23 @@ class MongoLookupReservations:
                 {"owner": owner, "state": LookupReservationState.PENDING.value}
             )
 
-    def retire(self, entry_id: str, values: Sequence[str], now: datetime) -> None:
+    def retire(
+        self,
+        entry_id: str,
+        values: Sequence[str],
+        now: datetime,
+        owns_value: Callable[[str, str], bool],
+    ) -> None:
         for value in dict.fromkeys(values):
-            with suppress(NotFoundError):
-                self._reconciler.abandon_value(
-                    value, now, entry_id, LookupReservationState.COMMITTED
-                )
+            try:
+                reservation = self._collection.find_one_by_id(value)
+            except NotFoundError:
+                continue
+            if (
+                reservation.get("entryId") == entry_id
+                and reservation.get("state") == LookupReservationState.COMMITTED.value
+            ):
+                self._reconciler.reconcile(reservation, now, owns_value)
 
     def is_active(
         self, value: str, now: datetime, owns_value: Callable[[str, str], bool]

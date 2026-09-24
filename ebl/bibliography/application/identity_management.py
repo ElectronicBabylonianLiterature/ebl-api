@@ -1,5 +1,3 @@
-"""The trusted bibliography identity operation."""
-
 import logging
 from typing import Any, Mapping
 

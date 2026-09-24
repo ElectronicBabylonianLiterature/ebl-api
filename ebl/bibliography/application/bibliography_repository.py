@@ -85,6 +85,10 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_by_legacy_alias(self, alias: str) -> Any:
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
         raise NotImplementedError
 

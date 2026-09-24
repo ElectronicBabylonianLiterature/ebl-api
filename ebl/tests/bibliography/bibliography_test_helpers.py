@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Any, Callable, Literal, NamedTuple, Protocol
 
 from ebl.bibliography.application.bibliography import Bibliography
@@ -11,9 +12,11 @@ from ebl.users.domain.user import User
 
 
 class MongoEntryFactory(Protocol):
+    @abstractmethod
     def __call__(
         self, bibliography_entry: dict[str, Any] | None = None
-    ) -> dict[str, Any]: ...
+    ) -> dict[str, Any]:
+        raise NotImplementedError
 
 
 class BibliographyFixtures(NamedTuple):

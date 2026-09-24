@@ -30,11 +30,11 @@ from ebl.tests.factories.bibliography import BibliographyEntryFactory
         ),
     ],
 )
-def test_partner_mutators_reject_write_scope_without_export(
+def test_partner_mutators_accept_write_scope_without_export(
     context, saved_entry, route, payload
 ):
     client = client_with_scope(context, "write:bibliography")
 
     result = client.simulate_post(route, body=json.dumps(payload))
 
-    assert result.status == falcon.HTTP_FORBIDDEN
+    assert result.status != falcon.HTTP_FORBIDDEN

@@ -1,5 +1,3 @@
-"""Trusted bibliography identity primitives."""
-
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -93,7 +91,21 @@ def _persist_with_identity_claims(
     now = datetime.now(timezone.utc)
     try:
         repository.commit_lookup_values(operation, now)
+    except Exception:
+        logging.exception(
+            "Bibliography identity write for %s persisted but lookup-reservation "
+            "commit failed; reservations will be reconciled",
+            entry["id"],
+        )
+    try:
         repository.retire_lookup_values(entry["id"], values_to_retire, now)
+    except Exception:
+        logging.exception(
+            "Bibliography identity write for %s persisted but lookup-reservation "
+            "retirement failed; reservations will be reconciled",
+            entry["id"],
+        )
+    try:
         context.changelog.create(
             COLLECTION,
             user.profile,
@@ -102,9 +114,8 @@ def _persist_with_identity_claims(
         )
     except Exception:
         logging.exception(
-            "Bibliography identity write for %s persisted but finalization "
-            "(lookup-reservation commit / changelog) failed; reservations will "
-            "be reconciled and the changelog entry may be missing",
+            "Bibliography identity write for %s persisted but changelog creation "
+            "failed; the changelog entry may be missing",
             entry["id"],
         )
     return operation.owner
@@ -166,7 +177,12 @@ def ensure_lookup_values_available(
             existing_entry = raw_lookup_owner(repository, value)
         except DuplicateError:
             raise LookupValueInUseError(value) from None
-        if existing_entry is None:
-            continue
-        if allowed_id is None or existing_entry["id"] != allowed_id:
-            raise LookupValueInUseError(value)
+        try:
+            legacy_entry = repository.query_by_legacy_alias(value)
+        except DuplicateError:
+            raise LookupValueInUseError(value) from None
+        except NotFoundError:
+            legacy_entry = None
+        for owner in (existing_entry, legacy_entry):
+            if owner is not None and (allowed_id is None or owner["id"] != allowed_id):
+                raise LookupValueInUseError(value)

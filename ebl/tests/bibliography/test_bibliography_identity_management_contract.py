@@ -89,6 +89,22 @@ def test_alias_with_an_empty_value_is_rejected(client, subject):
     assert result.status == falcon.HTTP_BAD_REQUEST
 
 
+@pytest.mark.parametrize(
+    "commands",
+    [
+        {"addAliases": [{"value": "   "}]},
+        {"removeAliases": ["\t"]},
+        {"citationKey": "  "},
+        {"deprecateTo": "\n"},
+    ],
+)
+def test_blank_identity_values_are_rejected(client, database, subject, commands):
+    result = manage_identity(client, "Q30000110", commands)
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert stored(database, "Q30000110")["citationKey"] == "subject1999Key"
+
+
 def test_unknown_alias_field_is_rejected(client, subject):
     result = manage_identity(
         client, "Q30000110", {"addAliases": [{"value": "a", "project": "x"}]}

@@ -1,8 +1,7 @@
-"""Pure application of trusted identity commands to a stored bibliography entry."""
-
 from copy import deepcopy
 from typing import Any, Mapping, MutableMapping, Sequence
 
+from ebl.bibliography.application.partner_identity import normalize_partner_id
 from ebl.errors import DataError
 
 Alias = Mapping[str, Any]
@@ -45,9 +44,22 @@ def _with_alias(
     aliases: Sequence[Alias], alias: Alias, id_: str
 ) -> list[dict[str, Any]]:
     value = alias["value"]
+    if not value.strip():
+        raise DataError("Bibliography aliases must not be blank.")
     if any(existing.get("value") == value for existing in aliases):
         raise DataError(f"Bibliography entry {id_} already has alias {value}.")
-    return [*(dict(existing) for existing in aliases), dict(alias)]
+    normalized_value = normalize_partner_id(value)
+    if not normalized_value:
+        raise DataError(
+            "Bibliography aliases must contain at least one letter or digit."
+        )
+    submitted_normalized_value = alias.get("normalizedValue")
+    if submitted_normalized_value not in (None, normalized_value):
+        raise DataError(
+            f"Bibliography alias {value} has an inconsistent normalized value."
+        )
+    normalized_alias = {**alias, "normalizedValue": normalized_value}
+    return [*(dict(existing) for existing in aliases), normalized_alias]
 
 
 def _apply_citation_key(
@@ -60,6 +72,8 @@ def _apply_citation_key(
     if citation_key is None:
         entry.pop("citationKey", None)
     else:
+        if not citation_key.strip():
+            raise DataError("Bibliography citation keys must not be blank.")
         entry["citationKey"] = citation_key
 
 
@@ -70,5 +84,7 @@ def _apply_deprecation(
         entry.pop("deprecated", None)
         entry.pop("redirectTo", None)
     elif "deprecateTo" in commands:
+        if not commands["deprecateTo"].strip():
+            raise DataError("Bibliography redirect targets must not be blank.")
         entry["deprecated"] = True
         entry["redirectTo"] = commands["deprecateTo"]

@@ -66,12 +66,31 @@ def test_add_alias_preserves_every_alias_field(client, database, bibliography, u
     assert stored(database, "Q30000012")["aliases"] == [full_alias]
 
 
-def test_add_alias_does_not_invent_provenance(client, database, bibliography, user):
+def test_add_alias_normalizes_value_without_inventing_provenance(
+    client, database, bibliography, user
+):
     entry(bibliography, user, "Q30000013")
 
-    manage_identity(client, "Q30000013", {"addAliases": [{"value": "bare-alias"}]})
+    manage_identity(client, "Q30000013", {"addAliases": [{"value": "Bare Alias"}]})
 
-    assert stored(database, "Q30000013")["aliases"] == [{"value": "bare-alias"}]
+    assert stored(database, "Q30000013")["aliases"] == [
+        {"value": "Bare Alias", "normalizedValue": "bare-alias"}
+    ]
+
+
+def test_add_alias_rejects_inconsistent_normalized_value(
+    client, database, bibliography, user
+):
+    entry(bibliography, user, "Q30000019")
+
+    result = manage_identity(
+        client,
+        "Q30000019",
+        {"addAliases": [{"value": "Bare Alias", "normalizedValue": "different"}]},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "aliases" not in stored(database, "Q30000019")
 
 
 def test_remove_alias_retires_reservation(client, database, bibliography, user):

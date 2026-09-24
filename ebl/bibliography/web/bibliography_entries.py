@@ -157,7 +157,6 @@ class PartnerBibliographyResource:
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
@@ -182,7 +181,6 @@ class PartnerBibliographyEntryResource:
         resp.media = self._bibliography.find_partner_entry(id_or_citation_key)
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(
@@ -217,7 +215,6 @@ class PartnerBibliographyDuplicateOverrideResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:

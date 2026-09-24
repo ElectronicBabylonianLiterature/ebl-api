@@ -49,6 +49,9 @@ class RepositorySpy:
     def query_by_alias(self, _value):
         return self._raw_match()
 
+    def query_by_legacy_alias(self, _value):
+        return self._raw_match()
+
     def _raw_match(self):
         if self.existing_entry is None:
             raise NotFoundError("missing")
@@ -110,6 +113,9 @@ class UpdateRepositorySpy:
         raise NotFoundError("missing")
 
     def query_by_alias(self, _alias):
+        raise NotFoundError("missing")
+
+    def query_by_legacy_alias(self, _alias):
         raise NotFoundError("missing")
 
     def claim_lookup_values(self, _operation, values):

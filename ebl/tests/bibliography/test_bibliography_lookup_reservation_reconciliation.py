@@ -145,3 +145,26 @@ def test_retire_lookup_values_abandons_only_matching_committed_claim(
 
     assert database[COLLECTION].find_one({"_id": "old"})["state"] == "abandoned"
     assert database[COLLECTION].find_one({"_id": "kept"})["state"] == "committed"
+
+
+def test_retire_keeps_a_value_readded_before_finalization(
+    database, bibliography_repository, create_mongo_bibliography_entry
+):
+    current_operation = operation("old-owner")
+    bibliography_repository.claim_lookup_values(current_operation, ["readded"])
+    bibliography_repository.commit_lookup_values(current_operation, NOW)
+    database["bibliography"].insert_one(
+        create_mongo_bibliography_entry(
+            {
+                "id": "Q30000000",
+                "type": "book",
+                "aliases": [{"value": "readded"}],
+            }
+        )
+    )
+
+    bibliography_repository.retire_lookup_values("Q30000000", ["readded"], LATER)
+
+    reservation = database[COLLECTION].find_one({"_id": "readded"})
+    assert reservation is not None
+    assert reservation["state"] == LookupReservationState.COMMITTED.value

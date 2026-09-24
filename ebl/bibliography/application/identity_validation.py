@@ -1,5 +1,3 @@
-"""Validating an intended bibliography identity state before it is persisted."""
-
 from copy import deepcopy
 from typing import Any, Callable, Mapping, Sequence
 

@@ -84,21 +84,3 @@ class LookupReservationReconciler:
         return {
             field: reservation[field] for field in ("_id", "entryId", "owner", "state")
         }
-
-    def abandon_value(
-        self,
-        value: str,
-        now: datetime,
-        entry_id: str,
-        state: LookupReservationState,
-    ) -> None:
-        self._collection.update_one(
-            {"_id": value, "entryId": entry_id, "state": state.value},
-            {
-                "$set": {
-                    "state": LookupReservationState.ABANDONED.value,
-                    "deleteAt": now,
-                },
-                "$unset": {"expiresAt": ""},
-            },
-        )

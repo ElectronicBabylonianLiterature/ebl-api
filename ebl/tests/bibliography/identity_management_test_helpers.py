@@ -3,6 +3,7 @@ from typing import Any, Optional, cast
 
 from falcon import testing
 
+from ebl.bibliography.application.partner_identity import normalize_partner_id
 from ebl.tests.bibliography.bibliography_route_test_helpers import client_with_scope
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
@@ -20,7 +21,11 @@ def manage_identity(client, id_: str, commands: dict) -> testing.Result:
 
 
 def alias(value: str, **overrides) -> dict:
-    return {"value": value, "normalizedValue": value, **overrides}
+    return {
+        "value": value,
+        "normalizedValue": normalize_partner_id(value),
+        **overrides,
+    }
 
 
 def entry(bibliography, user, id_: str, **overrides) -> dict:
