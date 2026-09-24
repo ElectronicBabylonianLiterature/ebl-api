@@ -15,7 +15,7 @@ at all stays a `404`.
 
 from typing import Callable
 
-from ebl.errors import DataError, NotFoundError
+from ebl.errors import DataError, DuplicateError, NotFoundError
 
 
 def stored_entry_for_update(
@@ -28,9 +28,9 @@ def stored_entry_for_update(
         raise DataError("Bibliography entry id is required.")
     stored_entry = query_canonical_entry(id_, query_by_id, find)
     if stored_entry.get("deprecated"):
-        raise DataError(
+        raise DuplicateError(
             f"Bibliography entry {id_} is deprecated; "
-            f"edit {stored_entry.get('redirectTo')} instead."
+            f"reload the entry and edit {stored_entry.get('redirectTo')} instead."
         )
     return stored_entry
 

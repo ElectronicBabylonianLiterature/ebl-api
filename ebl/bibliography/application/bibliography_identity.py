@@ -1,21 +1,7 @@
-"""Trusted bibliography identity primitives.
-
-`update_with_identity_claims` is the only path allowed to change the
-server-owned identity of an entry: it diffs the lookup values, claims the added
-ones, retires the removed ones, and recovers reservations when persistence
-fails. `Bibliography.update_metadata` is the generic CSL metadata editor and
-deliberately calls this primitive with identity preserved, so a metadata edit
-never claims or retires anything.
-
-The claim/retire path itself is parked for a future identity-management
-endpoint (deprecate, redirect, repair identity) — no caller supplying new
-identity values exists yet. Such a caller would supply them directly rather
-than routing through the metadata editor.
-"""
-
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import (
     BibliographyRepository,
@@ -28,7 +14,7 @@ from ebl.bibliography.application.lookup_reservation import (
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.application.server_owned_fields import stored_server_owned_fields
 from ebl.changelog import Changelog
-from ebl.errors import Defect, NotFoundError
+from ebl.errors import Defect, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
@@ -38,7 +24,6 @@ COLLECTION = "bibliography"
 class BibliographyIdentityContext:
     repository: BibliographyRepository
     changelog: Changelog
-    find: Callable[[str], dict]
 
 
 def identity_values(entry: dict[str, Any]) -> set[str]:
@@ -56,7 +41,7 @@ def create_with_identity_claims(
     created = False
     try:
         repository.claim_lookup_values(operation, bibliography_lookup_values(entry))
-        ensure_lookup_values_available(context.find, bibliography_lookup_values(entry))
+        ensure_lookup_values_available(repository, bibliography_lookup_values(entry))
         created_id = repository.create(entry)
         created = True
         if created_id != entry["id"]:
@@ -74,59 +59,130 @@ def create_with_identity_claims(
         raise
 
 
+def _persist_with_identity_claims(
+    context: BibliographyIdentityContext,
+    entry: dict[str, Any],
+    user: User,
+    stored_entry: dict[str, Any],
+    persist: Callable[[dict[str, Any], dict[str, Any]], None],
+) -> str:
+    repository = context.repository
+    if stored_entry.get("id") != entry["id"]:
+        raise Defect(
+            f"Stored bibliography {stored_entry.get('id')} does not match "
+            f"the entry being updated {entry['id']}."
+        )
+    expected_server_owned_fields = stored_server_owned_fields(stored_entry)
+    old_values = identity_values(stored_entry)
+    new_values = identity_values(entry)
+    values_to_claim = sorted(new_values - old_values)
+    values_to_retire = sorted(old_values - new_values)
+    operation = new_lookup_reservation_operation(
+        entry["id"], datetime.now(timezone.utc)
+    )
+    try:
+        repository.claim_lookup_values(operation, values_to_claim)
+        ensure_lookup_values_available(repository, values_to_claim, entry["id"])
+        persist(entry, expected_server_owned_fields)
+    except Exception:
+        repository.release_pending_lookup_values(operation.owner)
+        raise
+
+    now = datetime.now(timezone.utc)
+    try:
+        repository.commit_lookup_values(operation, now)
+    except Exception:
+        logging.exception(
+            "Bibliography identity write for %s persisted but lookup-reservation "
+            "commit failed; reservations will be reconciled",
+            entry["id"],
+        )
+    try:
+        repository.retire_lookup_values(entry["id"], values_to_retire, now)
+    except Exception:
+        logging.exception(
+            "Bibliography identity write for %s persisted but lookup-reservation "
+            "retirement failed; reservations will be reconciled",
+            entry["id"],
+        )
+    try:
+        context.changelog.create(
+            COLLECTION,
+            user.profile,
+            create_mongo_entry(stored_entry),
+            create_mongo_entry(entry),
+        )
+    except Exception:
+        logging.exception(
+            "Bibliography identity write for %s persisted but changelog creation "
+            "failed; the changelog entry may be missing",
+            entry["id"],
+        )
+    return operation.owner
+
+
 def update_with_identity_claims(
     context: BibliographyIdentityContext,
     entry: dict[str, Any],
     user: User,
     stored_entry: dict[str, Any] | None = None,
 ) -> None:
-    repository = context.repository
-    old_entry = (
-        repository.query_by_id(entry["id"]) if stored_entry is None else stored_entry
+    resolved_stored_entry: dict[str, Any] = (
+        stored_entry
+        if stored_entry is not None
+        else context.repository.query_by_id(entry["id"])
     )
-    if old_entry.get("id") != entry["id"]:
-        raise Defect(
-            f"Stored bibliography {old_entry.get('id')} does not match "
-            f"the entry being updated {entry['id']}."
-        )
-    expected_server_owned_fields = stored_server_owned_fields(old_entry)
-    old_values = identity_values(old_entry)
-    new_values = identity_values(entry)
-    values_to_claim = sorted(new_values - old_values)
-    values_to_retire = sorted(old_values - new_values)
-    now = datetime.now(timezone.utc)
-    operation = new_lookup_reservation_operation(entry["id"], now)
-    updated = False
-    try:
-        repository.claim_lookup_values(operation, values_to_claim)
-        ensure_lookup_values_available(context.find, values_to_claim, entry["id"])
-        repository.update(entry, expected_server_owned_fields)
-        updated = True
-        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
-        repository.retire_lookup_values(
-            entry["id"], values_to_retire, datetime.now(timezone.utc)
-        )
-        context.changelog.create(
-            COLLECTION,
-            user.profile,
-            create_mongo_entry(old_entry),
-            create_mongo_entry(entry),
-        )
-    except Exception:
-        if not updated:
-            repository.release_pending_lookup_values(operation.owner)
-        raise
+    _persist_with_identity_claims(
+        context, entry, user, resolved_stored_entry, context.repository.update
+    )
+
+
+def update_identity_fields_only(
+    context: BibliographyIdentityContext,
+    entry: dict[str, Any],
+    user: User,
+    stored_entry: dict[str, Any],
+) -> str:
+    return _persist_with_identity_claims(
+        context,
+        entry,
+        user,
+        stored_entry,
+        context.repository.update_identity_fields,
+    )
+
+
+def raw_lookup_owner(
+    repository: BibliographyRepository, value: str
+) -> Optional[dict[str, Any]]:
+    for query in (
+        repository.query_by_id,
+        repository.query_by_citation_key,
+        repository.query_by_alias,
+    ):
+        try:
+            return query(value)
+        except NotFoundError:
+            continue
+    return None
 
 
 def ensure_lookup_values_available(
-    find: Callable[[str], dict],
+    repository: BibliographyRepository,
     values: Sequence[str],
     allowed_id: str | None = None,
 ) -> None:
     for value in values:
         try:
-            existing_entry = find(value)
+            existing_entry = raw_lookup_owner(repository, value)
+        except DuplicateError:
+            raise LookupValueInUseError(value) from None
+        try:
+            legacy_entry = repository.query_by_legacy_alias(value)
+        except DuplicateError:
+            raise LookupValueInUseError(value) from None
         except NotFoundError:
-            continue
-        if allowed_id is None or existing_entry["id"] != allowed_id:
-            raise LookupValueInUseError(value)
+            legacy_entry = None
+        for owner in (existing_entry, legacy_entry):
+            if owner is not None and (allowed_id is None or owner["id"] != allowed_id):
+                raise LookupValueInUseError(value)

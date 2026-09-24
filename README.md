@@ -102,6 +102,7 @@ Fragmentarium:
 
 Bibliography:
 `write:bibliography`,
+`admin:bibliography` (trusted internal identity management; never partner M2M),
 
 Dictionary:
 `write:words`,

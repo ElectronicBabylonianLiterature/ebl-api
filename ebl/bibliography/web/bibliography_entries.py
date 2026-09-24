@@ -1,6 +1,4 @@
-"""Bibliography HTTP resources.
-
-`METADATA_UPDATE_JSON_SCHEMA` is `CSL_JSON_SCHEMA` without its lifecycle rule.
+"""`METADATA_UPDATE_JSON_SCHEMA` is `CSL_JSON_SCHEMA` without its lifecycle rule.
 The stored schema requires `redirectTo` whenever `deprecated` is true, which is
 an invariant of a *stored* entry. Applied to an update body it answered a client
 that submitted `deprecated` with `'redirectTo' is a required property` — a `400`
@@ -22,12 +20,9 @@ it only stops a spurious `400` on the legitimate round trip.
 """
 
 import falcon
-from falcon_caching import Cache
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
-import json
 from typing import Mapping, Sequence
-from ebl.cache.application.cache import DAILY_TIMEOUT
 
 from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
@@ -62,6 +57,19 @@ def submitted_server_owned_fields(
     )
 
 
+def reject_server_owned_create_fields(req, _resp, _resource, _params) -> None:
+    media = req.media
+    if not isinstance(media, dict):
+        return
+
+    if forbidden_fields := submitted_server_owned_fields([media]):
+        raise DataError(
+            "A new bibliography entry may not include server-owned fields: "
+            f"{', '.join(forbidden_fields)}; use "
+            "POST /bibliography/{id}/identity."
+        )
+
+
 def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
     media = req.media
     if not isinstance(media, dict):
@@ -86,6 +94,7 @@ class BibliographyResource:
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(reject_server_owned_create_fields)
     @validate(CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media
@@ -111,20 +120,12 @@ class BibliographyEntriesResource:
 
 
 class BibliographyList:
-    def __init__(self, bibliography: Bibliography, cache: Cache):
+    def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
-        self._cache = cache
 
     def on_get(self, req: Request, resp: Response) -> None:
         ids = req.params["ids"].split(",")
-        cache_key = ",".join(sorted(set(ids)))
-
-        if cached := self._cache.get(cache_key):
-            resp.text = cached
-        else:
-            data = json.dumps(self._bibliography.find_many(ids))
-            self._cache.set(cache_key, data, timeout=DAILY_TIMEOUT)
-            resp.text = data
+        resp.media = self._bibliography.find_many(ids)
 
 
 class BibliographyAll:

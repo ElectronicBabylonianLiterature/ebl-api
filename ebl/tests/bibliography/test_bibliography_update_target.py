@@ -71,7 +71,7 @@ def test_update_through_a_deprecated_id_names_the_redirect_target(
 ):
     result = post_entry(client, metadata_only_payload(deprecated_entry))
 
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert result.status == falcon.HTTP_CONFLICT
     assert "is deprecated" in result.text
     assert "rla_9_388" in result.text
 
