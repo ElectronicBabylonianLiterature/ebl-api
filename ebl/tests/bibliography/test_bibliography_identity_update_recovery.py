@@ -100,7 +100,7 @@ def fail_once(monkeypatch, target, name: str, message: str):
     return original
 
 
-def test_update_commit_failure_recovers_new_claims_and_retires_old(
+def test_update_commit_failure_does_not_skip_retirement_or_changelog(
     monkeypatch, bibliography_identity_update_context
 ):
     context = bibliography_identity_update_context
@@ -111,6 +111,7 @@ def test_update_commit_failure_recovers_new_claims_and_retires_old(
         "aliases": [alias("new-update-alias")],
     }
     context.bibliography.create(old_entry, context.user)
+    changelog_count = context.database["changelog"].count_documents({})
     original_commit = fail_once(
         monkeypatch,
         context.bibliography_repository,
@@ -123,12 +124,13 @@ def test_update_commit_failure_recovers_new_claims_and_retires_old(
     assert context.bibliography_repository.query_by_id(old_entry["id"]) == new_entry
     assert (
         state(context.database, old_entry["citationKey"])
-        == LookupReservationState.COMMITTED.value
+        == LookupReservationState.ABANDONED.value
     )
     assert (
         state(context.database, new_entry["citationKey"])
         == LookupReservationState.PENDING.value
     )
+    assert context.database["changelog"].count_documents({}) == changelog_count + 1
     monkeypatch.setattr(
         context.bibliography_repository, "commit_lookup_values", original_commit
     )
@@ -156,6 +158,7 @@ def test_update_retirement_failure_reconciles_stale_old_claim(
     old_entry = bibliography_entry("Q30000000", "old-retire-key")
     new_entry = {**old_entry, "citationKey": "new-retire-key"}
     context.bibliography.create(old_entry, context.user)
+    changelog_count = context.database["changelog"].count_documents({})
     fail_once(
         monkeypatch,
         context.bibliography_repository,
@@ -174,6 +177,7 @@ def test_update_retirement_failure_reconciles_stale_old_claim(
         state(context.database, old_entry["citationKey"])
         == LookupReservationState.COMMITTED.value
     )
+    assert context.database["changelog"].count_documents({}) == changelog_count + 1
     context.bibliography_repository.reconcile_lookup_reservations(FUTURE)
 
     assert (

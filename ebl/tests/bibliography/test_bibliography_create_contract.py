@@ -3,15 +3,12 @@
 import falcon
 import pytest
 
-from ebl.tests.bibliography.identity_preservation_test_helpers import reservations
+from ebl.tests.bibliography.identity_preservation_test_helpers import (
+    SERVER_OWNED_VALUES,
+    reservations,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
-SERVER_OWNED_VALUES = {
-    "aliases": [{"value": "client-alias", "normalizedValue": "client-alias"}],
-    "citationKey": "clientChosen",
-    "deprecated": True,
-    "redirectTo": "OTHER-ID",
-}
 NEW_ID = "NEW-ENTRY"
 
 
@@ -38,6 +35,22 @@ def test_the_client_supplied_canonical_id_is_kept(client):
     create(client, entry)
 
     assert client.simulate_get("/bibliography/rla_9_388").json["id"] == "rla_9_388"
+
+
+def test_location_percent_encodes_uri_delimiters_in_the_id(client):
+    result = create(client, new_entry(id="legacy?#%id"))
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.headers["location"] == "/bibliography/legacy%3F%23%25id"
+
+
+@pytest.mark.parametrize(
+    "id_", ["line\nbreak", "trailing-newline\n", "tab\tvalue", "nul\x00value"]
+)
+def test_control_characters_in_an_id_are_rejected(client, id_):
+    result = create(client, new_entry(id=id_))
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
 
 
 def test_rich_metadata_is_accepted(client):

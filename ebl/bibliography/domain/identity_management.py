@@ -1,6 +1,6 @@
-"""Request contract for the trusted bibliography identity operation."""
-
 from ebl.bibliography.domain.bibliography_entry import BIBLIOGRAPHY_ALIAS_SCHEMA
+
+NON_BLANK_STRING_SCHEMA = {"type": "string", "minLength": 1, "pattern": r"\S"}
 
 BIBLIOGRAPHY_IDENTITY_JSON_SCHEMA = {
     "type": "object",
@@ -10,18 +10,21 @@ BIBLIOGRAPHY_IDENTITY_JSON_SCHEMA = {
             "items": {
                 "allOf": [
                     BIBLIOGRAPHY_ALIAS_SCHEMA,
-                    {"properties": {"value": {"minLength": 1}}},
+                    {"properties": {"value": NON_BLANK_STRING_SCHEMA}},
                 ]
             },
             "minItems": 1,
         },
         "removeAliases": {
             "type": "array",
-            "items": {"type": "string", "minLength": 1},
+            "items": NON_BLANK_STRING_SCHEMA,
             "minItems": 1,
         },
-        "citationKey": {"type": ["string", "null"], "minLength": 1},
-        "deprecateTo": {"type": "string", "minLength": 1},
+        "citationKey": {
+            **NON_BLANK_STRING_SCHEMA,
+            "type": ["string", "null"],
+        },
+        "deprecateTo": NON_BLANK_STRING_SCHEMA,
         "reactivate": {"type": "boolean", "const": True},
     },
     "minProperties": 1,

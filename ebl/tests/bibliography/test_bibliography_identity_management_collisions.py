@@ -80,7 +80,28 @@ def test_alias_colliding_on_normalized_value(
     result = manage_identity(
         client,
         "Q30000020",
-        {"addAliases": [{"value": "Other", "normalizedValue": "dossin-1967"}]},
+        {"addAliases": [{"value": "Dossin-1967"}]},
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert_unchanged_identity(database, before)
+
+
+def test_alias_colliding_with_a_legacy_bare_alias(
+    client, database, bibliography, user, subject
+):
+    entry(
+        bibliography,
+        user,
+        "Q30000030",
+        aliases=[{"value": "Dossin 1967"}],
+    )
+    before = stored(database, "Q30000020")
+
+    result = manage_identity(
+        client,
+        "Q30000020",
+        {"addAliases": [{"value": "Dossin-1967"}]},
     )
 
     assert result.status == falcon.HTTP_CONFLICT

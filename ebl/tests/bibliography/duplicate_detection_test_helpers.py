@@ -48,6 +48,9 @@ class FakeBibliographyRepository(BibliographyRepository):
     def query_by_alias(self, alias: str) -> Any:
         raise NotImplementedError
 
+    def query_by_legacy_alias(self, alias: str) -> Any:
+        raise NotImplementedError
+
     def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
         raise NotImplementedError
 

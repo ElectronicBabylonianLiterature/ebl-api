@@ -84,6 +84,22 @@ def test_update_round_trips_a_persisted_null_valued_non_csl_key(
     assert document[LEGACY_KEY] is None
 
 
+def test_update_rejects_a_changed_persisted_non_csl_key(
+    client, database, entry_with_legacy_key
+):
+    id_ = entry_with_legacy_key["id"]
+    fetched = client.simulate_get(f"/bibliography/{id_}").json
+
+    result = client.simulate_post(
+        f"/bibliography/{id_}",
+        body=json.dumps({**fetched, LEGACY_KEY: "changed"}),
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert LEGACY_KEY in result.text
+    assert stored(database, id_)[LEGACY_KEY] == "keep-me"
+
+
 def test_update_without_a_body_id_takes_the_id_from_the_url(
     client, database, saved_entry
 ):
@@ -96,16 +112,19 @@ def test_update_without_a_body_id_takes_the_id_from_the_url(
     assert stored(database, id_)["title"] == "URL id wins"
 
 
-def test_update_ignores_a_body_id_that_differs_from_the_url(
+def test_update_rejects_a_body_id_that_differs_from_the_url(
     client, database, saved_entry
 ):
     id_ = saved_entry["id"]
+    original_title = stored(database, id_)["title"]
     body = {**saved_entry, "id": "SOMETHING-ELSE", "title": "URL id wins"}
 
     result = client.simulate_post(f"/bibliography/{id_}", body=json.dumps(body))
 
-    assert result.status == falcon.HTTP_NO_CONTENT
-    assert stored(database, id_)["title"] == "URL id wins"
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert id_ in result.text
+    assert "SOMETHING-ELSE" in result.text
+    assert stored(database, id_)["title"] == original_title
     assert database["bibliography"].find_one({"_id": "SOMETHING-ELSE"}) is None
 
 

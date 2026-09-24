@@ -124,7 +124,7 @@ def test_round_tripped_entry_with_unknown_persisted_field_is_accepted(
     assert stored_entry["title"] == "Legacy corrected"
 
 
-def test_update_ignores_an_unknown_field_the_client_invents(
+def test_update_rejects_an_unknown_field_the_client_invents(
     client, bibliography, saved_entry
 ):
     result = post_entry(client, {**saved_entry, "DPO": "10.1086/719864"})

@@ -1,9 +1,3 @@
-"""Parsing of the free-text bibliography search query.
-
-Extracted from `Bibliography` so the service stays within the file-size limit
-and so the patterns can be tested without a repository.
-"""
-
 import re
 
 

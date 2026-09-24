@@ -26,6 +26,7 @@ from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
     duplicate_candidate_queries,
 )
 from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
+from ebl.bibliography.infrastructure.legacy_alias_lookup import MongoLegacyAliasLookup
 from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -40,6 +41,7 @@ class MongoBibliographyRepository(BibliographyRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
         self._lookup_reservations = MongoLookupReservations(database)
+        self._legacy_alias_lookup = MongoLegacyAliasLookup(database)
 
     def create_indexes(self) -> None:
         self._collection.create_index([("citationKey", pymongo.ASCENDING)])
@@ -68,7 +70,9 @@ class MongoBibliographyRepository(BibliographyRepository):
     def retire_lookup_values(
         self, entry_id: str, values: Sequence[str], now: datetime
     ) -> None:
-        self._lookup_reservations.retire(entry_id, values, now)
+        self._lookup_reservations.retire(
+            entry_id, values, now, self._entry_owns_lookup_value
+        )
 
     def lookup_value_is_reserved(self, value: str) -> bool:
         return self._lookup_reservations.is_active(
@@ -114,6 +118,9 @@ class MongoBibliographyRepository(BibliographyRepository):
         if len({item["_id"] for item in data}) > 1:
             raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
         return create_object_entry(data[0])
+
+    def query_by_legacy_alias(self, alias: str) -> dict:
+        return self._legacy_alias_lookup.query(alias)
 
     def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
         data = self._collection.find_many({"redirectTo": id_})

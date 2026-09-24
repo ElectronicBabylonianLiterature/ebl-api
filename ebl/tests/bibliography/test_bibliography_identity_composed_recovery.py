@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import logging
 
 import pytest
 from pymongo.database import Database
@@ -107,3 +108,42 @@ def test_failed_commit_then_redirect_race_releases_forward_alias_claim(
     assert not bibliography_repository.lookup_value_is_reserved(
         "composed-recovery-alias"
     )
+
+
+def test_release_failure_after_redirect_rollback_keeps_conflict_response(
+    monkeypatch, caplog, recovery_context
+):
+    context = recovery_context
+    entry(context.bibliography, context.user, "Q30000162")
+    entry(context.bibliography, context.user, "Q30000163")
+    original_persist = identity_module.update_identity_fields_only
+    persist_calls = {"count": 0}
+
+    def introduce_redirect_race(identity, entry_, current_user, stored_entry):
+        if persist_calls["count"] == 0:
+            persist_calls["count"] += 1
+            context.database["bibliography"].update_one(
+                {"_id": "Q30000163"},
+                {"$set": {"deprecated": True, "redirectTo": "Q30000162"}},
+            )
+        return original_persist(identity, entry_, current_user, stored_entry)
+
+    def fail_release(_owner):
+        raise RuntimeError("release failed")
+
+    monkeypatch.setattr(
+        identity_module, "update_identity_fields_only", introduce_redirect_race
+    )
+    monkeypatch.setattr(
+        context.bibliography_repository,
+        "release_pending_lookup_values",
+        fail_release,
+    )
+
+    with caplog.at_level(logging.ERROR), pytest.raises(BibliographyUpdateConflictError):
+        context.identity_management.manage_identity(
+            "Q30000162", {"deprecateTo": "Q30000163"}, context.user
+        )
+
+    assert "deprecated" not in stored(context.database, "Q30000162")
+    assert "release failed" in caplog.text

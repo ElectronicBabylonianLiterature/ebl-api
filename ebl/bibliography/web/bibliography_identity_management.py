@@ -1,5 +1,3 @@
-"""Internal route for the trusted bibliography identity operation."""
-
 import falcon
 from falcon import Response
 from falcon.media.validators.jsonschema import validate

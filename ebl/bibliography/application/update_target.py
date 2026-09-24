@@ -1,18 +1,3 @@
-"""Choosing which stored record a metadata update is allowed to write to.
-
-`Bibliography.find` resolves a citation key, an alias or a redirect and answers
-with the canonical entry. An update deliberately does not: a write names one
-exact record, because a client that edited what it believed was one entry must
-never silently overwrite a different one that an identifier happened to resolve
-to. Reads may follow identity, writes may not.
-
-Both non-canonical identifiers are therefore refused, and each refusal names the
-record the caller should edit instead rather than leaving them with a bare
-`404`: a deprecated id points at its redirect target, and a citation key or
-alias points at the entry it belongs to. An identifier that resolves to nothing
-at all stays a `404`.
-"""
-
 from typing import Callable
 
 from ebl.errors import DataError, DuplicateError, NotFoundError

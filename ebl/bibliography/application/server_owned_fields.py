@@ -1,25 +1,3 @@
-"""Splitting a bibliography entry into client-owned and server-owned parts.
-
-Two helpers rebuild an entry from a submission plus stored state and are easy
-to confuse:
-
-* `preserve_server_owned_fields` keeps every submitted key except the
-  server-owned ones and overlays the stored server-owned values. Callers that
-  have already projected the submission to known metadata use it.
-* `preserve_persisted_fields` keeps only submitted keys that are client
-  editable and overlays everything else the stored document holds, including
-  keys outside the CSL schema. The generic update uses it so unknown persisted
-  fields survive an edit.
-
-Two guards decide whether a metadata submission is allowed at all:
-
-* `changed_server_owned_fields` -- a server-owned CSL field whose value
-  disagrees with stored state (empty values and alias order do not count);
-  the caller turns a non-empty result into a `409`.
-* `reject_unknown_metadata_fields` -- a key outside the CSL vocabulary whose
-  value is not an exact round-trip of stored state; raised as a `DataError`.
-"""
-
 import json
 from copy import deepcopy
 from typing import Any, Mapping, Sequence, cast
@@ -94,13 +72,6 @@ _EMPTY_SERVER_OWNED_VALUES: tuple[Any, ...] = ([], "", False, None)
 
 
 def _normalized_value(field: str, value: Any) -> Any:
-    """Collapse the shapes that mean "no identity state" onto one value.
-
-    A round-tripped `GET` can carry `aliases: []`, `citationKey: ""`,
-    `deprecated: False` or `redirectTo: None` for a field that is simply
-    absent from storage; those are not a change. `aliases` is a logically
-    unordered collection, so its order is not a change either.
-    """
     if any(value == empty for empty in _EMPTY_SERVER_OWNED_VALUES):
         return None
     if field == "aliases" and isinstance(value, list):
@@ -143,12 +114,6 @@ def unknown_nonroundtrip_fields(
 def reject_unknown_metadata_fields(
     entry: Mapping[str, Any], stored_entry: Mapping[str, Any]
 ) -> None:
-    """Refuse keys the metadata update does not recognise.
-
-    A key outside the CSL vocabulary is accepted only when it round-trips a
-    value already persisted (legacy documents carry such keys and the editor
-    replays a `GET`). A new or changed value for one is not a metadata edit.
-    """
     if unknown_fields := unknown_nonroundtrip_fields(entry, stored_entry):
         raise DataError(
             "Bibliography metadata update does not recognise: "
@@ -162,11 +127,6 @@ def submitted_server_owned_fields(entry: Mapping[str, Any]) -> list[str]:
 
 
 def reject_submitted_server_owned_fields(entry: Mapping[str, Any]) -> None:
-    """Refuse a client submission that carries server-owned identity state.
-
-    Enforced here rather than only in the route schema so the invariant holds
-    for any caller of the ordinary metadata creation path, not just HTTP.
-    """
     if forbidden_fields := submitted_server_owned_fields(entry):
         raise DataError(
             "Bibliography creation may not include server-owned fields: "

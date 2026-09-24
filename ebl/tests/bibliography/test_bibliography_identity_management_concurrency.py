@@ -15,7 +15,7 @@ from ebl.bibliography.application.identity_management import (
     BibliographyIdentityManagement,
 )
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
-from ebl.errors import DataError
+from ebl.errors import Defect
 from ebl.tests.bibliography.identity_management_test_helpers import (
     RESERVATIONS,
     admin_client,
@@ -202,7 +202,7 @@ def test_a_concurrent_cross_record_redirect_break_is_rolled_back(
     assert context.bibliography.find("Q30000096")["id"] == "Q30000095"
 
 
-def test_failed_redirect_rollback_logs_and_preserves_the_validation_conflict(
+def test_failed_redirect_rollback_logs_and_reports_a_server_defect(
     monkeypatch, caplog, concurrency_context
 ):
     context = concurrency_context
@@ -231,13 +231,13 @@ def test_failed_redirect_rollback_logs_and_preserves_the_validation_conflict(
 
     with (
         caplog.at_level(logging.ERROR),
-        pytest.raises(BibliographyUpdateConflictError) as raised,
+        pytest.raises(Defect) as raised,
     ):
         context.identity_management.manage_identity(
             "Q30000097", {"deprecateTo": "Q30000098"}, context.user
         )
 
-    assert isinstance(raised.value.__cause__, DataError)
+    assert isinstance(raised.value.__cause__, RuntimeError)
     assert "Q30000097" in caplog.text
     assert "rollback CAS lost" in caplog.text
     assert stored(context.database, "Q30000097")["redirectTo"] == "Q30000098"

@@ -2,6 +2,7 @@ import falcon
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 from typing import Mapping, Sequence
+from urllib.parse import quote
 
 from ebl.bibliography.application.server_owned_fields import (
     reject_submitted_server_owned_fields,
@@ -37,12 +38,6 @@ def submitted_server_owned_fields(
 
 
 def reject_server_owned_internal_fields(req, _resp, _resource, _params) -> None:
-    """Refuse identity state on ordinary internal creation.
-
-    Runs ahead of `@validate` so the caller is told which fields are
-    server-owned and where identity is managed, rather than getting the
-    schema's generic `additionalProperties` rejection.
-    """
     media = req.media
     if isinstance(media, dict):
         reject_submitted_server_owned_fields(media)
@@ -78,7 +73,7 @@ class BibliographyResource:
         bibliography_entry = req.media
         self._bibliography.create_metadata(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
-        resp.location = f"/bibliography/{bibliography_entry['id']}"
+        resp.location = f"/bibliography/{quote(bibliography_entry['id'], safe='')}"
         resp.media = bibliography_entry
 
 
@@ -92,6 +87,11 @@ class BibliographyEntriesResource:
     @falcon.before(require_scope, "write:bibliography")
     @validate(INTERNAL_METADATA_UPDATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response, id_: str) -> None:
+        submitted_id = req.media.get("id")
+        if submitted_id is not None and submitted_id != id_:
+            raise DataError(
+                f"Bibliography request id {submitted_id} does not match URL id {id_}."
+            )
         entry = {**req.media, "id": id_}
         self._bibliography.update_metadata(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT
@@ -135,7 +135,6 @@ class PartnerBibliographyResource:
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
@@ -160,7 +159,6 @@ class PartnerBibliographyEntryResource:
         resp.media = self._bibliography.find_partner_entry(id_or_citation_key)
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(
@@ -195,7 +193,6 @@ class PartnerBibliographyDuplicateOverrideResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(require_scope, "export:bibliography")
     @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:

@@ -45,20 +45,9 @@ class Bibliography:
         self._identity = BibliographyIdentityContext(repository, changelog)
 
     def create(self, entry: dict, user: User) -> str:
-        """Create an entry, claiming whatever identity state it carries.
-
-        Trusted internal caller path, mirroring `update`: the identity fields
-        are taken as given because the caller (`PartnerBibliography`) built
-        them server-side. Client submissions go through `create_metadata`.
-        """
         return create_with_identity_claims(self._identity, entry, user)
 
     def create_metadata(self, entry: dict, user: User) -> str:
-        """Create an entry on behalf of a client.
-
-        Identity state has a dedicated trusted operation, so a submitted
-        server-owned field is refused here rather than silently dropped.
-        """
         reject_submitted_server_owned_fields(entry)
         return self.create(entry, user)
 
@@ -81,7 +70,7 @@ class Bibliography:
         for entry in self._repository.query_by_ids(ids):
             try:
                 resolved_entry = self._follow_redirect(entry)
-            except (NotFoundError, DuplicateError):
+            except NotFoundError:
                 continue
             resolved_id = resolved_entry["id"]
             if resolved_id not in seen_ids:
@@ -93,19 +82,6 @@ class Bibliography:
         return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
     def update_metadata(self, entry: dict, user: User) -> None:
-        """Edit the metadata of an entry, keeping its persisted identity state.
-
-        The only way to write an existing entry, for clients and for trusted
-        internal callers alike. Client-editable CSL fields are replaced by the
-        submission; `aliases`, `citationKey`, `deprecated`, `redirectTo` and
-        every other persisted field the client does not own are carried over
-        from the stored record.
-
-        A submitted server-owned field that disagrees with stored state is a
-        conflict: never a silent overwrite, and never a silent drop either, so a
-        caller holding a stale identity is told to reload rather than writing on
-        top of the newer state.
-        """
         stored_entry = stored_entry_for_update(
             entry, self._repository.query_by_id, self.find
         )

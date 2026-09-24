@@ -10,6 +10,10 @@ def alias(value: str, **overrides) -> dict:
     return {"value": value, **overrides}
 
 
+def normalized_alias(value: str, **overrides) -> dict:
+    return {"value": value, "normalizedValue": value, **overrides}
+
+
 def test_no_commands_returns_an_equal_entry():
     assert apply_identity_commands(BASE, {}) == BASE
 
@@ -24,7 +28,7 @@ def test_the_stored_entry_is_not_mutated():
 
 def test_add_alias_to_an_entry_without_aliases():
     assert apply_identity_commands(BASE, {"addAliases": [alias("a")]})["aliases"] == [
-        alias("a")
+        normalized_alias("a")
     ]
 
 
@@ -33,7 +37,7 @@ def test_add_alias_appends_after_existing_ones():
 
     result = apply_identity_commands(stored, {"addAliases": [alias("b")]})
 
-    assert result["aliases"] == [alias("a"), alias("b")]
+    assert result["aliases"] == [alias("a"), normalized_alias("b")]
 
 
 def test_removals_are_applied_before_additions():
@@ -43,7 +47,7 @@ def test_removals_are_applied_before_additions():
         stored, {"removeAliases": ["a"], "addAliases": [alias("a", type="fixed")]}
     )
 
-    assert result["aliases"] == [alias("a", type="fixed")]
+    assert result["aliases"] == [normalized_alias("a", type="fixed")]
 
 
 def test_removing_the_last_alias_leaves_an_empty_list():
@@ -64,12 +68,23 @@ def test_adding_an_existing_alias_raises():
         apply_identity_commands(stored, {"addAliases": [alias("a")]})
 
 
+@pytest.mark.parametrize("value", [" ", "---"])
+def test_adding_an_alias_without_a_normalized_value_raises(value):
+    with pytest.raises(DataError):
+        apply_identity_commands(BASE, {"addAliases": [alias(value)]})
+
+
 def test_alias_key_is_absent_when_no_alias_command_is_given():
     assert "aliases" not in apply_identity_commands(BASE, {"citationKey": "k"})
 
 
 def test_set_citation_key():
     assert apply_identity_commands(BASE, {"citationKey": "k"})["citationKey"] == "k"
+
+
+def test_setting_a_blank_citation_key_raises():
+    with pytest.raises(DataError, match="must not be blank"):
+        apply_identity_commands(BASE, {"citationKey": " "})
 
 
 def test_remove_citation_key():
@@ -87,6 +102,11 @@ def test_deprecate_to_sets_both_fields():
 
     assert result["deprecated"] is True
     assert result["redirectTo"] == "Q2"
+
+
+def test_deprecating_to_a_blank_target_raises():
+    with pytest.raises(DataError, match="must not be blank"):
+        apply_identity_commands(BASE, {"deprecateTo": " "})
 
 
 def test_reactivate_clears_both_fields():
@@ -115,6 +135,6 @@ def test_commands_combine():
         },
     )
 
-    assert result["aliases"] == [alias("b")]
+    assert result["aliases"] == [normalized_alias("b")]
     assert result["citationKey"] == "new"
     assert result["redirectTo"] == "Q2"

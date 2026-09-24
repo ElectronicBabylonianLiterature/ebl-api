@@ -4,14 +4,10 @@ import pytest
 
 from ebl.bibliography.application.partner_identity import create_partner_alias
 from ebl.errors import DataError
+from ebl.tests.bibliography.identity_preservation_test_helpers import (
+    SERVER_OWNED_VALUES,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
-
-SERVER_OWNED_VALUES = {
-    "aliases": [{"value": "client-alias", "normalizedValue": "client-alias"}],
-    "citationKey": "clientChosen",
-    "deprecated": True,
-    "redirectTo": "OTHER-ID",
-}
 
 
 def entry(**overrides):
