@@ -1,10 +1,12 @@
+from collections.abc import Sequence
 from enum import Enum
 from types import MappingProxyType
-from typing import Mapping, Optional, Sequence
+from typing import Mapping, Optional
 
 import attr
 
 from ebl.media.domain.validation import (
+    instance_of,
     non_negative_int,
     not_blank,
     positive_int,
@@ -58,6 +60,8 @@ def _museum_numbers_of(
 ) -> tuple[MuseumNumber, ...]:
     if isinstance(value, str):
         raise ValueError("Attribute fragment_ids must be a sequence of museum numbers.")
+    if value is not None and not isinstance(value, Sequence):
+        raise ValueError("Attribute fragment_ids must be a sequence of museum numbers.")
     try:
         fragment_ids = tuple_or_empty(value)
     except TypeError as error:
@@ -72,6 +76,8 @@ def _museum_numbers_of(
 def _strings_of(value: Optional[Sequence[str]]) -> tuple[str, ...]:
     if isinstance(value, str):
         raise ValueError("String collections must be sequences of strings.")
+    if value is not None and not isinstance(value, Sequence):
+        raise ValueError("String collections must be sequences of strings.")
     try:
         strings = tuple_or_empty(value)
     except TypeError as error:
@@ -85,6 +91,8 @@ def _report_entries_of(
     value: Optional[Sequence[tuple[BackfillCategory, Sequence[str]]]],
 ) -> tuple[tuple[BackfillCategory, tuple[str, ...]], ...]:
     if isinstance(value, str):
+        raise ValueError("Report entries must be a sequence of pairs.")
+    if value is not None and not isinstance(value, Sequence):
         raise ValueError("Report entries must be a sequence of pairs.")
     try:
         report_entries = tuple_or_empty(value)
@@ -132,7 +140,7 @@ class ImportRequest:
     twice.
     """
 
-    mode: ImportMode = attr.ib(validator=attr.validators.instance_of(ImportMode))
+    mode: ImportMode = attr.ib(validator=instance_of(ImportMode))
     source_name: str = attr.ib(validator=not_blank)
     fragment_ids: Sequence[MuseumNumber] = attr.ib(
         factory=tuple, converter=_museum_numbers_of

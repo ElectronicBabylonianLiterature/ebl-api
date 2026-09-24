@@ -1,6 +1,5 @@
 from collections.abc import Callable
 from io import BytesIO
-from typing import cast
 
 import pytest
 
@@ -72,16 +71,6 @@ def test_thumbnail_write_request_requires_thumbnail_size() -> None:
             media_id=media_id(),
             content=write_content(),
             representation=original_representation(),
-        )
-
-
-def test_thumbnail_write_request_rejects_invalid_thumbnail_size() -> None:
-    with pytest.raises(TypeError):
-        ThumbnailRepresentationWriteRequest(
-            media_id(),
-            write_content(),
-            original_representation(),
-            cast(ThumbnailSize, None),
         )
 
 

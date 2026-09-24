@@ -1,4 +1,7 @@
+from collections.abc import MutableMapping
 from typing import Sequence, cast
+
+import pytest
 
 from ebl.media.application.media_dtos import FragmentMediaResponseDto
 from ebl.media.application.media_schemas import FragmentMediaResponseDtoSchema
@@ -178,6 +181,27 @@ def test_fragment_media_response_serializes_multiple_thumbnail_sizes() -> None:
         "width": 960,
         "height": 720,
     }
+
+
+def test_fragment_media_response_thumbnail_mapping_is_immutable() -> None:
+    response = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
+    thumbnails = cast(
+        MutableMapping[str, object], response.media[0].representations.thumbnails
+    )
+
+    with pytest.raises(TypeError):
+        thumbnails["small"] = object()
+
+
+def test_fragment_media_response_container_dtos_are_explicitly_unhashable() -> None:
+    response = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
+
+    with pytest.raises(TypeError):
+        hash(response.media[0].representations)
+    with pytest.raises(TypeError):
+        hash(response.media[0])
+    with pytest.raises(TypeError):
+        hash(response)
 
 
 def test_fragment_media_response_supports_svg_original_with_raster_display() -> None:

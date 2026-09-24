@@ -3,7 +3,30 @@ from typing import BinaryIO, Optional, Sequence
 import attr
 
 from ebl.media.domain import Media, MediaId, MediaRepresentation, ThumbnailSize
-from ebl.media.domain.validation import not_blank, positive_int, tuple_or_empty
+from ebl.media.domain.mime import is_supported_raster_mime_type
+from ebl.media.domain.validation import (
+    instance_of,
+    not_blank,
+    positive_int,
+    tuple_or_empty,
+)
+
+
+def _readable_content(
+    _instance: object, attribute: attr.Attribute, value: object
+) -> None:
+    if not callable(getattr(value, "read", None)):
+        raise ValueError(f"Attribute {attribute.name} must be a readable stream.")
+
+
+def _require_original_representation(representation: MediaRepresentation) -> None:
+    if representation.checksum is None:
+        raise ValueError("Original write representation must contain a checksum.")
+
+
+def _require_preview_representation(representation: MediaRepresentation) -> None:
+    if not is_supported_raster_mime_type(representation.mime_type):
+        raise ValueError("Display and thumbnail write representations must be raster.")
 
 
 def _thumbnail_handles_of(
@@ -163,31 +186,38 @@ class OpenRepresentation:
     `content` and must close it.
     """
 
-    media_id: MediaId
-    representation: MediaRepresentation
-    content: BinaryIO
+    media_id: MediaId = attr.ib(validator=instance_of(MediaId))
+    representation: MediaRepresentation = attr.ib(
+        validator=instance_of(MediaRepresentation)
+    )
+    content: BinaryIO = attr.ib(validator=_readable_content)
     length: int = attr.ib(validator=positive_int)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class _RepresentationWriteRequest:
-    media_id: MediaId
-    content: BinaryIO
-    representation: MediaRepresentation
+    media_id: MediaId = attr.ib(validator=instance_of(MediaId))
+    content: BinaryIO = attr.ib(validator=_readable_content)
+    representation: MediaRepresentation = attr.ib(
+        validator=instance_of(MediaRepresentation)
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class OriginalRepresentationWriteRequest(_RepresentationWriteRequest):
-    pass
+    def __attrs_post_init__(self) -> None:
+        _require_original_representation(self.representation)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class DisplayRepresentationWriteRequest(_RepresentationWriteRequest):
-    pass
+    def __attrs_post_init__(self) -> None:
+        _require_preview_representation(self.representation)
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class ThumbnailRepresentationWriteRequest(_RepresentationWriteRequest):
-    thumbnail_size: ThumbnailSize = attr.ib(
-        validator=attr.validators.instance_of(ThumbnailSize)
-    )
+    thumbnail_size: ThumbnailSize = attr.ib(validator=instance_of(ThumbnailSize))
+
+    def __attrs_post_init__(self) -> None:
+        _require_preview_representation(self.representation)

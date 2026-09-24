@@ -1,3 +1,4 @@
+from types import MappingProxyType
 from typing import Mapping, Optional, Sequence
 
 import attr
@@ -35,15 +36,27 @@ class MediaReferenceDto:
     id: str
 
 
-@attr.s(auto_attribs=True, frozen=True)
+def _read_only_thumbnails(
+    value: Mapping[str, MediaRepresentationDto],
+) -> Mapping[str, MediaRepresentationDto]:
+    return MappingProxyType(dict(value))
+
+
+@attr.s(auto_attribs=True, frozen=True, hash=False)
 class MediaRepresentationsDto:
+    __hash__ = None
+
     original: MediaRepresentationDto
     display: Optional[MediaRepresentationDto] = None
-    thumbnails: Mapping[str, MediaRepresentationDto] = attr.ib(factory=dict)
+    thumbnails: Mapping[str, MediaRepresentationDto] = attr.ib(
+        factory=dict, converter=_read_only_thumbnails
+    )
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True, frozen=True, hash=False)
 class FragmentMediaItemDto:
+    __hash__ = None
+
     id: str
     type: MediaType
     sort_order: int
@@ -92,8 +105,10 @@ class FragmentMediaItemDto:
         )
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@attr.s(auto_attribs=True, frozen=True, hash=False)
 class FragmentMediaResponseDto:
+    __hash__ = None
+
     media: Sequence[FragmentMediaItemDto]
 
     @classmethod
