@@ -87,15 +87,16 @@ def test_acquisition():
     acquisition = Acquisition(
         description="Clay tablet purchase", supplier="Antiquities Gallery", date=1925
     )
-    fragment = FragmentFactory.build(acquisition=acquisition)
+    fragment = FragmentFactory.build(acquisitions=(acquisition,))
 
-    assert isinstance(fragment.acquisition, Acquisition)
-    assert fragment.acquisition.description == "Clay tablet purchase"
-    assert fragment.acquisition.supplier == "Antiquities Gallery"
-    assert fragment.acquisition.date == 1925
+    assert isinstance(fragment.acquisitions, tuple)
+    assert isinstance(fragment.acquisitions[0], Acquisition)
+    assert fragment.acquisitions[0].description == "Clay tablet purchase"
+    assert fragment.acquisitions[0].supplier == "Antiquities Gallery"
+    assert fragment.acquisitions[0].date == 1925
 
-    fragment = FragmentFactory.build(acquisition=None)
-    assert fragment.acquisition is None
+    fragment = FragmentFactory.build(acquisitions=())
+    assert fragment.acquisitions == ()
 
 
 def test_description():

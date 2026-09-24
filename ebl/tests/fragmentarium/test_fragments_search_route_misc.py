@@ -154,8 +154,8 @@ def test_needs_revision(client, fragmentarium):
     fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(fragment)
     expected_dto = [expected_fragment_info_dto(attr.evolve(fragment, genres=()))]
-    if "acquisition" in expected_dto[0]:
-        del expected_dto[0]["acquisition"]
+    if "acquisitions" in expected_dto[0]:
+        del expected_dto[0]["acquisitions"]
 
     result = client.simulate_get("/fragments", params={"needsRevision": True})
 
