@@ -54,13 +54,22 @@ def _media_items_of(
     return tuple(value)
 
 
-@attr.s(auto_attribs=True, frozen=True, hash=False)
+@attr.s(auto_attribs=True, frozen=True, eq=False, hash=False)
 class MediaRepresentationsDto:
     original: MediaRepresentationDto
     display: Optional[MediaRepresentationDto] = None
     thumbnails: Mapping[str, MediaRepresentationDto] = attr.ib(
         factory=dict, converter=_read_only_thumbnails
     )
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, MediaRepresentationsDto):
+            return NotImplemented
+        return (
+            self.original == other.original
+            and self.display == other.display
+            and dict(self.thumbnails) == dict(other.thumbnails)
+        )
 
     def __hash__(self) -> int:
         return hash(

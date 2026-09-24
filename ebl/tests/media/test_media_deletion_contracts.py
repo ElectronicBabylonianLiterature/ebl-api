@@ -122,4 +122,6 @@ def test_stale_cleanup_cannot_finish_a_newer_deletion_generation() -> None:
 
     repository.finish_delete(old)
 
-    assert repository.delete(PHOTO_ID) == replacement
+    deleted_again = repository.delete(PHOTO_ID)
+
+    assert deleted_again == replacement

@@ -196,9 +196,11 @@ def test_fragment_media_response_thumbnail_mapping_is_immutable() -> None:
 def test_fragment_media_response_container_dtos_have_structural_hashes() -> None:
     first = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
     second = FragmentMediaResponseDto.of(MuseumNumber.of("K.1"), (photo_media(),))
+    representations = first.media[0].representations
 
     assert first == second
-    assert hash(first.media[0].representations) == hash(second.media[0].representations)
+    assert representations.__eq__(object()) is NotImplemented
+    assert hash(representations) == hash(second.media[0].representations)
     assert hash(first.media[0]) == hash(second.media[0])
     assert hash(first) == hash(second)
 
