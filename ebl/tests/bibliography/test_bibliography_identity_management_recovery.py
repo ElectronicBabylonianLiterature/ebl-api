@@ -108,7 +108,7 @@ def test_persistence_failure_releases_pending_claims(monkeypatch, recovery_conte
     assert context.database[RESERVATIONS].count_documents({"state": "pending"}) == 0
 
 
-def test_commit_failure_keeps_old_value_claimed_until_reconciled(
+def test_commit_failure_retires_old_value_and_reconciles_new_value(
     monkeypatch, recovery_context
 ):
     context = recovery_context
@@ -126,7 +126,7 @@ def test_commit_failure_keeps_old_value_claimed_until_reconciled(
 
     assert result["citationKey"] == "new1999Key"
     assert stored(context.database, "Q30000132")["citationKey"] == "new1999Key"
-    assert reservation_state(context.database, "old1999Key") == COMMITTED
+    assert reservation_state(context.database, "old1999Key") == ABANDONED
     assert reservation_state(context.database, "new1999Key") == "pending"
 
     context.bibliography_repository.reconcile_lookup_reservations(FUTURE)

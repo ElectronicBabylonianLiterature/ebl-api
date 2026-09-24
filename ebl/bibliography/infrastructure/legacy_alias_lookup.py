@@ -41,10 +41,20 @@ class MongoLegacyAliasLookup:
 
     @staticmethod
     def _matches(entry: Mapping[str, Any], normalized_alias: str) -> bool:
-        return bool(normalized_alias) and any(
-            isinstance(stored_alias, Mapping)
-            and not stored_alias.get("normalizedValue")
-            and isinstance(value := stored_alias.get("value"), str)
-            and normalize_partner_id(value) == normalized_alias
+        if not normalized_alias:
+            return False
+        return any(
+            MongoLegacyAliasLookup._alias_matches(stored_alias, normalized_alias)
             for stored_alias in entry.get("aliases", [])
         )
+
+    @staticmethod
+    def _alias_matches(stored_alias: object, normalized_alias: str) -> bool:
+        if not isinstance(stored_alias, Mapping):
+            return False
+        if stored_alias.get("normalizedValue"):
+            return False
+        value = stored_alias.get("value")
+        if not isinstance(value, str):
+            return False
+        return normalize_partner_id(value) == normalized_alias
