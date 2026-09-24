@@ -99,6 +99,16 @@ def test_acquisition():
     assert fragment.acquisitions == ()
 
 
+def test_multiple_acquisitions():
+    first = Acquisition(description="First purchase", supplier="Gallery A", date=1920)
+    second = Acquisition(description="Second purchase", supplier="Gallery B", date=1930)
+
+    fragment = FragmentFactory.build(acquisitions=(first, second))
+
+    assert isinstance(fragment.acquisitions, tuple)
+    assert fragment.acquisitions == (first, second)
+
+
 def test_description():
     fragment = FragmentFactory.build(description="description")
     assert fragment.description == "description"

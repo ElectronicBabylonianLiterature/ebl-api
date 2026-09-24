@@ -3,6 +3,7 @@ import attr
 import falcon
 from ebl.common.domain.scopes import Scope
 
+from ebl.fragmentarium.domain.fragment import Acquisition
 from ebl.fragmentarium.domain.named_entity import RealiaAnnotationSpan
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -112,6 +113,21 @@ def test_get_restricted_fragment_as_guest(guest_client, fragmentarium):
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
     assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_get_multiple_acquisitions(client, fragmentarium):
+    first = Acquisition(description="First purchase", supplier="Gallery A", date=1920)
+    second = Acquisition(description="Second purchase", supplier="Gallery B", date=1930)
+    fragment = TransliteratedFragmentFactory.build(acquisitions=(first, second))
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get(f"/fragments/{fragment.number}")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["acquisitions"] == [
+        {"description": "First purchase", "supplier": "Gallery A", "date": 1920},
+        {"description": "Second purchase", "supplier": "Gallery B", "date": 1930},
+    ]
 
 
 def test_fragments_retrieve_all(guest_client, fragmentarium):
