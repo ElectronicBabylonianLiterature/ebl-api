@@ -11,6 +11,7 @@ from ebl.common.query.parameter_parser import (
     parse_pages,
     parse_genre,
     parse_non_negative_integer_field,
+    parse_findspot_id,
     parse_findspot_ids,
     parse_count,
 )
@@ -141,7 +142,7 @@ class FragmentsQueryResource:
             parse_pages,
             parse_genre,
             parse_count,
-            parse_non_negative_integer_field("findspotId"),
+            parse_findspot_id,
             parse_findspot_ids,
             parse_integer_field("limit"),
             parse_non_negative_integer_field("offset"),

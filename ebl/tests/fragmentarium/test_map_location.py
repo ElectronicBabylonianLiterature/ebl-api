@@ -59,6 +59,14 @@ def test_map_location_normalizes_source_whitespace():
             {"polygon_ids": ("assur-1", "  ")},
             "polygonIds must not contain empty values.",
         ),
+        (
+            {"polygon_ids": "assur-1"},
+            "polygonIds must be a list or tuple.",
+        ),
+        (
+            {"polygon_ids": {"assur-1"}},
+            "polygonIds must be a list or tuple.",
+        ),
         ({"source": "   "}, "source must not be empty."),
         ({"source_revision": "  "}, "sourceRevision must not be empty."),
     ],

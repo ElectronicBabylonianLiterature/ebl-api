@@ -1,6 +1,4 @@
 from enum import Enum
-from typing import Iterable
-
 import attr
 
 
@@ -13,7 +11,9 @@ class MapLocationMatchMethod(Enum):
     VERIFIED_SOURCE = "verified-source"
 
 
-def _to_tuple(polygon_ids: Iterable[str]) -> tuple[str, ...]:
+def _to_tuple(polygon_ids: list[str] | tuple[str, ...]) -> tuple[str, ...]:
+    if not isinstance(polygon_ids, (list, tuple)):
+        raise ValueError("polygonIds must be a list or tuple.")
     return tuple(polygon_ids)
 
 
