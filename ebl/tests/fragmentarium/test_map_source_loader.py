@@ -59,8 +59,8 @@ def test_load_site_ods_rows_rejects_invalid_findspot_ids(monkeypatch, raw_id):
 def test_group_findspots_deduplicates_agreeing_progressive_rows():
     config = SITE_CONFIGS["KALHU"]
     rows = (
-        MapOdsRow(findspot_id=1, area="D XII"),
-        MapOdsRow(findspot_id=1, area="D XII"),
+        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
+        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
     )
     polygons = (
         MapPolygon(name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"),
@@ -78,8 +78,8 @@ def test_group_findspots_deduplicates_agreeing_progressive_rows():
 def test_group_findspots_flags_disagreeing_rows_as_conflict():
     config = SITE_CONFIGS["KALHU"]
     rows = (
-        MapOdsRow(findspot_id=1, area="D XII"),
-        MapOdsRow(findspot_id=1, area="ZT"),
+        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
+        MapOdsRow(findspot_id=1, site_name=config.site_name, area="ZT"),
     )
     polygons = (
         MapPolygon(name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"),
@@ -148,8 +148,8 @@ def test_load_site_polygons_always_checks_geographic_bounds(monkeypatch):
 def test_group_findspots_flags_mixed_resolved_and_unresolved_rows_as_conflict():
     config = SITE_CONFIGS["KALHU"]
     rows = (
-        MapOdsRow(findspot_id=1, area="D XII"),
-        MapOdsRow(findspot_id=1, area="unknown"),
+        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
+        MapOdsRow(findspot_id=1, site_name=config.site_name, area="unknown"),
     )
     polygons = (
         MapPolygon(name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"),
@@ -165,7 +165,7 @@ def test_group_findspots_flags_mixed_resolved_and_unresolved_rows_as_conflict():
 
 def test_derive_row_preserves_explicit_source_uncertainty():
     config = SITE_CONFIGS["ASSUR"]
-    row = MapOdsRow(findspot_id=4392, area="gB4II?")
+    row = MapOdsRow(findspot_id=4392, site_name=config.site_name, area="gB4II?")
     polygons = (
         MapPolygon(name="gB4II", polygon_id="assur-gb4ii-abc", geometry_checksum="abc"),
     )
@@ -175,3 +175,21 @@ def test_derive_row_preserves_explicit_source_uncertainty():
     assert derivation.status == "needs-human-curation"
     assert derivation.polygon_id is None
     assert derivation.matched_value == "gB4II?"
+
+
+@pytest.mark.parametrize("site_name", ["", "Wrong site"])
+def test_derive_row_requires_canonical_site_identity(site_name):
+    config = SITE_CONFIGS["ASSUR"]
+    row = MapOdsRow(findspot_id=1, site_name=site_name, area="Area")
+    polygons = (
+        MapPolygon(
+            name="Area",
+            polygon_id="assur-area-checksum",
+            geometry_checksum="checksum",
+        ),
+    )
+
+    derivation = derive_row(row, index_polygons_by_key(polygons), config)
+
+    assert derivation.status == "needs-human-curation"
+    assert derivation.polygon_id is None

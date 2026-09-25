@@ -75,8 +75,11 @@ def build_site_artifacts(
         for findspot_id in additional_authoritative_findspot_ids
     ):
         raise ValueError("Additional authoritative findspot IDs must be BSON int64s.")
-    source_findspot_ids = {row.findspot_id for row in rows}
-    authoritative_findspot_ids = source_findspot_ids | set(
+    source_group_ids = {row.findspot_id for row in rows}
+    authoritative_source_findspot_ids = {
+        row.findspot_id for row in rows if row.site_name == config.site_name
+    }
+    authoritative_findspot_ids = authoritative_source_findspot_ids | set(
         additional_authoritative_findspot_ids
     )
     curated = load_curated_mappings(
@@ -124,7 +127,7 @@ def build_site_artifacts(
         source_group_count=len(groups),
         verified_mapping_count=len(verified),
         curated_mapping_count=len(curated),
-        curated_source_group_count=len(curated_ids & source_findspot_ids),
+        curated_source_group_count=len(curated_ids & source_group_ids),
         unresolved_row_count=sum(len(group.rows) for group in unresolved_groups),
         unresolved_group_count=len(unresolved_groups),
         conflict_row_count=sum(len(group.rows) for group in conflict_groups),
