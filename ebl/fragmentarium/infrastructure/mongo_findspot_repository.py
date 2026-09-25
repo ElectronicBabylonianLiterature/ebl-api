@@ -22,3 +22,19 @@ class MongoFindspotRepository:
 
     def find_all(self) -> Sequence[Findspot]:
         return self._schema().load(self._findspots.find_many({}), many=True)
+
+    def find_by_ids(self, findspot_ids: Sequence[int]) -> Sequence[Findspot]:
+        if not findspot_ids:
+            return ()
+        documents = self._findspots.find_many(
+            {"_id": {"$in": list(findspot_ids)}},
+            projection={
+                "_id": True,
+                "site": True,
+                "sector": True,
+                "area": True,
+                "building": True,
+                "room": True,
+            },
+        )
+        return self._schema().load(documents, many=True)

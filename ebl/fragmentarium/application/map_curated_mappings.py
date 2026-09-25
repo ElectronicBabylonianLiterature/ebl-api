@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import TypedDict
 
@@ -13,6 +12,13 @@ from marshmallow import (
     validates_schema,
 )
 
+from ebl.fragmentarium.application.map_json import load_strict_json
+
+
+def _nonblank(value: str) -> None:
+    if not value.strip():
+        raise ValidationError("Field must not be blank.")
+
 
 class CuratedMappingRecord(TypedDict):
     findspotId: int
@@ -24,7 +30,9 @@ class CuratedMappingRecord(TypedDict):
 
 
 class CuratedCrosswalkRow(Schema):
-    findspot_id = fields.Integer(required=True, data_key="findspotId")
+    findspot_id = fields.Integer(
+        required=True, data_key="findspotId", validate=validate.Range(min=0)
+    )
     site_id = fields.String(required=True, data_key="siteId")
     polygon_ids = fields.List(
         fields.String(validate=validate.Length(min=1)),
@@ -33,15 +41,22 @@ class CuratedCrosswalkRow(Schema):
         validate=validate.Length(min=1),
     )
     match_method = fields.String(required=True, data_key="matchMethod")
-    reviewer = fields.String(required=True, validate=validate.Length(min=1))
+    reviewer = fields.String(required=True, validate=_nonblank)
     review_date = fields.String(
-        required=True, data_key="reviewDate", validate=validate.Length(min=1)
+        required=True, data_key="reviewDate", validate=_nonblank
     )
-    source = fields.String(required=True, validate=validate.Length(min=1))
+    source = fields.String(required=True, validate=_nonblank)
     source_revision = fields.String(
-        required=True, data_key="sourceRevision", validate=validate.Length(min=1)
+        required=True, data_key="sourceRevision", validate=_nonblank
     )
     note = fields.String(required=False, load_default="")
+    site_name = fields.String(required=False, data_key="siteName")
+    area = fields.String(required=False)
+    sector = fields.String(required=False)
+    building = fields.String(required=False)
+    map_name = fields.String(required=False, data_key="map")
+    status = fields.String(required=False)
+    required_decision = fields.String(required=False, data_key="requiredDecision")
 
     @validates_schema
     def validate_row(self, data, **kwargs) -> None:
@@ -53,6 +68,8 @@ class CuratedCrosswalkRow(Schema):
         polygon_ids = data.get("polygon_ids", ())
         if len(set(polygon_ids)) != len(polygon_ids):
             raise ValidationError("polygonIds must be unique.", "polygonIds")
+        if any(not polygon_id.strip() for polygon_id in polygon_ids):
+            raise ValidationError("polygonIds must not contain blanks.", "polygonIds")
 
     @post_load
     def to_mapping_record(self, data, **kwargs) -> CuratedMappingRecord:
@@ -61,29 +78,39 @@ class CuratedCrosswalkRow(Schema):
             "polygonIds": list(data["polygon_ids"]),
             "locationPrecision": "excavation-area",
             "matchMethod": "curated",
-            "source": data["source"],
-            "sourceRevision": data["source_revision"],
+            "source": data["source"].strip(),
+            "sourceRevision": data["source_revision"].strip(),
         }
 
 
 def load_curated_mappings(
-    path: Path | None, site_id: str, known_polygon_ids: set[str]
+    path: Path | None,
+    site_id: str,
+    known_polygon_ids: set[str],
+    authoritative_findspot_ids: set[int],
 ) -> tuple[CuratedMappingRecord, ...]:
     if path is None:
         return ()
-    entries = json.loads(Path(path).read_text(encoding="utf-8"))
+    entries = load_strict_json(Path(path).read_text(encoding="utf-8"), str(path))
     if not isinstance(entries, list):
         raise ValueError(f"Expected a JSON array of curated rows in {path}.")
     schema = CuratedCrosswalkRow()
     records: list[CuratedMappingRecord] = []
     seen_findspot_ids: set[int] = set()
     for entry in entries:
+        if not isinstance(entry, dict):
+            raise ValueError("Curated rows must be JSON objects.")
         if entry.get("siteId") != site_id:
             raise ValueError(
                 f"Curated row for findspot {entry.get('findspotId')} declares "
                 f"siteId {entry.get('siteId')!r}, expected {site_id!r}."
             )
         record = schema.load(entry)
+        if record["findspotId"] not in authoritative_findspot_ids:
+            raise ValueError(
+                f"Curated findspot ID {record['findspotId']} has no authoritative "
+                f"membership evidence for site {site_id}."
+            )
         missing = [pid for pid in record["polygonIds"] if pid not in known_polygon_ids]
         if missing:
             raise ValueError(

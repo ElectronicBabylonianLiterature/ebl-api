@@ -1,15 +1,5 @@
 [
   {
-    "findspotId": 228,
-    "polygonIds": [
-      "kalhu-ekal-m-arti-fort-shalmaneser-d7b0dc777aa9"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Kalhu Tafeln.ods",
-    "sourceRevision": "2026-08-05"
-  },
-  {
     "findspotId": 300,
     "polygonIds": [
       "kalhu-ezida-118147b1d10a"

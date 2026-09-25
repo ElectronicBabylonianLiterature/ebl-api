@@ -2,6 +2,12 @@ import falcon
 import pytest
 
 from ebl.common.domain.scopes import Scope
+from ebl.common.query.parameter_parser import (
+    MAX_FINDSPOT_ID,
+    MAX_FINDSPOT_ID_RAW_LENGTH,
+    parse_findspot_id,
+)
+from ebl.errors import DataError
 from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import (
@@ -45,8 +51,40 @@ def test_search_findspot_id_preserves_visibility(client, guest_client, fragmenta
     ).json == query_result_of([], 0)
 
 
-@pytest.mark.parametrize("value", ["invalid", "-1"])
+@pytest.mark.parametrize(
+    "value", ["invalid", "-1", "1_0", "true", "1.0", str(MAX_FINDSPOT_ID + 1)]
+)
 def test_search_findspot_id_rejects_invalid_values(client, value):
+    result = client.simulate_get("/fragments/query", params={"findspotId": value})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_findspot_id_accepts_zero(client):
+    result = client.simulate_get("/fragments/query", params={"findspotId": "0"})
+
+    assert result.status == falcon.HTTP_OK
+
+
+def test_parse_findspot_id_accepts_whitespace_and_bson_max():
+    assert parse_findspot_id({"findspotId": f" {MAX_FINDSPOT_ID} "}) == {
+        "findspotId": MAX_FINDSPOT_ID
+    }
+
+
+def test_parse_findspot_id_rejects_over_raw_length_limit():
+    value = "1" * (MAX_FINDSPOT_ID_RAW_LENGTH + 1)
+    with pytest.raises(DataError, match="must not exceed"):
+        parse_findspot_id({"findspotId": value})
+
+
+def test_parse_findspot_id_rejects_oversized_digit_count():
+    with pytest.raises(DataError, match=f"must not exceed {MAX_FINDSPOT_ID}"):
+        parse_findspot_id({"findspotId": "1" * 20})
+
+
+def test_search_findspot_id_rejects_over_raw_length_limit(client):
+    value = "1" * (MAX_FINDSPOT_ID_RAW_LENGTH + 1)
     result = client.simulate_get("/fragments/query", params={"findspotId": value})
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

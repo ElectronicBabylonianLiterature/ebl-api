@@ -4,15 +4,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+from ebl.fragmentarium.application.map_paths import MAP_SOURCE_DIR
+
 CrsKind = Literal["geographic-wgs84", "web-mercator-wgs84"]
 
-_GEOGRAPHIC_WGS84_SIGNATURE = 'GEOGCS["GCS_WGS_1984"'
-_WEB_MERCATOR_WGS84_SIGNATURE = 'PROJCS["WGS_1984_Web_Mercator_Auxiliary_Sphere"'
-
-CRS_SIGNATURES: dict[CrsKind, str] = {
-    "geographic-wgs84": _GEOGRAPHIC_WGS84_SIGNATURE,
-    "web-mercator-wgs84": _WEB_MERCATOR_WGS84_SIGNATURE,
-}
 CRS_EPSG: dict[CrsKind, str] = {
     "geographic-wgs84": "EPSG:4326",
     "web-mercator-wgs84": "EPSG:3857",
@@ -72,8 +67,8 @@ SITE_CONFIGS: dict[str, MapSiteConfig] = {
     "ASSUR": MapSiteConfig(
         site_id="ASSUR",
         site_name="Aššur",
-        shp_base=Path("Maps/Assur LRZ/Findspots/Findspots"),
-        ods_path=Path("Maps/Assur LRZ/Assur Tafeln.ods"),
+        shp_base=MAP_SOURCE_DIR / "Assur LRZ/Findspots/Findspots",
+        ods_path=MAP_SOURCE_DIR / "Assur LRZ/Assur Tafeln.ods",
         ods_header=("_id", "area", "sector", "site", "map"),
         crs_kind="geographic-wgs84",
         polygon_id_prefix="assur",
@@ -88,8 +83,8 @@ SITE_CONFIGS: dict[str, MapSiteConfig] = {
     "URUK": MapSiteConfig(
         site_id="URUK",
         site_name="Uruk",
-        shp_base=Path("Maps/Uruk LRZ/Findspots/Findspots"),
-        ods_path=Path("Maps/Uruk Tafeln aktualisiert 24-07-25.ods"),
+        shp_base=MAP_SOURCE_DIR / "Uruk LRZ/Findspots/Findspots",
+        ods_path=MAP_SOURCE_DIR / "Uruk Tafeln aktualisiert 24-07-25.ods",
         ods_header=("_id", "site", "sector", "area", "building", "map"),
         crs_kind="geographic-wgs84",
         polygon_id_prefix="uruk",
@@ -104,8 +99,8 @@ SITE_CONFIGS: dict[str, MapSiteConfig] = {
     "KALHU": MapSiteConfig(
         site_id="KALHU",
         site_name="Kalḫu",
-        shp_base=Path("Maps/Kalhu LRZ/Findspots/Findspots"),
-        ods_path=Path("Maps/Kalhu LRZ/Kalhu Tafeln.ods"),
+        shp_base=MAP_SOURCE_DIR / "Kalhu LRZ/Findspots/Findspots",
+        ods_path=MAP_SOURCE_DIR / "Kalhu LRZ/Kalhu Tafeln.ods",
         ods_header=("_id", "site", "sector", "area", "building", "", "map"),
         crs_kind="web-mercator-wgs84",
         polygon_id_prefix="kalhu",
@@ -122,8 +117,8 @@ SITE_CONFIGS: dict[str, MapSiteConfig] = {
     "NIPPUR": MapSiteConfig(
         site_id="NIPPUR",
         site_name="Nippur",
-        shp_base=Path("Maps/Nippur LRZ/Findspots/Findspots"),
-        ods_path=Path("Maps/Nippur LRZ/Nippur Tafeln.ods"),
+        shp_base=MAP_SOURCE_DIR / "Nippur LRZ/Findspots/Findspots",
+        ods_path=MAP_SOURCE_DIR / "Nippur LRZ/Nippur Tafeln.ods",
         ods_header=("_id", "site", "sector", "area", "building", "map"),
         crs_kind="web-mercator-wgs84",
         polygon_id_prefix="nippur",

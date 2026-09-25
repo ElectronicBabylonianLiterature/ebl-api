@@ -13,9 +13,12 @@ class FindspotGroup:
     findspot_id: int
     rows: tuple[MapOdsRow, ...]
     resolved_polygon_ids: frozenset[str]
+    has_unresolved_rows: bool
 
     @property
     def status(self) -> str:
+        if self.has_unresolved_rows and self.resolved_polygon_ids:
+            return "conflict"
         if len(self.resolved_polygon_ids) == 1:
             return "resolved"
         if len(self.resolved_polygon_ids) > 1:
@@ -41,6 +44,7 @@ def group_findspots(
 ) -> tuple[FindspotGroup, ...]:
     grouped: dict[int, list[MapOdsRow]] = defaultdict(list)
     resolved: dict[int, set[str]] = defaultdict(set)
+    unresolved: set[int] = set()
     order: list[int] = []
     for row, record in strict_zip(rows, derivations):
         if row.findspot_id not in grouped:
@@ -48,11 +52,14 @@ def group_findspots(
         grouped[row.findspot_id].append(row)
         if record.status == "verified-mapped" and record.polygon_id is not None:
             resolved[row.findspot_id].add(record.polygon_id)
+        else:
+            unresolved.add(row.findspot_id)
     return tuple(
         FindspotGroup(
             findspot_id=findspot_id,
             rows=tuple(grouped[findspot_id]),
             resolved_polygon_ids=frozenset(resolved.get(findspot_id, ())),
+            has_unresolved_rows=findspot_id in unresolved,
         )
         for findspot_id in order
     )

@@ -1,5 +1,3 @@
-import json
-
 import attr
 import falcon
 import pytest
@@ -7,33 +5,19 @@ from falcon import testing
 from falcon_auth import NoneAuthBackend
 
 import ebl.app
-from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.map_artifact_repository import (
     MapArtifactRepository,
 )
 from ebl.fragmentarium.domain.archaeology import Archaeology
-from ebl.fragmentarium.domain.fragment import Genre, Script
 from ebl.tests.factories.archaeology import FindspotFactory
 from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.fragmentarium.map_data_test_helpers import (
+    mapping_record,
+    write_mappings,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import Guest
-
-
-def _mapping_record(findspot_id, *polygon_ids):
-    return {
-        "findspotId": findspot_id,
-        "polygonIds": list(polygon_ids),
-        "locationPrecision": "excavation-area",
-        "matchMethod": "verified-source",
-        "source": "Test Tafeln.ods",
-        "sourceRevision": "2026-08-05",
-    }
-
-
-def _write_mappings(data_dir, site_id, records):
-    path = data_dir / f"{site_id.lower()}_findspot_polygon_mappings.json"
-    path.write_text(json.dumps(records), encoding="utf-8")
 
 
 def _seed_fragment(fragment_repository, site, findspot_id, number, scopes=()):
@@ -56,16 +40,16 @@ def map_data(
     assur = seeded_provenance_service.find_by_id("ASSUR")
     nippur = seeded_provenance_service.find_by_id("NIPPUR")
 
-    _write_mappings(
+    write_mappings(
         tmp_path,
         "ASSUR",
         [
-            _mapping_record(100, "assur-a"),
-            _mapping_record(101, "assur-a", "assur-b"),
-            _mapping_record(102, "assur-a"),
+            mapping_record(100, "assur-a"),
+            mapping_record(101, "assur-a", "assur-b"),
+            mapping_record(102, "assur-a"),
         ],
     )
-    _write_mappings(tmp_path, "NIPPUR", [_mapping_record(104, "nippur-a")])
+    write_mappings(tmp_path, "NIPPUR", [mapping_record(104, "nippur-a")])
 
     for findspot in [
         FindspotFactory.build(
@@ -162,74 +146,6 @@ def test_map_data_unmapped_site_returns_empty(map_data):
     assert response.json["findspots"] == []
 
 
-@pytest.fixture
-def map_data_with_script_and_genre(
-    tmp_path,
-    context,
-    findspot_repository,
-    fragment_repository,
-    seeded_provenance_service,
-):
-    assur = seeded_provenance_service.find_by_id("ASSUR")
-    _write_mappings(tmp_path, "ASSUR", [_mapping_record(200, "assur-c")])
-    findspot_repository.create(FindspotFactory.build(id_=200, site=assur))
-
-    fragment_repository.create(
-        FragmentFactory.build(
-            number=MuseumNumber.of("X.200"),
-            archaeology=Archaeology(site=assur, findspot_id=200),
-            script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
-            genres=(Genre(["ARCHIVAL", "Administrative"], False),),
-        )
-    )
-    fragment_repository.create(
-        FragmentFactory.build(
-            number=MuseumNumber.of("X.201"),
-            archaeology=Archaeology(site=assur, findspot_id=200),
-            script=Script(Period.NEO_ASSYRIAN, PeriodModifier.NONE),
-            genres=(Genre(["CANONICAL", "Catalogues"], False),),
-        )
-    )
-
-    test_context = attr.evolve(
-        context, map_artifact_repository=MapArtifactRepository(data_dir=tmp_path)
-    )
-    return testing.TestClient(ebl.app.create_app(test_context))
-
-
-def _count_for(client, query):
-    response = client.simulate_get(f"/findspots/map-data{query}")
-    return response.json["findspots"][0]["accessibleFragmentCount"]
-
-
-def test_map_data_script_filter(map_data_with_script_and_genre):
-    client = map_data_with_script_and_genre
-
-    assert _count_for(client, "") == 2
-    assert _count_for(client, "?scriptPeriod=Old Babylonian") == 1
-    assert _count_for(client, "?scriptPeriod=Neo-Assyrian") == 1
-
-
-def test_map_data_genre_filter(map_data_with_script_and_genre):
-    client = map_data_with_script_and_genre
-
-    assert _count_for(client, "?genre=ARCHIVAL:Administrative") == 1
-    assert _count_for(client, "?genre=CANONICAL:Catalogues") == 1
-
-
-def test_map_data_combined_script_and_genre_filter(map_data_with_script_and_genre):
-    client = map_data_with_script_and_genre
-
-    assert (
-        _count_for(client, "?scriptPeriod=Old Babylonian&genre=ARCHIVAL:Administrative")
-        == 1
-    )
-    assert (
-        _count_for(client, "?scriptPeriod=Neo-Assyrian&genre=ARCHIVAL:Administrative")
-        == 0
-    )
-
-
 def test_map_data_uses_one_count_query(map_data, fragment_repository, monkeypatch):
     calls = {"count": 0}
     original = fragment_repository.count_fragments_by_findspot_ids
@@ -243,3 +159,58 @@ def test_map_data_uses_one_count_query(map_data, fragment_repository, monkeypatc
     map_data.simulate_get("/findspots/map-data")
 
     assert calls["count"] == 1
+
+
+def test_map_data_rejects_counts_that_are_not_json_safe(
+    map_data, fragment_repository, monkeypatch
+):
+    monkeypatch.setattr(
+        fragment_repository,
+        "count_fragments_by_findspot_ids",
+        lambda *args, **kwargs: {100: 2**53},
+    )
+
+    response = map_data.simulate_get("/findspots/map-data")
+
+    assert response.status == falcon.HTTP_INTERNAL_SERVER_ERROR
+
+
+def test_map_data_uses_narrow_findspot_read(map_data, findspot_repository, monkeypatch):
+    def reject_full_collection_read():
+        raise AssertionError("map data must not load the full findspot collection")
+
+    monkeypatch.setattr(findspot_repository, "find_all", reject_full_collection_read)
+
+    response = map_data.simulate_get("/findspots/map-data")
+
+    assert response.status == falcon.HTTP_OK
+
+
+def test_map_data_rejects_missing_and_wrong_site_metadata(
+    tmp_path,
+    context,
+    findspot_repository,
+    seeded_provenance_service,
+):
+    assur = seeded_provenance_service.find_by_id("ASSUR")
+    nippur = seeded_provenance_service.find_by_id("NIPPUR")
+    write_mappings(
+        tmp_path,
+        "ASSUR",
+        [
+            mapping_record(300, "assur-a"),
+            mapping_record(301, "assur-b"),
+            mapping_record(302, "assur-c"),
+        ],
+    )
+    findspot_repository.create(FindspotFactory.build(id_=300, site=assur))
+    findspot_repository.create(FindspotFactory.build(id_=301, site=nippur))
+    findspot_repository.create(FindspotFactory.build(id_=302, site=None))
+    test_context = attr.evolve(
+        context, map_artifact_repository=MapArtifactRepository(data_dir=tmp_path)
+    )
+    client = testing.TestClient(ebl.app.create_app(test_context))
+
+    payload = client.simulate_get("/findspots/map-data").json["findspots"]
+
+    assert [item["findspotId"] for item in payload] == [300]

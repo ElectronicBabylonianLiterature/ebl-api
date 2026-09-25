@@ -90,16 +90,6 @@
     "sourceRevision": "2026-07-27"
   },
   {
-    "findspotId": 4392,
-    "polygonIds": [
-      "assur-gb4ii-4e46b9b143ad"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Assur Tafeln.ods",
-    "sourceRevision": "2026-07-27"
-  },
-  {
     "findspotId": 4393,
     "polygonIds": [
       "assur-ga4i-1423b39dd202"
@@ -2621,16 +2611,6 @@
   },
   {
     "findspotId": 4657,
-    "polygonIds": [
-      "assur-be4v-797c28d39cb5"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Assur Tafeln.ods",
-    "sourceRevision": "2026-07-27"
-  },
-  {
-    "findspotId": 4658,
     "polygonIds": [
       "assur-be4v-797c28d39cb5"
     ],

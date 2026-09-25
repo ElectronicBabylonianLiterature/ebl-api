@@ -1,13 +1,37 @@
 [
   {
+    "findspotId": 228,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "building": "ekal māšarti (Fort Shalmaneser)",
+    "map": "Hausleiter2008Nimrud@218",
+    "status": "needs-human-curation",
+    "requiredDecision": "Resolve conflicting polygon matches across duplicate source rows.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
+  },
+  {
     "findspotId": 348,
     "siteId": "KALHU",
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "Governor's Palace",
     "map": "Russell2017Assyrian@437",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 777,
@@ -15,9 +39,16 @@
     "siteName": "Kalḫu",
     "area": "C 50",
     "sector": "",
+    "building": "North-West Palace",
     "map": "?",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 817,
@@ -25,9 +56,16 @@
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "A 50",
     "map": "?",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 819,
@@ -35,9 +73,16 @@
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "B 50",
     "map": "?",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 1365,
@@ -45,9 +90,16 @@
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "South-East Palace",
     "map": "RN2323@201",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 1378,
@@ -55,9 +107,16 @@
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "Nabu Temple",
     "map": "RN2323@232",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 1411,
@@ -65,9 +124,16 @@
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "AS 411",
     "map": "?",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 1434,
@@ -75,9 +141,16 @@
     "siteName": "Kalḫu",
     "area": "",
     "sector": "",
+    "building": "South-West Palace but probably originating in Central Palace",
     "map": "Russell2017Assyrian@437",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 4329,
@@ -85,9 +158,16 @@
     "siteName": "Kalḫu",
     "area": "Upper fill of trench (d. 13) outside north-west corner of Governor's Palace",
     "sector": "",
+    "building": "",
     "map": "Russell2017Assyrian@437",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 4374,
@@ -95,8 +175,15 @@
     "siteName": "Kalḫu",
     "area": "ZT4",
     "sector": "",
+    "building": "",
     "map": "?",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   }
 ]

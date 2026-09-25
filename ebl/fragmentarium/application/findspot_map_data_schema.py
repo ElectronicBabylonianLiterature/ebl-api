@@ -22,10 +22,10 @@ class FindspotMapDataSchema(Schema):
         return obj.findspot.id_
 
     def serialize_site_id(self, obj):
-        return obj.findspot.site.id if obj.findspot.site else None
+        return obj.site_id
 
     def serialize_site_name(self, obj):
-        return obj.findspot.site.long_name if obj.findspot.site else None
+        return obj.site_name
 
     def serialize_polygon_ids(self, obj):
         if not obj.findspot.map_location:
