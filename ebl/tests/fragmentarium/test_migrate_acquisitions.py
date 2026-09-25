@@ -1,4 +1,8 @@
-from ebl.fragmentarium.migrate_acquisitions import COLLECTION, build_update, run_migration
+from ebl.fragmentarium.migrate_acquisitions import (
+    COLLECTION,
+    build_update,
+    run_migration,
+)
 
 
 def test_migrate_promotes_legacy_singular_acquisition(database):
@@ -63,7 +67,10 @@ def test_migrate_does_not_overwrite_concurrent_canonical_write(database):
     ]
     collection.update_one(
         {"_id": "X.4"},
-        {"$set": {"acquisitions": concurrent_acquisitions}, "$unset": {"acquisition": ""}},
+        {
+            "$set": {"acquisitions": concurrent_acquisitions},
+            "$unset": {"acquisition": ""},
+        },
     )
 
     result = collection.bulk_write([build_update(stale_document)])
