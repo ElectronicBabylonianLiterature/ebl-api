@@ -167,7 +167,11 @@ def test_get_all_fragment_signs(client, fragmentarium):
 
 
 def test_retrieve_all_serializes_fragment(client, fragmentarium):
-    fragment = TransliteratedFragmentFactory.build(authorized_scopes=None)
+    first = Acquisition(description="First purchase", supplier="Gallery A", date=1920)
+    second = Acquisition(description="Second purchase", supplier="Gallery B", date=1930)
+    fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=None, acquisitions=(first, second)
+    )
     fragmentarium.create(fragment)
 
     result = client.simulate_get("/fragments/retrieve-all?skip=0")
@@ -179,6 +183,10 @@ def test_retrieve_all_serializes_fragment(client, fragmentarium):
     assert "hasPhoto" in serialized
     assert "text" not in serialized
     assert serialized["realiaInfo"] == []
+    assert serialized["acquisitions"] == [
+        {"description": "First purchase", "supplier": "Gallery A", "date": 1920},
+        {"description": "Second purchase", "supplier": "Gallery B", "date": 1930},
+    ]
 
 
 def test_retrieve_all_resolves_realia_info(

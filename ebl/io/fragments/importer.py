@@ -61,6 +61,17 @@ def load_collection(path: str) -> dict:
     return fragments
 
 
+def _fragment_schema(
+    provenance_service: Optional[ProvenanceService] = None,
+) -> FragmentSchema:
+    if provenance_service is not None:
+        return FragmentSchema(
+            unknown="exclude",
+            context={"provenance_service": provenance_service},
+        )
+    return FragmentSchema(unknown="exclude")
+
+
 def validate(
     data: dict,
     filename: str = "",
@@ -74,18 +85,24 @@ def validate(
         }
         raise ValidationError(f"Invalid data in {filename}: {errors}")
     try:
-        if provenance_service is not None:
-            schema = FragmentSchema(
-                unknown="exclude",
-                context={"provenance_service": provenance_service},
-            )
-        else:
-            schema = FragmentSchema(unknown="exclude")
+        schema = _fragment_schema(provenance_service)
         validation_errors = schema.validate(data)
     except Exception as error:
         raise ValidationError(f"Invalid data in {filename}: {error}") from error
     if validation_errors:
         raise ValidationError(f"Invalid data in {filename}: {validation_errors}")
+
+
+def canonicalize(
+    data: dict, provenance_service: Optional[ProvenanceService] = None
+) -> dict:
+    """Round-trip validated data through the schema so the persisted
+    document matches what a standard GET would produce (coerced types,
+    stripped unknown fields, computed defaults filled in)."""
+    schema = _fragment_schema(provenance_service)
+    canonical = schema.dump(schema.load(data))
+    canonical["_id"] = data["_id"]
+    return canonical
 
 
 def validate_id(data: dict, filename="") -> None:
@@ -301,6 +318,7 @@ if __name__ == "__main__":
             validate(data, filename, provenance_service)
             validate_id(data, filename)
             ensure_unique(data, COLLECTION, filename)
+            fragments[filename] = canonicalize(data, provenance_service)
         else:
             try:
                 validate(data, filename, provenance_service)
@@ -312,6 +330,8 @@ if __name__ == "__main__":
                 ensure_unique(data, COLLECTION, filename)
             except Exception as error:
                 FAILS.append([filename, str(error)])
+                continue
+            fragments[filename] = canonicalize(data, provenance_service)
 
     fail_count = len(FAILS)
 
