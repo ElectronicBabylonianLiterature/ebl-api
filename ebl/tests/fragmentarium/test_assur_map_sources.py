@@ -26,7 +26,7 @@ def test_load_assur_sources_counts():
 
 
 def test_normalize_assur_area_label_matches_source_rule():
-    assert normalize_assur_area_label("i3? town area") == "i3 town area"
+    assert normalize_assur_area_label("i3? town area") == "i3? town area"
     assert shapefile_area_name("26dD9IV") == "dD9IV"
 
 

@@ -66,4 +66,4 @@ def shapefile_area_name(name: str) -> str:
 def build_assur_polygon_id(
     name: str, rings: tuple[tuple[tuple[float, float], ...], ...]
 ) -> tuple[str, str]:
-    return build_polygon_id("assur", name, rings)
+    return build_polygon_id("assur", name, (rings,))
