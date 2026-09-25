@@ -91,7 +91,7 @@ FragmentFactory = make_factory(
     museum=factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN]),
     collection=Faker("word"),
     publication=Faker("sentence"),
-    acquisition=SubFactory(AcquisitionFactory),
+    acquisitions=List([SubFactory(AcquisitionFactory), SubFactory(AcquisitionFactory)]),
     description=Faker("text"),
     legacy_script=Iterator(["NA", "NB"]),
     script=SubFactory(ScriptFactory),
