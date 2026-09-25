@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "2026-08-05",
+  "files": {
+    "nippur_findspot_polygon_curation_report.md": "26b7015c92565f96cae1ffa540d68b3fcb5beeeaa19c175af086210c76f97a65",
+    "nippur_findspot_polygon_curation_template.json": "f90f4a157d4107a14cd0c867af7a8a2d6b1947c166c77882510eb1fef74611b8",
+    "nippur_findspot_polygon_mappings.json": "b43e6938a5de50b4dcdbbe7458bde34ced3f4ff3cb2c35bdc72405c1c9d53ec7",
+    "nippur_polygon_inventory.json": "b5a74515e68514f7ee16ecf95112a651726d0a363d50ac99a53c305db67c3807"
+  }
+}
