@@ -66,6 +66,13 @@ def validate(
     filename: str = "",
     provenance_service: Optional[ProvenanceService] = None,
 ) -> None:
+    if isinstance(data, dict) and "acquisition" in data:
+        errors = {
+            "acquisition": [
+                "Legacy singular field is no longer supported; use 'acquisitions'."
+            ]
+        }
+        raise ValidationError(f"Invalid data in {filename}: {errors}")
     try:
         if provenance_service is not None:
             schema = FragmentSchema(

@@ -16,9 +16,12 @@ def get_database():
 
 def build_update(document: dict) -> UpdateOne:
     acquisition = document.get("acquisition")
-    acquisitions = [acquisition] if acquisition else []
+    if "acquisitions" in document:
+        acquisitions = document["acquisitions"]
+    else:
+        acquisitions = [acquisition] if acquisition else []
     return UpdateOne(
-        {"_id": document["_id"]},
+        {"_id": document["_id"], "acquisition": acquisition},
         {"$set": {"acquisitions": acquisitions}, "$unset": {"acquisition": ""}},
     )
 

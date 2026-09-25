@@ -116,6 +116,21 @@ def test_invalid_enum(valid_fragment_data, validate_fragment):
         validate_fragment(valid_fragment_data)
 
 
+def test_rejects_legacy_singular_acquisition(valid_fragment_data, validate_fragment):
+    acquisition = valid_fragment_data.pop("acquisitions")[0]
+    valid_fragment_data["acquisition"] = acquisition
+
+    with pytest.raises(
+        ValidationError,
+        match=re.escape(
+            f"Invalid data in {MOCKFILE}: "
+            "{'acquisition': [\"Legacy singular field is no longer supported; "
+            "use 'acquisitions'.\"]}"
+        ),
+    ):
+        validate_fragment(valid_fragment_data)
+
+
 def test_invalid_input_type(valid_fragment_data, validate_fragment):
     with pytest.raises(
         ValidationError,
