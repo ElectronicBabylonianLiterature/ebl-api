@@ -44,6 +44,7 @@ pyjwt = "2.13.0"
 [tool.poetry.group.dev]
 optional = true
 [tool.poetry.group.dev.dependencies]
+pyproj = "^3.7.2"
 pytest = "*"
 pytest-cov = "*"
 freezegun = "*"
