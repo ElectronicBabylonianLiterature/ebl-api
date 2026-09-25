@@ -20,16 +20,6 @@
     "sourceRevision": "2026-08-05"
   },
   {
-    "findspotId": 901,
-    "polygonIds": [
-      "nippur-ta-a711959786ac"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Nippur Tafeln.ods",
-    "sourceRevision": "2026-08-05"
-  },
-  {
     "findspotId": 945,
     "polygonIds": [
       "nippur-tb-beb0e6157cac"
@@ -83,16 +73,6 @@
     "findspotId": 2537,
     "polygonIds": [
       "nippur-sk-412bf7d0598b"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Nippur Tafeln.ods",
-    "sourceRevision": "2026-08-05"
-  },
-  {
-    "findspotId": 2538,
-    "polygonIds": [
-      "nippur-ta-a711959786ac"
     ],
     "locationPrecision": "excavation-area",
     "matchMethod": "verified-source",

@@ -1,25 +1,5 @@
 [
   {
-    "findspotId": 1,
-    "polygonIds": [
-      "uruk-ue-xviii-1-4c5b1b215704"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
-    "sourceRevision": "2026-08-05"
-  },
-  {
-    "findspotId": 44,
-    "polygonIds": [
-      "uruk-ue-xviii-1-4c5b1b215704"
-    ],
-    "locationPrecision": "excavation-area",
-    "matchMethod": "verified-source",
-    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
-    "sourceRevision": "2026-08-05"
-  },
-  {
     "findspotId": 57,
     "polygonIds": [
       "uruk-ub-xviii-4-1462df44fd82"

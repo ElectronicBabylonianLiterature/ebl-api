@@ -5,9 +5,33 @@
     "siteName": "Nippur",
     "area": "EN",
     "sector": "",
+    "building": "",
     "map": "heinrich1982die@234",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 901,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "TA",
+    "sector": "",
+    "building": "",
+    "map": "RN2747@pl5",
+    "status": "needs-human-curation",
+    "requiredDecision": "Resolve conflicting polygon matches across duplicate source rows.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 940,
@@ -15,9 +39,16 @@
     "siteName": "Nippur",
     "area": "TA gen.",
     "sector": "",
+    "building": "",
     "map": "RN2747@pl5",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 946,
@@ -25,9 +56,16 @@
     "siteName": "Nippur",
     "area": "EN gen.",
     "sector": "",
+    "building": "",
     "map": "heinrich1982die@234",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 2518,
@@ -35,9 +73,16 @@
     "siteName": "Nippur",
     "area": "EN",
     "sector": "Religious Quarter",
+    "building": "Enlil Temple",
     "map": "heinrich1982die@234",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 2528,
@@ -45,9 +90,33 @@
     "siteName": "Nippur",
     "area": "IT",
     "sector": "Religious Quarter",
+    "building": "Inanna Temple",
     "map": "heinrich1982die@234",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2538,
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "area": "TA",
+    "sector": "Scribal Quarter (Tablet Hill)",
+    "building": "",
+    "map": "RN2747@pl5",
+    "status": "needs-human-curation",
+    "requiredDecision": "Resolve conflicting polygon matches across duplicate source rows.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 3176,
@@ -55,9 +124,16 @@
     "siteName": "Nippur",
     "area": "",
     "sector": "Religious Quarter",
+    "building": "Enlil Temple?",
     "map": "heinrich1982die@234",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 4263,
@@ -65,9 +141,16 @@
     "siteName": "Nippur",
     "area": "WB",
     "sector": "West Mound",
+    "building": "Atop or amidst the ruins of a Kassite-period palace",
     "map": "gibson1978excavations@fig49",
     "status": "needs-human-curation",
-    "requiredDecision": "Resolve conflicting polygon matches across duplicate source rows."
+    "requiredDecision": "Resolve conflicting polygon matches across duplicate source rows.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   },
   {
     "findspotId": 4305,
@@ -75,8 +158,15 @@
     "siteName": "Nippur",
     "area": "ZB 4",
     "sector": "",
+    "building": "",
     "map": "-",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-08-05"
   }
 ]
