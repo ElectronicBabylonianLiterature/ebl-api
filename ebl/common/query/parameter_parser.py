@@ -6,7 +6,10 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 
 COUNT_MODES = ("exact", "none", "page")
+MAX_FINDSPOT_ID = 2**63 - 1
+MAX_FINDSPOT_ID_RAW_LENGTH = 64
 MAX_FINDSPOT_IDS = 200
+MAX_FINDSPOT_IDS_RAW_LENGTH = 4096
 
 
 def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
@@ -109,26 +112,59 @@ def parse_genre(parameters: Dict) -> Dict:
     return {**parameters, "genre": genre} if any(genre) else parameters
 
 
+def _parse_findspot_id(value: str, field: str) -> int:
+    if len(value) > MAX_FINDSPOT_ID_RAW_LENGTH:
+        raise DataError(
+            f"{field} must not exceed {MAX_FINDSPOT_ID_RAW_LENGTH} characters"
+        )
+    normalized = value.strip()
+    if not normalized or not normalized.isascii() or not normalized.isdecimal():
+        raise DataError(f"{field} must be a non-negative decimal integer")
+
+    if len(normalized) > len(str(MAX_FINDSPOT_ID)):
+        raise DataError(f"{field} must not exceed {MAX_FINDSPOT_ID}")
+    parsed = int(normalized)
+    if parsed > MAX_FINDSPOT_ID:
+        raise DataError(f"{field} must not exceed {MAX_FINDSPOT_ID}")
+    return parsed
+
+
+def parse_findspot_id(parameters: Dict) -> Dict:
+    if "findspotId" not in parameters:
+        return parameters
+
+    return {
+        **parameters,
+        "findspotId": _parse_findspot_id(parameters["findspotId"], "findspotId"),
+    }
+
+
 def parse_findspot_ids(parameters: Dict) -> Dict:
     if "findspotIds" not in parameters:
         return parameters
 
     raw = parameters["findspotIds"]
-    values = [item.strip() for item in raw.split(",") if item.strip()]
-    if not values:
-        raise DataError("findspotIds must not be empty.")
+    if len(raw) > MAX_FINDSPOT_IDS_RAW_LENGTH:
+        raise DataError(
+            f"findspotIds must not exceed {MAX_FINDSPOT_IDS_RAW_LENGTH} characters."
+        )
+    values = [item.strip() for item in raw.split(",")]
     if len(values) > MAX_FINDSPOT_IDS:
         raise DataError(
             f"findspotIds must not contain more than {MAX_FINDSPOT_IDS} values."
         )
-    try:
-        ids = [int(value) for value in values]
-    except ValueError as error:
+    if not values or any(not value for value in values):
+        raise DataError("findspotIds must not contain empty values.")
+
+    ids = [_parse_findspot_id(value, "findspotIds") for value in values]
+    selected_ids = set(ids)
+    if (findspot_id := parameters.get("findspotId")) is not None:
+        selected_ids.add(findspot_id)
+    if len(selected_ids) > MAX_FINDSPOT_IDS:
         raise DataError(
-            f"findspotIds must be a comma-separated list of integers, got {raw!r}"
-        ) from error
-    if any(value < 0 for value in ids):
-        raise DataError("findspotIds must be non-negative.")
+            f"findspotId and findspotIds must not select more than "
+            f"{MAX_FINDSPOT_IDS} values."
+        )
 
     return {**parameters, "findspotIds": sorted(set(ids))}
 

@@ -5,9 +5,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4267,
@@ -15,9 +22,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4268,
@@ -25,9 +39,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4269,
@@ -35,9 +56,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4270,
@@ -45,9 +73,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4271,
@@ -55,9 +90,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4272,
@@ -65,9 +107,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4273,
@@ -75,9 +124,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4274,
@@ -85,9 +141,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4275,
@@ -95,9 +158,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4276,
@@ -105,9 +175,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4277,
@@ -115,9 +192,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4278,
@@ -125,9 +209,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4279,
@@ -135,9 +226,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4280,
@@ -145,9 +243,16 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4281,
@@ -155,9 +260,33 @@
     "siteName": "Aššur",
     "area": "Wohnquartier",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4392,
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "area": "gB4II?",
+    "sector": "Aššur temple",
+    "building": "",
+    "map": "andrae1938assur@beilage",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4396,
@@ -165,9 +294,16 @@
     "siteName": "Aššur",
     "area": "town area",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4414,
@@ -175,9 +311,16 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4427,
@@ -185,9 +328,16 @@
     "siteName": "Aššur",
     "area": "town area",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4453,
@@ -195,9 +345,16 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4470,
@@ -205,9 +362,16 @@
     "siteName": "Aššur",
     "area": "town area",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4521,
@@ -215,9 +379,16 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4543,
@@ -225,9 +396,16 @@
     "siteName": "Aššur",
     "area": "i3? town area",
     "sector": "Aššur temple",
+    "building": "",
     "map": "heinrich1982die@365",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4568,
@@ -235,9 +413,16 @@
     "siteName": "Aššur",
     "area": "town area",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4575,
@@ -245,9 +430,16 @@
     "siteName": "Aššur",
     "area": "town area",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4602,
@@ -255,9 +447,16 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "Aššur temple",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4636,
@@ -265,9 +464,16 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4637,
@@ -275,9 +481,33 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
+  },
+  {
+    "findspotId": 4658,
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "area": "bE4V?",
+    "sector": "Houses 65-66",
+    "building": "",
+    "map": "andrae1938assur@beilage",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   },
   {
     "findspotId": 4662,
@@ -285,8 +515,15 @@
     "siteName": "Aššur",
     "area": "",
     "sector": "Houses 65-66",
+    "building": "",
     "map": "???",
     "status": "needs-human-curation",
-    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+    "requiredDecision": "Assign a polygon ID or leave the row unresolved.",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "reviewer": "",
+    "reviewDate": "",
+    "source": "human curation",
+    "sourceRevision": "2026-07-27"
   }
 ]

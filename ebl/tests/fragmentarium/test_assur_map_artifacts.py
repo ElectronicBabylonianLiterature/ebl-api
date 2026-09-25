@@ -16,14 +16,15 @@ def test_build_assur_artifacts_counts_and_links():
     inventory_ids = {item["polygonId"] for item in artifacts["inventory"]}
 
     assert len(artifacts["inventory"]) == 134
-    assert len(artifacts["mappings"]) == 317
-    assert len(artifacts["curation"]) == 29
+    assert len(artifacts["mappings"]) == 315
+    assert len(artifacts["curation"]) == 31
     assert len({item["polygonIds"][0] for item in artifacts["mappings"]}) == 133
     assert all(item["polygonIds"][0] in inventory_ids for item in artifacts["mappings"])
     assert all(
         record.status in {"verified-mapped", "needs-human-curation"}
         for record in artifacts["derivations"]
     )
+    assert {4392, 4658} <= {record["findspotId"] for record in artifacts["curation"]}
 
 
 def test_write_assur_artifacts_is_reproducible(tmp_path):
