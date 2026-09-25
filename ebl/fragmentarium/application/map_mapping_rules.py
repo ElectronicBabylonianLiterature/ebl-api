@@ -37,6 +37,15 @@ def index_polygons_by_key(
 def derive_row(
     row: MapOdsRow, index: dict[str, list[MapPolygon]], config: MapSiteConfig
 ) -> DerivationRecord:
+    if row.site_name != config.site_name:
+        return DerivationRecord(
+            findspot_id=row.findspot_id,
+            matched_field=None,
+            matched_value="",
+            polygon_id=None,
+            candidate_count=0,
+            status="needs-human-curation",
+        )
     field_values = {
         "area": row.area,
         "sector": row.sector,

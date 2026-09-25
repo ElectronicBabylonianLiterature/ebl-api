@@ -127,6 +127,16 @@ def test_additional_authoritative_membership_supports_non_ods_curation(tmp_path)
         json.dumps(
             [
                 {
+                    "findspotId": 1,
+                    "siteId": "ASSUR",
+                    "polygonIds": ["assur-area-checksum"],
+                    "matchMethod": "curated",
+                    "reviewer": "reviewer-handle",
+                    "reviewDate": "2026-09-25",
+                    "source": "authoritative site register",
+                    "sourceRevision": "register-1",
+                },
+                {
                     "findspotId": 2,
                     "siteId": "ASSUR",
                     "polygonIds": ["assur-area-checksum"],
@@ -135,7 +145,7 @@ def test_additional_authoritative_membership_supports_non_ods_curation(tmp_path)
                     "reviewDate": "2026-09-25",
                     "source": "authoritative site register",
                     "sourceRevision": "register-1",
-                }
+                },
             ]
         ),
         encoding="utf-8",
@@ -153,11 +163,55 @@ def test_additional_authoritative_membership_supports_non_ods_curation(tmp_path)
                 geometry_checksum="checksum",
             ),
         ),
-        additional_authoritative_findspot_ids={2},
+        additional_authoritative_findspot_ids={1, 2},
     )
 
-    assert [record["findspotId"] for record in artifacts["mappings"]] == [2]
+    assert [record["findspotId"] for record in artifacts["mappings"]] == [1, 2]
+    assert "Curated mappings: 2" in artifacts["report"]
     assert "Curated mappings without ODS source groups: 1" in artifacts["report"]
+
+
+@pytest.mark.parametrize("site_name", ["", "Wrong site"])
+def test_ods_rows_without_canonical_site_cannot_authorize_curation(tmp_path, site_name):
+    path = tmp_path / "curated.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "findspotId": 1,
+                    "siteId": "ASSUR",
+                    "polygonIds": ["assur-area-checksum"],
+                    "matchMethod": "curated",
+                    "reviewer": "reviewer-handle",
+                    "reviewDate": "2026-09-25",
+                    "source": "human curation",
+                    "sourceRevision": "revision-1",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="authoritative membership"):
+        build_site_artifacts(
+            SITE_CONFIGS["ASSUR"],
+            "revision-1",
+            curated_records_path=path,
+            ods_rows=(MapOdsRow(findspot_id=1, site_name=site_name, area="Area"),),
+            polygons=(
+                MapPolygon(
+                    name="Area",
+                    polygon_id="assur-area-checksum",
+                    geometry_checksum="checksum",
+                ),
+            ),
+        )
+
+
+def test_uruk_blank_site_rows_do_not_supply_membership_evidence():
+    rows = load_site_ods_rows(SITE_CONFIGS["URUK"])
+
+    assert {row.findspot_id for row in rows if not row.site_name} == {1, 2}
 
 
 @pytest.mark.parametrize("findspot_id", [True, -1, 2**63])
