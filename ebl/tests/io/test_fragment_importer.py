@@ -207,20 +207,19 @@ def test_canonicalize_coerces_types_and_strips_unknown_fields(
 def test_import_persists_canonical_schema_output(
     tmp_path,
     fragment,
-    fragment_schema,
     fragment_repository,
     fragments_collection,
-    validate_fragment,
     seeded_provenance_service,
 ):
-    data = fragment_schema.dump(fragment)
+    schema = FragmentSchema(context={"provenance_service": seeded_provenance_service})
+    data = schema.dump(fragment)
     data["_id"] = str(fragment.number)
     data["acquisitions"][0]["date"] = str(data["acquisitions"][0]["date"])
     data["unexpectedLegacyField"] = "junk"
     path = mock_json_file(json.dumps(data), tmp_path)
 
     [fragment_data] = load_data([path]).values()
-    validate_fragment(fragment_data)
+    validate(fragment_data, provenance_service=seeded_provenance_service)
     canonical = canonicalize(fragment_data, seeded_provenance_service)
     write_to_db([canonical], fragments_collection)
 
