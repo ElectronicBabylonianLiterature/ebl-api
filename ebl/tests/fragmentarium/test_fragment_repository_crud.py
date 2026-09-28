@@ -4,7 +4,7 @@ import pytest
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
-from ebl.fragmentarium.domain.fragment import Script
+from ebl.fragmentarium.domain.fragment import Acquisition, Script
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -41,6 +41,17 @@ def test_create_many(database, fragment_repository):
         assert database[COLLECTION].find_one(
             {"_id": str(fragment.number)}, projection={"_id": False}
         ) == FragmentSchema(exclude=["joins"]).dump(fragment)
+
+
+def test_query_by_museum_number_multiple_acquisitions(database, fragment_repository):
+    first = Acquisition(description="First purchase", supplier="Gallery A", date=1920)
+    second = Acquisition(description="Second purchase", supplier="Gallery B", date=1930)
+    fragment = LemmatizedFragmentFactory.build(acquisitions=(first, second))
+    fragment_repository.create(fragment)
+
+    queried_fragment = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert queried_fragment.acquisitions == (first, second)
 
 
 def test_create_indexes(database, fragment_repository):

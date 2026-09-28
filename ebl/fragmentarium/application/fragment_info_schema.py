@@ -19,7 +19,7 @@ class FragmentInfoSchema(Schema):
     number: fields.Field = fields.Nested(MuseumNumberSchema, required=True)
     accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
     script = fields.Nested(ScriptSchema, required=True)
-    acquisition = fields.Nested(AcquisitionSchema, required=False)
+    acquisitions = fields.Nested(AcquisitionSchema, many=True, required=False)
     description = fields.String(required=True)
     editor = fields.String(load_default="")
     edition_date = fields.String(data_key="editionDate", load_default="")

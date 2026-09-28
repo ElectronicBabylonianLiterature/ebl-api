@@ -106,3 +106,7 @@ def to_named_entity_tuple(
 
 def to_realia_tuple(value: Iterable[RealiaEntity]) -> Tuple[RealiaEntity, ...]:
     return tuple(value)
+
+
+def to_acquisition_tuple(value: Iterable[Acquisition]) -> Tuple[Acquisition, ...]:
+    return tuple(value)

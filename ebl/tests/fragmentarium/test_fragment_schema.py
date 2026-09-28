@@ -87,3 +87,13 @@ def test_empty_accession_deserialization(fragment_schema):
         "accession": None,
     }
     assert fragment_schema.load(data).accession is None
+
+
+def test_missing_acquisition_defaults_to_empty(fragment_schema):
+    fragment = FragmentFactory.build()
+    data = fragment_schema.dump(fragment)
+    del data["acquisitions"]
+
+    loaded = fragment_schema.load(data)
+
+    assert loaded.acquisitions == ()
