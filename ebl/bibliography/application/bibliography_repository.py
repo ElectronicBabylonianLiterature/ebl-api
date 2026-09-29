@@ -85,7 +85,9 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def query_by_legacy_alias(self, alias: str) -> Any:
+    def query_legacy_alias_owners(
+        self, values: Sequence[str]
+    ) -> Mapping[str, Sequence[str]]:
         raise NotImplementedError
 
     @abstractmethod
