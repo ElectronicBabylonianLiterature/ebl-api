@@ -44,7 +44,7 @@ def test_query_fragmentarium_number_summary_only(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_summary_of(fragment, has_photo=True)], 0
+        [query_summary_of(fragment, has_photo=True)], 0, bibliography_documents={}
     )
     assert result.json["items"][0]["matchingLinePreview"]["lines"] == []
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
