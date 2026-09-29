@@ -32,7 +32,7 @@ from ebl.fragmentarium.application.map_paths import MAP_DATA_DIR
 from ebl.fragmentarium.application.map_site_config import MapSiteConfig
 from ebl.fragmentarium.application.map_source_loader import (
     MapOdsRow,
-    MapPolygon,
+    SiteSources,
     load_site_ods_rows,
     load_site_polygons,
 )
@@ -45,8 +45,7 @@ def build_site_artifacts(
     config: MapSiteConfig,
     source_revision: str,
     curated_records_path: Path | None = None,
-    ods_rows: tuple[MapOdsRow, ...] | None = None,
-    polygons: tuple[MapPolygon, ...] | None = None,
+    sources: SiteSources | None = None,
     additional_authoritative_findspot_ids: Collection[int] = (),
 ) -> SiteArtifacts:
     from ebl.fragmentarium.application.map_curated_mappings import (
@@ -56,8 +55,13 @@ def build_site_artifacts(
     revision = source_revision.strip()
     if not revision:
         raise ValueError("sourceRevision must not be blank.")
-    rows = ods_rows if ods_rows is not None else load_site_ods_rows(config)
-    site_polygons = polygons if polygons is not None else load_site_polygons(config)
+    sources = sources or SiteSources()
+    rows = (
+        sources.ods_rows if sources.ods_rows is not None else load_site_ods_rows(config)
+    )
+    site_polygons = (
+        sources.polygons if sources.polygons is not None else load_site_polygons(config)
+    )
     index = index_polygons_by_key(site_polygons)
     derivations = tuple(derive_row(row, index, config) for row in rows)
     groups = group_findspots(rows, derivations)
