@@ -20,6 +20,11 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_needs_revision,
     aggregate_path_of_the_pioneers,
     aggregate_random,
+    match_user_scopes,
+)
+from ebl.fragmentarium.infrastructure.query_filters import (
+    filter_by_genre,
+    filter_by_script,
 )
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.common.query.query_collation import CollatedFieldQuery
@@ -185,7 +190,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             raise NotFoundError(f"Fragment {number} not found.") from error
 
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
-        fragment = next(
+        fragment: dict = next(
             self._fragments.find_many(
                 query_number_is(number), projection={"authorizedScopes": True}
             ),
@@ -194,6 +199,36 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         return [
             Scope.from_string(value) for value in fragment.get("authorizedScopes", [])
         ]
+
+    def count_fragments_by_findspot_ids(
+        self,
+        findspot_ids: Sequence[int],
+        user_scopes: Sequence[Scope] = (),
+        script_period: Optional[str] = None,
+        script_period_modifier: Optional[str] = None,
+        genre: Optional[Sequence[str]] = None,
+    ) -> dict:
+        if not findspot_ids:
+            return {}
+        cursor = self._fragments.aggregate(
+            [
+                {
+                    "$match": {
+                        "archaeology.findspotId": {"$in": list(findspot_ids)},
+                        **match_user_scopes(user_scopes),
+                        **filter_by_script(script_period, script_period_modifier),
+                        **filter_by_genre(genre),
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": "$archaeology.findspotId",
+                        "count": {"$sum": 1},
+                    }
+                },
+            ]
+        )
+        return {item["_id"]: item["count"] for item in cursor}
 
     def fetch_names(self, name_query: str) -> List[str]:
         if len(name_query) < 3:

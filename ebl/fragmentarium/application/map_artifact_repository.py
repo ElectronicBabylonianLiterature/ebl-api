@@ -36,6 +36,15 @@ class MapArtifactRepository:
             if (self._data_dir / artifact_manifest_name(site_id.lower())).is_file()
         )
 
+    @staticmethod
+    def supports_site(site_id: str) -> bool:
+        return site_id in SITE_CONFIGS
+
+    @staticmethod
+    def site_name(site_id: str) -> str:
+        MapArtifactRepository._require_known_site(site_id)
+        return SITE_CONFIGS[site_id].site_name
+
     def load_site_map_locations(self, site_id: str) -> dict[int, SiteMapLocation]:
         self._require_known_site(site_id)
         filename = self._mappings_filename(site_id)

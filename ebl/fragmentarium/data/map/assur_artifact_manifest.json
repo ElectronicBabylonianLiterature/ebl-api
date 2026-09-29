@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "2026-07-27",
+  "files": {
+    "assur_findspot_polygon_curation_report.md": "5347cb0e228d3428168418e427f62fb094ea637e4b35df88d9994e19f613ae7e",
+    "assur_findspot_polygon_curation_template.json": "c1b5a98d8427ee3c9188a5ee746bdd263f7fdffe1ae8078bde3337413dfc6b2c",
+    "assur_findspot_polygon_mappings.json": "ebf7ef04c54d9cb2e7fd71783ec77fc0c9a64eb29940edbb7ce3326223573acc",
+    "assur_polygon_inventory.json": "304fafbefca494da482f8d3d9ff734ee1c4a324c78b4153e90d59247bc6f31d0"
+  }
+}
