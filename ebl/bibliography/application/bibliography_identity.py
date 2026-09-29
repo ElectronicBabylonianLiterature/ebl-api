@@ -187,17 +187,19 @@ def ensure_lookup_values_available(
     values: Sequence[str],
     allowed_id: str | None = None,
 ) -> None:
+    legacy_owner_ids = repository.query_legacy_alias_owners(values)
     for value in values:
-        try:
-            existing_entry = raw_lookup_owner(repository, value)
-        except DuplicateError:
-            raise LookupValueInUseError(value) from None
-        try:
-            legacy_entry = repository.query_by_legacy_alias(value)
-        except DuplicateError:
-            raise LookupValueInUseError(value) from None
-        except NotFoundError:
-            legacy_entry = None
-        for owner in (existing_entry, legacy_entry):
-            if owner is not None and (allowed_id is None or owner["id"] != allowed_id):
-                raise LookupValueInUseError(value)
+        owner_ids = [
+            *_raw_owner_ids(repository, value),
+            *legacy_owner_ids.get(value, []),
+        ]
+        if any(owner_id != allowed_id for owner_id in owner_ids):
+            raise LookupValueInUseError(value)
+
+
+def _raw_owner_ids(repository: BibliographyRepository, value: str) -> list[str]:
+    try:
+        existing_entry = raw_lookup_owner(repository, value)
+    except DuplicateError:
+        raise LookupValueInUseError(value) from None
+    return [] if existing_entry is None else [existing_entry["id"]]

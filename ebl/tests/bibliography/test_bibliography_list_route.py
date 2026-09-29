@@ -72,7 +72,7 @@ def test_list_bibliography_deduplicates_redirected_canonical_entries(
     assert result.json == [canonical_entry]
 
 
-def test_list_bibliography_rejects_an_entry_with_a_redirect_cycle(
+def test_list_bibliography_skips_an_entry_with_a_redirect_cycle(
     client, database, bibliography, user
 ):
     valid_entry = BibliographyEntryFactory.build(id="VALID_ID")
@@ -88,7 +88,8 @@ def test_list_bibliography_rejects_an_entry_with_a_redirect_cycle(
         "/bibliography/list", params={"ids": f"LOOP_A,{valid_entry['id']}"}
     )
 
-    assert result.status == falcon.HTTP_CONFLICT
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [valid_entry]
 
 
 def test_list_bibliography_handles_canonical_alias_unknown_and_broken_ids(

@@ -70,7 +70,7 @@ class Bibliography:
         for entry in self._repository.query_by_ids(ids):
             try:
                 resolved_entry = self._follow_redirect(entry)
-            except NotFoundError:
+            except (NotFoundError, DuplicateError):
                 continue
             resolved_id = resolved_entry["id"]
             if resolved_id not in seen_ids:
@@ -82,6 +82,19 @@ class Bibliography:
         return follow_bibliography_redirect(entry, self._repository.query_by_id)
 
     def update_metadata(self, entry: dict, user: User) -> None:
+        """Edit the metadata of an entry, keeping its persisted identity state.
+
+        The only way to write an existing entry, for clients and for trusted
+        internal callers alike. Client-editable CSL fields are replaced by the
+        submission; `aliases`, `citationKey`, `deprecated`, `redirectTo` and
+        every other persisted field the client does not own are carried over
+        from the stored record.
+
+        A submitted server-owned field that disagrees with stored state is a
+        conflict: never a silent overwrite, and never a silent drop either, so a
+        caller holding a stale identity is told to reload rather than writing on
+        top of the newer state.
+        """
         stored_entry = stored_entry_for_update(
             entry, self._repository.query_by_id, self.find
         )

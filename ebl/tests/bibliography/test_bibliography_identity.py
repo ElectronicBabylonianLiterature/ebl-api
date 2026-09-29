@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Mapping, Optional, Sequence
 
 import pytest
 
@@ -49,8 +49,10 @@ class RepositorySpy:
     def query_by_alias(self, _value):
         return self._raw_match()
 
-    def query_by_legacy_alias(self, _value):
-        return self._raw_match()
+    def query_legacy_alias_owners(
+        self, _values: Sequence[str]
+    ) -> Mapping[str, Sequence[str]]:
+        return {}
 
     def _raw_match(self):
         if self.existing_entry is None:
@@ -132,8 +134,10 @@ class UpdateRepositorySpy:
     def query_by_alias(self, _alias):
         raise NotFoundError("missing")
 
-    def query_by_legacy_alias(self, _alias):
-        raise NotFoundError("missing")
+    def query_legacy_alias_owners(
+        self, _values: Sequence[str]
+    ) -> Mapping[str, Sequence[str]]:
+        return {}
 
     def claim_lookup_values(self, _operation, values):
         self.claimed_values = values

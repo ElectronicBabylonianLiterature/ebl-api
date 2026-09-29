@@ -119,8 +119,10 @@ class MongoBibliographyRepository(BibliographyRepository):
             raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
         return create_object_entry(data[0])
 
-    def query_by_legacy_alias(self, alias: str) -> dict:
-        return self._legacy_alias_lookup.query(alias)
+    def query_legacy_alias_owners(
+        self, values: Sequence[str]
+    ) -> Mapping[str, Sequence[str]]:
+        return self._legacy_alias_lookup.owners(values)
 
     def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
         data = self._collection.find_many({"redirectTo": id_})
