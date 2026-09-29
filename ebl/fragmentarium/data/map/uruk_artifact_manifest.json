@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "2026-08-05",
+  "files": {
+    "uruk_findspot_polygon_curation_report.md": "5c0679f9ce3cf1af7d12770a3c03970514a8d8206455e37546c300694dc41a4e",
+    "uruk_findspot_polygon_curation_template.json": "60a09736ed8ecd79253dd17b9068ef1b1c2b6ab0620d84fa1808a49808aac64d",
+    "uruk_findspot_polygon_mappings.json": "cf5c9142d87a608e33ffb20d4a4d244dec18f231b79aef6fd2b7543afb998ef4",
+    "uruk_polygon_inventory.json": "be0ab9df0ad5a2c8507d2a580c324c7b9b8ddc5d51839638db70925196b6d16b"
+  }
+}
