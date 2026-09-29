@@ -15,6 +15,12 @@ class StoredRepresentationRole(Enum):
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class StoredRepresentationHandle:
+    """Opaque, server-internal reference to one immutable logical stored version.
+
+    Never a route parameter, bearer capability, public DTO field, or part of a
+    user-facing error message.
+    """
+
     media_id: MediaId = attr.ib(validator=instance_of(MediaId))
     value: str = attr.ib(validator=not_blank)
     representation: MediaRepresentation = attr.ib(

@@ -7,6 +7,7 @@ from ebl.media.application.media_selection import (
     has_photo,
     primary_media_for,
     primary_photo_for,
+    with_primary,
 )
 from ebl.media.application.media_summary_dtos import (
     FragmentMediaSummaryDto,
@@ -35,6 +36,14 @@ Selection = Callable[[MuseumNumber, Sequence[Media]], object]
 def test_selection_rejects_media_of_another_fragment(select: Selection) -> None:
     with pytest.raises(ValueError, match=NOT_ASSOCIATED):
         select(OTHER_FRAGMENT_ID, other_fragments_photo())
+
+
+@pytest.mark.parametrize("is_primary", [True, False])
+def test_with_primary_rejects_media_of_another_fragment(is_primary: bool) -> None:
+    (media,) = other_fragments_photo()
+
+    with pytest.raises(ValueError, match=NOT_ASSOCIATED):
+        with_primary(media, OTHER_FRAGMENT_ID, is_primary)
 
 
 def test_media_summary_rejects_media_of_another_fragment() -> None:

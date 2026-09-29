@@ -69,11 +69,12 @@ class MediaImporter(ABC):
 
         When `request.dry_run` is true the call MUST NOT mutate anything: no
         `write_original`, `write_display` or `write_thumbnail`; no `create`,
-        `replace`, `replace_many` or `delete`; no `delete_representation`; no
-        association or primary change. No binary
-        may even be staged. Reads, validation, MIME inspection, duplicate
-        detection and reporting are allowed, and the report must describe what
-        the same request would have done with `dry_run` false.
+        `replace`, `replace_many`, `delete` or `finish_delete`; no
+        `delete_representation`; no `set_primary`; no association or primary
+        change. No binary may even be staged. Reads, validation, MIME
+        inspection, duplicate detection and reporting are allowed, and the
+        report must describe what the same request would have done with
+        `dry_run` false.
         """
         raise NotImplementedError
 

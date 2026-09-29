@@ -45,7 +45,7 @@ def has_photo(fragment_id: MuseumNumber, media: Sequence[Media]) -> bool:
 
 
 def with_primary(media: Media, fragment_id: MuseumNumber, is_primary: bool) -> Media:
-    media.association_for(fragment_id)
+    _require_association(media, fragment_id)
     return attr.evolve(
         media,
         associations=tuple(
@@ -55,6 +55,13 @@ def with_primary(media: Media, fragment_id: MuseumNumber, is_primary: bool) -> M
             for association in media.associations
         ),
     )
+
+
+def _require_association(media: Media, fragment_id: MuseumNumber) -> None:
+    if not media.is_associated_with(fragment_id):
+        raise ValueError(
+            f"Media {media.id} is not associated with fragment {fragment_id}."
+        )
 
 
 def _first_primary(
