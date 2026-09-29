@@ -1,12 +1,9 @@
-from types import SimpleNamespace
-
 from marshmallow import (
     EXCLUDE,
     Schema,
     fields,
     post_dump,
     post_load,
-    pre_dump,
     validate,
 )
 import pydash
@@ -28,7 +25,6 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     empty_matching_line_preview,
 )
 from ebl.schemas import ResearchProjectField, ValueEnumField
-from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 DEFAULT_THUMBNAIL_RESOLUTION = "small"
@@ -95,17 +91,15 @@ class FragmentQueryArchaeologySchema(Schema):
         return data or None
 
 
-class FragmentQueryPreviewLineSchema(TextLineSchema):
+class FragmentQueryPreviewLineSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     type = fields.String(required=True, validate=validate.Equal("TextLine"))
     index = fields.Integer(required=True)
-
-    @pre_dump
-    def prepare_line(self, data: dict, **kwargs) -> SimpleNamespace:
-        return SimpleNamespace(**data)
-
-    @post_load
-    def make_line(self, data, **kwargs) -> dict:
-        return data
+    line_number = fields.Dict(required=True, data_key="lineNumber")
+    prefix = fields.String(required=True)
+    content = fields.List(fields.Dict(), required=True)
 
 
 class FragmentQueryMatchingLinePreviewSchema(Schema):

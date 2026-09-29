@@ -35,7 +35,7 @@ def resolved_document(document: dict, fetched: Dict[str, dict]) -> Optional[dict
         target = redirect_target_of(document)
         if target is None or not isinstance(current_id, str):
             return None
-        if current_id in seen or target in seen:
+        if target in seen:
             return None
         if redirects_followed >= MAX_REDIRECT_DEPTH:
             return None
