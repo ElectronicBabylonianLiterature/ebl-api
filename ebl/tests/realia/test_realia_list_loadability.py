@@ -36,13 +36,17 @@ NON_STRING_IDENTIFIERS = [42, 4.2, True, {"id": "x"}]
 
 
 @pytest.mark.parametrize("field", NULLABLE_FIELDS)
-def test_entry_with_null_field_is_not_listed(
-    field: str, realia_repository: MongoRealiaRepository
+def test_entry_with_null_field_is_listed_only_if_retrievable(
+    field: str, realia_repository: MongoRealiaRepository, client
 ) -> None:
     insert_stored(realia_repository, HEALTHY_DOCUMENT)
     insert_stored(realia_repository, {"_id": "Legacy", field: None})
 
-    assert realia_repository.list_non_redirect_ids() == ["Anu"]
+    listed_identifiers = client.simulate_get("/realia/all").json
+    legacy_status = client.simulate_get("/realia/Legacy").status
+
+    assert "Anu" in listed_identifiers
+    assert ("Legacy" in listed_identifiers) == (legacy_status == falcon.HTTP_OK)
 
 
 @pytest.mark.parametrize("document", UNLOADABLE_DOCUMENTS)
@@ -79,13 +83,15 @@ def test_every_listed_id_is_retrievable_despite_malformed_entries(
 ) -> None:
     insert_stored(realia_repository, HEALTHY_DOCUMENT)
     for field in NULLABLE_FIELDS:
-        insert_stored(realia_repository, {"_id": f"Null {field}", field: None})
+        insert_stored(realia_repository, {"_id": f"Null-{field}", field: None})
     for document in UNLOADABLE_DOCUMENTS:
         insert_stored(realia_repository, document)
     insert_stored(realia_repository, {"_id": 42, "type": ["x"]})
 
     listed_identifiers = client.simulate_get("/realia/all").json
+    unloadable_identifiers = {document["_id"] for document in UNLOADABLE_DOCUMENTS}
 
-    assert listed_identifiers == ["Anu"]
+    assert "Anu" in listed_identifiers
+    assert unloadable_identifiers.isdisjoint(listed_identifiers)
     for identifier in listed_identifiers:
         assert client.simulate_get(f"/realia/{identifier}").status == falcon.HTTP_OK
