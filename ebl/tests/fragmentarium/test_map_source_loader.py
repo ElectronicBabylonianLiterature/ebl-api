@@ -95,54 +95,62 @@ def test_group_findspots_flags_disagreeing_rows_as_conflict():
     assert groups[0].polygon_id is None
 
 
-def test_load_site_polygons_rejects_semantically_different_crs(monkeypatch):
+def _ring(longitude: float) -> tuple:
+    return (
+        (longitude, 35.0),
+        (longitude, 35.1),
+        (longitude + 0.1, 35.1),
+        (longitude, 35.0),
+    )
+
+
+def _patch_polygon_sources(monkeypatch, names, longitudes, wkt):
+    monkeypatch.setattr(source_loader, "load_dbf_encoding", lambda path: "UTF-8")
+    monkeypatch.setattr(
+        source_loader,
+        "load_dbf_rows",
+        lambda path, encoding: tuple({"Name": name} for name in names),
+    )
+    monkeypatch.setattr(
+        source_loader,
+        "load_shp_polygon_geometries",
+        lambda path: tuple(((_ring(longitude),),) for longitude in longitudes),
+    )
+    monkeypatch.setattr(source_loader, "load_prj_wkt", lambda path: wkt)
+
+
+@pytest.mark.parametrize(
+    "names,longitudes,epsg,message",
+    [
+        (("A",), (43.0,), 3857, "does not match"),
+        (("A",), (200.0,), 4326, "plausible"),
+        (("A", "B"), (43.0,), 4326, "row counts differ"),
+        (("A", "A"), (43.0, 43.0), 4326, "must be unique"),
+    ],
+)
+def test_load_site_polygons_validates_sources(
+    monkeypatch, names, longitudes, epsg, message
+):
     from pyproj import CRS
 
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_dbf_encoding",
-        lambda path: "UTF-8",
-    )
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_dbf_rows",
-        lambda path, encoding: ({"Name": "A"},),
-    )
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_shp_polygon_geometries",
-        lambda path: (((((43.0, 35.0), (43.0, 35.1), (43.1, 35.1), (43.0, 35.0)),),),),
-    )
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_prj_wkt",
-        lambda path: CRS.from_epsg(3857).to_wkt(),
-    )
+    _patch_polygon_sources(monkeypatch, names, longitudes, CRS.from_epsg(epsg).to_wkt())
 
-    with pytest.raises(ValueError, match="does not match"):
+    with pytest.raises(ValueError, match=message):
         load_site_polygons(SITE_CONFIGS["ASSUR"])
 
 
-def test_load_site_polygons_always_checks_geographic_bounds(monkeypatch):
-    from pyproj import CRS
+def test_load_site_polygons_rejects_invalid_crs(monkeypatch):
+    _patch_polygon_sources(monkeypatch, ("A",), (43.0,), "not a crs")
 
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_dbf_encoding",
-        lambda path: "UTF-8",
-    )
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_dbf_rows",
-        lambda path, encoding: ({"Name": "A"},),
-    )
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_shp_polygon_geometries",
-        lambda path: (
-            ((((200.0, 35.0), (200.0, 35.1), (200.1, 35.1), (200.0, 35.0)),),),
-        ),
-    )
-    monkeypatch.setattr(
-        "ebl.fragmentarium.application.map_source_loader.load_prj_wkt",
-        lambda path: CRS.from_epsg(4326).to_wkt(),
-    )
-
-    with pytest.raises(ValueError, match="plausible"):
+    with pytest.raises(ValueError, match="CRS is invalid"):
         load_site_polygons(SITE_CONFIGS["ASSUR"])
+
+
+def test_load_site_ods_rows_rejects_empty_source(monkeypatch):
+    monkeypatch.setattr(source_loader, "read_ods_rows", lambda path: ())
+
+    with pytest.raises(ValueError, match="contains no rows"):
+        load_site_ods_rows(SITE_CONFIGS["ASSUR"])
 
 
 def test_group_findspots_flags_mixed_resolved_and_unresolved_rows_as_conflict():

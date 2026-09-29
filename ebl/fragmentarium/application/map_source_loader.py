@@ -13,9 +13,11 @@ from ebl.fragmentarium.application.map_site_config import (
     MapSiteConfig,
     ODS_COLUMN_TO_FIELD,
 )
-from ebl.fragmentarium.application.map_source_reader import (
+from ebl.fragmentarium.application.map_dbf_reader import (
     load_dbf_encoding,
     load_dbf_rows,
+)
+from ebl.fragmentarium.application.map_source_reader import (
     load_prj_wkt,
     load_shp_polygon_geometries,
 )
@@ -40,6 +42,12 @@ class MapPolygon:
     geometry_checksum: str
 
 
+@dataclass(frozen=True)
+class SiteSources:
+    ods_rows: tuple[MapOdsRow, ...] | None = None
+    polygons: tuple[MapPolygon, ...] | None = None
+
+
 def load_site_ods_rows(config: MapSiteConfig) -> tuple[MapOdsRow, ...]:
     raw_rows = read_ods_rows(config.ods_path)
     if not raw_rows:
@@ -48,9 +56,9 @@ def load_site_ods_rows(config: MapSiteConfig) -> tuple[MapOdsRow, ...]:
     if tuple(header) != config.ods_header:
         raise ValueError(f"Unexpected ODS header in {config.ods_path}: {header!r}")
     field_positions = [
-        (ODS_COLUMN_TO_FIELD[column], index)
+        (field, index)
         for index, column in enumerate(config.ods_header)
-        if ODS_COLUMN_TO_FIELD[column] is not None
+        if (field := ODS_COLUMN_TO_FIELD[column]) is not None
     ]
     rows = []
     for values in raw_rows[1:]:
