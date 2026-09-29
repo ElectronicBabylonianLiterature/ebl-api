@@ -2,7 +2,8 @@
 
 A named sign used to store its name as one interleaved array, mixing the value
 tokens with the brackets that fall inside the name. They are now two arrays,
-`nameParts` and `nameBreaks`. This separates existing documents.
+`nameParts` and `nameBreaks`. This separates existing documents, including
+the chapter display cache, which is served without passing through the schema.
 
 Run it only after the backend that understands both shapes is deployed: older
 code rejects an unknown `nameBreaks` field outright.
@@ -28,6 +29,7 @@ import copy
 import logging
 import os
 from collections.abc import Iterator, Mapping, Sequence
+from dataclasses import dataclass
 from typing import Any, Optional
 
 from pymongo import MongoClient, UpdateOne
@@ -37,7 +39,7 @@ from pymongo.database import Database
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-COLLECTIONS = ("fragments", "texts", "chapters")
+COLLECTIONS = ("fragments", "texts", "chapters", "cache")
 BATCH_SIZE = 500
 NAME_PART_TYPE = "ValueToken"
 NAME_BREAK_TYPE = "BrokenAway"
@@ -134,20 +136,44 @@ def _pending_updates(collection: Collection) -> Iterator[UpdateOne]:
             yield _update_for(document, migrated)
 
 
-def _apply_updates(collection: Collection, updates: Iterator[UpdateOne]) -> int:
-    attempted = 0
-    written = 0
+@dataclass
+class _Progress:
+    attempted: int = 0
+    written: int = 0
+
+
+def _write_in_batches(
+    collection: Collection, updates: Iterator[UpdateOne], progress: _Progress
+) -> None:
     batch: list[UpdateOne] = []
     for update in updates:
-        attempted += 1
+        progress.attempted += 1
         batch.append(update)
         if len(batch) >= BATCH_SIZE:
-            written += collection.bulk_write(batch).matched_count
+            progress.written += collection.bulk_write(batch).matched_count
             batch = []
     if batch:
-        written += collection.bulk_write(batch).matched_count
-    _report_skipped(collection, attempted - written)
-    return written
+        progress.written += collection.bulk_write(batch).matched_count
+
+
+def _apply_updates(collection: Collection, updates: Iterator[UpdateOne]) -> int:
+    progress = _Progress()
+    try:
+        _write_in_batches(collection, updates, progress)
+    except NonAlternatingName:
+        _report_aborted(collection, progress.written)
+        raise
+    _report_skipped(collection, progress.attempted - progress.written)
+    return progress.written
+
+
+def _report_aborted(collection: Collection, written: int) -> None:
+    logger.error(
+        "%s: aborted; %s documents written before the abort stay migrated. "
+        "Repair the document named below and run the migration again",
+        collection.name,
+        written,
+    )
 
 
 def _report_skipped(collection: Collection, skipped: int) -> None:

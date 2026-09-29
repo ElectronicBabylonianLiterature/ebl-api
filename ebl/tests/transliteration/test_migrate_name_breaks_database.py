@@ -99,7 +99,32 @@ def test_migrate_reports_every_present_collection(database, fragments) -> None:
     counts = migrate(database, dry_run=True)
 
     assert counts["fragments"] == 1
-    assert set(counts) <= {"fragments", "texts", "chapters"}
+    assert set(counts) <= {"fragments", "texts", "chapters", "cache"}
+
+
+def test_the_chapter_display_cache_is_migrated(database) -> None:
+    database.cache.insert_one({"cache_key": "L I.1 1", **legacy_fragment()})
+
+    assert migrate(database, dry_run=False)["cache"] == 1
+
+    stored = named_sign(database.cache.find_one({"cache_key": "L I.1 1"}))
+    assert stored["nameParts"] == [LEGACY_PART, LEGACY_TAIL]
+    assert stored["nameBreaks"] == [LEGACY_BREAK]
+
+
+def test_an_abort_reports_what_was_already_written(fragments, monkeypatch, caplog):
+    fragments.insert_one({"_id": "K.2", **legacy_fragment()})
+    fragments.update_one(
+        {"_id": "K.2"},
+        {"$set": {"text.lines.0.content.0.parts.0.nameParts": [LEGACY_PART] * 2}},
+    )
+    monkeypatch.setattr(MODULE + ".BATCH_SIZE", 1)
+
+    with caplog.at_level(logging.ERROR), pytest.raises(NonAlternatingName):
+        migrate_collection(fragments, dry_run=False)
+
+    assert "aborted; 1 documents written before the abort" in caplog.text
+    assert _stored(fragments)["nameBreaks"] == [LEGACY_BREAK]
 
 
 def test_a_missing_collection_is_reported(database, caplog) -> None:

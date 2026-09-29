@@ -137,5 +137,6 @@ def test_running_the_module_as_a_script_invokes_main(monkeypatch) -> None:
     monkeypatch.setenv("MONGODB_URI", "mongodb://127.0.0.1:27017")
     monkeypatch.setenv("MONGODB_DB", "ebl_migrate_probe")
     monkeypatch.setattr(sys, "argv", [MODULE])
+    monkeypatch.delitem(sys.modules, MODULE, raising=False)
 
     runpy.run_module(MODULE, run_name="__main__")
