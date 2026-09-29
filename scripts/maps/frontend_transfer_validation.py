@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-import hashlib
-from pathlib import Path
 import re
+from typing import Mapping
 
 from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
-from ebl.fragmentarium.application.map_artifact_storage import (
-    artifact_directory_lock,
-    artifact_manifest_name,
-)
 from ebl.fragmentarium.application.map_artifact_types import (
     CurationRecord,
     InventoryRecord,
@@ -22,64 +17,31 @@ from ebl.fragmentarium.application.map_polygon_identity import (
     slugify,
 )
 from ebl.fragmentarium.application.map_site_config import CRS_EPSG, SITE_CONFIGS
+from scripts.maps.frontend_transfer_manifest import read_artifact_sets
 
-ARTIFACT_SUFFIXES = (
-    "polygon_inventory.json",
-    "findspot_polygon_mappings.json",
-    "findspot_polygon_curation_template.json",
-    "findspot_polygon_curation_report.md",
+__all__ = ["read_artifact_sets", "site_summary"]
+
+MAPPING_LOCATION_KEYS = (
+    "polygonIds",
+    "locationPrecision",
+    "matchMethod",
+    "source",
+    "sourceRevision",
 )
-
-
-def _sha256(content: bytes) -> str:
-    return hashlib.sha256(content).hexdigest()
-
-
-def _artifact_names(site_id: str) -> tuple[str, ...]:
-    prefix = site_id.lower()
-    return tuple(f"{prefix}_{suffix}" for suffix in ARTIFACT_SUFFIXES)
-
-
-def read_artifact_sets(data_dir: Path) -> tuple[dict[str, bytes], dict[str, str]]:
-    if not data_dir.is_dir():
-        raise FileNotFoundError(f"Map artifact directory does not exist: {data_dir}")
-    contents: dict[str, bytes] = {}
-    revisions: dict[str, str] = {}
-    with artifact_directory_lock(data_dir, exclusive=False):
-        for site_id in SITE_CONFIGS:
-            manifest_path = data_dir / artifact_manifest_name(site_id.lower())
-            if not manifest_path.is_file() or manifest_path.is_symlink():
-                raise FileNotFoundError(f"Missing regular artifact: {manifest_path}")
-            manifest = load_strict_json(
-                manifest_path.read_text(encoding="utf-8"), str(manifest_path)
-            )
-            if not isinstance(manifest, dict) or manifest.get("schemaVersion") != 1:
-                raise ValueError(f"Invalid artifact manifest: {manifest_path}")
-            revision = manifest.get("sourceRevision")
-            declared_files = manifest.get("files")
-            expected_names = set(_artifact_names(site_id))
-            if not isinstance(revision, str) or not revision.strip():
-                raise ValueError(f"Invalid source revision in {manifest_path}")
-            if (
-                not isinstance(declared_files, dict)
-                or set(declared_files) != expected_names
-            ):
-                raise ValueError(
-                    f"Artifact manifest has unexpected declarations: {manifest_path}"
-                )
-            revisions[site_id] = revision
-            for name in sorted(expected_names):
-                expected_hash = declared_files[name]
-                path = data_dir / name
-                if not isinstance(expected_hash, str):
-                    raise ValueError(f"Invalid checksum for {name} in {manifest_path}")
-                if not path.is_file() or path.is_symlink():
-                    raise FileNotFoundError(f"Missing regular artifact: {path}")
-                content = path.read_bytes()
-                if _sha256(content) != expected_hash:
-                    raise ValueError(f"Artifact checksum mismatch for {name}")
-                contents[name] = content
-    return contents, revisions
+CURATION_TEMPLATE_VALUES = {
+    "status": "needs-human-curation",
+    "polygonIds": [],
+    "matchMethod": "curated",
+    "source": "human curation",
+    "reviewer": "",
+    "reviewDate": "",
+}
+CURATION_TEXT_KEYS = ("area", "sector", "building", "map")
+INVENTORY_KEYS = frozenset(InventoryRecord.__annotations__)
+RECORD_KEYS = {
+    "mapping": frozenset(CuratedMappingRecord.__annotations__),
+    "curation": frozenset(CurationRecord.__annotations__),
+}
 
 
 def _json_array(contents: dict[str, bytes], name: str) -> list[object]:
@@ -89,9 +51,126 @@ def _json_array(contents: dict[str, bytes], name: str) -> list[object]:
     return payload
 
 
-def _validated_records(
+def _typed_record(record: object, keys: frozenset[str], error: str) -> dict:
+    if not isinstance(record, dict) or set(record) != keys:
+        raise ValueError(error)
+    return record
+
+
+def _is_text(value: object) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _differs(record: dict, expected: Mapping[str, object]) -> bool:
+    return any(record.get(key) != value for key, value in expected.items())
+
+
+def _inventory_identity(record: dict, site_id: str) -> tuple[str, str]:
+    error = f"Invalid inventory identity for {site_id}"
+    name = record.get("name")
+    checksum = record.get("geometryChecksum")
+    if (
+        not isinstance(name, str)
+        or not name.strip()
+        or contains_control_character(name)
+    ):
+        raise ValueError(error)
+    if not isinstance(checksum, str) or not re.fullmatch(r"[0-9a-f]{12}", checksum):
+        raise ValueError(error)
+    polygon_id = f"{site_id.lower()}-{slugify(name)}-{checksum}"
+    expected = {
+        "polygonId": polygon_id,
+        "areaName": polygon_match_key(name),
+        "siteId": site_id,
+        "siteName": SITE_CONFIGS[site_id].site_name,
+    }
+    if not _is_text(record.get("areaName")) or _differs(record, expected):
+        raise ValueError(error)
+    return polygon_id, checksum
+
+
+def _validated_polygon_ids(inventory: list[object], site_id: str) -> set[str]:
+    polygon_ids: set[str] = set()
+    checksums: set[str] = set()
+    for item in inventory:
+        record = _typed_record(
+            item, INVENTORY_KEYS, f"Invalid inventory record for {site_id}"
+        )
+        polygon_id, checksum = _inventory_identity(record, site_id)
+        if polygon_id in polygon_ids or checksum in checksums:
+            raise ValueError(f"Invalid inventory identity for {site_id}")
+        polygon_ids.add(polygon_id)
+        checksums.add(checksum)
+    return polygon_ids
+
+
+def _is_polygon_id_list(value: object, polygon_ids: set[str]) -> bool:
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        return False
+    return len(value) == len(set(value)) and set(value) <= polygon_ids
+
+
+def _findspot_identity(
+    record: dict, kind: str, site_id: str, polygon_ids: set[str]
+) -> int:
+    findspot_id = record.get("findspotId")
+    if (
+        not isinstance(findspot_id, int)
+        or isinstance(findspot_id, bool)
+        or not _is_polygon_id_list(record.get("polygonIds"), polygon_ids)
+    ):
+        raise ValueError(f"Invalid {kind} identity for {site_id}")
+    if not 0 <= findspot_id <= MAX_FINDSPOT_ID:
+        raise ValueError(f"Invalid {kind} identity for {site_id}")
+    return findspot_id
+
+
+def _validate_mapping(record: dict, site_id: str) -> None:
+    if not record["polygonIds"]:
+        raise ValueError(f"Mapping has no polygons for {site_id}")
+    MapLocationSchema().load({key: record.get(key) for key in MAPPING_LOCATION_KEYS})
+
+
+def _validate_curation(record: dict, site_id: str, revision: str) -> None:
+    expected = {
+        **CURATION_TEMPLATE_VALUES,
+        "siteId": site_id,
+        "siteName": SITE_CONFIGS[site_id].site_name,
+        "sourceRevision": revision,
+    }
+    if (
+        _differs(record, expected)
+        or not _is_text(record.get("requiredDecision"))
+        or not all(isinstance(record.get(key), str) for key in CURATION_TEXT_KEYS)
+    ):
+        raise ValueError(f"Invalid curation template for {site_id}")
+
+
+def _validated_findspot_ids(
+    records_by_kind: dict[str, list[object]],
+    site_id: str,
+    revision: str,
+    polygon_ids: set[str],
+) -> set[int]:
+    findspot_ids: set[int] = set()
+    for kind, records in records_by_kind.items():
+        for item in records:
+            error = f"Invalid {kind} record for {site_id}"
+            record = _typed_record(item, RECORD_KEYS[kind], error)
+            findspot_id = _findspot_identity(record, kind, site_id, polygon_ids)
+            if findspot_id in findspot_ids:
+                raise ValueError(f"Invalid {kind} identity for {site_id}")
+            if kind == "mapping":
+                _validate_mapping(record, site_id)
+            else:
+                _validate_curation(record, site_id, revision)
+            findspot_ids.add(findspot_id)
+    return findspot_ids
+
+
+def site_summary(
     contents: dict[str, bytes], revisions: dict[str, str], site_id: str
-) -> tuple[list[object], list[object], list[object], set[int]]:
+) -> tuple[dict[str, object], set[int]]:
     config = SITE_CONFIGS[site_id]
     prefix = site_id.lower()
     inventory = _json_array(contents, f"{prefix}_polygon_inventory.json")
@@ -99,102 +178,12 @@ def _validated_records(
     curation = _json_array(
         contents, f"{prefix}_findspot_polygon_curation_template.json"
     )
-    polygon_ids: set[str] = set()
-    geometry_checksums: set[str] = set()
-    for record in inventory:
-        if not isinstance(record, dict) or set(record) != set(
-            InventoryRecord.__annotations__
-        ):
-            raise ValueError(f"Invalid inventory record for {site_id}")
-        polygon_id = record.get("polygonId")
-        name = record.get("name")
-        area_name = record.get("areaName")
-        geometry_checksum = record.get("geometryChecksum")
-        if (
-            not isinstance(polygon_id, str)
-            or not isinstance(name, str)
-            or not name.strip()
-            or contains_control_character(name)
-            or not isinstance(area_name, str)
-            or not area_name.strip()
-            or not isinstance(geometry_checksum, str)
-            or re.fullmatch(r"[0-9a-f]{12}", geometry_checksum) is None
-            or polygon_id != f"{prefix}-{slugify(name)}-{geometry_checksum}"
-            or area_name != polygon_match_key(name)
-            or polygon_id in polygon_ids
-            or geometry_checksum in geometry_checksums
-            or record.get("siteId") != site_id
-            or record.get("siteName") != config.site_name
-        ):
-            raise ValueError(f"Invalid inventory identity for {site_id}")
-        polygon_ids.add(polygon_id)
-        geometry_checksums.add(geometry_checksum)
-    findspot_ids: set[int] = set()
-    for kind, records in (("mapping", mappings), ("curation", curation)):
-        for record in records:
-            expected_type = (
-                CuratedMappingRecord if kind == "mapping" else CurationRecord
-            )
-            if not isinstance(record, dict) or set(record) != set(
-                expected_type.__annotations__
-            ):
-                raise ValueError(f"Invalid {kind} record for {site_id}")
-            findspot_id = record.get("findspotId")
-            record_polygons = record.get("polygonIds")
-            if (
-                not isinstance(findspot_id, int)
-                or isinstance(findspot_id, bool)
-                or not 0 <= findspot_id <= MAX_FINDSPOT_ID
-                or findspot_id in findspot_ids
-                or not isinstance(record_polygons, list)
-                or not all(isinstance(value, str) for value in record_polygons)
-                or len(record_polygons) != len(set(record_polygons))
-                or not set(record_polygons) <= polygon_ids
-            ):
-                raise ValueError(f"Invalid {kind} identity for {site_id}")
-            if kind == "mapping" and not record_polygons:
-                raise ValueError(f"Mapping has no polygons for {site_id}")
-            if kind == "mapping":
-                MapLocationSchema().load(
-                    {
-                        key: record.get(key)
-                        for key in (
-                            "polygonIds",
-                            "locationPrecision",
-                            "matchMethod",
-                            "source",
-                            "sourceRevision",
-                        )
-                    }
-                )
-            if kind == "curation" and (
-                record.get("siteId") != site_id
-                or record.get("siteName") != config.site_name
-                or record.get("status") != "needs-human-curation"
-                or record_polygons
-                or record.get("matchMethod") != "curated"
-                or record.get("source") != "human curation"
-                or record.get("sourceRevision") != revisions[site_id]
-                or not isinstance(record.get("requiredDecision"), str)
-                or not record["requiredDecision"].strip()
-                or record.get("reviewer") != ""
-                or record.get("reviewDate") != ""
-                or not all(
-                    isinstance(record.get(key), str)
-                    for key in ("area", "sector", "building", "map")
-                )
-            ):
-                raise ValueError(f"Invalid curation template for {site_id}")
-            findspot_ids.add(findspot_id)
-    return inventory, mappings, curation, findspot_ids
-
-
-def site_summary(
-    contents: dict[str, bytes], revisions: dict[str, str], site_id: str
-) -> tuple[dict[str, object], set[int]]:
-    config = SITE_CONFIGS[site_id]
-    inventory, mappings, curation, findspot_ids = _validated_records(
-        contents, revisions, site_id
+    polygon_ids = _validated_polygon_ids(inventory, site_id)
+    findspot_ids = _validated_findspot_ids(
+        {"mapping": mappings, "curation": curation},
+        site_id,
+        revisions[site_id],
+        polygon_ids,
     )
     distinct_polygons = {
         polygon_id
