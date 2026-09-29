@@ -10,6 +10,7 @@ from ebl.fragmentarium.application.map_artifact_generator import (
     write_site_artifacts,
 )
 from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
+from ebl.fragmentarium.application.map_source_loader import SiteSources
 
 DEFAULT_OUTPUT_DIR = _DEFAULT_OUTPUT_DIR
 _ASSUR_CONFIG = SITE_CONFIGS["ASSUR"]
@@ -30,8 +31,7 @@ def build_assur_artifacts(
     return build_site_artifacts(
         _ASSUR_CONFIG,
         source_revision,
-        ods_rows=ods_rows,
-        polygons=polygons,
+        sources=SiteSources(ods_rows=ods_rows, polygons=polygons),
     )
 
 

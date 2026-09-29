@@ -13,6 +13,7 @@ from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
 from ebl.fragmentarium.application.map_source_loader import (
     MapOdsRow,
     MapPolygon,
+    SiteSources,
     load_site_ods_rows,
 )
 
@@ -155,12 +156,14 @@ def test_additional_authoritative_membership_supports_non_ods_curation(tmp_path)
         SITE_CONFIGS["ASSUR"],
         "revision-1",
         curated_records_path=path,
-        ods_rows=(MapOdsRow(findspot_id=1, area="unknown"),),
-        polygons=(
-            MapPolygon(
-                name="Area",
-                polygon_id="assur-area-checksum",
-                geometry_checksum="checksum",
+        sources=SiteSources(
+            ods_rows=(MapOdsRow(findspot_id=1, area="unknown"),),
+            polygons=(
+                MapPolygon(
+                    name="Area",
+                    polygon_id="assur-area-checksum",
+                    geometry_checksum="checksum",
+                ),
             ),
         ),
         additional_authoritative_findspot_ids={1, 2},
@@ -197,12 +200,14 @@ def test_ods_rows_without_canonical_site_cannot_authorize_curation(tmp_path, sit
             SITE_CONFIGS["ASSUR"],
             "revision-1",
             curated_records_path=path,
-            ods_rows=(MapOdsRow(findspot_id=1, site_name=site_name, area="Area"),),
-            polygons=(
-                MapPolygon(
-                    name="Area",
-                    polygon_id="assur-area-checksum",
-                    geometry_checksum="checksum",
+            sources=SiteSources(
+                ods_rows=(MapOdsRow(findspot_id=1, site_name=site_name, area="Area"),),
+                polygons=(
+                    MapPolygon(
+                        name="Area",
+                        polygon_id="assur-area-checksum",
+                        geometry_checksum="checksum",
+                    ),
                 ),
             ),
         )
@@ -220,8 +225,7 @@ def test_invalid_additional_membership_evidence_is_rejected(findspot_id):
         build_site_artifacts(
             SITE_CONFIGS["ASSUR"],
             "revision-1",
-            ods_rows=(),
-            polygons=(),
+            sources=SiteSources(ods_rows=(), polygons=()),
             additional_authoritative_findspot_ids={findspot_id},
         )
 
