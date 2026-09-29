@@ -44,6 +44,10 @@ def test_author_year_title_match_omits_absent_filters(
     assert set(author_year_title_match(author, year, title)) == expected
 
 
+def test_author_year_title_match_is_empty_without_criteria() -> None:
+    assert author_year_title_match(None, None, None) == {}
+
+
 def test_query_by_author_year_and_title_uses_title_sort(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -105,6 +109,20 @@ def test_server_owned_state_update_unsets_absent_identity_fields() -> None:
         "redirectTo": "",
     }
     assert "citationKey" not in update["$unset"]
+
+
+def test_server_owned_state_update_unsets_nothing_when_every_field_is_present() -> None:
+    update = server_owned_state_update(
+        {
+            "_id": "Q30000024",
+            "aliases": [],
+            "citationKey": "key",
+            "deprecated": True,
+            "redirectTo": "Q30000025",
+        }
+    )
+
+    assert "$unset" not in update
 
 
 def test_server_owned_state_update_never_names_a_non_identity_field() -> None:

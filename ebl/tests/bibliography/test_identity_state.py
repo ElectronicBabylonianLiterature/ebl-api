@@ -74,6 +74,20 @@ def test_adding_an_alias_without_a_normalized_value_raises(value):
         apply_identity_commands(BASE, {"addAliases": [alias(value)]})
 
 
+@pytest.mark.parametrize(
+    "commands,message",
+    [
+        ({"addAliases": [alias(" \t")]}, "aliases must not be blank"),
+        ({"addAliases": [alias("!!!")]}, "at least one letter or digit"),
+        ({"citationKey": "  "}, "citation keys must not be blank"),
+        ({"deprecateTo": "\n"}, "redirect targets must not be blank"),
+    ],
+)
+def test_blank_identity_values_raise(commands: dict, message: str) -> None:
+    with pytest.raises(DataError, match=message):
+        apply_identity_commands(BASE, commands)
+
+
 def test_alias_key_is_absent_when_no_alias_command_is_given():
     assert "aliases" not in apply_identity_commands(BASE, {"citationKey": "k"})
 
