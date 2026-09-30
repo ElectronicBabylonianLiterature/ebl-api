@@ -27,8 +27,16 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "pypy-3.11"]
-    name: Test Python ${{ matrix.python-version }}
+        include:
+          - python-version: "3.11"
+            check_name: "3.11"
+          - python-version: "3.12"
+            check_name: "3.12"
+          # PyPy 7.3.23 is pinned for pp73 wheels; PyPy 8 uses pp80.
+          # Upgrade tracking: https://github.com/ElectronicBabylonianLiterature/ebl-api/issues/772
+          - python-version: "pypy3.11-v7.3.23"
+            check_name: "pypy-3.11"
+    name: Test Python ${{ matrix.check_name }}
 
     services:
       mongodb:
@@ -56,8 +64,8 @@ jobs:
       - name: Install Python Dependencies
         id: install
         run: |
-          pip install --upgrade pip
-          pip install --retries 10 --timeout 100 "poetry==2.4.1"
+          python -m pip install "pip==26.2.1"
+          python -m pip install --retries 10 --timeout 100 "poetry==2.4.1"
           # Retry the full install when PyPI truncates a download mid-stream.
           for attempt in 1 2 3; do
             poetry install --no-root --with dev && break
@@ -101,7 +109,7 @@ jobs:
           add-prefix: ebl/
 
   docker:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    if: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
     needs: [test]
     runs-on: ubuntu-24.04
     steps:
@@ -110,6 +118,7 @@ jobs:
       - uses: docker/setup-buildx-action@v3
 
       - uses: docker/login-action@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         with:
           registry: ebl.badw.de
           username: ${{ secrets.EBL_REGISTRY_USERNAME }}
@@ -118,7 +127,7 @@ jobs:
       - id: docker_build
         uses: docker/build-push-action@v5
         with:
-          push: true
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
           tags: |
             ebl.badw.de/ebl-api:master
             ${{format('ebl.badw.de/ebl-api:master.{0}', github.run_number)}}

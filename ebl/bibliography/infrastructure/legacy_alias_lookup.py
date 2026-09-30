@@ -9,6 +9,7 @@ COLLECTION = "bibliography"
 LEGACY_ALIAS_FILTER = {
     "aliases": {
         "$elemMatch": {
+            "value": {"$type": "string"},
             "$or": [
                 {"normalizedValue": {"$exists": False}},
                 {"normalizedValue": None},
