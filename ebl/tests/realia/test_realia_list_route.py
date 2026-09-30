@@ -1,4 +1,7 @@
+from urllib.parse import quote
+
 import falcon
+from freezegun import freeze_time
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.cache.application.cache import DEFAULT_TIMEOUT
@@ -83,13 +86,14 @@ def test_every_listed_id_is_retrievable(
     bibliography_repository: BibliographyRepository,
     client,
 ) -> None:
-    for identifier in (*RESERVED_REALIA_IDS, "Anu", "(Heiliger) Hügel"):
+    for identifier in (*RESERVED_REALIA_IDS, "Anu", "(Heiliger) Hügel", "by-id/foo"):
         _seed_entry(realia_repository, bibliography_repository, id=identifier)
+    _seed_entry(realia_repository, bibliography_repository, id="Other", realia_id="foo")
 
     listed_identifiers = client.simulate_get(LIST_ROUTE).json
 
     for identifier in listed_identifiers:
-        entry = client.simulate_get(f"/realia/{identifier}")
+        entry = client.simulate_get(f"/realia/{quote(identifier, safe='')}")
         assert entry.status == falcon.HTTP_OK
         assert entry.json["_id"] == identifier
 
@@ -110,3 +114,26 @@ def test_list_is_cached_server_side(
     assert second_result.headers["Cache-Control"] == (
         f"public, max-age={DEFAULT_TIMEOUT}"
     )
+
+
+def test_list_reports_age_of_uncached_result(client) -> None:
+    result = client.simulate_get(LIST_ROUTE)
+
+    assert result.headers["Age"] == "0"
+
+
+def test_list_age_bounds_total_staleness(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    cached_client,
+) -> None:
+    _seed_entry(realia_repository, bibliography_repository, id="Anu")
+    with freeze_time("2026-09-30 12:00:00") as frozen_time:
+        cached_client.simulate_get(LIST_ROUTE)
+        frozen_time.tick(DEFAULT_TIMEOUT - 1)
+        stale_result = cached_client.simulate_get(LIST_ROUTE)
+        frozen_time.tick(2)
+        fresh_result = cached_client.simulate_get(LIST_ROUTE)
+
+    assert stale_result.headers["Age"] == str(DEFAULT_TIMEOUT - 1)
+    assert fresh_result.headers["Age"] == "0"

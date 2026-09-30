@@ -1,7 +1,10 @@
 import falcon
 
 from ebl.context import Context
-from ebl.realia.domain.reserved_identifiers import LIST_ROUTE_SEGMENT
+from ebl.realia.domain.reserved_identifiers import (
+    BY_ID_ROUTE_SEGMENT,
+    LIST_ROUTE_SEGMENT,
+)
 from ebl.realia.web.realia import (
     RealiaByIdResource,
     RealiaLemmaSink,
@@ -19,7 +22,7 @@ def create_realia_routes(api: falcon.App, context: Context) -> None:
     realia_list_resource = RealiaListResource(context.realia_repository, context.cache)
     realia_lemma_sink = RealiaLemmaSink(context.realia_repository)
     api.add_route(f"/realia/{LIST_ROUTE_SEGMENT}", realia_list_resource)
-    api.add_route("/realia/by-id/{realia_id}", realia_by_id_resource)
+    api.add_route(f"/realia/{BY_ID_ROUTE_SEGMENT}/{{realia_id}}", realia_by_id_resource)
     api.add_route("/realia/{entry_id}", realia_resource)
     api.add_route("/realia", realia_search_resource)
     api.add_sink(realia_lemma_sink, prefix=r"/realia/(?P<entry_id>.+)")

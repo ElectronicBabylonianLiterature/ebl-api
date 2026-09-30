@@ -18,7 +18,12 @@ ARRAY_FIELDS = (
     "reallexikon",
 )
 
-NON_ARRAY_VALUES = ["a string", 7, {"id": "a"}, True]
+NON_ARRAY_VALUES = [
+    pytest.param("a string", id="string"),
+    pytest.param(7, id="integer"),
+    pytest.param({"id": "a"}, id="object"),
+    pytest.param(True, id="boolean"),
+]
 
 
 def _insert_healthy_entry(realia_repository: MongoRealiaRepository) -> None:

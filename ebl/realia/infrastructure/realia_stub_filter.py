@@ -59,17 +59,17 @@ def _resolvable_reallexikon_count() -> dict:
 
 def _is_resolvable_reference(reference: str) -> dict:
     return {
-        "$switch": {
-            "branches": [
-                {
-                    "case": {"$eq": [{"$type": reference}, "string"]},
-                    "then": {"$ne": [reference, ""]},
-                },
-                {
-                    "case": {"$eq": [{"$type": reference}, "object"]},
-                    "then": {"$ne": [{"$ifNull": [f"{reference}.id", ""]}, ""]},
-                },
-            ],
-            "default": False,
-        }
+        "$or": [
+            _is_non_empty_string(reference),
+            _is_non_empty_string(f"{reference}.id"),
+        ]
+    }
+
+
+def _is_non_empty_string(value: str) -> dict:
+    return {
+        "$and": [
+            {"$eq": [{"$type": value}, "string"]},
+            {"$ne": [value, ""]},
+        ]
     }

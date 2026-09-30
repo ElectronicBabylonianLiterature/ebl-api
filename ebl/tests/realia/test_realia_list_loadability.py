@@ -32,7 +32,18 @@ UNLOADABLE_DOCUMENTS: List[dict] = [
     },
 ]
 
-NON_STRING_IDENTIFIERS = [42, 4.2, True, {"id": "x"}]
+NON_STRING_REFERENCE_IDS = [
+    pytest.param(5, id="integer"),
+    pytest.param({"nested": "bib_1"}, id="object"),
+    pytest.param(["bib_1"], id="list"),
+]
+
+NON_STRING_IDENTIFIERS = [
+    pytest.param(42, id="integer"),
+    pytest.param(4.2, id="float"),
+    pytest.param(True, id="boolean"),
+    pytest.param({"id": "x"}, id="object"),
+]
 
 
 @pytest.mark.parametrize("field", NULLABLE_FIELDS)
@@ -95,3 +106,18 @@ def test_every_listed_id_is_retrievable_despite_malformed_entries(
     assert unloadable_identifiers.isdisjoint(listed_identifiers)
     for identifier in listed_identifiers:
         assert client.simulate_get(f"/realia/{identifier}").status == falcon.HTTP_OK
+
+
+@pytest.mark.parametrize("reference_id", NON_STRING_REFERENCE_IDS)
+def test_entry_with_non_string_reallexikon_reference_id_is_retrievable(
+    reference_id: object, realia_repository: MongoRealiaRepository, client
+) -> None:
+    reallexikon = [{"id": "r", "reference": {"id": reference_id}}]
+    insert_stored(realia_repository, {"_id": "Legacy", "reallexikon": reallexikon})
+
+    listed_identifiers = client.simulate_get("/realia/all").json
+    entry = client.simulate_get("/realia/Legacy")
+
+    assert listed_identifiers == ["Legacy"]
+    assert entry.status == falcon.HTTP_OK
+    assert entry.json["reallexikon"][0]["reference"] is None

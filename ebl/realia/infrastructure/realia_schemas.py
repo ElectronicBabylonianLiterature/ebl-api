@@ -18,18 +18,18 @@ from ebl.realia.domain.realia_entry import (
 
 
 class ReallexikonReferenceField(fields.Field):
-    def _serialize(self, value, attr_name, obj, **kwargs):
+    def _serialize(self, value, attr, obj, **kwargs):
         return None if value is None else ApiReferenceSchema().dump(value)
 
-    def _deserialize(self, value, attr_name, data, **kwargs):
+    def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, str):
             return self._from_id(value, "")
         if isinstance(value, dict):
             return self._from_id(value.get("id", ""), value.get("pages", ""))
         return None
 
-    def _from_id(self, bibliography_id: str, pages: str) -> Optional[Reference]:
-        if not bibliography_id:
+    def _from_id(self, bibliography_id: object, pages: str) -> Optional[Reference]:
+        if not isinstance(bibliography_id, str) or not bibliography_id:
             return None
         return Reference(
             BibliographyId(bibliography_id), ReferenceType.DISCUSSION, pages=pages

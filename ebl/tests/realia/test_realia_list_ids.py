@@ -1,7 +1,10 @@
 import pytest
 
 from ebl.realia.application.realia_repository import RealiaRepository
-from ebl.realia.domain.reserved_identifiers import RESERVED_REALIA_IDS
+from ebl.realia.domain.reserved_identifiers import (
+    RESERVED_REALIA_ID_PREFIXES,
+    RESERVED_REALIA_IDS,
+)
 from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.tests.realia.realia_repository_helpers import insert_minimal, insert_stored
 
@@ -41,6 +44,29 @@ def test_list_non_redirect_ids_excludes_reserved_identifiers(
         insert_minimal(realia_repository, identifier)
 
     assert realia_repository.list_non_redirect_ids() == ["Anu"]
+
+
+@pytest.mark.parametrize("reserved_prefix", RESERVED_REALIA_ID_PREFIXES)
+def test_list_non_redirect_ids_excludes_reserved_prefixes(
+    reserved_prefix: str, realia_repository: MongoRealiaRepository
+) -> None:
+    for identifier in (f"{reserved_prefix}foo", reserved_prefix, "Anu"):
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_non_redirect_ids() == ["Anu"]
+
+
+def test_list_non_redirect_ids_lists_ids_only_resembling_reserved_prefixes(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    for identifier in ("by-id", "by-idx/foo", "a/by-id/foo"):
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_non_redirect_ids() == [
+        "a/by-id/foo",
+        "by-id",
+        "by-idx/foo",
+    ]
 
 
 def test_list_non_redirect_ids_returns_every_id_without_limit(
@@ -147,6 +173,10 @@ def test_list_non_redirect_ids_lists_entries_with_resolvable_reallexikon(
         [{"id": "r", "reference": None}],
         [{"id": "r", "reference": {"pages": "5"}}],
         [{"id": "r", "reference": ""}],
+        [{"id": "r", "reference": {"id": 5}}],
+        [{"id": "r", "reference": {"id": {"nested": "bib_1"}}}],
+        [{"id": "r", "reference": {"id": ["bib_1"]}}],
+        [{"id": "r", "reference": ["bib_1"]}],
     ],
 )
 def test_list_non_redirect_ids_excludes_unresolvable_reallexikon(

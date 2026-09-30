@@ -1,5 +1,6 @@
 import attr
-from typing import Dict, List, Sequence, Tuple, cast
+import re
+from typing import Dict, List, Pattern, Sequence, Tuple, cast
 
 from pymongo.database import Database
 
@@ -13,7 +14,10 @@ from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.domain.realia_entry import RealiaEntry, ReallexikonEntry
-from ebl.realia.domain.reserved_identifiers import RESERVED_REALIA_IDS
+from ebl.realia.domain.reserved_identifiers import (
+    RESERVED_REALIA_ID_PREFIXES,
+    RESERVED_REALIA_IDS,
+)
 from ebl.realia.infrastructure.realia_id_sorting import sort_realia_ids
 from ebl.realia.infrastructure.realia_loadability import is_loadable
 from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
@@ -87,9 +91,17 @@ class MongoRealiaRepository(RealiaRepository):
 
     def _build_listable_query(self) -> dict:
         return {
-            "_id": {"$type": "string", "$nin": list(RESERVED_REALIA_IDS)},
+            "_id": {
+                "$type": "string",
+                "$nin": list(RESERVED_REALIA_IDS),
+                "$not": self._reserved_prefix_pattern(),
+            },
             "$expr": non_redirect_stub_expression(),
         }
+
+    def _reserved_prefix_pattern(self) -> Pattern[str]:
+        prefixes = "|".join(re.escape(prefix) for prefix in RESERVED_REALIA_ID_PREFIXES)
+        return re.compile(f"^(?:{prefixes})")
 
     def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
         options = "i" if cfq.use_collations else ""
