@@ -27,7 +27,8 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "pypy-3.11"]
+        # PyPy 7.3.23 is intentional: locked compiled dependencies have pp73 wheels, while PyPy 8 uses pp80.
+        python-version: ["3.11", "3.12", "pypy-3.11-v7.3.23"]
     name: Test Python ${{ matrix.python-version }}
 
     services:
@@ -56,8 +57,8 @@ jobs:
       - name: Install Python Dependencies
         id: install
         run: |
-          pip install --upgrade pip
-          pip install --retries 10 --timeout 100 "poetry==2.4.1"
+          python -m pip install "pip==26.2.1"
+          python -m pip install --retries 10 --timeout 100 "poetry==2.4.1"
           # Retry the full install when PyPI truncates a download mid-stream.
           for attempt in 1 2 3; do
             poetry install --no-root --with dev && break

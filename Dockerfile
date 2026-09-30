@@ -1,9 +1,10 @@
-FROM pypy:3.11
+# PyPy 7.3.23 is intentional: locked compiled dependencies have pp73 wheels, while PyPy 8 uses pp80.
+FROM pypy:3.11-7.3.23
 
-RUN pip install --upgrade pip
+RUN python -m pip install "pip==26.2.1"
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN pip install --retries 10 --timeout 100 "poetry==2.4.1"
+RUN python -m pip install --retries 10 --timeout 100 "poetry==2.4.1"
 
 EXPOSE 8000
 
