@@ -1,51 +1,23 @@
-"""One-off migration for the nameParts/nameBreaks split.
-
-A named sign used to store its name as one interleaved array, mixing the value
-tokens with the brackets that fall inside the name. They are now two arrays,
-`nameParts` and `nameBreaks`. This separates existing documents, including
-the chapter display cache, which is served without passing through the schema.
-
-Run it only after the backend that understands both shapes is deployed: older
-code rejects an unknown `nameBreaks` field outright.
-
-    poetry run python -m ebl.transliteration.migrate_name_breaks           # dry run
-    poetry run python -m ebl.transliteration.migrate_name_breaks --apply   # writes
-
-It writes only the top-level fields it changed, and only to documents that have
-not been touched since it read them, so an edit made while the scan is running
-is left alone instead of being reverted. Those documents are reported and are
-picked up by the next run.
-
-The script is resumable. A document that already carries `nameBreaks` is
-skipped, so if a run stops early — `NonAlternatingName` aborts it on data that
-does not alternate — the fix is to repair the document the error names and run
-it again. Nothing already written is undone or written twice.
-
-Both MONGODB_URI and MONGODB_DB must be set.
-"""
-
 import argparse
-import copy
 import logging
 import os
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Optional
 
 from pymongo import MongoClient, UpdateOne
 from pymongo.collection import Collection
 from pymongo.database import Database
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-COLLECTIONS = ("fragments", "texts", "chapters", "cache")
+COLLECTIONS = ("fragments", "texts", "chapters")
+CACHE_COLLECTION = "cache"
 BATCH_SIZE = 500
 NAME_PART_TYPE = "ValueToken"
 NAME_BREAK_TYPE = "BrokenAway"
 
-NameToken = Mapping[str, Any]
-MongoDocument = Mapping[str, Any]
+NameToken = Mapping[str, object]
 
 
 def get_database() -> Database:
@@ -54,86 +26,110 @@ def get_database() -> Database:
 
 
 class NonAlternatingName(ValueError):
-    """A legacy nameParts array that does not alternate part, break, part."""
+    pass
+
+
+@dataclass(frozen=True)
+class LegacyName:
+    path: str
+    name_parts: object
 
 
 def _expected_type(index: int) -> str:
     return NAME_PART_TYPE if index % 2 == 0 else NAME_BREAK_TYPE
 
 
-def _validate_is_an_array(name_parts: Any) -> None:
+def _as_array(name_parts: object) -> Sequence[object]:
     if not isinstance(name_parts, Sequence) or isinstance(name_parts, (str, bytes)):
         raise NonAlternatingName(
             f"Expected nameParts to be an array, found {name_parts!r}. "
             f"There is nothing to split by position; refusing to migrate."
         )
+    return name_parts
 
 
-def _validate_alternating(name_parts: Sequence[Any]) -> None:
-    for index, token in enumerate(name_parts):
-        expected = _expected_type(index)
-        if not isinstance(token, Mapping) or token.get("type") != expected:
-            raise NonAlternatingName(
-                f"Expected a {expected} at position {index} of nameParts, "
-                f"found {token!r}. Splitting by position would move it into "
-                f"the wrong array; refusing to migrate."
-            )
+def _as_token(token: object, index: int) -> NameToken:
+    expected = _expected_type(index)
+    if not isinstance(token, Mapping) or token.get("type") != expected:
+        raise NonAlternatingName(
+            f"Expected a {expected} at position {index} of nameParts, "
+            f"found {token!r}. Splitting by position would move it into "
+            f"the wrong array; refusing to migrate."
+        )
+    return token
+
+
+def _validate_ends_with_a_part(tokens: Sequence[NameToken]) -> None:
+    if len(tokens) % 2 == 0:
+        raise NonAlternatingName(
+            f"Expected nameParts to start and end with a {NAME_PART_TYPE}, "
+            f"found {len(tokens)} tokens. No name the parser writes has that "
+            f"shape; refusing to migrate."
+        )
 
 
 def separate_name_parts(
-    name_parts: Any,
+    name_parts: object,
 ) -> tuple[list[NameToken], list[NameToken]]:
-    _validate_is_an_array(name_parts)
-    _validate_alternating(name_parts)
-    return list(name_parts[0::2]), list(name_parts[1::2])
+    tokens = [
+        _as_token(token, index) for index, token in enumerate(_as_array(name_parts))
+    ]
+    _validate_ends_with_a_part(tokens)
+    return tokens[0::2], tokens[1::2]
 
 
-def migrate_document(document: Any) -> bool:
-    changed = False
-    if isinstance(document, dict):
-        if "nameParts" in document and "nameBreaks" not in document:
-            parts, breaks = separate_name_parts(document["nameParts"])
-            document["nameParts"] = parts
-            document["nameBreaks"] = breaks
-            changed = True
-        for value in document.values():
-            changed = migrate_document(value) or changed
+def _join(path: str, key: object) -> str:
+    return f"{path}.{key}" if path else str(key)
+
+
+def find_legacy_names(document: object, path: str = "") -> Iterator[LegacyName]:
+    if isinstance(document, Mapping):
+        yield from _legacy_names_in_object(document, path)
     elif isinstance(document, list):
-        for value in document:
-            changed = migrate_document(value) or changed
-    return changed
+        for index, value in enumerate(document):
+            yield from find_legacy_names(value, _join(path, index))
 
 
-def _migrate_copy(
-    collection: Collection, document: MongoDocument
-) -> Optional[dict[str, Any]]:
-    migrated = copy.deepcopy(dict(document))
+def _legacy_names_in_object(
+    document: Mapping[object, object], path: str
+) -> Iterator[LegacyName]:
+    is_legacy = "nameParts" in document and "nameBreaks" not in document
+    if is_legacy:
+        yield LegacyName(path, document["nameParts"])
+    for key, value in document.items():
+        if not (is_legacy and key == "nameParts"):
+            yield from find_legacy_names(value, _join(path, key))
+
+
+def _update_for(document_id: object, names: Sequence[LegacyName]) -> UpdateOne:
+    unchanged_since_read: dict[str, object] = {"_id": document_id}
+    separated: dict[str, object] = {}
+    for name in names:
+        parts, breaks = separate_name_parts(name.name_parts)
+        unchanged_since_read[_join(name.path, "nameParts")] = name.name_parts
+        unchanged_since_read[_join(name.path, "nameBreaks")] = {"$exists": False}
+        separated[_join(name.path, "nameParts")] = parts
+        separated[_join(name.path, "nameBreaks")] = breaks
+    return UpdateOne(unchanged_since_read, {"$set": separated})
+
+
+def _document_update(
+    collection: Collection, document: Mapping[str, object]
+) -> Optional[UpdateOne]:
+    names = list(find_legacy_names(document))
     try:
-        changed = migrate_document(migrated)
+        return _update_for(document["_id"], names) if names else None
     except NonAlternatingName as error:
         raise NonAlternatingName(
             f"{collection.name} document {document['_id']!r}: {error}"
         ) from error
-    return migrated if changed else None
-
-
-def _update_for(original: MongoDocument, migrated: MongoDocument) -> UpdateOne:
-    changed = {
-        key: value
-        for key, value in migrated.items()
-        if key != "_id" and value != original[key]
-    }
-    unchanged_since_read: dict[str, Any] = {"_id": original["_id"]}
-    for key in changed:
-        unchanged_since_read[key] = original[key]
-    return UpdateOne(unchanged_since_read, {"$set": changed})
 
 
 def _pending_updates(collection: Collection) -> Iterator[UpdateOne]:
     for document in collection.find({}):
-        migrated = _migrate_copy(collection, document)
-        if migrated is not None:
-            yield _update_for(document, migrated)
+        update = _document_update(collection, document)
+        if update is not None:
+            yield update
 
 
 @dataclass
@@ -179,8 +175,9 @@ def _report_aborted(collection: Collection, written: int) -> None:
 def _report_skipped(collection: Collection, skipped: int) -> None:
     if skipped:
         logger.warning(
-            "%s: %s documents changed while the migration was reading them and "
-            "were left alone; run the migration again to pick them up",
+            "%s: %s documents were changed or deleted while the migration was "
+            "reading them and were left alone; run the migration again to pick "
+            "up any that still hold a legacy name",
             collection.name,
             skipped,
         )
@@ -213,12 +210,29 @@ def migrate(database: Database, dry_run: bool) -> Mapping[str, int]:
     return counts
 
 
+def clear_cache(database: Database, dry_run: bool) -> int:
+    cache = database[CACHE_COLLECTION]
+    if dry_run:
+        cleared = cache.count_documents({})
+    else:
+        cleared = cache.delete_many({}).deleted_count
+    logger.info(
+        "%s: %s entries %s",
+        CACHE_COLLECTION,
+        cleared,
+        "would be cleared" if dry_run else "cleared",
+    )
+    return cleared
+
+
 def main(argv: Optional[Sequence[str]] = None) -> None:
+    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(
         description=(
             "Separate the interleaved nameParts array into nameParts and "
-            "nameBreaks. Documents already carrying nameBreaks are left alone, "
-            "so the script is safe to re-run."
+            "nameBreaks, then clear the chapter display cache so it is rebuilt "
+            "in the new shape. Documents already carrying nameBreaks are left "
+            "alone, so the script is safe to re-run."
         )
     )
     parser.add_argument(
@@ -227,7 +241,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         help="write the changes; without it the script only reports counts",
     )
     arguments = parser.parse_args(argv)
-    migrate(get_database(), dry_run=not arguments.apply)
+    database = get_database()
+    migrate(database, dry_run=not arguments.apply)
+    clear_cache(database, dry_run=not arguments.apply)
 
 
 if __name__ == "__main__":
