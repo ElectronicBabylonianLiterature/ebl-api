@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         # PyPy 7.3.23 is intentional: locked compiled dependencies have pp73 wheels, while PyPy 8 uses pp80.
-        python-version: ["3.11", "3.12", "pypy-3.11-v7.3.23"]
+        python-version: ["3.11", "3.12", "pypy3.11-v7.3.23"]
     name: Test Python ${{ matrix.python-version }}
 
     services:
