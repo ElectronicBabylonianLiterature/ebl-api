@@ -20,8 +20,10 @@ def follow_bibliography_redirect(
                 f"Deprecated bibliography {current_id} has no redirect target."
             )
         if current_id in visited_ids or redirect_to in visited_ids:
+            closure_id = current_id if current_id in visited_ids else redirect_to
             raise DuplicateError(
-                f"Bibliography redirect loop detected at {current_id}."
+                f"Bibliography redirect loop from {entry.get('id')} closes at "
+                f"{closure_id}."
             )
         if redirects_followed >= MAX_REDIRECT_DEPTH:
             raise DuplicateError(

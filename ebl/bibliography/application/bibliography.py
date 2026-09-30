@@ -27,7 +27,7 @@ from ebl.bibliography.application.server_owned_fields import (
 from ebl.bibliography.application.update_target import stored_entry_for_update
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
-from ebl.errors import DataError, NotFoundError
+from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
 
@@ -36,9 +36,9 @@ class Bibliography:
         self._repository = repository
         self._changelog = changelog
         self._partner = PartnerBibliography(self, repository)
-        self._identity = BibliographyIdentityContext(repository, changelog, self.find)
+        self._identity = BibliographyIdentityContext(repository, changelog)
 
-    def create(self, entry, user: User) -> str:
+    def create(self, entry: dict, user: User) -> str:
         return create_with_identity_claims(self._identity, entry, user)
 
     def find(self, id_: str):
@@ -58,7 +58,10 @@ class Bibliography:
         resolved_entries: list[dict] = []
         seen_ids: set[str] = set()
         for entry in self._repository.query_by_ids(ids):
-            resolved_entry = self._follow_redirect(entry)
+            try:
+                resolved_entry = self._follow_redirect(entry)
+            except (NotFoundError, DuplicateError):
+                continue
             resolved_id = resolved_entry["id"]
             if resolved_id not in seen_ids:
                 resolved_entries.append(resolved_entry)
@@ -212,7 +215,7 @@ class Bibliography:
         for reference in references:
             try:
                 entry = self.find(reference.id)
-            except NotFoundError:
+            except (NotFoundError, DuplicateError):
                 invalid_references.append(reference.id)
             else:
                 canonical_references.append(

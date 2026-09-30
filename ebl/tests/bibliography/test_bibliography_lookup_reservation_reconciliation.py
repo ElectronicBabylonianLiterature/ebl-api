@@ -1,7 +1,12 @@
+from typing import NoReturn
+
+import pytest
+
 from ebl.bibliography.application.lookup_reservation import (
     LookupReservationOperation,
     LookupReservationState,
 )
+from ebl.errors import NotFoundError
 from ebl.tests.bibliography.lookup_reservation_test_helpers import (
     COLLECTION,
     LATER,
@@ -44,6 +49,24 @@ def test_reconcile_commits_expired_pending_reservation_with_entry(
     assert_expired_pending_reservation_is_committed(
         database, bibliography_repository, create_mongo_bibliography_entry
     )
+
+
+def test_expired_pending_ownership_lookup_not_found_is_not_suppressed(
+    monkeypatch, bibliography_repository
+):
+    bibliography_repository.claim_lookup_values(
+        LookupReservationOperation("owner", "Q30000000", NOW), ["legacy-id"]
+    )
+
+    def fail_ownership_lookup(_entry_id: str, _value: str) -> NoReturn:
+        raise NotFoundError("ownership lookup failed")
+
+    monkeypatch.setattr(
+        bibliography_repository, "_entry_owns_lookup_value", fail_ownership_lookup
+    )
+
+    with pytest.raises(NotFoundError, match="ownership lookup failed"):
+        bibliography_repository.reconcile_lookup_reservations(LATER)
 
 
 def test_reconcile_abandons_duplicate_citation_key_reservation_and_keeps_unique_one(
@@ -122,3 +145,26 @@ def test_retire_lookup_values_abandons_only_matching_committed_claim(
 
     assert database[COLLECTION].find_one({"_id": "old"})["state"] == "abandoned"
     assert database[COLLECTION].find_one({"_id": "kept"})["state"] == "committed"
+
+
+def test_retire_keeps_a_value_readded_before_finalization(
+    database, bibliography_repository, create_mongo_bibliography_entry
+):
+    current_operation = operation("old-owner")
+    bibliography_repository.claim_lookup_values(current_operation, ["readded"])
+    bibliography_repository.commit_lookup_values(current_operation, NOW)
+    database["bibliography"].insert_one(
+        create_mongo_bibliography_entry(
+            {
+                "id": "Q30000000",
+                "type": "book",
+                "aliases": [{"value": "readded"}],
+            }
+        )
+    )
+
+    bibliography_repository.retire_lookup_values("Q30000000", ["readded"], LATER)
+
+    reservation = database[COLLECTION].find_one({"_id": "readded"})
+    assert reservation is not None
+    assert reservation["state"] == LookupReservationState.COMMITTED.value
