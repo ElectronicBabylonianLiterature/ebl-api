@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Mapping, Optional, Sequence
 
 import attr
@@ -36,6 +37,8 @@ from ebl.changelog import Changelog
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
+logger = logging.getLogger(__name__)
+
 
 class Bibliography:
     def __init__(self, repository: BibliographyRepository, changelog: Changelog):
@@ -70,7 +73,12 @@ class Bibliography:
         for entry in self._repository.query_by_ids(ids):
             try:
                 resolved_entry = self._follow_redirect(entry)
-            except (NotFoundError, DuplicateError):
+            except (NotFoundError, DuplicateError) as error:
+                logger.warning(
+                    "Skipping unresolvable bibliography entry %s: %s",
+                    entry["id"],
+                    error,
+                )
                 continue
             resolved_id = resolved_entry["id"]
             if resolved_id not in seen_ids:

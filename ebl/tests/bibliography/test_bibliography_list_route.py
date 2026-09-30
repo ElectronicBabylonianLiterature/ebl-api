@@ -1,3 +1,5 @@
+import logging
+
 import falcon
 
 from ebl.tests.bibliography.identity_management_test_helpers import (
@@ -73,7 +75,7 @@ def test_list_bibliography_deduplicates_redirected_canonical_entries(
 
 
 def test_list_bibliography_skips_an_entry_with_a_redirect_cycle(
-    client, database, bibliography, user
+    caplog, client, database, bibliography, user
 ):
     valid_entry = BibliographyEntryFactory.build(id="VALID_ID")
     bibliography.create(valid_entry, user)
@@ -84,12 +86,15 @@ def test_list_bibliography_skips_an_entry_with_a_redirect_cycle(
             {"$set": {"deprecated": True, "redirectTo": target}},
         )
 
-    result = client.simulate_get(
-        "/bibliography/list", params={"ids": f"LOOP_A,{valid_entry['id']}"}
-    )
+    with caplog.at_level(logging.WARNING):
+        result = client.simulate_get(
+            "/bibliography/list", params={"ids": f"LOOP_A,{valid_entry['id']}"}
+        )
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [valid_entry]
+    assert "Skipping unresolvable bibliography entry LOOP_A" in caplog.text
+    assert "Bibliography redirect loop from LOOP_A closes at LOOP_A" in caplog.text
 
 
 def test_list_bibliography_handles_canonical_alias_unknown_and_broken_ids(
