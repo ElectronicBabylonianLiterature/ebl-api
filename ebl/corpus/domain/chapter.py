@@ -1,4 +1,5 @@
 from enum import Enum, unique
+from functools import singledispatchmethod
 from typing import Iterator, Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
 
 import attr
@@ -12,6 +13,7 @@ from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.record import Record
 from ebl.errors import NotFoundError
 from ebl.merger import Merger
+from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.markup import MarkupPart, to_title
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.common.domain.stage import Stage
@@ -28,6 +30,7 @@ ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
 
 
 class ChapterVisitor:
+    @singledispatchmethod
     def visit(self, item: ChapterItem) -> None:
         pass
 
@@ -133,7 +136,9 @@ class Chapter:
         ]
 
     @property
-    def extant_lines(self) -> Mapping[Siglum, Mapping[ManuscriptLineLabel, ExtantLine]]:
+    def extant_lines(
+        self,
+    ) -> Mapping[Siglum, Mapping[Tuple[Label, ...], Sequence[ExtantLine]]]:
         return {
             manuscript.siglum: self._get_extant_lines(manuscript.id)
             for manuscript in self.manuscripts
@@ -159,12 +164,19 @@ class Chapter:
             for index in sorted(self._get_matching_line_indexes(query))
         ]
 
+    @staticmethod
+    def _lines_in_range(
+        lines: Sequence[TextLineEntry], start: int, end: int
+    ) -> Sequence[TextLineEntry]:
+        stop = end + 1
+        return lines[start:stop]
+
     def _get_matching_line_indexes(self, query: TransliterationQuery) -> Set[int]:
         return {
             line.source
             for index, numbers in enumerate(self._match(query))
             for start, end in numbers
-            for line in self.text_lines[index][start : end + 1]
+            for line in self._lines_in_range(self.text_lines[index], start, end)
             if line.source is not None
         }
 
@@ -184,7 +196,7 @@ class Chapter:
                 self.manuscripts[index].id: [
                     line.line
                     for start, end in numbers
-                    for line in text_lines[index][start : end + 1]
+                    for line in self._lines_in_range(text_lines[index], start, end)
                     if line.source is None
                 ]
                 for index, numbers in enumerate(self._match(query))
@@ -201,7 +213,7 @@ class Chapter:
 
     def _get_extant_lines(
         self, manuscript_id: int
-    ) -> Mapping[ManuscriptLineLabel, ExtantLine]:
+    ) -> Mapping[Tuple[Label, ...], Sequence[ExtantLine]]:
         return pydash.group_by(
             (
                 ExtantLine.of(line, manuscript_id)
@@ -209,7 +221,7 @@ class Chapter:
                 if manuscript_id in line.manuscript_ids
                 and line.get_manuscript_text_line(manuscript_id) is not None
             ),
-            lambda extant_line: extant_line.label,
+            lambda extant_line: tuple(extant_line.label),
         )
 
     def _get_manuscript_text_lines(

@@ -2,17 +2,28 @@ import falcon
 from falcon import Request, Response
 from falcon_caching import Cache
 import json
+from typing import Dict, Sequence
+
+from marshmallow import ValidationError
 
 from ebl.context import Context
+from ebl.errors import DataError
 from ebl.markup.domain.converters import markup_string_to_json
 from ebl.cache.application.cache import DAILY_TIMEOUT
+
+
+def parse_markup(text: str) -> Sequence[Dict]:
+    try:
+        return markup_string_to_json(text)
+    except ValidationError as error:
+        raise DataError(f'Invalid markup: "{text}"') from error
 
 
 class Markup:
     auth = {"auth_disabled": True}
 
     def on_get(self, req: Request, resp: Response) -> None:
-        resp.media = markup_string_to_json(req.params["text"])
+        resp.media = parse_markup(req.params["text"])
 
 
 class CachedMarkup(Markup):
@@ -25,7 +36,7 @@ class CachedMarkup(Markup):
         if cached := self._cache.get(cache_key):
             resp.text = cached
         else:
-            data = json.dumps(markup_string_to_json(req.params["text"]))
+            data = json.dumps(parse_markup(req.params["text"]))
             self._cache.set(cache_key, data, timeout=DAILY_TIMEOUT)
             resp.text = data
 

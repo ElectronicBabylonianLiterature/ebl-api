@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
 import pydash
 
@@ -8,6 +8,7 @@ from ebl.transliteration.domain.sign import Sign, SignName
 
 class MemoizingSignRepository(SignRepository):
     def __init__(self, delegate: SignRepository):
+        self._delegate = delegate
         self._create = delegate.create
         self._find = pydash.memoize(delegate.find)
         self._find_many = delegate.find_many
@@ -40,9 +41,7 @@ class MemoizingSignRepository(SignRepository):
     def search_include_homophones(self, reading) -> Sequence[Sign]:
         return self._search_include_homophones(reading)
 
-    def search_composite_signs(
-        self, reading: str, sub_index: Optional[int] = None
-    ) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return self._search_composite_signs(reading, sub_index)
 
     def search_by_id(self, query: str) -> Sequence[Sign]:
@@ -56,3 +55,11 @@ class MemoizingSignRepository(SignRepository):
 
     def list_all_signs(self) -> Sequence[str]:
         return self._list_all_signs()
+
+    def find_signs_by_order(
+        self, name: SignName, sort_era: str
+    ) -> Sequence[Sequence[Sign]]:
+        return self._delegate.find_signs_by_order(name, sort_era)
+
+    def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
+        return self._delegate.get_unicode_from_atf(line)

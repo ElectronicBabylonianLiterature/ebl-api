@@ -1,4 +1,4 @@
-from typing import List, Dict, Sequence, Optional
+from typing import Callable, List, Dict, Sequence, Optional, Tuple
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import (
     match_user_scopes,
@@ -16,7 +16,7 @@ from ebl.fragmentarium.infrastructure.fragment_query_result_projection import (
     items_pipeline,
     result_projection,
 )
-from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.provenance.application.provenance_lookup import ProvenanceLookup
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
@@ -26,7 +26,7 @@ class PatternMatcher:
     def __init__(
         self,
         query: Dict,
-        provenance_service: ProvenanceService,
+        provenance_service: ProvenanceLookup,
         user_scopes: Sequence[Scope] = (),
     ):
         self._query = query
@@ -198,7 +198,7 @@ class PatternMatcher:
         ]
 
     def _get_pipeline_components(self) -> List[Dict]:
-        dispatcher = {
+        dispatcher: Dict[Tuple[bool, bool], Callable[..., List[Dict]]] = {
             (True, True): self._merge_pipelines,
             (True, False): self._lemma_matcher.build_pipeline,
             (False, True): self._sign_matcher.build_pipeline,

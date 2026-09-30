@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Mapping, Optional
 
-from marshmallow import Schema, fields, post_load, EXCLUDE
+from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import (
@@ -124,6 +124,12 @@ class RealiaEntrySchema(Schema):
         data_key="afoCrossReferences",
         load_default=list,
     )
+
+    @pre_load
+    def treat_null_as_absent(self, data: object, **kwargs) -> object:
+        if not isinstance(data, Mapping):
+            return data
+        return {key: value for key, value in data.items() if value is not None}
 
     @post_load
     def make_entry(self, data, **kwargs) -> RealiaEntry:

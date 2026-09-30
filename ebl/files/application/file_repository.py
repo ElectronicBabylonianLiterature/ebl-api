@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 from ebl.common.domain.scopes import Scope
 
 from ebl.errors import NotFoundError
@@ -19,7 +19,7 @@ class File(ABC):
 
     @property
     @abstractmethod
-    def content_type(self) -> str:
+    def content_type(self) -> Optional[str]:
         raise NotImplementedError
 
     @abstractmethod

@@ -8,7 +8,8 @@ from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.text_line import AlignmentMap, TextLine
+from ebl.transliteration.domain.alignment_map import AlignmentMap
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.atf import Atf
@@ -78,15 +79,19 @@ class ManuscriptLine:
         merged_line = self.line.merge(other.line)
         return attr.evolve(other, line=merged_line)
 
+    def _update_omitted_words(self, alignment_map: AlignmentMap) -> Tuple[int, ...]:
+        aligned_words = (
+            alignment_map[index]
+            for index in self.omitted_words
+            if index < len(alignment_map)
+        )
+        return tuple(word for word in aligned_words if word is not None)
+
     def update_alignments(self, alignment_map: AlignmentMap) -> "ManuscriptLine":
         return attr.evolve(
             self,
             line=self.line.update_alignments(alignment_map),
-            omitted_words=tuple(
-                alignment_map[index]
-                for index in self.omitted_words
-                if index < len(alignment_map) and alignment_map[index] is not None
-            ),
+            omitted_words=self._update_omitted_words(alignment_map),
         )
 
     def get_line_content(self) -> Sequence[Token]:

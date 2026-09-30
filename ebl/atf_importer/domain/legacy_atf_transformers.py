@@ -1,92 +1,16 @@
 import re
-from typing import Optional, List, Sequence, Union, Type
-from lark.visitors import Transformer, Tree, Token, v_args, Discard
+from typing import Optional, Type
+
+from lark.lexer import Token
+from lark.tree import Tree
+from lark.visitors import Discard, v_args
+
+from ebl.atf_importer.domain.legacy_transformer_base import (
+    LegacyTransformer,
+    create_token,
+    token_type,
+)
 from ebl.transliteration.domain.atf import _SUB_SCRIPT
-
-
-class LegacyTransformer(Transformer):
-    prefix = "ebl_atf_text_line"
-
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.legacy_found = False
-        self.current_path: List[int] = []
-        self.current_tree: Optional[Tree] = None
-        self.break_at: Sequence[str] = []
-
-    def clear(self) -> None:
-        self.legacy_found = False
-        self.current_path = []
-        self.current_tree = None
-
-    def transform(self, tree: Tree) -> Tree:
-        result = self._remove_discard_nodes(super().transform(tree))
-        return result if result else tree
-
-    def _transform_children(self, children: Sequence[Tree]):
-        index_correction = 0
-        for index, child in enumerate(children):
-            self._enter_node(index - index_correction)
-            result = self._get_child_result(child)
-            self._exit_node()
-            if result is not Discard:
-                yield result
-
-    def _get_child_result(self, child: Tree) -> Tree:
-        if self.is_classes_break_at(self.get_ancestors()):
-            return child
-        elif isinstance(child, Tree):
-            return self._transform_tree(child)
-        elif self.__visit_tokens__ and isinstance(child, Token):
-            return self._call_userfunc_token(child)
-        else:
-            return child
-
-    def _enter_node(self, index: int = 0) -> None:
-        self.current_path.append(index)
-
-    def _exit_node(self) -> None:
-        if self.current_path:
-            self.current_path.pop()
-
-    def get_ancestors(self) -> Sequence:
-        if not self.current_tree:
-            return []
-        tree = self.current_tree
-        ancestors = [tree.data]
-        for parent_index in self.current_path[:-1]:
-            ancestor = tree.children[parent_index]
-            ancestors.append(ancestor.data)
-            tree = tree.children[parent_index]
-        return ancestors
-
-    def is_classes_break_at(self, node_classes: Sequence[str]) -> bool:
-        return not set(node_classes).isdisjoint(self.break_at)
-
-    def _remove_discard_nodes(self, tree: Tree) -> Tree:
-        if isinstance(tree, Tree):
-            tree.children = [
-                self._remove_discard_nodes(child)
-                for child in tree.children
-                if child is not Discard
-            ]
-        return tree
-
-    def to_token(self, name: str, string: Optional[str]) -> Token:
-        return (
-            Token(f"{self.prefix}__{name}", string)
-            if self.prefix
-            else Token(name, string)
-        )
-
-    def to_tree(
-        self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
-    ) -> Tree:
-        return (
-            Tree(f"{self.prefix}__{name}", children)
-            if self.prefix
-            else Tree(name, children)
-        )
 
 
 class LegacyStateTransformer(LegacyTransformer):
@@ -152,9 +76,9 @@ class HalfBracketsTransformer(LegacyTransformer):
 class OraccJoinerTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, joiner: Token) -> Tree:
-        if joiner.type == "ebl_atf_text_line__LEGACY_ORACC_JOINER":  # type: ignore
+        if token_type(joiner) == "ebl_atf_text_line__LEGACY_ORACC_JOINER":
             self.legacy_found = True
-            return self.to_tree("joiner", [Token("MINUS", "-")])
+            return self.to_tree("joiner", [create_token("MINUS", "-")])
         return self.to_tree("joiner", [joiner])
 
 
@@ -164,7 +88,10 @@ class OraccSpecialTransformer(LegacyTransformer):
         self.legacy_found = True
         return self.to_tree(
             "logogram_name_part",
-            [Token("ebl_atf_text_line__LOGOGRAM_CHARACTER", char) for char in "DIŠ"],
+            [
+                create_token("ebl_atf_text_line__LOGOGRAM_CHARACTER", char)
+                for char in "DIŠ"
+            ],
         )
 
 
@@ -214,7 +141,7 @@ class AccentedIndexTransformer(LegacyTransformer):
         return char
 
     @v_args(inline=True)
-    def ebl_atf_text_line__sub_index(self, sub_index: Optional[str]) -> Optional[str]:
+    def ebl_atf_text_line__sub_index(self, sub_index: Optional[str]) -> Optional[Tree]:
         if sub_index and sub_index[0] in _SUB_SCRIPT.keys():
             self.legacy_found = True
             self._set_sub_index("".join(_SUB_SCRIPT[digit] for digit in sub_index))
@@ -227,7 +154,7 @@ class AccentedIndexTransformer(LegacyTransformer):
         self.legacy_found = True
         return self.replacement_chars[char]
 
-    def _set_sub_index_from_accented(self, char: Optional[str]) -> None:
+    def _set_sub_index_from_accented(self, char: str) -> None:
         for pattern, sub_index in self.accented_index_patterns:
             if pattern.search(char):
                 self._set_sub_index(sub_index)

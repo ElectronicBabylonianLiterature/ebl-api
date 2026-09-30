@@ -1,4 +1,11 @@
-from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
+from marshmallow import (
+    EXCLUDE,
+    Schema,
+    fields,
+    post_dump,
+    post_load,
+    validate,
+)
 import pydash
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
@@ -17,10 +24,10 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQuerySummary,
     empty_matching_line_preview,
 )
+from ebl.media.application.media_urls import legacy_fragment_thumbnail_url
+from ebl.media.domain import ThumbnailSize
 from ebl.schemas import ResearchProjectField, ValueEnumField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-
-DEFAULT_THUMBNAIL_RESOLUTION = "small"
 
 
 def deserialize_script_period(value):
@@ -84,24 +91,15 @@ class FragmentQueryArchaeologySchema(Schema):
         return data or None
 
 
-class FragmentQueryPreviewTokenSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    value = fields.String(required=True)
-    cleanValue = fields.String(allow_none=True)
-    uniqueLemma = fields.List(fields.String())
-    type = fields.String()
-
-
 class FragmentQueryPreviewLineSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    number = fields.String(required=True)
+    type = fields.String(required=True, validate=validate.Equal("TextLine"))
+    index = fields.Integer(required=True)
+    line_number = fields.Dict(required=True, data_key="lineNumber")
     prefix = fields.String(required=True)
-    text = fields.String(required=True)
-    tokens = fields.Nested(FragmentQueryPreviewTokenSchema, many=True, required=True)
+    content = fields.List(fields.Dict(), required=True)
 
 
 class FragmentQueryMatchingLinePreviewSchema(Schema):
@@ -150,8 +148,8 @@ class FragmentQuerySummarySchema(Schema):
     match_count = fields.Integer(required=True, data_key="matchCount")
     has_photo = fields.Boolean(required=True, data_key="hasPhoto")
     thumbnail_path = fields.Function(
-        lambda summary: (
-            f"/fragments/{summary.museum_number}/thumbnail/{DEFAULT_THUMBNAIL_RESOLUTION}"
+        lambda summary: legacy_fragment_thumbnail_url(
+            summary.museum_number, ThumbnailSize.SMALL
         ),
         dump_only=True,
         data_key="thumbnailPath",
@@ -180,6 +178,12 @@ class FragmentQueryResultSchema(QueryResultSchema):
         unknown = EXCLUDE
 
     items = fields.Nested(FragmentQuerySummarySchema, many=True, required=True)
+    bibliography_documents = fields.Dict(
+        keys=fields.String(),
+        values=fields.Dict(),
+        load_default=dict,
+        data_key="bibliographyDocuments",
+    )
 
     @post_load
     def make_query_result(self, data, **kwargs) -> FragmentQueryResult:
