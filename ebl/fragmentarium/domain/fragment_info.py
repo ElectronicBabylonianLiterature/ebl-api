@@ -15,7 +15,7 @@ class FragmentInfo:
     number: MuseumNumber
     accession: Optional[Accession]
     script: Script
-    acquisition: Optional[Acquisition]
+    acquisitions: Sequence[Acquisition]
     description: str
     matching_lines: Optional[Text]
     editor: str
@@ -49,7 +49,7 @@ class FragmentInfo:
             fragment.number,
             fragment.accession,
             fragment.script,
-            fragment.acquisition,
+            fragment.acquisitions,
             fragment.description,
             matching_lines,
             first_transliteration.user,

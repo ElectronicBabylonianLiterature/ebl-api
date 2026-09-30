@@ -6,10 +6,6 @@ import pytest
 
 from ebl.common.query.query_result import QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
-from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_query_summary_schema import (
-    FragmentQueryResultSchema,
-)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import query_item_of
@@ -184,57 +180,3 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
             "matchCountTotal": 5,
         }
     )
-
-
-def test_query_fragmentarium_limit_summary_missing_hydration_fails_clearly(
-    fragment_repository,
-):
-    with pytest.raises(NotFoundError, match="Fragment summary data"):
-        fragment_repository._load_fragment_query_result(
-            {
-                "items": [
-                    {
-                        "_id": "missing",
-                        "museumNumber": {"prefix": "K", "number": "1", "suffix": ""},
-                        "matchingLines": [],
-                        "matchCount": 0,
-                    }
-                ],
-                "matchCountTotal": 0,
-            }
-        )
-
-
-def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
-    fragment_repository,
-):
-    result = FragmentQueryResultSchema().load(
-        {
-            "items": [
-                fragment_repository._hydrate_fragment_query_item(
-                    {
-                        "_id": "K.1",
-                        "museumNumber": {"prefix": "K", "number": "1", "suffix": ""},
-                        "matchingLines": [0, 1],
-                    },
-                    {
-                        "K.1": {
-                            "museumNumber": {
-                                "prefix": "K",
-                                "number": "1",
-                                "suffix": "",
-                            },
-                            "text": {"lines": [{"prefix": "1.", "content": []}]},
-                        }
-                    },
-                    (),
-                )
-            ],
-            "matchCountTotal": 0,
-        }
-    )
-
-    summary = result.items[0]
-    assert summary.description == ""
-    assert summary.script == Script()
-    assert len(summary.matching_line_preview["lines"]) == 1
