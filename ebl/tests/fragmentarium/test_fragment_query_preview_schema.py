@@ -1,7 +1,8 @@
+import time
 from typing import cast
 
 import pytest
-from marshmallow import ValidationError, fields
+from marshmallow import ValidationError
 
 from ebl.fragmentarium.application.fragment_query_preview import (
     matching_line_preview_of_data,
@@ -74,9 +75,12 @@ def test_preview_line_schema_dumps_stored_content_unchanged():
 
 
 def test_preview_line_schema_page_cost_stays_line_level():
-    schema = FragmentQueryPreviewLineSchema()
-    content = schema.fields["content"]
+    wire_lines = [preview_wire_line() for _ in range(40)] * 25
+    schema = FragmentQueryPreviewLineSchema(many=True)
 
-    assert isinstance(schema.fields["line_number"], fields.Dict)
-    assert isinstance(content, fields.List)
-    assert isinstance(content.inner, fields.Dict)
+    started = time.perf_counter()
+    schema.dump(schema.load(wire_lines))
+    elapsed = time.perf_counter() - started
+
+    assert len(wire_lines) == 1000
+    assert elapsed < 0.5
