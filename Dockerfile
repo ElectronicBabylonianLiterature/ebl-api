@@ -1,4 +1,5 @@
-# PyPy 7.3.23 is intentional: locked compiled dependencies have pp73 wheels, while PyPy 8 uses pp80.
+# PyPy 7.3.23 is pinned for pp73 wheels; PyPy 8 uses pp80.
+# Upgrade tracking: https://github.com/ElectronicBabylonianLiterature/ebl-api/issues/772
 FROM pypy:3.11-7.3.23
 
 RUN python -m pip install "pip==26.2.1"
