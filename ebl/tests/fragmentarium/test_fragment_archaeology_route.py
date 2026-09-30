@@ -14,8 +14,13 @@ from ebl.fragmentarium.domain.archaeology import (
 from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
 from ebl.fragmentarium.domain.fragment import Fragment
 
+from ebl.fragmentarium.domain.map_location import (
+    MapLocation,
+    MapLocationMatchMethod,
+    MapLocationPrecision,
+)
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.archaeology import DateRangeFactory
+from ebl.tests.factories.archaeology import DateRangeFactory, FindspotFactory
 from ebl.tests.factories.fragment import FragmentFactory
 
 
@@ -96,6 +101,40 @@ def test_update_archaeology(
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == {**expected_json, "realiaInfo": []}
+
+
+def test_fragment_get_surfaces_findspot_map_location(
+    client, fragmentarium, findspot_repository, seeded_provenance_service
+) -> None:
+    findspot = FindspotFactory.build(
+        id_=4242,
+        site=seeded_provenance_service.find_by_id("ASSUR"),
+        map_location=MapLocation(
+            ("assur-1", "assur-2"),
+            MapLocationPrecision.EXCAVATION_AREA,
+            MapLocationMatchMethod.CURATED,
+            "Assur Tafeln.ods",
+            "2026-07-27",
+        ),
+    )
+    findspot_repository.create(findspot)
+    fragment: Fragment = FragmentFactory.build(
+        archaeology=attr.evolve(
+            ARCHAEOLOGY, site=None, findspot=None, findspot_id=findspot.id_
+        )
+    )
+    fragment_number = fragmentarium.create(fragment)
+
+    get_result = client.simulate_get(f"/fragments/{fragment_number}")
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.json["archaeology"]["findspot"]["mapLocation"] == {
+        "polygonIds": ["assur-1", "assur-2"],
+        "locationPrecision": "excavation-area",
+        "matchMethod": "curated",
+        "source": "Assur Tafeln.ods",
+        "sourceRevision": "2026-07-27",
+    }
 
 
 def test_invalid_excavation_number_update(client, fragmentarium, user):
