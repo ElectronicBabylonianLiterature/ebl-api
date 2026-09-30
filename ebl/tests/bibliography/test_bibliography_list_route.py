@@ -1,5 +1,12 @@
+import logging
+
 import falcon
 
+from ebl.tests.bibliography.identity_management_test_helpers import (
+    admin_client,
+    alias,
+    manage_identity,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
@@ -67,8 +74,8 @@ def test_list_bibliography_deduplicates_redirected_canonical_entries(
     assert result.json == [canonical_entry]
 
 
-def test_list_bibliography_skips_an_entry_with_a_broken_redirect(
-    client, database, bibliography, user
+def test_list_bibliography_skips_an_entry_with_a_redirect_cycle(
+    caplog, client, database, bibliography, user
 ):
     valid_entry = BibliographyEntryFactory.build(id="VALID_ID")
     bibliography.create(valid_entry, user)
@@ -79,12 +86,56 @@ def test_list_bibliography_skips_an_entry_with_a_broken_redirect(
             {"$set": {"deprecated": True, "redirectTo": target}},
         )
 
-    result = client.simulate_get(
-        "/bibliography/list", params={"ids": f"LOOP_A,{valid_entry['id']}"}
-    )
+    with caplog.at_level(logging.WARNING):
+        result = client.simulate_get(
+            "/bibliography/list", params={"ids": f"LOOP_A,{valid_entry['id']}"}
+        )
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [valid_entry]
+    assert "Skipping unresolvable bibliography entry LOOP_A" in caplog.text
+    assert "Bibliography redirect loop from LOOP_A closes at LOOP_A" in caplog.text
+
+
+def test_list_bibliography_handles_canonical_alias_unknown_and_broken_ids(
+    client, context, database, bibliography, user
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    aliased_entry = BibliographyEntryFactory.build(id="ALIASED_ID")
+    broken_entry = BibliographyEntryFactory.build(id="BROKEN_ID")
+    for entry in (canonical_entry, aliased_entry, broken_entry):
+        bibliography.create(entry, user)
+    identity_result = manage_identity(
+        admin_client(context),
+        aliased_entry["id"],
+        {"addAliases": [alias("legacy-alias")]},
+    )
+    database["bibliography"].update_one(
+        {"_id": broken_entry["id"]},
+        {"$set": {"deprecated": True, "redirectTo": "MISSING_ID"}},
+    )
+
+    result = client.simulate_get(
+        "/bibliography/list",
+        params={"ids": f"{canonical_entry['id']},legacy-alias,UNKNOWN_ID,BROKEN_ID"},
+    )
+
+    assert identity_result.status == falcon.HTTP_OK
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [canonical_entry]
+
+
+def test_list_bibliography_does_not_suppress_a_systemic_query_failure(
+    monkeypatch, client, bibliography_repository
+):
+    def fail_query(_ids):
+        raise RuntimeError("batch query failed")
+
+    monkeypatch.setattr(bibliography_repository, "query_by_ids", fail_query)
+
+    result = client.simulate_get("/bibliography/list", params={"ids": "Q30000000"})
+
+    assert result.status == falcon.HTTP_INTERNAL_SERVER_ERROR
 
 
 def test_list_bibliography_returns_a_consistent_response(

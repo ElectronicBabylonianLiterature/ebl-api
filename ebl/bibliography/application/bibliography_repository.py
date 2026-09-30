@@ -26,7 +26,7 @@ class BibliographyUpdateConflictError(DuplicateError):
 
     def __str__(self) -> str:
         cause = (
-            f"does not match the stored server-owned state ({', '.join(self.fields)})"
+            f"does not match the stored state ({', '.join(self.fields)})"
             if self.fields
             else "was changed by another operation"
         )

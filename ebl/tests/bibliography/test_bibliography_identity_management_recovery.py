@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+import falcon
 import pytest
+from falcon import testing
 from pymongo.database import Database
 
 from ebl.bibliography.application.bibliography import Bibliography
@@ -14,9 +16,12 @@ from ebl.changelog import Changelog
 from ebl.errors import DataError
 from ebl.tests.bibliography.identity_management_test_helpers import (
     RESERVATIONS,
+    admin_client,
     alias,
+    body,
     changelog_entries,
     entry,
+    manage_identity,
     reservation,
     reservation_state,
     stored,
@@ -34,6 +39,31 @@ def identity_management(bibliography_repository, changelog, bibliography):
 
 
 @dataclass(frozen=True)
+class RecoveryServices:
+    identity_management: BibliographyIdentityManagement
+    bibliography_repository: MongoBibliographyRepository
+    changelog: Changelog
+    bibliography: Bibliography
+
+
+@pytest.fixture
+def recovery_services(
+    identity_management,
+    bibliography_repository,
+    changelog,
+    bibliography,
+) -> RecoveryServices:
+    return RecoveryServices(
+        identity_management, bibliography_repository, changelog, bibliography
+    )
+
+
+@pytest.fixture
+def client(context):
+    return admin_client(context)
+
+
+@dataclass(frozen=True)
 class RecoveryContext:
     identity_management: BibliographyIdentityManagement
     bibliography_repository: MongoBibliographyRepository
@@ -41,17 +71,24 @@ class RecoveryContext:
     database: Database
     bibliography: Bibliography
     user: User
+    client: testing.TestClient
 
 
 @pytest.fixture
-def recovery_context(request: pytest.FixtureRequest) -> RecoveryContext:
+def recovery_context(
+    recovery_services: RecoveryServices,
+    database: Database,
+    user: User,
+    client: testing.TestClient,
+) -> RecoveryContext:
     return RecoveryContext(
-        request.getfixturevalue("identity_management"),
-        request.getfixturevalue("bibliography_repository"),
-        request.getfixturevalue("changelog"),
-        request.getfixturevalue("database"),
-        request.getfixturevalue("bibliography"),
-        request.getfixturevalue("user"),
+        recovery_services.identity_management,
+        recovery_services.bibliography_repository,
+        recovery_services.changelog,
+        database,
+        recovery_services.bibliography,
+        user,
+        client,
     )
 
 
@@ -120,11 +157,10 @@ def test_commit_failure_retires_old_value_and_reconciles_new_value(
         "commit failed",
     )
 
-    result = context.identity_management.manage_identity(
-        "Q30000132", {"citationKey": "new1999Key"}, context.user
-    )
+    result = manage_identity(context.client, "Q30000132", {"citationKey": "new1999Key"})
 
-    assert result["citationKey"] == "new1999Key"
+    assert result.status == falcon.HTTP_OK
+    assert body(result)["citationKey"] == "new1999Key"
     assert stored(context.database, "Q30000132")["citationKey"] == "new1999Key"
     assert reservation_state(context.database, "old1999Key") == ABANDONED
     assert reservation_state(context.database, "new1999Key") == "pending"
@@ -146,11 +182,10 @@ def test_retirement_failure_does_not_retire_before_the_new_value_is_persisted(
         "retire failed",
     )
 
-    result = context.identity_management.manage_identity(
-        "Q30000133", {"citationKey": "new1999Key"}, context.user
-    )
+    result = manage_identity(context.client, "Q30000133", {"citationKey": "new1999Key"})
 
-    assert result["citationKey"] == "new1999Key"
+    assert result.status == falcon.HTTP_OK
+    assert body(result)["citationKey"] == "new1999Key"
     assert stored(context.database, "Q30000133")["citationKey"] == "new1999Key"
     assert reservation_state(context.database, "new1999Key") == COMMITTED
     assert reservation_state(context.database, "old1999Key") == COMMITTED
@@ -165,11 +200,12 @@ def test_changelog_failure_keeps_the_persisted_identity(monkeypatch, recovery_co
     changelog_before = len(changelog_entries(context.database, "Q30000134"))
     fail_once(monkeypatch, context.changelog, "create", "changelog failed")
 
-    result = context.identity_management.manage_identity(
-        "Q30000134", {"addAliases": [alias("logged-late")]}, context.user
+    result = manage_identity(
+        context.client, "Q30000134", {"addAliases": [alias("logged-late")]}
     )
 
-    assert result["aliases"] == [alias("logged-late")]
+    assert result.status == falcon.HTTP_OK
+    assert body(result)["aliases"] == [alias("logged-late")]
     assert stored(context.database, "Q30000134")["aliases"] == [alias("logged-late")]
     assert reservation_state(context.database, "logged-late") == COMMITTED
     assert len(changelog_entries(context.database, "Q30000134")) == changelog_before

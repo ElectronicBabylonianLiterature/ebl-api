@@ -10,7 +10,7 @@ from ebl.bibliography.application.bibliography_identity import (
 from ebl.bibliography.application.bibliography_repository import LookupValueInUseError
 from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
-from ebl.errors import Defect, NotFoundError
+from ebl.errors import Defect, DuplicateError, NotFoundError
 
 
 class ChangelogSpy:
@@ -80,6 +80,23 @@ def identity_context(repository, changelog):
 
 def test_create_releases_claims_when_post_claim_lookup_finds_existing_entry(user):
     repository = RepositorySpy(existing_entry={"id": "OTHER"})
+
+    with pytest.raises(LookupValueInUseError):
+        create_with_identity_claims(
+            identity_context(repository, ChangelogSpy()),
+            {"id": "Q30000000", "type": "book"},
+            user,
+        )
+
+    assert repository.released_owners == [repository.claimed_owner]
+
+
+def test_create_treats_an_ambiguous_post_claim_lookup_as_in_use(user):
+    class AmbiguousLookupRepository(RepositorySpy):
+        def query_by_id(self, _value):
+            raise DuplicateError("ambiguous lookup")
+
+    repository = AmbiguousLookupRepository()
 
     with pytest.raises(LookupValueInUseError):
         create_with_identity_claims(

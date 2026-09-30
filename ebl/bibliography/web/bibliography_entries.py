@@ -1,47 +1,27 @@
-"""`METADATA_UPDATE_JSON_SCHEMA` is `CSL_JSON_SCHEMA` without its lifecycle rule.
-The stored schema requires `redirectTo` whenever `deprecated` is true, which is
-an invariant of a *stored* entry. Applied to an update body it answered a client
-that submitted `deprecated` with `'redirectTo' is a required property` — a `400`
-about a field the client does not own, raised before the application could give
-the real answer, that the submitted state simply disagrees with what is stored.
-Dropping the rule from this one route lets that reach `update_metadata` and come
-back as a conflict. Every property keeps its shape, and `CSL_JSON_SCHEMA` itself
-is untouched.
-
-It also allows additional properties, unlike the stored schema. GET serialises
-the whole stored document, and a persisted entry can carry keys outside
-`CSL_JSON_SCHEMA` that `preserve_persisted_fields` deliberately keeps across an
-edit instead of destroying them. Rejecting those keys here would mean an editor
-can fetch an entry and then fail to save it back unchanged. This does not open
-the door to a client inventing a new unknown field: `preserve_persisted_fields`
-only reads submitted keys that are already client-editable, so an unrecognised
-key in the request body is silently ignored either way — the schema accepting
-it only stops a spurious `400` on the legitimate round trip.
-"""
-
 import falcon
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
 from typing import Mapping, Sequence
+from urllib.parse import quote
 
+from ebl.bibliography.application.server_owned_fields import (
+    reject_submitted_server_owned_fields,
+)
 from ebl.bibliography.domain.bibliography_entry import (
-    CSL_JSON_SCHEMA,
-    DUPLICATE_CANDIDATE_JSON_SCHEMA,
     PARTNER_CSL_JSON_SCHEMA,
     PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
+)
+from ebl.bibliography.domain.bibliography_requests import (
+    DUPLICATE_CANDIDATE_JSON_SCHEMA,
+    INTERNAL_CREATE_JSON_SCHEMA,
+    INTERNAL_METADATA_UPDATE_JSON_SCHEMA,
 )
 from ebl.errors import DataError
 from ebl.users.web.require_scope import require_scope
 from ebl.users.web.user_request import UserRequest
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.duplicate_override import DuplicateOverrideError
-
-
-METADATA_UPDATE_JSON_SCHEMA = {
-    **{key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"},
-    "additionalProperties": True,
-}
 
 
 def submitted_server_owned_fields(
@@ -57,17 +37,10 @@ def submitted_server_owned_fields(
     )
 
 
-def reject_server_owned_create_fields(req, _resp, _resource, _params) -> None:
+def reject_server_owned_internal_fields(req, _resp, _resource, _params) -> None:
     media = req.media
-    if not isinstance(media, dict):
-        return
-
-    if forbidden_fields := submitted_server_owned_fields([media]):
-        raise DataError(
-            "A new bibliography entry may not include server-owned fields: "
-            f"{', '.join(forbidden_fields)}; use "
-            "POST /bibliography/{id}/identity."
-        )
+    if isinstance(media, dict):
+        reject_submitted_server_owned_fields(media)
 
 
 def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
@@ -94,13 +67,13 @@ class BibliographyResource:
         resp.media = self._bibliography.search(req.params["query"])
 
     @falcon.before(require_scope, "write:bibliography")
-    @falcon.before(reject_server_owned_create_fields)
-    @validate(CSL_JSON_SCHEMA)
+    @falcon.before(reject_server_owned_internal_fields)
+    @validate(INTERNAL_CREATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response) -> None:
         bibliography_entry = req.media
-        self._bibliography.create(bibliography_entry, req.context.user)
+        self._bibliography.create_metadata(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
-        resp.location = f"/bibliography/{bibliography_entry['id']}"
+        resp.location = f"/bibliography/{quote(bibliography_entry['id'], safe='')}"
         resp.media = bibliography_entry
 
 
@@ -112,8 +85,13 @@ class BibliographyEntriesResource:
         resp.media = self._bibliography.find(id_)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(METADATA_UPDATE_JSON_SCHEMA)
+    @validate(INTERNAL_METADATA_UPDATE_JSON_SCHEMA)
     def on_post(self, req: UserRequest, resp: Response, id_: str) -> None:
+        submitted_id = req.media.get("id")
+        if submitted_id is not None and submitted_id != id_:
+            raise DataError(
+                f"Bibliography request id {submitted_id} does not match URL id {id_}."
+            )
         entry = {**req.media, "id": id_}
         self._bibliography.update_metadata(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT

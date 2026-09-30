@@ -48,15 +48,30 @@ def create_with_identity_claims(
             raise Defect(
                 f"Created bibliography id {created_id} does not match {entry['id']}."
             )
-        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
-        context.changelog.create(
-            COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry)
-        )
-        return created_id
     except Exception:
         if not created:
             repository.release_pending_lookup_values(operation.owner)
         raise
+
+    try:
+        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
+    except Exception:
+        logging.exception(
+            "Bibliography %s was created but lookup-reservation commit failed; "
+            "reservations will be reconciled",
+            entry["id"],
+        )
+    try:
+        context.changelog.create(
+            COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry)
+        )
+    except Exception:
+        logging.exception(
+            "Bibliography %s was created but changelog creation failed; the "
+            "changelog entry may be missing",
+            entry["id"],
+        )
+    return created_id
 
 
 def _persist_with_identity_claims(

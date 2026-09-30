@@ -24,6 +24,7 @@ from ebl.bibliography.application.identity_management import (
 from ebl.tests.bibliography.identity_management_test_helpers import (
     admin_client,
     alias,
+    body,
     changelog_entries,
     entry,
     manage_identity,
@@ -101,10 +102,24 @@ def test_concurrent_title_edit_survives_an_alias_addition(
     )
 
     assert result.status == falcon.HTTP_OK
+    assert body(result)["title"] == "Concurrent title"
     stored_entry = stored(context.database, "Q30000160")
     assert result.json == context.bibliography_repository.query_by_id("Q30000160")
     assert stored_entry["title"] == "Concurrent title"
     assert stored_entry["aliases"] == [alias("new-alias")]
+
+
+def test_concurrent_metadata_edits_are_last_write_wins(
+    bibliography, bibliography_repository, user
+):
+    original = entry(bibliography, user, "Q30000168")
+    first_edit = {**original, "title": "First title"}
+    second_edit = {**original, "title": "Second title"}
+
+    bibliography.update_metadata(first_edit, user)
+    bibliography.update_metadata(second_edit, user)
+
+    assert bibliography_repository.query_by_id("Q30000168")["title"] == "Second title"
 
 
 def test_noop_returns_an_authoritative_concurrent_metadata_edit(

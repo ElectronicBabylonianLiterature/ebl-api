@@ -1,4 +1,4 @@
-import re
+import logging
 from typing import Any, Mapping, Optional, Sequence
 
 import attr
@@ -20,15 +20,24 @@ from ebl.bibliography.application.partner_bibliography import PartnerBibliograph
 from ebl.bibliography.application.redirect_resolution import (
     follow_bibliography_redirect,
 )
+from ebl.bibliography.application.search_queries import (
+    parse_author_year_and_title,
+    parse_container_title_short_and_collection_number,
+    parse_title_short_and_volume,
+)
 from ebl.bibliography.application.server_owned_fields import (
     changed_server_owned_fields,
     preserve_persisted_fields,
+    reject_submitted_server_owned_fields,
+    reject_unknown_metadata_fields,
 )
 from ebl.bibliography.application.update_target import stored_entry_for_update
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
+
+logger = logging.getLogger(__name__)
 
 
 class Bibliography:
@@ -40,6 +49,10 @@ class Bibliography:
 
     def create(self, entry: dict, user: User) -> str:
         return create_with_identity_claims(self._identity, entry, user)
+
+    def create_metadata(self, entry: dict, user: User) -> str:
+        reject_submitted_server_owned_fields(entry)
+        return self.create(entry, user)
 
     def find(self, id_: str):
         for query in (
@@ -60,7 +73,12 @@ class Bibliography:
         for entry in self._repository.query_by_ids(ids):
             try:
                 resolved_entry = self._follow_redirect(entry)
-            except (NotFoundError, DuplicateError):
+            except (NotFoundError, DuplicateError) as error:
+                logger.warning(
+                    "Skipping unresolvable bibliography entry %s: %s",
+                    entry["id"],
+                    error,
+                )
                 continue
             resolved_id = resolved_entry["id"]
             if resolved_id not in seen_ids:
@@ -88,6 +106,7 @@ class Bibliography:
         stored_entry = stored_entry_for_update(
             entry, self._repository.query_by_id, self.find
         )
+        reject_unknown_metadata_fields(entry, stored_entry)
         self._reject_changed_server_owned_fields(entry, stored_entry)
         update_with_identity_claims(
             self._identity,
@@ -103,14 +122,14 @@ class Bibliography:
 
     def search(self, query: str) -> Sequence[dict]:
         author_query_result: Sequence[dict] = []
-        author_query = self._parse_author_year_and_title(query)
+        author_query = parse_author_year_and_title(query)
         if any(value is not None for value in author_query.values()):
             author_query_result = self.search_author_year_and_title(
                 author_query["author"], author_query["year"], author_query["title"]
             )
 
         container_query_result: Sequence[dict] = []
-        container_query = self._parse_container_title_short_and_collection_number(query)
+        container_query = parse_container_title_short_and_collection_number(query)
         if any(value is not None for value in list(container_query.values())):
             container_query_result = self.search_container_title_and_collection_number(
                 container_query["container_title_short"],
@@ -118,7 +137,7 @@ class Bibliography:
             )
 
         title_short_volume_result: Sequence[dict] = []
-        title_short_volume_query = self._parse_title_short_and_volume(query)
+        title_short_volume_query = parse_title_short_and_volume(query)
         if any(value is not None for value in list(title_short_volume_query.values())):
             title_short_volume_result = self.search_title_short_and_volume(
                 title_short_volume_query["title_short"],
@@ -156,31 +175,6 @@ class Bibliography:
 
     def find_partner_entry(self, id_: str) -> dict:
         return self._partner.find_entry(id_)
-
-    @staticmethod
-    def _parse_author_year_and_title(query: str) -> dict:
-        parsed_query = dict.fromkeys(["author", "year", "title"])
-        if match := re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query):
-            parsed_query["author"] = match[1]
-            parsed_query["year"] = int(match[2]) if match[2] else None
-            parsed_query["title"] = match[3]
-        return parsed_query
-
-    @staticmethod
-    def _parse_container_title_short_and_collection_number(query: str) -> dict:
-        parsed_query = dict.fromkeys(["container_title_short", "collection_number"])
-        if match := re.match(r"^([^\s]+)(?: (\d*))?$", query):
-            parsed_query["container_title_short"] = match[1]
-            parsed_query["collection_number"] = match[2]
-        return parsed_query
-
-    @staticmethod
-    def _parse_title_short_and_volume(query: str) -> dict:
-        parsed_query = dict.fromkeys(["title_short", "volume"])
-        if match := re.match(r"^([^\s]+)(?: (\d*))?$", query):
-            parsed_query["title_short"] = match[1]
-            parsed_query["volume"] = match[2]
-        return parsed_query
 
     def search_author_year_and_title(
         self,

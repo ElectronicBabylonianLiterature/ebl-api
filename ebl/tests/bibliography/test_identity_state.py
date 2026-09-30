@@ -68,6 +68,12 @@ def test_adding_an_existing_alias_raises():
         apply_identity_commands(stored, {"addAliases": [alias("a")]})
 
 
+@pytest.mark.parametrize("value", [" ", "---"])
+def test_adding_an_alias_without_a_normalized_value_raises(value):
+    with pytest.raises(DataError):
+        apply_identity_commands(BASE, {"addAliases": [alias(value)]})
+
+
 @pytest.mark.parametrize(
     "commands,message",
     [
@@ -90,6 +96,11 @@ def test_set_citation_key():
     assert apply_identity_commands(BASE, {"citationKey": "k"})["citationKey"] == "k"
 
 
+def test_setting_a_blank_citation_key_raises():
+    with pytest.raises(DataError, match="must not be blank"):
+        apply_identity_commands(BASE, {"citationKey": " "})
+
+
 def test_remove_citation_key():
     stored = {**BASE, "citationKey": "k"}
 
@@ -105,6 +116,11 @@ def test_deprecate_to_sets_both_fields():
 
     assert result["deprecated"] is True
     assert result["redirectTo"] == "Q2"
+
+
+def test_deprecating_to_a_blank_target_raises():
+    with pytest.raises(DataError, match="must not be blank"):
+        apply_identity_commands(BASE, {"deprecateTo": " "})
 
 
 def test_reactivate_clears_both_fields():
