@@ -66,11 +66,12 @@ def fail_once(monkeypatch, target, name: str, message: str):
     return original
 
 
-def test_create_commit_failure_recovers_lookup_claims(
+def test_create_commit_failure_returns_created_entry_and_recovers_lookup_claims(
     monkeypatch, bibliography_identity_context
 ):
     context = bibliography_identity_context
     entry = bibliography_entry("Q30000000", "create-commit-key")
+    changelog_count = context.database["changelog"].count_documents({})
     original_commit = fail_once(
         monkeypatch,
         context.bibliography_repository,
@@ -78,8 +79,8 @@ def test_create_commit_failure_recovers_lookup_claims(
         "commit failed",
     )
 
-    with pytest.raises(RuntimeError, match="commit failed"):
-        context.bibliography.create(entry, context.user)
+    assert context.bibliography.create(entry, context.user) == entry["id"]
+    assert context.database["changelog"].count_documents({}) == changelog_count + 1
 
     assert context.bibliography_repository.query_by_id(entry["id"]) == entry
     assert state(context.database, entry["id"]) == LookupReservationState.PENDING.value
@@ -105,15 +106,14 @@ def test_create_commit_failure_recovers_lookup_claims(
     assert context.database["bibliography"].count_documents({"_id": entry["id"]}) == 1
 
 
-def test_create_changelog_failure_keeps_committed_claims(
+def test_create_changelog_failure_returns_created_entry_with_committed_claims(
     monkeypatch, bibliography_identity_context
 ):
     context = bibliography_identity_context
     entry = bibliography_entry("Q30000000", "create-changelog-key")
     fail_once(monkeypatch, context.changelog, "create", "changelog failed")
 
-    with pytest.raises(RuntimeError, match="changelog failed"):
-        context.bibliography.create(entry, context.user)
+    assert context.bibliography.create(entry, context.user) == entry["id"]
 
     assert context.bibliography_repository.query_by_id(entry["id"]) == entry
     assert (

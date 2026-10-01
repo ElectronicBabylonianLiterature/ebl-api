@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Any, cast
 
 NAME_SCHEMA = {
@@ -207,15 +208,10 @@ CSL_JSON_SCHEMA = {
 PARTNER_CSL_JSON_SCHEMA = {
     **{key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"},
     "properties": {
-        key: {"type": "string"} if key == "id" else value
+        key: {"type": "string"} if key == "id" else deepcopy(value)
         for key, value in cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]).items()
         if key not in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
     },
-    "required": ["type"],
-}
-
-DUPLICATE_CANDIDATE_JSON_SCHEMA = {
-    **CSL_JSON_SCHEMA,
     "required": ["type"],
 }
 
@@ -244,7 +240,8 @@ DUPLICATE_OVERRIDE_JSON_SCHEMA = {
 PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA = {
     **DUPLICATE_OVERRIDE_JSON_SCHEMA,
     "properties": {
-        **cast(dict[str, Any], DUPLICATE_OVERRIDE_JSON_SCHEMA["properties"]),
-        "bibliographyEntry": PARTNER_CSL_JSON_SCHEMA,
+        **deepcopy(cast(dict[str, Any], DUPLICATE_OVERRIDE_JSON_SCHEMA["properties"])),
+        "bibliographyEntry": deepcopy(PARTNER_CSL_JSON_SCHEMA),
     },
+    "required": list(cast(list, DUPLICATE_OVERRIDE_JSON_SCHEMA["required"])),
 }

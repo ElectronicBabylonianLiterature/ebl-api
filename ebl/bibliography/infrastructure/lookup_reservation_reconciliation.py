@@ -1,7 +1,9 @@
+from contextlib import suppress
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict
 
 from ebl.bibliography.application.lookup_reservation import LookupReservationState
+from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 
@@ -29,14 +31,17 @@ class LookupReservationReconciler:
         expires_at = reservation.get("expiresAt")
         comparison_now = to_utc_datetime(now)
         if self._is_expired_pending(state, expires_at, comparison_now):
-            if owns_value(entry_id, value):
-                self._commit_value(value, comparison_now)
-            else:
-                self.abandon_value(value, comparison_now, entry_id, state)
+            is_owner = owns_value(entry_id, value)
+            with suppress(NotFoundError):
+                if is_owner:
+                    self._commit_value(reservation, comparison_now)
+                else:
+                    self._abandon_reservation(reservation, comparison_now)
         elif state == LookupReservationState.COMMITTED and not owns_value(
             entry_id, value
         ):
-            self.abandon_value(value, comparison_now, entry_id, state)
+            with suppress(NotFoundError):
+                self._abandon_reservation(reservation, comparison_now)
 
     def _is_expired_pending(
         self,
@@ -50,9 +55,9 @@ class LookupReservationReconciler:
             and to_utc_datetime(expires_at) <= comparison_now
         )
 
-    def _commit_value(self, value: str, now: datetime) -> None:
+    def _commit_value(self, reservation: Dict[str, Any], now: datetime) -> None:
         self._collection.update_one(
-            {"_id": value, "state": LookupReservationState.PENDING.value},
+            self._snapshot_filter(reservation),
             {
                 "$set": {
                     "state": LookupReservationState.COMMITTED.value,
@@ -62,15 +67,9 @@ class LookupReservationReconciler:
             },
         )
 
-    def abandon_value(
-        self,
-        value: str,
-        now: datetime,
-        entry_id: str,
-        state: LookupReservationState,
-    ) -> None:
+    def _abandon_reservation(self, reservation: Dict[str, Any], now: datetime) -> None:
         self._collection.update_one(
-            {"_id": value, "entryId": entry_id, "state": state.value},
+            self._snapshot_filter(reservation),
             {
                 "$set": {
                     "state": LookupReservationState.ABANDONED.value,
@@ -79,3 +78,9 @@ class LookupReservationReconciler:
                 "$unset": {"expiresAt": ""},
             },
         )
+
+    @staticmethod
+    def _snapshot_filter(reservation: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            field: reservation[field] for field in ("_id", "entryId", "owner", "state")
+        }

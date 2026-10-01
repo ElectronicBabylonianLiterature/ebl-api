@@ -14,7 +14,7 @@ from ebl.tests.factories.bibliography import BibliographyEntryFactory
 SERVER_OWNED_PAYLOADS = {
     "aliases": [{"value": "attacker-alias", "normalizedValue": "attacker-alias"}],
     "citationKey": "different",
-    "deprecated": False,
+    "deprecated": True,
     "redirectTo": "other-record",
 }
 
@@ -69,16 +69,14 @@ def test_update_cannot_tombstone_an_active_record(client, bibliography, aliased_
     assert stored_entry.get("redirectTo") is None
 
 
-def test_deprecating_without_a_redirect_target_is_a_conflict_not_a_schema_error(
+def test_update_reports_a_lifecycle_change_as_a_conflict(
     client, bibliography, aliased_entry
 ):
-    """`deprecated` is server-owned, so the answer is about state, not shape.
+    """A lone `deprecated` is a stale-state conflict, not a schema error.
 
-    The stored schema requires `redirectTo` alongside `deprecated`, which used
-    to make this a `400` complaining about a property the client does not own.
-    The route contract drops that stored-entry rule so the request reaches the
-    application and gets the same answer every other server-owned mismatch
-    gets.
+    The stored-entry rule that `deprecated` requires `redirectTo` used to fire
+    first and answer `'redirectTo' is a required property`, which tells the
+    client to supply lifecycle state it does not own.
     """
     payload = {**metadata_only_payload(aliased_entry), "deprecated": True}
 
@@ -87,6 +85,7 @@ def test_deprecating_without_a_redirect_target_is_a_conflict_not_a_schema_error(
 
     assert result.status == falcon.HTTP_CONFLICT
     assert "deprecated" in result.text
+    assert "redirectTo' is a required property" not in result.text
     assert stored_entry.get("deprecated") is None
     assert stored_entry.get("redirectTo") is None
     assert stored_entry["title"] == aliased_entry["title"]
