@@ -28,8 +28,8 @@ class ReallexikonReferenceField(fields.Field):
             return self._from_id(value.get("id", ""), value.get("pages", ""))
         return None
 
-    def _from_id(self, bibliography_id: str, pages: str) -> Optional[Reference]:
-        if not bibliography_id:
+    def _from_id(self, bibliography_id: object, pages: str) -> Optional[Reference]:
+        if not isinstance(bibliography_id, str) or not bibliography_id:
             return None
         return Reference(
             BibliographyId(bibliography_id), ReferenceType.DISCUSSION, pages=pages
