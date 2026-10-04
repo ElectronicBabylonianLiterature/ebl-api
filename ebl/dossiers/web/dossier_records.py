@@ -4,7 +4,7 @@ from ebl.errors import NotFoundError
 from marshmallow import EXCLUDE
 
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
-from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
+from ebl.dossiers.infrastructure.dossiers_schemas import (
     DossierRecordSchema,
     DossierRecordSuggestionSchema,
 )

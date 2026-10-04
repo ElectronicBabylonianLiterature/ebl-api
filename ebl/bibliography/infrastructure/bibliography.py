@@ -28,6 +28,7 @@ from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
 from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
 from ebl.bibliography.infrastructure.legacy_alias_lookup import MongoLegacyAliasLookup
 from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
+from ebl.bibliography.infrastructure import lookup_documents
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
@@ -124,13 +125,20 @@ class MongoBibliographyRepository(BibliographyRepository):
     ) -> Mapping[str, Sequence[str]]:
         return self._legacy_alias_lookup.owners(values)
 
-    def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
+    def query_by_redirect_target(
+        self, id_: str, limit: Optional[int] = None
+    ) -> Sequence[dict]:
         data = self._collection.find_many({"redirectTo": id_})
+        if limit is not None:
+            data = data.limit(limit)
         return [create_object_entry(item) for item in data]
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})
         return [create_object_entry(item) for item in data]
+
+    def query_by_lookup_values(self, values: Sequence[str]) -> Sequence[dict]:
+        return lookup_documents.query_by_lookup_values(self._collection, values)
 
     def update(self, entry, expected_server_owned_fields: Mapping[str, Any]) -> None:
         mongo_entry = create_mongo_entry(entry)

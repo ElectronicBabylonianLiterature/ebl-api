@@ -43,3 +43,17 @@ def test_query_by_redirect_target_finds_every_direct_predecessor(
     }
 
     assert predecessors == {"Q30000005", "Q30000006"}
+
+
+def test_query_by_redirect_target_can_bound_search_reads(bibliography_repository):
+    for index in range(3):
+        bibliography_repository.create(
+            BibliographyEntryFactory.build(
+                id=f"OLD{index}", deprecated=True, redirectTo="CANONICAL"
+            )
+        )
+
+    assert (
+        len(bibliography_repository.query_by_redirect_target("CANONICAL", limit=2)) == 2
+    )
+    assert len(bibliography_repository.query_by_redirect_target("CANONICAL")) == 3
