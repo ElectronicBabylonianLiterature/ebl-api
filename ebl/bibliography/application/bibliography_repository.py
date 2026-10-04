@@ -97,6 +97,12 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_by_redirect_targets(
+        self, ids: Sequence[str], limit: Optional[int] = None
+    ) -> Sequence[Any]:
+        raise NotImplementedError
+
+    @abstractmethod
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
         raise NotImplementedError
 

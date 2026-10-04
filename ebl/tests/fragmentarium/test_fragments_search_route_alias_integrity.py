@@ -34,13 +34,13 @@ def test_reverse_lookup_read_is_bounded(
     client, bibliography_repository, equivalent_bibliography, monkeypatch
 ):
     calls = []
-    original = bibliography_repository.query_by_redirect_target
+    original = bibliography_repository.query_by_redirect_targets
 
     def query(id_, limit=None):
         calls.append(limit)
         return original(id_, limit=limit)
 
-    monkeypatch.setattr(bibliography_repository, "query_by_redirect_target", query)
+    monkeypatch.setattr(bibliography_repository, "query_by_redirect_targets", query)
     result = client.simulate_get(
         "/fragments/query", params={"bibId": "UBHD-1718224", "limit": "10"}
     )
@@ -175,12 +175,12 @@ def test_reverse_lookup_detects_a_graph_changed_during_search(
     bibliography_repository.create(predecessor)
 
     def changed_incoming(id_, limit=None):
-        if id_ == "CANONICAL":
+        if id_ == ["CANONICAL"]:
             return [predecessor]
         return [{**canonical, "deprecated": True, "redirectTo": "OLD"}]
 
     monkeypatch.setattr(
-        bibliography_repository, "query_by_redirect_target", changed_incoming
+        bibliography_repository, "query_by_redirect_targets", changed_incoming
     )
     result = client.simulate_get(
         "/fragments/query", params={"bibId": "CANONICAL", "limit": "10"}

@@ -117,7 +117,7 @@ class Bibliography:
             try:
                 identifier_result = [self.find(identifier)]
             except NotFoundError:
-                pass
+                identifier_result = []
 
         author_query_result: Sequence[dict] = []
         author_query = parse_author_year_and_title(query)

@@ -104,21 +104,7 @@ class MongoBibliographyRepository(BibliographyRepository):
         return create_object_entry(data[0])
 
     def query_by_alias(self, alias: str) -> dict:
-        normalized_alias = normalize_partner_id(alias)
-        query: Dict[str, Any] = {ALIASES_VALUE_FIELD: alias}
-        if normalized_alias:
-            query = {
-                "$or": [
-                    {ALIASES_VALUE_FIELD: alias},
-                    {"aliases.normalizedValue": normalized_alias},
-                ]
-            }
-        data = list(self._collection.find_many(query))
-        if not data:
-            raise NotFoundError(f"bibliography alias {alias} not found.")
-        if len({item["_id"] for item in data}) > 1:
-            raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
-        return create_object_entry(data[0])
+        return lookup_documents.query_by_alias(self._collection, alias)
 
     def query_legacy_alias_owners(
         self, values: Sequence[str]
@@ -128,10 +114,12 @@ class MongoBibliographyRepository(BibliographyRepository):
     def query_by_redirect_target(
         self, id_: str, limit: Optional[int] = None
     ) -> Sequence[dict]:
-        data = self._collection.find_many({"redirectTo": id_})
-        if limit is not None:
-            data = data.limit(limit)
-        return [create_object_entry(item) for item in data]
+        return self.query_by_redirect_targets([id_], limit)
+
+    def query_by_redirect_targets(
+        self, ids: Sequence[str], limit: Optional[int] = None
+    ) -> Sequence[dict]:
+        return lookup_documents.query_by_redirect_targets(self._collection, ids, limit)
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})

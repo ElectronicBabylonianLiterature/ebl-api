@@ -4,6 +4,9 @@ from typing import Tuple
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
+from ebl.bibliography.application.reference_documents import (
+    bibliography_documents_by_lookup,
+)
 from ebl.bibliography.application.redirect_resolution import (
     MAX_REDIRECT_DEPTH,
     follow_bibliography_redirect,
@@ -34,16 +37,18 @@ def find_bibliography_entry(id_: str, repository: BibliographyRepository) -> dic
 
 
 def _incoming_entries(entry: dict, repository: BibliographyRepository):
-    pending = [(entry, 0)]
+    frontier = [entry]
     visited = set()
-    while pending:
-        current, depth = pending.pop()
-        if current["id"] in visited:
-            raise DuplicateError("Bibliography reverse redirect loop.")
-        visited.add(current["id"])
-        yield current
-        incoming_entries = repository.query_by_redirect_target(
-            current["id"], limit=MAX_REFERENCE_SEARCH_ENTRIES + 1
+    depth = 0
+    while frontier:
+        for current in frontier:
+            if current["id"] in visited:
+                raise DuplicateError("Bibliography reverse redirect loop.")
+            visited.add(current["id"])
+            yield current
+        incoming_entries = repository.query_by_redirect_targets(
+            [current["id"] for current in frontier],
+            limit=MAX_REFERENCE_SEARCH_ENTRIES + 1,
         )
         if len(incoming_entries) > MAX_REFERENCE_SEARCH_ENTRIES:
             raise DataError("Bibliography reference search exceeds entry limit.")
@@ -54,9 +59,10 @@ def _incoming_entries(entry: dict, repository: BibliographyRepository):
         ]
         if incoming and depth >= MAX_REDIRECT_DEPTH:
             raise DuplicateError("Bibliography reverse redirect exceeds maximum depth.")
-        if len(visited) + len(pending) + len(incoming) > MAX_REFERENCE_SEARCH_ENTRIES:
+        if len(visited) + len(incoming) > MAX_REFERENCE_SEARCH_ENTRIES:
             raise DataError("Bibliography reference search exceeds entry limit.")
-        pending.extend((candidate, depth + 1) for candidate in incoming)
+        frontier = incoming
+        depth += 1
 
 
 def equivalent_reference_ids(
@@ -80,12 +86,9 @@ def equivalent_reference_ids(
         candidates.update(bibliography_lookup_values(incoming))
         if len(candidates) > MAX_REFERENCE_SEARCH_VALUES:
             raise DataError("Bibliography reference search exceeds identity limit.")
-    equivalents = []
-    for candidate in sorted(candidates):
-        try:
-            resolved = find_bibliography_entry(candidate, repository)
-        except (NotFoundError, DuplicateError):
-            continue
-        if resolved["id"] == canonical["id"]:
-            equivalents.append(candidate)
-    return tuple(equivalents)
+    resolved = bibliography_documents_by_lookup(sorted(candidates), repository)
+    return tuple(
+        candidate
+        for candidate in sorted(resolved)
+        if resolved[candidate]["id"] == canonical["id"]
+    )
