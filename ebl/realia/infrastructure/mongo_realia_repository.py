@@ -3,7 +3,10 @@ from typing import Dict, List, Sequence, Tuple, cast
 
 from pymongo.database import Database
 
-from ebl.bibliography.application.serialization import create_object_entry
+from ebl.bibliography.application.reference_documents import (
+    bibliography_documents_by_lookup,
+)
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.common.query.query_collation import (
     CollatedFieldQuery,
@@ -17,15 +20,12 @@ from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanker
 
 REALIA_COLLECTION = "realia"
-BIBLIOGRAPHY_COLLECTION = "bibliography"
 
 
 class MongoRealiaRepository(RealiaRepository):
     def __init__(self, database: Database) -> None:
         self._realia_collection = MongoCollection(database, REALIA_COLLECTION)
-        self._bibliography_collection = MongoCollection(
-            database, BIBLIOGRAPHY_COLLECTION
-        )
+        self._bibliography_repository = MongoBibliographyRepository(database)
 
     def create_indexes(self) -> None:
         self._realia_collection.create_index(
@@ -104,10 +104,9 @@ class MongoRealiaRepository(RealiaRepository):
     def _fetch_bibliography_entries(
         self, reference_ids: List[BibliographyId]
     ) -> Dict[str, dict]:
-        entries = self._bibliography_collection.find_many(
-            {"_id": {"$in": reference_ids}}
+        return bibliography_documents_by_lookup(
+            reference_ids, self._bibliography_repository
         )
-        return {entry["_id"]: entry for entry in entries}
 
     def _inject_bibliography(self, entries: List[RealiaEntry]) -> None:
         bibliography = self._fetch_bibliography_entries(
@@ -128,8 +127,7 @@ class MongoRealiaRepository(RealiaRepository):
     def _document_for(
         self, reference_id: BibliographyId, bibliography: Dict[str, dict]
     ) -> dict:
-        document = bibliography.get(reference_id)
-        return create_object_entry(document) if document else {}
+        return bibliography.get(reference_id) or {}
 
     def _inject_references(
         self, references: Sequence[Reference], bibliography: Dict[str, dict]

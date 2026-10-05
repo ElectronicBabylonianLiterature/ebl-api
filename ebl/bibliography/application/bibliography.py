@@ -17,6 +17,7 @@ from ebl.bibliography.application.bibliography_identity import (
     update_with_identity_claims,
 )
 from ebl.bibliography.application.partner_bibliography import PartnerBibliography
+from ebl.bibliography.application.reference_search import find_bibliography_entry
 from ebl.bibliography.application.redirect_resolution import (
     follow_bibliography_redirect,
 )
@@ -55,17 +56,7 @@ class Bibliography:
         return self.create(entry, user)
 
     def find(self, id_: str):
-        for query in (
-            self._repository.query_by_id,
-            self._repository.query_by_citation_key,
-            self._repository.query_by_alias,
-        ):
-            try:
-                result = query(id_)
-            except NotFoundError:
-                continue
-            return self._follow_redirect(result)
-        raise NotFoundError(f"bibliography {id_} not found.")
+        return find_bibliography_entry(id_, self._repository)
 
     def find_many(self, ids: Sequence[str]):
         resolved_entries: list[dict] = []
@@ -120,7 +111,18 @@ class Bibliography:
         if changed_fields := changed_server_owned_fields(entry, stored_entry):
             raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
 
+    def _identifier_matches(self, query: str) -> Sequence[dict]:
+        identifier = query.strip()
+        if not identifier:
+            return []
+        try:
+            return [self.find(identifier)]
+        except (NotFoundError, DuplicateError):
+            return []
+
     def search(self, query: str) -> Sequence[dict]:
+        identifier_result = self._identifier_matches(query)
+
         author_query_result: Sequence[dict] = []
         author_query = parse_author_year_and_title(query)
         if any(value is not None for value in author_query.values()):
@@ -144,8 +146,13 @@ class Bibliography:
                 title_short_volume_query["volume"],
             )
         results = uniq_with(
-            [*author_query_result, *container_query_result, *title_short_volume_result],
-            lambda a, b: a == b,
+            [
+                *identifier_result,
+                *author_query_result,
+                *container_query_result,
+                *title_short_volume_result,
+            ],
+            lambda a, b: a["id"] == b["id"],
         )
         return [entry for entry in results if not entry.get("deprecated", False)]
 

@@ -4,7 +4,7 @@ from ebl.errors import NotFoundError
 from marshmallow import EXCLUDE
 
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
-from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
+from ebl.dossiers.infrastructure.dossiers_schemas import (
     DossierRecordSchema,
     DossierRecordSuggestionSchema,
 )
@@ -35,7 +35,7 @@ class DossiersSearchResource:
         self._dossiersRepository = _dossiersRepository
 
     def on_get(self, req: Request, resp: Response) -> None:
-        query = req.get_param("query", default="")
+        query = req.get_param("query") or ""
         provenance = req.get_param("provenance")
         script_period = req.get_param("scriptPeriod")
 
@@ -67,6 +67,6 @@ class DossiersSuggestionsResource:
         self._dossiersRepository = _dossiersRepository
 
     def on_get(self, req: Request, resp: Response) -> None:
-        query = req.get_param("q", default="")
+        query = req.get_param("q") or ""
         suggestions = self._dossiersRepository.search_suggestions(query)
         resp.media = DossierRecordSuggestionSchema(many=True).dump(suggestions)

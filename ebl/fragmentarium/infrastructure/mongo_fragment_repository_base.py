@@ -1,3 +1,4 @@
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from marshmallow import EXCLUDE
 from typing import List, cast
 from pymongo.database import Database
@@ -18,6 +19,7 @@ class MongoFragmentRepositoryBase(FragmentRepository):
         self._joins = MongoCollection(database, JOINS_COLLECTION)
         self._photo_files = MongoCollection(database, "photos.files")
         self._provenance_service = provenance_service
+        self._bibliography_repository = MongoBibliographyRepository(database)
 
     def _schema(self, **kwargs):
         return FragmentSchema(

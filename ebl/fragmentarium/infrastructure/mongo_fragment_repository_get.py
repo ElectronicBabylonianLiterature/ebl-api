@@ -36,7 +36,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.queries import query_number_is
-from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.bibliography.application.reference_documents import hydrate_reference_documents
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended import (
     MongoFragmentRepositoryGetExtended,
 )
@@ -56,12 +56,12 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryGetSummary):
                 {"$match": query_number_is(number)},
                 *(omit_text_lines() if exclude_lines else filter_fragment_lines(lines)),
                 *join_findspots(),
-                *join_reference_documents(),
                 *join_joins(),
             ]
         )
         try:
             fragment_data = next(data)
+            hydrate_reference_documents([fragment_data], self._bibliography_repository)
             return cast(Fragment, self._schema(unknown=EXCLUDE).load(fragment_data))
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error

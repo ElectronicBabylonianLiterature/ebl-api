@@ -27,14 +27,14 @@ from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
 )
 from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
 from ebl.bibliography.infrastructure.legacy_alias_lookup import MongoLegacyAliasLookup
-from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
+from ebl.bibliography.infrastructure import lookup_documents
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography"
 DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS = 5000
 ALIASES_VALUE_FIELD = "aliases.value"
-__all__ = ["MongoBibliographyRepository", "join_reference_documents"]
+__all__ = ["MongoBibliographyRepository"]
 
 
 class MongoBibliographyRepository(BibliographyRepository):
@@ -103,21 +103,7 @@ class MongoBibliographyRepository(BibliographyRepository):
         return create_object_entry(data[0])
 
     def query_by_alias(self, alias: str) -> dict:
-        normalized_alias = normalize_partner_id(alias)
-        query: Dict[str, Any] = {ALIASES_VALUE_FIELD: alias}
-        if normalized_alias:
-            query = {
-                "$or": [
-                    {ALIASES_VALUE_FIELD: alias},
-                    {"aliases.normalizedValue": normalized_alias},
-                ]
-            }
-        data = list(self._collection.find_many(query))
-        if not data:
-            raise NotFoundError(f"bibliography alias {alias} not found.")
-        if len({item["_id"] for item in data}) > 1:
-            raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
-        return create_object_entry(data[0])
+        return lookup_documents.query_by_alias(self._collection, alias)
 
     def query_legacy_alias_owners(
         self, values: Sequence[str]
@@ -125,12 +111,19 @@ class MongoBibliographyRepository(BibliographyRepository):
         return self._legacy_alias_lookup.owners(values)
 
     def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
-        data = self._collection.find_many({"redirectTo": id_})
-        return [create_object_entry(item) for item in data]
+        return self.query_by_redirect_targets([id_])
+
+    def query_by_redirect_targets(
+        self, ids: Sequence[str], limit: Optional[int] = None
+    ) -> Sequence[dict]:
+        return lookup_documents.query_by_redirect_targets(self._collection, ids, limit)
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})
         return [create_object_entry(item) for item in data]
+
+    def query_by_lookup_values(self, values: Sequence[str]) -> Sequence[dict]:
+        return lookup_documents.query_by_lookup_values(self._collection, values)
 
     def update(self, entry, expected_server_owned_fields: Mapping[str, Any]) -> None:
         mongo_entry = create_mongo_entry(entry)
