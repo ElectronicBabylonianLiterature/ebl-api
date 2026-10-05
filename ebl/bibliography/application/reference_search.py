@@ -1,11 +1,11 @@
-"""Resolve bibliography lookup identities before searching stored references."""
-
-from typing import Tuple
-
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
-from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
 from ebl.bibliography.application.reference_documents import (
     bibliography_documents_by_lookup,
+)
+from ebl.bibliography.application.reference_search_identities import (
+    ReferenceSearchIdentities,
+    identities_of,
+    requested_identities,
 )
 from ebl.bibliography.application.redirect_resolution import (
     MAX_REDIRECT_DEPTH,
@@ -65,30 +65,39 @@ def _incoming_entries(entry: dict, repository: BibliographyRepository):
         depth += 1
 
 
-def equivalent_reference_ids(
-    id_: str, repository: BibliographyRepository
-) -> Tuple[str, ...]:
-    """Include only identities that resolve to the requested canonical entry.
+def _incoming_identities(
+    canonical: dict, repository: BibliographyRepository
+) -> ReferenceSearchIdentities:
+    identities = ReferenceSearchIdentities()
+    for incoming in _incoming_entries(canonical, repository):
+        identities = identities.merge(identities_of(incoming))
+        if len(identities.stored_reference_values()) > MAX_REFERENCE_SEARCH_VALUES:
+            raise DataError("Bibliography reference search exceeds identity limit.")
+    return identities
 
-    Missing historical IDs retain exact matching. Broken redirects and ambiguous
-    requested identities fail rather than combining unrelated publications.
-    Unresolvable secondary aliases are omitted conservatively.
-    """
+
+def _resolved_identities(
+    id_: str, repository: BibliographyRepository
+) -> ReferenceSearchIdentities:
+    entry = _lookup_entry(id_, repository)
+    canonical = follow_bibliography_redirect(entry, repository.query_by_id)
+    candidates = requested_identities(id_, entry).merge(
+        _incoming_identities(canonical, repository)
+    )
+    resolved = bibliography_documents_by_lookup(
+        candidates.stored_reference_values(), repository
+    )
+    return candidates.keep(
+        lambda value: value in resolved and resolved[value]["id"] == canonical["id"]
+    )
+
+
+def equivalent_reference_identities(
+    id_: str, repository: BibliographyRepository
+) -> ReferenceSearchIdentities:
     if not isinstance(id_, str) or not id_:
         raise DataError("Bibliography ID must be a non-empty string.")
     try:
-        entry = _lookup_entry(id_, repository)
-    except NotFoundError:
-        return (id_,)
-    canonical = follow_bibliography_redirect(entry, repository.query_by_id)
-    candidates = {id_}
-    for incoming in _incoming_entries(canonical, repository):
-        candidates.update(bibliography_lookup_values(incoming))
-        if len(candidates) > MAX_REFERENCE_SEARCH_VALUES:
-            raise DataError("Bibliography reference search exceeds identity limit.")
-    resolved = bibliography_documents_by_lookup(sorted(candidates), repository)
-    return tuple(
-        candidate
-        for candidate in sorted(resolved)
-        if resolved[candidate]["id"] == canonical["id"]
-    )
+        return _resolved_identities(id_, repository)
+    except (NotFoundError, DuplicateError):
+        return ReferenceSearchIdentities(unresolved_reference_ids=(id_,))

@@ -5,7 +5,9 @@ import falcon
 from falcon import Request, Response
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
-from ebl.bibliography.application.reference_search import equivalent_reference_ids
+from ebl.bibliography.application.reference_search import (
+    equivalent_reference_identities,
+)
 from ebl.common.query.parameter_parser import (
     parse_limit,
     parse_lines,
@@ -150,7 +152,7 @@ class FragmentsQueryResource:
         parameters = {
             key: value
             for key, value in req.params.items()
-            if key not in {"paginationIndex", "_bibliographyIds"}
+            if key not in {"paginationIndex", "_bibliographyIdentities"}
         }
         query = _parse_fragment_query(
             parameters,
@@ -163,7 +165,7 @@ class FragmentsQueryResource:
             parse_non_negative_integer_field("offset"),
         )
         if "bibId" in query:
-            query["_bibliographyIds"] = equivalent_reference_ids(
+            query["_bibliographyIdentities"] = equivalent_reference_identities(
                 query["bibId"], self._bibliography_repository
             )
         result = self._repository.query(

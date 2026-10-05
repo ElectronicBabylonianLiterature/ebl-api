@@ -1,7 +1,12 @@
 import pytest
 from mockito import expect
 
-from ebl.bibliography.application.reference_search import equivalent_reference_ids
+from ebl.bibliography.application.reference_search import (
+    equivalent_reference_identities,
+)
+from ebl.bibliography.application.reference_search_identities import (
+    ReferenceSearchIdentities,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
@@ -35,8 +40,12 @@ def test_one_thousand_lookup_identities_use_four_queries(
         )
     )
 
-    assert equivalent_reference_ids("CANON", bibliography_repository) == tuple(
-        sorted(["CANON", *aliases])
+    assert equivalent_reference_identities(
+        "CANON", bibliography_repository
+    ) == ReferenceSearchIdentities(
+        bibliography_ids=("CANON",),
+        alias_values=tuple(aliases),
+        normalized_alias_values=tuple(aliases),
     )
     assert [call[0] for call in lookup_calls] == [
         "query_by_id",
@@ -56,9 +65,10 @@ def test_wide_reverse_frontier_uses_one_query_per_depth(
             BibliographyEntryFactory.build(id=id_, deprecated=True, redirectTo="CANON")
         )
 
-    assert equivalent_reference_ids("CANON", bibliography_repository) == tuple(
-        sorted(["CANON", *predecessor_ids])
-    )
+    identities = equivalent_reference_identities("CANON", bibliography_repository)
+    assert identities.bibliography_ids[0] == "CANON"
+    assert sorted(identities.bibliography_ids[1:]) == predecessor_ids
+    assert identities.stored_reference_values() == identities.bibliography_ids
     reverse_calls = [
         call for call in lookup_calls if call[0] == "query_by_redirect_targets"
     ]
@@ -88,7 +98,9 @@ def test_batched_secondary_id_validation_keeps_lookup_precedence(
     ):
         bibliography_repository.create(entry)
 
-    assert equivalent_reference_ids("CANON", bibliography_repository) == ("CANON",)
+    assert equivalent_reference_identities(
+        "CANON", bibliography_repository
+    ) == ReferenceSearchIdentities(bibliography_ids=("CANON",))
 
 
 def test_empty_reverse_targets_skip_database_lookup(bibliography_repository):

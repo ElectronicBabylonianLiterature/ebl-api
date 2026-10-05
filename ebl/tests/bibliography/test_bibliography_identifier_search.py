@@ -1,9 +1,7 @@
-"""Autocomplete resolves the same identities as single-entry bibliography lookup."""
-
 import falcon
 import pytest
+from mockito import expect
 
-from ebl.errors import DuplicateError
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
@@ -64,7 +62,6 @@ def test_identifier_search_follows_tombstone(
 def test_identifier_search_keeps_metadata_matches_and_deduplicates_by_id(
     bibliography, identity_search_entry, bibliography_repository, when
 ):
-    # Different projections of the same identity still represent one option.
     projected_entry = {**identity_search_entry, "title": "Metadata projection"}
     other = BibliographyEntryFactory.build(id="OTHER", title="Additional match")
     (
@@ -101,10 +98,9 @@ def test_metadata_search_excludes_deprecated_entries(
 
 
 @pytest.mark.parametrize("field", ["aliases", "citationKey"])
-def test_ambiguous_identifier_search_fails_without_guessing(
-    bibliography, client, database, field
+def test_ambiguous_identifier_falls_back_to_metadata_search(
+    bibliography_repository, client, database, field, when
 ):
-    # Legacy data may predate identity uniqueness enforcement.
     identity = (
         [{"value": "shared-key", "normalizedValue": "shared-key"}]
         if field == "aliases"
@@ -115,10 +111,21 @@ def test_ambiguous_identifier_search_fails_without_guessing(
             {"_id": id_, "type": "book", field: identity}
         )
 
-    with pytest.raises(DuplicateError, match="ambiguous"):
-        bibliography.search("shared-key")
+    other = BibliographyEntryFactory.build(id="OTHER", title="Metadata match")
+    (
+        when(bibliography_repository)
+        .query_by_author_year_and_title("shared-key", None, None)
+        .thenReturn([])
+    )
+    (
+        when(bibliography_repository)
+        .query_by_container_title_and_collection_number("shared-key", None)
+        .thenReturn([other])
+    )
+
     result = client.simulate_get("/bibliography", params={"query": "shared-key"})
-    assert result.status == falcon.HTTP_CONFLICT
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [other]
 
 
 @pytest.mark.parametrize("redirect_to", [None, "MISSING"])
@@ -136,7 +143,7 @@ def test_unresolvable_tombstone_is_not_an_autocomplete_option(
     assert result.json == []
 
 
-def test_redirect_loop_search_fails_without_returning_deprecated_entry(
+def test_redirect_loop_search_returns_no_deprecated_entry(
     bibliography, client, database
 ):
     for id_, target in [("LOOP_A", "LOOP_B"), ("LOOP_B", "LOOP_A")]:
@@ -144,7 +151,25 @@ def test_redirect_loop_search_fails_without_returning_deprecated_entry(
             {"_id": id_, "type": "book", "deprecated": True, "redirectTo": target}
         )
 
-    with pytest.raises(DuplicateError, match="redirect loop"):
-        bibliography.search("LOOP_A")
+    assert bibliography.search("LOOP_A") == []
     result = client.simulate_get("/bibliography", params={"query": "LOOP_A"})
-    assert result.status == falcon.HTTP_CONFLICT
+    assert result.status == falcon.HTTP_OK
+    assert result.json == []
+
+
+@pytest.mark.parametrize("query", ["", "   "])
+def test_blank_query_skips_identifier_lookup(
+    bibliography, bibliography_repository, client, query, when
+):
+    expect(bibliography_repository, times=0).query_by_id(...)
+    if query:
+        (
+            when(bibliography_repository)
+            .query_by_author_year_and_title(query, None, None)
+            .thenReturn([])
+        )
+
+    assert bibliography.search(query) == []
+    result = client.simulate_get("/bibliography", params={"query": query})
+    assert result.status == falcon.HTTP_OK
+    assert result.json == []

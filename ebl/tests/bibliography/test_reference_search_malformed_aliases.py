@@ -1,7 +1,12 @@
 import pytest
 
 from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
-from ebl.bibliography.application.reference_search import equivalent_reference_ids
+from ebl.bibliography.application.reference_search import (
+    equivalent_reference_identities,
+)
+from ebl.bibliography.application.reference_search_identities import (
+    ReferenceSearchIdentities,
+)
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 
@@ -41,7 +46,6 @@ def test_reference_search_ignores_malformed_persisted_aliases(
             entry["aliases"] = aliases
         bibliography_repository.create(entry)
 
-    assert equivalent_reference_ids("CANONICAL", bibliography_repository) == (
-        "CANONICAL",
-        "OLD",
-    )
+    assert equivalent_reference_identities(
+        "CANONICAL", bibliography_repository
+    ) == ReferenceSearchIdentities(bibliography_ids=("CANONICAL", "OLD"))

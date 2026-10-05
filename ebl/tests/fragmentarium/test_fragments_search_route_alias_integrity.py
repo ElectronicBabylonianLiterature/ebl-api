@@ -164,8 +164,8 @@ def test_reverse_lookup_overflow_returns_no_partial_matches(
     assert "items" not in result.json
 
 
-def test_reverse_lookup_detects_a_graph_changed_during_search(
-    client, bibliography_repository, monkeypatch
+def test_reverse_lookup_loop_falls_back_to_exact_match(
+    client, fragmentarium, bibliography_repository, monkeypatch
 ):
     canonical = BibliographyEntryFactory.build(id="CANONICAL")
     predecessor = BibliographyEntryFactory.build(
@@ -182,9 +182,11 @@ def test_reverse_lookup_detects_a_graph_changed_during_search(
     monkeypatch.setattr(
         bibliography_repository, "query_by_redirect_targets", changed_incoming
     )
+    for number, id_ in (("X.1", "CANONICAL"), ("X.2", "OLD")):
+        fragmentarium.create(build_fragment(number, ReferenceFactory.build(id=id_)))
     result = client.simulate_get(
         "/fragments/query", params={"bibId": "CANONICAL", "limit": "10"}
     )
 
-    assert result.status == falcon.HTTP_CONFLICT
-    assert "items" not in result.json
+    assert result.status == falcon.HTTP_OK
+    assert [item["museumNumber"]["number"] for item in result.json["items"]] == ["1"]

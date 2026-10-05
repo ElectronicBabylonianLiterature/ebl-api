@@ -53,9 +53,7 @@ class FakeBibliographyRepository(BibliographyRepository):
     ) -> Mapping[str, Sequence[str]]:
         raise NotImplementedError
 
-    def query_by_redirect_target(
-        self, id_: str, limit: Optional[int] = None
-    ) -> Sequence[Any]:
+    def query_by_redirect_target(self, id_: str) -> Sequence[Any]:
         raise NotImplementedError
 
     def query_by_redirect_targets(

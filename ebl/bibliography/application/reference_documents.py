@@ -21,21 +21,17 @@ def pending_targets_of(documents: Iterable[dict], requested: Set[str]) -> List[s
 
 def resolved_document(document: dict, fetched: Dict[str, dict]) -> Optional[dict]:
     seen: Set[str] = set()
-    redirects_followed = 0
     while document.get("deprecated", False):
         current_id = document.get("id")
         target = redirect_target_of(document)
-        if target is None or not isinstance(current_id, str):
+        if not isinstance(current_id, str):
             return None
-        if target in seen:
-            return None
-        if redirects_followed >= MAX_REDIRECT_DEPTH:
+        if target is None:
+            return document
+        if target in seen or len(seen) >= MAX_REDIRECT_DEPTH or target not in fetched:
             return None
         seen.add(current_id)
-        if target not in fetched:
-            return None
         document = fetched[target]
-        redirects_followed += 1
     return document
 
 
@@ -77,7 +73,6 @@ def lookup_document(id_: str, candidates: Sequence[dict]) -> Optional[dict]:
 def bibliography_documents_by_lookup(
     ids: Sequence[str], repository: BibliographyRepository
 ) -> Dict[str, dict]:
-    """Batch hydrate original reference IDs; omit unresolved/ambiguous identities."""
     ids = list(dict.fromkeys(ids))
     documents = documents_by_id(ids, repository)
     missing = [id_ for id_ in ids if id_ not in documents]

@@ -111,13 +111,17 @@ class Bibliography:
         if changed_fields := changed_server_owned_fields(entry, stored_entry):
             raise BibliographyUpdateConflictError(stored_entry["id"], changed_fields)
 
+    def _identifier_matches(self, query: str) -> Sequence[dict]:
+        identifier = query.strip()
+        if not identifier:
+            return []
+        try:
+            return [self.find(identifier)]
+        except (NotFoundError, DuplicateError):
+            return []
+
     def search(self, query: str) -> Sequence[dict]:
-        identifier_result: Sequence[dict] = []
-        if identifier := query.strip():
-            try:
-                identifier_result = [self.find(identifier)]
-            except NotFoundError:
-                identifier_result = []
+        identifier_result = self._identifier_matches(query)
 
         author_query_result: Sequence[dict] = []
         author_query = parse_author_year_and_title(query)

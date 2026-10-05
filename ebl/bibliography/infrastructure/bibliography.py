@@ -27,7 +27,6 @@ from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
 )
 from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
 from ebl.bibliography.infrastructure.legacy_alias_lookup import MongoLegacyAliasLookup
-from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
 from ebl.bibliography.infrastructure import lookup_documents
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -35,7 +34,7 @@ from ebl.mongo_collection import MongoCollection
 COLLECTION = "bibliography"
 DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS = 5000
 ALIASES_VALUE_FIELD = "aliases.value"
-__all__ = ["MongoBibliographyRepository", "join_reference_documents"]
+__all__ = ["MongoBibliographyRepository"]
 
 
 class MongoBibliographyRepository(BibliographyRepository):
@@ -111,10 +110,8 @@ class MongoBibliographyRepository(BibliographyRepository):
     ) -> Mapping[str, Sequence[str]]:
         return self._legacy_alias_lookup.owners(values)
 
-    def query_by_redirect_target(
-        self, id_: str, limit: Optional[int] = None
-    ) -> Sequence[dict]:
-        return self.query_by_redirect_targets([id_], limit)
+    def query_by_redirect_target(self, id_: str) -> Sequence[dict]:
+        return self.query_by_redirect_targets([id_])
 
     def query_by_redirect_targets(
         self, ids: Sequence[str], limit: Optional[int] = None

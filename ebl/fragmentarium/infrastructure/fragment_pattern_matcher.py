@@ -105,8 +105,12 @@ class PatternMatcher:
 
         parameters = {
             "id": (
-                {"$in": list(self._query["_bibliographyIds"])}
-                if "_bibliographyIds" in self._query
+                {
+                    "$in": list(
+                        self._query["_bibliographyIdentities"].stored_reference_values()
+                    )
+                }
+                if "_bibliographyIdentities" in self._query
                 else self._query["bibId"]
             )
         }

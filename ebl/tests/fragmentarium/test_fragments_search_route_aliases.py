@@ -114,12 +114,12 @@ def test_unknown_id_remains_literal_and_internal_query_is_untrusted(
     fragmentarium.create(build_fragment("X.2", ReferenceFactory.build(id="OTHER")))
     result = client.simulate_get(
         "/fragments/query",
-        params={"bibId": "MISSING", "_bibliographyIds": "OTHER", "limit": "10"},
+        params={"bibId": "MISSING", "_bibliographyIdentities": "OTHER", "limit": "10"},
     )
     assert result.status == falcon.HTTP_OK
     assert [item["museumNumber"]["number"] for item in result.json["items"]] == ["1"]
     result = client.simulate_get(
-        "/fragments/query", params={"_bibliographyIds": "OTHER", "limit": "10"}
+        "/fragments/query", params={"_bibliographyIdentities": "OTHER", "limit": "10"}
     )
     assert len(result.json["items"]) == 2
 
@@ -142,7 +142,7 @@ def test_unrelated_active_id_wins_over_stale_alias(
 
 
 @pytest.mark.parametrize("kind", ["ambiguous", "dangling", "cycle", "deep"])
-def test_corrupt_id_resolution_fails_closed(
+def test_corrupt_id_resolution_falls_back_to_exact_match(
     client, fragmentarium, bibliography_repository, kind
 ):
     if kind == "ambiguous":
@@ -176,12 +176,15 @@ def test_corrupt_id_resolution_fails_closed(
         ] + [BibliographyEntryFactory.build(id="R6")]
     for entry in entries:
         bibliography_repository.create(entry)
-    fragmentarium.create(build_fragment("X.1", ReferenceFactory.build(id="BAD")))
+    requested = "R6" if kind == "deep" else "BAD"
+    fragmentarium.create(build_fragment("X.1", ReferenceFactory.build(id=requested)))
+    for number, id_ in (("X.2", "R5"), ("X.3", "A"), ("X.4", "OTHER")):
+        fragmentarium.create(build_fragment(number, ReferenceFactory.build(id=id_)))
     result = client.simulate_get(
-        "/fragments/query",
-        params={"bibId": "R6" if kind == "deep" else "BAD", "limit": "10"},
+        "/fragments/query", params={"bibId": requested, "limit": "10"}
     )
-    assert result.status_code in {404, 409, 422}
+    assert result.status == falcon.HTTP_OK
+    assert [item["museumNumber"]["number"] for item in result.json["items"]] == ["1"]
 
 
 def test_duplicate_id_parameter_is_rejected(client):

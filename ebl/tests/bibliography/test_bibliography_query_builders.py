@@ -5,19 +5,11 @@ from ebl.bibliography.infrastructure.bibliography import (
     MongoBibliographyRepository,
     author_year_title_match,
     bibliography_query_pipeline,
-    join_reference_documents,
 )
 from ebl.bibliography.infrastructure.bibliography_queries import (
     server_owned_state_filter,
     server_owned_state_update,
 )
-
-
-def test_join_reference_documents_pipeline() -> None:
-    pipeline = join_reference_documents()
-
-    assert pipeline[0]["$unwind"]["path"] == "$references"
-    assert pipeline[-1]["$set"]["references"]["$filter"]["as"] == "reference"
 
 
 def test_author_year_title_match_and_pipeline() -> None:
