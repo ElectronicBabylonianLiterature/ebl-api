@@ -97,15 +97,19 @@ def bibliography_documents_by_lookup(
     return {id_: document for id_, document in resolved.items() if document is not None}
 
 
+def _normalized_references(record: dict) -> List[dict]:
+    record["references"] = record.get("references") or []
+    return record["references"]
+
+
 def hydrate_reference_documents(
     records: Sequence[dict], repository: BibliographyRepository
 ) -> None:
-    ids = [
-        reference["id"]
-        for record in records
-        for reference in record.get("references", [])
+    references = [
+        reference for record in records for reference in _normalized_references(record)
     ]
-    documents = bibliography_documents_by_lookup(ids, repository)
-    for record in records:
-        for reference in record.get("references", []):
-            reference["document"] = documents.get(reference["id"])
+    documents = bibliography_documents_by_lookup(
+        [reference["id"] for reference in references], repository
+    )
+    for reference in references:
+        reference["document"] = documents.get(reference["id"])

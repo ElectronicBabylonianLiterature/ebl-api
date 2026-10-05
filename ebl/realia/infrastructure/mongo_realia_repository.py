@@ -7,7 +7,6 @@ from ebl.bibliography.application.reference_documents import (
     bibliography_documents_by_lookup,
 )
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
-from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.common.query.query_collation import (
     CollatedFieldQuery,
@@ -128,8 +127,7 @@ class MongoRealiaRepository(RealiaRepository):
     def _document_for(
         self, reference_id: BibliographyId, bibliography: Dict[str, dict]
     ) -> dict:
-        document = bibliography.get(reference_id)
-        return create_object_entry(document) if document else {}
+        return bibliography.get(reference_id) or {}
 
     def _inject_references(
         self, references: Sequence[Reference], bibliography: Dict[str, dict]

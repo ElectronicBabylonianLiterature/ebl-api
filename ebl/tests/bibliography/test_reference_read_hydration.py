@@ -99,17 +99,30 @@ def test_reference_reads_resolve_equivalent_ids_preserving_occurrences(
     assert actual.references == expected
 
 
+STORED_EMPTY_REFERENCES = {
+    "empty": {},
+    "null": {"$set": {"references": None}},
+    "missing": {"$unset": {"references": ""}},
+}
+
+
+@pytest.mark.parametrize("stored", list(STORED_EMPTY_REFERENCES))
 @pytest.mark.parametrize("reader", ["fragment", "corpus_find", "corpus_list"])
 def test_reference_reads_with_empty_references(
-    fragment_repository, text_repository, reader
+    fragment_repository, text_repository, database, reader, stored
 ):
+    update = STORED_EMPTY_REFERENCES[stored]
     if reader == "fragment":
         source = FragmentFactory.build(references=())
         fragment_repository.create(source)
+        if update:
+            database["fragments"].update_many({}, update)
         actual = fragment_repository.query_by_museum_number(source.number)
     else:
         source = TextFactory.build(chapters=(), references=())
         text_repository.create(source)
+        if update:
+            database["texts"].update_many({}, update)
         actual = (
             text_repository.find(source.id)
             if reader == "corpus_find"

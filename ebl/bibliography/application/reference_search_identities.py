@@ -17,6 +17,7 @@ class ReferenceSearchIdentities:
     citation_keys: Tuple[str, ...] = ()
     alias_values: Tuple[str, ...] = ()
     normalized_alias_values: Tuple[str, ...] = ()
+    requested_values: Tuple[str, ...] = ()
     unresolved_reference_ids: Tuple[str, ...] = ()
 
     def stored_reference_values(self) -> Tuple[str, ...]:
@@ -66,4 +67,4 @@ def requested_identities(id_: str, entry: Mapping) -> ReferenceSearchIdentities:
     entry_identities = identities_of(entry)
     if id_ in entry_identities.stored_reference_values():
         return ReferenceSearchIdentities()
-    return ReferenceSearchIdentities(alias_values=(id_,))
+    return ReferenceSearchIdentities(requested_values=(id_,))

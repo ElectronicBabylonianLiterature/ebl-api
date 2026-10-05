@@ -39,7 +39,7 @@ def test_stored_requested_identity_adds_nothing(id_):
     assert requested_identities(id_, entry) == ReferenceSearchIdentities()
 
 
-def test_normalized_spelling_is_searched_as_alias_value(bibliography_repository):
+def test_normalized_spelling_is_searched_as_requested_value(bibliography_repository):
     bibliography_repository.create(
         BibliographyEntryFactory.build(
             id="CANONICAL", aliases=[create_partner_alias("UBHD-1718224")]
@@ -51,7 +51,8 @@ def test_normalized_spelling_is_searched_as_alias_value(bibliography_repository)
     )
 
     assert identities.bibliography_ids == ("CANONICAL",)
-    assert identities.alias_values == ("UBHD 1718224", "UBHD-1718224")
+    assert identities.alias_values == ("UBHD-1718224",)
+    assert identities.requested_values == ("UBHD 1718224",)
     assert identities.unresolved_reference_ids == ()
 
 
