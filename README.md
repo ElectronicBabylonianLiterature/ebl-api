@@ -367,6 +367,30 @@ def on_get(self, req, resp):
     ...
 ```
 
+On a cache hit `cache.cached` returns the stored body without running the
+responder or its hooks, so a `cache_control` header is not added to cached
+responses. When the header must always be sent, memoize the data instead and
+keep the responder uncached:
+
+```python
+def __init__(self, repository, cache):
+    @cache.memoize(DEFAULT_TIMEOUT)
+    def list_ids():
+        return repository.list_ids()
+
+    self._list_ids = list_ids
+
+@cache_control(['public', 'max-age=600'])
+def on_get(self, req, resp):
+    resp.media = self._list_ids()
+```
+
+Without further care the two lifetimes add up: a memoized value that is
+already `max-age` seconds old is sent with a fresh `max-age`, so a downstream
+cache may serve it for almost twice as long. Memoize the computation time with
+the data and send it as an `Age` header, as `RealiaListResource` does, so the
+total staleness stays within `max-age`.
+
 ### Authentication and Authorization
 
 [Auth0](https://auth0.com) and [falcon-auth](https://github.com/vertexcover-io/falcon-auth)
