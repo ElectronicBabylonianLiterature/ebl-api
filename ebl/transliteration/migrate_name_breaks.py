@@ -9,15 +9,16 @@ from pymongo import MongoClient, UpdateOne
 from pymongo.collection import Collection
 from pymongo.database import Database
 
+from ebl.transliteration.migrate_name_breaks_validation import (
+    NonAlternatingName,
+    separate_name_parts,
+)
+
 logger = logging.getLogger(__name__)
 
 COLLECTIONS = ("fragments", "texts", "chapters")
 CACHE_COLLECTION = "cache"
 BATCH_SIZE = 500
-NAME_PART_TYPE = "ValueToken"
-NAME_BREAK_TYPE = "BrokenAway"
-
-NameToken = Mapping[str, object]
 
 
 def get_database() -> Database:
@@ -25,57 +26,10 @@ def get_database() -> Database:
     return client.get_database(os.environ["MONGODB_DB"])
 
 
-class NonAlternatingName(ValueError):
-    pass
-
-
 @dataclass(frozen=True)
 class LegacyName:
     path: str
     name_parts: object
-
-
-def _expected_type(index: int) -> str:
-    return NAME_PART_TYPE if index % 2 == 0 else NAME_BREAK_TYPE
-
-
-def _as_array(name_parts: object) -> Sequence[object]:
-    if not isinstance(name_parts, Sequence) or isinstance(name_parts, (str, bytes)):
-        raise NonAlternatingName(
-            f"Expected nameParts to be an array, found {name_parts!r}. "
-            f"There is nothing to split by position; refusing to migrate."
-        )
-    return name_parts
-
-
-def _as_token(token: object, index: int) -> NameToken:
-    expected = _expected_type(index)
-    if not isinstance(token, Mapping) or token.get("type") != expected:
-        raise NonAlternatingName(
-            f"Expected a {expected} at position {index} of nameParts, "
-            f"found {token!r}. Splitting by position would move it into "
-            f"the wrong array; refusing to migrate."
-        )
-    return token
-
-
-def _validate_ends_with_a_part(tokens: Sequence[NameToken]) -> None:
-    if len(tokens) % 2 == 0:
-        raise NonAlternatingName(
-            f"Expected nameParts to start and end with a {NAME_PART_TYPE}, "
-            f"found {len(tokens)} tokens. No name the parser writes has that "
-            f"shape; refusing to migrate."
-        )
-
-
-def separate_name_parts(
-    name_parts: object,
-) -> tuple[list[NameToken], list[NameToken]]:
-    tokens = [
-        _as_token(token, index) for index, token in enumerate(_as_array(name_parts))
-    ]
-    _validate_ends_with_a_part(tokens)
-    return tokens[0::2], tokens[1::2]
 
 
 def _join(path: str, key: object) -> str:
@@ -229,10 +183,10 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(
         description=(
-            "Separate the interleaved nameParts array into nameParts and "
-            "nameBreaks, then clear the chapter display cache so it is rebuilt "
-            "in the new shape. Documents already carrying nameBreaks are left "
-            "alone, so the script is safe to re-run."
+            "Clear the chapter display cache so it is rebuilt in the new "
+            "shape, then separate the interleaved nameParts array into "
+            "nameParts and nameBreaks. Documents already carrying nameBreaks "
+            "are left alone, so the script is safe to re-run."
         )
     )
     parser.add_argument(
@@ -242,8 +196,8 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     )
     arguments = parser.parse_args(argv)
     database = get_database()
-    migrate(database, dry_run=not arguments.apply)
     clear_cache(database, dry_run=not arguments.apply)
+    migrate(database, dry_run=not arguments.apply)
 
 
 if __name__ == "__main__":

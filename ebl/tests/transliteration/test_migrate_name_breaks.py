@@ -1,16 +1,14 @@
 import logging
 import runpy
 import sys
-from typing import Dict
 
 import pymongo
 import pytest
 
 from ebl.tests.transliteration.legacy_named_sign import (
     LATER_NAMED_SIGN_PATH,
-    LEGACY_BREAK,
     LEGACY_PART,
-    LEGACY_TAIL,
+    MODULE,
     NAMED_SIGN_PATH,
     legacy_fragment,
     legacy_fragment_with_a_later_name,
@@ -18,58 +16,14 @@ from ebl.tests.transliteration.legacy_named_sign import (
 )
 from ebl.transliteration.migrate_name_breaks import (
     LegacyName,
-    NonAlternatingName,
     find_legacy_names,
     get_database,
     main,
-    separate_name_parts,
 )
-
-MODULE = "ebl.transliteration.migrate_name_breaks"
 
 
 def _paths(document: object) -> list[str]:
     return [name.path for name in find_legacy_names(document)]
-
-
-def test_separating_takes_alternating_positions() -> None:
-    assert separate_name_parts([LEGACY_PART, LEGACY_BREAK, LEGACY_TAIL]) == (
-        [LEGACY_PART, LEGACY_TAIL],
-        [LEGACY_BREAK],
-    )
-
-
-def test_separating_an_unbroken_name_yields_no_breaks() -> None:
-    assert separate_name_parts([LEGACY_PART]) == ([LEGACY_PART], [])
-
-
-def test_two_adjacent_parts_are_refused_rather_than_mis_split() -> None:
-    with pytest.raises(NonAlternatingName, match="position 1"):
-        separate_name_parts([LEGACY_PART, LEGACY_TAIL])
-
-
-def test_a_break_in_a_part_position_is_refused() -> None:
-    with pytest.raises(NonAlternatingName, match="position 0"):
-        separate_name_parts([LEGACY_BREAK, LEGACY_PART])
-
-
-def test_a_name_part_that_is_not_a_mapping_is_refused() -> None:
-    with pytest.raises(NonAlternatingName, match="position 0"):
-        separate_name_parts(["ku"])
-
-
-@pytest.mark.parametrize(
-    "name_parts", [[LEGACY_PART, LEGACY_BREAK], []], ids=["trailing break", "empty"]
-)
-def test_a_name_that_does_not_end_with_a_part_is_refused(name_parts) -> None:
-    with pytest.raises(NonAlternatingName, match="start and end with a ValueToken"):
-        separate_name_parts(name_parts)
-
-
-@pytest.mark.parametrize("name_parts", [None, "ku", 7, {"type": "ValueToken"}])
-def test_name_parts_that_is_not_an_array_is_refused(name_parts) -> None:
-    with pytest.raises(NonAlternatingName, match="to be an array"):
-        separate_name_parts(name_parts)
 
 
 def test_a_nested_legacy_name_is_found_with_its_path() -> None:
@@ -105,7 +59,7 @@ def test_a_document_without_names_is_left_alone() -> None:
     assert _paths([{"a": 1}, "b", 3]) == []
 
 
-def test_get_database_uses_the_environment(monkeypatch) -> None:
+def test_get_database_uses_the_environment(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MONGODB_URI", "mongodb://127.0.0.1:27017")
     monkeypatch.setenv("MONGODB_DB", "ebl_migrate_name_breaks_probe")
 
@@ -115,7 +69,9 @@ def test_get_database_uses_the_environment(monkeypatch) -> None:
     database.client.close()
 
 
-def test_get_database_requires_the_database_name(monkeypatch) -> None:
+def test_get_database_requires_the_database_name(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setenv("MONGODB_URI", "mongodb://127.0.0.1:27017")
     monkeypatch.delenv("MONGODB_DB", raising=False)
 
@@ -124,15 +80,15 @@ def test_get_database_requires_the_database_name(monkeypatch) -> None:
 
 
 @pytest.fixture
-def recorded_dry_runs(monkeypatch) -> Dict[str, bool]:
-    calls: Dict[str, bool] = {}
+def recorded_calls(monkeypatch: pytest.MonkeyPatch) -> list[tuple[str, bool]]:
+    calls: list[tuple[str, bool]] = []
 
-    def fake_migrate(database, dry_run):
-        calls["migrate"] = dry_run
+    def fake_migrate(database: object, dry_run: bool) -> dict[str, int]:
+        calls.append(("migrate", dry_run))
         return {}
 
-    def fake_clear_cache(database, dry_run):
-        calls["clear_cache"] = dry_run
+    def fake_clear_cache(database: object, dry_run: bool) -> int:
+        calls.append(("clear_cache", dry_run))
         return 0
 
     monkeypatch.setattr(MODULE + ".migrate", fake_migrate)
@@ -141,37 +97,41 @@ def recorded_dry_runs(monkeypatch) -> Dict[str, bool]:
     return calls
 
 
-def test_main_defaults_to_a_dry_run(recorded_dry_runs) -> None:
+def test_main_defaults_to_a_dry_run(recorded_calls: list[tuple[str, bool]]) -> None:
     main([])
 
-    assert recorded_dry_runs == {"migrate": True, "clear_cache": True}
+    assert recorded_calls == [("clear_cache", True), ("migrate", True)]
 
 
-def test_main_applies_when_asked(recorded_dry_runs) -> None:
+def test_main_clears_the_cache_before_migrating_when_applying(
+    recorded_calls: list[tuple[str, bool]],
+) -> None:
     main(["--apply"])
 
-    assert recorded_dry_runs == {"migrate": False, "clear_cache": False}
+    assert recorded_calls == [("clear_cache", False), ("migrate", False)]
 
 
-def test_running_the_module_as_a_script_invokes_main(monkeypatch, caplog) -> None:
+def test_running_the_module_as_a_script_invokes_main(
+    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
     class _Cache:
-        def count_documents(self, query):
+        def count_documents(self, query: object) -> int:
             return 3
 
     class _Database:
         name = "ebl_migrate_probe"
 
-        def list_collection_names(self):
+        def list_collection_names(self) -> list[str]:
             return []
 
-        def __getitem__(self, name):
+        def __getitem__(self, name: str) -> _Cache:
             return _Cache()
 
     class _Client:
-        def __init__(self, uri):
+        def __init__(self, uri: str) -> None:
             self.uri = uri
 
-        def get_database(self, name):
+        def get_database(self, name: str) -> _Database:
             return _Database()
 
     monkeypatch.setattr(pymongo, "MongoClient", _Client)
