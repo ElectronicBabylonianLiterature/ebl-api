@@ -1,6 +1,6 @@
-from typing import List, Sequence, Dict, Union
+from typing import List, Sequence, Dict, Union, cast
 import pymongo
-from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.bibliography.application.reference_documents import hydrate_reference_documents
 from ebl.corpus.application.schemas import (
     TextSchema,
 )
@@ -13,10 +13,9 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import MongoTextReposi
 
 class MongoTextRepositoryList(MongoTextRepositoryBase):
     def list(self) -> List[Text]:
-        return TextSchema().load(
+        texts = list(
             self._texts.aggregate(
                 [
-                    *join_reference_documents(),
                     *join_chapters(False),
                     {
                         "$sort": {
@@ -25,9 +24,10 @@ class MongoTextRepositoryList(MongoTextRepositoryBase):
                         }
                     },
                 ]
-            ),
-            many=True,
+            )
         )
+        hydrate_reference_documents(texts, self._bibliography_repository)
+        return cast(List[Text], TextSchema().load(texts, many=True))
 
     def list_all_texts(self) -> Sequence[Dict[str, Union[str, int]]]:
         return list(

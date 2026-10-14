@@ -13,6 +13,13 @@ PARTNER_ALIAS = {
 CITATION_KEY = "dossin1967La"
 CORRECTED_TITLE = "Corrected title"
 RESERVATIONS = "bibliography_lookup_reservations"
+RESERVATION_NOT_AWAITING_TTL_DELETION = {"deleteAt": {"$exists": False}}
+SERVER_OWNED_VALUES = {
+    "aliases": [{"value": "client-alias", "normalizedValue": "client-alias"}],
+    "citationKey": "clientChosen",
+    "deprecated": True,
+    "redirectTo": "OTHER-ID",
+}
 
 
 def metadata_only_payload(entry: dict) -> dict:
@@ -30,4 +37,9 @@ def post_entry(client, entry: dict) -> testing.Result:
 
 
 def reservations(database) -> dict:
-    return {document["_id"]: document for document in database[RESERVATIONS].find({})}
+    return {
+        document["_id"]: document
+        for document in database[RESERVATIONS].find(
+            RESERVATION_NOT_AWAITING_TTL_DELETION
+        )
+    }

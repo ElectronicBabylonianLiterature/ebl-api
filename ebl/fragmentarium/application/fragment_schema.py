@@ -43,7 +43,7 @@ class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
     publication = fields.String(required=True)
-    acquisition = fields.Nested(AcquisitionSchema, allow_none=True, load_default=None)
+    acquisitions = fields.Nested(AcquisitionSchema, many=True, load_default=())
     description = fields.String(required=True)
     cdli_images = fields.List(fields.String(), data_key="cdliImages")
     collection = fields.String(required=True)
@@ -127,6 +127,7 @@ class FragmentSchema(Schema):
     @post_load
     def make_fragment(self, data, **kwargs):
         data["references"] = tuple(data["references"])
+        data["acquisitions"] = tuple(data["acquisitions"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
         if "projects" in data:

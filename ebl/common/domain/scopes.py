@@ -89,6 +89,7 @@ class Scope(ScopeItem):
     CREATE_PROPER_NOUNS = ("create:proper_nouns", RESTRICTED)
     TRANSLITERATE_FRAGMENTS = ("transliterate:fragments", RESTRICTED)
     WRITE_BIBLIOGRAPHY = ("write:bibliography", RESTRICTED)
+    ADMIN_BIBLIOGRAPHY = ("admin:bibliography", RESTRICTED)
     WRITE_TEXTS = ("write:texts", RESTRICTED)
     READ_WORDS = ("read:words", OPEN)
     READ_TEXTS = ("read:texts", OPEN)

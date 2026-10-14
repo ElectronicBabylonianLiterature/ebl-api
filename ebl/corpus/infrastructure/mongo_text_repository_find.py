@@ -1,4 +1,6 @@
-from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from typing import cast
+
+from ebl.bibliography.application.reference_documents import hydrate_reference_documents
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
@@ -36,15 +38,18 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
                                 "index": id_.index,
                             }
                         },
-                        *join_reference_documents(),
                         *join_chapters(True),
                         {"$limit": 1},
                     ]
                 )
             )
-            return TextSchema(
-                context={"provenance_service": self._provenance_service}
-            ).load(mongo_text)
+            hydrate_reference_documents([mongo_text], self._bibliography_repository)
+            return cast(
+                Text,
+                TextSchema(
+                    context={"provenance_service": self._provenance_service}
+                ).load(mongo_text),
+            )
 
         except StopIteration as error:
             raise text_not_found(id_) from error
@@ -54,9 +59,12 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
             chapter = self._chapters.find_one(
                 chapter_id_query(id_), projection={"_id": False}
             )
-            return ChapterSchema(
-                context={"provenance_service": self._provenance_service}
-            ).load(chapter)
+            return cast(
+                Chapter,
+                ChapterSchema(
+                    context={"provenance_service": self._provenance_service}
+                ).load(chapter),
+            )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
@@ -64,15 +72,18 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
         try:
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
-            return ChapterDisplaySchema(
-                context={"provenance_service": self._provenance_service}
-            ).load(
-                {
-                    **next(chapters),
-                    "textName": text.name,
-                    "textHasDoi": text.has_doi,
-                    "isSingleStage": not text.has_multiple_stages,
-                }
+            return cast(
+                ChapterDisplay,
+                ChapterDisplaySchema(
+                    context={"provenance_service": self._provenance_service}
+                ).load(
+                    {
+                        **next(chapters),
+                        "textName": text.name,
+                        "textHasDoi": text.has_doi,
+                        "isSingleStage": not text.has_multiple_stages,
+                    }
+                ),
             )
         except NotFoundError as error:
             raise text_not_found(id_.text_id) from error
@@ -89,6 +100,6 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
                     {"$skip": number},
                 ]
             )
-            return LineSchema().load(next(chapters))
+            return cast(Line, LineSchema().load(next(chapters)))
         except StopIteration as error:
             raise line_not_found(id_, number) from error
