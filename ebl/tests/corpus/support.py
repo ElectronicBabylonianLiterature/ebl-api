@@ -1,5 +1,7 @@
 from typing import cast
 
+from falcon import testing
+
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.users.domain.user import Guest
@@ -23,6 +25,12 @@ def allow_signs(signs, sign_list):
 
 def create_chapter_dto(chapter: Chapter) -> dict:
     return cast(dict, ApiChapterSchema().dump(chapter))
+
+
+def simulate_get(client: testing.TestClient, url: str) -> testing.Result:
+    result = client.simulate_get(url)
+    assert isinstance(result, testing.Result)
+    return result
 
 
 def create_chapter_url(chapter: Chapter, suffix: str = "") -> str:

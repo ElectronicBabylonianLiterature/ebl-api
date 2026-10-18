@@ -3,6 +3,7 @@ import logging
 import bson
 import pymongo
 from bson import ObjectId
+from bson.raw_bson import RawBSONDocument
 from pymongo.common import MAX_BSON_SIZE
 from pymongo.database import Database
 
@@ -33,14 +34,16 @@ class MongoCacheRepository(CacheRepository):
         )
 
     def set(self, cache_key: str, item: dict) -> None:
-        document = {"_id": ObjectId(), "cache_key": cache_key, **item}
-        size = len(bson.encode(document))
+        encoded_document = bson.encode(
+            {"_id": ObjectId(), "cache_key": cache_key, **item}
+        )
+        size = len(encoded_document)
         if size > MAX_BSON_SIZE:
             logger.warning(
                 "Not caching %s: %d bytes exceeds %d", cache_key, size, MAX_BSON_SIZE
             )
         else:
-            self._collection.insert_one(document)
+            self._collection.insert_one(RawBSONDocument(encoded_document))
 
     def delete(self, cache_key: str) -> None:
         if self.has(cache_key):
