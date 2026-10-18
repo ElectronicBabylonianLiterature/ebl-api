@@ -1,4 +1,9 @@
+import logging
+
+import bson
 import pymongo
+from bson import ObjectId
+from pymongo.common import MAX_BSON_SIZE
 from pymongo.database import Database
 
 from ebl.cache.application.cache_repository import CacheRepository
@@ -6,6 +11,8 @@ from ebl.mongo_collection import MongoCollection
 
 
 COLLECTION = "cache"
+
+logger = logging.getLogger(__name__)
 
 
 class MongoCacheRepository(CacheRepository):
@@ -26,7 +33,14 @@ class MongoCacheRepository(CacheRepository):
         )
 
     def set(self, cache_key: str, item: dict) -> None:
-        self._collection.insert_one({"cache_key": cache_key, **item})
+        document = {"_id": ObjectId(), "cache_key": cache_key, **item}
+        size = len(bson.encode(document))
+        if size > MAX_BSON_SIZE:
+            logger.warning(
+                "Not caching %s: %d bytes exceeds %d", cache_key, size, MAX_BSON_SIZE
+            )
+        else:
+            self._collection.insert_one(document)
 
     def delete(self, cache_key: str) -> None:
         if self.has(cache_key):

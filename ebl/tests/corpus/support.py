@@ -1,3 +1,5 @@
+from typing import cast
+
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.users.domain.user import Guest
@@ -20,7 +22,7 @@ def allow_signs(signs, sign_list):
 
 
 def create_chapter_dto(chapter: Chapter) -> dict:
-    return ApiChapterSchema().dump(chapter)
+    return cast(dict, ApiChapterSchema().dump(chapter))
 
 
 def create_chapter_url(chapter: Chapter, suffix: str = "") -> str:

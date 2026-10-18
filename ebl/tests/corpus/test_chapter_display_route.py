@@ -1,3 +1,5 @@
+from typing import cast
+
 import attr
 import falcon
 import pytest
@@ -25,14 +27,19 @@ def text(chapter: Chapter) -> Text:
 
 
 @pytest.fixture
+def stored_chapter(text_repository, text: Text, chapter: Chapter) -> Chapter:
+    text_repository.create(text)
+    text_repository.create_chapter(chapter)
+    return chapter
+
+
+@pytest.fixture
 def url(chapter: Chapter) -> str:
     return create_chapter_url(chapter, "/display")
 
 
-def test_get(client, text_repository, parallel_line_injector, text, chapter, url):
-    text_repository.create(text)
-    text_repository.create_chapter(chapter)
-    chapter_display = ChapterDisplay.of_chapter(text, chapter)
+def test_get(client, parallel_line_injector, text, stored_chapter, url):
+    chapter_display = ChapterDisplay.of_chapter(text, stored_chapter)
     injected_chapter_display = attr.evolve(
         chapter_display,
         lines=tuple(
@@ -90,7 +97,9 @@ def test_get_partial(
         ),
     )
     url = create_chapter_url(chapter, "/display?lines=0&variants=0")
-    serialized_partial_chapter = ChapterDisplaySchema().dump(injected_chapter_display)
+    serialized_partial_chapter = cast(
+        dict, ChapterDisplaySchema().dump(injected_chapter_display)
+    )
     selected_line = serialized_partial_chapter["lines"][0]
     serialized_partial_chapter["lines"] = [
         {**selected_line, "variants": selected_line["variants"][:1]}
@@ -111,6 +120,10 @@ def test_get_cached(cached_client, text_repository, text, chapter, url):
     second_result = cached_client.simulate_get(url)
     assert second_result.status == falcon.HTTP_OK
     assert first_result.json == second_result.json
+
+
+def test_get_too_large_to_cache(assert_served_without_caching, stored_chapter, url):
+    assert_served_without_caching(url)
 
 
 def test_text_not_found(client, text_repository, text, url):
