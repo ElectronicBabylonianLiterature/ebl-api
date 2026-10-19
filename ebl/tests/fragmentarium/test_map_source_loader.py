@@ -10,23 +10,17 @@ from ebl.fragmentarium.application.map_mapping_rules import (
     index_polygons_by_key,
 )
 from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
-from ebl.fragmentarium.application.map_source_loader import (
-    MapOdsRow,
-    MapPolygon,
-    load_site_ods_rows,
-    load_site_polygons,
-)
 
 
 def test_load_site_ods_rows_rejects_unexpected_header():
     config = replace(SITE_CONFIGS["ASSUR"], ods_header=("site", "_id", "area"))
 
     with pytest.raises(ValueError, match="Unexpected ODS header"):
-        load_site_ods_rows(config)
+        source_loader.load_site_ods_rows(config)
 
 
 def test_load_site_ods_rows_skips_blank_id_rows():
-    rows = load_site_ods_rows(SITE_CONFIGS["ASSUR"])
+    rows = source_loader.load_site_ods_rows(SITE_CONFIGS["ASSUR"])
 
     assert all(row.findspot_id for row in rows)
 
@@ -40,7 +34,7 @@ def test_source_paths_and_loading_do_not_depend_on_working_directory(
 
     monkeypatch.chdir(tmp_path)
 
-    assert load_site_ods_rows(config)
+    assert source_loader.load_site_ods_rows(config)
 
 
 @pytest.mark.parametrize("raw_id", ["-1", "1.0", "١", str(2**63)])
@@ -53,17 +47,23 @@ def test_load_site_ods_rows_rejects_invalid_findspot_ids(monkeypatch, raw_id):
     )
 
     with pytest.raises(ValueError, match="Invalid findspot ID"):
-        load_site_ods_rows(config)
+        source_loader.load_site_ods_rows(config)
 
 
 def test_group_findspots_deduplicates_agreeing_progressive_rows():
     config = SITE_CONFIGS["KALHU"]
     rows = (
-        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
-        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
     )
     polygons = (
-        MapPolygon(name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"),
+        source_loader.MapPolygon(
+            name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"
+        ),
     )
     index = index_polygons_by_key(polygons)
     derivations = tuple(derive_row(row, index, config) for row in rows)
@@ -78,12 +78,18 @@ def test_group_findspots_deduplicates_agreeing_progressive_rows():
 def test_group_findspots_flags_disagreeing_rows_as_conflict():
     config = SITE_CONFIGS["KALHU"]
     rows = (
-        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
-        MapOdsRow(findspot_id=1, site_name=config.site_name, area="ZT"),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+        source_loader.MapOdsRow(findspot_id=1, site_name=config.site_name, area="ZT"),
     )
     polygons = (
-        MapPolygon(name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"),
-        MapPolygon(name="ZT", polygon_id="kalhu-zt-def", geometry_checksum="def"),
+        source_loader.MapPolygon(
+            name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"
+        ),
+        source_loader.MapPolygon(
+            name="ZT", polygon_id="kalhu-zt-def", geometry_checksum="def"
+        ),
     )
     index = index_polygons_by_key(polygons)
     derivations = tuple(derive_row(row, index, config) for row in rows)
@@ -136,31 +142,37 @@ def test_load_site_polygons_validates_sources(
     _patch_polygon_sources(monkeypatch, names, longitudes, CRS.from_epsg(epsg).to_wkt())
 
     with pytest.raises(ValueError, match=message):
-        load_site_polygons(SITE_CONFIGS["ASSUR"])
+        source_loader.load_site_polygons(SITE_CONFIGS["ASSUR"])
 
 
 def test_load_site_polygons_rejects_invalid_crs(monkeypatch):
     _patch_polygon_sources(monkeypatch, ("A",), (43.0,), "not a crs")
 
     with pytest.raises(ValueError, match="CRS is invalid"):
-        load_site_polygons(SITE_CONFIGS["ASSUR"])
+        source_loader.load_site_polygons(SITE_CONFIGS["ASSUR"])
 
 
 def test_load_site_ods_rows_rejects_empty_source(monkeypatch):
     monkeypatch.setattr(source_loader, "read_ods_rows", lambda path: ())
 
     with pytest.raises(ValueError, match="contains no rows"):
-        load_site_ods_rows(SITE_CONFIGS["ASSUR"])
+        source_loader.load_site_ods_rows(SITE_CONFIGS["ASSUR"])
 
 
 def test_group_findspots_flags_mixed_resolved_and_unresolved_rows_as_conflict():
     config = SITE_CONFIGS["KALHU"]
     rows = (
-        MapOdsRow(findspot_id=1, site_name=config.site_name, area="D XII"),
-        MapOdsRow(findspot_id=1, site_name=config.site_name, area="unknown"),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="unknown"
+        ),
     )
     polygons = (
-        MapPolygon(name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"),
+        source_loader.MapPolygon(
+            name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"
+        ),
     )
     index = index_polygons_by_key(polygons)
     derivations = tuple(derive_row(row, index, config) for row in rows)
@@ -173,9 +185,13 @@ def test_group_findspots_flags_mixed_resolved_and_unresolved_rows_as_conflict():
 
 def test_derive_row_preserves_explicit_source_uncertainty():
     config = SITE_CONFIGS["ASSUR"]
-    row = MapOdsRow(findspot_id=4392, site_name=config.site_name, area="gB4II?")
+    row = source_loader.MapOdsRow(
+        findspot_id=4392, site_name=config.site_name, area="gB4II?"
+    )
     polygons = (
-        MapPolygon(name="gB4II", polygon_id="assur-gb4ii-abc", geometry_checksum="abc"),
+        source_loader.MapPolygon(
+            name="gB4II", polygon_id="assur-gb4ii-abc", geometry_checksum="abc"
+        ),
     )
 
     derivation = derive_row(row, index_polygons_by_key(polygons), config)
@@ -188,9 +204,9 @@ def test_derive_row_preserves_explicit_source_uncertainty():
 @pytest.mark.parametrize("site_name", ["", "Wrong site"])
 def test_derive_row_requires_canonical_site_identity(site_name):
     config = SITE_CONFIGS["ASSUR"]
-    row = MapOdsRow(findspot_id=1, site_name=site_name, area="Area")
+    row = source_loader.MapOdsRow(findspot_id=1, site_name=site_name, area="Area")
     polygons = (
-        MapPolygon(
+        source_loader.MapPolygon(
             name="Area",
             polygon_id="assur-area-checksum",
             geometry_checksum="checksum",
