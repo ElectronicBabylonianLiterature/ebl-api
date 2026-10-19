@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 from marshmallow import ValidationError
 
+from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
 from ebl.fragmentarium.application.map_curated_mappings import (
     CuratedMappingRecord,
     load_curated_mappings,
@@ -60,6 +61,31 @@ def test_valid_reviewed_record_is_accepted(tmp_path):
 
 def test_missing_path_returns_empty():
     assert _load(None) == ()
+
+
+@pytest.mark.parametrize("findspot_id", [0, 1, MAX_FINDSPOT_ID])
+def test_curated_findspot_ids_preserve_nonnegative_bson_integers(
+    tmp_path: Path, findspot_id: int
+) -> None:
+    path = _write(tmp_path, [_row(findspotId=findspot_id)])
+
+    records = load_curated_mappings(path, "ASSUR", KNOWN_POLYGON_IDS, {findspot_id})
+
+    assert records[0]["findspotId"] == findspot_id
+
+
+@pytest.mark.parametrize(
+    "findspot_id", [1.9, -0.5, 1.0, "1", True, False, None, -1, MAX_FINDSPOT_ID + 1]
+)
+def test_curated_findspot_ids_reject_coercion_and_out_of_range(
+    tmp_path: Path, findspot_id: object
+) -> None:
+    path = _write(tmp_path, [_row(findspotId=findspot_id)])
+
+    with pytest.raises(ValidationError, match="findspotId"):
+        load_curated_mappings(
+            path, "ASSUR", KNOWN_POLYGON_IDS, {0, 1, -1, MAX_FINDSPOT_ID + 1}
+        )
 
 
 @pytest.mark.parametrize("field", ["reviewer", "reviewDate"])

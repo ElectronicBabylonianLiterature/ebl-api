@@ -12,6 +12,7 @@ from marshmallow import (
     validates_schema,
 )
 
+from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
 from ebl.fragmentarium.application.map_json import load_strict_json
 
 
@@ -31,7 +32,10 @@ class CuratedMappingRecord(TypedDict):
 
 class CuratedCrosswalkRow(Schema):
     findspot_id = fields.Integer(
-        required=True, data_key="findspotId", validate=validate.Range(min=0)
+        required=True,
+        strict=True,
+        data_key="findspotId",
+        validate=validate.Range(min=0, max=MAX_FINDSPOT_ID),
     )
     site_id = fields.String(required=True, data_key="siteId")
     polygon_ids = fields.List(
