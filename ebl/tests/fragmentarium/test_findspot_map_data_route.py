@@ -1,3 +1,5 @@
+from typing import cast
+
 import attr
 import falcon
 import pytest
@@ -211,6 +213,7 @@ def test_map_data_rejects_missing_and_wrong_site_metadata(
     )
     client = testing.TestClient(ebl.app.create_app(test_context))
 
-    payload = client.simulate_get("/findspots/map-data").json["findspots"]
+    result = cast(testing.Result, client.simulate_get("/findspots/map-data"))
+    payload = cast(dict[str, list[dict[str, object]]], result.json)["findspots"]
 
     assert [item["findspotId"] for item in payload] == [300]

@@ -89,6 +89,7 @@ def test_map_data_combined_script_and_genre_filter(map_data_with_script_and_genr
 @pytest.mark.parametrize(
     "query",
     [
+        "?site=UNKNOWN",
         "?scriptPeriod=not-a-period",
         "?scriptPeriodModifier=not-a-modifier",
         "?genre=ARCHIVAL:not-a-genre",

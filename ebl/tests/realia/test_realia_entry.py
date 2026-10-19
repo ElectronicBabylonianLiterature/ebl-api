@@ -1,3 +1,5 @@
+from typing import cast
+
 import pytest
 
 from ebl.bibliography.domain.reference import ReferenceType
@@ -12,6 +14,14 @@ from ebl.realia.infrastructure.realia_schemas import (
     ReallexikonEntrySchema,
 )
 from ebl.tests.factories.realia import RealiaEntryFactory
+
+
+def _load_reallexikon(data: dict) -> ReallexikonEntry:
+    return cast(ReallexikonEntry, ReallexikonEntrySchema().load(data))
+
+
+def _load_realia(data: dict) -> RealiaEntry:
+    return cast(RealiaEntry, RealiaEntrySchema().load(data))
 
 
 @pytest.fixture
@@ -61,7 +71,7 @@ def test_afo_register_entry_schema_round_trip() -> None:
         reference="p. 42",
         cross_reference="see gold",
     )
-    dumped = AfoRegisterEntrySchema().dump(entry)
+    dumped = cast(dict, AfoRegisterEntrySchema().dump(entry))
     assert dumped == {
         "mainWord": "silver",
         "note": "precious metal",
@@ -78,17 +88,33 @@ def test_afo_register_entry_schema_round_trip() -> None:
 
 def test_reallexikon_entry_schema_round_trip() -> None:
     entry = ReallexikonEntry(id="Lion", title="Lion, Löwe", reference=None)
-    dumped = ReallexikonEntrySchema().dump(entry)
+    dumped = cast(dict, ReallexikonEntrySchema().dump(entry))
     assert dumped["id"] == "Lion"
     assert dumped["title"] == "Lion, Löwe"
     assert dumped["reference"] is None
     assert "content" not in dumped
-    loaded = ReallexikonEntrySchema().load(dumped)
+    loaded = _load_reallexikon(dumped)
     assert loaded == entry
 
 
+@pytest.mark.parametrize(
+    "reference_id",
+    [
+        pytest.param(5, id="integer"),
+        pytest.param({"nested": "bib_1"}, id="object"),
+        pytest.param(["bib_1"], id="list"),
+    ],
+)
+def test_reallexikon_non_string_reference_id_deserializes_to_none(
+    reference_id: object,
+) -> None:
+    entry = _load_reallexikon({"id": "Lion", "reference": {"id": reference_id}})
+
+    assert entry.reference is None
+
+
 def test_reallexikon_lean_reference_deserializes_with_pages() -> None:
-    entry = ReallexikonEntrySchema().load(
+    entry = _load_reallexikon(
         {
             "id": "1069",
             "title": "Aššur A.",
@@ -103,18 +129,13 @@ def test_reallexikon_lean_reference_deserializes_with_pages() -> None:
 
 
 def test_reallexikon_empty_reference_id_deserializes_to_none() -> None:
-    assert ReallexikonEntrySchema().load({"id": "x", "reference": ""}).reference is None
-    assert (
-        ReallexikonEntrySchema()
-        .load({"id": "x", "reference": {"pages": "1"}})
-        .reference
-        is None
-    )
-    assert ReallexikonEntrySchema().load({"id": "x", "reference": []}).reference is None
+    assert _load_reallexikon({"id": "x", "reference": ""}).reference is None
+    assert _load_reallexikon({"id": "x", "reference": {"pages": "1"}}).reference is None
+    assert _load_reallexikon({"id": "x", "reference": []}).reference is None
 
 
 def test_realia_entry_schema_dump(realia_entry: RealiaEntry) -> None:
-    dumped = RealiaEntrySchema().dump(realia_entry)
+    dumped = cast(dict, RealiaEntrySchema().dump(realia_entry))
     assert dumped["_id"] == realia_entry.id
     assert dumped["relatedTerms"] == list(realia_entry.related_terms)
     assert dumped["type"] == list(realia_entry.type)
@@ -133,7 +154,7 @@ def test_realia_entry_schema_load_round_trip() -> None:
         "wikidataId": ["Q34095"],
         "reallexikon": [],
     }
-    entry = RealiaEntrySchema().load(data)
+    entry = _load_realia(data)
     assert entry.id == "Bronze"
     assert entry.related_terms == ("Kupfer", "Metall")
     assert entry.type == ("Personal names",)
@@ -156,7 +177,7 @@ def test_realia_entry_schema_load_stored_shape() -> None:
             }
         ],
     }
-    entry = RealiaEntrySchema().load(data)
+    entry = _load_realia(data)
     assert entry.type == ("Personal names",)
     reference = entry.reallexikon[0].reference
     assert reference is not None
@@ -186,8 +207,9 @@ def test_realia_entry_schema_load_multiple_reallexikon() -> None:
             {"id": "1071", "title": "Aššur C. Gott", "reference": None},
         ],
     }
-    entry = RealiaEntrySchema().load(data)
+    entry = _load_realia(data)
     assert tuple(rlex.id for rlex in entry.reallexikon) == ("1069", "1070", "1071")
-    assert entry.reallexikon[0].reference is not None
-    assert entry.reallexikon[0].reference.id == "rla_1_170e"
+    first_reference = entry.reallexikon[0].reference
+    assert first_reference is not None
+    assert first_reference.id == "rla_1_170e"
     assert entry.reallexikon[2].reference is None

@@ -15,7 +15,7 @@ from ebl.fragmentarium.domain.findspot import (
 )
 from ebl.common.application.schemas import deserialize_provenance_record
 from ebl.schemas import NameEnumField
-from marshmallow import Schema, fields, post_dump, post_load
+from marshmallow import RAISE, Schema, fields, post_dump, post_load
 
 
 class ExcavationNumberSchema(AbstractMuseumNumberSchema):
@@ -55,7 +55,7 @@ class FindspotSchema(ProvenanceSiteMixin, Schema):
     date_range = fields.Nested(DateRangeSchema, data_key="date", allow_none=True)
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=())
     room = fields.String()
-    context = fields.String()
+    findspot_context = fields.String(attribute="context", data_key="context")
     map_location = fields.Nested(
         MapLocationSchema, allow_none=True, load_default=None, data_key="mapLocation"
     )
@@ -99,3 +99,14 @@ class ArchaeologySchema(ProvenanceSiteMixin, Schema):
     @post_load
     def create_archaeology(self, data, **kwargs) -> Archaeology:
         return Archaeology(**data)
+
+
+class ArchaeologyInputSchema(ArchaeologySchema):
+    findspot = fields.Nested(
+        FindspotSchema(exclude=("map_location",), unknown=RAISE),
+        allow_none=True,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = RAISE
