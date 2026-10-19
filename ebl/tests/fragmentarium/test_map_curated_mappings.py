@@ -1,9 +1,11 @@
 import json
+from pathlib import Path
 
 import pytest
 from marshmallow import ValidationError
 
 from ebl.fragmentarium.application.map_curated_mappings import (
+    CuratedMappingRecord,
     load_curated_mappings,
     merge_verified_and_curated,
 )
@@ -103,6 +105,20 @@ def test_empty_polygon_array_rejected(tmp_path):
         _load(path)
 
 
+def test_blank_polygon_identifier_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(polygonIds=["  "])])
+
+    with pytest.raises(ValidationError, match="must not contain blanks"):
+        _load(path)
+
+
+def test_curated_document_requires_array(tmp_path: Path) -> None:
+    path = _write(tmp_path, {"rows": [_row()]})
+
+    with pytest.raises(ValueError, match="Expected a JSON array"):
+        _load(path)
+
+
 def test_unsupported_match_method_rejected(tmp_path):
     path = _write(tmp_path, [_row(matchMethod="verified-source")])
 
@@ -149,17 +165,28 @@ def test_duplicate_json_keys_are_rejected(tmp_path):
         _load(path)
 
 
+def _mapping(findspot_id: int, polygon_id: str) -> CuratedMappingRecord:
+    return {
+        "findspotId": findspot_id,
+        "polygonIds": [polygon_id],
+        "locationPrecision": "excavation-area",
+        "matchMethod": "curated",
+        "source": "manual review",
+        "sourceRevision": "2026-08-05",
+    }
+
+
 def test_merge_rejects_overlap_between_verified_and_curated():
-    verified = ({"findspotId": 1, "polygonIds": ["assur-a"]},)
-    curated = ({"findspotId": 1, "polygonIds": ["assur-b"]},)
+    verified = (_mapping(1, "assur-a"),)
+    curated = (_mapping(1, "assur-b"),)
 
     with pytest.raises(ValueError, match="both verified and curated"):
         merge_verified_and_curated(verified, curated)
 
 
 def test_merge_combines_disjoint_sets_sorted_by_findspot_id():
-    verified = ({"findspotId": 2, "polygonIds": ["assur-a"]},)
-    curated = ({"findspotId": 1, "polygonIds": ["assur-b"]},)
+    verified = (_mapping(2, "assur-a"),)
+    curated = (_mapping(1, "assur-b"),)
 
     merged = merge_verified_and_curated(verified, curated)
 

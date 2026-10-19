@@ -119,15 +119,19 @@ def test_fragment_get_surfaces_findspot_map_location(
     )
     findspot_repository.create(findspot)
     fragment: Fragment = FragmentFactory.build(
-        archaeology=attr.evolve(
-            ARCHAEOLOGY, site=None, findspot=None, findspot_id=findspot.id_
-        )
+        archaeology=attr.evolve(ARCHAEOLOGY, site=None, findspot=None, findspot_id=None)
     )
     fragment_number = fragmentarium.create(fragment)
 
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/archaeology",
+        json={"archaeology": {"findspotId": findspot.id_}},
+    )
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
 
+    assert post_result.status == falcon.HTTP_OK
     assert get_result.status == falcon.HTTP_OK
+    assert post_result.json["archaeology"]["findspotId"] == findspot.id_
     assert get_result.json["archaeology"]["findspot"]["mapLocation"] == {
         "polygonIds": ["assur-1", "assur-2"],
         "locationPrecision": "excavation-area",

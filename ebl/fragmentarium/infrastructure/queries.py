@@ -167,6 +167,7 @@ def aggregate_needs_revision(user_scopes: Sequence[Scope] = ()) -> List[dict]:
                 "accession": {"$first": "$accession"},
                 "description": {"$first": "$description"},
                 "script": {"$first": "$script"},
+                "acquisitions": {"$first": "$acquisitions"},
                 "record": {"$push": "$record"},
             }
         },
@@ -223,6 +224,7 @@ def aggregate_needs_revision(user_scopes: Sequence[Scope] = ()) -> List[dict]:
                 "accession": 1,
                 "description": 1,
                 "script": 1,
+                "acquisitions": 1,
                 "editionDate": {"$arrayElemAt": ["$transliterationDates", 0]},
                 "editor": {"$arrayElemAt": ["$transliterators", 0]},
             }

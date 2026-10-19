@@ -9,6 +9,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from pymongo.errors import BulkWriteError
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.io.fragments.importer import (
+    canonicalize,
     create_sort_index,
     load_collection,
     set_word_ids,
@@ -116,6 +117,21 @@ def test_invalid_enum(valid_fragment_data, validate_fragment):
         validate_fragment(valid_fragment_data)
 
 
+def test_rejects_legacy_singular_acquisition(valid_fragment_data, validate_fragment):
+    acquisition = valid_fragment_data.pop("acquisitions")[0]
+    valid_fragment_data["acquisition"] = acquisition
+
+    with pytest.raises(
+        ValidationError,
+        match=re.escape(
+            f"Invalid data in {MOCKFILE}: "
+            "{'acquisition': [\"Legacy singular field is no longer supported; "
+            "use 'acquisitions'.\"]}"
+        ),
+    ):
+        validate_fragment(valid_fragment_data)
+
+
 def test_invalid_input_type(valid_fragment_data, validate_fragment):
     with pytest.raises(
         ValidationError,
@@ -170,6 +186,50 @@ def test_ensure_unique_duplicate(
         ValidationError, match=f"ID {museum_number} of file {MOCKFILE} already exists"
     ):
         ensure_unique(valid_fragment_data, fragments_collection)
+
+
+def test_canonicalize_coerces_types_and_strips_unknown_fields(
+    valid_fragment_data, seeded_provenance_service
+):
+    valid_fragment_data["_id"] = "mock.number"
+    valid_fragment_data["acquisitions"][0]["date"] = str(
+        valid_fragment_data["acquisitions"][0]["date"]
+    )
+    valid_fragment_data["unexpectedLegacyField"] = "junk"
+
+    canonical = canonicalize(valid_fragment_data, seeded_provenance_service)
+
+    assert isinstance(canonical["acquisitions"][0]["date"], int)
+    assert "unexpectedLegacyField" not in canonical
+    assert canonical["_id"] == "mock.number"
+
+
+def test_import_persists_canonical_schema_output(
+    tmp_path,
+    fragment,
+    fragment_repository,
+    fragments_collection,
+    seeded_provenance_service,
+):
+    schema = FragmentSchema(context={"provenance_service": seeded_provenance_service})
+    data = schema.dump(fragment)
+    data["_id"] = str(fragment.number)
+    data["acquisitions"][0]["date"] = str(data["acquisitions"][0]["date"])
+    data["unexpectedLegacyField"] = "junk"
+    path = mock_json_file(json.dumps(data), tmp_path)
+
+    [fragment_data] = load_data([path]).values()
+    validate(fragment_data, provenance_service=seeded_provenance_service)
+    canonical = canonicalize(fragment_data, seeded_provenance_service)
+    write_to_db([canonical], fragments_collection)
+
+    stored = fragments_collection.find_one_by_id(str(fragment.number))
+    assert stored == canonical
+    assert "unexpectedLegacyField" not in stored
+    assert isinstance(stored["acquisitions"][0]["date"], int)
+
+    round_tripped = fragment_repository.query_by_museum_number(fragment.number)
+    assert round_tripped.acquisitions == fragment.acquisitions
 
 
 def test_write_to_db(

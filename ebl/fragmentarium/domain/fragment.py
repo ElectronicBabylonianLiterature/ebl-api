@@ -31,6 +31,7 @@ from ebl.fragmentarium.domain.fragment_metadata import (
     Script,
     UncuratedReference,
     parse_markup_with_paragraphs,
+    to_acquisition_tuple,
     to_named_entity_tuple,
     to_realia_tuple,
 )
@@ -64,6 +65,7 @@ __all__ = [
     "Script",
     "UncuratedReference",
     "parse_markup_with_paragraphs",
+    "to_acquisition_tuple",
     "to_named_entity_tuple",
     "to_realia_tuple",
 ]
@@ -74,7 +76,9 @@ class Fragment(FragmentExternalNumbers):
     number: MuseumNumber
     accession: Optional[Accession] = None
     publication: str = ""
-    acquisition: Optional[Acquisition] = None
+    acquisitions: Sequence[Acquisition] = attr.ib(
+        default=(), converter=to_acquisition_tuple
+    )
     description: str = ""
     cdli_images: Sequence[str] = []
     collection: str = ""

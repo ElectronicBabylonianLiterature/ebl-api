@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TypedDict
+from typing import TypedDict, cast
 
 from marshmallow import (
     Schema,
@@ -105,7 +105,7 @@ def load_curated_mappings(
                 f"Curated row for findspot {entry.get('findspotId')} declares "
                 f"siteId {entry.get('siteId')!r}, expected {site_id!r}."
             )
-        record = schema.load(entry)
+        record = cast(CuratedMappingRecord, schema.load(entry))
         if record["findspotId"] not in authoritative_findspot_ids:
             raise ValueError(
                 f"Curated findspot ID {record['findspotId']} has no authoritative "
