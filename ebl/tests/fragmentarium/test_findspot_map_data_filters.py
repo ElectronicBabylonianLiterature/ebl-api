@@ -101,3 +101,12 @@ def test_map_data_rejects_invalid_filters(map_data_with_script_and_genre, query)
     )
 
     assert response.status_code == 422
+
+
+@pytest.mark.parametrize("route", ["/findspots/map-data", "/fragments/query"])
+def test_map_and_search_reject_repeated_genre(
+    guest_client: testing.TestClient, route: str
+) -> None:
+    response = guest_client.simulate_get(f"{route}?genre=ARCHIVAL&genre=CANONICAL")
+
+    assert response.status_code == 422
