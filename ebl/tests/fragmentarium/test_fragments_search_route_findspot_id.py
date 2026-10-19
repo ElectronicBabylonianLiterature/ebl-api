@@ -1,5 +1,6 @@
 import falcon
 import pytest
+from falcon import testing
 
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.parameter_parser import (
@@ -86,5 +87,14 @@ def test_parse_findspot_id_rejects_oversized_digit_count():
 def test_search_findspot_id_rejects_over_raw_length_limit(client):
     value = "1" * (MAX_FINDSPOT_ID_RAW_LENGTH + 1)
     result = client.simulate_get("/fragments/query", params={"findspotId": value})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize("parameter", ["findspotId", "findspotIds"])
+def test_search_rejects_repeated_findspot_parameters(
+    guest_client: testing.TestClient, parameter: str
+) -> None:
+    result = guest_client.simulate_get(f"/fragments/query?{parameter}=1&{parameter}=2")
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

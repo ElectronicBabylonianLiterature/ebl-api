@@ -122,7 +122,9 @@ def parse_genre(parameters: Dict) -> Dict:
     return {**parameters, "genre": genre} if any(genre) else parameters
 
 
-def _parse_findspot_id(value: str, field: str) -> int:
+def _parse_findspot_id(value: object, field: str) -> int:
+    if not isinstance(value, str):
+        raise DataError(f"{field} must be a single string")
     if len(value) > MAX_FINDSPOT_ID_RAW_LENGTH:
         raise DataError(
             f"{field} must not exceed {MAX_FINDSPOT_ID_RAW_LENGTH} characters"
@@ -154,6 +156,8 @@ def parse_findspot_ids(parameters: Dict) -> Dict:
         return parameters
 
     raw = parameters["findspotIds"]
+    if not isinstance(raw, str):
+        raise DataError("findspotIds must be a single comma-separated string.")
     if len(raw) > MAX_FINDSPOT_IDS_RAW_LENGTH:
         raise DataError(
             f"findspotIds must not exceed {MAX_FINDSPOT_IDS_RAW_LENGTH} characters."
