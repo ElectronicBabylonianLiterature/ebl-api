@@ -9,11 +9,6 @@ ACTIVE_BIBLIOGRAPHY_FILTER = {"deprecated": {"$ne": True}}
 
 
 def expected_field_match(value: Any) -> Any:
-    """Match exactly the stored value, distinguishing null from absent.
-
-    A bare ``None`` also matches documents where the field is missing, which
-    would let a concurrent removal slip past the compare-and-set.
-    """
     return {"$type": "null"} if value is None else value
 
 
@@ -31,6 +26,23 @@ def server_owned_state_filter(
             for field in sorted(SERVER_OWNED_BIBLIOGRAPHY_FIELDS)
         },
     }
+
+
+def server_owned_state_update(entry: Mapping[str, Any]) -> Dict[str, Any]:
+    set_fields = {
+        field: entry[field]
+        for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+        if field in entry
+    }
+    unset_fields = {
+        field: "" for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS if field not in entry
+    }
+    update: Dict[str, Any] = {}
+    if set_fields:
+        update["$set"] = set_fields
+    if unset_fields:
+        update["$unset"] = unset_fields
+    return update
 
 
 def author_year_title_match(

@@ -1,5 +1,12 @@
 import re
-from typing import Callable, MutableSequence, Optional, Sequence, TypeVar, Union
+from typing import (
+    Callable,
+    MutableSequence,
+    Optional,
+    Sequence,
+    TypeVar,
+    cast,
+)
 
 import attr
 
@@ -29,7 +36,12 @@ from ebl.transliteration.domain.standardization import (
     Standardization,
     UNKNOWN,
 )
-from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor, Variant
+from ebl.transliteration.domain.tokens import (
+    ErasureState,
+    SignsCollectingVisitor,
+    Token,
+    Variant,
+)
 from ebl.transliteration.domain.unknown_sign_tokens import UnknownSign
 from ebl.transliteration.domain.word_tokens import Word
 
@@ -39,34 +51,33 @@ def strip_flags(name: str) -> str:
     return re.sub(pattern, "", name)
 
 
-S = TypeVar("S")
-T = TypeVar("T", bound=Token)
+VisitorMethod = TypeVar("VisitorMethod", bound=Callable[..., None])
 
 
-def skip_enclosures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
+def skip_enclosures(func: VisitorMethod) -> VisitorMethod:
     skipped_enclosures = {
         EnclosureType.REMOVAL,
         EnclosureType.ACCIDENTAL_OMISSION,
         EnclosureType.INTENTIONAL_OMISSION,
     }
 
-    def inner(self: S, token: T) -> None:
+    def inner(self: object, token: Token) -> None:
         if token.enclosure_type.isdisjoint(skipped_enclosures):
             func(self, token)
 
-    return inner
+    return cast(VisitorMethod, inner)
 
 
-def skip_erasures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
-    def inner(self: S, token: T) -> None:
+def skip_erasures(func: VisitorMethod) -> VisitorMethod:
+    def inner(self: object, token: Token) -> None:
         if token.erasure != ErasureState.ERASED:
             func(self, token)
 
-    return inner
+    return cast(VisitorMethod, inner)
 
 
 @attr.s(auto_attribs=True)
-class SignsVisitor(TokenVisitor):
+class SignsVisitor(SignsCollectingVisitor):
     _sign_repository: SignRepository
     _is_deep: bool = True
     _to_unicode: bool = False
@@ -74,9 +85,8 @@ class SignsVisitor(TokenVisitor):
         init=False, factory=list
     )
 
-    @property
-    def result(self) -> Sequence[Union[int, str]]:
-        return self.result_unicode if self._to_unicode else self.result_string
+    def reset(self) -> None:
+        self._standardizations = []
 
     @property
     def result_string(self) -> Sequence[str]:

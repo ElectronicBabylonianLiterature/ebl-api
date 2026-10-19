@@ -111,7 +111,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.cache,
     )
     fragment_query = FragmentsQueryResource(
-        context.fragment_repository, context.get_transliteration_query_factory()
+        context.fragment_repository,
+        context.get_transliteration_query_factory(),
+        context.bibliography_repository,
     )
     afo_register_fragments_query = AfoRegisterFragmentsQueryResource(
         context.fragment_repository, finder

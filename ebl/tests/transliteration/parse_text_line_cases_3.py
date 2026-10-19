@@ -1,0 +1,192 @@
+from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.enclosure_tokens import (
+    BrokenAway,
+    Determinative,
+    PerhapsBrokenAway,
+)
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.sign_tokens import (
+    Reading,
+)
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.tokens import (
+    Joiner,
+    UnknownNumberOfSigns,
+)
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
+from ebl.transliteration.domain.word_tokens import (
+    ErasureState,
+    LoneDeterminative,
+    Word,
+)
+
+PARSE_TEXT_LINE_CASES_3 = [
+    (
+        "1. [a?-ku (...)]\n2. [a?-ku (x)]",
+        [
+            TextLine.of_iterable(
+                LineNumber(1),
+                (
+                    Word.of(
+                        parts=[
+                            BrokenAway.open(),
+                            Reading.of_name("a", flags=[atf.Flag.UNCERTAIN]),
+                            Joiner.hyphen(),
+                            Reading.of_name("ku"),
+                        ]
+                    ),
+                    Word.of(
+                        (
+                            PerhapsBrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            PerhapsBrokenAway.close(),
+                            BrokenAway.close(),
+                        )
+                    ),
+                ),
+            ),
+            TextLine.of_iterable(
+                LineNumber(2),
+                (
+                    Word.of(
+                        parts=[
+                            BrokenAway.open(),
+                            Reading.of_name("a", flags=[atf.Flag.UNCERTAIN]),
+                            Joiner.hyphen(),
+                            Reading.of_name("ku"),
+                        ]
+                    ),
+                    Word.of(
+                        parts=[
+                            PerhapsBrokenAway.open(),
+                            UnclearSign.of(),
+                            PerhapsBrokenAway.close(),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                ),
+            ),
+        ],
+    ),
+    (
+        "1. [...+ku....] [....ku+...]",
+        [
+            TextLine.of_iterable(
+                LineNumber(1),
+                (
+                    Word.of(
+                        parts=[
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            Joiner.plus(),
+                            Reading.of_name("ku"),
+                            Joiner.dot(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                    Word.of(
+                        parts=[
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            Joiner.dot(),
+                            Reading.of_name("ku"),
+                            Joiner.plus(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                ),
+            )
+        ],
+    ),
+    (
+        (
+            "1. [...] {bu} [...]\n"
+            "2. [...]{bu} [...]\n"
+            "3. [...] {bu}[...]\n"
+            "4. [...]{bu}[...]"
+        ),
+        [
+            TextLine.of_iterable(
+                LineNumber(1),
+                (
+                    Word.of(
+                        (
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )
+                    ),
+                    LoneDeterminative.of_value(
+                        [Determinative.of([Reading.of_name("bu")])],
+                        ErasureState.NONE,
+                    ),
+                    Word.of(
+                        (
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )
+                    ),
+                ),
+            ),
+            TextLine.of_iterable(
+                LineNumber(2),
+                (
+                    Word.of(
+                        [
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                            Determinative.of([Reading.of_name("bu")]),
+                        ]
+                    ),
+                    Word.of(
+                        (
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )
+                    ),
+                ),
+            ),
+            TextLine.of_iterable(
+                LineNumber(3),
+                (
+                    Word.of(
+                        (
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        )
+                    ),
+                    Word.of(
+                        [
+                            Determinative.of([Reading.of_name("bu")]),
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                ),
+            ),
+            TextLine.of_iterable(
+                LineNumber(4),
+                (
+                    Word.of(
+                        parts=[
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                            Determinative.of([Reading.of_name("bu")]),
+                            BrokenAway.open(),
+                            UnknownNumberOfSigns.of(),
+                            BrokenAway.close(),
+                        ]
+                    ),
+                ),
+            ),
+        ],
+    ),
+]

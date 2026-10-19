@@ -47,6 +47,10 @@ def test_map_location_schema_round_trip(polygon_ids):
     [
         _payload(polygonIds=[]),
         _payload(polygonIds=["assur-1", "assur-1"]),
+        _payload(polygonIds=[" assur-1 ", "assur-1"]),
+        _payload(polygonIds=[1]),
+        _payload(polygonIds=[None]),
+        _payload(polygonIds=[["assur-1"]]),
         _payload(polygonIds=["assur-1", "  "]),
         _payload(locationPrecision="not-a-precision"),
         _payload(matchMethod="not-a-method"),
@@ -62,6 +66,19 @@ def test_map_location_schema_rejects_invalid_payload(payload):
 def test_map_location_schema_rejects_unknown_field():
     with pytest.raises(ValidationError):
         MapLocationSchema().load(_payload(unknown="value"))
+
+
+def test_map_location_schema_normalizes_polygon_ids():
+    schema = MapLocationSchema()
+
+    assert schema.dump(schema.load(_payload(polygonIds=[" assur-1 "]))) == _payload()
+
+
+def test_map_location_schema_rejects_normalized_duplicates_on_polygon_field():
+    with pytest.raises(ValidationError) as error:
+        MapLocationSchema().load(_payload(polygonIds=["assur-1", " assur-1 "]))
+
+    assert error.value.messages == {"polygonIds": ["polygonIds must be unique."]}
 
 
 def test_map_location_schema_normalizes_source_whitespace():

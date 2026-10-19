@@ -6,6 +6,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 
 COUNT_MODES = ("exact", "none", "page")
+MAX_QUERY_LIMIT = 200
 MAX_FINDSPOT_ID = 2**63 - 1
 MAX_FINDSPOT_ID_RAW_LENGTH = 64
 MAX_FINDSPOT_IDS = 200
@@ -21,7 +22,7 @@ def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
 
         try:
             return {**parameters, field: int(value)}
-        except ValueError as error:
+        except (TypeError, ValueError) as error:
             raise DataError(
                 f"{field} must be integer, got {value!r} instead"
             ) from error
@@ -39,6 +40,15 @@ def parse_non_negative_integer_field(field: str) -> Callable[[Dict], Dict]:
         return parameters
 
     return parse_non_negative_integer
+
+
+def parse_limit(parameters: Dict) -> Dict:
+    parameters = parse_integer_field("limit")(parameters)
+    if "limit" not in parameters:
+        return parameters
+    if parameters["limit"] < 1:
+        raise DataError(f"limit must be at least 1, got {parameters['limit']} instead")
+    return {**parameters, "limit": min(parameters["limit"], MAX_QUERY_LIMIT)}
 
 
 def parse_lines(lines: Sequence[str]) -> Sequence[int]:

@@ -28,6 +28,7 @@ from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
     SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
 )
+from ebl.errors import DataError
 
 CLIENT_EDITABLE_BIBLIOGRAPHY_FIELDS = (
     frozenset(cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]))
@@ -89,16 +90,19 @@ def preserve_persisted_fields(
     }
 
 
+_EMPTY_SERVER_OWNED_VALUES: tuple[Any, ...] = ([], "", False, None)
+
+
+def _normalized_value(field: str, value: Any) -> Any:
+    if any(value == empty for empty in _EMPTY_SERVER_OWNED_VALUES):
+        return None
+    if field == "aliases" and isinstance(value, list):
+        return canonical_aliases(value)
+    return value
+
+
 def canonical_aliases(aliases: Sequence[Any]) -> list[str]:
     return sorted(json.dumps(alias, sort_keys=True, default=str) for alias in aliases)
-
-
-def comparable_server_owned_value(field: str, value: Any) -> Any:
-    return (
-        canonical_aliases(value)
-        if field == "aliases" and isinstance(value, list)
-        else value
-    )
 
 
 def changed_server_owned_fields(
@@ -108,6 +112,46 @@ def changed_server_owned_fields(
         field
         for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
         if field in entry
-        and comparable_server_owned_value(field, entry[field])
-        != comparable_server_owned_value(field, stored_entry.get(field))
+        and _normalized_value(field, entry[field])
+        != _normalized_value(field, stored_entry.get(field))
     )
+
+
+_KNOWN_METADATA_UPDATE_FIELDS = (
+    CLIENT_EDITABLE_BIBLIOGRAPHY_FIELDS | SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+)
+
+
+def unknown_nonroundtrip_fields(
+    entry: Mapping[str, Any], stored_entry: Mapping[str, Any]
+) -> list[str]:
+    return sorted(
+        key
+        for key, value in entry.items()
+        if key not in _KNOWN_METADATA_UPDATE_FIELDS
+        and (key not in stored_entry or value != stored_entry[key])
+    )
+
+
+def reject_unknown_metadata_fields(
+    entry: Mapping[str, Any], stored_entry: Mapping[str, Any]
+) -> None:
+    if unknown_fields := unknown_nonroundtrip_fields(entry, stored_entry):
+        raise DataError(
+            "Bibliography metadata update does not recognise: "
+            f"{', '.join(unknown_fields)}. Only persisted values may be "
+            "round-tripped for keys outside the CSL schema."
+        )
+
+
+def submitted_server_owned_fields(entry: Mapping[str, Any]) -> list[str]:
+    return sorted(SERVER_OWNED_BIBLIOGRAPHY_FIELDS.intersection(entry))
+
+
+def reject_submitted_server_owned_fields(entry: Mapping[str, Any]) -> None:
+    if forbidden_fields := submitted_server_owned_fields(entry):
+        raise DataError(
+            "Bibliography creation may not include server-owned fields: "
+            f"{', '.join(forbidden_fields)}. "
+            "Use POST /bibliography/{id}/identity to manage identity state."
+        )
