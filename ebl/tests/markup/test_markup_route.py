@@ -75,3 +75,28 @@ def test_get_markup(client):
     )
     assert result.json == expected
     assert result.status == falcon.HTTP_OK
+
+
+def test_unparsable_markup_is_unprocessable(client):
+    result = client.simulate_get("/markup", params={"text": "@i@kur@i@"})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "Invalid markup" in result.json["description"]
+
+
+def test_unparsable_cached_markup_is_unprocessable(client):
+    result = client.simulate_get("/cached-markup", params={"text": "@i@kur@i@"})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "Invalid markup" in result.json["description"]
+
+
+def test_cached_markup_serves_the_second_request_from_the_cache(cached_client):
+    params = {"text": "@i{cached}"}
+
+    first = cached_client.simulate_get("/cached-markup", params=params)
+    second = cached_client.simulate_get("/cached-markup", params=params)
+
+    assert first.status == falcon.HTTP_OK
+    assert second.status == falcon.HTTP_OK
+    assert second.json == first.json

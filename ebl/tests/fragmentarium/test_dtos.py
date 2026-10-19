@@ -62,7 +62,9 @@ def expected_dto(lemmatized_fragment, has_photo):
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
             "cdliImages": lemmatized_fragment.cdli_images,
-            "acquisition": AcquisitionSchema().dump(lemmatized_fragment.acquisition),
+            "acquisitions": AcquisitionSchema().dump(
+                lemmatized_fragment.acquisitions, many=True
+            ),
             "description": lemmatized_fragment.description,
             "joins": cast(dict, JoinsSchema().dump(lemmatized_fragment.joins))[
                 "fragments"
@@ -169,7 +171,7 @@ def test_create_fragment_info_dto():
         "accession": AccessionSchema().dump(info.accession),
         "script": ScriptSchema().dump(info.script),
         "description": info.description,
-        "acquisition": AcquisitionSchema().dump(info.acquisition),
+        "acquisitions": AcquisitionSchema().dump(info.acquisitions, many=True),
         "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",

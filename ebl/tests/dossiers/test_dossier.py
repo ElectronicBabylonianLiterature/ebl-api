@@ -1,9 +1,13 @@
+from typing import cast
+
 import pytest
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
+    DossierRecordSuggestion,
 )
-from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
+from ebl.dossiers.infrastructure.dossiers_schemas import (
     DossierRecordSchema,
+    DossierRecordSuggestionSchema,
 )
 from ebl.tests.factories.dossier import DossierRecordFactory
 from ebl.fragmentarium.domain.fragment import Script
@@ -67,11 +71,12 @@ def test_dossier_record_from_dict(
     dossier_record: DossierRecord,
     seeded_provenance_service,
 ) -> None:
-    serialized_data = DossierRecordSchema().dump(dossier_record)
+    serialized_data = cast(dict, DossierRecordSchema().dump(dossier_record))
     deserialized_object = DossierRecordSchema(
         context={"provenance_service": seeded_provenance_service}
     ).load(serialized_data)
 
+    assert isinstance(deserialized_object, DossierRecord)
     assert deserialized_object.id == dossier_record.id
     assert deserialized_object.description == dossier_record.description
     assert deserialized_object.is_approximate_date == dossier_record.is_approximate_date
@@ -81,3 +86,14 @@ def test_dossier_record_from_dict(
     assert deserialized_object.provenance == dossier_record.provenance
     assert deserialized_object.script == dossier_record.script
     assert deserialized_object.references == dossier_record.references
+
+
+def test_dossier_record_suggestion_schema_load_and_dump() -> None:
+    data = {"id": "D.1", "descriptionSnippet": "A snippet"}
+
+    suggestion = DossierRecordSuggestionSchema().load(data)
+
+    assert suggestion == DossierRecordSuggestion(
+        id="D.1", description_snippet="A snippet"
+    )
+    assert DossierRecordSuggestionSchema().dump(suggestion) == data
