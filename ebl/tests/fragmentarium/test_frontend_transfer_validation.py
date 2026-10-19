@@ -2,10 +2,15 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import tarfile
 
 import pytest
 
-from ebl.fragmentarium.application.map_artifact_generator import DEFAULT_OUTPUT_DIR
+from ebl.fragmentarium.application.map_artifact_generator import (
+    DEFAULT_OUTPUT_DIR,
+    write_site_artifacts,
+)
+from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
 from scripts.maps import frontend_transfer_archive as transfer
 from scripts.maps.frontend_transfer_validation import read_artifact_sets
 
@@ -84,12 +89,63 @@ def test_manifest_embeds_exact_frontend_reproduction_inputs(monkeypatch):
     )
     contents, revisions = read_artifact_sets(DEFAULT_OUTPUT_DIR)
     manifest = transfer.build_manifest(contents, revisions).decode("utf-8")
-    expectations = json.dumps(
-        transfer.FRONTEND_GENERATOR_EXPECTATIONS, separators=(",", ":")
+    assert f"frontendGeneratorPath: {transfer.FRONTEND_GENERATOR_PATH}" in manifest
+    assert _manifest_expectations(manifest) == {
+        "assur": {"features": 134, "inventory": 134, "mappings": 315, "mapped": 133},
+        "kalhu": {"features": 12, "inventory": 12, "mappings": 7, "mapped": 7},
+        "nippur": {"features": 20, "inventory": 20, "mappings": 18, "mapped": 9},
+        "uruk": {"features": 128, "inventory": 128, "mappings": 129, "mapped": 125},
+    }
+
+
+def _manifest_expectations(manifest: str) -> dict[str, dict[str, int]]:
+    prefix = "frontendGeneratorExpectationsJson: "
+    return json.loads(
+        next(
+            line.removeprefix(prefix)
+            for line in manifest.splitlines()
+            if line.startswith(prefix)
+        )
     )
 
-    assert f"frontendGeneratorPath: {transfer.FRONTEND_GENERATOR_PATH}" in manifest
-    assert f"frontendGeneratorExpectationsJson: {expectations}" in manifest
+
+def test_manifest_expectations_follow_valid_curated_publication(tmp_path: Path) -> None:
+    data_dir = _copy_artifacts(tmp_path)
+    inventory = json.loads((data_dir / "kalhu_polygon_inventory.json").read_text())
+    mappings = json.loads(
+        (data_dir / "kalhu_findspot_polygon_mappings.json").read_text()
+    )
+    curation = json.loads(
+        (data_dir / "kalhu_findspot_polygon_curation_template.json").read_text()
+    )
+    mapped_ids = {polygon_id for row in mappings for polygon_id in row["polygonIds"]}
+    polygon_id = next(
+        row["polygonId"] for row in inventory if row["polygonId"] not in mapped_ids
+    )
+    curated_row = {
+        **curation[0],
+        "polygonIds": [polygon_id],
+        "reviewer": "fixture-reviewer",
+        "reviewDate": "2026-10-19",
+    }
+    curated_path = tmp_path / "curated.json"
+    curated_path.write_text(json.dumps([curated_row]), encoding="utf-8")
+    write_site_artifacts(
+        SITE_CONFIGS["KALHU"], data_dir, "curated-revision", curated_path
+    )
+
+    output = transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
+
+    with tarfile.open(output, "r:gz") as archive:
+        manifest = archive.extractfile(transfer.ARCHIVE_MANIFEST)
+        assert manifest is not None
+        expectations = _manifest_expectations(manifest.read().decode("utf-8"))
+    assert expectations["kalhu"] == {
+        "features": 12,
+        "inventory": 12,
+        "mappings": 8,
+        "mapped": 8,
+    }
 
 
 def _replace_first(field, value):
@@ -178,3 +234,15 @@ def test_artifact_manifest_checksums_must_be_strings(tmp_path):
 def test_missing_artifact_directory_is_rejected(tmp_path):
     with pytest.raises(FileNotFoundError, match="does not exist"):
         read_artifact_sets(tmp_path / "missing")
+
+
+def test_archive_rejects_cross_site_findspot_ids(tmp_path: Path) -> None:
+    data_dir = _copy_artifacts(tmp_path)
+    name = "kalhu_findspot_polygon_curation_template.json"
+    records = json.loads((data_dir / name).read_text())
+    assur_mappings = data_dir / "assur_findspot_polygon_mappings.json"
+    records[0]["findspotId"] = json.loads(assur_mappings.read_text())[0]["findspotId"]
+    _replace_declared_file(data_dir, name, records)
+
+    with pytest.raises(ValueError, match="Findspot IDs must be unique across sites"):
+        transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")

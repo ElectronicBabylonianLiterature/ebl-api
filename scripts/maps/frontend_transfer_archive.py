@@ -19,12 +19,6 @@ GENERATOR_VERSION = "map_artifact_generator/2"
 FRONTEND_GEOMETRY_COMMIT = "b8188ac7026ab96687c1f42f09ee1d154d80cd64"
 FRONTEND_GENERATOR_COMMIT = "894a764fbd06fc5e6b671bc94c40da105c3d6fa5"
 FRONTEND_GENERATOR_PATH = "scripts/maps/build-findspot-map-assets.py"
-FRONTEND_GENERATOR_EXPECTATIONS = {
-    "assur": {"features": 134, "inventory": 134, "mappings": 315, "mapped": 133},
-    "kalhu": {"features": 12, "inventory": 12, "mappings": 7, "mapped": 7},
-    "nippur": {"features": 20, "inventory": 20, "mappings": 18, "mapped": 9},
-    "uruk": {"features": 128, "inventory": 128, "mappings": 129, "mapped": 125},
-}
 TRANSFER_SUFFIXES = ("polygon_inventory.json", "findspot_polygon_mappings.json")
 
 
@@ -51,6 +45,16 @@ def _transfer_names() -> tuple[str, ...]:
 
 
 def build_manifest(contents: dict[str, bytes], revisions: dict[str, str]) -> bytes:
+    summaries = _site_summaries(contents, revisions)
+    expectations = {
+        site_id.lower(): {
+            "features": summary["polygonCount"],
+            "inventory": summary["polygonCount"],
+            "mappings": summary["mappingCount"],
+            "mapped": summary["distinctMappedPolygonCount"],
+        }
+        for site_id, summary in summaries.items()
+    }
     dirty = bool(_git("status", "--porcelain", "--untracked-files=normal"))
     lines = [
         "eBL Interactive Map — Multi-Site Frontend Transfer Manifest",
@@ -70,7 +74,7 @@ def build_manifest(contents: dict[str, bytes], revisions: dict[str, str]) -> byt
         f"frontendGeneratorPath: {FRONTEND_GENERATOR_PATH}",
         "frontendGeneratorArchiveStep: extract this archive into <artifact-dir>",
         "frontendGeneratorExpectationsJson: "
-        + json.dumps(FRONTEND_GENERATOR_EXPECTATIONS, separators=(",", ":")),
+        + json.dumps(expectations, separators=(",", ":")),
         (
             "frontendGeneratorCommand: python3 "
             f"{FRONTEND_GENERATOR_PATH} --findspot-dir <geojson-dir> "
@@ -79,12 +83,7 @@ def build_manifest(contents: dict[str, bytes], revisions: dict[str, str]) -> byt
         "",
         "Per-site summary:",
     ]
-    all_findspot_ids: set[int] = set()
-    for site_id in SITE_CONFIGS:
-        summary, findspot_ids = site_summary(contents, revisions, site_id)
-        if all_findspot_ids & findspot_ids:
-            raise ValueError("Findspot IDs must be unique across sites")
-        all_findspot_ids.update(findspot_ids)
+    for site_id, summary in summaries.items():
         lines.append(f"- {site_id} ({summary['siteName']})")
         lines.extend(
             f"    {key}: {value}"
@@ -94,6 +93,20 @@ def build_manifest(contents: dict[str, bytes], revisions: dict[str, str]) -> byt
     lines.extend(("", "File checksums (SHA-256):"))
     lines.extend(f"- {name}: {_sha256(contents[name])}" for name in _transfer_names())
     return ("\n".join((*lines, "")) + "\n").encode("utf-8")
+
+
+def _site_summaries(
+    contents: dict[str, bytes], revisions: dict[str, str]
+) -> dict[str, dict[str, object]]:
+    summaries: dict[str, dict[str, object]] = {}
+    all_findspot_ids: set[int] = set()
+    for site_id in SITE_CONFIGS:
+        summary, findspot_ids = site_summary(contents, revisions, site_id)
+        if all_findspot_ids & findspot_ids:
+            raise ValueError("Findspot IDs must be unique across sites")
+        all_findspot_ids.update(findspot_ids)
+        summaries[site_id] = summary
+    return summaries
 
 
 def _add_member(archive: tarfile.TarFile, name: str, content: bytes) -> None:
