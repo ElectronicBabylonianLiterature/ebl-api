@@ -1,8 +1,11 @@
+from typing import List
+
 import attr
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.signs_updater import SignsUpdater
 from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
@@ -13,7 +16,7 @@ class LinesUpdater(ChapterUpdater):
         super().__init__()
         self._lines_update = lines
         self._sign_updater = SignsUpdater(sign_repository)
-        self._lines = []
+        self._lines: List[Line] = []
 
     def _visit_lines(self, chapter: Chapter) -> None:
         for index, line in enumerate(chapter.lines):

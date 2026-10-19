@@ -14,7 +14,9 @@ class MapLocationMatchMethod(Enum):
 def _to_tuple(polygon_ids: list[str] | tuple[str, ...]) -> tuple[str, ...]:
     if not isinstance(polygon_ids, (list, tuple)):
         raise ValueError("polygonIds must be a list or tuple.")
-    return tuple(polygon_ids)
+    if any(not isinstance(polygon_id, str) for polygon_id in polygon_ids):
+        raise ValueError("polygonIds must contain only strings.")
+    return tuple(polygon_id.strip() for polygon_id in polygon_ids)
 
 
 def _stripped(value: str) -> str:
@@ -34,7 +36,7 @@ class MapLocation:
             raise ValueError("polygonIds must not be empty.")
         if len(set(self.polygon_ids)) != len(self.polygon_ids):
             raise ValueError("polygonIds must be unique.")
-        if any(not polygon_id.strip() for polygon_id in self.polygon_ids):
+        if any(not polygon_id for polygon_id in self.polygon_ids):
             raise ValueError("polygonIds must not contain empty values.")
         if not self.source:
             raise ValueError("source must not be empty.")

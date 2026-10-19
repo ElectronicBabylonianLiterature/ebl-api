@@ -7,7 +7,10 @@ from collections import OrderedDict
 from ebl.errors import DataError
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import TokenVisitor
+from ebl.transliteration.domain.tokens import (
+    NullSignsCollectingVisitor,
+    SignsCollectingVisitor,
+)
 
 
 class Type(Enum):
@@ -29,17 +32,28 @@ wildcard_matchers: OrderedDict[Type, str] = OrderedDict(
 )
 
 
-@attr.s(auto_attribs=True)
-class TransliterationQuery:
-    string: str
-    visitor: TokenVisitor
-    type: Type = attr.ib(init=False)
-    regexp: str = attr.ib(init=False)
+def _strip_query_string(string: str) -> str:
+    return string.strip(" -.\n")
 
-    def __attrs_post_init__(self) -> None:
-        self.string = self.string.strip(" -.\n")
-        self.type = self._classify(self.string)
-        self.regexp = self._regexp()
+
+def _classify_query(query: "TransliterationQuery") -> Type:
+    return query._classify(query.string)
+
+
+def _build_query_regexp(query: "TransliterationQuery") -> str:
+    return query._regexp()
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class TransliterationQuery:
+    string: str = attr.ib(converter=_strip_query_string)
+    visitor: SignsCollectingVisitor = attr.ib(eq=False)
+    type: Type = attr.ib(
+        init=False, default=attr.Factory(_classify_query, takes_self=True)
+    )
+    regexp: str = attr.ib(
+        init=False, default=attr.Factory(_build_query_regexp, takes_self=True)
+    )
 
     def _regexp(self) -> str:
         return r"" if self.is_empty() else self.children_regexp(self.string)
@@ -129,7 +143,7 @@ class TransliterationQuery:
         return TransliterationQueryWildCard(string=string, visitor=self.visitor)
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryText(TransliterationQuery):
     def _regexp(self) -> str:
         signs_regexp = " ".join(
@@ -143,9 +157,9 @@ class TransliterationQueryText(TransliterationQuery):
     def _create_signs(self, transliteration: str) -> Sequence[str]:
         if not transliteration:
             return []
-        self.visitor._standardizations = []
+        self.visitor.reset()
         self._parse(transliteration).accept(self.visitor)
-        return self.visitor.result
+        return self.visitor.result_string
 
     def _parse(self, transliteration: str) -> TextLine:
         from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
@@ -159,7 +173,7 @@ class TransliterationQueryText(TransliterationQuery):
             raise DataError("Invalid transliteration query.")
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryWildCard(TransliterationQuery):
     def _regexp(self) -> str:
         if self.type == Type.ALTERNATIVE:
@@ -182,7 +196,7 @@ class TransliterationQueryWildCard(TransliterationQuery):
         return rf"({regexp})"
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryLine(TransliterationQuery):
     def _classify(self, string: str) -> Type:
         return Type.LINE
@@ -194,10 +208,9 @@ class TransliterationQueryLine(TransliterationQuery):
 
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryEmpty(TransliterationQuery):
-    string: str = ""
-    visitor: TokenVisitor = TokenVisitor()
+    string: str = attr.ib(default="", converter=_strip_query_string)
+    visitor: SignsCollectingVisitor = attr.ib(
+        default=attr.Factory(NullSignsCollectingVisitor), eq=False
+    )
     type: Type = Type.UNDEFINED
     regexp: str = r""
-
-    def __attrs_post_init__(self) -> None:
-        pass

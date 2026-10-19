@@ -22,10 +22,10 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
 MANUSCRIPT_LINE_PARSER_PATH = (
-    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf_manuscript_line.lark"
+    "../../transliteration/domain/atf_parsers/atf_grammar/ebl_atf_manuscript_line.lark"
 )
 PARALLEL_LINE_PARSER_PATH = (
-    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf_parallel_line.lark"
+    "../../transliteration/domain/atf_parsers/atf_grammar/ebl_atf_parallel_line.lark"
 )
 
 

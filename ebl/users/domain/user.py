@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Sequence, List, Optional
+from typing import Sequence, List
 
 from ebl.common.domain.scopes import Scope
 
@@ -32,9 +32,7 @@ class User(ABC):
             )
         )
 
-    def get_scopes(
-        self, prefix: Optional[str] = "", suffix: Optional[str] = ""
-    ) -> List[Scope]:
+    def get_scopes(self, prefix: str = "", suffix: str = "") -> List[Scope]:
         return []
 
 

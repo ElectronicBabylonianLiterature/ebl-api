@@ -20,7 +20,7 @@ from ebl.fragmentarium.infrastructure.fragment_query_result_projection import (
     items_pipeline,
     result_projection,
 )
-from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.provenance.application.provenance_lookup import ProvenanceLookup
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
@@ -30,7 +30,7 @@ class PatternMatcher:
     def __init__(
         self,
         query: Dict,
-        provenance_service: ProvenanceService,
+        provenance_service: ProvenanceLookup,
         user_scopes: Sequence[Scope] = (),
     ):
         self._query = query
@@ -98,7 +98,17 @@ class PatternMatcher:
         if "bibId" not in self._query:
             return {}
 
-        parameters = {"id": self._query["bibId"]}
+        parameters = {
+            "id": (
+                {
+                    "$in": list(
+                        self._query["_bibliographyIdentities"].stored_reference_values()
+                    )
+                }
+                if "_bibliographyIdentities" in self._query
+                else self._query["bibId"]
+            )
+        }
         if "pages" in self._query:
             parameters["pages"] = {
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
