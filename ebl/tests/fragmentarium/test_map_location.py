@@ -41,6 +41,13 @@ def test_map_location_accepts_polygon_id_sequence():
     )
 
 
+def test_map_location_normalizes_polygon_ids():
+    assert _map_location(polygon_ids=(" assur-1 ", "\tassur-2\n")).polygon_ids == (
+        "assur-1",
+        "assur-2",
+    )
+
+
 def test_map_location_normalizes_source_whitespace():
     map_location = _map_location(
         source="  Assur Tafeln.ods  ", source_revision=" 2026-07-27 "
@@ -55,6 +62,10 @@ def test_map_location_normalizes_source_whitespace():
     [
         ({"polygon_ids": ()}, "polygonIds must not be empty."),
         ({"polygon_ids": ("assur-1", "assur-1")}, "polygonIds must be unique."),
+        ({"polygon_ids": (" assur-1 ", "assur-1")}, "polygonIds must be unique."),
+        ({"polygon_ids": (1,)}, "polygonIds must contain only strings."),
+        ({"polygon_ids": (None,)}, "polygonIds must contain only strings."),
+        ({"polygon_ids": (["assur-1"],)}, "polygonIds must contain only strings."),
         (
             {"polygon_ids": ("assur-1", "  ")},
             "polygonIds must not contain empty values.",

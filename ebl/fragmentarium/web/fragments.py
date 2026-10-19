@@ -1,10 +1,15 @@
 from typing import List, cast
 
+import attr
 import falcon
 from falcon import Request, Response
 
+from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.reference_search import (
+    equivalent_reference_identities,
+)
 from ebl.common.query.parameter_parser import (
-    parse_integer_field,
+    parse_limit,
     parse_lines,
     parse_transliteration,
     parse_lemmas,
@@ -20,6 +25,9 @@ from ebl.errors import DataError, NotFoundError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_query_bibliography import (
+    bibliography_documents_of,
+)
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
@@ -29,6 +37,7 @@ from ebl.fragmentarium.application.realia_info import (
     document_realia_info,
     resolve_realia_info_map,
 )
+from ebl.fragmentarium.domain.fragment_query_summary import FragmentQueryResult
 from ebl.fragmentarium.web.dtos import (
     FragmentDtoFactory,
     parse_excavation_number,
@@ -127,13 +136,25 @@ class FragmentsQueryResource:
         self,
         repository: FragmentRepository,
         transliteration_query_factory: TransliterationQueryFactory,
+        bibliography_repository: BibliographyRepository,
     ):
         self._repository = repository
         self._transliteration_query_factory = transliteration_query_factory
+        self._bibliography_repository = bibliography_repository
+
+    def _enrich(self, result: FragmentQueryResult) -> FragmentQueryResult:
+        return attr.evolve(
+            result,
+            bibliography_documents=bibliography_documents_of(
+                result.items, self._bibliography_repository
+            ),
+        )
 
     def on_get(self, req: Request, resp: Response):
         parameters = {
-            key: value for key, value in req.params.items() if key != "paginationIndex"
+            key: value
+            for key, value in req.params.items()
+            if key not in {"paginationIndex", "_bibliographyIdentities"}
         }
         query = _parse_fragment_query(
             parameters,
@@ -144,22 +165,26 @@ class FragmentsQueryResource:
             parse_count,
             parse_findspot_id,
             parse_findspot_ids,
-            parse_integer_field("limit"),
+            parse_limit,
             parse_non_negative_integer_field("offset"),
         )
-        schema = (
-            FragmentQueryResultSchema(include_count_metadata=True)
-            if "limit" in query
-            else QueryResultSchema(include_count_metadata=True)
+        if "bibId" in query:
+            query["_bibliographyIdentities"] = equivalent_reference_identities(
+                query["bibId"], self._bibliography_repository
+            )
+        result = self._repository.query(
+            query,
+            cast(User, req.context["user"]).get_scopes(
+                prefix="read:", suffix="-fragments"
+            ),
         )
 
-        resp.media = schema.dump(
-            self._repository.query(
-                query,
-                cast(User, req.context["user"]).get_scopes(
-                    prefix="read:", suffix="-fragments"
-                ),
+        resp.media = (
+            FragmentQueryResultSchema(include_count_metadata=True).dump(
+                self._enrich(result)
             )
+            if isinstance(result, FragmentQueryResult)
+            else QueryResultSchema(include_count_metadata=True).dump(result)
         )
 
 

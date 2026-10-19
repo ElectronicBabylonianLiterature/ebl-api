@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Sequence
+from typing import Sequence, cast
 
 from ebl.fragmentarium.application.map_artifact_storage import (
     artifact_manifest_name,
@@ -102,7 +102,7 @@ class MapArtifactRepository:
                 f"Map mapping {index} for {site_id} has an invalid findspotId."
             )
         payload = {key: value for key, value in entry.items() if key != "findspotId"}
-        return findspot_id, schema.load(payload)
+        return findspot_id, cast(MapLocation, schema.load(payload))
 
     @staticmethod
     def _require_known_site(site_id: str) -> None:

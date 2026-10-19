@@ -2,7 +2,9 @@ from PIL import Image
 from mockito import mock, verify
 
 from ebl.fragmentarium import retrieve_annotations
-from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
+from ebl.fragmentarium import retrieve_annotations_helpers
+from ebl.fragmentarium.domain.annotation import BoundingBox
+from ebl.fragmentarium.retrieve_annotations_helpers import create_annotations
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     GeometryFactory,
@@ -17,7 +19,7 @@ def test_create_annotations(photo_repository, when, photo):
         f"{annotation.fragment_number}.jpg"
     ).thenReturn(photo)
     when(Image).open(...).thenReturn(image)
-    when(retrieve_annotations).write_annotations(...).thenReturn(None)
+    when(retrieve_annotations_helpers).write_annotations(...).thenReturn(None)
 
     create_annotations([annotation], "", "", photo_repository)
     verify(image).save(f"{annotation.fragment_number}.jpg")
@@ -41,7 +43,7 @@ def test_write_annotations(tmp_path):
     dir.mkdir()
     file_name = dir / "annotation_1.txt"
     bounding_boxes = [BoundingBox(0.1, 1, 2, 100.543), BoundingBox(10, 11, 12, 13)]
-    retrieve_annotations.write_annotations(
+    retrieve_annotations_helpers.write_annotations(
         file_name, bounding_boxes, ["KUR", "A.GUD×KUR"]
     )
     assert file_name.read_text() == "0,1,2,100,KUR\n10,11,12,13,A.GUD×KUR\n"
@@ -52,7 +54,7 @@ def test_write_fragment_numbers(tmp_path):
     dir = tmp_path / "annotations"
     dir.mkdir()
     file_name = dir / "Annotation_numbers.txt"
-    retrieve_annotations.write_fragment_numbers(annotations, file_name)
+    retrieve_annotations_helpers.write_fragment_numbers(annotations, file_name)
     result = "\n".join([str(annotation.fragment_number) for annotation in annotations])
     assert file_name.read_text() == f"Total of 5 Annotations\n{result}\n"
 

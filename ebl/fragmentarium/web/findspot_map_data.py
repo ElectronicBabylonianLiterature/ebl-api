@@ -1,4 +1,4 @@
-from falcon import Request, Response
+from falcon import Response
 
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.query.parameter_parser import parse_genre
@@ -11,6 +11,7 @@ from ebl.fragmentarium.application.findspot_map_data_service import (
 )
 from ebl.fragmentarium.domain.genres import genres
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.users.web.user_request import UserRequest
 
 _PERIODS = frozenset(period.long_name for period in Period)
 _PERIOD_MODIFIERS = frozenset(modifier.value for modifier in PeriodModifier)
@@ -40,7 +41,7 @@ class FindspotMapDataResource:
             raise DataError(f"Invalid {name}: {value}")
         return value
 
-    def on_get(self, req: Request, resp: Response) -> None:
+    def on_get(self, req: UserRequest, resp: Response) -> None:
         site_id = self._parse_site(req.get_param("site"))
         genre = parse_genre(dict(req.params)).get("genre")
         if genre is not None and tuple(genre) not in genres:
