@@ -1,4 +1,12 @@
+import logging
+
+import bson
 import pytest
+from bson import ObjectId
+from pymongo.common import MAX_BSON_SIZE
+from pymongo.database import Database
+
+from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 
 CACHE_COLLECTION = "cache"
 
@@ -10,6 +18,50 @@ def test_set(database, mongo_cache_repository) -> None:
         {"cache_key": "test"}, projection={"_id": False, "cache_key": False}
     )
     assert inserted_text == {"data": "data"}
+
+
+def test_set_stores_nested_item(
+    mongo_cache_repository: MongoCacheRepository,
+) -> None:
+    item = {"lines": [{"number": 1, "text": "ša₂ ṭup-pi"}], "total": 1.5, "doi": None}
+
+    mongo_cache_repository.set("test", item)
+
+    assert mongo_cache_repository.get("test") == item
+
+
+def _item_of_encoded_size(cache_key: str, size: int) -> dict:
+    empty_size = len(
+        bson.encode({"_id": ObjectId(), "cache_key": cache_key, "data": ""})
+    )
+    return {"data": "x" * (size - empty_size)}
+
+
+def test_set_at_size_limit(
+    database: Database, mongo_cache_repository: MongoCacheRepository
+) -> None:
+    mongo_cache_repository.set("test", _item_of_encoded_size("test", MAX_BSON_SIZE))
+
+    assert database[CACHE_COLLECTION].count_documents({"cache_key": "test"}) == 1
+
+
+@pytest.mark.parametrize("excess", [1, 32 * 1024])
+def test_set_too_large(
+    database: Database,
+    mongo_cache_repository: MongoCacheRepository,
+    caplog: pytest.LogCaptureFixture,
+    excess: int,
+) -> None:
+    item = _item_of_encoded_size("test", MAX_BSON_SIZE + excess)
+
+    with caplog.at_level(logging.WARNING):
+        mongo_cache_repository.set("test", item)
+
+    assert database[CACHE_COLLECTION].count_documents({}) == 0
+    assert (
+        f"Not caching test: {MAX_BSON_SIZE + excess} bytes exceeds {MAX_BSON_SIZE}"
+        in caplog.text
+    )
 
 
 def test_has(database, mongo_cache_repository) -> None:
