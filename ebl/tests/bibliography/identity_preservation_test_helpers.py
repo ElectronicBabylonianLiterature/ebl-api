@@ -14,6 +14,12 @@ CITATION_KEY = "dossin1967La"
 CORRECTED_TITLE = "Corrected title"
 RESERVATIONS = "bibliography_lookup_reservations"
 RESERVATION_NOT_AWAITING_TTL_DELETION = {"deleteAt": {"$exists": False}}
+SERVER_OWNED_VALUES = {
+    "aliases": [{"value": "client-alias", "normalizedValue": "client-alias"}],
+    "citationKey": "clientChosen",
+    "deprecated": True,
+    "redirectTo": "OTHER-ID",
+}
 
 
 def metadata_only_payload(entry: dict) -> dict:

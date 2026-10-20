@@ -132,7 +132,7 @@ def test_redirect_cycles_are_omitted(spied_bibliography_repository, cycle_length
 
 
 @pytest.mark.parametrize("redirect_to", [None, "", 42])
-def test_deprecated_document_without_usable_target_is_omitted(
+def test_deprecated_document_without_usable_target_is_kept_as_tombstone(
     spied_bibliography_repository, redirect_to
 ):
     repository, calls = spied_bibliography_repository
@@ -145,7 +145,7 @@ def test_deprecated_document_without_usable_target_is_omitted(
         [summary_of("X.1", reference_of("OLD"))], repository
     )
 
-    assert documents == {}
+    assert documents == {"OLD": entry}
     assert calls == [["OLD"]]
 
 

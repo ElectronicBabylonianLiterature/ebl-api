@@ -103,7 +103,17 @@ class PatternMatcher:
         if "bibId" not in self._query:
             return {}
 
-        parameters = {"id": self._query["bibId"]}
+        parameters = {
+            "id": (
+                {
+                    "$in": list(
+                        self._query["_bibliographyIdentities"].stored_reference_values()
+                    )
+                }
+                if "_bibliographyIdentities" in self._query
+                else self._query["bibId"]
+            )
+        }
         if "pages" in self._query:
             parameters["pages"] = {
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"

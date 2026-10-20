@@ -1,3 +1,4 @@
+from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from pymongo.database import Database
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.corpus.application.text_repository import TextRepository
@@ -30,3 +31,4 @@ class MongoTextRepositoryBase(TextRepository):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
         self._provenance_service = provenance_service
+        self._bibliography_repository = MongoBibliographyRepository(database)
