@@ -42,7 +42,7 @@ class ProvenanceSiteMixin(Schema):
         return deserialize_provenance_record(self, value)
 
 
-class FindspotSchema(ProvenanceSiteMixin, Schema):
+class FindspotSchema(ProvenanceSiteMixin):
     id_ = fields.Integer(required=True, data_key="_id")
     site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     sector = fields.String()
@@ -77,7 +77,7 @@ class FindspotSchema(ProvenanceSiteMixin, Schema):
         return data
 
 
-class ArchaeologySchema(ProvenanceSiteMixin, Schema):
+class ArchaeologySchema(ProvenanceSiteMixin):
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
