@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Optional, Protocol, Sequence
 
@@ -14,7 +15,9 @@ MAX_JSON_SAFE_INTEGER = 2**53 - 1
 
 
 class FindspotRepository(Protocol):
-    def find_by_ids(self, findspot_ids: Sequence[int]) -> Sequence[Findspot]: ...
+    @abstractmethod
+    def find_by_ids(self, findspot_ids: Sequence[int]) -> Sequence[Findspot]:
+        raise NotImplementedError
 
 
 @dataclass(frozen=True)
