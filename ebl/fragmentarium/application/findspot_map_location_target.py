@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Sequence
-from urllib.parse import urlparse
 
 from ebl.fragmentarium.application.findspot_map_location_importer_models import (
     ASSUR_SITE_ID,
@@ -54,20 +53,27 @@ class DatabaseFingerprint:
 
 
 def is_local_mongo_uri(uri: str) -> bool:
-    netloc = urlparse(uri).netloc.split("@")[-1]
-    hosts = [host.strip("[]").split(":", 1)[0] for host in netloc.split(",") if host]
+    netloc, _ = _target_parts(uri)
+    hosts = [
+        host[1:].split("]", 1)[0] if host.startswith("[") else host.split(":", 1)[0]
+        for host in netloc.split(",")
+        if host
+    ]
     return bool(hosts) and all(
         host in {"localhost", "127.0.0.1", "::1"} for host in hosts
     )
 
 
 def is_protected_target(uri: str, database_name: str) -> bool:
-    parsed = urlparse(uri)
-    target_text = " ".join(
-        part.casefold()
-        for part in (parsed.hostname or "", parsed.path.lstrip("/"), database_name)
-    )
+    netloc, path = _target_parts(uri)
+    target_text = " ".join(part.casefold() for part in (netloc, path, database_name))
     return any(token in target_text for token in PROTECTED_TARGET_TOKENS)
+
+
+def _target_parts(uri: str) -> tuple[str, str]:
+    resource = uri.partition("://")[2]
+    authority, _, path = resource.partition("/")
+    return authority.rsplit("@", 1)[-1].split("?", 1)[0], path.split("?", 1)[0]
 
 
 def fingerprint_database(
@@ -131,23 +137,25 @@ def fingerprint_database(
         if expected_unresolved is None
         else expected_unresolved
     )
-    approved = (
-        total_findspots == expected_total_findspots
-        and assur_findspots == expected_assur_findspots
-        and len(records) + expected_unresolved == expected_assur_findspots
-        and len(target_ids) == len(records)
-        and len(assur_target_docs) == len(records)
-        and unresolved == expected_unresolved
-        and _existing_map_locations_are_safe(
-            total_map_locations,
-            len(records),
-            identical,
-            previous_records,
-            previous_identical,
+    approved = all(
+        (
+            total_findspots == expected_total_findspots,
+            assur_findspots == expected_assur_findspots,
+            len(records) + expected_unresolved == expected_assur_findspots,
+            len(target_ids) == len(records),
+            len(assur_target_docs) == len(records),
+            unresolved == expected_unresolved,
+            _existing_map_locations_are_safe(
+                total_map_locations,
+                len(records),
+                identical,
+                previous_records,
+                previous_identical,
+            ),
+            non_target_map_locations == 0,
+            assur_site_name is not None,
+            _all_record_polygon_ids_exist(records, polygon_ids),
         )
-        and non_target_map_locations == 0
-        and assur_site_name is not None
-        and _all_record_polygon_ids_exist(records, polygon_ids)
     )
     return DatabaseFingerprint(
         total_findspots=total_findspots,

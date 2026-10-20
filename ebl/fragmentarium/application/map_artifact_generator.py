@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import TypedDict
@@ -56,6 +57,14 @@ class SiteArtifacts(TypedDict):
     curation: tuple[CurationRecord, ...]
     report: str
     derivations: tuple[DerivationRecord, ...]
+
+
+@dataclass(frozen=True)
+class ArtifactReportCounts:
+    verified: int
+    curated: int
+    conflicts: int
+    unresolved: int
 
 
 def build_site_artifacts(
@@ -121,10 +130,9 @@ def build_site_artifacts(
         "curation": curation,
         "report": _render_report(
             config,
-            len(verified),
-            len(curated),
-            len(conflicts),
-            len(curation),
+            ArtifactReportCounts(
+                len(verified), len(curated), len(conflicts), len(curation)
+            ),
             unresolved,
         ),
         "derivations": derivations,
@@ -197,20 +205,17 @@ def write_site_artifacts(
 
 def _render_report(
     config: MapSiteConfig,
-    verified_count: int,
-    curated_count: int,
-    conflicts_count: int,
-    unresolved_total: int,
+    counts: ArtifactReportCounts,
     unresolved: Counter[str],
 ) -> str:
     lines = [
         config.report_title,
         "",
         "- Generated from immutable ODS and shapefile sources.",
-        f"- Verified mappings: {verified_count}",
-        *([f"- Curated mappings: {curated_count}"] if curated_count else []),
-        f"- Unresolved rows: {unresolved_total}",
-        f"- Source conflicts: {conflicts_count}",
+        f"- Verified mappings: {counts.verified}",
+        *([f"- Curated mappings: {counts.curated}"] if counts.curated else []),
+        f"- Unresolved rows: {counts.unresolved}",
+        f"- Source conflicts: {counts.conflicts}",
         "- Invalid source rows: 0",
         "",
         "## Deterministic rule used",

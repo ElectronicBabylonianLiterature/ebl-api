@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from typing import Sequence
 
 from pymongo import UpdateOne
+from pymongo.client_session import ClientSession
+from pymongo.collection import Collection
+from pymongo.errors import OperationFailure
 
 from ebl.fragmentarium.application.findspot_map_location_importer_models import (
     ImportIssue,
@@ -26,22 +29,14 @@ class _PlanContext:
     has_previous_records: bool
 
 
+@dataclass(frozen=True)
 class _PlanStepResult:
-    def __init__(
-        self,
-        existing: int = 0,
-        new: int = 0,
-        changed: int = 0,
-        skipped: int = 0,
-        issue: ImportIssue | None = None,
-        operations: Sequence[UpdateOne] = (),
-    ) -> None:
-        self.existing = existing
-        self.new = new
-        self.changed = changed
-        self.skipped = skipped
-        self.issue = issue
-        self.operations = operations
+    existing: int = 0
+    new: int = 0
+    changed: int = 0
+    skipped: int = 0
+    issue: ImportIssue | None = None
+    operations: Sequence[UpdateOne] = ()
 
 
 def build_plan(
@@ -60,10 +55,12 @@ def build_plan(
     )
     build_step = _build_rollback_operation if rollback else _build_forward_operation
     for record in records:
+        desired_doc = plan.dump_schema.dump(record.map_location)
+        assert isinstance(desired_doc, dict)
         context = _RecordContext(
             record=record,
             current=getattr(findspots[record.findspot_id], "map_location", None),
-            desired_doc=plan.dump_schema.dump(record.map_location),
+            desired_doc=desired_doc,
         )
         result = build_step(context, plan)
         existing += result.existing
@@ -76,15 +73,33 @@ def build_plan(
     return tuple(issues), existing, new, changed, skipped, tuple(operations)
 
 
-def write_operations(collection, operations: Sequence[UpdateOne]) -> int:
+class _StandaloneTransactionUnsupported(Exception):
+    pass
+
+
+def write_operations(collection: Collection, operations: Sequence[UpdateOne]) -> int:
     try:
         with collection.database.client.start_session() as session:
             with session.start_transaction():
-                return collection.bulk_write(
-                    list(operations), ordered=True, session=session
-                ).modified_count
-    except Exception:
+                return _write_transaction_batch(collection, operations, session)
+    except _StandaloneTransactionUnsupported:
         return collection.bulk_write(list(operations), ordered=True).modified_count
+
+
+def _write_transaction_batch(
+    collection: Collection, operations: Sequence[UpdateOne], session: ClientSession
+) -> int:
+    try:
+        return collection.bulk_write(
+            list(operations), ordered=True, session=session
+        ).modified_count
+    except OperationFailure as error:
+        unsupported_message = (
+            "Transaction numbers are only allowed on a replica set member or mongos"
+        )
+        if error.code != 20 or unsupported_message not in str(error):
+            raise
+        raise _StandaloneTransactionUnsupported from error
 
 
 def _set_map_location_operation(
@@ -114,6 +129,14 @@ def _build_forward_operation(
     if current == record.map_location:
         return _PlanStepResult(existing=1)
 
+    return _build_replacement_operation(context, plan)
+
+
+def _build_replacement_operation(
+    context: _RecordContext, plan: _PlanContext
+) -> _PlanStepResult:
+    record, current, desired_doc = context.record, context.current, context.desired_doc
+    previous_record = plan.previous_by_id.get(record.findspot_id)
     if previous_record is not None:
         if current != previous_record.map_location:
             return _PlanStepResult(
