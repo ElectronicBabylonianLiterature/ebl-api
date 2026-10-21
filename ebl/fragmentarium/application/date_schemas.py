@@ -5,11 +5,11 @@ from dateutil.parser import isoparse
 
 
 class IsoDateField(fields.Field):
-    def _serialize(self, date: datetime.date, *args, **kwargs) -> str:
-        return str(date)
+    def _serialize(self, value: datetime.date, *args, **kwargs) -> str:
+        return str(value)
 
-    def _deserialize(self, date_string: str, *args, **kwargs) -> datetime.date:
-        return isoparse(date_string).date()
+    def _deserialize(self, value: str, *args, **kwargs) -> datetime.date:
+        return isoparse(value).date()
 
 
 class PartialDateSchema(Schema):
