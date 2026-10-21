@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Sequence
+from typing import Sequence, cast
 
-from marshmallow import ValidationError
+from marshmallow import EXCLUDE, ValidationError
 
 from ebl.fragmentarium.application.findspot_map_location_importer_models import (
     ASSUR_SITE_ID,
@@ -25,9 +26,8 @@ from ebl.fragmentarium.application.findspot_map_location_target import (
     MappingInputs,
     fingerprint_database,
 )
-from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
-    MongoFindspotRepository,
-)
+from ebl.fragmentarium.application.archaeology_schemas import FindspotSchema
+from ebl.fragmentarium.domain.findspot import Findspot
 from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
@@ -58,7 +58,7 @@ def load_import_records(
     seen_findspot_ids: set[int] = set()
     for entry in data:
         try:
-            record = schema.load(entry)
+            record = cast(MapLocationImportRecord, schema.load(entry))
         except (ValidationError, ValueError, TypeError) as error:
             issues.append(
                 ImportIssue(_findspot_id(entry), f"validation failed: {error}")
@@ -103,11 +103,11 @@ def run_import(
     previous_records = _load_previous_records(
         paths.previous_mappings, paths.previous_inventory
     )
-    findspots = _load_findspots(database)
+    findspots, stored_locations = _load_findspots(database)
     valid_records, site_issues = _validate_findspots(records, findspots)
     issues = issues + site_issues
     plan_issues, existing, new, changed, skipped, operations = build_plan(
-        valid_records, findspots, rollback, previous_records
+        valid_records, findspots, rollback, previous_records, stored_locations
     )
     issues = issues + plan_issues
     issue_counts = _count_issues(issues)
@@ -173,10 +173,17 @@ def _count_issues(issues: Sequence[ImportIssue]) -> dict[str, int]:
     }
 
 
-def _load_findspots(database) -> dict[int, object]:
+def _load_findspots(database) -> tuple[dict[int, object], dict[int, dict | None]]:
     provenance_service = ProvenanceService(MongoProvenanceRepository(database))
-    repository = MongoFindspotRepository(database, provenance_service)
-    return {findspot.id_: findspot for findspot in repository.find_all()}
+    schema = FindspotSchema(
+        context={"provenance_service": provenance_service}, unknown=EXCLUDE
+    )
+    documents = list(database[FINDSPOTS_COLLECTION].find({}))
+    stored_locations = {
+        document["_id"]: deepcopy(document.get("mapLocation")) for document in documents
+    }
+    findspots = cast(Sequence[Findspot], schema.load(documents, many=True))
+    return {findspot.id_: findspot for findspot in findspots}, stored_locations
 
 
 def _validate_findspots(

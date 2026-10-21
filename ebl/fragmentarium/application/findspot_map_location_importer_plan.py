@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Mapping, Sequence, cast
 
 from pymongo import UpdateOne
 from pymongo.client_session import ClientSession
@@ -20,6 +20,7 @@ class _RecordContext:
     record: MapLocationImportRecord
     current: object
     desired_doc: dict
+    observed_doc: dict | None
 
 
 @dataclass(frozen=True)
@@ -44,6 +45,7 @@ def build_plan(
     findspots: dict[int, object],
     rollback: bool,
     previous_records: Sequence[MapLocationImportRecord] = (),
+    stored_locations: Mapping[int, dict | None] | None = None,
 ) -> tuple[tuple[ImportIssue, ...], int, int, int, int, tuple[UpdateOne, ...]]:
     existing = new = changed = skipped = 0
     issues: list[ImportIssue] = []
@@ -57,11 +59,15 @@ def build_plan(
     for record in records:
         desired_doc = plan.dump_schema.dump(record.map_location)
         assert isinstance(desired_doc, dict)
-        context = _RecordContext(
-            record=record,
-            current=getattr(findspots[record.findspot_id], "map_location", None),
-            desired_doc=desired_doc,
+        current = getattr(findspots[record.findspot_id], "map_location", None)
+        observed_doc = (
+            stored_locations[record.findspot_id]
+            if stored_locations is not None
+            else cast(dict, plan.dump_schema.dump(current))
+            if current is not None
+            else None
         )
+        context = _RecordContext(record, current, desired_doc, observed_doc)
         result = build_step(context, plan)
         existing += result.existing
         new += result.new
@@ -102,16 +108,23 @@ def _write_transaction_batch(
         raise _StandaloneTransactionUnsupported from error
 
 
-def _set_map_location_operation(
-    findspot_id: int, desired_doc: dict
-) -> tuple[UpdateOne]:
-    return (UpdateOne({"_id": findspot_id}, {"$set": {"mapLocation": desired_doc}}),)
+def _map_location_filter(context: _RecordContext) -> dict:
+    return {"_id": context.record.findspot_id, "mapLocation": context.observed_doc}
+
+
+def _set_map_location_operation(context: _RecordContext) -> tuple[UpdateOne]:
+    return (
+        UpdateOne(
+            _map_location_filter(context),
+            {"$set": {"mapLocation": context.desired_doc}},
+        ),
+    )
 
 
 def _build_forward_operation(
     context: _RecordContext, plan: _PlanContext
 ) -> _PlanStepResult:
-    record, current, desired_doc = context.record, context.current, context.desired_doc
+    record, current = context.record, context.current
     previous_record = plan.previous_by_id.get(record.findspot_id)
 
     if current is None:
@@ -123,7 +136,7 @@ def _build_forward_operation(
             )
         return _PlanStepResult(
             new=1,
-            operations=_set_map_location_operation(record.findspot_id, desired_doc),
+            operations=_set_map_location_operation(context),
         )
 
     if current == record.map_location:
@@ -145,12 +158,11 @@ def _build_replacement_operation(
                     "existing mapLocation does not match previous artifact",
                 )
             )
-        previous_doc = plan.dump_schema.dump(previous_record.map_location)
         return _PlanStepResult(
             changed=1,
             operations=(
                 UpdateOne(
-                    {"_id": record.findspot_id, "mapLocation": previous_doc},
+                    _map_location_filter(context),
                     {"$set": {"mapLocation": desired_doc}},
                 ),
             ),
@@ -164,7 +176,7 @@ def _build_replacement_operation(
         )
     return _PlanStepResult(
         changed=1,
-        operations=_set_map_location_operation(record.findspot_id, desired_doc),
+        operations=_set_map_location_operation(context),
     )
 
 
@@ -179,7 +191,7 @@ def _build_rollback_operation(
 def _build_rollback_with_previous(
     context: _RecordContext, plan: _PlanContext
 ) -> _PlanStepResult:
-    record, current, desired_doc = context.record, context.current, context.desired_doc
+    record, current = context.record, context.current
     previous_record = plan.previous_by_id.get(record.findspot_id)
 
     if current == record.map_location:
@@ -195,11 +207,7 @@ def _build_rollback_with_previous(
         )
         return _PlanStepResult(
             changed=1,
-            operations=(
-                UpdateOne(
-                    {"_id": record.findspot_id, "mapLocation": desired_doc}, update
-                ),
-            ),
+            operations=(UpdateOne(_map_location_filter(context), update),),
         )
     if current is None and previous_record is None:
         return _PlanStepResult(existing=1)
@@ -209,7 +217,7 @@ def _build_rollback_with_previous(
 
 
 def _build_rollback_without_previous(context: _RecordContext) -> _PlanStepResult:
-    record, current, desired_doc = context.record, context.current, context.desired_doc
+    record, current = context.record, context.current
 
     if current is None:
         return _PlanStepResult(existing=1)
@@ -218,7 +226,7 @@ def _build_rollback_without_previous(context: _RecordContext) -> _PlanStepResult
             changed=1,
             operations=(
                 UpdateOne(
-                    {"_id": record.findspot_id, "mapLocation": desired_doc},
+                    _map_location_filter(context),
                     {"$unset": {"mapLocation": ""}},
                 ),
             ),
