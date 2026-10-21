@@ -37,6 +37,10 @@ def render_artifact_report(
     config: MapSiteConfig, summary: ArtifactReportSummary
 ) -> str:
     summary.validate()
+    normalization_description = (
+        "Normalization applies Unicode NFKC, trims whitespace, "
+        "preserves uncertainty markers, and case-folds both sides."
+    )
     lines = [
         config.report_title,
         "",
@@ -63,8 +67,7 @@ def render_artifact_report(
         "",
         f"`{config.derivation_rule_text}`",
         "",
-        "Normalization applies Unicode NFKC, trims whitespace, "
-        "preserves uncertainty markers, and case-folds both sides.",
+        normalization_description,
         "",
         "## Human decision required",
         "",
