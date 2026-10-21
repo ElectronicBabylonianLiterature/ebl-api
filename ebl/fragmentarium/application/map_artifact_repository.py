@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Sequence
+from typing import Sequence, cast
 
 from ebl.fragmentarium.application.map_artifact_generator import DEFAULT_OUTPUT_DIR
 from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
@@ -28,7 +28,13 @@ class MapArtifactRepository:
             return {}
         entries = json.loads(path.read_text(encoding="utf-8"))
         schema = MapLocationSchema()
-        return {entry["findspotId"]: schema.load(entry) for entry in entries}
+        locations: dict[int, MapLocation] = {}
+        for entry in entries:
+            payload = {
+                key: value for key, value in entry.items() if key != "findspotId"
+            }
+            locations[entry["findspotId"]] = cast(MapLocation, schema.load(payload))
+        return locations
 
     def load_map_locations(
         self, site_ids: Sequence[str] | None = None

@@ -47,9 +47,9 @@ def load_site_ods_rows(config: MapSiteConfig) -> tuple[MapOdsRow, ...]:
     if tuple(header) != config.ods_header:
         raise ValueError(f"Unexpected ODS header in {config.ods_path}: {header!r}")
     field_positions = [
-        (ODS_COLUMN_TO_FIELD[column], index)
+        (field, index)
         for index, column in enumerate(config.ods_header)
-        if ODS_COLUMN_TO_FIELD[column] is not None
+        if (field := ODS_COLUMN_TO_FIELD[column]) is not None
     ]
     rows = []
     for values in raw_rows[1:]:
