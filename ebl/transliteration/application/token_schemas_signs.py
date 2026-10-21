@@ -1,11 +1,12 @@
 from abc import abstractmethod
 from typing import Any, Dict, Sequence
 
-from marshmallow import fields, post_load, pre_load, validate
+from marshmallow import fields, post_dump, post_load, pre_load, validate
 
 from ebl.schemas import ValueEnumField
 from ebl.transliteration.application.storage_serialization import (
     OMIT_FROM_STORAGE_WHEN_DEFAULT,
+    omit_stored_defaults,
 )
 from ebl.transliteration.application.token_schemas_enclosures import (
     BaseTokenSchema,
@@ -85,6 +86,13 @@ class NamedSignSchema(BaseTokenSchema):
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnumField(Flag), required=True)
     sign = fields.Nested("OneOfTokenSchema", allow_none=True)
+
+    @post_dump
+    def omit_defaults_from_storage(self, data, **kwargs):
+        stored = omit_stored_defaults(self, data)
+        if len(data["nameParts"]) > 1:
+            return {**stored, "nameBreaks": data["nameBreaks"]}
+        return stored
 
     @pre_load
     def separate_legacy_name_parts(

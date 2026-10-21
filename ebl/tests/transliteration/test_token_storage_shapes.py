@@ -9,8 +9,13 @@ from ebl.tests.fragmentarium.stored_line_shapes import (
 )
 from ebl.tests.transliteration.storage_test_helpers import has_key, stored_dump
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.transliteration.application.token_schemas_signs import is_legacy_name
+from ebl.transliteration.application.token_schemas_signs import (
+    ReadingSchema,
+    is_legacy_name,
+)
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.tokens import ValueToken
 
 ATFS = [
     "1. k[u-nu]-uš {d}INANA",
@@ -100,3 +105,28 @@ PART = {"type": "ValueToken", "value": "k"}
 )
 def test_is_legacy_name(data, expected):
     assert is_legacy_name(data) is expected
+
+
+MULTI_PART_READING = Reading.of((ValueToken.of("k"), ValueToken.of("u")))
+
+
+def test_storage_dump_keeps_empty_name_breaks_of_a_multi_part_name():
+    stored = stored_dump(ReadingSchema(), MULTI_PART_READING)
+
+    assert stored["nameBreaks"] == []
+    assert len(stored["nameParts"]) == 2
+    assert "erasure" not in stored
+
+
+def test_storage_dump_omits_empty_name_breaks_of_a_single_part_name():
+    stored = stored_dump(ReadingSchema(), Reading.of((ValueToken.of("ku"),)))
+
+    assert "nameBreaks" not in stored
+    assert "erasure" not in stored
+
+
+def test_a_stored_multi_part_name_is_not_read_as_legacy():
+    stored = stored_dump(ReadingSchema(), MULTI_PART_READING)
+
+    assert is_legacy_name(stored) is False
+    assert ReadingSchema().load(stored) == MULTI_PART_READING

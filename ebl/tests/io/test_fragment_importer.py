@@ -5,10 +5,8 @@ import attr
 from marshmallow import ValidationError
 import pymongo
 import pytest
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from pymongo.errors import BulkWriteError
-from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.io.fragments.importer import (
+    _fragment_schema,
     canonicalize,
     create_sort_index,
     load_collection,
@@ -17,12 +15,10 @@ from ebl.io.fragments.importer import (
     load_data,
     validate_id,
     ensure_unique,
-    write_to_db,
     update_sort_keys,
 )
-from ebl.mongo_collection import MongoCollection
+from ebl.tests.io.fragment_importer_test_helpers import mock_json_file
 
-from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -34,37 +30,10 @@ ensure_unique = partial(ensure_unique, filename=MOCKFILE)
 
 
 @pytest.fixture
-def fragment() -> Fragment:
-    return LemmatizedFragmentFactory.build()
-
-
-@pytest.fixture
-def fragment_schema(seeded_provenance_service) -> FragmentSchema:
-    return FragmentSchema(context={"provenance_service": seeded_provenance_service})
-
-
-@pytest.fixture
-def valid_fragment_data(fragment, fragment_schema) -> dict:
-    return fragment_schema.dump(fragment)
-
-
-@pytest.fixture
-def fragments_collection(fragment_repository) -> MongoCollection:
-    return fragment_repository._fragments
-
-
-@pytest.fixture
 def validate_fragment(seeded_provenance_service):
     return partial(
         validate, filename=MOCKFILE, provenance_service=seeded_provenance_service
     )
-
-
-def mock_json_file(contents, path) -> str:
-    path = path / "test.json"
-    with path.open("w") as tmp_file:
-        tmp_file.write(contents)
-    return str(path)
 
 
 def test_load_json(tmp_path):
@@ -204,61 +173,6 @@ def test_canonicalize_coerces_types_and_strips_unknown_fields(
     assert canonical["_id"] == "mock.number"
 
 
-def test_import_persists_canonical_schema_output(
-    tmp_path,
-    fragment,
-    fragment_repository,
-    fragments_collection,
-    seeded_provenance_service,
-):
-    schema = FragmentSchema(context={"provenance_service": seeded_provenance_service})
-    data = schema.dump(fragment)
-    data["_id"] = str(fragment.number)
-    data["acquisitions"][0]["date"] = str(data["acquisitions"][0]["date"])
-    data["unexpectedLegacyField"] = "junk"
-    path = mock_json_file(json.dumps(data), tmp_path)
-
-    [fragment_data] = load_data([path]).values()
-    validate(fragment_data, provenance_service=seeded_provenance_service)
-    canonical = canonicalize(fragment_data, seeded_provenance_service)
-    write_to_db([canonical], fragments_collection)
-
-    stored = fragments_collection.find_one_by_id(str(fragment.number))
-    assert stored == canonical
-    assert "unexpectedLegacyField" not in stored
-    assert isinstance(stored["acquisitions"][0]["date"], int)
-
-    round_tripped = fragment_repository.query_by_museum_number(fragment.number)
-    assert round_tripped.acquisitions == fragment.acquisitions
-
-
-def test_write_to_db(
-    valid_fragment_data,
-    fragment_repository,
-    fragment,
-    fragments_collection,
-):
-    fragment_repository.create(fragment)
-    valid_fragment_data["_id"] = "mock.number"
-
-    assert write_to_db([valid_fragment_data], fragments_collection) == ["mock.number"]
-    assert fragments_collection.count_documents({}) == 2
-    assert fragments_collection.find_one_by_id("mock.number") == valid_fragment_data
-
-
-def test_write_to_db_duplicate(
-    valid_fragment_data,
-    fragment,
-    fragment_repository,
-    fragments_collection,
-):
-    fragment_repository.create(fragment)
-    valid_fragment_data["_id"] = str(fragment.number)
-
-    with pytest.raises(BulkWriteError, match="E11000 duplicate key error"):
-        write_to_db([valid_fragment_data], fragments_collection)
-
-
 def test_update_sort_index(fragment, fragment_repository, fragments_collection):
     numbers = [1, 2, 3]
     for i in numbers:
@@ -297,3 +211,13 @@ def test_set_word_ids(valid_fragment_data, fragment_schema):
     assert ids and ids == expected_ids
     assert fragment_schema.load(data_with_ids) == fragment_with_ids
     assert fragment_schema.dump(fragment_with_ids) == data_with_ids
+
+
+def test_fragment_schema_without_provenance_service_has_no_context():
+    assert "provenance_service" not in _fragment_schema().context
+
+
+def test_set_word_ids_of_a_fragment_without_lines_is_unchanged():
+    fragment = {"_id": "X.1", "text": {"lines": []}}
+
+    assert set_word_ids(fragment) is fragment
