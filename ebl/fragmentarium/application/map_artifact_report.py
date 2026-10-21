@@ -63,7 +63,8 @@ def render_artifact_report(
         "",
         f"`{config.derivation_rule_text}`",
         "",
-        "Normalization applies Unicode NFKC, trims whitespace, preserves uncertainty markers, and case-folds both sides.",
+        "Normalization applies Unicode NFKC, trims whitespace, "
+        "preserves uncertainty markers, and case-folds both sides.",
         "",
         "## Human decision required",
         "",

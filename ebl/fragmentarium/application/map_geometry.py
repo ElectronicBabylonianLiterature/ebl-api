@@ -112,7 +112,8 @@ def polygonize_rings(rings: Rings) -> MultiPolygon:
     for ring, area in strict_zip(rings, areas):
         _validate_ring(ring, area)
     for left_index, left in enumerate(rings):
-        for right in rings[left_index + 1 :]:
+        next_index = left_index + 1
+        for right in rings[next_index:]:
             if _rings_intersect(left, right):
                 raise ValueError("Polygon rings must not intersect or touch.")
     parents = tuple(_parent_index(index, rings, areas) for index in range(len(rings)))
@@ -149,7 +150,8 @@ def _validate_ring(ring: Ring, area: float) -> None:
     edges = tuple(strict_zip(ring[:-1], ring[1:]))
     last_index = len(edges) - 1
     for left_index, left in enumerate(edges):
-        for right_index, right in enumerate(edges[left_index + 1 :], left_index + 1):
+        next_index = left_index + 1
+        for right_index, right in enumerate(edges[next_index:], next_index):
             if right_index == left_index + 1 or {left_index, right_index} == {
                 0,
                 last_index,
