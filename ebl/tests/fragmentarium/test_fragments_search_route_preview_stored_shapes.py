@@ -1,7 +1,10 @@
+from typing import cast
+
 import falcon
 import pytest
 
 from ebl.common.domain.period import Period
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.stored_line_shapes import legacy_shape, sparse_shape
@@ -18,8 +21,7 @@ def full_fragment_lines(fragmentarium, sign_repository, signs, database) -> list
     fragmentarium.create(fragment)
     for sign in signs:
         sign_repository.create(sign)
-    stored = database["fragments"].find_one({"_id": "X.1"})
-    lines = stored["text"]["lines"]
+    lines = cast(dict, FragmentSchema().dump(fragment))["text"]["lines"]
     database["fragments"].update_one(
         {"_id": "X.1"},
         {"$set": {"text.lines": sparse_shape(legacy_shape(lines))}},

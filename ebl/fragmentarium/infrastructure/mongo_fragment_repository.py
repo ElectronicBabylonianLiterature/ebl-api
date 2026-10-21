@@ -9,6 +9,9 @@ from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     fragment_is,
 )
+from ebl.transliteration.application.storage_serialization import (
+    storage_serialization,
+)
 
 
 class MongoFragmentRepository(
@@ -119,7 +122,8 @@ class MongoFragmentRepository(
             raise ValueError(
                 f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
             )
-        query = self._schema(only=fields_to_update[field]).dump(fragment)
+        with storage_serialization():
+            query = self._schema(only=fields_to_update[field]).dump(fragment)
         self._fragments.update_one(
             fragment_is(fragment),
             {"$set": query if query else {field: None}},

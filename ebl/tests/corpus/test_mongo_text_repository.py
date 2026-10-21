@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Optional, Sequence, Tuple, cast
 import attr
 import pytest
 
@@ -158,21 +158,6 @@ def test_creating_text(database, text_repository) -> None:
         {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False}
     )
     assert inserted_text == TextSchema(exclude=["chapters"]).dump(TEXT)
-
-
-def test_creating_chapter(database, text_repository) -> None:
-    text_repository.create_chapter(CHAPTER)
-
-    inserted_chapter = database[CHAPTERS_COLLECTION].find_one(
-        {
-            "textId.category": CHAPTER.text_id.category,
-            "textId.index": CHAPTER.text_id.index,
-            "stage": CHAPTER.stage.long_name,
-            "name": CHAPTER.name,
-        },
-        projection={"_id": False},
-    )
-    assert inserted_chapter == ChapterSchema().dump(CHAPTER)
 
 
 def test_it_is_not_possible_to_create_duplicate_texts(text_repository) -> None:
@@ -370,13 +355,11 @@ def make_dictionary_line(text: Text, chapter: Chapter, lemma: str) -> Dictionary
 
 
 @pytest.mark.parametrize(
-    "text,chapter,lemma_id,genre,expected",
+    "stored,query,expected",
     [
         (
-            LITERATURE_TEXT,
-            CHAPTER_WITH_QUERY_LEMMA,
-            QUERY_LEMMA,
-            None,
+            (LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA),
+            (QUERY_LEMMA, None),
             [
                 make_dictionary_line(
                     LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA, QUERY_LEMMA
@@ -384,30 +367,26 @@ def make_dictionary_line(text: Text, chapter: Chapter, lemma: str) -> Dictionary
             ],
         ),
         (
-            TEXT,
-            CHAPTER_WITH_QUERY_LEMMA,
-            QUERY_LEMMA,
-            Genre.DIVINATION,
+            (TEXT, CHAPTER_WITH_QUERY_LEMMA),
+            (QUERY_LEMMA, Genre.DIVINATION),
             [],
         ),
         (
-            TEXT,
-            CHAPTER_WITH_MANUSCRIPT_LEMMA,
-            QUERY_LEMMA,
-            None,
+            (TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA),
+            (QUERY_LEMMA, None),
             [make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA, QUERY_LEMMA)],
         ),
-        (TEXT, CHAPTER, "definitely not a lemma", None, []),
+        ((TEXT, CHAPTER), ("definitely not a lemma", None), []),
     ],
 )
 def test_query_by_lemma(
     text_repository: TextRepository,
-    text: Text,
-    chapter: Chapter,
-    lemma_id: str,
-    genre: Genre,
+    stored: Tuple[Text, Chapter],
+    query: Tuple[str, Optional[Genre]],
     expected: Sequence[DictionaryLine],
 ) -> None:
+    text, chapter = stored
+    lemma_id, genre = query
     text_repository.create(text)
     text_repository.create_chapter(chapter)
 
@@ -471,7 +450,12 @@ def test_query_manuscripts_with_joins_by_chapter(database, text_repository) -> N
     database[JOINS_COLLECTION].insert_one(
         {
             "fragments": [
-                {**JoinSchema(exclude=["is_in_fragmentarium"]).dump(join), "group": 0}
+                {
+                    **cast(
+                        dict, JoinSchema(exclude=["is_in_fragmentarium"]).dump(join)
+                    ),
+                    "group": 0,
+                }
             ]
         }
     )

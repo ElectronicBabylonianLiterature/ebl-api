@@ -7,13 +7,14 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import (
     MongoTextRepositoryBase,
     chapter_not_found,
 )
+from ebl.corpus.infrastructure.sign_data import api_sign_data_of
 from ebl.errors import NotFoundError
 
 
 class MongoTextRepositoryGet(MongoTextRepositoryBase):
     def get_sign_data(self, id_: ChapterId) -> dict:
         try:
-            return self._chapters.find_one(
+            stored_chapter = self._chapters.find_one(
                 chapter_id_query(id_),
                 projection={
                     "_id": False,
@@ -26,10 +27,12 @@ class MongoTextRepositoryGet(MongoTextRepositoryBase):
             )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
+        return api_sign_data_of(stored_chapter)
 
     def get_all_sign_data(self) -> Sequence[dict]:
-        return list(
-            self._chapters.find_many(
+        return [
+            api_sign_data_of(stored_chapter)
+            for stored_chapter in self._chapters.find_many(
                 {"signs": {"$regex": "."}, "textId.category": {"$ne": 99}},
                 projection={
                     "_id": False,
@@ -40,4 +43,4 @@ class MongoTextRepositoryGet(MongoTextRepositoryBase):
                     "name": True,
                 },
             )
-        )
+        ]
