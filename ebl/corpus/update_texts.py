@@ -7,6 +7,7 @@ import attr
 from tqdm import tqdm
 
 from ebl.app import create_context
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.text import Text, TextId
@@ -14,16 +15,17 @@ from ebl.users.domain.user import ApiUser
 from ebl.corpus.domain.lines_update import LinesUpdate
 
 
-def update_text(corpus: Corpus, text: Text) -> None:
+def update_text(corpus: Corpus, text: Text, cache: ChapterCache) -> None:
     user = ApiUser("update_texts.py")
     for chapter_listing in text.chapters:
         chapter_id = ChapterId(text.id, chapter_listing.stage, chapter_listing.name)
-        chapter = corpus.find_chapter(chapter_id)
-        corpus.update_lines(
-            chapter_id,
-            LinesUpdate([], set(), dict(enumerate(chapter.lines))),
-            user,
-        )
+        with cache.updating_chapter(chapter_id):
+            chapter = corpus.find_chapter(chapter_id)
+            corpus.update_lines(
+                chapter_id,
+                LinesUpdate([], set(), dict(enumerate(chapter.lines))),
+                user,
+            )
 
 
 @attr.s(auto_attribs=True)
@@ -52,7 +54,7 @@ class State:
         )
 
 
-def update(number) -> State:
+def update(number: TextId) -> State:
     context = create_context()
     corpus = Corpus(
         CorpusDependencies(
@@ -68,7 +70,7 @@ def update(number) -> State:
     text = corpus.find(number)
 
     try:
-        update_text(corpus, text)
+        update_text(corpus, text, context.custom_cache)
         state.add_updated()
     except Exception as error:
         state.add_error(error, text)

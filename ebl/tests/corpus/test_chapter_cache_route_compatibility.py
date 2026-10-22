@@ -1,6 +1,7 @@
 import falcon
 import attr
 import pytest
+from dataclasses import dataclass
 from falcon import testing
 
 from ebl.corpus.domain.chapter import Chapter
@@ -8,6 +9,7 @@ from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.corpus import test_chapter_cache_races
 from ebl.tests.corpus.support import create_chapter_url, simulate_get
+from ebl.tests.factories.corpus import LineFactory, LineVariantFactory
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.tokens import ValueToken
 
@@ -15,20 +17,57 @@ from ebl.transliteration.domain.tokens import ValueToken
 cached_chapter = test_chapter_cache_races.cached_chapter
 
 
+@dataclass(frozen=True)
+class SelectionCase:
+    query: str
+    line_index: int
+    variant_index: int
+    unpaired_line_index: int | None = None
+
+
 @pytest.mark.parametrize(
-    "query", ["lines=0&lines=1&variants=0", "lines=0&variants=0&variants=1"]
+    "selection",
+    [
+        SelectionCase("lines=0&lines=1&variants=0", 0, 0, 1),
+        SelectionCase("lines=1&variants=1&variants=0", 1, 1),
+    ],
 )
-def test_partial_display_ignores_unpaired_selection_parameters(
-    client: testing.TestClient, cached_chapter: Chapter, query: str
+def test_partial_display_preserves_selection_content(
+    client: testing.TestClient,
+    cached_chapter: Chapter,
+    text_repository: MongoTextRepository,
+    selection: SelectionCase,
 ) -> None:
+    lines = [
+        LineFactory.build(
+            manuscript_id=1,
+            variants=LineVariantFactory.build_batch(2, manuscript_id=1),
+        )
+        for _ in range(2)
+    ]
+    text_repository.update(cached_chapter.id_, attr.evolve(cached_chapter, lines=lines))
+    full_result = simulate_get(client, create_chapter_url(cached_chapter, "/display"))
+    full_body = full_result.json
+    assert isinstance(full_body, dict)
+    assert full_body["lines"][0] != full_body["lines"][1]
+    assert full_body["lines"][0]["variants"][0] != full_body["lines"][0]["variants"][1]
     result = simulate_get(
-        client, create_chapter_url(cached_chapter, f"/display?{query}")
+        client, create_chapter_url(cached_chapter, f"/display?{selection.query}")
     )
     assert result.status == falcon.HTTP_OK
     body = result.json
     assert isinstance(body, dict)
-    assert len(body["lines"]) == 1
-    assert len(body["lines"][0]["variants"]) == 1
+    expected_line = full_body["lines"][selection.line_index]
+    expected_lines = [
+        {
+            **expected_line,
+            "variants": [expected_line["variants"][selection.variant_index]],
+        }
+    ]
+    if selection.unpaired_line_index is not None:
+        unpaired_line = full_body["lines"][selection.unpaired_line_index]
+        expected_lines.append({**unpaired_line, "variants": []})
+    assert body["lines"] == expected_lines
 
 
 def test_sign_routes_keep_their_existing_wire_shape(

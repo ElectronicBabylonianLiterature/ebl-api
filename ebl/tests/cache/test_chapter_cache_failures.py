@@ -38,14 +38,19 @@ def test_finish_failure_keeps_cache_bypassed(
     assert database["cache"].count_documents({}) == 0
 
 
+@pytest.mark.parametrize("preexisting", [True, False])
 def test_state_read_failure_bypasses_existing_cache(
     mongo_cache_repository: MongoCacheRepository,
+    database: Database,
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
+    preexisting: bool,
 ) -> None:
     cache = ChapterCache(mongo_cache_repository)
     chapter_id: ChapterId = ChapterFactory.build().id_
-    cache.get_or_create(chapter_id, str(chapter_id), lambda: {"value": "old"})
+    if preexisting:
+        cache.get_or_create(chapter_id, str(chapter_id), lambda: {"value": "old"})
+    original_entries = list(database["cache"].find({}))
 
     def fail_read(*args: object, **kwargs: object) -> None:
         raise AutoReconnect("state unavailable")
@@ -57,7 +62,12 @@ def test_state_read_failure_bypasses_existing_cache(
         result = cache.get_or_create(
             chapter_id, str(chapter_id), lambda: {"value": "new"}
         )
+        later_result = cache.get_or_create(
+            chapter_id, str(chapter_id), lambda: {"value": "later"}
+        )
     assert result == {"value": "new"}
+    assert later_result == {"value": "later"}
+    assert list(database["cache"].find({})) == original_entries
     assert "Bypassing chapter cache" in caplog.text
 
 
@@ -89,6 +99,29 @@ def test_concurrent_upsert_survives_invalidation_before_retry(
     repository.set("chapter", {"value": "current"})
     assert calls == [True, True]
     assert repository.get("chapter") == {"value": "current"}
+
+
+def test_repeated_collisions_return_computed_value_without_caching(
+    mongo_cache_repository: MongoCacheRepository,
+    database: Database,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    calls = []
+
+    def collide(*args: object, **kwargs: object) -> None:
+        calls.append(kwargs)
+        raise DuplicateKeyError("simultaneous cache insert")
+
+    monkeypatch.setattr(mongo_cache_repository._collection, "replace_one", collide)
+    cache = ChapterCache(mongo_cache_repository)
+    chapter_id = ChapterFactory.build().id_
+    assert cache.get_or_create(
+        chapter_id, str(chapter_id), lambda: {"value": "computed"}
+    ) == {"value": "computed"}
+    assert calls == [{"upsert": True}, {"upsert": True}]
+    assert database["cache"].count_documents({}) == 0
+    assert "repeated concurrent cache fills" in caplog.text
 
 
 def test_removing_missing_cache_entries_is_idempotent(
