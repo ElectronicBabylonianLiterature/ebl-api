@@ -1,16 +1,17 @@
 from typing import Any, Dict
 
 SPARSE_DEFAULTS: Dict[str, Any] = {"erasure": "NONE", "enclosureType": []}
+STORAGE_DEFAULTS: Dict[str, Any] = {"erasure": "NONE", "nameBreaks": []}
 
 
-def sparse_shape(value: Any) -> Any:
+def sparse_shape(value: Any, defaults: Dict[str, Any] = SPARSE_DEFAULTS) -> Any:
     if isinstance(value, list):
-        return [sparse_shape(item) for item in value]
+        return [sparse_shape(item, defaults) for item in value]
     if isinstance(value, dict):
         return {
-            key: sparse_shape(item)
+            key: sparse_shape(item, defaults)
             for key, item in value.items()
-            if SPARSE_DEFAULTS.get(key, object()) != item
+            if defaults.get(key, object()) != item
         }
     return value
 
