@@ -19,14 +19,14 @@ from ebl.fragmentarium.application.findspot_map_location_target import (  # noqa
     is_local_mongo_uri,
     validate_approved_development_target,
 )
-from ebl.fragmentarium.application.findspot_map_location_importer import (
+from ebl.fragmentarium.application.findspot_map_location_importer import (  # noqa: E402
     DEFAULT_INVENTORY_PATH,
     DEFAULT_MAPPINGS_PATH,
     ImportPaths,
     load_import_records,
     load_polygon_inventory,
     run_import,
-)  # noqa: E402
+)
 from ebl.fragmentarium.application.findspot_map_location_importer_models import (  # noqa: E402
     MapLocationImportRecord,
 )
@@ -41,7 +41,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Unset verified mappings when the existing mapLocation matches",
     )
-    parser.add_argument(
+    mode.add_argument(
         "--dry-run",
         action="store_true",
         help="Validate and report only; this is the default when no mode is set",
@@ -190,7 +190,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 2
 
-    client = MongoClient(mongo_uri)
+    client: MongoClient[dict[str, object]] = MongoClient(mongo_uri)
     try:
         database = client.get_database(os.environ.get("MONGODB_DB"))
         exit_code = _verify_approved_development_target(mongo_uri, database, args)
