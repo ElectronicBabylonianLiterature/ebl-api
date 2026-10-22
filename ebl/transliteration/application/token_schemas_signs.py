@@ -90,7 +90,7 @@ class NamedSignSchema(BaseTokenSchema):
     @post_dump
     def omit_defaults_from_storage(self, data, **kwargs):
         stored = omit_stored_defaults(self, data)
-        if len(data["nameParts"]) > 1:
+        if "nameBreaks" in data and len(data.get("nameParts", [])) > 1:
             return {**stored, "nameBreaks": data["nameBreaks"]}
         return stored
 

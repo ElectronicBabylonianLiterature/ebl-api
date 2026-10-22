@@ -1,7 +1,7 @@
 import attr
 
 from ebl.corpus.application.schemas import ChapterSchema
-from ebl.tests.corpus.test_mongo_text_repository import (
+from ebl.tests.corpus.mongo_text_repository_fixtures import (
     CHAPTER,
     CHAPTER_SIGN_SCHEMA,
     CHAPTERS_COLLECTION,

@@ -130,3 +130,33 @@ def test_a_stored_multi_part_name_is_not_read_as_legacy():
 
     assert is_legacy_name(stored) is False
     assert ReadingSchema().load(stored) == MULTI_PART_READING
+
+
+def api_name_dump(schema, value) -> dict:
+    return cast(dict, schema.dump(value))
+
+
+@pytest.mark.parametrize(
+    "dump,schema_options,present,absent",
+    [
+        (api_name_dump, {"only": ["name", "name_breaks"]}, {"nameBreaks"}, set()),
+        (api_name_dump, {"exclude": ["name_parts"]}, {"nameBreaks"}, {"nameParts"}),
+        (api_name_dump, {"exclude": ["name_breaks"]}, {"nameParts"}, {"nameBreaks"}),
+        (stored_dump, {"only": ["name", "name_breaks"]}, set(), {"nameBreaks"}),
+        (stored_dump, {"exclude": ["name_parts"]}, set(), {"nameBreaks"}),
+        (stored_dump, {"exclude": ["name_breaks"]}, {"nameParts"}, {"nameBreaks"}),
+    ],
+    ids=[
+        "api-only",
+        "api-no-parts",
+        "api-no-breaks",
+        "stored-only",
+        "stored-no-parts",
+        "stored-no-breaks",
+    ],
+)
+def test_a_partial_name_dump_does_not_fail(dump, schema_options, present, absent):
+    dumped = dump(ReadingSchema(**schema_options), MULTI_PART_READING)
+
+    assert {"name", *present} <= set(dumped)
+    assert not absent & set(dumped)
