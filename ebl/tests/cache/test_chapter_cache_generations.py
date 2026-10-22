@@ -115,9 +115,11 @@ def test_reads_during_concurrent_writes_bypass_cache(
 def test_failed_mutation_finishes_generation(
     cache: ChapterCache, chapter_id: ChapterId, database: Database
 ) -> None:
-    with pytest.raises(ValueError, match="rejected"):
+    def reject() -> None:
         with cache.updating_chapter(chapter_id):
             raise ValueError("rejected")
+
+    pytest.raises(ValueError, reject).match("rejected")
     assert database["chapter_cache_state"].find_one({"_id": str(chapter_id)}) == {
         "_id": str(chapter_id),
         "pending": 0,

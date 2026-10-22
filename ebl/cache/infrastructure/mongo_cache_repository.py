@@ -55,10 +55,15 @@ class MongoCacheRepository(CacheRepository):
             )
         else:
             document = RawBSONDocument(encoded_document)
-            try:
-                self._collection.replace_one(document, upsert=True)
-            except DuplicateKeyError:
-                self._collection.replace_one(document, upsert=True)
+            for attempt in range(2):
+                try:
+                    self._collection.replace_one(document, upsert=True)
+                    return
+                except DuplicateKeyError:
+                    if attempt == 1:
+                        logger.warning(
+                            "Not caching %s: repeated concurrent cache fills", cache_key
+                        )
 
     def delete(self, cache_key: str) -> None:
         self.delete_all(rf"^{re.escape(cache_key)}$")
@@ -67,7 +72,7 @@ class MongoCacheRepository(CacheRepository):
         try:
             self._collection.delete_many({"cache_key": {"$regex": pattern}})
         except NotFoundError:
-            pass
+            return
 
     def chapter_revision(self, chapter_key: str) -> Optional[int]:
         return self._chapter_state.revision(chapter_key)
