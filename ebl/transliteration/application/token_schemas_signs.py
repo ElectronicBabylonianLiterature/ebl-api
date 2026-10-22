@@ -1,9 +1,13 @@
 from abc import abstractmethod
 from typing import Any, Dict, Sequence
 
-from marshmallow import fields, post_load, pre_load, validate
+from marshmallow import fields, post_dump, post_load, pre_load, validate
 
 from ebl.schemas import ValueEnumField
+from ebl.transliteration.application.storage_serialization import (
+    OMIT_FROM_STORAGE_WHEN_DEFAULT,
+    omit_stored_defaults,
+)
 from ebl.transliteration.application.token_schemas_enclosures import (
     BaseTokenSchema,
     BrokenAwaySchema,
@@ -56,28 +60,47 @@ def named_sign_arguments(data: Dict[str, Any]) -> NamedSignArguments:
     )
 
 
+def is_legacy_name(data: Any) -> bool:
+    if not isinstance(data, dict) or "nameBreaks" in data:
+        return False
+    parts = data.get("nameParts")
+    if not isinstance(parts, Sequence) or isinstance(parts, str):
+        return False
+    return any(
+        isinstance(part, dict) and part.get("type") == "BrokenAway" for part in parts
+    )
+
+
 class NamedSignSchema(BaseTokenSchema):
     name = fields.String(required=True)
     name_parts = fields.List(
         fields.Nested(NameValueTokenSchema), required=True, data_key="nameParts"
     )
     name_breaks = fields.List(
-        fields.Nested(NameBreakSchema), required=True, data_key="nameBreaks"
+        fields.Nested(NameBreakSchema),
+        load_default=list,
+        data_key="nameBreaks",
+        metadata={OMIT_FROM_STORAGE_WHEN_DEFAULT: True},
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnumField(Flag), required=True)
     sign = fields.Nested("OneOfTokenSchema", allow_none=True)
 
+    @post_dump
+    def omit_defaults_from_storage(self, data, **kwargs):
+        stored = omit_stored_defaults(self, data)
+        if "nameBreaks" in data and len(data.get("nameParts", [])) > 1:
+            return {**stored, "nameBreaks": data["nameBreaks"]}
+        return stored
+
     @pre_load
     def separate_legacy_name_parts(
         self, data: Dict[str, Any], **kwargs
     ) -> Dict[str, Any]:
-        if not isinstance(data, dict) or "nameBreaks" in data:
+        if not is_legacy_name(data):
             return data
-        legacy_parts = data.get("nameParts")
-        if not isinstance(legacy_parts, Sequence) or isinstance(legacy_parts, str):
-            return data
+        legacy_parts = data["nameParts"]
         return {
             **data,
             "nameParts": list(legacy_parts[0::2]),

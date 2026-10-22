@@ -97,7 +97,7 @@ def test_absent_name_breaks_is_read_as_the_legacy_interleaved_format() -> None:
     assert loaded.name_breaks == (CLOSE,)
 
 
-def test_name_breaks_is_required_when_name_parts_cannot_be_separated() -> None:
+def test_unseparable_name_parts_are_rejected() -> None:
     payload = _dumped_reading()
     del payload["nameBreaks"]
     payload["nameParts"] = "ku"
@@ -105,4 +105,5 @@ def test_name_breaks_is_required_when_name_parts_cannot_be_separated() -> None:
     with pytest.raises(ValidationError) as error:
         NamedSignSchema().load(payload)
 
-    assert "nameBreaks" in error.value.messages
+    assert "nameParts" in error.value.messages
+    assert "nameBreaks" not in error.value.messages
