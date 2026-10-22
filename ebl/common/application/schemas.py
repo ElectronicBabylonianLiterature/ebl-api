@@ -22,8 +22,10 @@ class AccessionSchema(AbstractMuseumNumberSchema):
 
 
 def deserialize_provenance_record(
-    schema: Schema, value: Optional[str]
+    schema: Schema, value: object
 ) -> Optional[ProvenanceRecord]:
+    if value is not None and not isinstance(value, str):
+        raise ValidationError("Provenance must be a string or null.")
     if not value:
         return None
     provenance_service = schema.context.get("provenance_service")
