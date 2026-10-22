@@ -1,4 +1,7 @@
+from typing import Sequence, cast
+
 import pymongo
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_create import (
     MongoFragmentRepositoryCreate,
 )
@@ -88,7 +91,10 @@ class MongoFragmentRepository(
         except StopIteration:
             return 0
 
-    def update_field(self, field, fragment):
+    def update_field(self, field: str, fragment: Fragment) -> None:
+        self.update_fields((field,), fragment)
+
+    def update_fields(self, fields: Sequence[str], fragment: Fragment) -> None:
         fields_to_update = {
             "introduction": ("introduction",),
             "lemmatization": ("text",),
@@ -115,12 +121,15 @@ class MongoFragmentRepository(
             "named_entities": ("text", "named_entities", "realia"),
         }
 
-        if field not in fields_to_update:
-            raise ValueError(
-                f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
+        query: dict = {}
+        for field in fields:
+            if field not in fields_to_update:
+                raise ValueError(
+                    f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
+                )
+            serialized = cast(
+                dict, self._schema(only=fields_to_update[field]).dump(fragment)
             )
-        query = self._schema(only=fields_to_update[field]).dump(fragment)
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": query if query else {field: None}},
-        )
+            query.update(serialized or {field: None})
+        if query:
+            self._fragments.update_one(fragment_is(fragment), {"$set": query})

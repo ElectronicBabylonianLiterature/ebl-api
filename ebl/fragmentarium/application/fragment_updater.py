@@ -50,14 +50,15 @@ class FragmentUpdater:
         ignore_lowest_join: bool = False,
     ) -> Tuple[Fragment, bool]:
         original_fragment = fragment = self._repository.query_by_museum_number(number)
+        fields: list[str] = []
 
         if introduction is not None:
             fragment = fragment.set_introduction(introduction)
-            self._repository.update_field("introduction", fragment)
+            fields.append("introduction")
 
         if notes is not None:
             fragment = fragment.set_notes(notes)
-            self._repository.update_field("notes", fragment)
+            fields.append("notes")
 
         if transliteration is not None:
             fragment = (
@@ -65,7 +66,12 @@ class FragmentUpdater:
                 if ignore_lowest_join
                 else fragment.update_lowest_join_transliteration(transliteration, user)
             )
-            self._repository.update_field("transliteration", fragment)
+            fields.append("transliteration")
+
+        if len(fields) == 1:
+            self._repository.update_field(fields[0], fragment)
+        elif fields:
+            self._repository.update_fields(fields, fragment)
 
         self._create_changelog(user, original_fragment, fragment)
 
