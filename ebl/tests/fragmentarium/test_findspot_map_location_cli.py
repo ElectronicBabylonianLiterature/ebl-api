@@ -69,7 +69,7 @@ def test_conflicting_modes_fail_before_connecting(
 
 
 @pytest.mark.parametrize(
-    "arguments,dry_run,rollback",
+    "mode",
     [
         ([], True, False),
         (["--dry-run"], True, False),
@@ -78,13 +78,12 @@ def test_conflicting_modes_fail_before_connecting(
     ],
 )
 def test_single_modes_preserve_import_behavior(
-    arguments: list[str],
-    dry_run: bool,
-    rollback: bool,
+    mode: tuple[list[str], bool, bool],
     monkeypatch: pytest.MonkeyPatch,
     client: Mock,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
+    arguments, dry_run, rollback = mode
     summary = replace(_summary(), dry_run=dry_run, rollback=rollback)
     importer = Mock(return_value=summary)
     monkeypatch.setattr(cli, "run_import", importer)

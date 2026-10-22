@@ -78,7 +78,7 @@ def test_approved_target_receives_validated_mapping_inputs(
 
 
 @pytest.mark.parametrize(
-    "invalid_input,exit_code,message",
+    "invalid_case",
     [
         ("current", 1, "mapping input is invalid"),
         ("previous", 1, "previous mapping input is invalid"),
@@ -87,13 +87,12 @@ def test_approved_target_receives_validated_mapping_inputs(
 )
 def test_invalid_mapping_inputs_refuse_approved_target(
     arguments: argparse.Namespace,
-    invalid_input: str,
-    exit_code: int,
-    message: str,
+    invalid_case: tuple[str, int, str],
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
     tmp_path: Path,
 ) -> None:
+    invalid_input, exit_code, message = invalid_case
     invalid_mappings = tmp_path / "invalid.json"
     invalid_mappings.write_text('[{"findspotId": 1}]')
     if invalid_input == "current":
