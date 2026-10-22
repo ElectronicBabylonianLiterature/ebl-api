@@ -1,6 +1,7 @@
 import argparse
 import json
 from pathlib import Path
+from typing import cast
 from unittest.mock import Mock
 
 import pytest
@@ -72,7 +73,8 @@ def test_approved_target_receives_validated_mapping_inputs(
     assert len(inputs.records) == 1
     assert inputs.polygon_ids == {"assur-test"}
     assert len(inputs.previous_records) == int(include_previous)
-    assert "Approved development target verified" in capsys.readouterr().out
+    stdout, _ = cast(tuple[str, str], capsys.readouterr())
+    assert "Approved development target verified" in stdout
 
 
 @pytest.mark.parametrize(
@@ -110,7 +112,8 @@ def test_invalid_mapping_inputs_refuse_approved_target(
         == exit_code
     )
 
-    assert message in capsys.readouterr().err
+    _, stderr = cast(tuple[str, str], capsys.readouterr())
+    assert message in stderr
     verify_target.assert_not_called()
 
 
@@ -132,4 +135,5 @@ def test_failed_target_fingerprint_is_reported_as_refusal(
         == 2
     )
 
-    assert "fingerprint mismatch" in capsys.readouterr().err
+    _, stderr = cast(tuple[str, str], capsys.readouterr())
+    assert "fingerprint mismatch" in stderr

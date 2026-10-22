@@ -1,6 +1,7 @@
 import json
 import runpy
 from dataclasses import replace
+from typing import cast
 from unittest.mock import Mock
 
 import pytest
@@ -62,7 +63,8 @@ def test_conflicting_modes_fail_before_connecting(
         cli.main(arguments)
 
     assert error.value.code == 2
-    assert "not allowed with argument" in capsys.readouterr().err
+    _, stderr = cast(tuple[str, str], capsys.readouterr())
+    assert "not allowed with argument" in stderr
     client_factory.assert_not_called()
 
 
@@ -96,7 +98,8 @@ def test_single_modes_preserve_import_behavior(
         dry_run=dry_run,
         rollback=rollback,
     )
-    assert "Applied: 0" in capsys.readouterr().out
+    stdout, _ = cast(tuple[str, str], capsys.readouterr())
+    assert "Applied: 0" in stdout
     client.close.assert_called_once_with()
 
 
@@ -110,7 +113,8 @@ def test_invalid_import_returns_failure_with_json_report(
 
     assert cli.main(["--json"]) == 1
 
-    report = json.loads(capsys.readouterr().out)
+    stdout, _ = cast(tuple[str, str], capsys.readouterr())
+    report = json.loads(stdout)
     assert report["invalid"] == 1
     assert report["issues"] == [{"findspot_id": 1, "reason": "unknown polygon"}]
     client.close.assert_called_once_with()
@@ -126,7 +130,7 @@ def test_text_report_limits_issue_details(
         )
     )
 
-    output = capsys.readouterr().out
+    output, _ = cast(tuple[str, str], capsys.readouterr())
     assert output.count("unknown polygon") == min(issue_count, 10)
     assert ("and 1 more" in output) is (issue_count > 10)
 
@@ -141,7 +145,8 @@ def test_entrypoint_refuses_missing_database_uri(
         runpy.run_path(cli.__file__, run_name="__main__")
 
     assert error.value.code == 2
-    assert "Refusing to run unless MONGODB_URI" in capsys.readouterr().err
+    _, stderr = cast(tuple[str, str], capsys.readouterr())
+    assert "Refusing to run unless MONGODB_URI" in stderr
 
 
 def test_refused_target_closes_client_without_importing(
@@ -155,6 +160,7 @@ def test_refused_target_closes_client_without_importing(
 
     assert cli.main(["--dry-run"]) == 2
 
-    assert "without approved development mode" in capsys.readouterr().err
+    _, stderr = cast(tuple[str, str], capsys.readouterr())
+    assert "without approved development mode" in stderr
     importer.assert_not_called()
     client.close.assert_called_once_with()
