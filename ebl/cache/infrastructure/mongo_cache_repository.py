@@ -1,13 +1,17 @@
 import logging
+import re
 
 import bson
 import pymongo
-from bson import ObjectId
 from bson.raw_bson import RawBSONDocument
 from pymongo.common import MAX_BSON_SIZE
 from pymongo.database import Database
+from pymongo.errors import DuplicateKeyError
+from typing import Optional
 
 from ebl.cache.application.cache_repository import CacheRepository
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
+from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 
@@ -19,6 +23,7 @@ logger = logging.getLogger(__name__)
 class MongoCacheRepository(CacheRepository):
     def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
+        self._chapter_state = MongoChapterCacheState(database)
 
     def create_indexes(self) -> None:
         self._collection.create_index([("cache_key", pymongo.ASCENDING)])
@@ -29,13 +34,19 @@ class MongoCacheRepository(CacheRepository):
         )
 
     def get(self, cache_key: str) -> dict:
+        documents = self._collection.find_many(
+            {"_id": self._document_id(cache_key)}, projection={"cache_key": 0, "_id": 0}
+        )
+        document = next(documents, None)
+        if document is not None:
+            return document
         return self._collection.find_one(
             {"cache_key": cache_key}, projection={"cache_key": 0, "_id": 0}
         )
 
     def set(self, cache_key: str, item: dict) -> None:
         encoded_document = bson.encode(
-            {"_id": ObjectId(), "cache_key": cache_key, **item}
+            {**item, "_id": self._document_id(cache_key), "cache_key": cache_key}
         )
         size = len(encoded_document)
         if size > MAX_BSON_SIZE:
@@ -43,12 +54,30 @@ class MongoCacheRepository(CacheRepository):
                 "Not caching %s: %d bytes exceeds %d", cache_key, size, MAX_BSON_SIZE
             )
         else:
-            self._collection.insert_one(RawBSONDocument(encoded_document))
+            document = RawBSONDocument(encoded_document)
+            try:
+                self._collection.replace_one(document, upsert=True)
+            except DuplicateKeyError:
+                self._collection.replace_one(document, upsert=True)
 
     def delete(self, cache_key: str) -> None:
-        if self.has(cache_key):
-            self._collection.delete_one({"cache_key": cache_key})
+        self.delete_all(rf"^{re.escape(cache_key)}$")
 
     def delete_all(self, pattern: str) -> None:
-        if self.has(pattern, regex=True):
+        try:
             self._collection.delete_many({"cache_key": {"$regex": pattern}})
+        except NotFoundError:
+            pass
+
+    def chapter_revision(self, chapter_key: str) -> Optional[int]:
+        return self._chapter_state.revision(chapter_key)
+
+    def start_chapter_update(self, chapter_key: str) -> None:
+        self._chapter_state.start_update(chapter_key)
+
+    def finish_chapter_update(self, chapter_key: str) -> None:
+        self._chapter_state.finish_update(chapter_key)
+
+    @staticmethod
+    def _document_id(cache_key: str) -> str:
+        return f"chapter-cache-v2:{cache_key}"

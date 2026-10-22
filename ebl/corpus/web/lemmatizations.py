@@ -1,4 +1,5 @@
 import falcon
+from typing import cast
 from marshmallow import Schema, fields
 
 from ebl.cache.application.custom_cache import ChapterCache
@@ -8,6 +9,7 @@ from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
+from ebl.users.web.user_request import UserRequest
 
 
 class CorpusLemmatizationsSchema(Schema):
@@ -25,7 +27,7 @@ class LemmatizationResource:
     @validate(CorpusLemmatizationsSchema())
     def on_post(
         self,
-        req: falcon.Request,
+        req: UserRequest,
         resp: falcon.Response,
         genre: str,
         category: str,
@@ -34,10 +36,12 @@ class LemmatizationResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete_chapter(chapter_id)
-        updated_chapter = self._corpus.update_manuscript_lemmatization(
-            chapter_id,
-            CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
-            req.context.user,
-        )
+        with self._cache.updating_chapter(chapter_id):
+            updated_chapter = self._corpus.update_manuscript_lemmatization(
+                chapter_id,
+                cast(dict, CorpusLemmatizationsSchema().load(req.media))[
+                    "lemmatization"
+                ],
+                req.context.user,
+            )
         resp.media = ApiChapterSchema().dump(updated_chapter)
