@@ -1,15 +1,19 @@
 import falcon
+from typing import cast
 
 from ebl.cache.application.custom_cache import ChapterCache
+from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.web.alignment_schema import AlignmentSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
+from ebl.users.web.user_request import UserRequest
 
 
 class AlignmentResource:
-    def __init__(self, corpus, cache: ChapterCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache) -> None:
         self._corpus = corpus
         self._cache = cache
 
@@ -17,7 +21,7 @@ class AlignmentResource:
     @validate(AlignmentSchema())
     def on_post(
         self,
-        req: falcon.Request,
+        req: UserRequest,
         resp: falcon.Response,
         genre: str,
         category: str,
@@ -26,8 +30,10 @@ class AlignmentResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete_chapter(chapter_id)
-        updated_chapter = self._corpus.update_alignment(
-            chapter_id, AlignmentSchema().load(req.media), req.context.user
-        )
+        with self._cache.updating_chapter(chapter_id):
+            updated_chapter = self._corpus.update_alignment(
+                chapter_id,
+                cast(Alignment, AlignmentSchema().load(req.media)),
+                req.context.user,
+            )
         resp.media = ApiChapterSchema().dump(updated_chapter)

@@ -1,4 +1,5 @@
 import falcon
+from typing import cast
 from marshmallow import Schema, fields
 
 from ebl.cache.application.custom_cache import ChapterCache
@@ -11,6 +12,7 @@ from ebl.corpus.web.chapter_schemas import (
 )
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
+from ebl.users.web.user_request import UserRequest
 
 
 class ManuscriptDtoSchema(Schema):
@@ -48,7 +50,7 @@ class ManuscriptsResource:
     @falcon.before(require_scope, "write:texts")
     def on_post(
         self,
-        req: falcon.Request,
+        req: UserRequest,
         resp: falcon.Response,
         genre: str,
         category: str,
@@ -57,8 +59,6 @@ class ManuscriptsResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete_chapter(chapter_id)
-
         schema = ManuscriptDtoSchema(
             context={"provenance_service": self._provenance_service}
         )
@@ -67,11 +67,12 @@ class ManuscriptsResource:
             raise falcon.HTTPBadRequest(
                 title="Request data failed validation", description=errors
             )
-        dto = schema.load(req.media)
-        updated_chapter = self._corpus.update_manuscripts(
-            chapter_id,
-            dto["manuscripts"],
-            tuple(dto["uncertain_fragments"]),
-            req.context.user,
-        )
+        dto = cast(dict, schema.load(req.media))
+        with self._cache.updating_chapter(chapter_id):
+            updated_chapter = self._corpus.update_manuscripts(
+                chapter_id,
+                dto["manuscripts"],
+                tuple(dto["uncertain_fragments"]),
+                req.context.user,
+            )
         resp.media = ApiChapterSchema().dump(updated_chapter)

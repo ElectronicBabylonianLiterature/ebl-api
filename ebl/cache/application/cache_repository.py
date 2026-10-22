@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 
 class CacheRepository(ABC):
@@ -20,4 +21,16 @@ class CacheRepository(ABC):
 
     @abstractmethod
     def delete_all(self, pattern: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def chapter_revision(self, chapter_key: str) -> Optional[int]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def start_chapter_update(self, chapter_key: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def finish_chapter_update(self, chapter_key: str) -> None:
         raise NotImplementedError

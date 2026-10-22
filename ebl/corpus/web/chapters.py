@@ -1,7 +1,7 @@
 import json
 from collections import defaultdict
 from itertools import zip_longest
-from typing import Optional, Sequence
+from typing import Optional, Sequence, cast
 import falcon
 from falcon_caching import Cache
 from pydash.arrays import flatten_deep
@@ -106,20 +106,20 @@ class ChaptersDisplayResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         chapter_id_str = str(chapter_id)
-        lines = parse_lines(req.get_param_as_list("lines", default=[]))
-        variants = parse_lines(req.get_param_as_list("variants", default=[]))
+        lines = parse_lines(req.get_param_as_list("lines", default=[]) or [])
+        variants = parse_lines(req.get_param_as_list("variants", default=[]) or [])
 
-        if self._cache.has(chapter_id_str):
-            cached_chapter = self._cache.get(chapter_id_str)
-            resp.media = self._select_lines_and_variants(
-                cached_chapter, lines, variants
-            )
-        else:
-            chapter = self._corpus.find_chapter_for_display(chapter_id)
-            dump = ChapterDisplaySchema().dump(chapter)
-            self._cache.set(chapter_id_str, dump)
-
-            resp.media = self._select_lines_and_variants(dump, lines, variants)
+        dump = self._cache.get_or_create(
+            chapter_id,
+            chapter_id_str,
+            lambda: cast(
+                dict,
+                ChapterDisplaySchema().dump(
+                    self._corpus.find_chapter_for_display(chapter_id)
+                ),
+            ),
+        )
+        resp.media = self._select_lines_and_variants(dump, lines, variants)
 
 
 class ChaptersByFragmentResource:

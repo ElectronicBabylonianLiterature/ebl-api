@@ -1,6 +1,7 @@
 from mockito import verify
+import re
 
-from ebl.cache.application.custom_cache import ChapterCache
+from ebl.cache.application.custom_cache import CHAPTER_CACHE_KEY_PREFIX, ChapterCache
 from ebl.tests.factories.corpus import ChapterFactory
 from ebl.corpus.domain.chapter import ChapterId
 
@@ -42,7 +43,9 @@ def test_custom_cache_delete_chapter(mongo_cache_repository, when):
     custom_cache = ChapterCache(mongo_cache_repository)
     chapter = ChapterFactory.build()
     chapter_id = ChapterId(chapter.text_id, chapter.stage, chapter.name)
-    pattern = rf"^{str(chapter_id)}(\sline-\d+)?$"
+    pattern = (
+        rf"^({CHAPTER_CACHE_KEY_PREFIX})?{re.escape(str(chapter_id))}(\sline-\d+)?$"
+    )
     when(mongo_cache_repository).delete_all(pattern).thenReturn(None)
     custom_cache.delete_chapter(chapter_id)
     verify(mongo_cache_repository, 1).delete_all(pattern)
