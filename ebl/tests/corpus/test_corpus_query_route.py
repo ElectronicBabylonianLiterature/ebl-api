@@ -17,6 +17,7 @@ from ebl.tests.corpus.corpus_query_route_fixtures import (
         ({"lemmaOperator": "line", "lemmas": "mu I+u I"}, ([2], [0])),
         ({"lemmaOperator": "phrase", "lemmas": "mu I+u I"}, ([2], [0])),
     ],
+    ids=["and", "or", "line", "phrase"],
 )
 def test_query_chapter_lemmas(client, text_repository, params, expected):
     text_repository.create_chapter(CHAPTER_WITH_LEMMA)
@@ -75,6 +76,7 @@ def test_query_chapter_signs(client, text_repository, transliteration, expected)
             ([2, 3, 6], [1, 0, 0]),
         ),
     ],
+    ids=["and", "phrase", "line"],
 )
 def test_query_chapter_lemmas_and_signs(client, text_repository, params, expected):
     text_repository.create_chapter(CHAPTER_WITH_SIGNS_AND_LEMMAS)
