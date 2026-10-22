@@ -74,8 +74,8 @@ def test_api_dump_is_not_sparse(atf):
 @pytest.mark.parametrize(
     "shape",
     [
-        lambda line: api_dump(line),
-        lambda line: storage_dump(line),
+        api_dump,
+        storage_dump,
         lambda line: legacy_shape(api_dump(line)),
         lambda line: legacy_shape(storage_dump(line)),
     ],

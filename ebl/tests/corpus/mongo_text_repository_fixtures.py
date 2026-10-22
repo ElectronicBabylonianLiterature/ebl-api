@@ -1,5 +1,4 @@
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
-from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.text import Text
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.factories.corpus import (
@@ -70,7 +69,7 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
 )
 LEMMA_MANUSCRIPT = ManuscriptFactory.build()
 QUERY_LEMMA = "qanû I"
-CHAPTER_WITH_QUERY_LEMMA: Chapter = ChapterFactory.build(
+CHAPTER_WITH_QUERY_LEMMA = ChapterFactory.build(
     text_id=LITERATURE_TEXT.id,
     manuscripts=(LEMMA_MANUSCRIPT,),
     lines=(
@@ -91,7 +90,7 @@ CHAPTER_WITH_QUERY_LEMMA: Chapter = ChapterFactory.build(
         ),
     ),
 )
-CHAPTER_WITH_MANUSCRIPT_LEMMA: Chapter = ChapterFactory.build(
+CHAPTER_WITH_MANUSCRIPT_LEMMA = ChapterFactory.build(
     text_id=TEXT.id,
     manuscripts=(LEMMA_MANUSCRIPT,),
     lines=(

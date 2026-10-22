@@ -33,10 +33,14 @@ def test_storage_serialization_is_on_only_inside_the_block():
     assert is_storage_serialization() is False
 
 
+def fail_inside_storage_serialization() -> None:
+    with storage_serialization():
+        raise RuntimeError()
+
+
 def test_storage_serialization_is_reset_after_an_error():
     with pytest.raises(RuntimeError):
-        with storage_serialization():
-            raise RuntimeError()
+        fail_inside_storage_serialization()
     assert is_storage_serialization() is False
 
 

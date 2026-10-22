@@ -184,9 +184,3 @@ def write_to_tsv(
         if column_names:
             writer.writerow(column_names)
         writer.writerows(data)
-
-
-if __name__ == "__main__":
-    from ebl.io.fragments.importer_cli import main
-
-    main()

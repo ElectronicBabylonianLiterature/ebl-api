@@ -1,6 +1,7 @@
 import csv
 import json
 import runpy
+import sys
 
 import pytest
 from marshmallow import ValidationError
@@ -175,10 +176,12 @@ def test_main_connects_to_the_selected_database(monkeypatch, database):
     assert connected == ["mongodb://example.invalid", "ebldev"]
 
 
-def test_running_the_importer_module_calls_main(monkeypatch):
-    calls = []
-    monkeypatch.setattr(importer_cli, "main", lambda: calls.append("main"))
+def test_running_the_importer_cli_module_calls_main(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["importer_cli", "--help"])
+    monkeypatch.delitem(sys.modules, "ebl.io.fragments.importer_cli")
 
-    runpy.run_module("ebl.io.fragments.importer", run_name="__main__")
+    with pytest.raises(SystemExit) as exit_info:
+        runpy.run_module("ebl.io.fragments.importer_cli", run_name="__main__")
 
-    assert calls == ["main"]
+    assert exit_info.value.code == 0
+    assert "{import,validate,reindex}" in capsys.readouterr().out

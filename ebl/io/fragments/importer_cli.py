@@ -222,3 +222,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     args = build_parser().parse_args(argv)
     client = MongoClient(os.environ["MONGODB_URI"])
     run(args, client.get_database(args.database))
+
+
+if __name__ == "__main__":
+    main()
