@@ -2,7 +2,7 @@ import uuid
 from typing import Callable, Optional, Sequence, TypeVar
 
 import attr
-from pymongo import ASCENDING, ReadPreference
+from pymongo import ReadPreference
 from pymongo.client_session import ClientSession
 from pymongo.errors import DuplicateKeyError
 from pymongo.read_concern import ReadConcern
@@ -22,6 +22,10 @@ from ebl.media.infrastructure.media_documents import (
     stored_document,
 )
 from ebl.media.infrastructure.mongo_media_reader import MongoMediaReader
+from ebl.media.infrastructure.media_indexes import (
+    MEDIA_REPOSITORY_INDEXES,
+    create_media_indexes,
+)
 from ebl.media.infrastructure.mongo_media_sources import (
     SOURCE_COLLECTION,
     reserve_sources,
@@ -43,19 +47,9 @@ class MongoMediaRepository(MongoMediaReader, MediaRepository):
     def create_indexes(self) -> None:
         self.assert_writable_topology()
         verify_source_reservations(self._database)
-        self._collection.create_index(
-            "sourceKey",
-            name="media_import_source",
-        )
-        self._collection.create_index(
-            [("associations.fragmentId", ASCENDING), ("state", ASCENDING)],
-            name="media_fragment_state",
-        )
+        create_media_indexes(self._database, MEDIA_REPOSITORY_INDEXES)
         self._database["mediaLocks"].update_one(
             {"_id": "writes"}, {"$setOnInsert": {"revision": 0}}, upsert=True
-        )
-        self._database[SOURCE_COLLECTION].create_index(
-            "mediaId", name="media_source_owner"
         )
 
     def _transaction(self, operation: Callable[[ClientSession], Result]) -> Result:
