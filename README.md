@@ -715,3 +715,145 @@ CSL-JSON schema is based on
 [citation-style-language/schema](https://github.com/citation-style-language/schema)
 Copyright (c) 2007-2018 Citation Style Language and contributors.
 Licensed under MIT License.
+
+## Media persistence and legacy storage
+
+### Scope and merge order
+
+This is the persistence foundation for the media API and migration branches.
+Merge this branch first. The API and migration branches both depend on these
+adapters and can then be merged independently. The frontend gallery depends on
+the API contract and must only be enabled after backend deployment and migration
+verification.
+
+Merging this code does not run a migration, create database indexes, or change
+existing photo routes. No production database was accessed during development.
+
+### Database prerequisites
+
+All metadata mutations require a MongoDB replica set or sharded cluster with
+transaction support. Reads do not require transactions. Call
+`MongoMediaRepository.assert_writable_topology()` for a read-only preflight.
+Unsupported standalone servers fail before any mutation.
+
+Metadata mutations acquire the same transaction lock in `mediaLocks`, then commit
+with snapshot reads, primary read preference, and majority write concern. This
+serializes imports, replacements, primary selection, and deletion. The initial
+migration should use bounded batches and measured throughput; it should not
+launch many competing metadata writers.
+
+Both concrete adapters use primary reads even when the supplied database has a
+secondary read preference. This prevents stale metadata or registry reads during
+retry, deletion, and immediate reads after an import.
+
+Primary selection is atomic. Explicit creation or replacement still preserves
+the supplied primary flags, as required by the existing contracts. A later
+explicit primary creation can introduce another primary; the migration should
+default to non-primary records until its selection policy is applied.
+
+### Explicit index preparation
+
+The migration command will call the following operations only in an explicitly
+authorized preparation/apply phase, never during a dry run or application import:
+
+```python
+repository = MongoMediaRepository(database)
+store = GridFsMediaRepresentationStore(database)
+repository.assert_writable_topology()
+repository.create_indexes()
+store.create_indexes()
+```
+
+The adapters use these collections and indexes:
+
+| Collection | Index or state | Purpose |
+| --- | --- | --- |
+| `media` | Unique `_id_` | Public media identity |
+| `media` | `media_import_source` on `sourceKey` | Import-source lookup |
+| `media` | `media_fragment_state` | Batch fragment reads and visible state |
+| `mediaSources` | Unique `_id_` (full source) | Import-source reservation |
+| `mediaSources` | `media_source_owner` | Reservation cleanup by media |
+| `mediaLocks` | Unique `_id_`, document `writes` | Transaction serialization |
+| `mediaFiles` | Unique `_id_` | Immutable logical representation handle |
+| `mediaFiles` | `media_file_recovery` | Find owned pending writes |
+| `media.files` | `filename_1_uploadDate_1` | Standard GridFS file lookup |
+| `media.chunks` | Unique `files_id_1_n_1` | Standard GridFS chunk identity |
+
+The source reservation contains system, container, and typed file identity.
+An ObjectId and a string with identical characters remain different sources.
+Reservation owners can switch atomically during a multi-record source swap;
+uniqueness is enforced by the reservation's unique identifier and the shared
+transaction, rather than a unique index on the media document's lookup field.
+
+Index preparation checks existing media/reservation consistency first. It
+derives each canonical source key from the stored import source, rejects missing
+or mismatched keys, and verifies every reservation owner. It refuses inconsistent
+preexisting records instead of silently repairing them.
+Index preparation does not import originals or create gallery records.
+Preparation and migration readiness share the index definitions in
+`media_indexes.py`, including each collection's implicit unique identifier.
+Named indexes are created with simple collation so their behavior does not
+depend on a collection's default collation.
+
+### Binary ownership
+
+Legacy adoption permits only the existing `photos` and `thumbnails` buckets.
+Adopted handles are server-internal; public DTOs never contain file IDs or
+registry handles. Open and delete operations require an exact match of media,
+representation, role, and thumbnail size against the immutable registry record.
+
+New writes own files only in `media.files` and `media.chunks`. Every write receives
+a fresh logical handle and file ID. Deleting an adopted representation only
+tombstones its registry entry; it never deletes legacy chunks or file metadata.
+Repeated cleanup is harmless, and deleted handles cannot be revived.
+
+Adoption checks complete byte count, SHA-256 when present, and raster signature
+against the supplied metadata. It does not pixel-decode large legacy originals;
+the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
+registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
+the total of decoded frame pixels, independently of Pillow's global settings.
+WebP canvas dimensions are checked from a bounded header before creating a
+native decoder.
+The adapter currently accepts JPEG, PNG, and WebP. SVG writes fail closed until
+an explicit sanitizer is added.
+
+Legacy protection applies to the new adapters. Existing maintenance jobs and
+direct database operations remain capable of deleting legacy bytes. In
+particular, the old thumbnail generator clears its thumbnail bucket. The
+migration should generate owned previews instead of adopting those thumbnails,
+and operators must preserve adopted original file IDs.
+
+### Failure recovery and deletion
+
+A failed or interrupted owned upload has a registry entry with `ready=false`.
+It is never readable. An exception during writing deletes only that upload's
+owned file and marks its registry entry deleted. A process crash can leave
+pending entries for a later explicit recovery command to inspect.
+
+Retain an adopted registration when metadata creation fails, so retrying the
+same audited source reuses the protected handle. Do not apply generic binary
+cleanup to borrowed handles on a failed import. Generated previews may be
+cleaned up by their exact owned handles.
+
+Replacement returns superseded handles without deleting their bytes. Physical
+cleanup must wait until readers holding those handles have finished; the store
+does not coordinate active streams. This rollout's read-only media HTTP API
+exposes no replacement or deletion routes, and the migration preserves existing
+records.
+
+Metadata deletion first hides the media and reserves its import source.
+The returned `StoredMedia.deletion_token` identifies that exact deletion
+generation. Pass the returned object unchanged to `finish_delete` after binary
+cleanup. An old completion cannot remove a later identical deletion generation.
+
+### Verification
+
+New tests run against an isolated replica set, exercise actual transactions,
+and cover source collisions, atomic source swaps, failed batches, concurrent
+promotions, typed source identities, stale deletion completion, protected
+legacy bytes, forged handles, interrupted writes, and binary validation.
+
+CI starts a local single-node replica set. Local media tests reuse an existing
+replica-set test client or start a temporary instance using the existing
+`pymongo-inmemory` downloader. Test databases have unique names and are removed
+after use. Production connection settings are not needed.
