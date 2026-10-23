@@ -131,8 +131,18 @@ def test_exact_chapter_invalidation_preserves_other_chapters(
     cache: ChapterCache, chapter_id: ChapterId, database: Database
 ) -> None:
     other_key = str(chapter_id).replace(chapter_id.name, chapter_id.name + " extra")
-    for key in (str(chapter_id), f"{chapter_id} line-0", other_key):
+    for key in (
+        str(chapter_id),
+        f"{chapter_id} line-0",
+        f"{CHAPTER_CACHE_KEY_PREFIX}{chapter_id}",
+        f"{CHAPTER_CACHE_KEY_PREFIX}{chapter_id} line-0",
+        other_key,
+        f"{CHAPTER_CACHE_KEY_PREFIX}{other_key}",
+    ):
         cache.set(key, {"value": "existing"})
     with cache.updating_chapter(chapter_id):
-        assert database["cache"].count_documents({}) == 1
+        assert database["cache"].count_documents({}) == 2
     assert cache.get(other_key) == {"value": "existing"}
+    assert cache.get(f"{CHAPTER_CACHE_KEY_PREFIX}{other_key}") == {
+        "value": "existing"
+    }
