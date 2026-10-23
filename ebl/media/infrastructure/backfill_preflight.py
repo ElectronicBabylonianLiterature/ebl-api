@@ -2,6 +2,11 @@ from typing import Mapping
 
 from pymongo.database import Database
 
+from ebl.media.infrastructure.media_indexes import (
+    MEDIA_REQUIRED_INDEXES,
+    MediaIndexDefinition,
+)
+
 
 def complete_filename_index(indexes: Mapping[str, Mapping]) -> str | None:
     return next(
@@ -37,17 +42,26 @@ def prepare_legacy_indexes(database: Database) -> None:
         )
 
 
+def index_matches(information: Mapping, definition: MediaIndexDefinition) -> bool:
+    keys_match = tuple(information.get("key", ())) == definition.keys
+    unique_matches = information.get("unique", definition.implicit) is definition.unique
+    complete = "partialFilterExpression" not in information and not any(
+        information.get(option) for option in ("sparse", "hidden")
+    )
+    collation = information.get("collation", {}).get("locale", "simple")
+    return (
+        keys_match and unique_matches and complete and collation == definition.collation
+    )
+
+
 def assert_apply_ready(database: Database) -> None:
-    required = {
-        "media": {"media_import_source", "media_fragment_state"},
-        "mediaSources": {"media_source_owner"},
-        "mediaFiles": {"media_file_recovery"},
-        "media.files": {"filename_1_uploadDate_1"},
-        "media.chunks": {"files_id_1_n_1"},
-    }
-    for collection, indexes in required.items():
-        if not indexes.issubset(database[collection].index_information()):
+    for definition in MEDIA_REQUIRED_INDEXES:
+        information = (
+            database[definition.collection].index_information().get(definition.name, {})
+        )
+        if not index_matches(information, definition):
             raise ValueError("Run prepare-indexes before applying a media plan.")
     lock = database["mediaLocks"].find_one({"_id": "writes"})
-    if lock is None or not isinstance(lock.get("revision"), int):
+    revision = lock.get("revision") if lock is not None else None
+    if isinstance(revision, bool) or not isinstance(revision, int):
         raise ValueError("Media transaction coordination must be initialized.")

@@ -14,6 +14,7 @@ from ebl.media.application.backfill_plan import BackfillPolicy, SourceRejected
 from ebl.media.domain import MediaChecksum, MediaRepresentation
 from ebl.media.infrastructure.backfill_jpeg import inspect_jpeg
 from ebl.media.infrastructure.backfill_jpeg_segments import exif_evidence
+from ebl.media.infrastructure.media_webp import webp_dimensions
 
 
 @contextmanager
@@ -65,6 +66,9 @@ def inspect_image(
             ), evidence
     content.seek(0)
     try:
+        dimensions = webp_dimensions(content)
+        if dimensions is not None and dimensions[0] * dimensions[1] > policy.max_pixels:
+            raise SourceRejected("review", "pixel-inspection-limit")
         with warnings.catch_warnings():
             warnings.simplefilter("error", Image.DecompressionBombWarning)
             with Image.open(content) as image:

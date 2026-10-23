@@ -6,6 +6,7 @@ from typing import BinaryIO, cast
 from PIL import Image
 
 from ebl.media.domain import MediaRepresentation
+from ebl.media.infrastructure.media_webp import webp_dimensions
 
 READ_CHUNK_SIZE = 65536
 MAX_RASTER_PIXELS = 40_000_000
@@ -59,6 +60,9 @@ def verified_content(
 
 
 def _verify_dimensions(content: BinaryIO, representation: MediaRepresentation) -> None:
+    dimensions = webp_dimensions(content)
+    if dimensions and dimensions[0] * dimensions[1] > MAX_RASTER_PIXELS:
+        raise ValueError("Media representation exceeds the pixel limit.")
     with warnings.catch_warnings():
         warnings.simplefilter("error", Image.DecompressionBombWarning)
         with Image.open(content) as image:
@@ -68,4 +72,7 @@ def _verify_dimensions(content: BinaryIO, representation: MediaRepresentation) -
                 raise ValueError(
                     "Media representation dimensions do not match its bytes."
                 )
-            image.verify()
+            if image.format == "JPEG":
+                image.load()
+            else:
+                image.verify()

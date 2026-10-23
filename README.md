@@ -593,9 +593,11 @@ The byte limit is 512 MiB per original. JPEGs over the 40-million-pixel decode
 budget receive bounded marker/scan/EOI validation and a full byte hash, recorded
 as `binaryValidation: jpeg-structure-only`. That does not establish pixel-level
 integrity; preview generation is deferred and recorded in the reason. Smaller
-supported originals receive full decoding. Pillow's global safety limit is never
-disabled. Counts may differ from the historical audit because these policies and
-the current source inventory differ.
+supported originals receive full decoding. WebP canvas dimensions are checked
+with a bounded header parser before constructing the native decoder, using the
+same pixel budget. Pillow's global safety limit is never disabled. Counts may
+differ from the historical audit because these policies and the current source
+inventory differ.
 
 By default EXIF Artist and Copyright values are preserved as labelled attribution
 text, with tag evidence in the plan. No photographer identity, licence or rights
@@ -632,8 +634,11 @@ on museum-number prefix/number/suffix must already exist from application setup.
 
 Source uniqueness is enforced transactionally through `mediaSources`, not by
 making `media_import_source` unique. Preparation validates existing source
-reservations and fails on inconsistent state. Apply checks prepared indexes and
-the lock before registering any legacy handle. Planning never creates them.
+reservations and fails on inconsistent state. Before registering any legacy
+handle, apply checks canonical ordered index keys, uniqueness, completeness,
+visibility and collation, including the implicit `_id` indexes. It also requires
+an integer lock revision; BSON integers are accepted, Boolean values are rejected.
+Readiness only reads this state and never repairs it. Planning never creates it.
 The metadata indexes cover `sourceKey` and `associations.fragmentId`/`state`;
 the recovery index covers `ownership`/`ready`.
 
@@ -949,6 +954,10 @@ derives each canonical source key from the stored import source, rejects missing
 or mismatched keys, and verifies every reservation owner. It refuses inconsistent
 preexisting records instead of silently repairing them.
 Index preparation does not import originals or create gallery records.
+Preparation and migration readiness share the index definitions in
+`media_indexes.py`, including each collection's implicit unique identifier.
+Named indexes are created with simple collation so their behavior does not
+depend on a collection's default collation.
 
 ### Binary ownership
 
@@ -967,6 +976,9 @@ against the supplied metadata. It does not pixel-decode large legacy originals;
 the migration audit must validate dimensions and structural integrity. New
 generated raster writes also check dimensions and image structure with Pillow,
 with an explicit 40,000,000-pixel limit independent of Pillow's global settings.
+WebP canvas dimensions are checked from a bounded header before creating a
+native decoder. Owned JPEGs are decoded within that pixel bound before any
+registry or GridFS record is written, rejecting truncated scans and end markers.
 The adapter currently accepts JPEG, PNG, and WebP. SVG writes fail closed until
 an explicit sanitizer is added.
 
