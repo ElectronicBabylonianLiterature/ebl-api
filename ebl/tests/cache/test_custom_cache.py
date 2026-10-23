@@ -43,9 +43,13 @@ def test_custom_cache_delete_chapter(mongo_cache_repository, when):
     custom_cache = ChapterCache(mongo_cache_repository)
     chapter = ChapterFactory.build()
     chapter_id = ChapterId(chapter.text_id, chapter.stage, chapter.name)
-    pattern = (
-        rf"^({CHAPTER_CACHE_KEY_PREFIX})?{re.escape(str(chapter_id))}(\sline-\d+)?$"
-    )
-    when(mongo_cache_repository).delete_all(pattern).thenReturn(None)
+    chapter_key_pattern = rf"{re.escape(str(chapter_id))}(\sline-\d+)?$"
+    patterns = [
+        f"^{chapter_key_pattern}",
+        f"^{CHAPTER_CACHE_KEY_PREFIX}{chapter_key_pattern}",
+    ]
+    for pattern in patterns:
+        when(mongo_cache_repository).delete_all(pattern).thenReturn(None)
     custom_cache.delete_chapter(chapter_id)
-    verify(mongo_cache_repository, 1).delete_all(pattern)
+    for pattern in patterns:
+        verify(mongo_cache_repository, 1).delete_all(pattern)

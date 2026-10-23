@@ -34,9 +34,9 @@ class CustomCache:
 @attr.attrs(auto_attribs=True, frozen=True)
 class ChapterCache(CustomCache):
     def delete_chapter(self, chapter_id: ChapterId) -> None:
-        self.delete_all(
-            pattern=rf"^({CHAPTER_CACHE_KEY_PREFIX})?{re.escape(str(chapter_id))}(\sline-\d+)?$"
-        )
+        chapter_key_pattern = rf"{re.escape(str(chapter_id))}(\sline-\d+)?$"
+        self.delete_all(pattern=f"^{chapter_key_pattern}")
+        self.delete_all(pattern=f"^{CHAPTER_CACHE_KEY_PREFIX}{chapter_key_pattern}")
 
     @contextmanager
     def updating_chapter(self, chapter_id: ChapterId) -> Iterator[None]:
