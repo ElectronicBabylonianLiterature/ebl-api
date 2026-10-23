@@ -4,7 +4,7 @@ from typing import Optional, cast, BinaryIO
 from bson import ObjectId
 from gridfs import GridFS, GridOut, NoFile
 from pymongo.database import Database
-from pymongo import ASCENDING, ReadPreference
+from pymongo import ReadPreference
 
 from ebl.media.application.media_errors import StoredRepresentationMissingError
 from ebl.media.application.media_store import MediaRepresentationStore
@@ -26,6 +26,10 @@ from ebl.media.infrastructure.legacy_media_handles import (
 )
 from ebl.media.infrastructure.media_binary_validation import verified_content
 from ebl.media.infrastructure.media_documents import handle_document
+from ebl.media.infrastructure.media_indexes import (
+    MEDIA_STORE_INDEXES,
+    create_media_indexes,
+)
 
 OWNED_BUCKET = "media"
 HANDLE_COLLECTION = "mediaFiles"
@@ -44,16 +48,7 @@ class GridFsMediaRepresentationStore(MediaRepresentationStore):
         self._max_file_size = max_file_size
 
     def create_indexes(self) -> None:
-        self._registry.create_index(
-            [("ownership", ASCENDING), ("ready", ASCENDING)],
-            name="media_file_recovery",
-        )
-        self._database[f"{OWNED_BUCKET}.files"].create_index(
-            [("filename", ASCENDING), ("uploadDate", ASCENDING)]
-        )
-        self._database[f"{OWNED_BUCKET}.chunks"].create_index(
-            [("files_id", ASCENDING), ("n", ASCENDING)], unique=True
-        )
+        create_media_indexes(self._database, MEDIA_STORE_INDEXES)
 
     def _record(self, handle: StoredRepresentationHandle) -> dict:
         record = self._registry.find_one(

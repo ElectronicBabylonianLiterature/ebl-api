@@ -63,9 +63,9 @@ class MediaResource:
         ):
             raise DataError("A single fragment identifier is required.")
         number = parse_museum_number(value)
-        fragment = self._fragments.query_by_museum_number(number, exclude_lines=True)
+        scopes = self._fragments.query_read_scopes(number)
         user = cast(User, request.context["user"])
-        if not user.can_read_fragment(fragment.authorized_scopes or ()):
+        if not user.can_read_fragment(scopes):
             raise falcon.HTTPForbidden()
         return number
 

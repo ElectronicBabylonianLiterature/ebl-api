@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional, Sequence, cast
 
 import pymongo
-from marshmallow import EXCLUDE
+from marshmallow import EXCLUDE, fields
 
 from ebl.common.domain.scopes import Scope
 from ebl.errors import NotFoundError
@@ -25,6 +25,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.common.query.query_collation import CollatedFieldQuery
+from ebl.schemas import ScopeField
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -200,6 +201,19 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         return [
             Scope.from_string(value) for value in fragment.get("authorizedScopes", [])
         ]
+
+    def query_read_scopes(self, number: MuseumNumber) -> List[Scope]:
+        try:
+            fragment = self._fragments.find_one(
+                query_number_is(number),
+                projection={"authorizedScopes": True, "_id": False},
+            )
+        except NotFoundError as error:
+            raise NotFoundError(f"Fragment {number} not found.") from error
+        return cast(
+            List[Scope],
+            fields.List(ScopeField()).deserialize(fragment.get("authorizedScopes", [])),
+        )
 
     def fetch_names(self, name_query: str) -> List[str]:
         if len(name_query) < 3:

@@ -790,6 +790,10 @@ derives each canonical source key from the stored import source, rejects missing
 or mismatched keys, and verifies every reservation owner. It refuses inconsistent
 preexisting records instead of silently repairing them.
 Index preparation does not import originals or create gallery records.
+Preparation and migration readiness share the index definitions in
+`media_indexes.py`, including each collection's implicit unique identifier.
+Named indexes are created with simple collation so their behavior does not
+depend on a collection's default collation.
 
 ### Binary ownership
 
@@ -808,6 +812,9 @@ against the supplied metadata. It does not pixel-decode large legacy originals;
 the migration audit must validate dimensions and structural integrity. New
 generated raster writes also check dimensions and image structure with Pillow,
 with an explicit 40,000,000-pixel limit independent of Pillow's global settings.
+WebP canvas dimensions are checked from a bounded header before creating a
+native decoder. Owned JPEGs are decoded within that pixel bound before any
+registry or GridFS record is written, rejecting truncated scans and end markers.
 The adapter currently accepts JPEG, PNG, and WebP. SVG writes fail closed until
 an explicit sanitizer is added.
 
