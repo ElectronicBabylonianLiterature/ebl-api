@@ -134,3 +134,24 @@ Production writes, migration execution, deployment, and merging are excluded.
   `c844d2389e9d3f3680c1202f15625918fbe5b390`. All 39 saved changed-file
   hashes matched after the fast-forward and stash restoration; the six shared
   test corrections are inherited from the parent and absent from the API diff.
+
+## Persistence review follow-up verification
+
+- Validated the six frozen parent files for canonical import-source identities,
+  an explicit raster pixel limit independent of Pillow's global setting, and
+  real partial-upload cleanup. API production code did not change.
+- The composed full suite passed: **6,073 passed, two existing skips, one
+  existing expected failure**, in 837.47 seconds, with wrapper exit zero.
+  All changed production modules reached **1,080 of 1,080 covered statements**.
+- Whole-project format, Ruff, and Pyre passed; scoped Pyright, Mypy, Flake8, and
+  qlty passed on all 49 changed Python files. Markdown and whitespace checks
+  passed. All changed Python files remain within 250 lines.
+- All 1,099 source hashes stayed unchanged throughout verification. The final
+  source digest is
+  `ac4dcb52afa03474ebe56cb2c46dbcdf08eb528bdbb226254ca3d8b7b31f1047`.
+  Root published the exact parent files as
+  `48b27b008d48bdf85b220839c060ed4892d6cfef` and owns subsequent integration.
+- Detailed corrections and validation evidence are recorded in
+  `TASK-media-api-parent-validation-log.md`. No production operation or Git
+  publication was performed by the API agent. Hosted CI runs independently
+  without monitoring, as requested by the user.

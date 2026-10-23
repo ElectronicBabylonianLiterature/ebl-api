@@ -786,7 +786,9 @@ uniqueness is enforced by the reservation's unique identifier and the shared
 transaction, rather than a unique index on the media document's lookup field.
 
 Index preparation checks existing media/reservation consistency first. It
-refuses inconsistent preexisting records instead of silently repairing them.
+derives each canonical source key from the stored import source, rejects missing
+or mismatched keys, and verifies every reservation owner. It refuses inconsistent
+preexisting records instead of silently repairing them.
 Index preparation does not import originals or create gallery records.
 
 ### Binary ownership
@@ -805,8 +807,9 @@ Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
 the migration audit must validate dimensions and structural integrity. New
 generated raster writes also check dimensions and image structure with Pillow,
-without disabling global image-size protections. The adapter currently accepts
-JPEG, PNG, and WebP. SVG writes fail closed until an explicit sanitizer is added.
+with an explicit 40,000,000-pixel limit independent of Pillow's global settings.
+The adapter currently accepts JPEG, PNG, and WebP. SVG writes fail closed until
+an explicit sanitizer is added.
 
 Legacy protection applies to the new adapters. Existing maintenance jobs and
 direct database operations remain capable of deleting legacy bytes. In
@@ -825,6 +828,12 @@ Retain an adopted registration when metadata creation fails, so retrying the
 same audited source reuses the protected handle. Do not apply generic binary
 cleanup to borrowed handles on a failed import. Generated previews may be
 cleaned up by their exact owned handles.
+
+Replacement returns superseded handles without deleting their bytes. Physical
+cleanup must wait until readers holding those handles have finished; the store
+does not coordinate active streams. This rollout's read-only media HTTP API
+exposes no replacement or deletion routes, and the migration preserves existing
+records.
 
 Metadata deletion first hides the media and reserves its import source.
 The returned `StoredMedia.deletion_token` identifies that exact deletion

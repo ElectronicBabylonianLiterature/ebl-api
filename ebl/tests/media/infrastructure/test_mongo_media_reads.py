@@ -5,6 +5,7 @@ from pymongo.database import Database
 from ebl.common.domain.project import ResearchProject
 from ebl.media.domain import MediaId, MediaImportSource
 from ebl.media.infrastructure.mongo_media_repository import MongoMediaRepository
+from ebl.media.infrastructure.media_documents import source_document, source_key
 from ebl.tests.media.factories import (
     association,
     copy_media,
@@ -96,10 +97,15 @@ def test_initialization_and_source_consistency(media_database: Database) -> None
 def test_duplicate_preexisting_sources_prevent_index_setup(
     media_database: Database,
 ) -> None:
+    source = MediaImportSource("gridfs", "duplicate", container="photos")
     media_database.media.insert_many(
         [
-            {"_id": "one", "sourceKey": "same"},
-            {"_id": "two", "sourceKey": "same"},
+            {
+                "_id": identifier,
+                "importSource": source_document(source),
+                "sourceKey": source_key(source),
+            }
+            for identifier in ("one", "two")
         ]
     )
     with pytest.raises(ValueError, match="duplicate"):
