@@ -36,6 +36,17 @@ def test_ready_poll_is_bounded(monkeypatch: pytest.MonkeyPatch, process: Mock) -
         replica_set._wait_until_ready(process, Mock())
 
 
+def test_ready_timeout_preserves_connection_failure(
+    monkeypatch: pytest.MonkeyPatch, process: Mock
+) -> None:
+    connection_error = ConnectionFailure("Starting")
+    monkeypatch.setattr(replica_set.time, "monotonic", Mock(side_effect=[0, 1, 31]))
+    monkeypatch.setattr(replica_set.time, "sleep", Mock())
+    with pytest.raises(RuntimeError, match="did not become ready") as raised:
+        replica_set._wait_until_ready(process, Mock(side_effect=connection_error))
+    assert raised.value.__cause__ is connection_error
+
+
 def test_stopping_exited_server_does_not_signal(process: Mock) -> None:
     process.poll.return_value = 0
     replica_set._stop_server(process)

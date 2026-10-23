@@ -5,7 +5,7 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Callable, Iterator
+from typing import Callable, Iterator, Optional
 
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
@@ -28,16 +28,19 @@ def _wait_until_ready(
     process: subprocess.Popen[bytes], ready: Callable[[], bool]
 ) -> None:
     deadline = time.monotonic() + STARTUP_TIMEOUT
+    last_error: Optional[PyMongoError] = None
     while time.monotonic() < deadline:
         if process.poll() is not None:
             raise RuntimeError("Temporary MongoDB replica set exited during startup.")
         try:
             if ready():
                 return
-        except PyMongoError:
-            pass
+        except PyMongoError as error:
+            last_error = error
         time.sleep(0.1)
-    raise RuntimeError("Temporary MongoDB replica set did not become ready in time.")
+    raise RuntimeError(
+        "Temporary MongoDB replica set did not become ready in time."
+    ) from last_error
 
 
 def _stop_server(process: subprocess.Popen[bytes]) -> None:

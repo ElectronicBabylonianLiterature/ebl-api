@@ -53,7 +53,8 @@ def test_concurrent_source_imports_have_one_winner(
         return True
 
     with ThreadPoolExecutor(max_workers=2) as executor:
-        assert sorted(executor.map(create, range(2))) == [False, True]
+        created = sorted(executor.map(create, range(2)))
+    assert created == [False, True]
     assert len(mongo_media_repository.find_by_fragment(MuseumNumber.of("K.1"))) == 1
 
 
@@ -73,10 +74,8 @@ def test_concurrent_promotions_have_linearizable_snapshots(
         return [item.id for item in result if item.association_for(fragment).is_primary]
 
     with ThreadPoolExecutor(max_workers=2) as executor:
-        assert list(executor.map(promote, (first.media.id, second.media.id))) == [
-            [first.media.id],
-            [second.media.id],
-        ]
+        promoted = list(executor.map(promote, (first.media.id, second.media.id)))
+    assert promoted == [[first.media.id], [second.media.id]]
     assert (
         sum(
             item.association_for(fragment).is_primary

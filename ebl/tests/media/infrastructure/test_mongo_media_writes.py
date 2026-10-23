@@ -30,7 +30,8 @@ def test_replace_returns_previous_and_retains_handles(
     first = stored_media(photo_media())
     replacement = attr.evolve(first, media=attr.evolve(first.media, caption="updated"))
     mongo_media_repository.create(first)
-    assert mongo_media_repository.replace(replacement) == first
+    previous = mongo_media_repository.replace(replacement)
+    assert previous == first
     assert mongo_media_repository.find_stored_by_id(first.media.id) == replacement
     assert not first.superseded_by(replacement)
     with pytest.raises(MediaNotFoundError):
@@ -49,7 +50,8 @@ def test_batch_rolls_back_missing_and_duplicate_sources(
     assert mongo_media_repository.find_stored_by_id(first.media.id) == first
     with pytest.raises(ValueError):
         mongo_media_repository.replace_many((first, first))
-    assert mongo_media_repository.replace_many(()) == ()
+    previous = mongo_media_repository.replace_many(())
+    assert previous == ()
     source = MediaImportSource("gridfs", "abc")
     with pytest.raises(MediaAlreadyExistsError):
         mongo_media_repository.replace_many(
@@ -75,7 +77,8 @@ def test_atomic_source_swap(mongo_media_repository: MongoMediaRepository) -> Non
             media=attr.evolve(second.media, import_source=first.media.import_source),
         ),
     )
-    assert mongo_media_repository.replace_many(replacements) == (first, second)
+    previous = mongo_media_repository.replace_many(replacements)
+    assert previous == (first, second)
     for item in replacements:
         assert item.media.import_source is not None
         assert (
@@ -130,21 +133,25 @@ def test_tombstone_reserves_source_and_rejects_stale_generation(
     deleted = mongo_media_repository.delete(first.media.id)
     assert deleted is not None
     assert deleted.deletion_token
-    assert mongo_media_repository.delete(first.media.id) == deleted
+    repeated_deletion = mongo_media_repository.delete(first.media.id)
+    assert repeated_deletion == deleted
     assert mongo_media_repository.find_by_id(first.media.id) is None
     with pytest.raises(MediaAlreadyExistsError):
         mongo_media_repository.create(stored_media(copy_media(import_source=source)))
     with pytest.raises(ValueError, match="tombstoned"):
         mongo_media_repository.create(deleted)
     mongo_media_repository.finish_delete(first)
-    assert mongo_media_repository.delete(first.media.id) == deleted
+    deletion_after_stale_completion = mongo_media_repository.delete(first.media.id)
+    assert deletion_after_stale_completion == deleted
     mongo_media_repository.finish_delete(deleted)
     mongo_media_repository.create(first)
     newer_deletion = mongo_media_repository.delete(first.media.id)
     assert newer_deletion != deleted
     mongo_media_repository.finish_delete(deleted)
-    assert mongo_media_repository.delete(first.media.id) == newer_deletion
+    deletion_after_old_completion = mongo_media_repository.delete(first.media.id)
+    assert deletion_after_old_completion == newer_deletion
     assert newer_deletion is not None
     mongo_media_repository.finish_delete(newer_deletion)
-    assert mongo_media_repository.delete(first.media.id) is None
+    deletion_after_completion = mongo_media_repository.delete(first.media.id)
+    assert deletion_after_completion is None
     mongo_media_repository.create(stored_media(copy_media(import_source=source)))

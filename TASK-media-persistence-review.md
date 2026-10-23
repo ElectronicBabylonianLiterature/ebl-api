@@ -67,3 +67,23 @@ Merged foundation PR #738 feedback was fully fetched: 39 timeline entries,
 approved it. Current-state Mongo transactions, typed source uniqueness, and
 storage ownership were independently checked rather than inferred from its
 in-memory foundation tests.
+
+## Publication follow-up
+
+PR #785 at `e5c3eee2836029761fa677516c37f09cdf16535d` matched the reviewed
+implementation. All available timeline comments, reviews, and threads were read.
+CodeQL then reported four side-effecting assertions and one empty exception
+handler in test infrastructure. No production-code finding was reported.
+
+The six-file correction moves mutating calls outside assertions, including
+analogous adoption and concurrency cases. Replica-set startup now preserves the
+last connection error as the bounded-timeout cause, with a regression test.
+Production code is unchanged. The independent reviewer inspected the full diff
+and reran the infrastructure suite: **61 tests passed in 6.88 seconds**.
+
+The reviewed 22-path digest remained stable during that run:
+`70d0d97c632e25f16115fbbc703c7278338d150d8efd265c9bfb19cf296c0d90`.
+The author also reports 443 focused media tests passing, 100 percent production
+and replica-set-helper statement coverage, and passing static gates. The full
+repository follow-up suite remains an author-owned publication gate. The final
+follow-up commit and its remote CodeQL result still require reconciliation.

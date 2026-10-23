@@ -31,22 +31,18 @@ def test_adoption_is_repeatable_and_deletion_preserves_legacy(
             media_id(), container, file_id, image_representation()
         )
     )
-    assert (
-        representation_store.adopt_legacy(
-            LegacyRepresentationAdoption(
-                media_id(), container, file_id, image_representation()
-            )
+    adopted = representation_store.adopt_legacy(
+        LegacyRepresentationAdoption(
+            media_id(), container, file_id, image_representation()
         )
-        == expected
     )
-    assert (
-        representation_store.adopt_legacy(
-            LegacyRepresentationAdoption(
-                media_id(), container, file_id, image_representation()
-            )
+    assert adopted == expected
+    adopted_again = representation_store.adopt_legacy(
+        LegacyRepresentationAdoption(
+            media_id(), container, file_id, image_representation()
         )
-        == expected
     )
+    assert adopted_again == expected
     with representation_store.open_representation(expected).content as opened:
         assert opened.read() == image_bytes()
     representation_store.delete_representation(expected)

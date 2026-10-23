@@ -28,7 +28,8 @@ def test_roundtrip_complete_state(mongo_media_repository: MongoMediaRepository) 
             import_source=source,
         )
     )
-    assert mongo_media_repository.create(item) == item.media.id
+    created_id = mongo_media_repository.create(item)
+    assert created_id == item.media.id
     assert mongo_media_repository.find_stored_by_id(item.media.id) == item
     assert mongo_media_repository.find_by_id(item.media.id) == item.media
     assert mongo_media_repository.find_by_import_source(source) == item.media
@@ -114,4 +115,5 @@ def test_read_without_display_or_thumbnails(
     mongo_media_repository.create(item)
     assert mongo_media_repository.find_stored_by_id(item.media.id) == item
     changed = attr.evolve(item, media=attr.evolve(item.media, caption="changed"))
-    assert mongo_media_repository.replace(changed) == item
+    previous = mongo_media_repository.replace(changed)
+    assert previous == item
