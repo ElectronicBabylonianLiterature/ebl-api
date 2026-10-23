@@ -44,7 +44,7 @@ def test_media_summary_serializes_primary_photo_and_legacy_fields() -> None:
                 "id": DEFAULT_MEDIA_ID,
                 "type": "PHOTO",
                 "thumbnail": {
-                    "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/thumbnail/small",
+                    "url": f"/media/{DEFAULT_MEDIA_ID}/thumbnail/small?fragment=K.1",
                     "mimeType": "image/jpeg",
                     "width": 240,
                     "height": 180,
@@ -67,7 +67,7 @@ def test_media_summary_for_copy_only_fragment_has_no_legacy_photo_flag() -> None
         "id": DEFAULT_COPY_MEDIA_ID,
         "type": "COPY",
         "thumbnail": {
-            "url": f"/fragments/K.1/media/{DEFAULT_COPY_MEDIA_ID}/thumbnail/small",
+            "url": f"/media/{DEFAULT_COPY_MEDIA_ID}/thumbnail/small?fragment=K.1",
             "mimeType": "image/jpeg",
             "width": 240,
             "height": 180,

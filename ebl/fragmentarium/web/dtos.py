@@ -1,5 +1,5 @@
 import contextvars
-from typing import Sequence, cast
+from typing import Optional, Sequence, cast
 from marshmallow import fields
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
@@ -15,6 +15,7 @@ from ebl.fragmentarium.domain.realia_info import RealiaInfo
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
+from ebl.media.web.fragment_media_enricher import FragmentMediaEnricher
 
 
 fragment_user_context: contextvars.ContextVar = contextvars.ContextVar(
@@ -51,15 +52,23 @@ def create_response_dto(
 
 
 class FragmentDtoFactory:
-    def __init__(self, realia_repository: RealiaRepository) -> None:
+    def __init__(
+        self,
+        realia_repository: RealiaRepository,
+        media: Optional[FragmentMediaEnricher] = None,
+    ) -> None:
         self._realia_repository = realia_repository
+        self._media = media or FragmentMediaEnricher()
 
     def create(self, fragment: Fragment, user: User, has_photo: bool) -> dict:
-        return create_response_dto(
-            fragment,
-            user,
-            has_photo,
-            resolve_realia_info(fragment, self._realia_repository),
+        return self._media.enrich(
+            create_response_dto(
+                fragment,
+                user,
+                has_photo,
+                resolve_realia_info(fragment, self._realia_repository),
+            ),
+            fragment.number,
         )
 
 
