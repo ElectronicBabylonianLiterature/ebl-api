@@ -38,14 +38,18 @@ jobs:
             check_name: "pypy-3.11"
     name: Test Python ${{ matrix.check_name }}
 
-    services:
-      mongodb:
-        image: mongo:7.0
-        ports:
-          - 27017:27017
-
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start MongoDB replica set
+        run: |
+          docker run --detach --name ebl-test-mongodb --publish 27017:27017 \
+            --ulimit nofile=65536:65536 \
+            mongo:7.0 --replSet ebl-test --bind_ip_all
+          timeout 60 bash -c 'until docker exec ebl-test-mongodb mongosh --quiet --eval "db.adminCommand({ping: 1})" >/dev/null 2>&1; do sleep 1; done'
+          docker exec ebl-test-mongodb mongosh --quiet --eval \
+            'rs.initiate({_id: "ebl-test", members: [{_id: 0, host: "localhost:27017"}]})'
+          timeout 60 bash -c 'until docker exec ebl-test-mongodb mongosh --quiet --eval "quit(db.hello().isWritablePrimary ? 0 : 1)" >/dev/null 2>&1; do sleep 1; done'
 
       - uses: actions/setup-python@v5
         with:

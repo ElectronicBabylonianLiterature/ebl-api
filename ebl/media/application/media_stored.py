@@ -130,6 +130,11 @@ class StoredMedia:
     representations: StoredMediaRepresentations = attr.ib(
         validator=attr.validators.instance_of(StoredMediaRepresentations)
     )
+    deletion_token: Optional[str] = attr.ib(
+        default=None,
+        kw_only=True,
+        validator=attr.validators.optional(attr.validators.instance_of(str)),
+    )
 
     def __attrs_post_init__(self) -> None:
         media_thumbnails = dict(self.media.representations.thumbnails)
