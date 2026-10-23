@@ -110,3 +110,17 @@ download all passed. The prior ten gallery checks passed in the same composition
 This separate root-run test completed in 6.41 seconds; its log and composition
 manifest are retained outside the implementation trees. No production operation
 was involved.
+
+## Publication CI follow-up
+
+The first published commit, `6dec01f1e667f42f0f894ac09f199cf8c9af4727`,
+matched all 40 reviewed file hashes. Its Python 3.11 CI run exposed a test-only
+portability error: the invalid-URI test required the existing test database URI
+to use `127.0.0.1`, while CI uses `localhost`. The corrected test captures the
+original URI and asserts exact preservation after the invalid alternate URI.
+
+The independent reviewer inspected this isolated change and reran it using the
+CI hostname: one test passed in 0.07 seconds without a MongoDB process. The
+author also verified both hostname spellings. No migration production code
+changed. The two inherited persistence validation corrections are reviewed in
+the persistence follow-up; final dependency composition and CI remain gates.

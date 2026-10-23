@@ -87,3 +87,40 @@ The author also reports 443 focused media tests passing, 100 percent production
 and replica-set-helper statement coverage, and passing static gates. The full
 repository follow-up suite remains an author-owned publication gate. The final
 follow-up commit and its remote CodeQL result still require reconciliation.
+
+## Sourcery follow-up triage
+
+All six later Sourcery threads on PR #785 were read. Two concrete production
+validation gaps were independently reproduced and corrected:
+
+- A preexisting record with missing or mismatched `sourceKey` passed index
+  preparation, after which a second record with the same `importSource` could
+  be created. Preparation now derives and validates the canonical source key for
+  every imported media record before comparing reservation ownership.
+- The normal annotations-service import disables Pillow's global pixel cap.
+  An oversized PNG header rejected under the default cap was accepted after
+  that actual import. Owned-raster validation now enforces its own explicit
+  40-million-pixel cap; audited legacy adoption retains its non-decoding policy.
+
+The original failed-upload test raised before storing anything. Its replacement
+now exercises both real partial chunks and a completed file before the injected
+failure. It verifies that failed-upload bytes are removed while an unrelated
+file remains readable. No cleanup implementation change was needed.
+
+The claimed fresh-ID assertion failure is a false positive: `media_id()` uses
+the deterministic `DEFAULT_MEDIA_ID`. SVG storage rejection is an intentional,
+documented fail-closed policy pending a sanitizer. Replacement returns previous
+handles and performs no automatic byte cleanup; the read-only HTTP rollout has
+no replacement or deletion routes. Physical cleanup must wait for readers that
+could hold old handles to finish; the README now states this limitation.
+
+The unchanged adversarial probe now rejects both inconsistent source-key cases
+before preparation and rejects the oversized header after the actual
+annotations-service import. The independent infrastructure suite passed
+**74 tests in 9.17 seconds**. Its final 23-path digest remained stable:
+`e6c8c8eaf50d00d31ca66ef32cdc4a4c7c7ddc7f006a09a59fcabd4fa55ced07`.
+
+The author reports 456 focused media tests passing, 507 of 507 production
+statements covered, and passing static gates. The final full suite and committed
+identity remain author-owned publication gates. All reproduction data was
+synthetic and local; the oversized header allocated no oversized pixel buffer.

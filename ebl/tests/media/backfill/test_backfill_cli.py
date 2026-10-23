@@ -143,6 +143,7 @@ def test_missing_uri_fails_without_credentials_in_error(
 def test_real_connection_failure_reports_no_uri(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path, command_output: StringIO
 ) -> None:
+    original_uri = os.environ["MONGODB_URI"]
     monkeypatch.setenv("MEDIA_INVALID_URI", "https://user:secret@invalid")
     exit_status = captured_main(
         command_output,
@@ -158,4 +159,4 @@ def test_real_connection_failure_reports_no_uri(
     )
     assert exit_status == 1
     assert "secret" not in command_output.getvalue()
-    assert os.environ["MONGODB_URI"].startswith("mongodb://127.0.0.1:")
+    assert os.environ["MONGODB_URI"] == original_uri

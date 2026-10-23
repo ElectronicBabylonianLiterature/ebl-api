@@ -1,8 +1,9 @@
 from io import BytesIO
-from typing import cast
+from typing import BinaryIO, cast
 
 import attr
 import pytest
+from bson import ObjectId
 from gridfs import GridFS
 from pymongo import ReadPreference
 from pymongo.database import Database
@@ -157,13 +158,26 @@ def test_invalid_ownership_cannot_delete_legacy_bytes(
     assert GridFS(media_database, "photos").get(file_id).read() == image_bytes()
 
 
+@pytest.mark.parametrize("failure_stage", ["chunks", "file"])
 def test_write_failure_cleans_owned_file(
     representation_store: GridFsMediaRepresentationStore,
     media_database: Database,
     monkeypatch: pytest.MonkeyPatch,
+    failure_stage: str,
 ) -> None:
+    original_put = GridFS.put
+    retained_id = GridFS(media_database, "media").put(b"unrelated content")
 
-    def fail_upload(_self: GridFS, *_args: object, **_kwargs: object) -> None:
+    def fail_upload(
+        bucket: GridFS, data: BinaryIO, *, _id: ObjectId, metadata: dict
+    ) -> None:
+        if failure_stage == "file":
+            original_put(bucket, data, _id=_id, metadata=metadata)
+        else:
+            media_database["media.chunks"].insert_one(
+                {"files_id": _id, "n": 0, "data": b"partial upload"}
+            )
+        assert media_database["media.chunks"].count_documents({"files_id": _id}) > 0
         raise RuntimeError("upload interrupted")
 
     monkeypatch.setattr(GridFS, "put", fail_upload)
@@ -173,7 +187,11 @@ def test_write_failure_cleans_owned_file(
                 media_id(), BytesIO(image_bytes()), image_representation()
             )
         )
-    assert media_database["media.files"].count_documents({}) == 0
+    assert media_database["media.files"].count_documents({}) == 1
+    assert media_database["media.chunks"].count_documents({}) == 1
+    assert (
+        GridFS(media_database, "media").get(retained_id).read() == b"unrelated content"
+    )
     assert (
         media_database.mediaFiles.count_documents({"deleted": True, "ready": False})
         == 1

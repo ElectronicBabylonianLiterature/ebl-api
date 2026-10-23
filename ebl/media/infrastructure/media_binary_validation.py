@@ -8,6 +8,7 @@ from PIL import Image
 from ebl.media.domain import MediaRepresentation
 
 READ_CHUNK_SIZE = 65536
+MAX_RASTER_PIXELS = 40_000_000
 
 
 def raster_mime_type(header: bytes) -> str:
@@ -61,6 +62,8 @@ def _verify_dimensions(content: BinaryIO, representation: MediaRepresentation) -
     with warnings.catch_warnings():
         warnings.simplefilter("error", Image.DecompressionBombWarning)
         with Image.open(content) as image:
+            if image.width * image.height > MAX_RASTER_PIXELS:
+                raise ValueError("Media representation exceeds the pixel limit.")
             if image.size != (representation.width, representation.height):
                 raise ValueError(
                     "Media representation dimensions do not match its bytes."

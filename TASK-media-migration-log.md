@@ -69,7 +69,7 @@ owns commits, publication and pull requests; this worker does not perform them.
 - Reviewed the root-owned PR description. Clarified that index preparation creates
   reservation structures, while imports create reservations; qualified production
   exclusions and documented that retries do not add previews to existing records.
-- No Python source or test file exceeds 250 lines: 29 owned files, largest 173.
+- No Python source or test file exceeds 250 lines: 30 owned files, largest 173.
 
 ## Final focused gates and error recovery
 
@@ -200,3 +200,63 @@ owns commits, publication and pull requests; this worker does not perform them.
 - The disposable local verification processes completed and were removed; no
   resource exhaustion occurred. Only task-documentation updates followed this
   final run. All migration, source-selection and runtime code remains frozen.
+
+## Published branch and parent validation follow-up
+
+- Root published migration PR 787 at
+  `6dec01f1e667f42f0f894ac09f199cf8c9af4727`; its tree was clean afterward.
+- Root supplied six frozen parent source/test overlays for canonical source-key
+  consistency, an explicit owned-raster pixel cap and partial-upload cleanup
+  verification. All six SHA-256 values match
+  `media-verification/persistence-validation-frozen-hashes.json`.
+- Migration production source remains unchanged. The overlays remain in place
+  for root-owned actual parent integration. Final composed verification is
+  running against these exact parent bytes with synthetic local data only.
+- The first composed run was interrupted with exit 130 after parent Pyre found
+  a test-only `crc32(bytearray)` typing error. Parent corrected it to bytes and
+  root refreshed that single test overlay and its manifest. No production source
+  changed. The interrupted run is not counted as a passing full suite; all type
+  gates will pass before its replacement begins.
+
+## Initial PR CI portability correction
+
+- Initial PR 787 CI failed because the CLI connection-error test assumed the
+  existing MongoDB URI used `127.0.0.1`. CI uses `localhost`; both are valid.
+  The CLI itself did not fail its expected behavior.
+- The isolated test now captures the original `MONGODB_URI` and asserts exact
+  preservation after using the invalid alternate URI. Credential-output checks
+  are unchanged. No production source changed.
+- Root directed the already-running full suite to continue, followed by targeted
+  verification of the corrected CLI module under both hostname spellings and
+  affected static gates. Results will distinguish those two verification stages.
+- The corrected test passed with original `localhost` and `127.0.0.1` URI
+  spellings, respectively one test in 0.11 and 0.07 seconds, without starting
+  MongoDB or connecting through the invalid alternate URI. Independent review
+  accepted the exact two-line change and repeated the localhost case successfully.
+- An exploratory fixture search included a nonexistent intermediate conftest;
+  reading the actual root/test fixture files confirmed no Mongo fixture was
+  needed for these targeted checks.
+- The composed full run passed with exit 0: 6,152 passed, 2 skipped, 1 xfailed
+  in 698.69 seconds. Log:
+  `media-verification/migration-full-suite-parent-validation-fixed-20261023.log`.
+  Its frozen production source includes the parent validation changes; the
+  isolated URI-test correction is covered by the separate targeted checks and
+  subsequent focused media suite, rather than another broad run.
+- Whole format/lint, scoped Pyright/mypy over 36 files, Flake8, Qlty including
+  tests, Markdown and whitespace checks passed. The corrected URI test also
+  passed those affected static checks. Final whole Pyre passed with zero errors.
+- Final focused coverage passed all 583 media tests in 21.27 seconds, including
+  the corrected CLI module and the parent validation regressions. All 923 source
+  statements across the migration and two changed parent modules have 100% line
+  coverage. Log:
+  `media-verification/migration-media-coverage-parent-validation-20261023.log`.
+- Root published parent follow-up
+  `48b27b008d48bdf85b220839c060ed4892d6cfef`. Its six overlay hashes were rechecked
+  after verification and match exactly. Root will perform the actual parent
+  merge without rewriting history and preserve all tested non-Markdown bytes.
+- All local gates are complete. No migration production code changed during this
+  follow-up; the sole owned test correction has targeted, focused and independent
+  review evidence. The worktree is frozen for root-owned integration/publication.
+- The user instructed that hosted CI be left to run independently. Completion
+  therefore uses the local verification evidence; no additional hosted CI or
+  automated-review polling is performed by this worker.

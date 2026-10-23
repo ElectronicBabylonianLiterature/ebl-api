@@ -17,6 +17,9 @@
 - [x] Reverify the test correction and complete independent review.
 - [x] Reject incomplete legacy filename indexes and verify the correction.
 - [x] Repeat final gates after the filename-index correctness correction.
-- [ ] Root publishes the approved work after final gates.
+- [x] Root publishes the approved work after final gates.
+- [x] Verify the frozen parent validation follow-up in full composition.
+- [x] Record final composition gates and freeze for parent integration.
+- [x] Verify CLI test portability after the initial PR 787 CI failure.
 
 Production migration, deployment and legacy-file mutation are out of scope.
