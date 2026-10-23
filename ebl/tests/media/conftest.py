@@ -1,6 +1,9 @@
-from typing import Callable, List, Sequence
+from typing import Callable, Iterator, List, Sequence
+from uuid import uuid4
 
 import pytest
+from pymongo import MongoClient
+from pymongo.database import Database
 
 from ebl.media.application import (
     MediaRepository,
@@ -11,9 +14,27 @@ from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
     InMemoryRepresentationStore,
 )
+from ebl.tests.media.infrastructure.replica_set import replica_set_client
 
 MediaRepositoryFactory = Callable[[Sequence[StoredMedia]], MediaRepository]
 RepresentationStoreFactory = Callable[[], MediaRepresentationStore]
+
+
+@pytest.fixture(scope="session")
+def media_mongo_client(mongo_client: MongoClient) -> Iterator[MongoClient]:
+    topology = mongo_client.admin.command("hello")
+    if topology.get("setName") or topology.get("msg") == "isdbgrid":
+        yield mongo_client
+    else:
+        with replica_set_client() as client:
+            yield client
+
+
+@pytest.fixture
+def media_database(media_mongo_client: MongoClient) -> Iterator[Database]:
+    database = media_mongo_client[f"media_test_{uuid4().hex}"]
+    yield database
+    media_mongo_client.drop_database(database.name)
 
 
 @pytest.fixture

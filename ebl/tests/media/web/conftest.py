@@ -5,6 +5,7 @@ import attr
 import pytest
 from falcon import testing
 from falcon_auth import NoneAuthBackend
+from pymongo.database import Database
 
 from ebl.app import create_app
 from ebl.context import Context
@@ -33,6 +34,11 @@ from ebl.tests.media.in_memory_media import (
 from ebl.tests.media.representation_helpers import representation_for_content
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import Guest
+
+
+@pytest.fixture
+def database(media_database: Database) -> Database:
+    return media_database
 
 
 @pytest.fixture

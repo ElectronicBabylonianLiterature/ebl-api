@@ -4,7 +4,7 @@ from io import BytesIO
 import attr
 from PIL import Image
 from pymongo.database import Database
-from pymongo import monitoring
+from pymongo import MongoClient, monitoring
 
 from ebl.context import Context
 from ebl.media.application.media_runtime import MediaRuntime
@@ -19,6 +19,17 @@ from ebl.media.web.bootstrap import create_media_runtime
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.media.factories import association, photo_media
 from ebl.transliteration.domain.museum_number import MuseumNumber
+
+
+def monitored_client(
+    database: Database, listener: monitoring.CommandListener
+) -> MongoClient[dict]:
+    database.client.admin.command("ping")
+    return MongoClient(
+        [f"{host}:{port}" for host, port in database.client.nodes],
+        replicaSet=database.client.options.replica_set_name,
+        event_listeners=[listener],
+    )
 
 
 def png_bytes() -> bytes:

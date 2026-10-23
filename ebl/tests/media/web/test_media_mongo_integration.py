@@ -1,6 +1,3 @@
-import os
-
-from pymongo import MongoClient
 from falcon import testing
 from pymongo.database import Database
 
@@ -11,6 +8,7 @@ from ebl.tests.media.web.helpers import body, get
 from ebl.tests.media.web.mongo_test_support import (
     MediaReadCounter,
     context_with_media,
+    monitored_client,
     png_bytes,
     seed_runtime,
 )
@@ -40,10 +38,7 @@ def test_real_mongo_summary_uses_one_batch_read(
 ) -> None:
     seed_runtime(database, context)
     counter = MediaReadCounter()
-    client: MongoClient[dict] = MongoClient(
-        os.environ["MONGODB_URI"], event_listeners=[counter]
-    )
-    with client:
+    with monitored_client(database, counter) as client:
         runtime = create_media_runtime(client[database.name])
         rows: list[dict] = [
             {"museumNumber": {"prefix": "A/B", "number": "1", "suffix": ""}},

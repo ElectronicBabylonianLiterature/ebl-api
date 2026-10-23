@@ -1,4 +1,3 @@
-import os
 from collections.abc import Callable, Iterator
 from urllib.parse import quote
 
@@ -6,7 +5,7 @@ import attr
 import pytest
 from falcon import testing
 from falcon_auth import NoneAuthBackend
-from pymongo import MongoClient, monitoring
+from pymongo import monitoring
 from pymongo.database import Database
 
 from ebl.app import create_app
@@ -17,6 +16,7 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
 from ebl.media.application.media_stored import StoredMedia
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.media.web.helpers import body, get
+from ebl.tests.media.web.mongo_test_support import monitored_client
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.users.domain.user import Guest
@@ -41,10 +41,7 @@ def observed_media_context(
     database: Database, media_context: Context
 ) -> Iterator[tuple[Context, FragmentReadRecorder]]:
     recorder = FragmentReadRecorder()
-    client: MongoClient[dict] = MongoClient(
-        os.environ["MONGODB_URI"], event_listeners=[recorder]
-    )
-    with client:
+    with monitored_client(database, recorder) as client:
         repository = MongoFragmentRepository(
             client[database.name], media_context.provenance_service
         )
