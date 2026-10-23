@@ -143,6 +143,4 @@ def test_exact_chapter_invalidation_preserves_other_chapters(
     with cache.updating_chapter(chapter_id):
         assert database["cache"].count_documents({}) == 2
     assert cache.get(other_key) == {"value": "existing"}
-    assert cache.get(f"{CHAPTER_CACHE_KEY_PREFIX}{other_key}") == {
-        "value": "existing"
-    }
+    assert cache.get(f"{CHAPTER_CACHE_KEY_PREFIX}{other_key}") == {"value": "existing"}
