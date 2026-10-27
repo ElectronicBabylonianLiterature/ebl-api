@@ -98,13 +98,20 @@ jobs:
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest -x -n auto
+        run: poetry run pytest -x -n 2
 
       - name: Unit Tests with Coverage
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
         run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x -n auto
+
+      - name: Diagnose MongoDB test failures
+        if: failure()
+        run: |
+          docker ps --all --filter name=ebl-test-mongodb
+          docker inspect --format '{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}' ebl-test-mongodb || true
+          docker logs --tail 100 ebl-test-mongodb || true
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
