@@ -98,7 +98,7 @@ jobs:
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest -n auto
+        run: poetry run pytest -x -n auto
 
       - name: Unit Tests with Coverage
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}

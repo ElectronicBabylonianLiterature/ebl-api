@@ -809,12 +809,11 @@ Repeated cleanup is harmless, and deleted handles cannot be revived.
 
 Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New
-generated raster writes also check dimensions and image structure with Pillow,
-with an explicit 40,000,000-pixel limit independent of Pillow's global settings.
+the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
+registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
+the total of decoded frame pixels, independently of Pillow's global settings.
 WebP canvas dimensions are checked from a bounded header before creating a
-native decoder. Owned JPEGs are decoded within that pixel bound before any
-registry or GridFS record is written, rejecting truncated scans and end markers.
+native decoder.
 The adapter currently accepts JPEG, PNG, and WebP. SVG writes fail closed until
 an explicit sanitizer is added.
 
