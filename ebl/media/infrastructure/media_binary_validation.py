@@ -72,7 +72,15 @@ def _verify_dimensions(content: BinaryIO, representation: MediaRepresentation) -
                 raise ValueError(
                     "Media representation dimensions do not match its bytes."
                 )
-            if image.format == "JPEG":
+            frame_count = cast(int, getattr(image, "n_frames", 1))
+            if (
+                frame_count < 1
+                or image.width * image.height * frame_count > MAX_RASTER_PIXELS
+            ):
+                raise ValueError("Media representation exceeds the pixel limit.")
+            image.verify()
+        content.seek(0)
+        with Image.open(content) as image:
+            for frame_index in range(frame_count):
+                image.seek(frame_index)
                 image.load()
-            else:
-                image.verify()
