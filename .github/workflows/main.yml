@@ -38,14 +38,18 @@ jobs:
             check_name: "pypy-3.11"
     name: Test Python ${{ matrix.check_name }}
 
-    services:
-      mongodb:
-        image: mongo:7.0
-        ports:
-          - 27017:27017
-
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start MongoDB replica set
+        run: |
+          docker run --detach --name ebl-test-mongodb --publish 27017:27017 \
+            --ulimit nofile=65536:65536 \
+            mongo:7.0 --replSet ebl-test --bind_ip_all
+          timeout 60 bash -c 'until docker exec ebl-test-mongodb mongosh --quiet --eval "db.adminCommand({ping: 1})" >/dev/null 2>&1; do sleep 1; done'
+          docker exec ebl-test-mongodb mongosh --quiet --eval \
+            'rs.initiate({_id: "ebl-test", members: [{_id: 0, host: "localhost:27017"}]})'
+          timeout 60 bash -c 'until docker exec ebl-test-mongodb mongosh --quiet --eval "quit(db.hello().isWritablePrimary ? 0 : 1)" >/dev/null 2>&1; do sleep 1; done'
 
       - uses: actions/setup-python@v5
         with:
@@ -94,13 +98,20 @@ jobs:
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest -n auto
+        run: poetry run pytest -x -n 2
 
       - name: Unit Tests with Coverage
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
         run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x -n auto
+
+      - name: Diagnose MongoDB test failures
+        if: failure()
+        run: |
+          docker ps --all --filter name=ebl-test-mongodb
+          docker inspect --format '{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}' ebl-test-mongodb || true
+          docker logs --tail 100 ebl-test-mongodb || true
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
