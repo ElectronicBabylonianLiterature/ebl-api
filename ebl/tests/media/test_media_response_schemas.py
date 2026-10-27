@@ -66,7 +66,7 @@ def test_fragment_media_response_serializes_fragment_context() -> None:
                 "references": [{"id": "bibliography-id"}],
                 "representations": {
                     "original": {
-                        "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/file",
+                        "url": f"/media/{DEFAULT_MEDIA_ID}/file?fragment=K.1",
                         "mimeType": "image/jpeg",
                         "width": 4000,
                         "height": 3000,
@@ -74,8 +74,8 @@ def test_fragment_media_response_serializes_fragment_context() -> None:
                     "thumbnails": {
                         "small": {
                             "url": (
-                                f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}"
-                                "/thumbnail/small"
+                                f"/media/{DEFAULT_MEDIA_ID}"
+                                "/thumbnail/small?fragment=K.1"
                             ),
                             "mimeType": "image/jpeg",
                             "width": 240,
@@ -99,7 +99,7 @@ def test_fragment_media_response_serializes_display_representation() -> None:
     [result] = dump_media(fragment_id, (item,))
 
     assert mapped(result["representations"])["display"] == {
-        "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/display",
+        "url": f"/media/{DEFAULT_MEDIA_ID}/display?fragment=K.1",
         "mimeType": "image/webp",
         "width": 2560,
         "height": 1920,
@@ -114,11 +114,11 @@ def test_fragment_media_response_encodes_future_media_urls() -> None:
 
     representations = mapped(result["representations"])
     assert mapped(representations["original"])["url"] == (
-        f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/file"
+        f"/media/{DEFAULT_MEDIA_ID}/file?fragment=A%2FB.1"
     )
     thumbnails = mapped(representations["thumbnails"])
     assert mapped(thumbnails["small"])["url"] == (
-        f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/thumbnail/small"
+        f"/media/{DEFAULT_MEDIA_ID}/thumbnail/small?fragment=A%2FB.1"
     )
 
 
@@ -164,19 +164,19 @@ def test_fragment_media_response_serializes_multiple_thumbnail_sizes() -> None:
 
     assert set(thumbnails) == {"small", "medium", "large"}
     assert thumbnails["small"] == {
-        "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/thumbnail/small",
+        "url": f"/media/{DEFAULT_MEDIA_ID}/thumbnail/small?fragment=K.1",
         "mimeType": "image/jpeg",
         "width": 240,
         "height": 180,
     }
     assert thumbnails["medium"] == {
-        "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/thumbnail/medium",
+        "url": f"/media/{DEFAULT_MEDIA_ID}/thumbnail/medium?fragment=K.1",
         "mimeType": "image/jpeg",
         "width": 480,
         "height": 360,
     }
     assert thumbnails["large"] == {
-        "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/thumbnail/large",
+        "url": f"/media/{DEFAULT_MEDIA_ID}/thumbnail/large?fragment=K.1",
         "mimeType": "image/jpeg",
         "width": 960,
         "height": 720,
