@@ -26,11 +26,18 @@ def _letters_by_fold() -> Mapping[str, str]:
 LETTERS_BY_FOLD = _letters_by_fold()
 
 
+def _class_members(pattern: str) -> str:
+    return pattern[1:-1] if pattern.startswith("[") else pattern
+
+
 def _character_pattern(character: str) -> str:
     collated = CollatedFieldQuery(character, SEARCHED_FIELDS[0], DATA_TYPE).value
     pattern = collated or re.escape(character)
     letters = LETTERS_BY_FOLD.get(character)
-    return f"(?:{pattern}|[{letters}])" if letters else pattern
+    if not letters:
+        return pattern
+    members = dict.fromkeys(_class_members(pattern) + letters)
+    return f"[{''.join(members)}]"
 
 
 def search_pattern(folded_query: str) -> str:
