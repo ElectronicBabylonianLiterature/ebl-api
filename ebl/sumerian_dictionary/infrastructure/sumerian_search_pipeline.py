@@ -1,20 +1,19 @@
-import re
 from typing import List, Mapping, Sequence
 
-from ebl.common.query.query_collation import CollatedFieldQuery, DataType, Fields
 from ebl.sumerian_dictionary.domain.search_query import (
     PROPER_NOUN_TAGS,
     Kind,
     SourceFilter,
     SumerianWordQuery,
 )
+from ebl.sumerian_dictionary.infrastructure.sumerian_search_pattern import (
+    SEARCHED_FIELDS,
+    search_pattern,
+)
 
-DATA_TYPE: DataType = "sumerian-dictionary"
 ENGLISH_SENSE_LIMIT = 4
-OPTIONAL_BRACES = "[{}]*"
 IS_OBJECT = {"$type": "object"}
 MANAGED_DOCUMENT = {"sources": IS_OBJECT}
-SEARCHED_FIELDS: Sequence[str] = Fields.SUMERIAN_DICTIONARY.value["COLLATED_FIELDS"]
 PROPER_NOUNS = sorted(PROPER_NOUN_TAGS)
 
 
@@ -98,17 +97,6 @@ def search_projection() -> dict:
     }
 
 
-def _character_pattern(character: str) -> str:
-    collated = CollatedFieldQuery(character, SEARCHED_FIELDS[0], DATA_TYPE).value
-    return collated or re.escape(character)
-
-
-def brace_tolerant_pattern(folded_query: str) -> str:
-    return OPTIONAL_BRACES.join(
-        _character_pattern(character) for character in folded_query
-    )
-
-
 def _kind_filter(kind: Kind) -> List[dict]:
     if kind == Kind.WORDS:
         return [{"pos": {"$nin": PROPER_NOUNS}}]
@@ -124,7 +112,7 @@ def _source_filter(source: SourceFilter) -> List[dict]:
 
 
 def search_match(query: SumerianWordQuery, folded_query: str) -> dict:
-    condition = {"$regex": brace_tolerant_pattern(folded_query), "$options": "i"}
+    condition = {"$regex": search_pattern(folded_query), "$options": "i"}
     return {
         "$and": [
             MANAGED_DOCUMENT,

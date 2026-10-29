@@ -13,6 +13,7 @@ from ebl.sumerian_dictionary.domain.sumerian_word import (
     Epsd2Form,
     Epsd2Sense,
     Epsd2Source,
+    HeadwordMark,
     Match,
     Rendering,
     SignEntry,
@@ -36,7 +37,9 @@ AttingerSourceFactory = make_factory(
     depth=1,
     part_of_speech="N",
     headword=LazyAttribute(
-        lambda _: AttingerHeadword("lugal", "lugal, ES u₃-mu-un", ((0, 5, "italic"),))
+        lambda _: AttingerHeadword(
+            "lugal", "lugal, ES u₃-mu-un", (HeadwordMark(0, 5, "i"),)
+        )
     ),
 )
 
@@ -115,6 +118,7 @@ def _partial_rendering() -> Rendering:
 
 def build_complete_word() -> SumerianWord:
     return SumerianWordFactory.build(
+        id="complete-word",
         atf="lugal",
         truncated=True,
         uncertain=True,

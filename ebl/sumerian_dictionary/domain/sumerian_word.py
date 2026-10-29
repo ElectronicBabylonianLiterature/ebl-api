@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 import attr
 
@@ -105,10 +105,17 @@ class Attestation:
 
 
 @attr.s(frozen=True, auto_attribs=True)
+class HeadwordMark:
+    start: int
+    end: int
+    style: str
+
+
+@attr.s(frozen=True, auto_attribs=True)
 class AttingerHeadword:
     text: str
     display: str
-    marks: Sequence[Tuple[int, int, str]] = ()
+    marks: Sequence[HeadwordMark] = ()
 
 
 @attr.s(frozen=True, auto_attribs=True)

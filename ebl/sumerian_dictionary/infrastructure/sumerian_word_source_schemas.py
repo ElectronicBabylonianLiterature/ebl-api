@@ -4,10 +4,19 @@ from ebl.sumerian_dictionary.domain.sumerian_word import (
     AttingerHeadword,
     AttingerSource,
     Epsd2Source,
+    HeadwordMark,
     Match,
     Sources,
 )
 from ebl.sumerian_dictionary.infrastructure.sumerian_schema_base import AttrsSchema
+
+
+class HeadwordMarkSchema(AttrsSchema):
+    model = HeadwordMark
+
+    start = fields.Integer(required=True)
+    end = fields.Integer(required=True)
+    style = fields.String(required=True)
 
 
 class AttingerHeadwordSchema(AttrsSchema):
@@ -15,10 +24,7 @@ class AttingerHeadwordSchema(AttrsSchema):
 
     text = fields.String(required=True)
     display = fields.String(required=True)
-    marks = fields.List(
-        fields.Tuple((fields.Integer(), fields.Integer(), fields.String())),
-        load_default=list,
-    )
+    marks = fields.List(fields.Nested(HeadwordMarkSchema), load_default=list)
 
 
 class AttingerSourceSchema(AttrsSchema):
