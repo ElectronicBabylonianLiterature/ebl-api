@@ -1,4 +1,6 @@
 import base64
+from contextlib import contextmanager
+from typing import Iterator
 
 import falcon
 import pytest
@@ -139,3 +141,21 @@ def test_create_app_bootstraps_bibliography_annotations_and_afo_indexes(
     assert calls["reconcile"] == 100
     assert calls["annotations"] == 1
     assert calls["afo"] == 1
+
+
+class RecordingScope:
+    user: object = None
+
+
+def test_set_sentry_user_sets_the_scope_user(monkeypatch: pytest.MonkeyPatch) -> None:
+    scope = RecordingScope()
+
+    @contextmanager
+    def configure_scope() -> Iterator[RecordingScope]:
+        yield scope
+
+    monkeypatch.setattr(ebl.app, "configure_scope", configure_scope)
+
+    ebl.app.set_sentry_user("auth0|reader")
+
+    assert scope.user == {"id": "auth0|reader"}

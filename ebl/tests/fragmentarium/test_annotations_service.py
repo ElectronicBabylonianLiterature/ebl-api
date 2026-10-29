@@ -1,12 +1,24 @@
-import attr
 from itertools import zip_longest
+from typing import Any, Callable, Mapping, cast
+
+import attr
+import pytest
+
+from ebl.changelog import Changelog
+from ebl.files.application.file_repository import FileRepository
+from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
+    MongoCroppedSignImagesRepository,
+)
+from ebl.tests.fixtures.fixture_resolution import resolve_fixtures
 
 from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.cropped_sign_image import Base64, CroppedSignImage
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.tests.conftest import create_test_photo
+from ebl.tests.fixtures.file_fixtures import create_test_photo
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
@@ -19,14 +31,40 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 SCHEMA = AnnotationsSchema()
 
 
+ANNOTATION_DEPENDENCY_FIXTURES: Mapping[str, str] = {
+    name: name
+    for name in (
+        "annotations_repository",
+        "photo_repository",
+        "fragment_repository",
+        "cropped_sign_images_repository",
+        "changelog",
+    )
+}
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class AnnotationDependencies:
+    annotations_repository: AnnotationsRepository
+    photo_repository: FileRepository
+    fragment_repository: FragmentRepository
+    cropped_sign_images_repository: MongoCroppedSignImagesRepository
+    changelog: Changelog
+    when: Callable[..., Any]
+
+
+@pytest.fixture
+def dependencies(
+    request: pytest.FixtureRequest, when: Callable[..., Any]
+) -> AnnotationDependencies:
+    return AnnotationDependencies(
+        when=when, **resolve_fixtures(request, ANNOTATION_DEPENDENCY_FIXTURES)
+    )
+
+
 def test_cropped_images_from_sign(
-    annotations_repository,
-    fragment_repository,
-    photo_repository,
-    when,
-    text_with_labels,
-    annotations_service,
-):
+    dependencies: AnnotationDependencies, text_with_labels, annotations_service
+) -> None:
     single_annotation = AnnotationFactory.build(
         data=AnnotationDataFactory.build(path=[3, 0, 0])
     )
@@ -34,12 +72,12 @@ def test_cropped_images_from_sign(
 
     fragment = TransliteratedFragmentFactory.build(text=text_with_labels)
     (
-        when(fragment_repository)
+        dependencies.when(dependencies.fragment_repository)
         .query_by_museum_number(annotation.fragment_number)
         .thenReturn(fragment)
     )
     (
-        when(photo_repository)
+        dependencies.when(dependencies.photo_repository)
         .query_by_file_name(f"{annotation.fragment_number}.jpg")
         .thenReturn(create_test_photo("K.2"))
     )
@@ -57,35 +95,28 @@ def test_cropped_images_from_sign(
         assert annotation.cropped_sign.label == "i Stone wig"
 
 
-def test_generate_annotations(
-    annotations_repository,
-    photo_repository,
-    changelog,
-    when,
-    fragment_repository,
-    cropped_sign_images_repository,
-):
+def test_generate_annotations(dependencies: AnnotationDependencies) -> None:
     fragment_number = MuseumNumber.of("X.0")
 
     image_file = create_test_photo("K.2")
 
-    when(photo_repository).query_by_file_name(f"{fragment_number}.jpg").thenReturn(
-        image_file
-    )
+    dependencies.when(dependencies.photo_repository).query_by_file_name(
+        f"{fragment_number}.jpg"
+    ).thenReturn(image_file)
     ebl_ai_client = EblAiClient("mock-localhost:8001")
     service = AnnotationsService(
         ebl_ai_client,
-        annotations_repository,
-        photo_repository,
-        changelog,
-        fragment_repository,
-        photo_repository,
-        cropped_sign_images_repository,
+        dependencies.annotations_repository,
+        dependencies.photo_repository,
+        dependencies.changelog,
+        dependencies.fragment_repository,
+        dependencies.photo_repository,
+        dependencies.cropped_sign_images_repository,
     )
     expected = Annotations(fragment_number, ())
-    when(ebl_ai_client).generate_annotations(fragment_number, image_file, 0).thenReturn(
-        expected
-    )
+    dependencies.when(ebl_ai_client).generate_annotations(
+        fragment_number, image_file, 0
+    ).thenReturn(expected)
 
     annotations = service.generate_annotations(fragment_number, 0)
     assert isinstance(annotations, Annotations)
@@ -102,16 +133,8 @@ def test_find(annotations_repository, annotations_service, when):
 
 
 def test_update(
-    annotations_service,
-    annotations_repository,
-    photo_repository,
-    fragment_repository,
-    cropped_sign_images_repository,
-    when,
-    user,
-    changelog,
-    text_with_labels,
-):
+    dependencies: AnnotationDependencies, annotations_service, user, text_with_labels
+) -> None:
     fragment_number = MuseumNumber("K", "1")
     fragment = TransliteratedFragmentFactory(
         number=fragment_number, text=text_with_labels
@@ -125,15 +148,15 @@ def test_update(
         fragment_number=fragment_number, annotations=[annotation]
     )
 
-    when(annotations_repository).query_by_museum_number(fragment_number).thenReturn(
-        old_annotations
-    )
+    dependencies.when(dependencies.annotations_repository).query_by_museum_number(
+        fragment_number
+    ).thenReturn(old_annotations)
     image = create_test_photo("K.2")
-    when(fragment_repository).query_by_museum_number(fragment_number).thenReturn(
-        fragment
-    )
+    dependencies.when(dependencies.fragment_repository).query_by_museum_number(
+        fragment_number
+    ).thenReturn(fragment)
     (
-        when(photo_repository)
+        dependencies.when(dependencies.photo_repository)
         .query_by_file_name(f"{annotations.fragment_number}.jpg")
         .thenReturn(image)
     )
@@ -151,21 +174,25 @@ def test_update(
     expected_annotations = attr.evolve(
         annotations, annotations=[annotation_cropped_sign]
     )
-    when(CroppedSignImage).create(...).thenReturn(expected_cropped_sign_image)
+    dependencies.when(CroppedSignImage).create(...).thenReturn(
+        expected_cropped_sign_image
+    )
 
-    when(cropped_sign_images_repository).delete_by_fragment_number(
-        fragment_number
+    dependencies.when(
+        dependencies.cropped_sign_images_repository
+    ).delete_by_fragment_number(fragment_number).thenReturn()
+    dependencies.when(dependencies.annotations_repository).create_or_update(
+        expected_annotations
     ).thenReturn()
-    when(annotations_repository).create_or_update(expected_annotations).thenReturn()
-    when(cropped_sign_images_repository).create_many(
+    dependencies.when(dependencies.cropped_sign_images_repository).create_many(
         [expected_cropped_sign_image]
     ).thenReturn()
     schema = AnnotationsSchema()
-    when(changelog).create(
+    dependencies.when(dependencies.changelog).create(
         "annotations",
         user.profile,
-        {"_id": str(fragment_number), **schema.dump(old_annotations)},
-        {"_id": str(fragment_number), **schema.dump(expected_annotations)},
+        {"_id": str(fragment_number), **cast(dict, schema.dump(old_annotations))},
+        {"_id": str(fragment_number), **cast(dict, schema.dump(expected_annotations))},
     ).thenReturn()
 
     result = annotations_service.update(annotations, user)

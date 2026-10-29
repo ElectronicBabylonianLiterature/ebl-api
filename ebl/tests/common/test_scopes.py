@@ -29,3 +29,11 @@ def test_is_restricted() -> None:
 def test_str_round_trip() -> None:
     assert str(Scope.READ_BIBLIOGRAPHY) == "read:bibliography"
     assert str(Scope.READ_ARG_FOLIOS) == "read:ARG-folios"
+
+
+def test_sumerian_words_scope_is_restricted() -> None:
+    scope = Scope.from_string("read:sumerian-words")
+
+    assert scope is Scope.READ_SUMERIAN_WORDS
+    assert scope.is_restricted is True
+    assert str(scope) == "read:sumerian-words"
