@@ -1,11 +1,17 @@
-from ebl.common.query.query_result import QueryItem, QueryResult
-import pytest
+from typing import Sequence, cast
 
+import pytest
+from pymongo.database import Database
+
+from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Acquisition, Script
 from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -32,8 +38,10 @@ def test_create(database, fragment_repository):
     ) == FragmentSchema(exclude=["joins"]).dump(fragment)
 
 
-def test_create_many(database, fragment_repository):
-    fragments = LemmatizedFragmentFactory.build_batch(2)
+def test_create_many(
+    database: Database[dict[str, object]], fragment_repository: MongoFragmentRepository
+) -> None:
+    fragments = [LemmatizedFragmentFactory.build() for _ in range(2)]
     fragment_ids = fragment_repository.create_many(fragments)
 
     for fragment in fragments:
@@ -80,20 +88,23 @@ def test_create_indexes(database, fragment_repository):
     ] in join_index_keys
 
 
-def test_create_join(database, fragment_repository):
+def test_create_join(
+    database: Database[dict[str, object]], fragment_repository: MongoFragmentRepository
+) -> None:
     first_join = JoinFactory.build()
     second_join = JoinFactory.build()
+    join_schema = JoinSchema(exclude=["is_in_fragmentarium"])
 
     fragment_repository.create_join([[first_join], [second_join]])
 
     assert database[JOINS_COLLECTION].find_one({}, projection={"_id": False}) == {
         "fragments": [
             {
-                **JoinSchema(exclude=["is_in_fragmentarium"]).dump(first_join),
+                **cast(dict[str, object], join_schema.dump(first_join)),
                 "group": 0,
             },
             {
-                **JoinSchema(exclude=["is_in_fragmentarium"]).dump(second_join),
+                **cast(dict[str, object], join_schema.dump(second_join)),
                 "group": 1,
             },
         ]
@@ -136,7 +147,9 @@ def test_query_by_museum_number(database, fragment_repository, number):
         ("*.*", ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a", "IM.1"]),
     ],
 )
-def test_museum_number_wildcard(fragment_repository, query, expected):
+def test_museum_number_wildcard(
+    fragment_repository: MongoFragmentRepository, query: str, expected: Sequence[str]
+) -> None:
     all_numbers = ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a", "IM.1"]
     fragments = [
         FragmentFactory.build(number=MuseumNumber.of(number), script=Script())
@@ -152,28 +165,34 @@ def test_museum_number_wildcard(fragment_repository, query, expected):
             if str(fragment.number) in expected
         ],
         0,
+        total_documents=len(expected),
     )
 
     assert fragment_repository.query({"number": query}) == expected_result
 
 
-def test_query_by_museum_number_joins(database, fragment_repository):
+def test_query_by_museum_number_joins(
+    database: Database[dict[str, object]], fragment_repository: MongoFragmentRepository
+) -> None:
     museum_number = MuseumNumber("X", "1")
     first_join = Join(museum_number, is_in_fragmentarium=True)
     second_join = Join(MuseumNumber("X", "2"), is_in_fragmentarium=False)
     fragment = LemmatizedFragmentFactory.build(
         number=museum_number, joins=Joins(((first_join,), (second_join,)))
     )
-    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    database[COLLECTION].insert_one(
+        cast(dict[str, object], FragmentSchema(exclude=["joins"]).dump(fragment))
+    )
+    join_schema = JoinSchema(exclude=["is_in_fragmentarium"])
     database[JOINS_COLLECTION].insert_one(
         {
             "fragments": [
                 {
-                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(first_join),
+                    **cast(dict[str, object], join_schema.dump(first_join)),
                     "group": 0,
                 },
                 {
-                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(second_join),
+                    **cast(dict[str, object], join_schema.dump(second_join)),
                     "group": 1,
                 },
             ]
