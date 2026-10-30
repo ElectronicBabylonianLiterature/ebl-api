@@ -20,6 +20,12 @@ ANCIENT_CULTURES_CHICAGO: MuseumEntry = (
     "US",
     "https://isac.uchicago.edu/",
 )
+ARCHAEOLOGISCHE_STAATSSAMMLUNG: MuseumEntry = (
+    "Archäologische Staatssammlung",
+    "Munich",
+    "DE",
+    "https://www.archaeologie.bayern/",
+)
 ASHMOLEAN_MUSEUM: MuseumEntry = (
     "Ashmolean Museum",
     "Oxford",
@@ -43,6 +49,12 @@ BATMAN_HASANKEYF_MUZESI: MuseumEntry = (
     "Batman",
     "TR",
     "https://kvmgm.ktb.gov.tr/TR-281298/batman-muze-mudurlugu.html",
+)
+BAYERISCHE_STAATSBIBLIOTHEK: MuseumEntry = (
+    "Bayerische Staatsbibliothek",
+    "Munich",
+    "DE",
+    "https://www.bsb-muenchen.de/",
 )
 BRYN_MAWR_COLLEGE: MuseumEntry = (
     "Bryn Mawr College Special Collections",
@@ -79,6 +91,12 @@ DE_LIAGRE_BOEHL_COLLECTION: MuseumEntry = (
     "Leiden",
     "NL",
     "https://www.nino-leiden.nl/collections/de-liagre-bohl-collection",
+)
+DEUTSCHES_MUSEUM: MuseumEntry = (
+    "Deutsches Museum",
+    "Munich",
+    "DE",
+    "https://www.deutsches-museum.de/",
 )
 ECOLE_PRATIQUE_DES_HAUTES_ETUDES: MuseumEntry = (
     "École pratique des hautes Études",
@@ -184,6 +202,12 @@ KUNSTHISTORISCHES_MUSEUM: MuseumEntry = (
     "Vienna",
     "AT",
     "https://www.khm.at/",
+)
+LMU_IAH: MuseumEntry = (
+    "LMU Institut für Assyriologie und Hethitologie",
+    "Munich",
+    "DE",
+    "https://www.assyriologie.uni-muenchen.de/",
 )
 LOUVRE: MuseumEntry = (
     "Louvre",
