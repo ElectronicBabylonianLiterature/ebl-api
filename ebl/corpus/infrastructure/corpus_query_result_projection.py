@@ -6,6 +6,7 @@ CORPUS_QUERY_SORT = {
     "textId.category": 1,
     "textId.index": 1,
     "stage": 1,
+    "_sortName": 1,
     "name": 1,
     "_id": 1,
 }
@@ -20,7 +21,8 @@ def paginated_corpus_result(query: Dict) -> List[Dict]:
                     {"$sort": CORPUS_QUERY_SORT},
                     *([{"$skip": offset}] if offset else []),
                     {"$limit": query["limit"]},
-                    {"$project": {"_id": False}},
+                    {"$set": {"name": "$_sortName"}},
+                    {"$project": {"_id": False, "_sortName": False}},
                 ],
                 "count": [
                     {

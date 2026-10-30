@@ -99,7 +99,7 @@ class CorpusQueryResultSchema(QueryResultSchema):
     )
 
     @post_dump
-    def filter_chapter_metadata(self, data, **kwargs):
+    def filter_chapter_metadata(self, data: dict, **kwargs: object) -> dict:
         if not self._include_count_metadata:
             data.pop("totalChapters", None)
         return data

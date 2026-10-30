@@ -11,7 +11,8 @@ def test_page_materialization_is_bounded_before_the_final_result() -> None:
         {"$sort": CORPUS_QUERY_SORT},
         {"$skip": 10},
         {"$limit": 5},
-        {"$project": {"_id": False}},
+        {"$set": {"name": "$_sortName"}},
+        {"$project": {"_id": False, "_sortName": False}},
     ]
     assert all(
         "$skip" not in stage and "$limit" not in stage for stage in facet["count"]
