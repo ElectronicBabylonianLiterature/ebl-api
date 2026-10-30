@@ -94,6 +94,15 @@ class CorpusQueryResultSchema(QueryResultSchema):
         exclude = ("total_documents",)
 
     items = fields.Nested(CorpusQueryItemSchema, many=True, required=True)
+    total_chapters = fields.Integer(
+        data_key="totalChapters", load_default=None, allow_none=True
+    )
+
+    @post_dump
+    def filter_chapter_metadata(self, data, **kwargs):
+        if not self._include_count_metadata:
+            data.pop("totalChapters", None)
+        return data
 
     @post_load
     def make_query_result(self, data, **kwargs) -> CorpusQueryResult:

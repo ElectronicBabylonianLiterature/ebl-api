@@ -81,6 +81,7 @@ class CorpusQueryResult:
     match_count_total: Optional[int]
     is_match_count_total_exact: bool = True
     has_next_page: Optional[bool] = None
+    total_chapters: Optional[int] = None
 
     @staticmethod
     def create_empty() -> "CorpusQueryResult":
