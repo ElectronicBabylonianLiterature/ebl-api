@@ -42,4 +42,5 @@ def test_corpus_result_does_not_gain_library_document_metadata() -> None:
         **payload,
         "isMatchCountTotalExact": True,
         "hasNextPage": None,
+        "totalChapters": None,
     }
