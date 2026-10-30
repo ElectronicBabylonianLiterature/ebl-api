@@ -1,6 +1,6 @@
 from typing import Dict, Sequence, cast
 
-from marshmallow import EXCLUDE, Schema, fields
+from marshmallow import EXCLUDE, RAISE, Schema, fields
 
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.at_line import (
@@ -59,7 +59,7 @@ def locations_of_data(lines: Sequence[dict], indices: Sequence[int]) -> Dict[int
             break
         if line.get("type") in LOCATION_LINE_TYPES:
             current = advance_location(
-                current, cast(Line, schema.load(line, unknown=EXCLUDE))
+                current, cast(Line, schema.load(line, unknown=RAISE))
             )
         if index in selected_indices:
             locations[index] = location_of(current)

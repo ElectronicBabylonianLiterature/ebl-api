@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import pytest
+from marshmallow import ValidationError
 
 from ebl.fragmentarium.application.fragment_query_locations import (
     advance_location,
@@ -114,3 +115,15 @@ def test_late_preview_match_uses_all_preceding_markers() -> None:
     result = matching_line_preview_of_data(dumped_text(text), [43])
     assert result["lines"][0]["location"]["surface"] == "r"
     assert result["lines"][0]["location"]["column"] == "ii"
+
+
+@pytest.mark.parametrize("extra_field", ["column_label", "number", "storedOnly"])
+def test_structural_markers_reject_unknown_variant_fields(extra_field: str) -> None:
+    from ebl.transliteration.application.text_schema import TextSchema
+
+    text = dumped_text(parse_atf_lark("@obverse\n6. ku"))
+    text["lines"][0][extra_field] = {"column": 2, "status": []}
+    with pytest.raises(ValidationError, match=extra_field):
+        TextSchema().load(text)
+    with pytest.raises(ValidationError, match=extra_field):
+        matching_line_preview_of_data(text, [1])

@@ -1,7 +1,15 @@
-from typing import cast
+from typing import Sequence, cast
 
 import falcon
 import pytest
+from falcon import testing
+
+from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
+from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
+from ebl.transliteration.domain.sign import Sign
 
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryMatchingLinePreviewSchema,
@@ -14,7 +22,7 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 
 def test_multiline_overlaps_count_distinct_lines_and_keep_occurrence_count(
-    fragment_repository,
+    fragment_repository: MongoFragmentRepository,
 ) -> None:
     text = parse_atf_lark(
         "@obverse\n@column 2\n" + "\n".join(f"{index}. ku" for index in range(1, 8))
@@ -36,7 +44,10 @@ def test_multiline_overlaps_count_distinct_lines_and_keep_occurrence_count(
 
 
 def test_locations_are_serialized_on_the_existing_query_route(
-    client, fragmentarium, sign_repository, signs
+    client: testing.TestClient,
+    fragmentarium: Fragmentarium,
+    sign_repository: MongoSignRepository,
+    signs: Sequence[Sign],
 ) -> None:
     for sign in signs:
         sign_repository.create(sign)
@@ -48,7 +59,8 @@ def test_locations_are_serialized_on_the_existing_query_route(
         "/fragments/query", params={"transliteration": "KU", "limit": "1"}
     )
     assert response.status == falcon.HTTP_OK
-    preview = response.json["items"][0]["matchingLinePreview"]
+    payload = cast(dict, cast(testing.Result, response).json)
+    preview = payload["items"][0]["matchingLinePreview"]
     assert preview["totalMatchingLines"] == 1
     line = preview["lines"][0]
     assert line["index"] == 2
