@@ -27,7 +27,16 @@ def test_preview_of_stored_data_adds_only_source_index():
     stored_line = dumped_text(fragment.text)["lines"][0]
 
     assert matching_line_preview_of_data(dumped_text(fragment.text), (0,))["lines"] == [
-        {**stored_line, "index": 0}
+        {
+            **stored_line,
+            "index": 0,
+            "location": {
+                "surface": None,
+                "column": None,
+                "object": None,
+                "sealNumber": None,
+            },
+        }
     ]
 
 
@@ -47,8 +56,8 @@ def test_the_two_builders_differ_only_in_the_parser_version_key():
     from_data = matching_line_preview_of_data(dumped_text(fragment.text), (0,))
     from_domain = matching_line_preview_of(fragment.text, (0,))
 
-    assert set(from_data) == {"lines", "parserVersion"}
-    assert set(from_domain) == {"lines", "parser_version"}
+    assert set(from_data) == {"lines", "parserVersion", "totalMatchingLines"}
+    assert set(from_domain) == {"lines", "parser_version", "total_matching_lines"}
     assert FragmentQueryMatchingLinePreviewSchema().dump(from_domain) == from_data
 
 

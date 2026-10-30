@@ -41,5 +41,14 @@ def test_preview_of_a_legacy_sparse_fragment_is_the_full_api_shape(
 
     assert result.status == falcon.HTTP_OK
     assert sparse_shape(legacy_shape(expected_line)) != expected_line
-    assert preview_line == {**expected_line, "index": MATCHING_LINE_INDEX}
+    assert preview_line == {
+        **expected_line,
+        "index": MATCHING_LINE_INDEX,
+        "location": {
+            "surface": None,
+            "column": None,
+            "object": None,
+            "sealNumber": None,
+        },
+    }
     assert detail["text"]["lines"][MATCHING_LINE_INDEX] == expected_line
