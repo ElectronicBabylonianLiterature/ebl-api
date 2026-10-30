@@ -20,6 +20,9 @@ class ExternalNumbers:
     kelsey_number: str = ""
     harvard_ham_number: str = ""
     sketchfab_number: str = ""
+    mdz_number: str = ""
+    deutsches_museum_number: str = ""
+    smaek_number: str = ""
     spurlock_number: str = ""
     etcsri_number: str = ""
     ark_number: str = ""
@@ -110,6 +113,18 @@ class FragmentExternalNumbers:
     @property
     def sketchfab_number(self) -> str:
         return self._get_external_number("sketchfab")
+
+    @property
+    def mdz_number(self) -> str:
+        return self._get_external_number("mdz")
+
+    @property
+    def deutsches_museum_number(self) -> str:
+        return self._get_external_number("deutsches_museum")
+
+    @property
+    def smaek_number(self) -> str:
+        return self._get_external_number("smaek")
 
     @property
     def ark_number(self) -> str:
