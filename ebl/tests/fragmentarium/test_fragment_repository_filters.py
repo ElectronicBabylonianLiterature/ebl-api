@@ -81,12 +81,16 @@ def test_update_update_references(fragment_repository):
         (
             LemmaQueryType.AND,
             ("ana I",),
-            QueryResult([QueryItem(MuseumNumber.of("K.1"), (1,), 1)], 1),
+            QueryResult(
+                [QueryItem(MuseumNumber.of("K.1"), (1,), 1)], 1, total_documents=1
+            ),
         ),
         (
             LemmaQueryType.OR,
             ("ana I", "kīdu I"),
-            QueryResult([QueryItem(MuseumNumber.of("K.1"), (1, 2), 2)], 2),
+            QueryResult(
+                [QueryItem(MuseumNumber.of("K.1"), (1, 2), 2)], 2, total_documents=1
+            ),
         ),
         (
             LemmaQueryType.OR,
@@ -97,33 +101,48 @@ def test_update_update_references(fragment_repository):
                     QueryItem(MuseumNumber.of("Sm.2"), (0,), 1),
                 ],
                 3,
+                total_documents=2,
             ),
         ),
-        (LemmaQueryType.LINE, ("ana I", "kīdu I"), QueryResult([], 0)),
+        (
+            LemmaQueryType.LINE,
+            ("ana I", "kīdu I"),
+            QueryResult([], 0, total_documents=0),
+        ),
         (
             LemmaQueryType.LINE,
             ("kīdu I", "u I", "bamātu I"),
-            QueryResult([QueryItem(MuseumNumber.of("K.1"), (2,), 1)], 1),
+            QueryResult(
+                [QueryItem(MuseumNumber.of("K.1"), (2,), 1)], 1, total_documents=1
+            ),
         ),
         (
             LemmaQueryType.AND,
             ("kur II", "uk I", "ap III"),
-            QueryResult([QueryItem(MuseumNumber.of("Sm.2"), (0,), 1)], 1),
+            QueryResult(
+                [QueryItem(MuseumNumber.of("Sm.2"), (0,), 1)], 1, total_documents=1
+            ),
         ),
         (
             LemmaQueryType.PHRASE,
             ("uk I", "kur II"),
-            QueryResult([QueryItem(MuseumNumber.of("Sm.2"), (0,), 1)], 1),
+            QueryResult(
+                [QueryItem(MuseumNumber.of("Sm.2"), (0,), 1)], 1, total_documents=1
+            ),
         ),
-        (LemmaQueryType.PHRASE, ("uk I", "ap III"), QueryResult([], 0)),
+        (
+            LemmaQueryType.PHRASE,
+            ("uk I", "ap III"),
+            QueryResult([], 0, total_documents=0),
+        ),
     ],
 )
 def test_query_lemmas(
     fragment_repository: MongoFragmentRepository,
     query_type: LemmaQueryType,
-    lemmas: Tuple[str],
+    lemmas: Tuple[str, ...],
     expected: QueryResult,
-):
+) -> None:
     fragment = LemmatizedFragmentFactory.build(
         number=MuseumNumber.of("K.1"),
         script=Script(Period.NEO_ASSYRIAN),
