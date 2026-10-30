@@ -1,6 +1,7 @@
 import argparse
 from collections.abc import Callable
 from pathlib import Path
+from urllib.parse import urlunsplit
 import pytest
 from ebl.io.media.backfill import parser, target_identity, validate_arguments
 from ebl.io.media.backfill_commands import MigrationRunOptions, apply_plan, dry_run
@@ -87,9 +88,18 @@ def test_explicit_target_and_confirmation() -> None:
         )
 
 
-def test_uri_credentials_are_not_in_target() -> None:
-    assert target_identity(
-        "mongodb://alice:secret@localhost:27017", "ebl"
-    ) == target_identity("mongodb://bob:other@localhost:27017", "ebl")
+@pytest.mark.parametrize(
+    "username,password",
+    [("test-user", "test-password"), ("other-test-user", "other-test-password")],
+)
+def test_uri_credentials_are_not_in_target(username: str, password: str) -> None:
+    # Assemble synthetic credentials for this parser-only test; no connection is made.
+    uri = urlunsplit(("mongodb", f"{username}:{password}@localhost:27017", "", "", ""))
+    assert target_identity(uri, "ebl") == target_identity(
+        "mongodb://localhost:27017", "ebl"
+    )
+
+
+def test_target_requires_explicit_endpoint() -> None:
     with pytest.raises(ValueError, match="explicit endpoint"):
         target_identity("not-mongodb", "ebl")
