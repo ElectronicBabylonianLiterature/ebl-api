@@ -1,13 +1,17 @@
 from typing import Dict, List
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.common.query.util import flatten_field
+from ebl.corpus.application.query_pagination import parse_corpus_pagination
 from ebl.corpus.infrastructure.corpus_lemma_matcher import CorpusLemmaMatcher
 from ebl.corpus.infrastructure.corpus_sign_matcher import CorpusSignMatcher
+from ebl.corpus.infrastructure.corpus_query_result_projection import (
+    paginated_corpus_result,
+)
 
 
 class CorpusPatternMatcher:
     def __init__(self, query: Dict):
-        self._query = query
+        self._query = parse_corpus_pagination(query)
 
         self._lemma_matcher = (
             CorpusLemmaMatcher(
@@ -23,13 +27,11 @@ class CorpusPatternMatcher:
             else None
         )
 
-    def _limit_result(self):
-        return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
-
     def _wrap_query_items_with_total(self) -> List[Dict]:
+        if "limit" in self._query:
+            return paginated_corpus_result(self._query)
         return [
             {"$sort": {"matchCount": -1, "textId": 1}},
-            *self._limit_result(),
             {"$project": {"_id": False}},
             {
                 "$group": {
