@@ -1,6 +1,8 @@
 from itertools import count
 from typing import Optional, Sequence, cast
 import json
+import os
+import sys
 from marshmallow import ValidationError
 import pymongo
 from ebl.common.query.util import sort_by_museum_number
@@ -184,3 +186,10 @@ def write_to_tsv(
         if column_names:
             writer.writerow(column_names)
         writer.writerows(data)
+
+
+if __name__ == "__main__":
+    os.execv(
+        sys.executable,
+        [sys.executable, "-m", "ebl.io.fragments.importer_cli", *sys.argv[1:]],
+    )
