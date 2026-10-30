@@ -1,10 +1,15 @@
 from typing import Dict, List
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.common.query.util import flatten_field
+from ebl.common.query.collation_identity import (
+    collation_safe_identity,
+    original_identity_value,
+)
 from ebl.corpus.application.query_pagination import parse_corpus_pagination
 from ebl.corpus.infrastructure.corpus_lemma_matcher import CorpusLemmaMatcher
 from ebl.corpus.infrastructure.corpus_sign_matcher import CorpusSignMatcher
 from ebl.corpus.infrastructure.corpus_query_result_projection import (
+    CORPUS_QUERY_SORT,
     paginated_corpus_result,
 )
 
@@ -31,8 +36,9 @@ class CorpusPatternMatcher:
         if "limit" in self._query:
             return paginated_corpus_result(self._query)
         return [
-            {"$sort": {"matchCount": -1, "textId": 1}},
-            {"$project": {"_id": False}},
+            {"$sort": CORPUS_QUERY_SORT},
+            {"$set": {"name": "$_sortName"}},
+            {"$project": {"_id": False, "_sortName": False}},
             {
                 "$group": {
                     "_id": None,
@@ -130,7 +136,7 @@ class CorpusPatternMatcher:
         ]
 
     def build_pipeline(self) -> List[Dict]:
-        pipeline = []
+        pipeline: List[Dict] = [{"$set": {"name": collation_safe_identity("$name")}}]
 
         if self._lemma_matcher and self._sign_matcher:
             pipeline.extend(
@@ -156,6 +162,7 @@ class CorpusPatternMatcher:
                 ]
             )
 
+        pipeline.append({"$set": {"_sortName": original_identity_value("$name")}})
         pipeline.extend(self._wrap_query_items_with_total())
 
         return pipeline

@@ -136,4 +136,4 @@ def test_equal_collation_names_are_stable_for_paginated_browsing(
         )["items"][0]["name"]
         for offset in range(3)
     ]
-    assert observed == names
+    assert observed == ["I", "I-", "I."]
