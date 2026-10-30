@@ -108,11 +108,17 @@ def test_query_fragmentarium_transliteration_limit_with_offset(
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of(
-        [query_summary_of(fragment, matching_lines=[3]) for fragment in fragments[1:3]],
-        4,
-        bibliography_documents={},
-    )
+    assert result.json == {
+        **query_result_of(
+            [
+                query_summary_of(fragment, matching_lines=[3])
+                for fragment in fragments[1:3]
+            ],
+            4,
+            bibliography_documents={},
+        ),
+        "totalDocuments": 4,
+    }
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
 
 
@@ -137,10 +143,13 @@ def test_query_fragmentarium_transliteration_offset_without_limit_returns_lean_i
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of(
-        [query_item_of(fragment, matching_lines=[3]) for fragment in fragments[2:]],
-        4,
-    )
+    assert result.json == {
+        **query_result_of(
+            [query_item_of(fragment, matching_lines=[3]) for fragment in fragments[2:]],
+            4,
+        ),
+        "totalDocuments": 4,
+    }
 
 
 def test_query_fragmentarium_transliteration_offset_zero_is_accepted(
@@ -187,7 +196,7 @@ def test_query_fragmentarium_limit_invalid(client, limit):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.parametrize("offset", ["invalid", "-1"])
+@pytest.mark.parametrize("offset", ["invalid", "-1", str(2**63)])
 def test_query_fragmentarium_offset_invalid(client, offset):
     result = client.simulate_get(
         "/fragments/query",

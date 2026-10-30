@@ -43,6 +43,7 @@ def test_search_equivalent_ids_combines_historical_references(
         "1",
         "2",
     ]
+    assert result.json["totalDocuments"] == 6
     assert result.json["matchCountTotal"] == 0
     assert result.json["hasNextPage"] is None
     full_result = client.simulate_get(
@@ -207,6 +208,7 @@ def test_alias_count_modes(client, fragmentarium, equivalent_bibliography, count
     assert len(result.json["items"]) == 1
     assert result.json["matchCountTotal"] == (0 if count == "exact" else None)
     assert result.json["hasNextPage"] == (True if count == "page" else None)
+    assert result.json["totalDocuments"] == (3 if count == "exact" else None)
 
 
 def test_alias_unlimited_query_keeps_legacy_shape(

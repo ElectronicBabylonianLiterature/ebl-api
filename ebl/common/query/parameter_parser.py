@@ -31,8 +31,11 @@ def parse_non_negative_integer_field(field: str) -> Callable[[Dict], Dict]:
 
     def parse_non_negative_integer(parameters: Dict) -> Dict:
         parameters = parse_integer(parameters)
-        if parameters.get(field, 0) < 0:
+        value = parameters.get(field, 0)
+        if value < 0:
             raise DataError(f"{field} must be non-negative")
+        if value > 2**63 - 1:
+            raise DataError(f"{field} exceeds the maximum supported integer")
         return parameters
 
     return parse_non_negative_integer

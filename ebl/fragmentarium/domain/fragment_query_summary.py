@@ -82,10 +82,11 @@ class FragmentQueryResult:
     is_match_count_total_exact: bool = True
     has_next_page: Optional[bool] = None
     bibliography_documents: Mapping[str, dict] = attr.Factory(dict)
+    total_documents: Optional[int] = None
 
     @staticmethod
     def create_empty() -> "FragmentQueryResult":
-        return FragmentQueryResult([], 0)
+        return FragmentQueryResult([], 0, total_documents=0)
 
     def __eq__(self, other):
         return compare_query_results(self, other)

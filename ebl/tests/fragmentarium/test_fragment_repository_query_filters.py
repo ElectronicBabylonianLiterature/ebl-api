@@ -6,6 +6,9 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
 from ebl.fragmentarium.domain.fragment import Genre, Script
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import query_summary_of
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -22,7 +25,11 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
         ({"scriptPeriod": ""}, [0, 1, 2, 3]),
     ],
 )
-def test_query_script(fragment_repository, query, expected):
+def test_query_script(
+    fragment_repository: MongoFragmentRepository,
+    query: dict[str, str],
+    expected: list[int],
+) -> None:
     scripts = [
         Script(),
         Script(Period.HITTITE, PeriodModifier.EARLY),
@@ -38,6 +45,7 @@ def test_query_script(fragment_repository, query, expected):
     assert fragment_repository.query(query) == QueryResult(
         [QueryItem(fragments[index].number, (), 0) for index in expected],
         0,
+        total_documents=len(expected),
     )
 
 
@@ -53,7 +61,11 @@ def test_query_script(fragment_repository, query, expected):
         (["MONUMENTAL", "Narrative"], []),
     ],
 )
-def test_query_genres(fragment_repository, query, expected):
+def test_query_genres(
+    fragment_repository: MongoFragmentRepository,
+    query: list[str],
+    expected: list[int],
+) -> None:
     test_genres = [
         (Genre(["MONUMENTAL"], False),),
         (Genre(["CANONICAL", "Technical"], False),),
@@ -74,6 +86,7 @@ def test_query_genres(fragment_repository, query, expected):
     assert fragment_repository.query({"genre": query}) == QueryResult(
         [QueryItem(fragments[index].number, (), 0) for index in expected],
         0,
+        total_documents=len(expected),
     )
 
 
@@ -85,7 +98,11 @@ def test_query_genres(fragment_repository, query, expected):
         ({"offset": 2, "limit": 2}, [2, 3]),
     ],
 )
-def test_query_genres_with_pagination(fragment_repository, query, expected):
+def test_query_genres_with_pagination(
+    fragment_repository: MongoFragmentRepository,
+    query: dict[str, int],
+    expected: list[int],
+) -> None:
     genre = Genre(
         ["CANONICAL", "Technical", "Astronomy", "Astronomical Diaries"],
         False,
@@ -105,5 +122,6 @@ def test_query_genres_with_pagination(fragment_repository, query, expected):
         {
             "items": [query_summary_of(fragments[index]) for index in expected],
             "matchCountTotal": 0,
+            "totalDocuments": 5,
         }
     )
