@@ -1,5 +1,7 @@
 from typing import Dict, List
 
+from ebl.common.query.collation_identity import original_identity_value
+
 EXACT_COUNT = "exact"
 PAGE_COUNT = "page"
 
@@ -28,7 +30,7 @@ def items_pipeline(query: Dict) -> List[Dict]:
             *_limit_result(query),
             {
                 "$project": {
-                    "_id": True,
+                    "_id": original_identity_value("$_id"),
                     "matchCount": True,
                     "matchingLines": True,
                     "museumNumber": True,

@@ -1,4 +1,5 @@
-from typing import Optional, Sequence
+from types import NotImplementedType
+from typing import Optional, Protocol, Sequence, cast
 import attr
 from enum import Enum
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -6,27 +7,29 @@ from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 
 
-def _query_result_equality_values(result):
+class _QueryResultValue(Protocol):
+    items: Sequence[object]
+    match_count_total: Optional[int]
+
+
+def _query_result_equality_values(result: object) -> tuple:
+    query_result = cast(_QueryResultValue, result)
     return (
-        tuple(result.items),
-        result.match_count_total,
-        result.is_match_count_total_exact,
-        result.has_next_page,
+        tuple(query_result.items),
+        query_result.match_count_total,
+        getattr(result, "is_match_count_total_exact", True),
+        getattr(result, "has_next_page", None),
+        getattr(result, "total_documents", None),
     )
 
 
-def compare_query_results(left, right):
+def compare_query_results(left: object, right: object) -> bool | NotImplementedType:
     try:
-        right_values = (
-            tuple(right.items),
-            right.match_count_total,
-            getattr(right, "is_match_count_total_exact", True),
-            getattr(right, "has_next_page", None),
+        return _query_result_equality_values(left) == _query_result_equality_values(
+            right
         )
     except AttributeError:
         return NotImplemented
-
-    return _query_result_equality_values(left) == right_values
 
 
 class LemmaQueryType(Enum):
@@ -55,7 +58,7 @@ class QueryResult:
     def create_empty() -> "QueryResult":
         return QueryResult([], 0, total_documents=0)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool | NotImplementedType:
         return compare_query_results(self, other)
 
 
