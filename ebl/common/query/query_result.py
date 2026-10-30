@@ -49,10 +49,11 @@ class QueryResult:
     match_count_total: Optional[int]
     is_match_count_total_exact: bool = True
     has_next_page: Optional[bool] = None
+    total_documents: Optional[int] = None
 
     @staticmethod
     def create_empty() -> "QueryResult":
-        return QueryResult([], 0)
+        return QueryResult([], 0, total_documents=0)
 
     def __eq__(self, other):
         return compare_query_results(self, other)

@@ -57,6 +57,7 @@ def query_result_of(
         "matchCountTotal": match_count_total,
         "isMatchCountTotalExact": is_match_count_total_exact,
         "hasNextPage": has_next_page,
+        "totalDocuments": len(items) if is_match_count_total_exact else None,
         **(
             {}
             if bibliography_documents is None

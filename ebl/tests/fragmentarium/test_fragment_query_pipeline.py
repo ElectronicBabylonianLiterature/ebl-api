@@ -1,5 +1,12 @@
+from typing import cast
+from unittest.mock import Mock
+
+from ebl.provenance.application.provenance_lookup import ProvenanceLookup
 from ebl.fragmentarium.infrastructure.fragment_pattern_matcher import PatternMatcher
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
+
+
+PROVENANCE_LOOKUP = cast(ProvenanceLookup, Mock(spec=ProvenanceLookup))
 
 
 def _items_facet(pipeline):
@@ -47,7 +54,7 @@ def test_sign_matcher_prefilters_fragments_before_mapping_lines():
 def test_fragment_query_summary_phase_one_has_no_lookup_or_hydration():
     items = _items_facet(
         PatternMatcher(
-            {"transliteration": ["kur₂"], "limit": 10}, None
+            {"transliteration": ["kur₂"], "limit": 10}, PROVENANCE_LOOKUP
         ).build_pipeline()
     )
 
@@ -71,7 +78,7 @@ def test_fragment_query_summary_phase_one_has_no_lookup_or_hydration():
 def test_fragment_query_applies_limit_before_phase_one_projection():
     items = _items_facet(
         PatternMatcher(
-            {"transliteration": ["kur₂"], "limit": 10}, None
+            {"transliteration": ["kur₂"], "limit": 10}, PROVENANCE_LOOKUP
         ).build_pipeline()
     )
 
@@ -81,7 +88,7 @@ def test_fragment_query_applies_limit_before_phase_one_projection():
 def test_fragment_query_applies_offset_before_limit_and_phase_one_projection():
     items = _items_facet(
         PatternMatcher(
-            {"transliteration": ["kur₂"], "limit": 10, "offset": 5}, None
+            {"transliteration": ["kur₂"], "limit": 10, "offset": 5}, PROVENANCE_LOOKUP
         ).build_pipeline()
     )
 
@@ -90,7 +97,9 @@ def test_fragment_query_applies_offset_before_limit_and_phase_one_projection():
 
 def test_fragment_query_without_limit_uses_lean_items():
     items = _items_facet(
-        PatternMatcher({"transliteration": ["kur₂"]}, None).build_pipeline()
+        PatternMatcher(
+            {"transliteration": ["kur₂"]}, PROVENANCE_LOOKUP
+        ).build_pipeline()
     )
 
     assert not any("$limit" in stage for stage in items)
@@ -106,7 +115,9 @@ def test_fragment_query_without_limit_uses_lean_items():
 
 
 def test_fragment_query_count_facet_stays_lightweight():
-    pipeline = PatternMatcher({"transliteration": ["kur₂"]}, None).build_pipeline()
+    pipeline = PatternMatcher(
+        {"transliteration": ["kur₂"]}, PROVENANCE_LOOKUP
+    ).build_pipeline()
     count = _count_facet(pipeline)
 
     assert count == [
@@ -114,15 +125,19 @@ def test_fragment_query_count_facet_stays_lightweight():
             "$group": {
                 "_id": None,
                 "matchCountTotal": {"$sum": {"$ifNull": ["$matchCount", 0]}},
+                "totalDocuments": {"$sum": 1},
             }
         },
-        {"$project": {"_id": False, "matchCountTotal": True}},
+        {"$project": {"_id": False, "matchCountTotal": True, "totalDocuments": True}},
     ]
     assert _result_projection(pipeline) == {
         "_id": False,
         "items": True,
         "matchCountTotal": {
             "$ifNull": [{"$arrayElemAt": ["$count.matchCountTotal", 0]}, 0]
+        },
+        "totalDocuments": {
+            "$ifNull": [{"$arrayElemAt": ["$count.totalDocuments", 0]}, 0]
         },
         "isMatchCountTotalExact": {"$literal": True},
         "hasNextPage": {"$literal": None},
@@ -131,7 +146,7 @@ def test_fragment_query_count_facet_stays_lightweight():
 
 def test_fragment_query_count_none_omits_exact_count_facet():
     pipeline = PatternMatcher(
-        {"transliteration": ["kur₂"], "limit": 10, "count": "none"}, None
+        {"transliteration": ["kur₂"], "limit": 10, "count": "none"}, PROVENANCE_LOOKUP
     ).build_pipeline()
 
     assert "count" not in _facet(pipeline)
@@ -139,6 +154,7 @@ def test_fragment_query_count_none_omits_exact_count_facet():
         "_id": False,
         "items": True,
         "matchCountTotal": {"$literal": None},
+        "totalDocuments": {"$literal": None},
         "isMatchCountTotalExact": {"$literal": False},
         "hasNextPage": {"$literal": None},
     }
@@ -146,7 +162,7 @@ def test_fragment_query_count_none_omits_exact_count_facet():
 
 def test_fragment_query_count_page_fetches_sentinel_and_slices_items():
     pipeline = PatternMatcher(
-        {"transliteration": ["kur₂"], "limit": 10, "count": "page"}, None
+        {"transliteration": ["kur₂"], "limit": 10, "count": "page"}, PROVENANCE_LOOKUP
     ).build_pipeline()
     items = _items_facet(pipeline)
 
@@ -157,6 +173,7 @@ def test_fragment_query_count_page_fetches_sentinel_and_slices_items():
         "_id": False,
         "items": {"$slice": ["$items", 10]},
         "matchCountTotal": {"$literal": None},
+        "totalDocuments": {"$literal": None},
         "isMatchCountTotalExact": {"$literal": False},
         "hasNextPage": {"$gt": [{"$size": "$items"}, 10]},
     }
@@ -164,7 +181,7 @@ def test_fragment_query_count_page_fetches_sentinel_and_slices_items():
 
 def test_fragment_query_count_page_without_limit_has_no_next_page():
     pipeline = PatternMatcher(
-        {"transliteration": ["kur₂"], "count": "page"}, None
+        {"transliteration": ["kur₂"], "count": "page"}, PROVENANCE_LOOKUP
     ).build_pipeline()
 
     assert "count" not in _facet(pipeline)
@@ -173,6 +190,7 @@ def test_fragment_query_count_page_without_limit_has_no_next_page():
         "_id": False,
         "items": True,
         "matchCountTotal": {"$literal": None},
+        "totalDocuments": {"$literal": None},
         "isMatchCountTotalExact": {"$literal": False},
         "hasNextPage": {"$literal": False},
     }

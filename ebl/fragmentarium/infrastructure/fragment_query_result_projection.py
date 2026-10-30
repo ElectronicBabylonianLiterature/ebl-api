@@ -54,9 +54,10 @@ def count_pipeline() -> List[Dict]:
             "$group": {
                 "_id": None,
                 "matchCountTotal": {"$sum": {"$ifNull": ["$matchCount", 0]}},
+                "totalDocuments": {"$sum": 1},
             }
         },
-        {"$project": {"_id": False, "matchCountTotal": True}},
+        {"$project": {"_id": False, "matchCountTotal": True, "totalDocuments": True}},
     ]
 
 
@@ -92,6 +93,11 @@ def result_projection(query: Dict) -> Dict:
         "_id": False,
         "items": _items_projection(query),
         "matchCountTotal": _match_count_total_projection(query),
+        "totalDocuments": (
+            {"$ifNull": [{"$arrayElemAt": ["$count.totalDocuments", 0]}, 0]}
+            if count_is_exact(query)
+            else {"$literal": None}
+        ),
         "isMatchCountTotalExact": {"$literal": count_is_exact(query)},
         "hasNextPage": _has_next_page_projection(query),
     }
