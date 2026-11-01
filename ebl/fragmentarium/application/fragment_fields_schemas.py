@@ -62,9 +62,6 @@ class ExternalNumbersSchema(Schema):
     kelsey_number = fields.String(load_default="", data_key="kelseyNumber")
     harvard_ham_number = fields.String(load_default="", data_key="harvardHamNumber")
     sketchfab_number = fields.String(load_default="", data_key="sketchfabNumber")
-    mdz_number = fields.String(load_default="", data_key="mdzNumber")
-    deutsches_museum_number = fields.String(load_default="", data_key="deutschesMuseumNumber")
-    smaek_number = fields.String(load_default="", data_key="smaekNumber")
     spurlock_number = fields.String(load_default="", data_key="spurlockNumber")
     etcsri_number = fields.String(load_default="", data_key="etcsriNumber")
     ark_number = fields.String(load_default="", data_key="arkNumber")
@@ -85,6 +82,11 @@ class ExternalNumbersSchema(Schema):
         load_default="", data_key="digitaleKeilschriftBibliothekNumber"
     )
     seal_numbers = fields.List(fields.String(), load_default=(), data_key="sealNumbers")
+    mdz_number = fields.String(load_default="", data_key="mdzNumber")
+    deutsches_museum_number = fields.String(
+        load_default="", data_key="deutschesMuseumNumber"
+    )
+    smaek_number = fields.String(load_default="", data_key="smaekNumber")
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
