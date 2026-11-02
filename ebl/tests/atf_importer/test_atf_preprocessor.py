@@ -173,14 +173,15 @@ def test_unparsable_line_falls_back_to_empty_tree(database, monkeypatch):
     assert tree == legacy_atf_converter.ebl_parser.parse("")
 
 
-@pytest.mark.parametrize("line", ["Y", "x", "1"])
+@pytest.mark.parametrize("line", ["Y", "x", "1", "#"])
 def test_preprocess_single_character_line(line):
     assert AtfPreprocessor(logger).preprocess_line(line) == line
 
 
-def test_single_character_correction_prompts_again(database, monkeypatch):
+@pytest.mark.parametrize("answer", ["Y", "#"])
+def test_single_character_correction_prompts_again(database, monkeypatch, answer):
     legacy_atf_converter = LegacyAtfConverter(database, config, logger)
-    answers = iter(["Y"])
+    answers = iter([answer])
 
     def answer_then_refuse():
         try:

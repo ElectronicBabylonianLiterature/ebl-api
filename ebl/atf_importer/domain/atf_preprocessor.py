@@ -101,7 +101,7 @@ class AtfPreprocessor:
         return self._strip_dollar_line_excessive_parantheses(atf)
 
     def _handle_note_line(self, atf: str) -> str:
-        if atf[0] == "#" and atf[1] == " " and "# note:" not in atf:
+        if atf.startswith("# ") and "# note:" not in atf:
             atf = atf.replace("#", "#note:")
         elif "# note:" in atf:
             atf = atf.replace("# note:", "#note:")
