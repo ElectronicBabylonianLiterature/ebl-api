@@ -1,6 +1,7 @@
 import pytest
 import json
 from typing import List
+from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.logger import Logger
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
@@ -170,3 +171,31 @@ def test_unparsable_line_falls_back_to_empty_tree(database, monkeypatch):
     tree = legacy_atf_converter._parse_and_validate_line("1. ((((")
 
     assert tree == legacy_atf_converter.ebl_parser.parse("")
+
+
+@pytest.mark.parametrize("line", ["Y", "x", "1"])
+def test_preprocess_single_character_line(line):
+    assert AtfPreprocessor(logger).preprocess_line(line) == line
+
+
+def test_single_character_correction_prompts_again(database, monkeypatch):
+    legacy_atf_converter = LegacyAtfConverter(database, config, logger)
+    answers = iter(["Y"])
+
+    def answer_then_refuse():
+        try:
+            return next(answers)
+        except StopIteration as error:
+            raise EOFError from error
+
+    monkeypatch.setattr("builtins.input", answer_then_refuse)
+
+    tree = legacy_atf_converter._parse_and_validate_line("1. ((((")
+
+    assert tree == legacy_atf_converter.ebl_parser.parse("")
+
+
+def test_single_sign_bracket_before_subscript():
+    preprocessor = AtfPreprocessor(logger)
+
+    assert preprocessor._move_brackets_before_subscripts("[a]₂") == "a₂# []"

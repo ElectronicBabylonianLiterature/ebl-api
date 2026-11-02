@@ -59,7 +59,7 @@ class AtfPreprocessor:
         return self.preprocess_line_by_type(atf)
 
     def preprocess_line_by_type(self, atf: str) -> str:
-        if atf and (atf[0].isdigit() or atf[1].isdigit()):
+        if any(character.isdigit() for character in atf[:2]):
             atf = self._handle_text_line(atf)
         elif atf and atf[0] == "$":
             atf = self._handle_dollar_line(atf)
@@ -73,7 +73,8 @@ class AtfPreprocessor:
         split_index = atf.find(separator)
         if split_index != -1:
             number_part = atf[:split_index]
-            content_part = atf[split_index + len(separator) :]
+            content_start = split_index + len(separator)
+            content_part = atf[content_start:]
             content_part = self._handle_text_line_content(content_part)
             return f"{number_part}{separator}{content_part}"
         return atf
@@ -97,8 +98,7 @@ class AtfPreprocessor:
         return atf
 
     def _handle_dollar_line(self, atf: str) -> str:
-        atf = self._strip_dollar_line_excessive_parantheses(atf)
-        return self._remove_plus_in_lem_lines(atf)
+        return self._strip_dollar_line_excessive_parantheses(atf)
 
     def _handle_note_line(self, atf: str) -> str:
         if atf[0] == "#" and atf[1] == " " and "# note:" not in atf:
@@ -178,8 +178,6 @@ class AtfPreprocessor:
     def _handle_closing_bracket_for_subscript(self, match):
         content = match.group(1)
         sub = match.group(2)
-        if not content:
-            return match.group(0)
         inner_raw = content[:-1]
         last = content[-1]
         inner_clean = inner_raw.rstrip()
@@ -193,10 +191,6 @@ class AtfPreprocessor:
         prefix = match.group(1)
         sub = match.group(2)
         rest = match.group(3) or ""
-
-        if not prefix or not re.match(r"[A-Za-z]$", prefix[-1]):
-            return match.group(0)
-
         before = prefix[:-1]
         last = prefix[-1]
         hash_mark = "#" if len(prefix) == 1 else ""
@@ -212,11 +206,6 @@ class AtfPreprocessor:
     def _strip_dollar_line_excessive_parantheses(self, line: str) -> str:
         _line = self._strip_matching_parentheses(line[1:].strip())
         return f"$ ({_line})"
-
-    def _remove_plus_in_lem_lines(self, atf: str) -> str:
-        if "#lem: " in atf:
-            atf.replace("+", "")
-        return atf
 
     def _strip_matching_parentheses(self, string: str) -> str:
         while True:
