@@ -82,6 +82,11 @@ class ExternalNumbersSchema(Schema):
         load_default="", data_key="digitaleKeilschriftBibliothekNumber"
     )
     seal_numbers = fields.List(fields.String(), load_default=(), data_key="sealNumbers")
+    mdz_number = fields.String(load_default="", data_key="mdzNumber")
+    deutsches_museum_number = fields.String(
+        load_default="", data_key="deutschesMuseumNumber"
+    )
+    smaek_number = fields.String(load_default="", data_key="smaekNumber")
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
