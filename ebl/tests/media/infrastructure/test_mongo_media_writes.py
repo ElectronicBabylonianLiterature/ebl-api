@@ -155,3 +155,20 @@ def test_tombstone_reserves_source_and_rejects_stale_generation(
     deletion_after_completion = mongo_media_repository.delete(first.media.id)
     assert deletion_after_completion is None
     mongo_media_repository.create(stored_media(copy_media(import_source=source)))
+
+
+def test_finish_delete_ignores_payload_drift(
+    mongo_media_repository: MongoMediaRepository,
+) -> None:
+    source = MediaImportSource("gridfs", "drift", container="photos")
+    original = stored_media(photo_media(import_source=source))
+    mongo_media_repository.create(original)
+    deleted = mongo_media_repository.delete(original.media.id)
+    assert deleted is not None
+    mongo_media_repository._collection.update_one(
+        {"_id": str(original.media.id)},
+        {"$set": {"representations.futureField": "added-after-tombstone"}},
+    )
+    mongo_media_repository.finish_delete(deleted)
+    assert mongo_media_repository.delete(original.media.id) is None
+    mongo_media_repository.create(stored_media(copy_media(import_source=source)))

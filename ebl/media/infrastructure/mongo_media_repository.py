@@ -48,9 +48,9 @@ class MongoMediaRepository(MongoMediaReader, MediaRepository):
         self.assert_writable_topology()
         verify_source_reservations(self._database)
         create_media_indexes(self._database, MEDIA_REPOSITORY_INDEXES)
-        self._database["mediaLocks"].update_one(
-            {"_id": "writes"}, {"$setOnInsert": {"revision": 0}}, upsert=True
-        )
+        self._database.with_options(write_concern=WriteConcern("majority"))[
+            "mediaLocks"
+        ].update_one({"_id": "writes"}, {"$setOnInsert": {"revision": 0}}, upsert=True)
 
     def _transaction(self, operation: Callable[[ClientSession], Result]) -> Result:
         self.assert_writable_topology()
@@ -171,8 +171,11 @@ class MongoMediaRepository(MongoMediaReader, MediaRepository):
     def finish_delete(self, media: StoredMedia) -> None:
         if media.deletion_token is None:
             return
-        expected = stored_document(media)
-        expected.update(state="deleted", deletionToken=media.deletion_token)
+        expected = {
+            "_id": str(media.media.id),
+            "state": "deleted",
+            "deletionToken": media.deletion_token,
+        }
 
         def finish(session: ClientSession) -> None:
             result = self._collection.delete_one(expected, session=session)
