@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Sequence, cast
+from typing import List, Optional, Sequence, cast
 
 import pymongo
 from marshmallow import EXCLUDE, fields
@@ -192,15 +192,10 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         return None
 
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
-        fragment: Dict[str, Any] = next(
-            self._fragments.find_many(
-                query_number_is(number), projection={"authorizedScopes": True}
-            ),
-            {},
-        )
-        return [
-            Scope.from_string(value) for value in fragment.get("authorizedScopes", [])
-        ]
+        try:
+            return self.query_read_scopes(number)
+        except NotFoundError:
+            return []
 
     def query_read_scopes(self, number: MuseumNumber) -> List[Scope]:
         try:

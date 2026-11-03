@@ -41,9 +41,9 @@ class FragmentMediaEnricher:
         summary = FragmentMediaSummaryDto.of(number, media)
         result = {
             **document,
-            **cast(dict, FragmentMediaSummaryDtoSchema().dump(summary)),
+            **cast(
+                dict,
+                FragmentMediaSummaryDtoSchema(only=("media_summary",)).dump(summary),
+            ),
         }
-        result["legacyHasPhoto"] = bool(document.get("hasPhoto"))
-        result["hasPhoto"] = result["legacyHasPhoto"] or summary.has_photo
-        result["thumbnailPath"] = document.get("thumbnailPath", summary.thumbnail_path)
         return result

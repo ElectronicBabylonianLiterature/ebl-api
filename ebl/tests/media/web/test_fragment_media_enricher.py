@@ -42,7 +42,7 @@ def test_empty_new_media_preserves_existing_photo_and_thumbnail() -> None:
     document = {**DOCUMENT, "hasPhoto": True, "thumbnailPath": "/legacy/custom"}
     result = enricher().enrich(document, NUMBER)
     assert result["hasPhoto"] is True
-    assert result["legacyHasPhoto"] is True
+    assert "legacyHasPhoto" not in result
     assert result["thumbnailPath"] == "/legacy/custom"
     assert result["mediaSummary"] == {"count": 0, "types": []}
     assert "mediaSummary" not in document
@@ -50,17 +50,17 @@ def test_empty_new_media_preserves_existing_photo_and_thumbnail() -> None:
 
 def test_copy_only_fragment_has_a_summary_without_claiming_a_photo() -> None:
     result = enricher(copy_media()).enrich(DOCUMENT, NUMBER)
-    assert result["hasPhoto"] is False
-    assert result["legacyHasPhoto"] is False
+    assert "hasPhoto" not in result
+    assert "legacyHasPhoto" not in result
     assert result["mediaSummary"]["types"] == ["COPY"]
     assert result["mediaSummary"]["primary"]["type"] == "COPY"
 
 
-def test_new_photo_sets_flag_and_keeps_legacy_thumbnail_contract() -> None:
+def test_new_photo_keeps_legacy_fields_absent() -> None:
     result = enricher(photo_media()).enrich(DOCUMENT, NUMBER)
-    assert result["hasPhoto"] is True
-    assert result["legacyHasPhoto"] is False
-    assert result["thumbnailPath"] == "/fragments/K.1/thumbnail/small"
+    assert "hasPhoto" not in result
+    assert "legacyHasPhoto" not in result
+    assert "thumbnailPath" not in result
     assert result["mediaSummary"]["primary"]["thumbnail"]["url"].startswith("/media/")
 
 
@@ -68,7 +68,7 @@ def test_original_only_nonprimary_media_remains_discoverable() -> None:
     media = photo_media(associations=(association(is_primary=False),))
     result = enricher(media).enrich(DOCUMENT, NUMBER)
     assert result["mediaSummary"] == {"count": 1, "types": ["PHOTO"]}
-    assert result["hasPhoto"] is True
+    assert "hasPhoto" not in result
 
 
 def test_page_reads_media_in_one_batch() -> None:

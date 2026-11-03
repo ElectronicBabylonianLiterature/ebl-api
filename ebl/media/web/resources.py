@@ -86,13 +86,13 @@ class MediaResource:
         size: Optional[str] = None,
     ) -> None:
         _private_response(resp)
+        if representation not in {"file", "display", "thumbnail"}:
+            raise falcon.HTTPNotFound()
         number = self._authorized_fragment(req)
         identifier = _media_id(media_id)
         stored = self._runtime.service.get_stored_fragment_media(number, identifier)
         if stored is None:
             raise MediaNotFoundError(identifier)
-        if representation not in {"file", "display", "thumbnail"}:
-            raise falcon.HTTPNotFound()
         handle = _representation_handle(stored, representation, size)
         opened = self._runtime.store.open_representation(handle)
         if (

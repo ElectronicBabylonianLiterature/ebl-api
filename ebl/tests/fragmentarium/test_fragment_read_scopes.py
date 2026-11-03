@@ -49,3 +49,20 @@ def test_projected_scopes_preserve_full_detail_validation(
     assert fragment_repository.query_read_scopes(number) == []
     with pytest.raises(ValidationError):
         fragment_repository.query_by_museum_number(number)
+
+
+@pytest.mark.parametrize("value", ["invalid", "read:missing", 1])
+def test_legacy_and_media_reject_the_same_invalid_scopes(
+    database: Database, fragment_repository: FragmentRepository, value: object
+) -> None:
+    number = MuseumNumber.of("K.1")
+    fragment_repository.create(FragmentFactory.build(number=number, references=()))
+    database.fragments.update_one(
+        {"_id": str(number)}, {"$set": {"authorizedScopes": [value]}}
+    )
+    for reader in (
+        fragment_repository.fetch_scopes,
+        fragment_repository.query_read_scopes,
+    ):
+        with pytest.raises(ValidationError):
+            reader(number)
