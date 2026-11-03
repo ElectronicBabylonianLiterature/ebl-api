@@ -8,6 +8,7 @@ from typing import Optional
 from pymongo import MongoClient, UpdateOne
 from pymongo.collection import Collection
 from pymongo.database import Database
+from pymongo.errors import BulkWriteError
 
 from ebl.transliteration.migrate_name_breaks_validation import (
     NonAlternatingName,
@@ -55,16 +56,24 @@ def _legacy_names_in_object(
             yield from find_legacy_names(value, _join(path, key))
 
 
-def _update_for(document_id: object, names: Sequence[LegacyName]) -> UpdateOne:
+class MigrationWriteFailed(RuntimeError):
+    pass
+
+
+def _update_for(
+    document_id: object, names: Sequence[LegacyName]
+) -> Optional[UpdateOne]:
     unchanged_since_read: dict[str, object] = {"_id": document_id}
     separated: dict[str, object] = {}
     for name in names:
         parts, breaks = separate_name_parts(name.name_parts)
+        if not breaks:
+            continue
         unchanged_since_read[_join(name.path, "nameParts")] = name.name_parts
         unchanged_since_read[_join(name.path, "nameBreaks")] = {"$exists": False}
         separated[_join(name.path, "nameParts")] = parts
         separated[_join(name.path, "nameBreaks")] = breaks
-    return UpdateOne(unchanged_since_read, {"$set": separated})
+    return UpdateOne(unchanged_since_read, {"$set": separated}) if separated else None
 
 
 def _document_update(
@@ -72,7 +81,7 @@ def _document_update(
 ) -> Optional[UpdateOne]:
     names = list(find_legacy_names(document))
     try:
-        return _update_for(document["_id"], names) if names else None
+        return _update_for(document["_id"], names)
     except NonAlternatingName as error:
         raise NonAlternatingName(
             f"{collection.name} document {document['_id']!r}: {error}"
@@ -113,6 +122,10 @@ def _apply_updates(collection: Collection, updates: Iterator[UpdateOne]) -> int:
     except NonAlternatingName:
         _report_aborted(collection, progress.written)
         raise
+    except BulkWriteError as error:
+        progress.written += error.details.get("nMatched", 0)
+        _report_aborted(collection, progress.written)
+        raise MigrationWriteFailed(_write_error_summary(collection, error)) from None
     _report_skipped(collection, progress.attempted - progress.written)
     return progress.written
 
@@ -123,6 +136,14 @@ def _report_aborted(collection: Collection, written: int) -> None:
         "Repair the document named below and run the migration again",
         collection.name,
         written,
+    )
+
+
+def _write_error_summary(collection: Collection, error: BulkWriteError) -> str:
+    first = error.details["writeErrors"][0]
+    return (
+        f"{collection.name} document {first['op']['q']['_id']!r} could not be "
+        f"written: {first['errmsg']} (code {first['code']})"
     )
 
 
