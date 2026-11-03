@@ -51,72 +51,155 @@ class BackfillPolicy:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class PlannedPhoto:
-    source_id: str
-    snapshot: str
-    filename: str
-    fragment_id: str | None
-    outcome: str
-    reason: str | None = None
-    representation: MediaRepresentation | None = None
-    attribution: str | None = None
-    attribution_evidence: Mapping[str, str] = attr.ib(factory=dict)
-    binary_validation: str | None = None
+class InspectedPhoto:
+    fragment_id: str
+    representation: MediaRepresentation
+    attribution: str | None
+    attribution_evidence: Mapping[str, str]
+    binary_validation: str
 
     def document(self) -> dict:
         representation = self.representation
         return {
-            "kind": "photo",
-            "sourceId": self.source_id,
-            "snapshot": self.snapshot,
-            "filename": self.filename,
             "fragmentId": self.fragment_id,
-            "outcome": self.outcome,
-            "reason": self.reason,
-            "representation": (
-                {
-                    "mimeType": representation.mime_type,
-                    "width": representation.width,
-                    "height": representation.height,
-                    "fileSize": representation.file_size,
-                    "sha256": (
-                        representation.checksum.value
-                        if representation.checksum is not None
-                        else None
-                    ),
-                }
-                if representation is not None
-                else None
-            ),
+            "representation": {
+                "mimeType": representation.mime_type,
+                "width": representation.width,
+                "height": representation.height,
+                "fileSize": representation.file_size,
+                "sha256": representation.checksum.value
+                if representation.checksum
+                else None,
+            },
             "attribution": self.attribution,
             "attributionEvidence": dict(self.attribution_evidence),
             "binaryValidation": self.binary_validation,
         }
 
     @classmethod
-    def of(cls, document: Mapping) -> "PlannedPhoto":
-        representation = document.get("representation")
+    def of(cls, document: Mapping) -> "InspectedPhoto":
+        representation = document["representation"]
         return cls(
-            source_id=document["sourceId"],
-            snapshot=document["snapshot"],
-            filename=document["filename"],
-            fragment_id=document["fragmentId"],
-            outcome=document["outcome"],
-            reason=document["reason"],
-            representation=(
-                MediaRepresentation(
-                    representation["mimeType"],
-                    representation["width"],
-                    representation["height"],
-                    representation["fileSize"],
-                    MediaChecksum(value=representation["sha256"]),
-                )
-                if representation is not None
-                else None
+            document["fragmentId"],
+            MediaRepresentation(
+                representation["mimeType"],
+                representation["width"],
+                representation["height"],
+                representation["fileSize"],
+                MediaChecksum(value=representation["sha256"]),
             ),
-            attribution=document["attribution"],
-            attribution_evidence=document["attributionEvidence"],
-            binary_validation=document["binaryValidation"],
+            document["attribution"],
+            document["attributionEvidence"],
+            document["binaryValidation"],
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class RejectedSource:
+    source_id: str
+    snapshot: str
+    filename: str
+    outcome: str
+    reason: str | None
+
+    def document(self) -> dict:
+        return {
+            "sourceId": self.source_id,
+            "snapshot": self.snapshot,
+            "filename": self.filename,
+            "outcome": self.outcome,
+            "reason": self.reason,
+        }
+
+    @classmethod
+    def of(cls, document: Mapping) -> "RejectedSource":
+        if set(document) != {"sourceId", "snapshot", "filename", "outcome", "reason"}:
+            raise ValueError("Rejected source fields are incomplete or malformed.")
+        return cls(
+            document["sourceId"],
+            document["snapshot"],
+            document["filename"],
+            document["outcome"],
+            document["reason"],
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class PlannedPhoto:
+    source_id: str
+    snapshot: str
+    filename: str
+    outcome: str
+    reason: str | None = None
+    inspected_photos: tuple[InspectedPhoto, ...] = ()
+
+    @property
+    def rejected_sources(self) -> tuple[RejectedSource, ...]:
+        return (
+            ()
+            if self.inspected_photos
+            else (
+                RejectedSource(
+                    self.source_id,
+                    self.snapshot,
+                    self.filename,
+                    self.outcome,
+                    self.reason,
+                ),
+            )
+        )
+
+    @property
+    def fragment_id(self) -> str | None:
+        return self.inspected_photos[0].fragment_id if self.inspected_photos else None
+
+    @property
+    def representation(self) -> MediaRepresentation | None:
+        return (
+            self.inspected_photos[0].representation if self.inspected_photos else None
+        )
+
+    @property
+    def attribution(self) -> str | None:
+        return self.inspected_photos[0].attribution if self.inspected_photos else None
+
+    @property
+    def attribution_evidence(self) -> Mapping[str, str]:
+        return (
+            self.inspected_photos[0].attribution_evidence
+            if self.inspected_photos
+            else {}
+        )
+
+    @property
+    def binary_validation(self) -> str | None:
+        return (
+            self.inspected_photos[0].binary_validation
+            if self.inspected_photos
+            else None
+        )
+
+    def document(self) -> dict:
+        return {
+            "kind": "photo",
+            "sourceId": self.source_id,
+            "snapshot": self.snapshot,
+            "filename": self.filename,
+            "outcome": self.outcome,
+            "reason": self.reason,
+            "inspectedPhotos": [photo.document() for photo in self.inspected_photos],
+            "rejectedSources": [source.document() for source in self.rejected_sources],
+        }
+
+    @classmethod
+    def of(cls, document: Mapping) -> "PlannedPhoto":
+        return cls(
+            document["sourceId"],
+            document["snapshot"],
+            document["filename"],
+            document["outcome"],
+            document["reason"],
+            tuple(InspectedPhoto.of(photo) for photo in document["inspectedPhotos"]),
         )
 
 

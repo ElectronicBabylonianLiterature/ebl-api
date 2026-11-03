@@ -80,7 +80,9 @@ def test_entire_plan_is_validated_before_first_database_write(
     plan = tmp_path / "plan.jsonl"
     with BackfillJournal(plan, HEADER, False) as journal:
         journal.append(candidate.document())
-        journal.append(dict(ROW, attributionEvidence=[]))
+        malformed = candidate.document()
+        malformed["inspectedPhotos"][0]["attributionEvidence"] = []
+        journal.append(malformed)
         journal.finish()
     with pytest.raises(ValueError, match="Attribution evidence"):
         apply_plan(

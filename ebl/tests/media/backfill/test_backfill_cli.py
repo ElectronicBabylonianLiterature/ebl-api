@@ -19,7 +19,14 @@ def captured_main(output: StringIO, arguments: list[str]) -> int:
 
 
 def command(database: Database, operation: str, *options: str) -> list[str]:
-    return [operation, "--database", database.name, *options]
+    return [
+        operation,
+        "--database",
+        database.name,
+        "--uri-env",
+        "MEDIA_TEST_URI",
+        *options,
+    ]
 
 
 def test_real_cli_plan_indexes_apply_and_repeat(
@@ -114,7 +121,9 @@ def test_module_entrypoint_and_bounded_exit(
 def test_invalid_cli_arguments_fail_before_connection(
     arguments: list[str], command_output: StringIO
 ) -> None:
-    exit_status = captured_main(command_output, arguments)
+    exit_status = captured_main(
+        command_output, [*arguments, "--uri-env", "MEDIA_TEST_URI"]
+    )
     assert exit_status == 1
     assert "ValueError" in command_output.getvalue()
 
@@ -143,7 +152,7 @@ def test_missing_uri_fails_without_credentials_in_error(
 def test_real_connection_failure_reports_no_uri(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path, command_output: StringIO
 ) -> None:
-    original_uri = os.environ["MONGODB_URI"]
+    original_uri = os.environ.get("MONGODB_URI")
     monkeypatch.setenv("MEDIA_INVALID_URI", "https://user:secret@invalid")
     exit_status = captured_main(
         command_output,
@@ -159,4 +168,28 @@ def test_real_connection_failure_reports_no_uri(
     )
     assert exit_status == 1
     assert "secret" not in command_output.getvalue()
-    assert os.environ["MONGODB_URI"] == original_uri
+    assert os.environ.get("MONGODB_URI") == original_uri
+
+
+@pytest.mark.parametrize("operation", ["dry-run", "apply", "prepare-indexes"])
+def test_endpoint_environment_selection_is_required(operation: str) -> None:
+    with pytest.raises(SystemExit) as error:
+        backfill.parser().parse_args([operation, "--database", "test"])
+    assert error.value.code == 2
+
+
+def test_confirmation_error_explains_stop(command_output: StringIO) -> None:
+    status = captured_main(
+        command_output,
+        [
+            "prepare-indexes",
+            "--database",
+            "test",
+            "--confirm-database",
+            "other",
+            "--uri-env",
+            "MEDIA_TEST_URI",
+        ],
+    )
+    assert status == 1
+    assert "Database confirmation does not match" in command_output.getvalue()

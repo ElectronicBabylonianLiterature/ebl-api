@@ -20,7 +20,7 @@ def inspect_plan(path: Path) -> tuple[dict, str]:
         header = read_document(first)
         if (
             header.get("kind") != "header"
-            or header.get("schema") != 1
+            or header.get("schema") != 2
             or header.get("command") != "dry-run"
         ):
             raise ValueError("Not a supported dry-run plan.")
@@ -61,8 +61,13 @@ def plan_rows(path: Path, resume_after: str | None) -> Iterator[dict]:
 
 
 @contextmanager
-def verified_plan(path: Path) -> Iterator[tuple[Path, dict, str]]:
-    with path.open("rb") as source, NamedTemporaryFile(mode="w+b") as snapshot:
+def verified_plan(
+    path: Path, directory: Path | None = None
+) -> Iterator[tuple[Path, dict, str]]:
+    with (
+        path.open("rb") as source,
+        NamedTemporaryFile(mode="w+b", dir=directory or path.parent) as snapshot,
+    ):
         shutil.copyfileobj(source, snapshot, length=1_048_576)
         snapshot.flush()
         snapshot_path = Path(snapshot.name)

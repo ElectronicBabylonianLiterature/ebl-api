@@ -52,7 +52,7 @@ def dry_run(migration: LegacyPhotoMigration, options: MigrationRunOptions) -> di
 def apply_plan(
     migration: LegacyPhotoMigration, plan: Path, options: MigrationRunOptions
 ) -> dict:
-    with verified_plan(plan) as (snapshot, header, digest):
+    with verified_plan(plan, options.report.parent) as (snapshot, header, digest):
         return _apply_verified(migration, (snapshot, header, digest), options)
 
 

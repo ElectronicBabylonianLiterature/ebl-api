@@ -6,6 +6,7 @@ from bson import ObjectId
 
 from ebl.media.application.backfill_plan import (
     BackfillPolicy,
+    InspectedPhoto,
     PlannedPhoto,
     SourceRejected,
 )
@@ -38,7 +39,11 @@ def candidate_media(candidate: PlannedPhoto) -> Media:
         raise ValueError("Migration source identity must be an ObjectId or string.")
     source = legacy_import_source("photos", file_id)
     media_id = MediaId(
-        str(uuid.uuid5(uuid.NAMESPACE_URL, f"ebl:gridfs:photos:{source.file_id}"))
+        str(
+            uuid.uuid5(
+                uuid.NAMESPACE_URL, f"ebl:gridfs:photos:{encode_source_id(file_id)}"
+            )
+        )
     )
     return Media(
         media_id,
@@ -56,7 +61,6 @@ def initial_candidate(document: Mapping) -> PlannedPhoto:
         source_id=encode_source_id(document["_id"]),
         snapshot=metadata_snapshot(document),
         filename=str(document.get("filename", "")),
-        fragment_id=None,
         outcome="blocked",
     )
 
@@ -85,23 +89,26 @@ def inspect_candidate(
     sources.mapping(document)
     return attr.evolve(
         initial_candidate(document),
-        fragment_id=str(fragment),
         outcome="candidate",
         reason="preview-deferred-pixel-limit" if preview_deferred else None,
-        representation=representation,
-        attribution=attribution,
-        attribution_evidence=evidence,
-        binary_validation=(
-            "jpeg-structure-only"
-            if representation.width * representation.height > policy.max_pixels
-            else "decoded"
+        inspected_photos=(
+            InspectedPhoto(
+                str(fragment),
+                representation,
+                attribution,
+                evidence,
+                "jpeg-structure-only"
+                if representation.width * representation.height > policy.max_pixels
+                else "decoded",
+            ),
         ),
     )
 
 
 def existing_outcome(candidate: PlannedPhoto, repository: MediaReader) -> str | None:
     media = candidate_media(candidate)
-    assert media.import_source is not None
+    if media.import_source is None:
+        raise ValueError("Inspected media must retain its legacy import source.")
     existing = repository.find_by_import_source(media.import_source)
     if existing is not None:
         return (

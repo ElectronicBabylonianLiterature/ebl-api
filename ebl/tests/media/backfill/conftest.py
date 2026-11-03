@@ -1,4 +1,5 @@
 import io
+import os
 from collections.abc import Callable, Iterator
 
 import pytest
@@ -6,6 +7,7 @@ from bson import ObjectId
 from gridfs import GridFS
 from PIL import Image
 from pymongo.database import Database
+from urllib.parse import urlsplit
 
 from ebl.media.application.backfill_plan import BackfillPolicy
 from ebl.media.infrastructure.backfill_runner import LegacyPhotoMigration
@@ -14,6 +16,12 @@ from ebl.media.infrastructure.grid_fs_media_representation_store import (
     GridFsMediaRepresentationStore,
 )
 from ebl.media.infrastructure.mongo_media_repository import MongoMediaRepository
+
+
+if os.environ.get("CI") == "true" and urlsplit(
+    os.environ.get("MONGODB_URI", "")
+).hostname not in {"127.0.0.1", "localhost", "::1"}:
+    raise RuntimeError("CRITICAL SAFETY ERROR: media tests require local MongoDB.")
 
 
 def image_bytes(
@@ -76,3 +84,22 @@ def migration_factory(database: Database) -> Callable:
 def command_output() -> Iterator[io.StringIO]:
     with io.StringIO() as output:
         yield output
+
+
+@pytest.fixture
+def database(media_database: Database) -> Database:
+    return media_database
+
+
+@pytest.fixture(autouse=True)
+def isolated_cli_endpoint(database: Database, monkeypatch: pytest.MonkeyPatch) -> None:
+    address = database.client.address
+    if address is None:
+        raise RuntimeError("The media test client must use an explicit local endpoint.")
+    host, port = address
+    if host not in {"127.0.0.1", "localhost", "::1"}:
+        raise RuntimeError("CRITICAL SAFETY ERROR: media tests require local MongoDB.")
+    uri = f"mongodb://{host}:{port}"
+    if urlsplit(uri).hostname not in {"127.0.0.1", "localhost", "::1"}:
+        raise RuntimeError("CRITICAL SAFETY ERROR: media tests require local MongoDB.")
+    monkeypatch.setenv("MEDIA_TEST_URI", uri)

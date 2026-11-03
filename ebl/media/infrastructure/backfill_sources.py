@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 from typing import Iterator, Mapping
 
 from bson import ObjectId, json_util
@@ -28,7 +29,10 @@ def metadata_snapshot(document: Mapping) -> str:
 
 
 class LegacyPhotoSources:
-    def __init__(self, database: Database) -> None:
+    def __init__(
+        self, database: Database, *, spool_directory: Path | None = None
+    ) -> None:
+        self.spool_directory = spool_directory
         self.database = database.with_options(read_preference=ReadPreference.PRIMARY)
         self.files = self.database["photos.files"]
         self._filename_index: str | None = None

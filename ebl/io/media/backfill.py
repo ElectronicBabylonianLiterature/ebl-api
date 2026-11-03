@@ -22,13 +22,16 @@ from ebl.media.infrastructure.mongo_media_repository import MongoMediaRepository
 
 def parser() -> argparse.ArgumentParser:
     argument_parser = argparse.ArgumentParser(
-        description="Plan or apply protected legacy photo imports."
+        description="Plan or apply protected legacy photo imports.",
+        epilog="MongoDB 4.4+ is supported. Before 5.0, resumed scans can traverse the full source index. "
+        "Plans and reports use schema 2. Keep an apply report together with its "
+        "<report>.staging.jsonl companion for recovery; schema 1 plans must be regenerated.",
     )
     commands = argument_parser.add_subparsers(dest="command", required=True)
     for command in ("dry-run", "apply", "prepare-indexes"):
         command_parser = commands.add_parser(command)
         command_parser.add_argument("--database", required=True)
-        command_parser.add_argument("--uri-env", default="MONGODB_URI")
+        command_parser.add_argument("--uri-env", required=True)
         if command != "dry-run":
             command_parser.add_argument("--confirm-database", required=True)
         if command != "prepare-indexes":
@@ -105,7 +108,13 @@ def execute(arguments: argparse.Namespace) -> dict:
         repository = MongoMediaRepository(database)
         store = GridFsMediaRepresentationStore(database)
         migration = LegacyPhotoMigration(
-            LegacyPhotoSources(database), repository, store, policy
+            LegacyPhotoSources(
+                database,
+                spool_directory=getattr(arguments, "report", Path.cwd()).parent,
+            ),
+            repository,
+            store,
+            policy,
         )
         if arguments.command == "prepare-indexes":
             repository.assert_writable_topology()
@@ -136,10 +145,25 @@ def execute(arguments: argparse.Namespace) -> dict:
 
 def main(argv: list[str] | None = None) -> int:
     try:
-        result = execute(parser().parse_args(argv))
+        arguments = parser().parse_args(argv)
+        result = execute(arguments)
+        uri = os.environ[arguments.uri_env]
+        result.update(
+            endpoint=urlsplit(uri).netloc.rsplit("@", 1)[-1].lower(),
+            database=arguments.database,
+        )
     except (ValueError, OSError, PyMongoError) as error:
+        detail = (
+            str(error)
+            if isinstance(error, ValueError)
+            else error.strerror
+            if isinstance(error, OSError)
+            else None
+        )
+        reason = f": {detail}" if detail else ""
         print(
-            f"Media migration stopped ({type(error).__name__}); no progress beyond the durable report is claimed.",
+            f"Media migration stopped ({type(error).__name__}{reason}); "
+            "no progress beyond the durable report is claimed.",
             file=sys.stderr,
         )
         return 1

@@ -74,7 +74,15 @@ def test_apply_target_and_policy_must_match(
 
 def test_explicit_target_and_confirmation() -> None:
     arguments = parser().parse_args(
-        ["dry-run", "--database", "ebltest", "--report", "report.jsonl"]
+        [
+            "dry-run",
+            "--database",
+            "ebltest",
+            "--uri-env",
+            "MEDIA_TEST_URI",
+            "--report",
+            "report.jsonl",
+        ]
     )
     validate_arguments(arguments)
     assert arguments.command == "dry-run"
@@ -93,7 +101,6 @@ def test_explicit_target_and_confirmation() -> None:
     [("test-user", "test-password"), ("other-test-user", "other-test-password")],
 )
 def test_uri_credentials_are_not_in_target(username: str, password: str) -> None:
-    # Assemble synthetic credentials for this parser-only test; no connection is made.
     uri = urlunsplit(("mongodb", f"{username}:{password}@localhost:27017", "", "", ""))
     assert target_identity(uri, "ebl") == target_identity(
         "mongodb://localhost:27017", "ebl"

@@ -52,7 +52,10 @@ class LegacyPhotoMigration:
             try:
                 self.sources.mapping(document)
                 with source_content(
-                    self.sources.database, document, self.policy
+                    self.sources.database,
+                    document,
+                    self.policy,
+                    self.sources.spool_directory,
                 ) as content:
                     candidate = inspect_candidate(
                         document, content, self.sources, self.policy
@@ -80,7 +83,10 @@ class LegacyPhotoMigration:
         try:
             document = self._current_document(expected)
             with source_content(
-                self.sources.database, document, self.policy
+                self.sources.database,
+                document,
+                self.policy,
+                self.sources.spool_directory,
             ) as content:
                 current = inspect_candidate(
                     document, content, self.sources, self.policy
@@ -110,6 +116,9 @@ class LegacyPhotoMigration:
         on_staged: Callable[[StoredRepresentationHandle], None] | None,
     ) -> PlannedPhoto:
         media = candidate_media(candidate)
+        if not self.sources.unchanged(document):
+            raise SourceRejected("conflicting", "source-metadata-changed")
+        self.sources.mapping(document)
         original = self.store.adopt_legacy(
             LegacyRepresentationAdoption(
                 media.id,
@@ -118,6 +127,8 @@ class LegacyPhotoMigration:
                 media.representations.original,
             )
         )
+        if on_staged is not None:
+            on_staged(original)
         previews = PreviewWriter(self.store, on_staged)
         try:
             stored = (

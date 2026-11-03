@@ -1,6 +1,7 @@
 from typing import Mapping
 
 from pymongo.database import Database
+from pymongo.errors import OperationFailure
 
 from ebl.media.infrastructure.media_indexes import (
     MEDIA_REQUIRED_INDEXES,
@@ -35,11 +36,20 @@ def prepare_legacy_indexes(database: Database) -> None:
         )
     indexes = database["photos.files"].index_information()
     if complete_filename_index(indexes) is None:
-        database["photos.files"].create_index(
-            "filename",
-            name="media_legacy_photo_filename",
-            collation={"locale": "simple"},
-        )
+        try:
+            database["photos.files"].create_index(
+                "filename",
+                name="media_legacy_photo_filename",
+                collation={"locale": "simple"},
+            )
+        except OperationFailure as error:
+            if error.code not in {85, 86}:
+                raise
+            raise ValueError(
+                "A legacy filename index conflicts with the required complete index. "
+                "Review existing indexes before preparing again; MongoDB 4.4 cannot "
+                "keep same-key indexes with different options."
+            ) from error
 
 
 def index_matches(information: Mapping, definition: MediaIndexDefinition) -> bool:

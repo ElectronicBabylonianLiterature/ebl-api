@@ -77,7 +77,7 @@ def test_png_original_is_inspected_without_conversion() -> None:
 
 def test_unmapped_candidate_cannot_become_media() -> None:
     with pytest.raises(ValueError, match="inspected"):
-        candidate_media(PlannedPhoto("source", "snapshot", "file", None, "blocked"))
+        candidate_media(PlannedPhoto("source", "snapshot", "file", "blocked"))
 
 
 def test_non_string_source_identity_is_never_adopted(

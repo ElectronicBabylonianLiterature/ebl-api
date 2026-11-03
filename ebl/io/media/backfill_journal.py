@@ -23,32 +23,47 @@ def read_document(line: bytes) -> dict:
 def validate_entry(document: Mapping) -> None:
     if not isinstance(document.get("sourceId"), str):
         raise ValueError("Journal result lacks a source identity.")
-    kind = document.get("kind")
-    if kind == "staged" and isinstance(document.get("handle"), dict):
-        return
-    if kind == "reconciled":
-        return
-    if kind != "photo" or not isinstance(document.get("outcome"), str):
+    if document.get("kind") != "photo" or not isinstance(document.get("outcome"), str):
         raise ValueError("Journal result lacks a valid kind or outcome.")
 
 
 class BackfillJournal:
     def __init__(self, path: Path, header: Mapping, resume: bool) -> None:
         self.path = path
-        self.header = dict(header, kind="header", schema=1)
+        self.header = dict(header, kind="header", schema=2)
         self.file: BinaryIO = path.open("r+b" if resume else "x+b")
         self.last_source: str | None = None
         self.completed = False
         self.counts: Counter[str] = Counter()
         self.pending: dict[str, list[dict]] = {}
         self.digest = hashlib.sha256()
+        self.staging: BackfillStagingJournal | None = None
         try:
             fcntl.flock(self.file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             if resume:
                 self._recover()
             else:
                 self._write(self.header)
+            if header.get("command") == "apply":
+                staging_path = path.with_name(path.name + ".staging.jsonl")
+                staging_resume = resume and (
+                    staging_path.exists()
+                    or self.last_source is not None
+                    or self.completed
+                )
+                self.staging = BackfillStagingJournal(
+                    staging_path,
+                    dict(header, command="apply-staging"),
+                    staging_resume,
+                )
+                self.pending = self.staging.pending
+                if self.completed and not self.staging.completed:
+                    raise ValueError(
+                        "Completed apply lacks a completed staging journal."
+                    )
         except BaseException:
+            if self.staging is not None:
+                self.staging.__exit__()
             self.file.close()
             raise
 
@@ -56,6 +71,8 @@ class BackfillJournal:
         return self
 
     def __exit__(self, *_arguments: object) -> None:
+        if self.staging is not None:
+            self.staging.__exit__()
         self.file.close()
 
     def _recover(self) -> None:
@@ -82,20 +99,17 @@ class BackfillJournal:
                     raise ValueError("Journal completion checksum does not match.")
                 self.completed = True
             else:
-                validate_entry(document)
+                self._validate(document)
                 self._remember(document)
                 self.digest.update(line)
 
     def _remember(self, document: Mapping) -> None:
         source_id = document["sourceId"]
-        if document.get("kind") == "staged":
-            self.pending.setdefault(source_id, []).append(document["handle"])
-            return
-        if document.get("kind") == "reconciled":
-            self.pending.pop(str(source_id), None)
-            return
         self.last_source = source_id
         self.counts[document["outcome"]] += 1
+
+    def _validate(self, document: Mapping) -> None:
+        validate_entry(document)
 
     def _write(self, document: Mapping) -> None:
         line = json_bytes(document)
@@ -107,18 +121,29 @@ class BackfillJournal:
     def append(self, document: Mapping) -> None:
         if self.completed:
             raise ValueError("A completed journal cannot be extended.")
-        validate_entry(document)
+        self._validate(document)
         self._write(document)
         self._remember(document)
 
     def stage(self, source_id: str, handle: Mapping) -> None:
-        self.append({"kind": "staged", "sourceId": source_id, "handle": dict(handle)})
+        if self.completed or self.staging is None:
+            raise ValueError("Staging requires an incomplete apply journal.")
+        self.staging.append(
+            {
+                "sourceId": source_id,
+                "handles": [*self.pending.get(source_id, []), dict(handle)],
+            }
+        )
 
     def reconcile(self, source_id: str) -> None:
-        self.append({"kind": "reconciled", "sourceId": source_id})
+        if self.completed or self.staging is None:
+            raise ValueError("Reconciliation requires an incomplete apply journal.")
+        self.staging.append({"sourceId": source_id, "handles": []})
 
     def finish(self) -> None:
         if not self.completed:
+            if self.staging is not None:
+                self.staging.finish()
             self._write(
                 {
                     "kind": "complete",
@@ -128,3 +153,23 @@ class BackfillJournal:
                 }
             )
             self.completed = True
+
+
+class BackfillStagingJournal(BackfillJournal):
+    def _validate(self, document: Mapping) -> None:
+        if set(document) != {"sourceId", "handles"} or not isinstance(
+            document["sourceId"], str
+        ):
+            raise ValueError("Staging rows require a source identity and handle array.")
+        handles = document["handles"]
+        if not isinstance(handles, list) or not all(
+            isinstance(handle, dict) for handle in handles
+        ):
+            raise ValueError("Staging handles must be objects.")
+
+    def _remember(self, document: Mapping) -> None:
+        source_id = document["sourceId"]
+        if document["handles"]:
+            self.pending[source_id] = document["handles"]
+        else:
+            self.pending.pop(source_id, None)

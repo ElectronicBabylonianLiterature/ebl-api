@@ -2,7 +2,6 @@ from collections.abc import Callable
 
 import pytest
 from pymongo.database import Database
-from pymongo.errors import OperationFailure
 
 from ebl.media.application.media_requests import BackfillRequest
 from ebl.media.infrastructure.backfill_preflight import (
@@ -32,6 +31,11 @@ def test_partial_index_cannot_hide_competing_originals(
     assert {
         name: list(database[name].find()) for name in database.list_collection_names()
     } == before
+    if database.client.server_info()["versionArray"][0] < 5:
+        with pytest.raises(ValueError, match="MongoDB 4.4"):
+            prepare_legacy_indexes(database)
+        assert files.index_information() == indexes
+        files.drop_index("partial")
     prepare_legacy_indexes(database)
     assert (
         LegacyPhotoSources(database).filename_index() == "media_legacy_photo_filename"
@@ -95,6 +99,6 @@ def test_preparation_does_not_replace_unsafe_same_name_index(
     files.drop_indexes()
     files.create_index("filename", name="media_legacy_photo_filename", sparse=True)
     before = files.index_information()
-    with pytest.raises(OperationFailure):
+    with pytest.raises(ValueError, match="conflicts"):
         prepare_legacy_indexes(database)
     assert files.index_information() == before

@@ -13,7 +13,7 @@ HEADER = {
     "endpointSha256": "example",
     "policy": BackfillPolicy().document(),
 }
-ROW = PlannedPhoto("source", "snapshot", "file", None, "blocked").document()
+ROW = PlannedPhoto("source", "snapshot", "file", "blocked").document()
 
 
 def test_resume_truncates_only_incomplete_last_row(tmp_path: Path) -> None:

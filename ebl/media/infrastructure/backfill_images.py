@@ -3,6 +3,7 @@ import io
 import warnings
 from contextlib import contextmanager
 from tempfile import SpooledTemporaryFile
+from pathlib import Path
 from typing import BinaryIO, Iterator, Mapping, cast
 
 from gridfs import GridFS
@@ -19,7 +20,10 @@ from ebl.media.infrastructure.media_webp import webp_dimensions
 
 @contextmanager
 def source_content(
-    database: Database, document: Mapping, policy: BackfillPolicy
+    database: Database,
+    document: Mapping,
+    policy: BackfillPolicy,
+    directory: Path | None = None,
 ) -> Iterator[BinaryIO]:
     length = document.get("length")
     if (
@@ -30,7 +34,11 @@ def source_content(
         raise SourceRejected("blocked", "invalid-or-excessive-byte-length")
     try:
         with GridFS(database, "photos").get(document["_id"]) as source:
-            with SpooledTemporaryFile(max_size=8_388_608, mode="w+b") as content:
+            with SpooledTemporaryFile(
+                max_size=8_388_608,
+                mode="w+b",
+                dir=str(directory) if directory is not None else None,
+            ) as content:
                 total = 0
                 while chunk := source.read(1_048_576):
                     total += len(chunk)
