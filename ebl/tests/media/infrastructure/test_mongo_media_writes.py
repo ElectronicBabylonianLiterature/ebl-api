@@ -170,5 +170,6 @@ def test_finish_delete_ignores_payload_drift(
         {"$set": {"representations.futureField": "added-after-tombstone"}},
     )
     mongo_media_repository.finish_delete(deleted)
-    assert mongo_media_repository.delete(original.media.id) is None
+    deletion_after_completion = mongo_media_repository.delete(original.media.id)
+    assert deletion_after_completion is None
     mongo_media_repository.create(stored_media(copy_media(import_source=source)))
