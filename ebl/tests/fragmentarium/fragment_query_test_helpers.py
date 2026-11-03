@@ -48,16 +48,16 @@ def query_item_of(
 def query_result_of(
     items: List[Dict],
     match_count_total: Optional[int],
-    is_match_count_total_exact: bool = True,
+    total_documents: Optional[int],
     has_next_page: Optional[bool] = None,
     bibliography_documents: Optional[Dict] = None,
 ) -> Dict:
     return {
         "items": items,
         "matchCountTotal": match_count_total,
-        "isMatchCountTotalExact": is_match_count_total_exact,
+        "isMatchCountTotalExact": match_count_total is not None,
         "hasNextPage": has_next_page,
-        "totalDocuments": len(items) if is_match_count_total_exact else None,
+        "totalDocuments": total_documents,
         **(
             {}
             if bibliography_documents is None

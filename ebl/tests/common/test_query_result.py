@@ -1,7 +1,7 @@
 from typing import cast
 
-from ebl.common.query.query_result import QueryResult
-from ebl.common.query.query_schemas import QueryResultSchema
+from ebl.common.query.query_result import CorpusQueryResult, QueryResult
+from ebl.common.query.query_schemas import CorpusQueryResultSchema, QueryResultSchema
 
 
 def test_query_result_equality_with_unsupported_type_returns_not_implemented():
@@ -31,9 +31,6 @@ def test_old_result_payload_remains_loadable() -> None:
 
 
 def test_corpus_result_does_not_gain_library_document_metadata() -> None:
-    from ebl.common.query.query_result import CorpusQueryResult
-    from ebl.common.query.query_schemas import CorpusQueryResultSchema
-
     payload = {"items": [], "matchCountTotal": 0}
     assert CorpusQueryResultSchema().load(payload) == CorpusQueryResult([], 0)
     assert CorpusQueryResultSchema(include_count_metadata=True).dump(

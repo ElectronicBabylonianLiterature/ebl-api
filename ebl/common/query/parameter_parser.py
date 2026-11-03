@@ -7,6 +7,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 
 COUNT_MODES = ("exact", "none", "page")
 MAX_QUERY_LIMIT = 200
+MAX_SIGNED_INT64 = 2**63 - 1
 
 
 def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
@@ -34,7 +35,7 @@ def parse_non_negative_integer_field(field: str) -> Callable[[Dict], Dict]:
         value = parameters.get(field, 0)
         if value < 0:
             raise DataError(f"{field} must be non-negative")
-        if value > 2**63 - 1:
+        if value > MAX_SIGNED_INT64:
             raise DataError(f"{field} exceeds the maximum supported integer")
         return parameters
 

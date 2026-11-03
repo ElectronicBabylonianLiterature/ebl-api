@@ -80,6 +80,12 @@ def _match_count_total_projection(query: Dict):
     return {"$literal": None}
 
 
+def _total_documents_projection(query: Dict) -> Dict:
+    if count_is_exact(query):
+        return {"$ifNull": [{"$arrayElemAt": ["$count.totalDocuments", 0]}, 0]}
+    return {"$literal": None}
+
+
 def _has_next_page_projection(query: Dict):
     if count_mode(query) == PAGE_COUNT:
         return (
@@ -95,11 +101,7 @@ def result_projection(query: Dict) -> Dict:
         "_id": False,
         "items": _items_projection(query),
         "matchCountTotal": _match_count_total_projection(query),
-        "totalDocuments": (
-            {"$ifNull": [{"$arrayElemAt": ["$count.totalDocuments", 0]}, 0]}
-            if count_is_exact(query)
-            else {"$literal": None}
-        ),
+        "totalDocuments": _total_documents_projection(query),
         "isMatchCountTotalExact": {"$literal": count_is_exact(query)},
         "hasNextPage": _has_next_page_projection(query),
     }

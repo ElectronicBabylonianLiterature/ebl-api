@@ -2,7 +2,7 @@ import falcon
 import pytest
 
 from ebl.common.domain.period import Period
-from ebl.common.query.parameter_parser import MAX_QUERY_LIMIT
+from ebl.common.query.parameter_parser import MAX_QUERY_LIMIT, MAX_SIGNED_INT64
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import (
@@ -73,17 +73,17 @@ def test_query_fragmentarium_transliteration_count_page(
     assert result.json == query_result_of(
         [query_summary_of(fragment, matching_lines=[3]) for fragment in fragments[:2]],
         None,
-        False,
-        True,
+        has_next_page=True,
         bibliography_documents={},
+        total_documents=None,
     )
     assert last_page_result.status == falcon.HTTP_OK
     assert last_page_result.json == query_result_of(
         [query_summary_of(fragments[2], matching_lines=[3])],
         None,
-        False,
-        False,
+        has_next_page=False,
         bibliography_documents={},
+        total_documents=None,
     )
 
 
@@ -108,17 +108,12 @@ def test_query_fragmentarium_transliteration_limit_with_offset(
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == {
-        **query_result_of(
-            [
-                query_summary_of(fragment, matching_lines=[3])
-                for fragment in fragments[1:3]
-            ],
-            4,
-            bibliography_documents={},
-        ),
-        "totalDocuments": 4,
-    }
+    assert result.json == query_result_of(
+        [query_summary_of(fragment, matching_lines=[3]) for fragment in fragments[1:3]],
+        4,
+        bibliography_documents={},
+        total_documents=4,
+    )
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
 
 
@@ -143,13 +138,11 @@ def test_query_fragmentarium_transliteration_offset_without_limit_returns_lean_i
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == {
-        **query_result_of(
-            [query_item_of(fragment, matching_lines=[3]) for fragment in fragments[2:]],
-            4,
-        ),
-        "totalDocuments": 4,
-    }
+    assert result.json == query_result_of(
+        [query_item_of(fragment, matching_lines=[3]) for fragment in fragments[2:]],
+        4,
+        total_documents=4,
+    )
 
 
 def test_query_fragmentarium_transliteration_offset_zero_is_accepted(
@@ -173,6 +166,7 @@ def test_query_fragmentarium_transliteration_offset_zero_is_accepted(
         [query_summary_of(fragment, matching_lines=[3])],
         1,
         bibliography_documents={},
+        total_documents=1,
     )
 
 
@@ -196,7 +190,7 @@ def test_query_fragmentarium_limit_invalid(client, limit):
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.parametrize("offset", ["invalid", "-1", str(2**63)])
+@pytest.mark.parametrize("offset", ["invalid", "-1", str(MAX_SIGNED_INT64 + 1)])
 def test_query_fragmentarium_offset_invalid(client, offset):
     result = client.simulate_get(
         "/fragments/query",
