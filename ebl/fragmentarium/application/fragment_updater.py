@@ -68,12 +68,9 @@ class FragmentUpdater:
             )
             fields.append("transliteration")
 
-        if len(fields) == 1:
-            self._repository.update_field(fields[0], fragment)
-        elif fields:
+        if fields:
             self._repository.update_fields(fields, fragment)
-
-        self._create_changelog(user, original_fragment, fragment)
+            self._create_changelog(user, original_fragment, fragment)
 
         return self._create_result(fragment)
 

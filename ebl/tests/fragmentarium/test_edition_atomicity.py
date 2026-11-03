@@ -16,6 +16,7 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.fragmentarium.route_test_context import INVALID_MARKUP, RouteContext
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.users.domain.user import User
@@ -91,12 +92,13 @@ def test_combined_and_empty_editions_preserve_omitted_fields(
     current = stored_fragment(route_context.database, fragment)
     for field in ("introduction", "notes"):
         assert current[field]["text"] == updates.get(field, original[field]["text"])
-    assert current["text"] == (
+    expected_text = (
         cast(dict, result.json)["text"]
         if "transliteration" in updates
         else original["text"]
     )
-    assert route_context.database["changelog"].count_documents({}) == 1
+    assert TextSchema().load(current["text"]) == TextSchema().load(expected_text)
+    assert route_context.database["changelog"].count_documents({}) == bool(updates)
 
 
 def test_combined_edition_uses_one_document_update(
