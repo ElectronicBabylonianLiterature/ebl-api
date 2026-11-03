@@ -1,24 +1,15 @@
 from itertools import count
-from typing import Optional, Sequence, List
-import argparse
-import os
-import sys
+from typing import Optional, Sequence, cast
 import json
 from marshmallow import ValidationError
-from pymongo import MongoClient
 import pymongo
 from ebl.common.query.util import sort_by_museum_number
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.provenance.application.provenance_service import ProvenanceService
-from ebl.provenance.infrastructure.mongo_provenance_repository import (
-    MongoProvenanceRepository,
-)
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.token_schemas import WORD_SCHEMAS
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
-import datetime
 from copy import deepcopy
 
 WORD_TYPES = set(WORD_SCHEMAS)
@@ -45,7 +36,7 @@ def load_data(paths: Sequence[str]) -> dict:
 
 
 def load_collection(path: str) -> dict:
-    fragments = {}
+    fragments: dict = {}
 
     if not path.endswith(".json"):
         return fragments
@@ -100,7 +91,7 @@ def canonicalize(
     document matches what a standard GET would produce (coerced types,
     stripped unknown fields, computed defaults filled in)."""
     schema = _fragment_schema(provenance_service)
-    canonical = schema.dump(schema.load(data))
+    canonical = cast(dict, schema.dump(schema.load(data)))
     canonical["_id"] = data["_id"]
     return canonical
 
@@ -183,12 +174,6 @@ def set_word_ids(fragment: dict) -> dict:
     }
 
 
-def write_to_db(
-    fragments: Sequence[dict], fragments_collection: MongoCollection
-) -> List:
-    return fragments_collection.insert_many(fragments, ordered=False)
-
-
 def write_to_tsv(
     filepath: str,
     data: Sequence[Sequence[str]],
@@ -198,196 +183,4 @@ def write_to_tsv(
         writer = csv.writer(csvfile, delimiter="\t")  # pyre-ignore[6]
         if column_names:
             writer.writerow(column_names)
-        writer.writerows(FAILS)
-
-
-if __name__ == "__main__":
-    DEV_DB = "ebldev"
-    PROD_DB = "ebl"
-    IMPORT_CMD = "import"
-    VALIDATION_CMD = "validate"
-    INDEX_CMD = "reindex"
-
-    parser = argparse.ArgumentParser(
-        description=(
-            "Import documents into the fragments collection. "
-            "MONGODB_URI environment variable must be set."
-        )
-    )
-    subparsers = parser.add_subparsers(dest="subcommand", required=True)
-
-    _input_parser = argparse.ArgumentParser(
-        description="Parser with input", add_help=False
-    )
-    _input_parser.add_argument(
-        "fragments",
-        nargs="+",
-        help="Paths to JSON input files OR a single file with an array of dictionaries",
-    )
-    _input_parser.add_argument(
-        "--strict",
-        action="store_true",
-        help="Abort the import if invalid documents or duplicate IDs are found",
-    )
-    _output_parser = argparse.ArgumentParser(
-        description="Parser with output", add_help=False
-    )
-    _output_parser.add_argument(
-        "-db",
-        "--database",
-        choices=[DEV_DB, PROD_DB],
-        default=DEV_DB,
-        help="Toggle between development (default) and production db",
-    )
-
-    import_info = "Validate input files, write to the database, and reindex"
-    subparsers.add_parser(
-        IMPORT_CMD,
-        help=import_info,
-        description=import_info,
-        parents=[_input_parser, _output_parser],
-    )
-
-    validation_info = "Validate input files without writing to the database"
-    subparsers.add_parser(
-        VALIDATION_CMD,
-        help=validation_info,
-        description=validation_info,
-        parents=[_input_parser, _output_parser],
-    )
-
-    index_info = "Rebuild the sort index"
-    subparsers.add_parser(
-        INDEX_CMD,
-        help=index_info,
-        description=index_info,
-        parents=[_output_parser],
-    )
-
-    def _reindex_database(collection, db):
-        print(f"Reindexing 'fragments' collection in the {db!r} database...")
-        print("Calculating _sortKeys (this may take a while)...")
-        update_sort_keys(collection)
-
-        print("Creating the sort index...")
-        create_sort_index(collection)
-
-        print("Sort index built successfully.")
-
-    args = parser.parse_args()
-
-    CLIENT = MongoClient(os.environ["MONGODB_URI"])
-    TARGET_DB = CLIENT.get_database(args.database)
-    COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
-    provenance_repository = MongoProvenanceRepository(TARGET_DB)
-    provenance_service = ProvenanceService(provenance_repository)
-    FAILS = []
-    IS_COLLECTION = False
-
-    error_file = "invalid_texts.tsv"
-    summary_file = f"fragment_import_summary_{datetime.date.today()}.tsv"
-
-    if args.subcommand == INDEX_CMD:
-        _reindex_database(COLLECTION, args.database)
-        sys.exit()
-
-    print("Loading data...")
-
-    if len(args.fragments) == 1:
-        try:
-            fragments = load_collection(args.fragments[0])
-            IS_COLLECTION = True
-        except Exception:
-            fragments = load_data(args.fragments)
-
-    else:
-        fragments = load_data(args.fragments)
-
-    fragment_count = len(fragments)
-
-    if fragments:
-        print(f"Found {'collection of ' * IS_COLLECTION}{fragment_count} documents.")
-    else:
-        print("No fragments found.")
-        sys.exit()
-
-    print("Validating...")
-
-    for filename, data in fragments.items():
-        if args.strict:
-            validate(data, filename, provenance_service)
-            validate_id(data, filename)
-            ensure_unique(data, COLLECTION, filename)
-            fragments[filename] = canonicalize(data, provenance_service)
-        else:
-            try:
-                validate(data, filename, provenance_service)
-                validate_id(data, filename)
-            except Exception as error:
-                FAILS.append([filename, str(error)])
-                continue
-            try:
-                ensure_unique(data, COLLECTION, filename)
-            except Exception as error:
-                FAILS.append([filename, str(error)])
-                continue
-            fragments[filename] = canonicalize(data, provenance_service)
-
-    fail_count = len(FAILS)
-
-    if FAILS:
-        print(
-            f"Skipping {fail_count} document(s), see {os.path.abspath(error_file)} for details"
-        )
-        write_to_tsv(error_file, FAILS, ["file", "error"])
-
-    valid_count = fragment_count - fail_count
-
-    print(
-        f"Validation of {valid_count} out of {fragment_count} document(s) successful."
-    )
-
-    if not valid_count:
-        print("No data to import.")
-        sys.exit()
-
-    if args.subcommand == VALIDATION_CMD:
-        sys.exit()
-
-    print("Writing to database...")
-
-    if args.database == PROD_DB:
-        passphrase = "HAMMURABI"
-        prompt = (
-            "\n\033[93m!!! WARNING: "
-            "This will alter the PRODUCTION DB and can lead to data loss. !!!"
-            "\n\nPROCEED ONLY after creating a DUPLICATE of the fragments collection!\033[0m"
-            f"\n\nType {passphrase} to continue: "
-        )
-        if input(prompt) != passphrase:
-            sys.exit("Aborting.")
-
-    fragments = {
-        filename: data
-        for filename, data in fragments.items()
-        if filename not in {file for file, _ in FAILS}
-    }
-    result = write_to_db(
-        [set_word_ids(fragment) for fragment in fragments.values()],
-        COLLECTION,
-    )
-
-    print("Result:")
-    print(result)
-
-    _reindex_database(COLLECTION, args.database)
-
-    write_to_tsv(
-        summary_file,
-        [[data["_id"], filename] for filename, data in fragments.items()],
-        ["id", "file"],
-    )
-
-    print(
-        f"Done! See {os.path.abspath(summary_file)} for a summary of added documents",
-    )
+        writer.writerows(data)

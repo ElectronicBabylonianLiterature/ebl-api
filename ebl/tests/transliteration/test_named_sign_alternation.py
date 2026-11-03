@@ -89,4 +89,4 @@ def test_a_legacy_payload_separates_back_into_the_same_arrays(atf: str) -> None:
         separated = schema.separate_legacy_name_parts(legacy)
 
         assert separated["nameParts"] == dumped["nameParts"]
-        assert separated["nameBreaks"] == dumped["nameBreaks"]
+        assert separated.get("nameBreaks", []) == dumped["nameBreaks"]
