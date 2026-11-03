@@ -36,8 +36,8 @@ class LegacyRepresentationAdoption:
 
 
 def legacy_import_source(container: str, file_id: ObjectId | str) -> MediaImportSource:
-    if container not in LEGACY_BUCKETS:
-        raise ValueError("Only legacy photo and thumbnail buckets can be adopted.")
+    if container != "photos":
+        raise ValueError("Only legacy original photos can be adopted.")
     if not isinstance(file_id, (ObjectId, str)) or not str(file_id):
         raise ValueError("Legacy file identity must be a nonempty string or ObjectId.")
     typed_identity = (

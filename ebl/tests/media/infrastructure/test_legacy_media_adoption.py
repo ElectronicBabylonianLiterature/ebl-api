@@ -25,6 +25,15 @@ def test_adoption_is_repeatable_and_deletion_preserves_legacy(
     media_database: Database,
     container: str,
 ) -> None:
+    if container == "thumbnails":
+        with pytest.raises(ValueError, match="original photos"):
+            representation_store.adopt_legacy(
+                LegacyRepresentationAdoption(
+                    media_id(), container, ObjectId(), image_representation()
+                )
+            )
+        assert media_database["mediaFiles"].count_documents({}) == 0
+        return
     file_id = GridFS(media_database, container).put(image_bytes())
     expected = legacy_handle(
         LegacyRepresentationAdoption(
