@@ -6,7 +6,7 @@ from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import fold
 
 DATA_TYPE: DataType = "sumerian-dictionary"
 SEARCHED_FIELDS: Sequence[str] = Fields.SUMERIAN_DICTIONARY.value["COLLATED_FIELDS"]
-IGNORABLE_CHARACTERS = "[{}̀-ͯ]*"
+IGNORABLE_CHARACTERS = "[{}\u0300-\u036f]*"
 PRECOMPOSED_LATIN_RANGES: Sequence[range] = (
     range(0x00C0, 0x0250),
     range(0x1E00, 0x1F00),
