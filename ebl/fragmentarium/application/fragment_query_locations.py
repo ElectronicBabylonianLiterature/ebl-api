@@ -1,6 +1,6 @@
-from typing import Dict, Sequence, cast
+from typing import Dict, Sequence, TypedDict, cast
 
-from marshmallow import EXCLUDE, RAISE, Schema, fields
+from marshmallow import EXCLUDE, RAISE, Schema, ValidationError, fields
 
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.at_line import (
@@ -13,6 +13,13 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 
 LOCATION_LINE_TYPES = {"ColumnAtLine", "ObjectAtLine", "SealAtLine", "SurfaceAtLine"}
+
+
+class FragmentQueryLineLocation(TypedDict):
+    surface: str | None
+    column: str | None
+    object: str | None
+    sealNumber: int | None
 
 
 class FragmentQueryLineLocationSchema(Schema):
@@ -37,7 +44,7 @@ def advance_location(current: LineLabel, line: Line) -> LineLabel:
     return current
 
 
-def location_of(label: LineLabel) -> dict:
+def location_of(label: LineLabel) -> FragmentQueryLineLocation:
     return {
         "surface": label.surface.to_value() if label.surface else None,
         "column": label.column.to_value() if label.column else None,
@@ -46,21 +53,29 @@ def location_of(label: LineLabel) -> dict:
     }
 
 
-def locations_of_data(lines: Sequence[dict], indices: Sequence[int]) -> Dict[int, dict]:
+def locations_of_data(
+    lines: Sequence[dict], indices: Sequence[int]
+) -> Dict[int, FragmentQueryLineLocation]:
     if not indices:
         return {}
     selected_indices = set(indices)
     last_index = max(selected_indices)
     current = LineLabel(None, None, None, None, None)
-    locations: Dict[int, dict] = {}
+    locations: Dict[int, FragmentQueryLineLocation] = {}
     schema = OneOfLineSchema()
     for index, line in enumerate(lines):
         if index > last_index:
             break
         if line.get("type") in LOCATION_LINE_TYPES:
-            current = advance_location(
-                current, cast(Line, schema.load(line, unknown=RAISE))
-            )
+            try:
+                current = advance_location(
+                    current, cast(Line, schema.load(line, unknown=RAISE))
+                )
+            except ValidationError:
+                return {
+                    selected_index: location_of(LineLabel(None, None, None, None, None))
+                    for selected_index in selected_indices
+                }
         if index in selected_indices:
             locations[index] = location_of(current)
     return locations

@@ -1,5 +1,4 @@
-from itertools import islice
-from typing import Any, Dict, List, Sequence, Tuple, cast
+from typing import Any, Dict, List, Sequence, cast
 
 from marshmallow import EXCLUDE
 
@@ -35,23 +34,12 @@ def matching_text_line_indices(
     )
 
 
-def selected_lines(
-    lines: Sequence[dict], matching_lines: Sequence[int]
-) -> List[Tuple[int, dict]]:
-    return [
-        (index, lines[index])
-        for index in islice(
-            matching_text_line_indices(lines, matching_lines), MAX_PREVIEW_LINES
-        )
-    ]
-
-
 def matching_line_preview_of_data(
     text: dict, matching_lines: Sequence[int]
 ) -> Dict[str, Any]:
     lines = text.get("lines") or []
     indices = matching_text_line_indices(lines, matching_lines)
-    selected = selected_lines(lines, indices[:MAX_PREVIEW_LINES])
+    selected = [(index, lines[index]) for index in indices[:MAX_PREVIEW_LINES]]
     locations = locations_of_data(lines, [index for index, _ in selected])
     return {
         "lines": [

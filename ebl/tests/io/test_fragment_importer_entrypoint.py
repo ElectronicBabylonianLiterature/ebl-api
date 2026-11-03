@@ -1,27 +1,13 @@
-import importlib
 import os
 from pathlib import Path
 import runpy
-import subprocess
 import sys
-from unittest.mock import patch
+from typing import cast
+from unittest.mock import Mock, patch
 
 import pytest
 
-from ebl.io.fragments import importer
-
-LEGACY_MODULE = "ebl.io.fragments.importer"
-CANONICAL_MODULE = "ebl.io.fragments.importer_cli"
-
-
-def _run_cli(module: str, arguments: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [sys.executable, "-m", module, *arguments],
-        capture_output=True,
-        text=True,
-        check=False,
-        timeout=30,
-    )
+from ebl.io.fragments import importer, importer_cli
 
 
 @pytest.mark.parametrize(
@@ -36,46 +22,50 @@ def _run_cli(module: str, arguments: list[str]) -> subprocess.CompletedProcess[s
     ],
     ids=["help", "import-help", "validate-help", "reindex-help", "invalid", "empty"],
 )
-def test_legacy_module_matches_canonical_cli(
-    arguments: list[str], expected_status: int
+def test_canonical_module_cli_contract(
+    arguments: list[str], expected_status: int, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    canonical = _run_cli(CANONICAL_MODULE, arguments)
-    legacy = _run_cli(LEGACY_MODULE, arguments)
+    with pytest.raises(SystemExit) as exit_info:
+        importer_cli.main(arguments)
 
-    assert canonical.returncode == expected_status
-    assert canonical.stdout or canonical.stderr
-    assert (legacy.returncode, legacy.stdout, legacy.stderr) == (
-        canonical.returncode,
-        canonical.stdout,
-        canonical.stderr,
-    )
+    assert exit_info.value.code == expected_status
+    captured_output, captured_error = cast(tuple[str, str], capsys.readouterr())
+    assert captured_output or captured_error
 
 
-def test_legacy_module_preserves_process_context_and_arguments(
+def test_canonical_module_preserves_process_context_and_arguments(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     arguments = ["import", "file name.json", "", "literal;$HOME", "line\nbreak"]
-    monkeypatch.setattr(sys, "argv", [LEGACY_MODULE, *arguments])
+    monkeypatch.setattr(sys, "argv", ["importer_cli", *arguments])
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("IMPORTER_ENTRYPOINT_TEST", "unchanged value")
+    monkeypatch.setenv("MONGODB_URI", "mongodb://example.invalid")
     environment = dict(os.environ)
     streams = (sys.stdin, sys.stdout, sys.stderr)
+    target = Mock()
+    with patch.object(importer_cli, "MongoClient", return_value=target) as connect:
+        with patch.object(importer_cli, "run") as run:
+            importer_cli.main(arguments)
 
-    with patch.object(os, "execv", side_effect=OSError("exec boundary")) as execute:
-        with pytest.raises(OSError, match="exec boundary"):
-            runpy.run_path(str(importer.__file__), run_name="__main__")
-
-    execute.assert_called_once_with(
-        sys.executable, [sys.executable, "-m", CANONICAL_MODULE, *arguments]
-    )
+    connect.assert_called_once_with("mongodb://example.invalid")
+    run.assert_called_once()
+    parsed, database = run.call_args.args
+    assert parsed.subcommand == "import"
+    assert parsed.fragments == arguments[1:]
+    assert database == target.get_database.return_value
+    target.get_database.assert_called_once_with(parsed.database)
     assert Path.cwd() == tmp_path
     assert dict(os.environ) == environment
     assert (sys.stdin, sys.stdout, sys.stderr) == streams
 
 
 def test_importing_helpers_does_not_delegate() -> None:
-    with patch.object(os, "execv") as execute:
-        importlib.reload(importer)
+    original_load_data = importer.load_data
+    with patch.object(importer_cli, "main") as main:
+        namespace = runpy.run_path(str(importer.__file__), run_name="__main__")
 
-    execute.assert_not_called()
+    main.assert_not_called()
+    assert namespace["load_data"]([]) == {}
+    assert importer.load_data is original_load_data
     assert importer.load_data([]) == {}

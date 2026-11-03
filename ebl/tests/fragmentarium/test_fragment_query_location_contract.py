@@ -3,13 +3,18 @@ from typing import Sequence, cast
 import falcon
 import pytest
 from falcon import testing
+from pymongo.database import Database
 
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.fragment_query_preview import (
+    matching_line_preview_of_data,
+)
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
 )
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.transliteration.domain.sign import Sign
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryMatchingLinePreviewSchema,
@@ -87,10 +92,51 @@ def test_old_preview_payload_does_not_invent_location_or_line_count() -> None:
 
 @pytest.mark.parametrize("text", [{}, {"lines": None}])
 def test_legacy_missing_text_has_exact_zero_matching_lines(text: dict) -> None:
-    from ebl.fragmentarium.application.fragment_query_preview import (
-        matching_line_preview_of_data,
-    )
-
     preview = matching_line_preview_of_data(text, [0, 99])
     assert preview["lines"] == []
     assert preview["totalMatchingLines"] == 0
+
+
+def test_malformed_marker_does_not_fail_other_search_results(
+    client: testing.TestClient,
+    fragmentarium: Fragmentarium,
+    database: Database,
+    sign_repository: MongoSignRepository,
+    signs: Sequence[Sign],
+) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
+    for number in ("X.1", "X.2"):
+        fragmentarium.create(
+            FragmentFactory.build(
+                number=MuseumNumber.of(number),
+                text=parse_atf_lark("@obverse\n1. KU\n@reverse\n2. KU"),
+                signs="KU\nKU",
+            )
+        )
+    database["fragments"].update_one(
+        {"_id": "X.1"}, {"$set": {"text.lines.2.storedOnly": 1}}
+    )
+
+    response = client.simulate_get(
+        "/fragments/query", params={"transliteration": "KU", "limit": "2"}
+    )
+
+    assert response.status == falcon.HTTP_OK
+    payload = cast(dict, cast(testing.Result, response).json)
+    assert len(payload["items"]) == 2
+    previews = {
+        item["museumNumber"]["number"]: item["matchingLinePreview"]
+        for item in payload["items"]
+    }
+    for line in previews["1"]["lines"]:
+        assert line["location"] == {
+            "surface": None,
+            "column": None,
+            "object": None,
+            "sealNumber": None,
+        }
+    assert [line["location"]["surface"] for line in previews["2"]["lines"]] == [
+        "o",
+        "r",
+    ]

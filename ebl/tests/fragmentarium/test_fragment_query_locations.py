@@ -14,6 +14,7 @@ from ebl.tests.fragmentarium.fragment_query_preview_test_helpers import (
     dumped_text,
     numbered_atf,
 )
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
@@ -119,11 +120,14 @@ def test_late_preview_match_uses_all_preceding_markers() -> None:
 
 @pytest.mark.parametrize("extra_field", ["column_label", "number", "storedOnly"])
 def test_structural_markers_reject_unknown_variant_fields(extra_field: str) -> None:
-    from ebl.transliteration.application.text_schema import TextSchema
-
     text = dumped_text(parse_atf_lark("@obverse\n6. ku"))
     text["lines"][0][extra_field] = {"column": 2, "status": []}
     with pytest.raises(ValidationError, match=extra_field):
         TextSchema().load(text)
-    with pytest.raises(ValidationError, match=extra_field):
-        matching_line_preview_of_data(text, [1])
+    preview = matching_line_preview_of_data(text, [1])
+    assert preview["lines"][0]["location"] == {
+        "surface": None,
+        "column": None,
+        "object": None,
+        "sealNumber": None,
+    }
