@@ -125,7 +125,7 @@ def test_signs_get_with_centroids_only_and_include_unclustered(
 
     centroid_annotation = AnnotationFactory.build(
         data=AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0]),
-        cropped_sign=CroppedSignFactory.build(),
+        cropped_sign=CroppedSignFactory.build(image_id="centroid-image"),
         pca_clustering=PcaClustering(
             cluster_id="test-centroid-cluster-id",
             cluster_rank=0,
@@ -138,7 +138,7 @@ def test_signs_get_with_centroids_only_and_include_unclustered(
 
     unclustered_annotation = AnnotationFactory.build(
         data=AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 1]),
-        cropped_sign=CroppedSignFactory.build(),
+        cropped_sign=CroppedSignFactory.build(image_id="unclustered-image"),
         pca_clustering=None,
     )
 
