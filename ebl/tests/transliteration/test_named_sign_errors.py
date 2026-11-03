@@ -8,6 +8,8 @@ from marshmallow import ValidationError
 import ebl.error_handler
 from ebl.errors import DataError
 from ebl.transliteration.application.token_schemas_signs import (
+    DeterminativeSchema,
+    GlossSchema,
     NamedSignSchema,
     ReadingSchema,
 )
@@ -97,7 +99,24 @@ def test_absent_name_breaks_is_read_as_the_legacy_interleaved_format() -> None:
     assert loaded.name_breaks == (CLOSE,)
 
 
-def test_name_breaks_is_required_when_name_parts_cannot_be_separated() -> None:
+def test_a_legacy_break_without_a_type_is_read_as_a_break() -> None:
+    dumped = _dumped_reading()
+    legacy = {key: value for key, value in dumped.items() if key != "nameBreaks"}
+    untyped_break = {
+        key: value for key, value in dumped["nameBreaks"][0].items() if key != "type"
+    }
+    legacy["nameParts"] = [
+        dumped["nameParts"][0],
+        untyped_break,
+        dumped["nameParts"][1],
+    ]
+
+    loaded = cast(Reading, ReadingSchema().load(legacy))
+
+    assert loaded == Reading.of_arguments(name_arguments(BROKEN_NAME))
+
+
+def test_unseparable_name_parts_are_rejected() -> None:
     payload = _dumped_reading()
     del payload["nameBreaks"]
     payload["nameParts"] = "ku"
@@ -105,4 +124,10 @@ def test_name_breaks_is_required_when_name_parts_cannot_be_separated() -> None:
     with pytest.raises(ValidationError) as error:
         NamedSignSchema().load(payload)
 
-    assert "nameBreaks" in error.value.messages
+    assert "nameParts" in error.value.messages
+    assert "nameBreaks" not in error.value.messages
+
+
+def test_the_gloss_schema_leaves_making_the_token_to_its_subclasses() -> None:
+    with pytest.raises(NotImplementedError):
+        GlossSchema.make_token(DeterminativeSchema(), {})

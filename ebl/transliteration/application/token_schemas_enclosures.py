@@ -1,8 +1,12 @@
 from abc import abstractmethod
 
-from marshmallow import EXCLUDE, Schema, fields, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 
 from ebl.schemas import NameEnumField
+from ebl.transliteration.application.storage_serialization import (
+    OMIT_FROM_STORAGE_WHEN_DEFAULT,
+    omit_stored_defaults,
+)
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
     BrokenAway,
@@ -33,7 +37,15 @@ class BaseTokenSchema(Schema):
     enclosure_type = fields.List(
         NameEnumField(EnclosureType), load_default=list, data_key="enclosureType"
     )
-    erasure = NameEnumField(ErasureState, load_default=ErasureState.NONE)
+    erasure = NameEnumField(
+        ErasureState,
+        load_default=ErasureState.NONE,
+        metadata={OMIT_FROM_STORAGE_WHEN_DEFAULT: True},
+    )
+
+    @post_dump
+    def omit_defaults_from_storage(self, data, **kwargs):
+        return omit_stored_defaults(self, data)
 
 
 class ValueTokenSchema(BaseTokenSchema):

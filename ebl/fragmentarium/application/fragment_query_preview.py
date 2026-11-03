@@ -1,6 +1,9 @@
 from itertools import islice
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Tuple, cast
 
+from marshmallow import EXCLUDE
+
+from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 
 MAX_PREVIEW_LINES = 5
@@ -10,8 +13,13 @@ def is_text_line(line: dict) -> bool:
     return line.get("type") == "TextLine"
 
 
+def api_line_of(stored_line: dict) -> Dict[str, Any]:
+    schema = OneOfLineSchema()
+    return cast(Dict[str, Any], schema.dump(schema.load(stored_line, unknown=EXCLUDE)))
+
+
 def preview_line_of(index: int, line: dict) -> Dict[str, Any]:
-    return {**line, "index": index}
+    return {**api_line_of(line), "index": index}
 
 
 def selected_lines(
