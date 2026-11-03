@@ -57,14 +57,19 @@ def test_batch_worker_invalidates_every_chapter_and_line_display(
         assert batch_context.text_repository.find_chapter(
             chapter.id_
         ).parser_version == (ATF_PARSER_VERSION)
-        assert database["chapter_cache_state"].find_one({"_id": str(chapter.id_)}) == {
+        assert database["chapter_cache_state"].find_one(
+            {"_id": str(chapter.id_)}, projection={"epoch": 0}
+        ) == {
             "_id": str(chapter.id_),
             "pending": 0,
             "revision": 2,
         }
     for endpoint in endpoints:
         assert simulate_get(client, endpoint).status == falcon.HTTP_OK
-    assert database["cache"].count_documents({"chapterCacheRevision": 2}) == 4
+    assert (
+        database["cache"].count_documents({"chapterCacheRevision": {"$regex": ":2$"}})
+        == 4
+    )
 
 
 def test_failed_batch_finishes_markers_and_reports_the_error(
@@ -83,7 +88,7 @@ def test_failed_batch_finishes_markers_and_reports_the_error(
     merged = result.merge(update_texts.State(updated=2))
     assert merged.to_tsv() == f"{error}\n# Updated: 2\n# Invalid: 1"
     assert database["chapter_cache_state"].find_one(
-        {"_id": str(cached_chapter.id_)}
+        {"_id": str(cached_chapter.id_)}, projection={"epoch": 0}
     ) == {
         "_id": str(cached_chapter.id_),
         "pending": 0,
@@ -110,4 +115,4 @@ def test_batch_cli_uses_shared_cache_and_writes_its_report(
 
     assert (tmp_path / "invalid_texts.tsv").read_text() == "# Updated: 1\n# Invalid: 0"
     assert "Update texts completed!" in stdout.getvalue()
-    assert cache._mongo_cache_repository.chapter_revision(str(cached_chapter.id_)) == 2
+    assert str(cache._chapter_state.revision(str(cached_chapter.id_))).endswith(":2")

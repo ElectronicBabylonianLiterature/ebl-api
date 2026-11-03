@@ -32,7 +32,7 @@ def test_set_stores_nested_item(
 def _item_of_encoded_size(cache_key: str, size: int) -> dict:
     empty_size = len(
         bson.encode(
-            {"_id": f"chapter-cache-v2:{cache_key}", "cache_key": cache_key, "data": ""}
+            {"_id": f"cache-v2:{cache_key}", "cache_key": cache_key, "data": ""}
         )
     )
     return {"data": "x" * (size - empty_size)}

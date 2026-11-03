@@ -8,6 +8,7 @@ from pymongo.database import Database
 from pymongo.errors import AutoReconnect, DuplicateKeyError
 from pymongo.read_preferences import Nearest, Secondary
 
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.corpus.domain.chapter import ChapterId
@@ -20,9 +21,9 @@ def test_finish_failure_keeps_cache_bypassed(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    cache = ChapterCache(mongo_cache_repository)
+    cache = ChapterCache(mongo_cache_repository, MongoChapterCacheState(database))
     chapter_id = ChapterFactory.build().id_
-    state = mongo_cache_repository._chapter_state
+    state = cache._chapter_state
     with cache.updating_chapter(chapter_id):
         cache.get_or_create(chapter_id, str(chapter_id), lambda: {"value": "old"})
 
@@ -46,7 +47,7 @@ def test_state_read_failure_bypasses_existing_cache(
     caplog: pytest.LogCaptureFixture,
     preexisting: bool,
 ) -> None:
-    cache = ChapterCache(mongo_cache_repository)
+    cache = ChapterCache(mongo_cache_repository, MongoChapterCacheState(database))
     chapter_id: ChapterId = ChapterFactory.build().id_
     if preexisting:
         cache.get_or_create(chapter_id, str(chapter_id), lambda: {"value": "old"})
@@ -55,9 +56,7 @@ def test_state_read_failure_bypasses_existing_cache(
     def fail_read(*args: object, **kwargs: object) -> None:
         raise AutoReconnect("state unavailable")
 
-    monkeypatch.setattr(
-        mongo_cache_repository._chapter_state._collection, "find_one", fail_read
-    )
+    monkeypatch.setattr(cache._chapter_state._collection, "find_one", fail_read)
     with caplog.at_level(logging.WARNING):
         result = cache.get_or_create(
             chapter_id, str(chapter_id), lambda: {"value": "new"}
@@ -114,7 +113,7 @@ def test_repeated_collisions_return_computed_value_without_caching(
         raise DuplicateKeyError("simultaneous cache insert")
 
     monkeypatch.setattr(mongo_cache_repository._collection, "replace_one", collide)
-    cache = ChapterCache(mongo_cache_repository)
+    cache = ChapterCache(mongo_cache_repository, MongoChapterCacheState(database))
     chapter_id = ChapterFactory.build().id_
     assert cache.get_or_create(
         chapter_id, str(chapter_id), lambda: {"value": "computed"}
@@ -133,21 +132,23 @@ def test_removing_missing_cache_entries_is_idempotent(
 
 
 def test_concurrent_workers_share_atomic_pending_state(database: Database) -> None:
-    workers = [MongoCacheRepository(database) for _ in range(8)]
+    workers = [MongoChapterCacheState(database) for _ in range(8)]
     chapter_key = str(ChapterFactory.build().id_)
 
-    def start(worker: MongoCacheRepository) -> None:
-        worker.start_chapter_update(chapter_key)
+    def start(worker: MongoChapterCacheState) -> None:
+        worker.start_update(chapter_key)
 
-    def finish(worker: MongoCacheRepository) -> None:
-        worker.finish_chapter_update(chapter_key)
+    def finish(worker: MongoChapterCacheState) -> None:
+        worker.finish_update(chapter_key)
 
     with ThreadPoolExecutor(max_workers=8) as executor:
         list(executor.map(start, workers))
-        assert workers[0].chapter_revision(chapter_key) is None
+        assert workers[0].revision(chapter_key) is None
         list(executor.map(finish, workers))
-    assert workers[0].chapter_revision(chapter_key) == 16
-    assert database["chapter_cache_state"].find_one({"_id": chapter_key}) == {
+    assert str(workers[0].revision(chapter_key)).endswith(":16")
+    assert database["chapter_cache_state"].find_one(
+        {"_id": chapter_key}, projection={"epoch": 0}
+    ) == {
         "_id": chapter_key,
         "pending": 0,
         "revision": 16,
@@ -161,12 +162,15 @@ def test_non_primary_reads_bypass_cache_and_keep_mutation_generations(
     database: Database, preference: Secondary | Nearest
 ) -> None:
     primary_repository = MongoCacheRepository(database)
-    primary_cache = ChapterCache(primary_repository)
+    primary_cache = ChapterCache(primary_repository, MongoChapterCacheState(database))
     chapter_id = ChapterFactory.build().id_
     chapter_key = str(chapter_id)
     primary_cache.get_or_create(chapter_id, chapter_key, lambda: {"value": "old"})
     reader = MongoCacheRepository(database.with_options(read_preference=preference))
-    cache = ChapterCache(reader)
+    cache = ChapterCache(
+        reader,
+        MongoChapterCacheState(database.with_options(read_preference=preference)),
+    )
     assert cache.get_or_create(chapter_id, chapter_key, lambda: {"value": "new"}) == {
         "value": "new"
     }
@@ -174,9 +178,9 @@ def test_non_primary_reads_bypass_cache_and_keep_mutation_generations(
         "value": "old"
     }
     with cache.updating_chapter(chapter_id):
-        assert primary_repository.chapter_revision(chapter_key) is None
-    assert primary_repository.chapter_revision(chapter_key) == 2
-    assert reader.chapter_revision(chapter_key) is None
+        assert primary_cache._chapter_state.revision(chapter_key) is None
+    assert str(primary_cache._chapter_state.revision(chapter_key)).endswith(":2")
+    assert cache._chapter_state.revision(chapter_key) is None
     for value in ("after mutation", "after another read"):
 
         def create(value: str = value) -> dict:

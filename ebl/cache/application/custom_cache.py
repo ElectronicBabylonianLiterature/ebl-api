@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from typing import Callable, Iterator, cast
 
 from ebl.cache.application.cache_repository import CacheRepository
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.errors import NotFoundError
 
@@ -33,6 +34,8 @@ class CustomCache:
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class ChapterCache(CustomCache):
+    _chapter_state: MongoChapterCacheState
+
     def delete_chapter(self, chapter_id: ChapterId) -> None:
         chapter_key_pattern = rf"{re.escape(str(chapter_id))}(\sline-\d+)?$"
         self.delete_all(pattern=f"^{chapter_key_pattern}")
@@ -41,17 +44,17 @@ class ChapterCache(CustomCache):
     @contextmanager
     def updating_chapter(self, chapter_id: ChapterId) -> Iterator[None]:
         chapter_key = str(chapter_id)
-        self._mongo_cache_repository.start_chapter_update(chapter_key)
+        self._chapter_state.start_update(chapter_key)
         try:
             self.delete_chapter(chapter_id)
             yield
         finally:
-            self._mongo_cache_repository.finish_chapter_update(chapter_key)
+            self._chapter_state.finish_update(chapter_key)
 
     def get_or_create(
         self, chapter_id: ChapterId, key: str, create: Callable[[], dict]
     ) -> dict:
-        revision = self._mongo_cache_repository.chapter_revision(str(chapter_id))
+        revision = self._chapter_state.revision(str(chapter_id))
         if revision is None:
             return create()
         cache_key = f"{CHAPTER_CACHE_KEY_PREFIX}{key}"

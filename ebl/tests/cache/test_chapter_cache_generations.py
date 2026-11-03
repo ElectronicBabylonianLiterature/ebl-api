@@ -3,6 +3,7 @@ from typing import Iterator
 import pytest
 from pymongo.database import Database
 
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.cache.application.custom_cache import CHAPTER_CACHE_KEY_PREFIX, ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.corpus.domain.chapter import ChapterId
@@ -15,8 +16,10 @@ def chapter_id() -> ChapterId:
 
 
 @pytest.fixture
-def cache(mongo_cache_repository: MongoCacheRepository) -> ChapterCache:
-    return ChapterCache(mongo_cache_repository)
+def cache(
+    mongo_cache_repository: MongoCacheRepository, database: Database
+) -> ChapterCache:
+    return ChapterCache(mongo_cache_repository, MongoChapterCacheState(database))
 
 
 def test_read_through_cache_reuses_current_revision(
@@ -49,7 +52,9 @@ def test_legacy_cache_payload_is_rebuilt(
 def test_completed_old_read_cannot_restore_stale_cache(
     cache: ChapterCache, chapter_id: ChapterId, database: Database
 ) -> None:
-    other_worker = ChapterCache(MongoCacheRepository(database))
+    other_worker = ChapterCache(
+        MongoCacheRepository(database), MongoChapterCacheState(database)
+    )
     value = {"value": "old"}
 
     def delayed_read() -> dict:
@@ -95,7 +100,9 @@ def test_malformed_current_revision_payload_is_rebuilt(
 def test_reads_during_concurrent_writes_bypass_cache(
     cache: ChapterCache, chapter_id: ChapterId, database: Database
 ) -> None:
-    other_worker = ChapterCache(MongoCacheRepository(database))
+    other_worker = ChapterCache(
+        MongoCacheRepository(database), MongoChapterCacheState(database)
+    )
     with cache.updating_chapter(chapter_id):
         with other_worker.updating_chapter(chapter_id):
             assert cache.get_or_create(
@@ -120,7 +127,9 @@ def test_failed_mutation_finishes_generation(
             raise ValueError("rejected")
 
     pytest.raises(ValueError, reject).match("rejected")
-    assert database["chapter_cache_state"].find_one({"_id": str(chapter_id)}) == {
+    assert database["chapter_cache_state"].find_one(
+        {"_id": str(chapter_id)}, projection={"epoch": 0}
+    ) == {
         "_id": str(chapter_id),
         "pending": 0,
         "revision": 2,
