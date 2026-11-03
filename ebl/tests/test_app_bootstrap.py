@@ -19,6 +19,8 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 
+MONGODB_URI = "mongodb://unused-in-tests"
+
 
 @pytest.fixture
 def bootstrap_environment(
@@ -30,11 +32,16 @@ def bootstrap_environment(
     monkeypatch.setenv("AUTH0_AUDIENCE", "test-audience")
     monkeypatch.setenv("AUTH0_ISSUER", "https://test.auth0.com/")
     monkeypatch.setenv("EBL_AI_API", "http://localhost:8001")
-    monkeypatch.setenv("MONGODB_URI", "mongodb://unused-in-tests")
+    monkeypatch.setenv("MONGODB_URI", MONGODB_URI)
     monkeypatch.setenv("MONGODB_DB", database_name)
     monkeypatch.setenv("SENTRY_DSN", "https://test@sentry.io/test")
     monkeypatch.setenv("SENTRY_ENVIRONMENT", "test")
-    monkeypatch.setattr(ebl.app, "MongoClient", lambda _uri: mongo_client)
+
+    def client_for(uri: str) -> MongoClient:
+        assert uri == MONGODB_URI
+        return mongo_client
+
+    monkeypatch.setattr(ebl.app, "MongoClient", client_for)
     yield
     mongo_client.drop_database(database_name)
 
