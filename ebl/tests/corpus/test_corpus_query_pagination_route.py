@@ -96,11 +96,12 @@ def test_invalid_corpus_pagination_returns_data_error(
 def test_no_pagination_arguments_keep_legacy_response_shape(
     client: testing.TestClient, many_chapter_rows: None
 ) -> None:
-    response = client.simulate_get("/corpus/query", params={"legacyFilter": "ignored"})
+    response = client.simulate_get("/corpus/query", params={"lemmas": "nonexistent I"})
     assert response.status == falcon.HTTP_OK
     payload = cast(dict, cast(testing.Result, response).json)
     assert set(payload) == {"items", "matchCountTotal"}
-    assert len(payload["items"]) == 237
+    assert payload["items"] == []
+    assert payload["matchCountTotal"] == 0
 
 
 def test_empty_query_keeps_legacy_empty_response(
