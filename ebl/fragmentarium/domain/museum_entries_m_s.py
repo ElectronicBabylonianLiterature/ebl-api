@@ -174,3 +174,9 @@ SPURLOCK_MUSEUM: MuseumEntry = (
     "US",
     "https://www.spurlock.illinois.edu/",
 )
+STAATLICHES_MUSEUM_AEGYPTISCHER_KUNST: MuseumEntry = (
+    "Staatliches Museum Ägyptischer Kunst",
+    "Munich",
+    "DE",
+    "https://smaek.de/",
+)

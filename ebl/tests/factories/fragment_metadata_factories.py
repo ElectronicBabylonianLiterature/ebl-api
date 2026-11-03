@@ -136,6 +136,9 @@ ExternalNumbersFactory = make_factory(
     ),
     oracc_numbers=List([Sequence(lambda n: f"oracc-number-{n}")], TUPLE_FACTORY),
     seal_numbers=List([Sequence(lambda n: f"seal_number-{n}")], TUPLE_FACTORY),
+    mdz_number=Sequence(lambda n: f"mdz-number-{n}"),
+    deutsches_museum_number=Sequence(lambda n: f"deutsches-museum-number-{n}"),
+    smaek_number=Sequence(lambda n: f"smaek-number-{n}"),
 )
 
 FragmentDossierReferenceFactory = make_factory(
