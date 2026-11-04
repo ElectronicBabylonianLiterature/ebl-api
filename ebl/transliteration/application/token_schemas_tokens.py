@@ -27,7 +27,7 @@ class UnknownNumberOfSignsSchema(BaseTokenSchema):
 
 
 class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnumField(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -60,8 +60,8 @@ class CommentaryProtocolSchema(BaseTokenSchema):
 
 class DividerSchema(BaseTokenSchema):
     divider = fields.String(required=True)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnumField(Flag), required=True)
+    modifiers = fields.List(fields.String(), load_default=list)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -85,7 +85,7 @@ class ColumnSchema(BaseTokenSchema):
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnumField(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -97,7 +97,7 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
 
 class UnclearSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnumField(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):

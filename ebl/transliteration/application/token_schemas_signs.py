@@ -81,9 +81,9 @@ class NamedSignSchema(BaseTokenSchema):
         metadata={OMIT_FROM_STORAGE_WHEN_DEFAULT: True},
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnumField(Flag), required=True)
-    sign = fields.Nested("OneOfTokenSchema", allow_none=True)
+    modifiers = fields.List(fields.String(), load_default=list)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    sign = fields.Nested("OneOfTokenSchema", allow_none=True, load_default=None)
 
     @post_dump
     def omit_defaults_from_storage(self, data, **kwargs):
@@ -156,8 +156,8 @@ class VariantSchema(BaseTokenSchema):
 
 class GraphemeSchema(BaseTokenSchema):
     name = fields.String(required=True)
-    modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnumField(Flag), required=True)
+    modifiers = fields.List(fields.String(), load_default=list)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):
