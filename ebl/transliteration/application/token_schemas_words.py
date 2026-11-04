@@ -115,7 +115,7 @@ class AkkadianWordSchema(BaseWordSchema):
             tuple(data["parts"]),
             data,
             modifier=tuple(data["modifiers"]),
-        )
+        ).set_erasure(data["erasure"])
 
 
 class BreakSchema(BaseTokenSchema):
@@ -125,16 +125,20 @@ class BreakSchema(BaseTokenSchema):
 class CaesuraSchema(BreakSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return Caesura.of(data["is_uncertain"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
+        return (
+            Caesura.of(data["is_uncertain"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
         )
 
 
 class MetricalFootSeparatorSchema(BreakSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return MetricalFootSeparator.of(data["is_uncertain"]).set_enclosure_type(
-            frozenset(data["enclosure_type"])
+        return (
+            MetricalFootSeparator.of(data["is_uncertain"])
+            .set_enclosure_type(frozenset(data["enclosure_type"]))
+            .set_erasure(data["erasure"])
         )
 
 

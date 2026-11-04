@@ -22,6 +22,7 @@ from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
     COLLECTION,
     JOINS_COLLECTION,
 )
+from ebl.tests.transliteration.storage_test_helpers import stored_dump
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.parallel_line import Labels, ParallelFragment
@@ -35,7 +36,7 @@ def test_create(database, fragment_repository):
     assert fragment_id == str(fragment.number)
     assert database[COLLECTION].find_one(
         {"_id": fragment_id}, projection={"_id": False}
-    ) == FragmentSchema(exclude=["joins"]).dump(fragment)
+    ) == stored_dump(FragmentSchema(exclude=["joins"]), fragment)
 
 
 def test_create_many(
@@ -48,7 +49,7 @@ def test_create_many(
         assert str(fragment.number) in fragment_ids
         assert database[COLLECTION].find_one(
             {"_id": str(fragment.number)}, projection={"_id": False}
-        ) == FragmentSchema(exclude=["joins"]).dump(fragment)
+        ) == stored_dump(FragmentSchema(exclude=["joins"]), fragment)
 
 
 def test_query_by_museum_number_multiple_acquisitions(database, fragment_repository):
