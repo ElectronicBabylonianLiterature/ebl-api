@@ -97,7 +97,7 @@ def test_the_samples_cover_every_token_type():
     assert TOKEN_TYPES - {"Token"} <= dumped_types(full_dumps(TOKENS))
 
 
-@pytest.mark.parametrize("key", [*TOKEN_LOAD_DEFAULTS, *DERIVED_TOKEN_FIELDS])
+@pytest.mark.parametrize("key", [*TOKEN_LOAD_DEFAULTS, *sorted(DERIVED_TOKEN_FIELDS)])
 def test_the_samples_omit_every_omittable_field(key):
     full = full_dumps(TOKENS)
 

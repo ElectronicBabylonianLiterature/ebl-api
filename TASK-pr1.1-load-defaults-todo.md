@@ -21,7 +21,7 @@ Plan: `TASK-chapter-plan-handoff.md`, "PR 1.1". Readers only, no write changes. 
 - [x] Clean up: throwaway DBs, temp files, background processes; report memory
 - [x] Wrap-up (requested 2026-11-04): docs and handoff current; markdownlint only (code unchanged since the gates)
 - [x] Commit and push (on request); open the PR
-- [ ] Remote checks green on the PR
+- [ ] Remote checks green on the PR (first run failed: set-ordered parametrize under xdist; fixed and pushed on your OK)
 - [ ] Your review and merge; deploy before PR 1.2
 - [ ] Before merge: remove the `TASK-pr1.1-load-defaults-*` files from the branch
 
