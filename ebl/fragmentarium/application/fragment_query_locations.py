@@ -1,4 +1,4 @@
-from typing import Dict, Sequence, TypedDict, cast
+from typing import Dict, Mapping, Sequence, TypedDict
 
 from marshmallow import EXCLUDE, RAISE, Schema, ValidationError, fields
 
@@ -9,7 +9,6 @@ from ebl.transliteration.domain.at_line import (
     SealAtLine,
     SurfaceAtLine,
 )
-from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 
 LOCATION_LINE_TYPES = {"ColumnAtLine", "ObjectAtLine", "SealAtLine", "SurfaceAtLine"}
@@ -32,7 +31,7 @@ class FragmentQueryLineLocationSchema(Schema):
     seal_number = fields.Integer(allow_none=True, data_key="sealNumber")
 
 
-def advance_location(current: LineLabel, line: Line) -> LineLabel:
+def advance_location(current: LineLabel, line: object) -> LineLabel:
     if isinstance(line, ColumnAtLine):
         return current.set_column(line.column_label)
     if isinstance(line, SurfaceAtLine):
@@ -54,7 +53,7 @@ def location_of(label: LineLabel) -> FragmentQueryLineLocation:
 
 
 def locations_of_data(
-    lines: Sequence[dict], indices: Sequence[int]
+    lines: Sequence[Mapping[str, object]], indices: Sequence[int]
 ) -> Dict[int, FragmentQueryLineLocation]:
     if not indices:
         return {}
@@ -68,9 +67,7 @@ def locations_of_data(
             break
         if line.get("type") in LOCATION_LINE_TYPES:
             try:
-                current = advance_location(
-                    current, cast(Line, schema.load(line, unknown=RAISE))
-                )
+                current = advance_location(current, schema.load(line, unknown=RAISE))
             except ValidationError:
                 return {
                     selected_index: location_of(LineLabel(None, None, None, None, None))
