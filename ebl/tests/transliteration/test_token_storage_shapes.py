@@ -14,7 +14,14 @@ from ebl.transliteration.application.token_schemas_signs import (
     is_legacy_name,
 )
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
+from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.domain.normalized_akkadian import (
+    AkkadianWord,
+    Caesura,
+    MetricalFootSeparator,
+)
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.token_base import ErasureState
 from ebl.transliteration.domain.tokens import ValueToken
 
 ATFS = [
@@ -35,6 +42,10 @@ def api_dump(line) -> dict:
 
 def storage_dump(line) -> dict:
     return stored_dump(OneOfLineSchema(), line)
+
+
+def stored_token_dump(token) -> dict:
+    return stored_dump(OneOfTokenSchema(), token)
 
 
 @pytest.mark.parametrize("atf", ATFS)
@@ -88,6 +99,7 @@ def test_every_stored_shape_loads_to_the_same_line(atf, shape):
 
 
 BREAK = {"type": "BrokenAway", "value": "["}
+UNTYPED_BREAK = {"value": "]", "side": "RIGHT"}
 PART = {"type": "ValueToken", "value": "k"}
 
 
@@ -95,6 +107,7 @@ PART = {"type": "ValueToken", "value": "k"}
     "data,expected",
     [
         ({"nameParts": [PART, BREAK, PART]}, True),
+        ({"nameParts": [PART, UNTYPED_BREAK, PART]}, True),
         ({"nameParts": [PART, BREAK, PART], "nameBreaks": [BREAK]}, False),
         ({"nameParts": [PART]}, False),
         ({"nameParts": [PART], "nameBreaks": []}, False),
@@ -160,3 +173,20 @@ def test_a_partial_name_dump_does_not_fail(dump, schema_options, present, absent
 
     assert {"name", *present} <= set(dumped)
     assert not absent & set(dumped)
+
+
+ERASED_TOKENS = [
+    AkkadianWord.of((ValueToken.of("ibnû"),)),
+    Caesura.certain(),
+    MetricalFootSeparator.uncertain(),
+]
+
+
+@pytest.mark.parametrize("token", ERASED_TOKENS, ids=lambda token: type(token).__name__)
+@pytest.mark.parametrize(
+    "dump", [OneOfTokenSchema().dump, stored_token_dump], ids=["api", "storage"]
+)
+def test_a_non_default_erasure_survives_loading(token, dump):
+    erased = token.set_erasure(ErasureState.ERASED)
+
+    assert OneOfTokenSchema().load(dump(erased)) == erased

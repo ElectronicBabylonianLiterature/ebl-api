@@ -66,9 +66,7 @@ def is_legacy_name(data: Any) -> bool:
     parts = data.get("nameParts")
     if not isinstance(parts, Sequence) or isinstance(parts, str):
         return False
-    return any(
-        isinstance(part, dict) and part.get("type") == "BrokenAway" for part in parts
-    )
+    return len(parts) > 1
 
 
 class NamedSignSchema(BaseTokenSchema):
