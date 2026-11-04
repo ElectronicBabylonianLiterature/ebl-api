@@ -6,7 +6,7 @@ import pytest
 from ebl.common.domain.stage import Stage
 from ebl.common.query.query_result import CorpusQueryItem
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.tests.corpus.test_corpus_query_route import (
+from ebl.tests.corpus.corpus_query_route_fixtures import (
     CHAPTER_WITH_LEMMA,
     CHAPTER_WITH_SIGNS_AND_LEMMAS,
 )

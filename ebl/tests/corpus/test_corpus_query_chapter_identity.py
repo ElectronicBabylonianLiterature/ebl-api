@@ -4,7 +4,7 @@ import attr
 import pytest
 
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.tests.corpus.test_corpus_query_route import CHAPTER_WITH_SIGNS_AND_LEMMAS
+from ebl.tests.corpus.corpus_query_route_fixtures import CHAPTER_WITH_SIGNS_AND_LEMMAS
 
 
 @pytest.fixture
