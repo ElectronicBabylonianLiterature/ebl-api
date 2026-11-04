@@ -35,7 +35,7 @@ def insert_words(
 @pytest.fixture
 def sumerian_reader() -> Auth0User:
     return Auth0User(
-        {"scope": "read:sumerian-words"},
+        {"scope": "read:sumerian-lex"},
         lambda: {"name": "reader@example.com", "https://ebabylon.org/eblName": "R"},
     )
 

@@ -25,7 +25,7 @@ from ebl.sumerian_dictionary.web.sumerian_word_query_parameters import (
 )
 from ebl.users.web.require_scope import require_scope
 
-READ_SCOPE = "read:sumerian-words"
+READ_SCOPE = "read:sumerian-lex"
 IDS_PARAMETER = "ids"
 
 T = TypeVar("T")
