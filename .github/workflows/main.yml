@@ -84,11 +84,11 @@ jobs:
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
-        run: poetry run ruff check ebl
+        run: poetry run ruff check ebl scripts
 
       - name: Code Style
         if: success() || steps.install.outcome == 'success'
-        run: poetry run ruff format --check ebl
+        run: poetry run ruff format --check ebl scripts
 
       - name: Type Check
         if: ${{ !startsWith(matrix.python-version, 'pypy') && (success() || steps.install.outcome == 'success') }}
@@ -107,7 +107,7 @@ jobs:
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x -n auto
+        run: poetry run pytest --cov=ebl --cov=scripts --cov-report term --cov-report xml -x -n auto
 
       - name: Diagnose MongoDB test failures
         if: failure()
