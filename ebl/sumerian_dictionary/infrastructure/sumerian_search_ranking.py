@@ -1,6 +1,7 @@
 import re
 import unicodedata
 from enum import IntEnum
+from functools import cached_property
 from typing import Callable, Mapping, Optional, Sequence, Tuple
 
 ROMAN_NUMERALS: Sequence[str] = (
@@ -21,7 +22,7 @@ DIGRAPHS: Sequence[Tuple[str, str]] = (
     ("s,", "ṣ"),
     ("t,", "ṭ"),
 )
-SUBSCRIPTS = str.maketrans("₀₁₂₃₄₅₆₇₈₉ₓ", "0123456789x")
+SUBSCRIPTS = str.maketrans("₀₁₂₃₄₅₆₇₈₉ₓ-.", "0123456789x  ")
 COMBINING_MARKS = re.compile("[̀-ͯ]")
 BRACES = re.compile("[{}]")
 TEXT_SEPARATOR = " | "
@@ -70,6 +71,31 @@ def _homonym_order(homonym: str) -> int:
     return ROMAN_NUMERALS.index(homonym) if homonym in ROMAN_NUMERALS else -1
 
 
+class _RankedFields:
+    def __init__(self, document: Mapping[str, object]) -> None:
+        self._document = document
+        self.citation_form = _string(document, "citationForm")
+
+    @cached_property
+    def folded_form(self) -> str:
+        return fold(self.citation_form)
+
+    @cached_property
+    def guide_word(self) -> str:
+        return fold(_string(self._document, "guideWord"))
+
+    @cached_property
+    def text(self) -> str:
+        return fold(
+            TEXT_SEPARATOR.join(
+                [
+                    *_strings(self._document, "senseMeanings"),
+                    *_strings(self._document, "akkadianWordIds"),
+                ]
+            )
+        )
+
+
 class SumerianRelevanceRanker:
     def __init__(self, query: str) -> None:
         self._raw = query.strip().lower()
@@ -95,33 +121,28 @@ class SumerianRelevanceRanker:
         )
 
     def _checks(self, document: Mapping[str, object]) -> Sequence[RankCheck]:
-        citation_form = _string(document, "citationForm")
-        folded_form = fold(citation_form)
-        guide_word = fold(_string(document, "guideWord"))
-        text = fold(
-            TEXT_SEPARATOR.join(
-                [
-                    *_strings(document, "senseMeanings"),
-                    *_strings(document, "akkadianWordIds"),
-                ]
-            )
-        )
+        fields = _RankedFields(document)
         query = self._folded
         return (
             (
                 MatchRank.CITATION_FORM_AS_TYPED,
-                lambda: citation_form.lower() == self._raw,
+                lambda: fields.citation_form.lower() == self._raw,
             ),
-            (MatchRank.CITATION_FORM_FOLDED, lambda: folded_form == query),
+            (MatchRank.CITATION_FORM_FOLDED, lambda: fields.folded_form == query),
             (MatchRank.ALIAS, lambda: bool(self.alias_hit(document))),
-            (MatchRank.GUIDE_WORD, lambda: guide_word == query),
-            (MatchRank.CITATION_FORM_PREFIX, lambda: folded_form.startswith(query)),
-            (MatchRank.CITATION_FORM_SUBSTRING, lambda: query in folded_form),
+            (MatchRank.GUIDE_WORD, lambda: fields.guide_word == query),
+            (
+                MatchRank.CITATION_FORM_PREFIX,
+                lambda: fields.folded_form.startswith(query),
+            ),
+            (MatchRank.CITATION_FORM_SUBSTRING, lambda: query in fields.folded_form),
             (
                 MatchRank.WHOLE_WORD_IN_TEXT,
-                lambda: bool(self._whole_word.search(f"{guide_word} {text}")),
+                lambda: bool(
+                    self._whole_word.search(f"{fields.guide_word} {fields.text}")
+                ),
             ),
-            (MatchRank.SUBSTRING_IN_TEXT, lambda: query in text),
+            (MatchRank.SUBSTRING_IN_TEXT, lambda: query in fields.text),
         )
 
     def key(

@@ -7,6 +7,7 @@ from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import fold
 DATA_TYPE: DataType = "sumerian-dictionary"
 SEARCHED_FIELDS: Sequence[str] = Fields.SUMERIAN_DICTIONARY.value["COLLATED_FIELDS"]
 IGNORABLE_CHARACTERS = "[{}\u0300-\u036f]*"
+SEPARATOR_PATTERN = "[-. ]"
 PRECOMPOSED_LATIN_RANGES: Sequence[range] = (
     range(0x00C0, 0x0250),
     range(0x1E00, 0x1F00),
@@ -31,6 +32,8 @@ def _class_members(pattern: str) -> str:
 
 
 def _character_pattern(character: str) -> str:
+    if character == " ":
+        return SEPARATOR_PATTERN
     collated = CollatedFieldQuery(character, SEARCHED_FIELDS[0], DATA_TYPE).value
     pattern = collated or re.escape(character)
     letters = LETTERS_BY_FOLD.get(character)

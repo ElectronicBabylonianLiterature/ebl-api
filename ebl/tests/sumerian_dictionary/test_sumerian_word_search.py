@@ -21,6 +21,7 @@ from ebl.tests.factories.sumerian_dictionary import (
     SumerianWordFactory,
 )
 from ebl.tests.sumerian_dictionary.conftest import InsertWords
+from ebl.tests.sumerian_dictionary.folding_pairs import FOLDING_PAIRS
 
 
 def _ids(
@@ -46,22 +47,7 @@ def test_empty_query_finds_nothing(
     assert (result.total, result.entries) == (0, ())
 
 
-@pytest.mark.parametrize(
-    "stored,typed",
-    [
-        ("šu", "su"),
-        ("šu", "szu"),
-        ("ṣa", "sa"),
-        ("ṭu", "tu"),
-        ("ḫa", "ha"),
-        ("ĝar", "gar"),
-        ("ĝar", "ŋar"),
-        ("ŋar", "gar"),
-        ("dug₄", "dug4"),
-        ("tumₓ", "tumx"),
-        ("Ĝeššar", "gessar"),
-    ],
-)
+@pytest.mark.parametrize("stored,typed", FOLDING_PAIRS)
 def test_folding_pairs_find_the_stored_form(
     sumerian_word_repository: MongoSumerianWordRepository,
     insert_words: InsertWords,
@@ -204,3 +190,12 @@ def test_special_characters_are_literal(
     insert_words(SumerianWordFactory.build(id="literal", citation_form=query))
 
     assert _ids(sumerian_word_repository, query) == ["literal"]
+
+
+def test_separators_do_not_match_letters(
+    sumerian_word_repository: MongoSumerianWordRepository,
+    insert_words: InsertWords,
+) -> None:
+    insert_words(SumerianWordFactory.build(id="joined", citation_form="dumuamunus"))
+
+    assert _ids(sumerian_word_repository, "dumu-munus") == []

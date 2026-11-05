@@ -7,6 +7,7 @@ from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import (
     SumerianRelevanceRanker,
     fold,
 )
+from ebl.tests.sumerian_dictionary.folding_pairs import FOLDING_PAIRS
 
 
 def candidate(**fields: object) -> Mapping[str, object]:
@@ -24,24 +25,7 @@ def candidate(**fields: object) -> Mapping[str, object]:
     }
 
 
-@pytest.mark.parametrize(
-    "stored,typed",
-    [
-        ("šu", "su"),
-        ("ṣa", "sa"),
-        ("ṭu", "tu"),
-        ("ḫa", "ha"),
-        ("ĝar", "gar"),
-        ("ĝar", "ŋar"),
-        ("dug₄", "dug4"),
-        ("tumₓ", "tumx"),
-        ("šu", "szu"),
-        ("ṣa", "s,a"),
-        ("ṭu", "t,u"),
-        ("ŠU", "šu"),
-        ("é", "e"),
-    ],
-)
+@pytest.mark.parametrize("stored,typed", FOLDING_PAIRS)
 def test_folding_pairs_meet(stored: str, typed: str) -> None:
     assert fold(stored) == fold(typed)
 

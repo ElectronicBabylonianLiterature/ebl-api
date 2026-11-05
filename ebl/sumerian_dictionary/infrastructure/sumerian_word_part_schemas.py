@@ -5,6 +5,7 @@ from ebl.sumerian_dictionary.domain.sumerian_word import (
     Attestation,
     AttingerForm,
     AttingerSense,
+    AttingerVariantRendering,
     Citation,
     EmesalForm,
     Epsd2Form,
@@ -18,7 +19,6 @@ from ebl.sumerian_dictionary.infrastructure.sumerian_schema_base import (
     ATTINGER_SOURCE,
     BORGER_SOURCE,
     DICTIONARY_SOURCES,
-    RENDERING_KINDS,
     OPTIONAL_SIGN_LISTS,
     UNRENDERED_REASONS,
     AttrsSchema,
@@ -104,20 +104,25 @@ class UnrenderedTokenSchema(AttrsSchema):
     reason = fields.String(required=True, validate=validate.OneOf(UNRENDERED_REASONS))
 
 
-class RenderingSchema(AttrsSchema):
-    model = Rendering
-
+class _RenderingFieldsSchema(AttrsSchema):
     spelling = fields.String(required=True)
-    source = fields.String(required=True, validate=validate.OneOf(DICTIONARY_SOURCES))
-    kind = fields.String(required=True, validate=validate.OneOf(RENDERING_KINDS))
     cuneiform = fields.List(fields.String(), required=True)
     complete = fields.Boolean(required=True)
     sign_lists = fields.List(fields.String(), data_key="signLists", load_default=list)
     unrendered = fields.List(fields.Nested(UnrenderedTokenSchema), load_default=list)
-    printed = fields.String(load_default="")
     known_wrong_characters = fields.List(
         fields.String(), data_key="knownWrongCharacters", load_default=list
     )
+
+
+class RenderingSchema(_RenderingFieldsSchema):
+    model = Rendering
+
+
+class AttingerVariantRenderingSchema(_RenderingFieldsSchema):
+    model = AttingerVariantRendering
+
+    printed = fields.String(load_default="")
 
 
 class CitationSchema(AttrsSchema):

@@ -16,6 +16,7 @@ from ebl.sumerian_dictionary.infrastructure.sumerian_word_part_schemas import (
     AttestationSchema,
     AttingerFormSchema,
     AttingerSenseSchema,
+    AttingerVariantRenderingSchema,
     CitationSchema,
     EmesalFormSchema,
     Epsd2FormSchema,
@@ -58,7 +59,11 @@ class SumerianWordBaseSchema(AttrsSchema):
     attinger_forms = _nested(AttingerFormSchema, "attingerForms")
     epsd2_forms = _nested(Epsd2FormSchema, "epsd2Forms")
     signs = _nested(SignEntrySchema)
-    renderings = _nested(RenderingSchema)
+    attinger_key_renderings = _nested(RenderingSchema, "attingerKeyRenderings")
+    attinger_variant_renderings = _nested(
+        AttingerVariantRenderingSchema, "attingerVariantRenderings"
+    )
+    epsd2_form_renderings = _nested(RenderingSchema, "epsd2FormRenderings")
     compounds = _nested(WordLinkSchema)
     name_compounds = _nested(WordLinkSchema, "nameCompounds")
     cross_references = _nested(CrossReferenceSchema, "crossReferences")

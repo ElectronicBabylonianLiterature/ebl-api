@@ -1,5 +1,6 @@
 from typing import List, Mapping, Sequence, Tuple, cast
 
+import attr
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
@@ -16,8 +17,8 @@ from ebl.sumerian_dictionary.domain.sumerian_word_summary import (
 )
 from ebl.sumerian_dictionary.infrastructure.sumerian_search_pipeline import (
     MANAGED_DOCUMENT,
+    ranking_projection,
     search_match,
-    search_projection,
     statistics_counts,
     statistics_pipeline,
     summary_projection,
@@ -77,11 +78,7 @@ class MongoSumerianWordRepository(SumerianWordRepository):
         ranked = self._rank(ranker, self._candidates(query, ranker.folded_query))
         start = query.offset
         end = start + query.limit
-        page = ranked[start:end]
-        return SearchResult(
-            len(ranked),
-            tuple(self._summary(ranker, document) for _, document in page),
-        )
+        return SearchResult(len(ranked), self._page(ranker, ranked[start:end]))
 
     def find_summaries(self, ids: Sequence[str]) -> Sequence[SumerianWordSummary]:
         documents = self._collection.aggregate(
@@ -113,7 +110,7 @@ class MongoSumerianWordRepository(SumerianWordRepository):
             self._collection.aggregate(
                 [
                     {"$match": search_match(query, folded_query)},
-                    {"$project": search_projection()},
+                    {"$project": ranking_projection()},
                 ]
             )
         )
@@ -131,12 +128,13 @@ class MongoSumerianWordRepository(SumerianWordRepository):
         ]
         return sorted(ranked, key=lambda pair: ranker.key(*pair))
 
-    def _summary(
-        self, ranker: SumerianRelevanceRanker, document: Mapping[str, object]
-    ) -> SumerianWordSummary:
-        return cast(
-            SumerianWordSummary,
-            SumerianWordSummarySchema().load(
-                {**document, "matchedAlias": ranker.alias_hit(document)}
-            ),
+    def _page(
+        self, ranker: SumerianRelevanceRanker, page: Sequence[RankedDocument]
+    ) -> Sequence[SumerianWordSummary]:
+        aliases = {
+            str(document["_id"]): ranker.alias_hit(document) for _, document in page
+        }
+        return tuple(
+            attr.evolve(summary, matched_alias=aliases[summary.id])
+            for summary in self.find_summaries(list(aliases))
         )

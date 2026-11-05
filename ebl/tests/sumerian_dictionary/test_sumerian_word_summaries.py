@@ -1,8 +1,12 @@
-from typing import Sequence
+from typing import Mapping, Sequence
 
 import pytest
 
-from ebl.sumerian_dictionary.domain.sumerian_word import Epsd2Sense, Rendering
+from ebl.sumerian_dictionary.domain.sumerian_word import (
+    AttingerVariantRendering,
+    Epsd2Sense,
+    Rendering,
+)
 from ebl.sumerian_dictionary.domain.sumerian_word_summary import SumerianWordSummary
 from ebl.sumerian_dictionary.infrastructure.mongo_sumerian_word_repository import (
     MongoSumerianWordRepository,
@@ -14,10 +18,12 @@ from ebl.tests.factories.sumerian_dictionary import (
 from ebl.tests.sumerian_dictionary.conftest import InsertWords
 
 
-def _rendering(
-    spelling: str, source: str, kind: str, cuneiform: str, complete: bool = True
-) -> Rendering:
-    return Rendering(spelling, source, kind, (cuneiform, "other"), complete)
+def _rendering(spelling: str, cuneiform: str, complete: bool = True) -> Rendering:
+    return Rendering(spelling, (cuneiform, "other"), complete)
+
+
+KEY_A = _rendering("a", "𒀀")
+FORM_LUGAL = _rendering("lugal", "𒈗")
 
 
 def _summary(repository: MongoSumerianWordRepository, id_: str) -> SumerianWordSummary:
@@ -38,7 +44,7 @@ def test_summary_of_a_complete_word(
         pos="N",
         attinger_pos="N",
         language="EMESAL",
-        cuneiform="",
+        cuneiform="𒈗",
         french_senses=("roi",),
         english_senses=("king",),
         has_attinger=True,
@@ -72,36 +78,41 @@ def test_summary_of_an_empty_word(
 @pytest.mark.parametrize(
     "renderings,expected",
     [
-        ((_rendering("a", "attinger", "key", "𒀀"),), "𒀀"),
+        ({"attinger_key_renderings": (KEY_A,)}, "𒀀"),
         (
-            (
-                _rendering("a", "attinger", "key", "𒀉", complete=False),
-                _rendering("a", "attinger", "key", "𒀀"),
-            ),
+            {"attinger_key_renderings": (_rendering("a", "𒀉", complete=False), KEY_A)},
             "𒀀",
         ),
         (
-            (
-                _rendering("lugal", "epsd2", "form", "𒈗"),
-                _rendering("a", "attinger", "key", "𒀀"),
-            ),
+            {
+                "attinger_key_renderings": (KEY_A,),
+                "epsd2_form_renderings": (FORM_LUGAL,),
+            },
             "𒀀",
         ),
-        ((_rendering("lugal", "epsd2", "form", "𒈗"),), "𒈗"),
-        ((_rendering("lugal", "attinger", "variant", "𒈗"),), ""),
-        ((_rendering("lugal-e", "epsd2", "form", "𒈗"),), ""),
-        ((_rendering("lugal", "epsd2", "form", "𒈗", complete=False),), ""),
+        ({"epsd2_form_renderings": (FORM_LUGAL,)}, "𒈗"),
+        (
+            {
+                "attinger_variant_renderings": (
+                    AttingerVariantRendering("lugal", ("𒈗",), True),
+                )
+            },
+            "",
+        ),
+        ({"epsd2_form_renderings": (_rendering("lugal-e", "𒈗"),)}, ""),
+        (
+            {"epsd2_form_renderings": (_rendering("lugal", "𒈗", complete=False),)},
+            "",
+        ),
     ],
 )
 def test_summary_cuneiform(
     sumerian_word_repository: MongoSumerianWordRepository,
     insert_words: InsertWords,
-    renderings: Sequence[Rendering],
+    renderings: Mapping[str, Sequence[object]],
     expected: str,
 ) -> None:
-    insert_words(
-        SumerianWordFactory.build(id="w", citation_form="lugal", renderings=renderings)
-    )
+    insert_words(SumerianWordFactory.build(id="w", citation_form="lugal", **renderings))
 
     assert _summary(sumerian_word_repository, "w").cuneiform == expected
 

@@ -33,10 +33,10 @@ def _has_object(path: str) -> dict:
     return {"$eq": [{"$type": f"${path}"}, "object"]}
 
 
-def _first_cuneiform(*conditions: dict) -> dict:
+def _first_cuneiform(path: str, *conditions: dict) -> dict:
     complete_matches = {
         "$filter": {
-            "input": _as_array("renderings"),
+            "input": _as_array(path),
             "cond": {"$and": [{"$eq": ["$$this.complete", True]}, *conditions]},
         }
     }
@@ -50,10 +50,9 @@ def _first_cuneiform(*conditions: dict) -> dict:
 
 
 def _head_cuneiform() -> dict:
-    key = _first_cuneiform({"$eq": ["$$this.kind", "key"]})
+    key = _first_cuneiform("attingerKeyRenderings")
     citation_form = _first_cuneiform(
-        {"$eq": ["$$this.source", "epsd2"]},
-        {"$eq": ["$$this.spelling", "$citationForm"]},
+        "epsd2FormRenderings", {"$eq": ["$$this.spelling", "$citationForm"]}
     )
     return {"$ifNull": [key, {"$ifNull": [citation_form, ""]}]}
 
@@ -83,9 +82,13 @@ def summary_projection() -> dict:
     }
 
 
-def search_projection() -> dict:
+def ranking_projection() -> dict:
     return {
-        **summary_projection(),
+        "citationForm": 1,
+        "homonym": 1,
+        "guideWord": 1,
+        "hasAttinger": _has_object("sources.attinger"),
+        "attestationCount": {"$ifNull": ["$attestation.count", 0]},
         "aliasForms": _values("aliases.form"),
         "senseMeanings": {
             "$concatArrays": [

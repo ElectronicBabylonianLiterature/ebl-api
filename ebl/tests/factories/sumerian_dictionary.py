@@ -8,6 +8,7 @@ from ebl.sumerian_dictionary.domain.sumerian_word import (
     AttingerHeadword,
     AttingerSense,
     AttingerSource,
+    AttingerVariantRendering,
     Citation,
     EmesalForm,
     Epsd2Form,
@@ -70,7 +71,9 @@ SumerianWordFactory = make_factory(
     attinger_forms=(),
     epsd2_forms=(),
     signs=(),
-    renderings=(),
+    attinger_key_renderings=(),
+    attinger_variant_renderings=(),
+    epsd2_form_renderings=(),
     head=None,
     compounds=(),
     name_compounds=(),
@@ -102,16 +105,14 @@ def _complete_sign() -> SignEntry:
     )
 
 
-def _partial_rendering() -> Rendering:
-    return Rendering(
+def _partial_rendering() -> AttingerVariantRendering:
+    return AttingerVariantRendering(
         spelling="lu₂-ga-al",
-        source="attinger",
-        kind="variant",
         cuneiform=("𒇽?",),
         complete=False,
+        printed="˹lu˺-ga-al",
         sign_lists=("ebl", "ogsl"),
         unrendered=(UnrenderedToken("ga", "noCharacter"),),
-        printed="˹lu˺-ga-al",
         known_wrong_characters=("𒇽",),
     )
 
@@ -132,7 +133,9 @@ def build_complete_word() -> SumerianWord:
         attinger_forms=(AttingerForm("lu-gal", True, "ELA 12"),),
         epsd2_forms=(Epsd2Form("lugal", 1200, 98.5),),
         signs=(_complete_sign(),),
-        renderings=(_partial_rendering(),),
+        attinger_key_renderings=(Rendering("lugal", ("𒈗",), True, ("ebl",)),),
+        attinger_variant_renderings=(_partial_rendering(),),
+        epsd2_form_renderings=(Rendering("lugal", ("𒈗",), True, ("ebl",)),),
         head=WordLink("o0000001", "lu₂", "I", "man"),
         compounds=(WordLink("o0000002", "lugal-ĝu₁₀", "", ""),),
         name_compounds=(WordLink("o0000003", "Lugal-banda", "", ""),),

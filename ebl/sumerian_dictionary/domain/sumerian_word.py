@@ -73,13 +73,21 @@ class UnrenderedToken:
 @attr.s(frozen=True, auto_attribs=True)
 class Rendering:
     spelling: str
-    source: str
-    kind: str
     cuneiform: Sequence[str]
     complete: bool
     sign_lists: Sequence[str] = ()
     unrendered: Sequence[UnrenderedToken] = ()
+    known_wrong_characters: Sequence[str] = ()
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class AttingerVariantRendering:
+    spelling: str
+    cuneiform: Sequence[str]
+    complete: bool
     printed: str = ""
+    sign_lists: Sequence[str] = ()
+    unrendered: Sequence[UnrenderedToken] = ()
     known_wrong_characters: Sequence[str] = ()
 
 
@@ -174,7 +182,9 @@ class SumerianWord:
     attinger_forms: Sequence[AttingerForm]
     epsd2_forms: Sequence[Epsd2Form]
     signs: Sequence[SignEntry]
-    renderings: Sequence[Rendering]
+    attinger_key_renderings: Sequence[Rendering]
+    attinger_variant_renderings: Sequence[AttingerVariantRendering]
+    epsd2_form_renderings: Sequence[Rendering]
     head: Optional[WordLink]
     compounds: Sequence[WordLink]
     name_compounds: Sequence[WordLink]

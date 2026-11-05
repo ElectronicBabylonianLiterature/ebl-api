@@ -33,7 +33,9 @@ LIST_FIELDS = (
     "attingerForms",
     "epsd2Forms",
     "signs",
-    "renderings",
+    "attingerKeyRenderings",
+    "attingerVariantRenderings",
+    "epsd2FormRenderings",
     "compounds",
     "nameCompounds",
     "crossReferences",
@@ -154,26 +156,13 @@ def test_unknown_fields_are_excluded_at_every_level() -> None:
     [
         ("language", "AKKADIAN"),
         (
-            "renderings",
+            "epsd2FormRenderings",
             [
                 {
                     "spelling": "a",
-                    "source": "x",
-                    "kind": "key",
                     "cuneiform": [],
-                    "complete": True,
-                }
-            ],
-        ),
-        (
-            "renderings",
-            [
-                {
-                    "spelling": "a",
-                    "source": "epsd2",
-                    "kind": "x",
-                    "cuneiform": [],
-                    "complete": True,
+                    "complete": False,
+                    "unrendered": [{"token": "a", "reason": "x"}],
                 }
             ],
         ),
@@ -213,7 +202,17 @@ def test_values_outside_the_vocabulary_are_rejected(field: str, value: object) -
         SumerianWordDocumentSchema().load({**MINIMAL_DOCUMENT, field: value})
 
 
-@pytest.mark.parametrize("field", ["citationForm", "sources", "match", "renderings"])
+@pytest.mark.parametrize(
+    "field",
+    [
+        "citationForm",
+        "sources",
+        "match",
+        "attingerKeyRenderings",
+        "attingerVariantRenderings",
+        "epsd2FormRenderings",
+    ],
+)
 def test_required_fields_are_enforced(field: str) -> None:
     document = {key: value for key, value in MINIMAL_DOCUMENT.items() if key != field}
 
