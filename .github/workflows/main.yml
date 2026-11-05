@@ -2,8 +2,9 @@ name: CI
 
 on:
   push:
-  pull_request:
     branches: [master]
+  pull_request:
+    branches: [master, 'fix/**']
   
   #Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
