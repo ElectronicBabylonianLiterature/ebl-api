@@ -1,0 +1,207 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import AbstractSet, TypedDict, cast
+
+from marshmallow import (
+    Schema,
+    ValidationError,
+    fields,
+    post_load,
+    validate,
+    validates_schema,
+)
+
+from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
+from ebl.fragmentarium.application.map_json import load_strict_json
+
+
+def _nonblank(value: str) -> None:
+    if not value.strip():
+        raise ValidationError("Field must not be blank.")
+
+
+class CuratedMappingRecord(TypedDict):
+    findspotId: int
+    polygonIds: list[str]
+    locationPrecision: str
+    matchMethod: str
+    source: str
+    sourceRevision: str
+
+
+class CurationSourceRow(Schema):
+    findspot_id = fields.Integer(
+        required=True,
+        strict=True,
+        data_key="findspotId",
+        validate=validate.Range(min=0, max=MAX_FINDSPOT_ID),
+    )
+    site_name = fields.String(required=True, data_key="siteName")
+    area = fields.String(required=True)
+    sector = fields.String(required=True)
+    building = fields.String(required=True)
+    map_name = fields.String(required=True, data_key="map")
+
+
+class CuratedCrosswalkRow(Schema):
+    findspot_id = fields.Integer(
+        required=True,
+        strict=True,
+        data_key="findspotId",
+        validate=validate.Range(min=0, max=MAX_FINDSPOT_ID),
+    )
+    site_id = fields.String(required=True, data_key="siteId")
+    polygon_ids = fields.List(
+        fields.String(validate=validate.Length(min=1)),
+        required=True,
+        data_key="polygonIds",
+        validate=validate.Length(min=1),
+    )
+    match_method = fields.String(required=True, data_key="matchMethod")
+    reviewer = fields.String(required=True, validate=_nonblank)
+    review_date = fields.String(
+        required=True, data_key="reviewDate", validate=_nonblank
+    )
+    source = fields.String(required=True, validate=_nonblank)
+    source_revision = fields.String(
+        required=True, data_key="sourceRevision", validate=_nonblank
+    )
+    note = fields.String(required=False, load_default="")
+    site_name = fields.String(required=False, data_key="siteName")
+    area = fields.String(required=False)
+    sector = fields.String(required=False)
+    building = fields.String(required=False)
+    map_name = fields.String(required=False, data_key="map")
+    status = fields.String(required=False)
+    required_decision = fields.String(required=False, data_key="requiredDecision")
+    derivation_status = fields.String(required=False, data_key="derivationStatus")
+    membership_status = fields.String(required=False, data_key="membershipStatus")
+    candidate_polygon_ids = fields.List(
+        fields.String(), required=False, data_key="candidatePolygonIds"
+    )
+    source_rows = fields.List(
+        fields.Nested(CurationSourceRow), required=False, data_key="sourceRows"
+    )
+
+    @validates_schema
+    def validate_row(self, data: dict, **kwargs: object) -> None:
+        if data.get("match_method") != "curated":
+            raise ValidationError(
+                "curated crosswalk rows must have matchMethod 'curated'.",
+                "matchMethod",
+            )
+        polygon_ids = [polygon_id.strip() for polygon_id in data.get("polygon_ids", ())]
+        data["polygon_ids"] = polygon_ids
+        if len(set(polygon_ids)) != len(polygon_ids):
+            raise ValidationError("polygonIds must be unique.", "polygonIds")
+        if any(not polygon_id.strip() for polygon_id in polygon_ids):
+            raise ValidationError("polygonIds must not contain blanks.", "polygonIds")
+        if any(
+            row["findspot_id"] != data["findspot_id"]
+            for row in data.get("source_rows", ())
+        ):
+            raise ValidationError(
+                "sourceRows must describe the same findspot.", "sourceRows"
+            )
+
+    @post_load
+    def to_mapping_record(self, data: dict, **kwargs: object) -> CuratedMappingRecord:
+        return {
+            "findspotId": data["findspot_id"],
+            "polygonIds": list(data["polygon_ids"]),
+            "locationPrecision": "excavation-area",
+            "matchMethod": "curated",
+            "source": data["source"].strip(),
+            "sourceRevision": data["source_revision"].strip(),
+        }
+
+
+class PendingCuratedCrosswalkRow(CuratedCrosswalkRow):
+    polygon_ids = fields.List(
+        fields.String(),
+        required=True,
+        data_key="polygonIds",
+        validate=validate.Length(equal=0),
+    )
+    reviewer = fields.String(required=True, validate=validate.OneOf(("",)))
+    review_date = fields.String(
+        required=True, data_key="reviewDate", validate=validate.OneOf(("",))
+    )
+
+
+def _parse_curated_row(
+    entry: object, site_id: str
+) -> tuple[CuratedMappingRecord, bool]:
+    if not isinstance(entry, dict):
+        raise ValueError("Curated rows must be JSON objects.")
+    if entry.get("siteId") != site_id:
+        raise ValueError(
+            f"Curated row for findspot {entry.get('findspotId')} declares "
+            f"siteId {entry.get('siteId')!r}, expected {site_id!r}."
+        )
+    pending = (
+        entry.get("polygonIds") == []
+        and entry.get("status") == "needs-human-curation"
+        and entry.get("reviewer") == ""
+        and entry.get("reviewDate") == ""
+    )
+    schema = PendingCuratedCrosswalkRow() if pending else CuratedCrosswalkRow()
+    try:
+        record = cast(CuratedMappingRecord, schema.load(entry))
+    except ValidationError as error:
+        raise ValueError(
+            f"Invalid curation for findspot {entry.get('findspotId')!r}: {error.messages}"
+        ) from error
+    return record, pending
+
+
+def load_curated_mappings(
+    path: Path | None,
+    site_id: str,
+    known_polygon_ids: set[str],
+    authoritative_findspot_ids: AbstractSet[int],
+) -> tuple[CuratedMappingRecord, ...]:
+    if path is None:
+        return ()
+    entries = load_strict_json(Path(path).read_text(encoding="utf-8"), str(path))
+    if not isinstance(entries, list):
+        raise ValueError(f"Expected a JSON array of curated rows in {path}.")
+    records: list[CuratedMappingRecord] = []
+    seen_findspot_ids: set[int] = set()
+    for entry in entries:
+        record, pending = _parse_curated_row(entry, site_id)
+        if record["findspotId"] in seen_findspot_ids:
+            raise ValueError(f"Duplicate curated findspot ID: {record['findspotId']}")
+        seen_findspot_ids.add(record["findspotId"])
+        if pending:
+            continue
+        if record["findspotId"] not in authoritative_findspot_ids:
+            raise ValueError(
+                f"Curated findspot ID {record['findspotId']} has no authoritative "
+                f"membership evidence for site {site_id}."
+            )
+        missing = [pid for pid in record["polygonIds"] if pid not in known_polygon_ids]
+        if missing:
+            raise ValueError(
+                f"Curated row for findspot {record['findspotId']} references "
+                f"unknown polygon IDs: {missing}"
+            )
+        records.append(record)
+    return tuple(records)
+
+
+def merge_verified_and_curated(
+    verified: tuple[CuratedMappingRecord, ...],
+    curated: tuple[CuratedMappingRecord, ...],
+) -> tuple[CuratedMappingRecord, ...]:
+    verified_ids = {record["findspotId"] for record in verified}
+    curated_ids = {record["findspotId"] for record in curated}
+    overlap = verified_ids & curated_ids
+    if overlap:
+        raise ValueError(
+            f"Findspot IDs present in both verified and curated mappings: {overlap}"
+        )
+    return tuple(
+        sorted(verified + curated, key=lambda record: int(record["findspotId"]))
+    )
