@@ -32,6 +32,28 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.transliteration.domain.genre import Genre
 
 
+__all__ = (
+    (
+        "ChapterListingSchema",
+        "ChapterSchema",
+        "ManuscriptAttestationSchema",
+        "TextSchema",
+        "UncertainFragmentAttestationSchema",
+        "UncertainFragmentSchema",
+    )
+    + (
+        "DictionaryLinePaginationSchema",
+        "DictionaryLineSchema",
+        "LineSchema",
+        "LineVariantSchema",
+        "ManuscriptLineSchema",
+        "ManuscriptSchema",
+        "OldSiglumSchema",
+    )
+    + ("labels", "manuscript_id")
+)
+
+
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnumField(Classification, required=True)
