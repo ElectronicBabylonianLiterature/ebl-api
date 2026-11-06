@@ -1,0 +1,162 @@
+[
+  {
+    "polygonId": "nippur-enlil-temple-6d0422078951",
+    "name": "Enlil Temple",
+    "areaName": "Enlil Temple",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "6d0422078951"
+  },
+  {
+    "polygonId": "nippur-house-b-fa54c8fb4309",
+    "name": "House B",
+    "areaName": "House B",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "fa54c8fb4309"
+  },
+  {
+    "polygonId": "nippur-house-c-d166671e2914",
+    "name": "House C",
+    "areaName": "House C",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "d166671e2914"
+  },
+  {
+    "polygonId": "nippur-house-d-58cfaada3c2c",
+    "name": "House D",
+    "areaName": "House D",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "58cfaada3c2c"
+  },
+  {
+    "polygonId": "nippur-house-f-3c7002731e7f",
+    "name": "House F",
+    "areaName": "House F",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "3c7002731e7f"
+  },
+  {
+    "polygonId": "nippur-house-i-0519b761097e",
+    "name": "House I",
+    "areaName": "House I",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "0519b761097e"
+  },
+  {
+    "polygonId": "nippur-house-j-6bfbd6fd9957",
+    "name": "House J",
+    "areaName": "House J",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "6bfbd6fd9957"
+  },
+  {
+    "polygonId": "nippur-inanna-temple-65aa508e7862",
+    "name": "Inanna Temple",
+    "areaName": "Inanna Temple",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "65aa508e7862"
+  },
+  {
+    "polygonId": "nippur-north-temple-359552df33e1",
+    "name": "North Temple",
+    "areaName": "North Temple",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "359552df33e1"
+  },
+  {
+    "polygonId": "nippur-sa-6ece7116d8ca",
+    "name": "SA",
+    "areaName": "SA",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "6ece7116d8ca"
+  },
+  {
+    "polygonId": "nippur-sb-04889d9160fd",
+    "name": "SB",
+    "areaName": "SB",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "04889d9160fd"
+  },
+  {
+    "polygonId": "nippur-scribal-quarter-a566fe34fdbe",
+    "name": "Scribal Quarter",
+    "areaName": "Scribal Quarter",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "a566fe34fdbe"
+  },
+  {
+    "polygonId": "nippur-sd-e3fd3f91b54b",
+    "name": "SD",
+    "areaName": "SD",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "e3fd3f91b54b"
+  },
+  {
+    "polygonId": "nippur-se-d45d3339f015",
+    "name": "SE",
+    "areaName": "SE",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "d45d3339f015"
+  },
+  {
+    "polygonId": "nippur-sk-412bf7d0598b",
+    "name": "SK",
+    "areaName": "SK",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "412bf7d0598b"
+  },
+  {
+    "polygonId": "nippur-ta-a711959786ac",
+    "name": "TA",
+    "areaName": "TA",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "a711959786ac"
+  },
+  {
+    "polygonId": "nippur-tb-beb0e6157cac",
+    "name": "TB",
+    "areaName": "TB",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "beb0e6157cac"
+  },
+  {
+    "polygonId": "nippur-wb-589c63a46fb1",
+    "name": "WB",
+    "areaName": "WB",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "589c63a46fb1"
+  },
+  {
+    "polygonId": "nippur-west-mound-b014ce4004a4",
+    "name": "West Mound",
+    "areaName": "West Mound",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "b014ce4004a4"
+  },
+  {
+    "polygonId": "nippur-wf-bab099415d47",
+    "name": "WF",
+    "areaName": "WF",
+    "siteId": "NIPPUR",
+    "siteName": "Nippur",
+    "geometryChecksum": "bab099415d47"
+  }
+]
