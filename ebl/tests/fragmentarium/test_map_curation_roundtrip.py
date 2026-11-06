@@ -1,4 +1,5 @@
 import json
+import os
 import pytest
 from pathlib import Path
 
@@ -93,7 +94,7 @@ def test_publication_preserves_reviewed_curation_input(
         if alias == "symlink":
             source.symlink_to(target)
         else:
-            source.hardlink_to(target)
+            os.link(target, source)
     before = {path.name: path.read_bytes() for path in output_dir.iterdir()}
 
     with pytest.raises(ValueError, match="must not alias a publication target"):
