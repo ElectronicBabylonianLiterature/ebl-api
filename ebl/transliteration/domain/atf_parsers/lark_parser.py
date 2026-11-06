@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import List, Optional, Sequence, Iterator, Tuple, cast
+from typing import List, Optional, Sequence, Iterator, Tuple, TypedDict, cast
 import re
 
 import pydash
@@ -37,7 +37,14 @@ from ebl.transliteration.domain.labels import Label
 
 ATF_GRAMMAR_PATH = "atf_grammar/ebl_atf.lark"
 ATF_COMMON_PATH = "atf_grammar/ebl_atf_common.lark"
-kwargs_lark = {"maybe_placeholders": True, "rel_to": __file__}
+
+
+class LarkParserOptions(TypedDict):
+    maybe_placeholders: bool
+    rel_to: str
+
+
+kwargs_lark: LarkParserOptions = {"maybe_placeholders": True, "rel_to": __file__}
 LINE_PARSER_STARTS = [
     "start",
     "text_line",
