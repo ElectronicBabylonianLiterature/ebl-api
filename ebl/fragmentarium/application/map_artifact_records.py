@@ -1,4 +1,7 @@
-from ebl.fragmentarium.application.map_artifact_types import CurationRecord
+from ebl.fragmentarium.application.map_artifact_types import (
+    CurationRecord,
+    SourceRowEvidence,
+)
 from ebl.fragmentarium.application.map_curated_mappings import CuratedMappingRecord
 from ebl.fragmentarium.application.map_findspot_grouping import FindspotGroup
 from ebl.fragmentarium.application.map_site_config import MapSiteConfig
@@ -52,14 +55,14 @@ def build_curation_record(
         membershipStatus="confirmed" if has_membership else "unverified-or-conflicting",
         candidatePolygonIds=sorted(group.resolved_polygon_ids),
         sourceRows=[
-            {
-                "findspotId": item.findspot_id,
-                "siteName": item.site_name,
-                "area": item.area,
-                "sector": item.sector,
-                "building": item.building,
-                "map": item.map_name,
-            }
+            SourceRowEvidence(
+                findspotId=item.findspot_id,
+                siteName=item.site_name,
+                area=item.area,
+                sector=item.sector,
+                building=item.building,
+                map=item.map_name,
+            )
             for item in group.rows
         ],
     )
