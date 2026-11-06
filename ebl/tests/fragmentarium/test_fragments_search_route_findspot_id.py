@@ -85,6 +85,13 @@ def test_parse_findspot_id_accepts_whitespace_and_bson_max() -> None:
     }
 
 
+@pytest.mark.parametrize(
+    "value", ["0" * 64, "0" * 63 + "1", "0" * 45 + str(MAX_FINDSPOT_ID)]
+)
+def test_parse_findspot_id_accepts_padded_values(value: str) -> None:
+    assert parse_findspot_id({"findspotId": value}) == {"findspotId": int(value)}
+
+
 def test_parse_findspot_id_rejects_over_raw_length_limit() -> None:
     value = "1" * (MAX_FINDSPOT_ID_RAW_LENGTH + 1)
     with pytest.raises(DataError, match="must not exceed"):

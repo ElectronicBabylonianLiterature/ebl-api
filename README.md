@@ -6,6 +6,10 @@ must omit `findspot.mapLocation` when submitting archaeology updates with
 writing an update. Curated map locations belong to the canonical findspot
 read model.
 
+Before enabling clients that send `findspotId` or `findspotIds`, update every
+serving backend replica to support these filters. Older replicas ignore them,
+so a mixed-version rollout cannot guarantee findspot-restricted results.
+
 ![Build Status](https://github.com/ElectronicBabylonianLiterature/ebl-api/workflows/CI/badge.svg?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
