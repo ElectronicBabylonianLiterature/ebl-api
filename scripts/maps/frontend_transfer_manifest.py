@@ -8,13 +8,16 @@ from ebl.fragmentarium.application.map_artifact_storage import (
     artifact_manifest_name,
 )
 from ebl.fragmentarium.application.map_json import load_strict_json
+from ebl.fragmentarium.application.map_polygon_identity import (
+    contains_control_character,
+)
 from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
 
 ARTIFACT_SUFFIXES = (
     "polygon_inventory.json",
     "findspot_polygon_mappings.json",
     "findspot_polygon_curation_template.json",
-    "findspot_polygon_curation_report.md",
+    "findspot_polygon_curation_report.json",
 )
 
 
@@ -49,11 +52,19 @@ def _read_manifest(manifest_path: Path, site_id: str) -> tuple[str, dict[str, ob
     manifest = load_strict_json(
         _regular_file(manifest_path).read_text(encoding="utf-8"), str(manifest_path)
     )
-    if not isinstance(manifest, dict) or manifest.get("schemaVersion") != 1:
+    if (
+        not isinstance(manifest, dict)
+        or type(manifest.get("schemaVersion")) is not int
+        or manifest["schemaVersion"] != 1
+    ):
         raise ValueError(f"Invalid artifact manifest: {manifest_path}")
     revision = manifest.get("sourceRevision")
     declared_files = manifest.get("files")
-    if not isinstance(revision, str) or not revision.strip():
+    if (
+        not isinstance(revision, str)
+        or not revision.strip()
+        or contains_control_character(revision)
+    ):
         raise ValueError(f"Invalid source revision in {manifest_path}")
     if not isinstance(declared_files, dict) or set(declared_files) != _artifact_names(
         site_id
