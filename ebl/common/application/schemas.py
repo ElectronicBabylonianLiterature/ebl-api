@@ -17,13 +17,15 @@ class AbstractMuseumNumberSchema(Schema):
 
 class AccessionSchema(AbstractMuseumNumberSchema):
     @post_load
-    def create_accession(self, data, **kwargs) -> Accession:
+    def create_accession(self, data: dict, **kwargs: object) -> Accession:
         return Accession(**data)
 
 
 def deserialize_provenance_record(
-    schema: Schema, value: Optional[str]
+    schema: Schema, value: object
 ) -> Optional[ProvenanceRecord]:
+    if value is not None and not isinstance(value, str):
+        raise ValidationError("Provenance must be a string or null.")
     if not value:
         return None
     provenance_service = schema.context.get("provenance_service")
