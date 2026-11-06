@@ -61,6 +61,10 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
 
+      - name: Install Pillow build dependencies
+        if: ${{ startsWith(matrix.python-version, 'pypy') }}
+        run: sudo apt-get install -y libjpeg-dev zlib1g-dev
+
       - name: Install Python Dependencies
         id: install
         run: |
