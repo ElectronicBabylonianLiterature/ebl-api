@@ -15,6 +15,7 @@ from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.cache.application.cache import create_cache
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -94,7 +95,7 @@ def create_context():
     cache = create_cache()
     cache_repository = MongoCacheRepository(database)
     cache_repository.create_indexes()
-    custom_cache = ChapterCache(cache_repository)
+    custom_cache = ChapterCache(cache_repository, MongoChapterCacheState(database))
     provenance_repository = MongoProvenanceRepository(database)
     provenance_service = ProvenanceService(provenance_repository)
     return Context(

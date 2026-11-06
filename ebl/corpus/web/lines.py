@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, cast
 
 import falcon
 from marshmallow import Schema, fields, post_load
@@ -14,6 +14,7 @@ from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.errors import NotFoundError
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
+from ebl.users.web.user_request import UserRequest
 
 
 class LineEditSchema(Schema):
@@ -53,7 +54,7 @@ class LinesResource:
     @falcon.before(require_scope, "write:texts")
     def on_post(
         self,
-        req: falcon.Request,
+        req: UserRequest,
         resp: falcon.Response,
         genre: str,
         category: str,
@@ -62,7 +63,6 @@ class LinesResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete_chapter(chapter_id)
         schema = LinesUpdateSchema(
             context={"provenance_service": self._provenance_service}
         )
@@ -71,9 +71,10 @@ class LinesResource:
             raise falcon.HTTPBadRequest(
                 title="Request data failed validation", description=errors
             )
-        updated_chapter = self._corpus.update_lines(
-            chapter_id, schema.load(req.media), req.context.user
-        )
+        with self._cache.updating_chapter(chapter_id):
+            updated_chapter = self._corpus.update_lines(
+                chapter_id, cast(LinesUpdate, schema.load(req.media)), req.context.user
+            )
         resp.media = ApiChapterSchema().dump(updated_chapter)
 
 
@@ -86,7 +87,7 @@ class LinesImportResource:
     @validate(LinesImportSchema())
     def on_post(
         self,
-        req: falcon.Request,
+        req: UserRequest,
         resp: falcon.Response,
         genre: str,
         category: str,
@@ -95,10 +96,10 @@ class LinesImportResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete_chapter(chapter_id)
-        updated_chapter = self._corpus.import_lines(
-            chapter_id, req.media["atf"], req.context.user
-        )
+        with self._cache.updating_chapter(chapter_id):
+            updated_chapter = self._corpus.import_lines(
+                chapter_id, req.media["atf"], req.context.user
+            )
         resp.media = ApiChapterSchema().dump(updated_chapter)
 
 
@@ -121,17 +122,14 @@ class LineResource:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         cache_id = f"{str(chapter_id)} line-{number}"
 
-        if self._cache.has(cache_id):
-            resp.media = self._cache.get(cache_id)
-            return
-
-        try:
+        def create() -> dict:
             line, manuscripts = self._corpus.find_line_with_manuscript_joins(
                 chapter_id, int(number)
             )
             line_details = LineDetailsDisplay.from_line_manuscripts(line, manuscripts)
-            dump = LineDetailsDisplaySchema().dump(line_details)
-            self._cache.set(cache_id, dump)
-            resp.media = dump
+            return cast(dict, LineDetailsDisplaySchema().dump(line_details))
+
+        try:
+            resp.media = self._cache.get_or_create(chapter_id, cache_id, create)
         except (IndexError, ValueError) as error:
             raise NotFoundError(f"{chapter_id} line {number} not found.") from error
