@@ -231,7 +231,15 @@ def site_summary(
             "polygonCount": len(inventory),
             "mappingCount": len(mappings),
             "distinctMappedPolygonCount": len(distinct_polygons),
-            "unresolvedCount": len(curation),
+            "pendingCurationCount": len(curation),
+            "unresolvedCount": sum(
+                isinstance(record, dict) and record["derivationStatus"] != "conflict"
+                for record in curation
+            ),
+            "conflictCount": sum(
+                isinstance(record, dict) and record["derivationStatus"] == "conflict"
+                for record in curation
+            ),
         },
         findspot_ids,
     )
