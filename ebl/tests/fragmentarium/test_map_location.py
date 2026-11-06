@@ -38,6 +38,13 @@ def test_map_location_is_hashable() -> None:
     assert hash(_map_location()) == hash(_map_location())
 
 
+@pytest.mark.parametrize("field", ["location_precision", "match_method"])
+@pytest.mark.parametrize("value", [None, "excavation-area", "curated", 1])
+def test_map_location_rejects_non_enum_fields(field: str, value: object) -> None:
+    with pytest.raises(TypeError, match=field):
+        _map_location(**{field: value})
+
+
 def test_map_location_accepts_polygon_id_sequence() -> None:
     assert _map_location(polygon_ids=["assur-1", "assur-2"]).polygon_ids == (
         "assur-1",
