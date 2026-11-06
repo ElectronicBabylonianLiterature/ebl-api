@@ -1,7 +1,10 @@
-import hashlib
+from ebl.tests.fragmentarium.frontend_transfer_test_helpers import (
+    copy_artifacts as _copy_artifacts,
+    replace_declared_file as _replace_declared_file,
+)
+from typing import Callable
 import json
 from pathlib import Path
-import shutil
 import tarfile
 
 import pytest
@@ -12,25 +15,10 @@ from ebl.fragmentarium.application.map_artifact_generator import (
 )
 from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
 from scripts.maps import frontend_transfer_archive as transfer
-from scripts.maps.frontend_transfer_validation import read_artifact_sets
+from scripts.maps.frontend_transfer_manifest import read_artifact_sets
 
 
-def _copy_artifacts(tmp_path: Path) -> Path:
-    destination = tmp_path / "artifacts"
-    shutil.copytree(DEFAULT_OUTPUT_DIR, destination)
-    return destination
-
-
-def _replace_declared_file(data_dir: Path, name: str, payload: object) -> None:
-    content = json.dumps(payload).encode("utf-8")
-    (data_dir / name).write_bytes(content)
-    manifest_path = data_dir / f"{name.split('_', 1)[0]}_artifact_manifest.json"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    manifest["files"][name] = hashlib.sha256(content).hexdigest()
-    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
-
-
-def test_inventory_area_name_must_be_nonblank(tmp_path):
+def test_inventory_area_name_must_be_nonblank(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     name = "assur_polygon_inventory.json"
     inventory = json.loads((data_dir / name).read_text(encoding="utf-8"))
@@ -56,7 +44,9 @@ def test_inventory_area_name_must_be_nonblank(tmp_path):
         ),
     ),
 )
-def test_unknown_transferred_fields_are_rejected(tmp_path, name, mutation, message):
+def test_unknown_transferred_fields_are_rejected(
+    tmp_path: Path, name: str, mutation: dict[str, object], message: str
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     records = json.loads((data_dir / name).read_text(encoding="utf-8"))
     records[0].update(mutation)
@@ -72,7 +62,9 @@ def test_unknown_transferred_fields_are_rejected(tmp_path, name, mutation, messa
 @pytest.mark.parametrize(
     "mutation", ({"reviewer": "reviewed"}, {"area": 17}, {"reviewDate": None})
 )
-def test_curation_template_contract_is_exact(tmp_path, mutation):
+def test_curation_template_contract_is_exact(
+    tmp_path: Path, mutation: dict[str, object]
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     name = "assur_findspot_polygon_curation_template.json"
     records = json.loads((data_dir / name).read_text(encoding="utf-8"))
@@ -83,7 +75,9 @@ def test_curation_template_contract_is_exact(tmp_path, mutation):
         transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
 
 
-def test_manifest_embeds_exact_frontend_reproduction_inputs(monkeypatch):
+def test_manifest_embeds_exact_frontend_reproduction_inputs(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr(
         transfer, "_git", lambda *args: "" if args[0] == "status" else "a" * 40
     )
@@ -148,11 +142,11 @@ def test_manifest_expectations_follow_valid_curated_publication(tmp_path: Path) 
     }
 
 
-def _replace_first(field, value):
+def _replace_first(field: str, value: object) -> Callable[[list[dict]], list[dict]]:
     return lambda records: [{**records[0], field: value}, *records[1:]]
 
 
-def _duplicate_first(records):
+def _duplicate_first(records: list[dict]) -> list[dict]:
     return [records[0], *records]
 
 
@@ -192,7 +186,9 @@ def _duplicate_first(records):
         ),
     ),
 )
-def test_transferred_record_contract_is_enforced(tmp_path, name, transform, message):
+def test_transferred_record_contract_is_enforced(
+    tmp_path: Path, name: str, transform: Callable[[list[dict]], object], message: str
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     records = json.loads((data_dir / name).read_text(encoding="utf-8"))
     _replace_declared_file(data_dir, name, transform(records))
@@ -205,11 +201,15 @@ def test_transferred_record_contract_is_enforced(tmp_path, name, transform, mess
     ("field", "value", "message"),
     (
         ("schemaVersion", 2, "Invalid artifact manifest"),
+        ("schemaVersion", True, "Invalid artifact manifest"),
         ("sourceRevision", " ", "Invalid source revision"),
+        ("sourceRevision", "revision\nfake-checksum", "Invalid source revision"),
         ("files", {"unexpected.json": "0"}, "unexpected declarations"),
     ),
 )
-def test_artifact_manifest_contract_is_enforced(tmp_path, field, value, message):
+def test_artifact_manifest_contract_is_enforced(
+    tmp_path: Path, field: str, value: object, message: str
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     manifest_path = data_dir / "assur_artifact_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -220,7 +220,7 @@ def test_artifact_manifest_contract_is_enforced(tmp_path, field, value, message)
         read_artifact_sets(data_dir)
 
 
-def test_artifact_manifest_checksums_must_be_strings(tmp_path):
+def test_artifact_manifest_checksums_must_be_strings(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     manifest_path = data_dir / "assur_artifact_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -231,18 +231,6 @@ def test_artifact_manifest_checksums_must_be_strings(tmp_path):
         read_artifact_sets(data_dir)
 
 
-def test_missing_artifact_directory_is_rejected(tmp_path):
+def test_missing_artifact_directory_is_rejected(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError, match="does not exist"):
         read_artifact_sets(tmp_path / "missing")
-
-
-def test_archive_rejects_cross_site_findspot_ids(tmp_path: Path) -> None:
-    data_dir = _copy_artifacts(tmp_path)
-    name = "kalhu_findspot_polygon_curation_template.json"
-    records = json.loads((data_dir / name).read_text())
-    assur_mappings = data_dir / "assur_findspot_polygon_mappings.json"
-    records[0]["findspotId"] = json.loads(assur_mappings.read_text())[0]["findspotId"]
-    _replace_declared_file(data_dir, name, records)
-
-    with pytest.raises(ValueError, match="Findspot IDs must be unique across sites"):
-        transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
