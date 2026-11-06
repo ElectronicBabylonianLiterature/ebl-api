@@ -1,4 +1,6 @@
 import json
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
 import runpy
 import sys
@@ -10,21 +12,23 @@ from scripts.maps.generate_assur_map_artifacts import main as generate_assur
 
 
 def test_packaged_generator_cli_publishes_versioned_report(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path,
 ) -> None:
-    result = main(
-        [
-            "--site",
-            "ASSUR",
-            "--source-revision",
-            "cli-revision",
-            "--output-dir",
-            str(tmp_path),
-        ]
-    )
+    output = StringIO()
+    with redirect_stdout(output):
+        result = main(
+            [
+                "--site",
+                "ASSUR",
+                "--source-revision",
+                "cli-revision",
+                "--output-dir",
+                str(tmp_path),
+            ]
+        )
 
     assert result == 0
-    assert "Mappings: 315" in capsys.readouterr().out
+    assert "Mappings: 315" in output.getvalue()
     report = json.loads(
         (tmp_path / "assur_findspot_polygon_curation_report.json").read_text()
     )

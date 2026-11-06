@@ -14,8 +14,8 @@ KNOWN_POLYGON_IDS = {"assur-a", "assur-b"}
 AUTHORITATIVE_FINDSPOT_IDS = {1}
 
 
-def _row(**overrides: object) -> dict:
-    row = {
+def _row(**overrides: object) -> dict[str, object]:
+    row: dict[str, object] = {
         "findspotId": 1,
         "siteId": "ASSUR",
         "polygonIds": ["assur-a"],
