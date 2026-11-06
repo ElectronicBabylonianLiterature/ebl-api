@@ -200,15 +200,16 @@ def write_site_artifacts(
     }
     if curated_records_path is not None:
         targets = (
-            output_dir / name
-            for name in (*serialized, artifact_manifest_name(prefix))
+            output_dir / name for name in (*serialized, artifact_manifest_name(prefix))
         )
         if any(
             target.resolve() == curated_records_path.resolve()
             or (target.exists() and target.samefile(curated_records_path))
             for target in targets
         ):
-            raise ValueError("Curated input must not alias an artifact publication target.")
+            raise ValueError(
+                "Curated input must not alias an artifact publication target."
+            )
     publish_artifact_set(output_dir, prefix, source_revision, serialized)
     return artifacts
 
