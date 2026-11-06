@@ -71,6 +71,9 @@ class QueryResultSchema(Schema):
     has_next_page = fields.Boolean(
         data_key="hasNextPage", load_default=None, dump_default=None, allow_none=True
     )
+    total_documents = fields.Integer(
+        data_key="totalDocuments", load_default=None, allow_none=True
+    )
     items = fields.Nested(QueryItemSchema, many=True, required=True)
 
     @post_dump
@@ -78,6 +81,7 @@ class QueryResultSchema(Schema):
         if not self._include_count_metadata:
             data.pop("isMatchCountTotalExact", None)
             data.pop("hasNextPage", None)
+            data.pop("totalDocuments", None)
         return data
 
     @post_load
@@ -86,6 +90,9 @@ class QueryResultSchema(Schema):
 
 
 class CorpusQueryResultSchema(QueryResultSchema):
+    class Meta:
+        exclude = ("total_documents",)
+
     items = fields.Nested(CorpusQueryItemSchema, many=True, required=True)
 
     @post_load

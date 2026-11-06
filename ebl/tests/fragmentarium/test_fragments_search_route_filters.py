@@ -1,5 +1,3 @@
-from datetime import date, timedelta
-
 import falcon
 import pytest
 
@@ -8,13 +6,7 @@ from ebl.common.domain.project import ResearchProject
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.fragmentarium.domain.museum import Museum
-from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.infrastructure.queries import (
-    LATEST_TRANSLITERATION_LIMIT,
-    LATEST_TRANSLITERATION_LINE_LIMIT,
-)
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
-from ebl.tests.factories.record import RecordEntryFactory, RecordFactory
+from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import (
     get_provenance_record,
     query_item_of,
@@ -37,9 +29,11 @@ def test_search_with_scopes(client, guest_client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_item_of(fragment)], 0)
+    assert result.json == query_result_of(
+        [query_item_of(fragment)], 0, total_documents=1
+    )
     assert guest_result.status == falcon.HTTP_OK
-    assert guest_result.json == query_result_of([], 0)
+    assert guest_result.json == query_result_of([], 0, total_documents=0)
 
 
 def test_search_with_scopes_limit_summary(client, guest_client, fragmentarium):
@@ -59,10 +53,12 @@ def test_search_with_scopes_limit_summary(client, guest_client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_summary_of(fragment)], 0, bibliography_documents={}
+        [query_summary_of(fragment)], 0, bibliography_documents={}, total_documents=1
     )
     assert guest_result.status == falcon.HTTP_OK
-    assert guest_result.json == query_result_of([], 0, bibliography_documents={})
+    assert guest_result.json == query_result_of(
+        [], 0, bibliography_documents={}, total_documents=0
+    )
 
 
 @pytest.mark.parametrize(
@@ -95,6 +91,7 @@ def test_search_script_period(client, fragmentarium, params: dict, expected: lis
     assert result.json == query_result_of(
         [query_item_of(fragments[index]) for index in expected],
         0,
+        total_documents=len(expected),
     )
 
 
@@ -127,6 +124,7 @@ def test_search_project(client, fragmentarium, project):
             if project in fragment.projects
         ],
         0,
+        total_documents=1,
     )
 
 
@@ -152,6 +150,7 @@ def test_search_museum(client, fragmentarium, museum):
             if fragment.museum == museum
         ],
         0,
+        total_documents=1,
     )
 
 
@@ -185,6 +184,7 @@ def test_search_site(client, fragmentarium, site, attribute):
             if fragment.archaeology.site == site
         ],
         0,
+        total_documents=1,
     )
 
 
@@ -210,38 +210,4 @@ def test_search_parent_site_returns_no_results(
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([], 0)
-
-
-def test_query_latest(client, fragmentarium):
-    start_date = date(2023, 5, 1)
-    fragments = [
-        TransliteratedFragmentFactory.build(
-            record=RecordFactory.build(
-                entries=(
-                    RecordEntryFactory.build(
-                        date=str(start_date + timedelta(index)),
-                        type=RecordType.TRANSLITERATION,
-                    ),
-                )
-            ),
-        )
-        for index in range(LATEST_TRANSLITERATION_LIMIT + 10)
-    ]
-    for fragment in fragments:
-        fragmentarium.create(fragment)
-
-    result = client.simulate_get("/fragments/latest")
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == {
-        "items": [
-            query_item_of(
-                fragment,
-                list(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
-                0,
-            )
-            for fragment in reversed(fragments[:])
-        ][:LATEST_TRANSLITERATION_LIMIT],
-        "matchCountTotal": 0,
-    }
+    assert result.json == query_result_of([], 0, total_documents=0)

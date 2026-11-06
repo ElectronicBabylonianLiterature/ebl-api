@@ -1,5 +1,6 @@
 from typing import Callable, List, Dict, Sequence, Optional, Tuple
 from ebl.common.domain.scopes import Scope
+from ebl.common.query.collation_identity import collation_safe_identity
 from ebl.fragmentarium.infrastructure.queries import (
     match_user_scopes,
     number_is,
@@ -221,7 +222,7 @@ class PatternMatcher:
 
         facet = {
             "items": [
-                *self._sort_by({"_scriptSortKey": 1, "_sortKey": 1}),
+                *self._sort_by({"_scriptSortKey": 1, "_sortKey": 1, "_id": 1}),
                 *items_pipeline(self._query),
             ],
         }
@@ -230,6 +231,7 @@ class PatternMatcher:
 
         return [
             *self._prefilter(),
+            {"$set": {"_id": collation_safe_identity("$_id")}},
             *dispatcher[key](),
             {"$facet": facet},
             {"$project": result_projection(self._query)},
