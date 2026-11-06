@@ -1,0 +1,121 @@
+from typing import cast
+
+import pytest
+from marshmallow import ValidationError
+
+from ebl.fragmentarium.application.archaeology_schemas import FindspotSchema
+from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
+from ebl.fragmentarium.domain.map_location import (
+    MapLocation,
+    MapLocationMatchMethod,
+    MapLocationPrecision,
+)
+from ebl.tests.factories.archaeology import FindspotFactory
+from ebl.provenance.application.provenance_service import ProvenanceService
+
+
+def _map_location(
+    *polygon_ids: str, source: str = "Assur Tafeln.ods", revision: str = "2026-07-27"
+) -> MapLocation:
+    return MapLocation(
+        polygon_ids=tuple(polygon_ids),
+        location_precision=MapLocationPrecision.EXCAVATION_AREA,
+        match_method=MapLocationMatchMethod.VERIFIED_SOURCE,
+        source=source,
+        source_revision=revision,
+    )
+
+
+def _payload(**changes: object) -> dict:
+    return {
+        "polygonIds": ["assur-1"],
+        "locationPrecision": "excavation-area",
+        "matchMethod": "verified-source",
+        "source": "Assur Tafeln.ods",
+        "sourceRevision": "2026-07-27",
+        **changes,
+    }
+
+
+@pytest.mark.parametrize("polygon_ids", [["assur-1"], ["assur-1", "assur-2"]])
+def test_map_location_schema_round_trip(polygon_ids: list[str]) -> None:
+    schema = MapLocationSchema()
+    payload = _payload(polygonIds=polygon_ids)
+
+    assert schema.dump(schema.load(payload)) == payload
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        _payload(polygonIds=[]),
+        _payload(polygonIds=["assur-1", "assur-1"]),
+        _payload(polygonIds=[" assur-1 ", "assur-1"]),
+        _payload(polygonIds=[1]),
+        _payload(polygonIds=[None]),
+        _payload(polygonIds=[["assur-1"]]),
+        _payload(polygonIds=["assur-1", "  "]),
+        _payload(locationPrecision="not-a-precision"),
+        _payload(matchMethod="not-a-method"),
+        _payload(source="   "),
+        _payload(sourceRevision="  "),
+    ],
+)
+def test_map_location_schema_rejects_invalid_payload(payload: dict) -> None:
+    with pytest.raises(ValidationError):
+        MapLocationSchema().load(payload)
+
+
+def test_map_location_schema_rejects_unknown_field() -> None:
+    with pytest.raises(ValidationError):
+        MapLocationSchema().load(_payload(unknown="value"))
+
+
+def test_map_location_schema_normalizes_polygon_ids() -> None:
+    schema = MapLocationSchema()
+
+    assert schema.dump(schema.load(_payload(polygonIds=[" assur-1 "]))) == _payload()
+
+
+def test_map_location_schema_rejects_normalized_duplicates_on_polygon_field() -> None:
+    with pytest.raises(ValidationError) as error:
+        MapLocationSchema().load(_payload(polygonIds=["assur-1", " assur-1 "]))
+
+    assert error.value.messages == {"polygonIds": ["polygonIds must be unique."]}
+
+
+def test_map_location_schema_normalizes_source_whitespace() -> None:
+    loaded = cast(
+        MapLocation,
+        MapLocationSchema().load(
+            _payload(source="  Assur Tafeln.ods  ", sourceRevision=" 2026-07-27 ")
+        ),
+    )
+
+    assert loaded.source == "Assur Tafeln.ods"
+    assert loaded.source_revision == "2026-07-27"
+
+
+def test_findspot_schema_omits_missing_map_location(
+    seeded_provenance_service: ProvenanceService,
+) -> None:
+    findspot = FindspotFactory.build(
+        site=seeded_provenance_service.find_by_id("ASSUR"), map_location=None
+    )
+    schema = FindspotSchema(context={"provenance_service": seeded_provenance_service})
+    dumped = cast(dict, schema.dump(findspot))
+
+    assert "mapLocation" not in dumped
+    assert schema.load(dumped) == findspot
+
+
+def test_findspot_schema_round_trip_with_map_location(
+    seeded_provenance_service: ProvenanceService,
+) -> None:
+    findspot = FindspotFactory.build(
+        site=seeded_provenance_service.find_by_id("ASSUR"),
+        map_location=_map_location("assur-1"),
+    )
+    schema = FindspotSchema(context={"provenance_service": seeded_provenance_service})
+
+    assert schema.load(cast(dict, schema.dump(findspot))) == findspot
