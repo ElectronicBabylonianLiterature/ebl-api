@@ -13,11 +13,29 @@ read model.
 
 ## Table of contents
 
+* [Map artifact utilities](#map-artifact-utilities)
 * [Setup](#setup)
 * [Development](#development)
 * [Running the application](#running-the-application)
 * [Updating data](#updating-data)
 * [Acknowledgements](#acknowledgements)
+
+## Map artifact utilities
+
+Run the offline generators as modules from the repository root:
+
+```sh
+poetry run python -m ebl.fragmentarium.application.map_artifact_cli \
+  --site ASSUR --source-revision <revision>
+poetry run python -m scripts.maps.build_frontend_transfer_archive \
+  --output /tmp/map-artifacts.tar.gz
+```
+
+Curation reports are versioned JSON. Keep unresolved template rows when
+submitting reviewed assignments. Site membership is checked against the
+versioned canonical findspot snapshot independently of the source spreadsheet.
+The transfer archive contains metadata; consumers supply GeoJSON satisfying
+the polygon ID and geometry checksum contract in `ARTIFACT_MANIFEST.json`.
 
 ## Setup
 
