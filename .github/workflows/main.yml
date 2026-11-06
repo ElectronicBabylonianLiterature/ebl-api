@@ -5,6 +5,7 @@ on:
     branches: [master]
   pull_request:
     branches: [master, 'fix/**']
+    types: [opened, synchronize, reopened, edited]
   
   #Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,6 +26,7 @@ env:
 
 jobs:
   test:
+    if: github.event.action != 'edited' || github.event.changes.base != null
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -115,12 +117,16 @@ jobs:
           docker ps --all --filter name=ebl-test-mongodb
           docker inspect --format '{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}' ebl-test-mongodb || true
           docker logs --tail 100 ebl-test-mongodb || true
+      - name: Normalize coverage paths
+        if: ${{ !startsWith(matrix.python-version, 'pypy') }}
+        run: >-
+          poetry run python -c 'import coverage; report = coverage.Coverage(source=["."]);
+          report.load(); report.xml_report(include=["ebl/*", "scripts/*"])'
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: coverage.xml
-          add-prefix: ebl/
 
   docker:
     if: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
