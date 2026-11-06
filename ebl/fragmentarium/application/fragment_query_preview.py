@@ -25,12 +25,12 @@ def preview_line_of(index: int, line: dict) -> Dict[str, Any]:
 def matching_text_line_indices(
     lines: Sequence[dict], matching_lines: Sequence[int]
 ) -> List[int]:
-    return list(
-        dict.fromkeys(
+    return sorted(
+        {
             index
             for index in matching_lines
             if 0 <= index < len(lines) and is_text_line(lines[index])
-        )
+        }
     )
 
 

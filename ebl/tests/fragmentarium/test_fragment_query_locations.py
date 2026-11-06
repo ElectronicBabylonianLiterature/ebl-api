@@ -68,9 +68,9 @@ def test_repeated_line_numbers_follow_original_indexes_and_context() -> None:
     )
     indices = [2, 4, 6]
     result = matching_line_preview_of_data(dumped_text(text), [6, 2, 4, 2])
-    assert [line["index"] for line in result["lines"]] == [6, 2, 4]
-    assert [line["location"]["surface"] for line in result["lines"]] == ["r", "o", "o"]
-    assert [line["location"]["column"] for line in result["lines"]] == ["ii", "i", "ii"]
+    assert [line["index"] for line in result["lines"]] == [2, 4, 6]
+    assert [line["location"]["surface"] for line in result["lines"]] == ["o", "o", "r"]
+    assert [line["location"]["column"] for line in result["lines"]] == ["i", "ii", "ii"]
     assert result["totalMatchingLines"] == len(indices)
 
 
