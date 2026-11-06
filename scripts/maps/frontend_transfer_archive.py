@@ -46,9 +46,16 @@ def _sha256(content: bytes) -> str:
 
 
 def _git_provenance() -> TransferProvenance:
+    records = _git(
+        "status", "--porcelain=v2", "--branch", "--untracked-files=normal", "-z"
+    ).split("\0")
+    commit = next(
+        record.removeprefix("# branch.oid ")
+        for record in records
+        if record.startswith("# branch.oid ")
+    )
     return TransferProvenance(
-        _git("rev-parse", "HEAD"),
-        bool(_git("status", "--porcelain", "--untracked-files=normal")),
+        commit, any(record and not record.startswith("# ") for record in records)
     )
 
 
