@@ -204,6 +204,9 @@ def test_map_data_uses_narrow_findspot_read(
     response = cast(testing.Result, map_data.simulate_get("/findspots/map-data"))
     assert response.status == falcon.HTTP_OK
 
+    payload = cast(dict[str, list[dict[str, object]]], response.json)["findspots"]
+    assert [row["findspotId"] for row in payload] == [100, 101, 102, 104]
+
 
 def test_map_data_rejects_missing_and_wrong_site_metadata(
     tmp_path: Path,

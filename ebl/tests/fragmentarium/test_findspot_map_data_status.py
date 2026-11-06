@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import cast
+from urllib.parse import urlencode
 
 import attr
 import falcon
@@ -37,16 +38,28 @@ def test_published_empty_mappings_are_valid_zero_data(
 
 
 @pytest.mark.parametrize(
-    "parameter", ["site", "scriptPeriod", "scriptPeriodModifier", "genre"]
+    "parameter,value",
+    [
+        ("site", "ASSUR"),
+        ("scriptPeriod", "Old Babylonian"),
+        ("scriptPeriodModifier", "Early"),
+        ("genre", "ARCHIVAL"),
+    ],
 )
 def test_map_data_rejects_repeated_filter_parameters(
-    tmp_path: Path, context: Context, parameter: str
+    tmp_path: Path, context: Context, parameter: str, value: str
 ) -> None:
+    write_mappings(tmp_path, "ASSUR", [])
+    client = _client(context, tmp_path)
+    single = cast(
+        testing.Result,
+        client.simulate_get("/findspots/map-data", params={parameter: value}),
+    )
+    assert single.status == falcon.HTTP_OK
+    repeated = urlencode([(parameter, value), (parameter, value)])
     response = cast(
         testing.Result,
-        _client(context, tmp_path).simulate_get(
-            f"/findspots/map-data?{parameter}=one&{parameter}=two"
-        ),
+        client.simulate_get(f"/findspots/map-data?{repeated}"),
     )
 
     assert response.status == falcon.HTTP_UNPROCESSABLE_ENTITY
