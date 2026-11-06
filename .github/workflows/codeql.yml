@@ -5,11 +5,13 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [master, 'fix/**']
+    types: [opened, synchronize, reopened, edited]
   schedule:
     - cron: "39 20 * * 6"
 
 jobs:
   analyze:
+    if: github.event.action != 'edited' || github.event.changes.base != null
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
@@ -24,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2
