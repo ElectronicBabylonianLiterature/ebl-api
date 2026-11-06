@@ -22,10 +22,9 @@ class SiteMapLocation:
 
 
 class MapArtifactRepository:
-    """Read-only, validated findspot-to-map-location artifact repository."""
-
     def __init__(self, data_dir: Path = MAP_DATA_DIR) -> None:
         self._data_dir = data_dir.resolve()
+        self._site_locations: dict[str, dict[int, SiteMapLocation]] = {}
 
     def known_site_ids(self) -> tuple[str, ...]:
         return tuple(
@@ -45,6 +44,8 @@ class MapArtifactRepository:
 
     def load_site_map_locations(self, site_id: str) -> dict[int, SiteMapLocation]:
         self._require_known_site(site_id)
+        if site_id in self._site_locations:
+            return dict(self._site_locations[site_id])
         filename = self._mappings_filename(site_id)
         raw = read_validated_artifact(self._data_dir, site_id.lower(), filename)
         entries = load_strict_json(raw, filename)
@@ -60,7 +61,8 @@ class MapArtifactRepository:
                     f"Duplicate findspot ID {findspot_id} in {site_id} mappings."
                 )
             locations[findspot_id] = SiteMapLocation(site_id, location)
-        return locations
+        self._site_locations[site_id] = locations
+        return dict(locations)
 
     def load_map_locations(
         self, site_ids: Sequence[str] | None = None
