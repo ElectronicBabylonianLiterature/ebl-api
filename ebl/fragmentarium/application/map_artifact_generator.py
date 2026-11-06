@@ -178,13 +178,31 @@ def write_site_artifacts(
     curated_records_path: Path | None = None,
     additional_authoritative_findspot_ids: Collection[int] = (),
 ) -> SiteArtifacts:
+    prefix = config.site_id.lower()
+    if curated_records_path is not None:
+        for suffix in (
+            "polygon_inventory.json",
+            "findspot_polygon_mappings.json",
+            "findspot_polygon_curation_template.json",
+            "findspot_polygon_curation_report.json",
+            "artifact_manifest.json",
+        ):
+            target = output_dir / f"{prefix}_{suffix}"
+            if curated_records_path.resolve() == target.resolve() or (
+                curated_records_path.exists()
+                and target.exists()
+                and curated_records_path.samefile(target)
+            ):
+                raise ValueError(
+                    "Reviewed curation input must not alias a publication target. "
+                    "Save it separately before generating artifacts."
+                )
     artifacts = build_site_artifacts(
         config,
         source_revision,
         curated_records_path,
         additional_authoritative_findspot_ids=additional_authoritative_findspot_ids,
     )
-    prefix = config.site_id.lower()
     serialized = {
         f"{prefix}_polygon_inventory.json": _serialize_json(artifacts["inventory"]),
         f"{prefix}_findspot_polygon_mappings.json": _serialize_json(
