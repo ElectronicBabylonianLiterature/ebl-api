@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import re
-from typing import Mapping
+from typing import Mapping, cast
+from marshmallow import ValidationError
 
-from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
 from ebl.fragmentarium.application.map_artifact_types import (
     CurationRecord,
     InventoryRecord,
 )
-from ebl.fragmentarium.application.map_curated_mappings import CuratedMappingRecord
+from ebl.fragmentarium.application.map_curated_mappings import (
+    CuratedMappingRecord,
+    PendingCuratedCrosswalkRow,
+)
 from ebl.fragmentarium.application.map_json import load_strict_json
 from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
 from ebl.fragmentarium.application.map_polygon_identity import (
@@ -17,9 +20,6 @@ from ebl.fragmentarium.application.map_polygon_identity import (
     slugify,
 )
 from ebl.fragmentarium.application.map_site_config import CRS_EPSG, SITE_CONFIGS
-from scripts.maps.frontend_transfer_manifest import read_artifact_sets
-
-__all__ = ["read_artifact_sets", "site_summary"]
 
 MAPPING_LOCATION_KEYS = (
     "polygonIds",
@@ -37,6 +37,7 @@ CURATION_TEMPLATE_VALUES = {
     "reviewDate": "",
 }
 CURATION_TEXT_KEYS = ("area", "sector", "building", "map")
+MAX_JSON_SAFE_INTEGER = 2**53 - 1
 INVENTORY_KEYS = frozenset(InventoryRecord.__annotations__)
 RECORD_KEYS = {
     "mapping": frozenset(CuratedMappingRecord.__annotations__),
@@ -51,21 +52,23 @@ def _json_array(contents: dict[str, bytes], name: str) -> list[object]:
     return payload
 
 
-def _typed_record(record: object, keys: frozenset[str], error: str) -> dict:
+def _typed_record(
+    record: object, keys: frozenset[str], error: str
+) -> dict[str, object]:
     if not isinstance(record, dict) or set(record) != keys:
         raise ValueError(error)
-    return record
+    return cast(dict[str, object], record)
 
 
 def _is_text(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
-def _differs(record: dict, expected: Mapping[str, object]) -> bool:
+def _differs(record: dict[str, object], expected: Mapping[str, object]) -> bool:
     return any(record.get(key) != value for key, value in expected.items())
 
 
-def _inventory_identity(record: dict, site_id: str) -> tuple[str, str]:
+def _inventory_identity(record: dict[str, object], site_id: str) -> tuple[str, str]:
     error = f"Invalid inventory identity for {site_id}"
     name = record.get("name")
     checksum = record.get("geometryChecksum")
@@ -111,7 +114,7 @@ def _is_polygon_id_list(value: object, polygon_ids: set[str]) -> bool:
 
 
 def _findspot_identity(
-    record: dict, kind: str, site_id: str, polygon_ids: set[str]
+    record: dict[str, object], kind: str, site_id: str, polygon_ids: set[str]
 ) -> int:
     findspot_id = record.get("findspotId")
     if (
@@ -120,18 +123,20 @@ def _findspot_identity(
         or not _is_polygon_id_list(record.get("polygonIds"), polygon_ids)
     ):
         raise ValueError(f"Invalid {kind} identity for {site_id}")
-    if not 0 <= findspot_id <= MAX_FINDSPOT_ID:
+    if not 0 <= findspot_id <= MAX_JSON_SAFE_INTEGER:
         raise ValueError(f"Invalid {kind} identity for {site_id}")
     return findspot_id
 
 
-def _validate_mapping(record: dict, site_id: str) -> None:
+def _validate_mapping(record: dict[str, object], site_id: str) -> None:
     if not record["polygonIds"]:
         raise ValueError(f"Mapping has no polygons for {site_id}")
     MapLocationSchema().load({key: record.get(key) for key in MAPPING_LOCATION_KEYS})
 
 
-def _validate_curation(record: dict, site_id: str, revision: str) -> None:
+def _validate_curation(
+    record: dict[str, object], site_id: str, revision: str, polygon_ids: set[str]
+) -> None:
     expected = {
         **CURATION_TEMPLATE_VALUES,
         "siteId": site_id,
@@ -144,6 +149,31 @@ def _validate_curation(record: dict, site_id: str, revision: str) -> None:
         or not all(isinstance(record.get(key), str) for key in CURATION_TEXT_KEYS)
     ):
         raise ValueError(f"Invalid curation template for {site_id}")
+    _validate_curation_context(record, site_id, polygon_ids)
+
+
+def _validate_curation_context(
+    record: dict[str, object], site_id: str, polygon_ids: set[str]
+) -> None:
+    error = f"Invalid curation context for {site_id}"
+    source_rows = record.get("sourceRows")
+    if record.get("derivationStatus") not in ("resolved", "unresolved", "conflict"):
+        raise ValueError(error)
+    if record.get("membershipStatus") not in ("confirmed", "unverified-or-conflicting"):
+        raise ValueError(error)
+    if not _is_polygon_id_list(record.get("candidatePolygonIds"), polygon_ids):
+        raise ValueError(error)
+    if not isinstance(source_rows, list) or not source_rows:
+        raise ValueError(error)
+    if any(
+        not isinstance(row, dict) or type(row.get("findspotId")) is not int
+        for row in source_rows
+    ):
+        raise ValueError(error)
+    try:
+        PendingCuratedCrosswalkRow().load(record)
+    except ValidationError as exception:
+        raise ValueError(error) from exception
 
 
 def _validated_findspot_ids(
@@ -163,7 +193,7 @@ def _validated_findspot_ids(
             if kind == "mapping":
                 _validate_mapping(record, site_id)
             else:
-                _validate_curation(record, site_id, revision)
+                _validate_curation(record, site_id, revision, polygon_ids)
             findspot_ids.add(findspot_id)
     return findspot_ids
 

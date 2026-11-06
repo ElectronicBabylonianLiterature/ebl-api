@@ -1,8 +1,10 @@
-import hashlib
+from ebl.tests.fragmentarium.frontend_transfer_test_helpers import (
+    copy_artifacts as _copy_artifacts,
+    replace_declared_file as _replace_declared_file,
+)
 import io
 import json
 from pathlib import Path
-import shutil
 import tarfile
 
 from marshmallow import ValidationError
@@ -14,6 +16,7 @@ from scripts.maps import frontend_transfer_archive as transfer
 
 EXPECTED_MEMBERS = (
     "ARTIFACT_MANIFEST.txt",
+    "ARTIFACT_MANIFEST.json",
     "assur_polygon_inventory.json",
     "assur_findspot_polygon_mappings.json",
     "uruk_polygon_inventory.json",
@@ -26,21 +29,13 @@ EXPECTED_MEMBERS = (
 
 
 @pytest.fixture(autouse=True)
-def stable_git_provenance(monkeypatch):
+def stable_git_provenance(monkeypatch: pytest.MonkeyPatch) -> None:
     def fake_git(*args: str) -> str:
         if args[0] == "status":
             return ""
-        if "--abbrev-ref" in args:
-            return "map/backend-06-artifact-transfer"
         return "a" * 40
 
     monkeypatch.setattr(transfer, "_git", fake_git)
-
-
-def _copy_artifacts(tmp_path: Path) -> Path:
-    destination = tmp_path / "artifacts"
-    shutil.copytree(DEFAULT_OUTPUT_DIR, destination)
-    return destination
 
 
 def _directory_snapshot(directory: Path) -> dict[str, bytes]:
@@ -51,17 +46,9 @@ def _directory_snapshot(directory: Path) -> dict[str, bytes]:
     }
 
 
-def _replace_declared_file(data_dir: Path, name: str, content: bytes) -> None:
-    (data_dir / name).write_bytes(content)
-    manifest_path = data_dir / f"{name.split('_', 1)[0]}_artifact_manifest.json"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    manifest["files"][name] = hashlib.sha256(content).hexdigest()
-    manifest_path.write_text(
-        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
-
-
-def test_build_archive_is_deterministic_normalized_and_documents_geometry(tmp_path):
+def test_build_archive_is_deterministic_normalized_and_documents_geometry(
+    tmp_path: Path,
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     before = _directory_snapshot(data_dir)
     first = transfer.build_archive(data_dir, tmp_path / "one" / "transfer.tar.gz")
@@ -87,7 +74,7 @@ def test_build_archive_is_deterministic_normalized_and_documents_geometry(tmp_pa
     assert "commit: " + "a" * 40 in manifest
     assert "dirtyWorktree: false" in manifest
     assert "geometryIncluded: false" in manifest
-    assert f"geometryCommit: {transfer.FRONTEND_GEOMETRY_COMMIT}" in manifest
+    assert "geometryContractVersion: ebl-excavation-polygons/1" in manifest
     assert "geometryRequiredFiles: assur.geojson, kalhu.geojson" in manifest
     assert "mappingCount: 315" in manifest
     assert "mappingCount: 129" in manifest
@@ -95,12 +82,12 @@ def test_build_archive_is_deterministic_normalized_and_documents_geometry(tmp_pa
     assert "mappingCount: 18" in manifest
 
 
-def test_manifest_marks_dirty_git_provenance(tmp_path, monkeypatch):
+def test_manifest_marks_dirty_git_provenance(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     def dirty_git(*args: str) -> str:
         if args[0] == "status":
             return " M ebl/fragmentarium/data/map/assur_polygon_inventory.json"
-        if "--abbrev-ref" in args:
-            return "review-757"
         return "b" * 40
 
     monkeypatch.setattr(transfer, "_git", dirty_git)
@@ -112,7 +99,7 @@ def test_manifest_marks_dirty_git_provenance(tmp_path, monkeypatch):
         assert "dirtyWorktree: true" in extracted.read().decode("utf-8")
 
 
-def test_checksum_tampering_is_rejected_before_output(tmp_path):
+def test_checksum_tampering_is_rejected_before_output(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     target = data_dir / "assur_findspot_polygon_mappings.json"
     target.write_bytes(target.read_bytes() + b"\n")
@@ -124,7 +111,9 @@ def test_checksum_tampering_is_rejected_before_output(tmp_path):
     assert not output.exists()
 
 
-def test_mixed_site_content_is_rejected_even_with_updated_checksum(tmp_path):
+def test_mixed_site_content_is_rejected_even_with_updated_checksum(
+    tmp_path: Path,
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     wrong_content = (data_dir / "nippur_findspot_polygon_mappings.json").read_bytes()
     _replace_declared_file(
@@ -135,7 +124,7 @@ def test_mixed_site_content_is_rejected_even_with_updated_checksum(tmp_path):
         transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
 
 
-def test_ambiguous_json_is_rejected_even_with_updated_checksum(tmp_path):
+def test_ambiguous_json_is_rejected_even_with_updated_checksum(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     _replace_declared_file(
         data_dir,
@@ -147,7 +136,7 @@ def test_ambiguous_json_is_rejected_even_with_updated_checksum(tmp_path):
         transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
 
 
-def test_symlinked_source_artifact_is_rejected(tmp_path):
+def test_symlinked_source_artifact_is_rejected(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     target = data_dir / "assur_polygon_inventory.json"
     original = tmp_path / "original.json"
@@ -158,7 +147,9 @@ def test_symlinked_source_artifact_is_rejected(tmp_path):
         transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
 
 
-def test_write_failure_preserves_source_and_previous_output(tmp_path, monkeypatch):
+def test_write_failure_preserves_source_and_previous_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     sentinel = data_dir / "ARTIFACT_MANIFEST.txt"
     sentinel.write_text("keep me", encoding="utf-8")
@@ -179,7 +170,7 @@ def test_write_failure_preserves_source_and_previous_output(tmp_path, monkeypatc
     assert not list(tmp_path.glob(".transfer.tar.gz.*.tmp"))
 
 
-def test_output_inside_source_or_through_symlink_is_rejected(tmp_path):
+def test_output_inside_source_or_through_symlink_is_rejected(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     with pytest.raises(ValueError, match="outside the source"):
         transfer.build_archive(data_dir, data_dir / "transfer.tar.gz")
@@ -190,14 +181,14 @@ def test_output_inside_source_or_through_symlink_is_rejected(tmp_path):
         transfer.build_archive(data_dir, output)
 
 
-def test_archive_member_names_must_be_basenames():
+def test_archive_member_names_must_be_basenames() -> None:
     stream = io.BytesIO()
     with tarfile.open(fileobj=stream, mode="w") as archive:
         with pytest.raises(ValueError, match="must be a basename"):
             transfer._add_member(archive, "../escape", b"payload")
 
 
-def test_invalid_inventory_contract_is_rejected(tmp_path):
+def test_invalid_inventory_contract_is_rejected(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     name = "assur_polygon_inventory.json"
     inventory = json.loads((data_dir / name).read_text(encoding="utf-8"))
@@ -212,7 +203,9 @@ def test_invalid_inventory_contract_is_rejected(tmp_path):
     ("field", "value"),
     (("locationPrecision", "invalid"), ("matchMethod", "invented"), ("source", "")),
 )
-def test_invalid_mapping_contract_is_rejected(tmp_path, field, value):
+def test_invalid_mapping_contract_is_rejected(
+    tmp_path: Path, field: str, value: object
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     name = "assur_findspot_polygon_mappings.json"
     mappings = json.loads((data_dir / name).read_text(encoding="utf-8"))
@@ -224,7 +217,9 @@ def test_invalid_mapping_contract_is_rejected(tmp_path, field, value):
 
 
 @pytest.mark.parametrize("findspot_id", (-1, MAX_FINDSPOT_ID + 1))
-def test_mapping_findspot_id_must_fit_nonnegative_bson_int64(tmp_path, findspot_id):
+def test_mapping_findspot_id_must_fit_nonnegative_bson_int64(
+    tmp_path: Path, findspot_id: int
+) -> None:
     data_dir = _copy_artifacts(tmp_path)
     name = "assur_findspot_polygon_mappings.json"
     mappings = json.loads((data_dir / name).read_text(encoding="utf-8"))
@@ -235,7 +230,7 @@ def test_mapping_findspot_id_must_fit_nonnegative_bson_int64(tmp_path, findspot_
         transfer.build_archive(data_dir, tmp_path / "transfer.tar.gz")
 
 
-def test_mapping_allows_zero_and_independent_curated_revision(tmp_path):
+def test_mapping_allows_zero_and_independent_curated_revision(tmp_path: Path) -> None:
     data_dir = _copy_artifacts(tmp_path)
     name = "assur_findspot_polygon_mappings.json"
     mappings = json.loads((data_dir / name).read_text(encoding="utf-8"))
