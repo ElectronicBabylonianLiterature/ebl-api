@@ -1,4 +1,5 @@
 import json
+from typing import Dict, List
 
 import httpretty
 import pytest
@@ -8,7 +9,7 @@ from ebl.ebl_ai_client import EblAiClient, BoundingBoxPredictionSchema, EblAiApi
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import BoundingBoxPrediction
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.tests.conftest import create_test_photo
+from ebl.tests.fixtures.file_fixtures import create_test_photo
 
 SCHEMA = AnnotationsSchema()
 
@@ -82,7 +83,7 @@ def test_generate_annotations_empty_results(
     annotations_repository, photo_repository, changelog, when
 ) -> None:
     fragment_number = MuseumNumber.of("X.0")
-    boundary_results = {"boundaryResults": []}
+    boundary_results: Dict[str, List[dict]] = {"boundaryResults": []}
 
     httpretty.register_uri(
         httpretty.POST,
