@@ -43,7 +43,7 @@ def test_search_findspot_id(
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_item_of(matching)], 0)
+    assert result.json == query_result_of([query_item_of(matching)], 0, 1)
 
 
 def test_search_findspot_id_preserves_visibility(
