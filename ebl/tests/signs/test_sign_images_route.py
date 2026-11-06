@@ -1,6 +1,6 @@
 import falcon
 import pytest
-from falcon.testing import TestClient as FalconTestClient
+from falcon.testing import Result, TestClient as FalconTestClient
 
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
@@ -176,6 +176,7 @@ def test_signs_get_with_centroids_only_and_include_unclustered(
         "/signs/signName/images?centroids_only=true&include_unclustered=true"
     )
 
+    assert isinstance(result, Result)
     assert result.status == falcon.HTTP_OK
     assert len(result.json) == 2
 
