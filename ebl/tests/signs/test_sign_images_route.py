@@ -178,6 +178,7 @@ def test_signs_get_with_centroids_only_and_include_unclustered(
 
     assert isinstance(result, Result)
     assert result.status == falcon.HTTP_OK
+    assert isinstance(result.json, list)
     assert len(result.json) == 2
 
     images = {item["image"] for item in result.json}
