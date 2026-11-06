@@ -5,19 +5,26 @@ import pytest
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.token_annotation import (
+    LineIndex,
+    LineLemmaAnnotation,
+    TextLemmaAnnotation,
+    TokenIndex,
+)
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_updater_test_helpers import (
     FROZEN_TIME,
     UpdaterContext,
+    mutable_lemmatization_tokens,
 )
 
 
 @freeze_time(FROZEN_TIME)
 def test_update_lemmatization(fragment_updater, updater_context: UpdaterContext):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+    transliterated_fragment: Fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
-    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens = mutable_lemmatization_tokens(transliterated_fragment.text.lemmatization)
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, (WordId("aklu I"),))
     lemmatization = Lemmatization(tokens)
     lemmatized_fragment = transliterated_fragment.update_lemmatization(lemmatization)
@@ -61,7 +68,7 @@ def test_update_edition_metadata_field(
     updated_fragment = getattr(fragment, f"set_{field}")(value)
     updater_context.expect_query(number, fragment)
     updater_context.expect_changelog(number, fragment, updated_fragment)
-    updater_context.expect_update_field(field, updated_fragment)
+    updater_context.expect_update_fields([field], updated_fragment)
 
     result = fragment_updater.update_edition(
         number, updater_context.user, **{field: value}
@@ -71,10 +78,12 @@ def test_update_edition_metadata_field(
 
 @freeze_time(FROZEN_TIME)
 def test_update_lemma_annotation(fragment_updater, updater_context: UpdaterContext):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+    transliterated_fragment: Fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
 
-    annotation = {1: {3: ["aklu I"]}}
+    annotation = TextLemmaAnnotation(
+        {LineIndex(1): LineLemmaAnnotation({TokenIndex(3): [WordId("aklu I")]})}
+    )
     lemmatized_fragment = transliterated_fragment.update_lemma_annotation(annotation)
 
     updater_context.expect_query(number, transliterated_fragment)
