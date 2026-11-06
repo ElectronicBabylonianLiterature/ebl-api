@@ -1,7 +1,14 @@
 import falcon
 import pytest
+from falcon.testing import TestClient as FalconTestClient
 
+from ebl.files.application.file_repository import FileRepository
+from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
+from ebl.fragmentarium.application.cropped_sign_images_repository import (
+    CroppedSignImagesRepository,
+)
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.annotation import PcaClustering
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
@@ -11,6 +18,7 @@ from ebl.tests.factories.annotation import (
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text import Text
 
 
 def test_signs_get(
@@ -111,13 +119,13 @@ def test_signs_get_with_centroids_only(
 
 
 def test_signs_get_with_centroids_only_and_include_unclustered(
-    client,
-    annotations_repository,
-    photo_repository,
-    fragment_repository,
-    text_with_labels,
-    cropped_sign_images_repository,
-):
+    client: FalconTestClient,
+    annotations_repository: AnnotationsRepository,
+    photo_repository: FileRepository,
+    fragment_repository: FragmentRepository,
+    text_with_labels: Text,
+    cropped_sign_images_repository: CroppedSignImagesRepository,
+) -> None:
     fragment = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("K.5"), text=text_with_labels
     )
