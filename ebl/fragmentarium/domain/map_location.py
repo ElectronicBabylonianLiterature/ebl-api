@@ -28,8 +28,12 @@ def _stripped(value: str) -> str:
 @attr.s(auto_attribs=True, frozen=True)
 class MapLocation:
     polygon_ids: tuple[str, ...] = attr.ib(converter=_to_tuple)
-    location_precision: MapLocationPrecision
-    match_method: MapLocationMatchMethod
+    location_precision: MapLocationPrecision = attr.ib(
+        validator=attr.validators.instance_of(MapLocationPrecision)
+    )
+    match_method: MapLocationMatchMethod = attr.ib(
+        validator=attr.validators.instance_of(MapLocationMatchMethod)
+    )
     source: str = attr.ib(converter=_stripped)
     source_revision: str = attr.ib(converter=_stripped)
 
