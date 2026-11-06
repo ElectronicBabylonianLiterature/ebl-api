@@ -80,7 +80,7 @@ def test_archive_includes_verifiable_machine_contract(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(
-        transfer, "_git", lambda *args: "" if args[0] == "status" else "a" * 40
+        transfer, "_git", lambda *args: "# branch.oid " + "a" * 40 + "\0"
     )
     output = transfer.build_archive(DEFAULT_OUTPUT_DIR, tmp_path / "transfer.tar.gz")
     with tarfile.open(output, "r:gz") as archive:
@@ -101,10 +101,15 @@ def test_text_and_json_share_one_git_snapshot(
     calls = []
 
     def changing_git(*arguments: str) -> str:
-        if arguments[0] == "status":
-            return ""
         calls.append(arguments)
-        return ("a" if len(calls) == 1 else "b") * 40
+        assert arguments == (
+            "status",
+            "--porcelain=v2",
+            "--branch",
+            "--untracked-files=normal",
+            "-z",
+        )
+        return "# branch.oid " + ("a" if len(calls) == 1 else "b") * 40 + "\0"
 
     monkeypatch.setattr(transfer, "_git", changing_git)
     output = transfer.build_archive(DEFAULT_OUTPUT_DIR, tmp_path / "snapshot.tar.gz")
@@ -115,6 +120,25 @@ def test_text_and_json_share_one_git_snapshot(
         payload = json.loads(machine.read())
         assert f"commit: {payload['producer']['commit']}\n" in text.read().decode()
     assert len(calls) == 1
+
+
+@pytest.mark.parametrize(
+    "site,unresolved,conflicts",
+    [("ASSUR", 31, 0), ("KALHU", 10, 1), ("NIPPUR", 7, 3), ("URUK", 13, 1)],
+)
+def test_contract_distinguishes_unresolved_groups_from_conflicts(
+    site: str, unresolved: int, conflicts: int
+) -> None:
+    contents, revisions = read_artifact_sets(DEFAULT_OUTPUT_DIR)
+    payload = json.loads(
+        build_contract_manifest(
+            contents, revisions, TransferProvenance("a" * 40, False)
+        )
+    )
+    summary = payload["sites"][site]
+    assert summary["unresolvedCount"] == unresolved
+    assert summary["conflictCount"] == conflicts
+    assert summary["pendingCurationCount"] == unresolved + conflicts
 
 
 @pytest.mark.parametrize(
