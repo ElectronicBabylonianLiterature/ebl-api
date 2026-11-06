@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "siteId": "NIPPUR",
+  "siteName": "Nippur",
+  "membershipSourceRevision": "sha256:9f3812b818c0f3a1a234b13b7394f058acc53c2bc89cc1e743fc5deab3d88799",
+  "counts": {
+    "sourceRows": 38,
+    "sourceGroups": 28,
+    "verifiedMappings": 18,
+    "curatedMappings": 0,
+    "curatedMappingsWithoutSourceGroups": 0,
+    "unresolvedRows": 10,
+    "unresolvedGroups": 7,
+    "conflictRows": 7,
+    "conflictGroups": 3,
+    "invalidRows": 0
+  },
+  "deterministicRule": "normalize(ODS.area) == normalize(shapefile.Name without leading digits); when area is blank, fall back to normalize(ODS.sector) == normalize(shapefile.Name without leading digits). Historical map plate references (the ODS `map` column) are never used as polygon identifiers.",
+  "normalization": "Unicode NFKC, whitespace trimming and case folding; uncertainty markers preserved.",
+  "unresolvedLabels": [
+    {
+      "label": "EN",
+      "count": 2
+    },
+    {
+      "label": "EN gen.",
+      "count": 1
+    },
+    {
+      "label": "IT",
+      "count": 1
+    },
+    {
+      "label": "Religious Quarter",
+      "count": 1
+    },
+    {
+      "label": "TA gen.",
+      "count": 1
+    },
+    {
+      "label": "ZB 4",
+      "count": 1
+    }
+  ]
+}
