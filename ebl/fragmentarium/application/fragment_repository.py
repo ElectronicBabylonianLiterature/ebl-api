@@ -114,6 +114,10 @@ class FragmentRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_read_scopes(self, number: MuseumNumber) -> List[Scope]:
+        raise NotImplementedError
+
+    @abstractmethod
     def fetch_names(self, name_query: str) -> List[str]:
         raise NotImplementedError
 

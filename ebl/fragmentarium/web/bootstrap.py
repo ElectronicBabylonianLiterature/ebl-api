@@ -51,6 +51,8 @@ from ebl.fragmentarium.web.fragments_afo_register import (
 from ebl.corpus.web.chapters import ChaptersByFragmentResource
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
+from ebl.media.web.bootstrap import create_media_routes
+from ebl.media.web.fragment_media_enricher import FragmentMediaEnricher
 
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
@@ -90,11 +92,15 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         )
     )
     statistics = make_statistics_resource(context.cache, fragmentarium)
-    dto_factory = FragmentDtoFactory(context.realia_repository)
+    media = FragmentMediaEnricher(context.media.service if context.media else None)
+    dto_factory = FragmentDtoFactory(context.realia_repository, media)
     fragments = FragmentsResource(finder, dto_factory)
 
     fragments_retrieve_all = FragmentsRetrieveAllResource(
-        context.fragment_repository, context.photo_repository, context.realia_repository
+        context.fragment_repository,
+        context.photo_repository,
+        context.realia_repository,
+        media,
     )
     fragment_genre = FragmentGenreResource(updater, dto_factory)
     fragment_script = FragmentScriptResource(updater, dto_factory)
@@ -114,6 +120,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository,
         context.get_transliteration_query_factory(),
         context.bibliography_repository,
+        media,
     )
     afo_register_fragments_query = AfoRegisterFragmentsQueryResource(
         context.fragment_repository, finder
@@ -197,3 +204,5 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     for uri, resource in routes:
         api.add_route(uri, resource)
+    if context.media is not None:
+        create_media_routes(api, context.fragment_repository, context.media)

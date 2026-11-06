@@ -66,6 +66,7 @@ from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.media.web.bootstrap import create_media_runtime
 
 althaia.patch()
 
@@ -122,6 +123,11 @@ def create_context():
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
+        media=(
+            create_media_runtime(database)
+            if os.environ.get("MEDIA_API_ENABLED", "false").lower() == "true"
+            else None
+        ),
     )
 
 

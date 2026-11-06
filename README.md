@@ -857,3 +857,47 @@ CI starts a local single-node replica set. Local media tests reuse an existing
 replica-set test client or start a temporary instance using the existing
 `pymongo-inmemory` downloader. Test databases have unique names and are removed
 after use. Production connection settings are not needed.
+
+## Media API rollout
+
+The media API builds on the media persistence branch. Merge
+`media/backend-01-persistence` before `media/backend-02-api`; the migration
+branch also depends on persistence and can be reviewed independently of this API.
+The frontend gallery requires this API before its rollout flag is enabled.
+
+`MEDIA_API_ENABLED=false` is the default. Set it to `true` and restart the
+backend to register the media routes and enrich fragment/query responses with
+`mediaSummary` and `legacyHasPhoto`. The latter reports whether the legacy photo
+exists independently of new media, including during a partial import. Disabling
+the flag restores the existing routes and response shape.
+Existing photo and thumbnail routes remain available in both modes.
+
+The canonical endpoints are:
+
+* `GET /media?fragment=K.1`
+* `GET /media/{media_id}/file?fragment=K.1`
+* `GET /media/{media_id}/display?fragment=K.1`
+* `GET /media/{media_id}/thumbnail/{size}?fragment=K.1`
+
+The fragment query parameter is required and percent-encoded; this allows museum
+numbers containing slashes to round-trip through Falcon. List and binary reads
+check the fragment's existing permissions. Binary URLs require the same
+credentials as listing, are private and non-cacheable, and never expose GridFS
+identifiers. SVG originals remain attachment-only.
+
+Before the first media write, explicitly initialize the repository and storage
+indexes with `MongoMediaRepository.create_indexes()` and
+`GridFsMediaRepresentationStore.create_indexes()`. The persistence implementation
+requires a replica set or sharded cluster for transactional writes. Runtime
+construction and media reads do not create these indexes or trigger a backfill.
+The migration PR provides the operational commands and resumable import workflow;
+no production migration is executed by this change.
+
+For rollout, deploy the compatible backend, run and verify the separately
+scheduled migration, then enable the frontend gallery. Keep legacy originals
+protected and available while unresolved sources are reviewed. A partial import,
+missing optional previews, or an empty media collection must preserve existing
+photo access. `thumbnailPath` retains its legacy meaning; clients use the new
+`mediaSummary.primary.thumbnail` through an authenticated loader when available.
+Clients retain the legacy photo choice when `legacyHasPhoto` is true, including
+when the media list already contains copies or other imported files.
