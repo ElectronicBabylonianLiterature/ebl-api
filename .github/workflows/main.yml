@@ -113,6 +113,8 @@ jobs:
         run: |
           docker ps --all --filter name=ebl-test-mongodb
           docker inspect --format '{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}' ebl-test-mongodb || true
+          docker exec ebl-test-mongodb sh -c \
+            'grep "Max open files" /proc/1/limits && find /proc/1/fd -mindepth 1 -maxdepth 1 | wc -l' || true
           docker logs --tail 100 ebl-test-mongodb || true
 
       - uses: qltysh/qlty-action/coverage@v1

@@ -528,6 +528,170 @@ MONGOEXPRESS_PASSWORD=<Mongo Express login password>
 Changes to the schemas or parsers can lead the data in the database to become obsolete.
 Below are instructions how to migrate Fragmentarium and Corpus to the latest state.
 
+### Legacy photo media migration
+
+The media persistence branch must merge before this tooling branch. Deploy the
+media API branch before enabling the frontend gallery. The API opt-in is
+`MEDIA_API_ENABLED=true`; the frontend uses the build-time
+`REACT_APP_MEDIA_GALLERY_ENABLED=true` switch. Keep both switches off until the
+respective deployment is ready. Legacy photo routes and fallback remain available
+while eligible imports and manual exceptions are handled. Merging these branches
+and starting the application do not run a migration or prepare media indexes.
+
+This CLI imports unambiguous legacy `photos` originals into the media model.
+It does not load the historical September/October audit manifests: it generates
+its own version 1 JSONL plan. Planning is read-only, including index discovery
+and preview validation. It is a migration plan, not a replacement for the complete
+binary audit: mapping failures stop before reading that source's binary, and
+orphaned legacy thumbnails are outside its scope. No production migration is
+performed as part of implementing or testing this feature.
+
+The target database is always explicit. Set `MONGODB_URI` through the existing
+secret/environment mechanism, or select another variable with `--uri-env NAME`.
+The CLI does not initialize the web application and does not need Docker or a
+running `task start` process. All source revalidation and media reads use the
+primary, even when the URI requests secondary reads. Apply requires a replica
+set or sharded deployment supporting transactions; standalone MongoDB is rejected.
+
+Before any authorized write, retain a tested backup and arrange a pause of legacy
+photo/fragment mapping changes and competing media imports for the final plan and
+apply window. The pause acknowledgement is a required apply flag; the CLI cannot
+pause other processes itself. A live dry run is possible, but is not an atomic
+snapshot. Sources inserted before its last cursor or after the scan can be absent
+from that plan. Compare a fresh inventory and plan outcome totals under the pause
+before treating coverage as complete.
+
+Dry run requires an existing complete, visible filename-leading B-tree index on
+`photos.files`, with simple collation and no partial or sparse filtering. Every
+compound index key must be ascending or descending. The standard GridFS filename
+index normally satisfies this prerequisite. Planning refuses unsafe indexes and
+never creates or repairs one. If none is suitable, separately authorize and run
+the explicit index-preparation command below before starting a fresh dry run.
+
+For a new planning session, use a private, durable artifact directory and a
+read-only database credential where available:
+
+```shell
+umask 077
+poetry run python -m ebl.io.media.backfill dry-run \
+  --database ebl --report media-plan.jsonl --generate-previews
+```
+
+The default processes every source in bounded batches of 100. `--batch-size`
+accepts 1–1000; `--max-batches` stops a planning session after that many batches.
+Resume the same plan with the identical policy flags and `--resume`. A completed
+plan carries a SHA-256 completion checksum; apply copies and validates the entire
+plan before its first database write. Reports bind the explicit database,
+credential-free endpoint digest, policy and, for apply, the exact plan digest.
+
+Review the plan's `candidate`, `already-present`, `review`, `blocked` and
+`conflicting` outcomes. Only one original mapping to exactly one existing fragment
+is eligible. Competing filenames/extensions are withheld without choosing a
+winner, including byte-identical duplicates. TIFFs, unknown fragments,
+unparseable names, unavailable chunks and malformed decodable images are withheld.
+The byte limit is 512 MiB per original. JPEGs over the 40-million-pixel decode
+budget receive bounded marker/scan/EOI validation and a full byte hash, recorded
+as `binaryValidation: jpeg-structure-only`. That does not establish pixel-level
+integrity; preview generation is deferred and recorded in the reason. Smaller
+supported originals receive full decoding. WebP canvas dimensions are checked
+with a bounded header parser before constructing the native decoder, using the
+same pixel budget. Pillow's global safety limit is never disabled. Counts may
+differ from the historical audit because these policies and the current source
+inventory differ.
+
+By default EXIF Artist and Copyright values are preserved as labelled attribution
+text, with tag evidence in the plan. No photographer identity, licence or rights
+are inferred. `--no-map-attribution` explicitly opts out. Imports have
+`isPrimary=false`; existing primary choices are preserved. Selecting a primary is
+a separate explicit media operation. `--generate-previews` creates display images
+and 240/480/720 thumbnails from the validated original in the owned `media` bucket
+on apply; dry run validates conversion without storing files. It never reuses
+potentially stale legacy thumbnails. Choose this policy before the first import:
+rerunning an existing source does not replace its metadata or add missing previews.
+
+Index preparation is an explicit, separately authorized write command:
+
+```shell
+poetry run python -m ebl.io.media.backfill prepare-indexes \
+  --database ebl --confirm-database ebl
+```
+
+It requires existing `fragments` and `photos.files` collections, retains the
+complete legacy filename-leading index or adds `media_legacy_photo_filename` with
+explicit simple collation, and initializes the following media structures. An
+incompatible index with that fallback name stops preparation; existing indexes
+are never dropped or replaced. The normal fragment compound index
+on museum-number prefix/number/suffix must already exist from application setup.
+
+| Collection | Required index or coordination document |
+| --- | --- |
+| `media` | `media_import_source`; `media_fragment_state` |
+| `mediaSources` | Unique `_id`; `media_source_owner` on `mediaId` |
+| `mediaFiles` | Unique `_id`; `media_file_recovery` |
+| `media.files` | `filename_1_uploadDate_1` |
+| `media.chunks` | Unique `files_id_1_n_1` |
+| `mediaLocks` | `_id: writes`, integer `revision` transaction coordination |
+
+Source uniqueness is enforced transactionally through `mediaSources`, not by
+making `media_import_source` unique. Preparation validates existing source
+reservations and fails on inconsistent state. Before registering any legacy
+handle, apply checks canonical ordered index keys, uniqueness, completeness,
+visibility and collation, including the implicit `_id` indexes. It also requires
+an integer lock revision; BSON integers are accepted, Boolean values are rejected.
+Readiness only reads this state and never repairs it. Planning never creates it.
+The metadata indexes cover `sourceKey` and `associations.fragmentId`/`state`;
+the recovery index covers `ownership`/`ready`.
+
+After reviewing a fresh completed plan and authorizing application, a pilot and
+continuation use a distinct report:
+
+```shell
+poetry run python -m ebl.io.media.backfill apply \
+  --database ebl --confirm-database ebl --confirm-source-writes-paused \
+  --plan media-plan.jsonl --report media-apply.jsonl --limit 100
+poetry run python -m ebl.io.media.backfill apply \
+  --database ebl --confirm-database ebl --confirm-source-writes-paused \
+  --plan media-plan.jsonl --report media-apply.jsonl --resume
+```
+
+Omit `--limit` to process the entire reviewed plan in one invocation. It is still
+resumable and commits per media item, not one database-wide transaction. Each
+source is reread and rehashed before writing; same-length changes, metadata and
+mapping changes become conflicts. Typed GridFS source identities and deterministic
+media IDs make retries idempotent. Existing media is never silently overwritten.
+Adopted originals are protected borrowed handles: deleting imported media cannot
+delete legacy original bytes. No fragments, `hasPhoto` flags or legacy binaries
+are updated by this tool.
+
+Every acknowledged outcome and returned preview handle is flushed and fsynced to
+the report. After interruption, retain the plan and report and resume them; a
+partial final journal line is discarded, earlier corruption is rejected. An
+uncertain metadata acknowledgement retains staged previews until reconciliation
+can establish which handles the current source owner references. The report's
+`pendingSources` lists unresolved staged work. Exit code 0 means the bound plan
+finished with no pending staged work, 2 means a bounded session or pending work,
+and 1 means execution stopped. Review/blocked/conflicting outcomes still need
+attention even when execution exits 0. Completion means completion of that plan;
+it does not prove every current original was migrated.
+
+The journal does not cover every process-death window. Inventory `mediaFiles`
+records with `ownership: owned`, including `ready: false` uploads and ready files
+not referenced in the journal, alongside `media.files`/`media.chunks`. Review their
+full immutable handles against active and deleted media records and every retained
+apply report before considering cleanup. A process can die after a file is ready
+but before its handle is journaled. Do not delete a borrowed registry entry, a
+current handle, a tombstone needed by an interrupted deletion, or an uncertain
+commit's files. Keep unresolved items for operator reconciliation; there is no
+blanket orphan-delete command. Intentionally deleted adopted handles cannot be
+revived by rerunning this migration.
+
+After apply, keep source writes paused while taking a fresh source inventory and
+new dry run, comparing exact counts and unexpected outcomes with the reviewed
+plan. Verify media metadata, representative gallery displays, credits and original
+byte downloads through the deployed API. Retain legacy storage and fallback until
+coverage and the withheld exceptions have been reviewed; enabling the gallery
+does not require deleting or resolving those exceptions automatically.
+
 ### Fragmentarium
 
 Improving the parser can lead to existing transliterations to become obsolete
