@@ -178,10 +178,11 @@ def test_signs_get_with_centroids_only_and_include_unclustered(
 
     assert isinstance(result, Result)
     assert result.status == falcon.HTTP_OK
-    assert isinstance(result.json, list)
-    assert len(result.json) == 2
+    payload = result.json
+    assert isinstance(payload, list)
+    assert len(payload) == 2
 
-    images = {item["image"] for item in result.json}
+    images = {item["image"] for item in payload}
     assert images == {"centroid-base64-string", "unclustered-base64-string"}
 
 
