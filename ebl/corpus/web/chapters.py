@@ -1,7 +1,7 @@
 import json
 from collections import defaultdict
 from itertools import zip_longest
-from typing import Optional, Sequence
+from typing import Optional, Sequence, cast
 import falcon
 from falcon_caching import Cache
 from pydash.arrays import flatten_deep
@@ -25,6 +25,7 @@ from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.corpus.application.query_pagination import parse_corpus_pagination
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -106,8 +107,12 @@ class ChaptersDisplayResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         chapter_id_str = str(chapter_id)
-        lines = parse_lines(req.get_param_as_list("lines", default=[]))
-        variants = parse_lines(req.get_param_as_list("variants", default=[]))
+        lines = parse_lines(
+            cast(Sequence[str], req.get_param_as_list("lines", default=[]))
+        )
+        variants = parse_lines(
+            cast(Sequence[str], req.get_param_as_list("variants", default=[]))
+        )
 
         if self._cache.has(chapter_id_str):
             cached_chapter = self._cache.get(chapter_id_str)
@@ -116,7 +121,7 @@ class ChaptersDisplayResource:
             )
         else:
             chapter = self._corpus.find_chapter_for_display(chapter_id)
-            dump = ChapterDisplaySchema().dump(chapter)
+            dump = cast(dict, ChapterDisplaySchema().dump(chapter))
             self._cache.set(chapter_id_str, dump)
 
             resp.media = self._select_lines_and_variants(dump, lines, variants)
@@ -182,12 +187,15 @@ class CorpusQueryResource:
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         parse = flow(
-            parse_lemmas, parse_transliteration(self._transliteration_query_factory)
+            parse_lemmas,
+            parse_transliteration(self._transliteration_query_factory),
+            parse_corpus_pagination,
         )
 
-        resp.media = CorpusQueryResultSchema().dump(
-            self._corpus.query(parse(req.params))
-        )
+        query = parse(req.params)
+        resp.media = CorpusQueryResultSchema(
+            include_count_metadata="limit" in query
+        ).dump(self._corpus.query(query))
 
 
 class ChaptersAllResource:
