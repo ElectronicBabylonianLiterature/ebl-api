@@ -89,9 +89,7 @@ def test_findspot_document_totals_are_independent_of_pages_and_scope(
             assert payload["totalDocuments"] == (
                 exact_total if count_mode == "exact" else None
             )
-            assert payload["matchCountTotal"] == (
-                0 if count_mode == "exact" else None
-            )
+            assert payload["matchCountTotal"] == (0 if count_mode == "exact" else None)
             assert payload["isMatchCountTotalExact"] is (count_mode == "exact")
             assert payload["hasNextPage"] is (
                 has_next_page if count_mode == "page" else None
