@@ -231,9 +231,7 @@ def test_map_data_rejects_missing_and_wrong_site_metadata(
         context, map_artifact_repository=MapArtifactRepository(data_dir=tmp_path)
     )
     client = testing.TestClient(ebl.app.create_app(test_context))
-    result = cast(
-        testing.Result, cast(testing.Result, client.simulate_get("/findspots/map-data"))
-    )
+    result = cast(testing.Result, client.simulate_get("/findspots/map-data"))
     payload = cast(dict[str, list[dict[str, object]]], cast(dict, result.json))[
         "findspots"
     ]
