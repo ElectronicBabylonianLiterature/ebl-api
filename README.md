@@ -36,6 +36,8 @@ submitting reviewed assignments. Site membership is checked against the
 versioned canonical findspot snapshot independently of the source spreadsheet.
 The transfer archive contains metadata; consumers supply GeoJSON satisfying
 the polygon ID and geometry checksum contract in `ARTIFACT_MANIFEST.json`.
+Per-site summaries distinguish `unresolvedCount` from `conflictCount`;
+`pendingCurationCount` is their sum and counts all rows awaiting curation.
 
 ## Setup
 

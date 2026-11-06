@@ -14,9 +14,7 @@ def test_default_output_is_outside_repo_and_repeatable(
     monkeypatch.setattr(cli.tempfile, "gettempdir", lambda: str(tmp_path))
 
     def fake_git(*args: str) -> str:
-        if args[0] == "status":
-            return ""
-        return "a" * 40
+        return "# branch.oid " + "a" * 40 + "\0"
 
     monkeypatch.setattr(transfer, "_git", fake_git)
     output = Path(tmp_path) / "map-multi-site-canonical-artifacts.tar.gz"
@@ -31,7 +29,7 @@ def test_default_output_is_outside_repo_and_repeatable(
 def test_module_main_guard(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     output = tmp_path / "main-guard.tar.gz"
     monkeypatch.setattr(
-        transfer, "_git", lambda *args: "" if args[0] == "status" else "a" * 40
+        transfer, "_git", lambda *args: "# branch.oid " + "a" * 40 + "\0"
     )
     monkeypatch.setattr(
         sys,
