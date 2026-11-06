@@ -24,6 +24,7 @@ _MAX_COLUMN_REPEAT = 16_384
 _MAX_ROW_REPEAT = 10_000
 _MAX_EXPANDED_ROWS = 100_000
 _MAX_EXPANDED_CELLS = 1_000_000
+_MAX_EXPANDED_CHARACTERS = 32 * 1024 * 1024
 _MAX_XML_BYTES = 32 * 1024 * 1024
 
 
@@ -44,6 +45,7 @@ def read_ods_rows(path: Path) -> tuple[tuple[str, ...], ...]:
         raise ValueError(f"Expected exactly one sheet in {path}.")
     rows: list[tuple[str, ...]] = []
     expanded_cell_count = 0
+    expanded_character_count = 0
     for row in _table_rows(tables[0]):
         expanded = tuple(_expand_row(row))
         repeat = _repeat(row, _ROW_REPEAT_KEY, "row", _MAX_ROW_REPEAT)
@@ -52,6 +54,8 @@ def read_ods_rows(path: Path) -> tuple[tuple[str, ...], ...]:
         expanded_cell_count += len(expanded) * repeat
         if expanded_cell_count > _MAX_EXPANDED_CELLS:
             raise ValueError(f"ODS cell expansion exceeds {_MAX_EXPANDED_CELLS} cells.")
+        expanded_character_count += sum(len(value) for value in expanded) * repeat
+        _validate_expanded_text(expanded_character_count)
         rows.extend([expanded] * repeat)
     return tuple(rows)
 
@@ -66,6 +70,7 @@ def _table_rows(container: ET.Element) -> Iterator[ET.Element]:
 
 def _expand_row(row: ET.Element) -> list[str]:
     values: list[str] = []
+    character_count = 0
     for cell in row:
         if cell.tag not in (_CELL_TAG, _COVERED_CELL_TAG):
             continue
@@ -73,6 +78,8 @@ def _expand_row(row: ET.Element) -> list[str]:
         if len(values) + repeat > _MAX_COLUMN_REPEAT:
             raise ValueError(f"ODS row exceeds {_MAX_COLUMN_REPEAT} columns.")
         text = "" if cell.tag == _COVERED_CELL_TAG else _cell_text(cell)
+        character_count += len(text) * repeat
+        _validate_expanded_text(character_count)
         values.extend([text] * repeat)
     return values
 
@@ -90,4 +97,24 @@ def _repeat(element: ET.Element, key: str, kind: str, maximum: int) -> int:
 
 def _cell_text(cell: ET.Element) -> str:
     paragraphs = cell.findall(".//text:p", _ODS_NAMESPACES)
-    return "\n".join("".join(paragraph.itertext()) for paragraph in paragraphs)
+    if any(
+        paragraph.find(".//text:p", _ODS_NAMESPACES) is not None
+        for paragraph in paragraphs
+    ):
+        raise ValueError("ODS text paragraphs must not be nested.")
+    character_count = max(len(paragraphs) - 1, 0)
+    _validate_expanded_text(character_count)
+    values: list[str] = []
+    for paragraph in paragraphs:
+        parts = tuple(paragraph.itertext())
+        character_count += sum(len(part) for part in parts)
+        _validate_expanded_text(character_count)
+        values.append("".join(parts))
+    return "\n".join(values)
+
+
+def _validate_expanded_text(character_count: int) -> None:
+    if character_count > _MAX_EXPANDED_CHARACTERS:
+        raise ValueError(
+            f"ODS text expansion exceeds {_MAX_EXPANDED_CHARACTERS} characters."
+        )
