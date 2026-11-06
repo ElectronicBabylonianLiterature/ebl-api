@@ -8,9 +8,10 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from pathlib import Path
 import json
 from ebl.fragmentarium.application.map_artifact_storage import publish_artifact_set
+from ebl.fragmentarium.application.map_curated_mappings import CuratedMappingRecord
 
 
-def mapping_record(findspot_id: int, *polygon_ids: str) -> dict:
+def mapping_record(findspot_id: int, *polygon_ids: str) -> CuratedMappingRecord:
     return {
         "findspotId": findspot_id,
         "polygonIds": list(polygon_ids),
@@ -21,7 +22,9 @@ def mapping_record(findspot_id: int, *polygon_ids: str) -> dict:
     }
 
 
-def write_mappings(data_dir: Path, site_id: str, records: list[dict]) -> None:
+def write_mappings(
+    data_dir: Path, site_id: str, records: list[CuratedMappingRecord]
+) -> None:
     prefix = site_id.lower()
     filename = f"{prefix}_findspot_polygon_mappings.json"
     publish_artifact_set(
