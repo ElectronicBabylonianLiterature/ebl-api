@@ -34,6 +34,10 @@ class MapLocation:
     source_revision: str = attr.ib(converter=_stripped)
 
     def __attrs_post_init__(self) -> None:
+        if not isinstance(self.location_precision, MapLocationPrecision):
+            raise ValueError("locationPrecision must be a MapLocationPrecision.")
+        if not isinstance(self.match_method, MapLocationMatchMethod):
+            raise ValueError("matchMethod must be a MapLocationMatchMethod.")
         if not self.polygon_ids:
             raise ValueError("polygonIds must not be empty.")
         if len(set(self.polygon_ids)) != len(self.polygon_ids):

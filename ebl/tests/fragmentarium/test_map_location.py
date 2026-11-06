@@ -86,6 +86,22 @@ def test_map_location_normalizes_source_whitespace() -> None:
         ({"source_revision": "  "}, "sourceRevision must not be empty."),
         ({"source": 1}, "Map location source metadata must be a string."),
         ({"source_revision": None}, "Map location source metadata must be a string."),
+        (
+            {"location_precision": "excavation-area"},
+            "locationPrecision must be a MapLocationPrecision.",
+        ),
+        (
+            {"location_precision": None},
+            "locationPrecision must be a MapLocationPrecision.",
+        ),
+        (
+            {"match_method": "curated"},
+            "matchMethod must be a MapLocationMatchMethod.",
+        ),
+        (
+            {"match_method": MapLocationPrecision.EXCAVATION_AREA},
+            "matchMethod must be a MapLocationMatchMethod.",
+        ),
     ],
 )
 def test_map_location_rejects_invalid_values(changes: dict, message: str) -> None:
