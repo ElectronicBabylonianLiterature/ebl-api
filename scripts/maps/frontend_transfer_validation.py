@@ -233,7 +233,7 @@ def site_summary(
             "distinctMappedPolygonCount": len(distinct_polygons),
             "pendingCurationCount": len(curation),
             "unresolvedCount": sum(
-                isinstance(record, dict) and record["derivationStatus"] != "conflict"
+                isinstance(record, dict) and record["derivationStatus"] == "unresolved"
                 for record in curation
             ),
             "conflictCount": sum(
