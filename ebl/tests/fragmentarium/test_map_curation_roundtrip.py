@@ -2,7 +2,10 @@ import json
 import pytest
 from pathlib import Path
 
-from ebl.fragmentarium.application.map_artifact_generator import build_site_artifacts
+from ebl.fragmentarium.application.map_artifact_generator import (
+    build_site_artifacts,
+    write_site_artifacts,
+)
 from ebl.fragmentarium.application.map_curated_mappings import load_curated_mappings
 from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
 from ebl.fragmentarium.application.map_source_loader import load_site_ods_rows
@@ -69,3 +72,32 @@ def test_curation_rejects_source_context_for_another_findspot(tmp_path: Path) ->
 
     with pytest.raises(ValueError, match="sourceRows"):
         build_site_artifacts(config, "revision-1", path)
+
+
+@pytest.mark.parametrize("alias", ["direct", "symlink", "hardlink"])
+def test_publication_preserves_reviewed_curation_input(
+    tmp_path: Path, alias: str
+) -> None:
+    config = SITE_CONFIGS["KALHU"]
+    output_dir = tmp_path / "output"
+    artifacts = write_site_artifacts(config, output_dir, "revision-1")
+    reviewed = [item.copy() for item in artifacts["curation"]]
+    reviewed[0]["polygonIds"] = [artifacts["inventory"][0]["polygonId"]]
+    reviewed[0]["reviewer"] = "reviewer-handle"
+    reviewed[0]["reviewDate"] = "2026-09-25"
+    target = output_dir / "kalhu_findspot_polygon_curation_template.json"
+    target.write_text(json.dumps(reviewed), encoding="utf-8")
+    source = target
+    if alias != "direct":
+        source = tmp_path / "reviewed.json"
+        if alias == "symlink":
+            source.symlink_to(target)
+        else:
+            source.hardlink_to(target)
+    before = {path.name: path.read_bytes() for path in output_dir.iterdir()}
+
+    with pytest.raises(ValueError, match="must not alias a publication target"):
+        write_site_artifacts(config, output_dir, "revision-1", source)
+
+    assert json.loads(source.read_text()) == reviewed
+    assert {path.name: path.read_bytes() for path in output_dir.iterdir()} == before
