@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "siteId": "URUK",
+  "siteName": "Uruk",
+  "membershipSourceRevision": "sha256:9f3812b818c0f3a1a234b13b7394f058acc53c2bc89cc1e743fc5deab3d88799",
+  "counts": {
+    "sourceRows": 180,
+    "sourceGroups": 143,
+    "verifiedMappings": 129,
+    "curatedMappings": 0,
+    "curatedMappingsWithoutSourceGroups": 0,
+    "unresolvedRows": 16,
+    "unresolvedGroups": 13,
+    "conflictRows": 3,
+    "conflictGroups": 1,
+    "invalidRows": 0
+  },
+  "deterministicRule": "normalize(ODS.area) == normalize(shapefile.Name without leading digits)",
+  "normalization": "Unicode NFKC, whitespace trimming and case folding; uncertainty markers preserved.",
+  "unresolvedLabels": [
+    {
+      "label": "<blank>",
+      "count": 7
+    },
+    {
+      "label": "Oc",
+      "count": 1
+    },
+    {
+      "label": "Pd XVI/1",
+      "count": 1
+    },
+    {
+      "label": "Pd XVI/4",
+      "count": 1
+    },
+    {
+      "label": "Pe XV/5",
+      "count": 1
+    },
+    {
+      "label": "Ue XVIII/1",
+      "count": 1
+    },
+    {
+      "label": "XVIII/1",
+      "count": 1
+    }
+  ]
+}
