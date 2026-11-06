@@ -1,4 +1,5 @@
 from typing import cast
+import attr
 from falcon import testing
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
@@ -109,8 +110,8 @@ def test_query_fragmentarium_multiple_findspot_ids(
     expected_items = sorted(
         [QueryItem(first.number, (), 0), QueryItem(second.number, (), 0)], key=key
     )
-    assert QueryResult(sorted(result.items, key=key), result.match_count_total) == (
-        QueryResult(expected_items, 0)
+    assert attr.evolve(result, items=sorted(result.items, key=key)) == (
+        QueryResult(expected_items, 0, total_documents=2)
     )
 
 
@@ -139,6 +140,7 @@ def test_search_multiple_findspot_ids(
     key = lambda item: str(item["museumNumber"])  # noqa: E731
     items = sorted([query_item_of(matching), query_item_of(also_matching)], key=key)
     assert sorted(cast(dict, result.json)["items"], key=key) == items
+    assert cast(dict, result.json)["totalDocuments"] == 2
 
 
 def test_search_findspot_ids_deduplicates_with_single_param(
@@ -157,7 +159,7 @@ def test_search_findspot_ids_deduplicates_with_single_param(
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_item_of(matching)], 0)
+    assert result.json == query_result_of([query_item_of(matching)], 0, 1)
 
 
 def test_search_findspot_ids_preserves_visibility(
@@ -230,10 +232,12 @@ def test_findspot_filter_composes_with_metadata_pagination_and_page_count(
         {"script.period": "Hittite", "script.periodModifier": "Early"},
         {"archaeology.findspotId": {"$in": [0, 1, 2]}},
     ]
-    items = pipeline[2]["$facet"]["items"]
+    items = next(stage["$facet"]["items"] for stage in pipeline if "$facet" in stage)
+    projection = pipeline[-1]["$project"]
     assert items[1:3] == [{"$skip": 1}, {"$limit": 2}]
-    assert pipeline[3]["$project"]["items"] == {"$slice": ["$items", 1]}
-    assert pipeline[3]["$project"]["hasNextPage"] == {"$gt": [{"$size": "$items"}, 1]}
+    assert projection["items"] == {"$slice": ["$items", 1]}
+    assert projection["hasNextPage"] == {"$gt": [{"$size": "$items"}, 1]}
+    assert projection["totalDocuments"] == {"$literal": None}
 
 
 def test_combined_findspot_cap_does_not_depend_on_parser_order() -> None:
