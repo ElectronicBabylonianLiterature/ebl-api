@@ -30,5 +30,5 @@ def assert_findspot_query_visibility(
         testing.Result, guest_client.simulate_get("/fragments/query", params=parameters)
     )
 
-    assert authorized_result.json == query_result_of([query_item_of(fragment)], 0)
-    assert guest_result.json == query_result_of([], 0)
+    assert authorized_result.json == query_result_of([query_item_of(fragment)], 0, 1)
+    assert guest_result.json == query_result_of([], 0, 0)
