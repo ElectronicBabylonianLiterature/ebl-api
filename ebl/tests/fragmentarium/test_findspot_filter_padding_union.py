@@ -3,6 +3,7 @@ from typing import cast
 import falcon
 from falcon import testing
 
+from ebl.common.domain.scopes import Scope
 from ebl.common.query.parameter_parser import parse_findspot_ids
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.domain.archaeology import Archaeology
@@ -45,4 +46,53 @@ def test_search_findspot_ids_preserves_distinct_single_selection(
     assert {
         **payload,
         "items": sorted(payload["items"], key=lambda item: str(item["museumNumber"])),
-    } == query_result_of([query_item_of(matching), query_item_of(also_matching)], 0)
+    } == query_result_of([query_item_of(matching), query_item_of(also_matching)], 0, 2)
+
+
+def test_findspot_document_totals_are_independent_of_pages_and_scope(
+    client: testing.TestClient,
+    guest_client: testing.TestClient,
+    fragmentarium: Fragmentarium,
+) -> None:
+    for number, findspot_id, scopes in (
+        ("X.1", 123, []),
+        ("X.2", 456, [Scope.READ_ITALIANNINEVEH_FRAGMENTS]),
+        ("X.3", 789, []),
+    ):
+        fragmentarium.create(
+            FragmentFactory.build(
+                number=MuseumNumber.of(number),
+                archaeology=Archaeology(findspot_id=findspot_id),
+                authorized_scopes=scopes,
+            )
+        )
+
+    for caller, exact_total, has_next_page in (
+        (client, 2, True),
+        (guest_client, 1, False),
+    ):
+        for count_mode in ("exact", "page", "none"):
+            result = cast(
+                testing.Result,
+                caller.simulate_get(
+                    "/fragments/query",
+                    params={
+                        "findspotIds": "123,456",
+                        "limit": "1",
+                        "count": count_mode,
+                    },
+                ),
+            )
+            assert result.status == falcon.HTTP_OK
+            payload = cast(dict, result.json)
+            assert len(payload["items"]) == 1
+            assert payload["totalDocuments"] == (
+                exact_total if count_mode == "exact" else None
+            )
+            assert payload["matchCountTotal"] == (
+                0 if count_mode == "exact" else None
+            )
+            assert payload["isMatchCountTotalExact"] is (count_mode == "exact")
+            assert payload["hasNextPage"] is (
+                has_next_page if count_mode == "page" else None
+            )

@@ -23,4 +23,5 @@ def test_query_fragmentarium_findspot_id(
     assert fragment_repository.query({"findspotId": 123}) == QueryResult(
         [QueryItem(matching.number, (), 0)],
         0,
+        total_documents=1,
     )
