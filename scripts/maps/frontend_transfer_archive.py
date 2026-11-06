@@ -5,6 +5,7 @@ import hashlib
 from io import BytesIO
 import json
 from pathlib import Path
+import re
 import subprocess
 import tarfile
 from tempfile import NamedTemporaryFile
@@ -46,9 +47,22 @@ def _sha256(content: bytes) -> str:
 
 
 def _git_provenance() -> TransferProvenance:
+    lines = _git(
+        "status", "--porcelain=v2", "--branch", "--untracked-files=normal"
+    ).splitlines()
+    commit = next(
+        (
+            line.removeprefix("# branch.oid ")
+            for line in lines
+            if line.startswith("# branch.oid ")
+        ),
+        "",
+    )
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("Git status must identify a committed producer revision")
     return TransferProvenance(
-        _git("rev-parse", "HEAD"),
-        bool(_git("status", "--porcelain", "--untracked-files=normal")),
+        commit,
+        any(not line.startswith("# ") for line in lines),
     )
 
 

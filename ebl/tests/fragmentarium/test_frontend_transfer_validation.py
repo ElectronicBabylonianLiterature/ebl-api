@@ -78,9 +78,7 @@ def test_curation_template_contract_is_exact(
 def test_manifest_embeds_exact_frontend_reproduction_inputs(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(
-        transfer, "_git", lambda *args: "" if args[0] == "status" else "a" * 40
-    )
+    monkeypatch.setattr(transfer, "_git", lambda *args: "# branch.oid " + "a" * 40)
     contents, revisions = read_artifact_sets(DEFAULT_OUTPUT_DIR)
     manifest = transfer.build_manifest(contents, revisions).decode("utf-8")
     assert f"frontendGeneratorPath: {transfer.FRONTEND_GENERATOR_PATH}" in manifest

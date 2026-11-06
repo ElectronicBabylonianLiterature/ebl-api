@@ -31,9 +31,7 @@ EXPECTED_MEMBERS = (
 @pytest.fixture(autouse=True)
 def stable_git_provenance(monkeypatch: pytest.MonkeyPatch) -> None:
     def fake_git(*args: str) -> str:
-        if args[0] == "status":
-            return ""
-        return "a" * 40
+        return "# branch.oid " + "a" * 40
 
     monkeypatch.setattr(transfer, "_git", fake_git)
 
@@ -86,9 +84,7 @@ def test_manifest_marks_dirty_git_provenance(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     def dirty_git(*args: str) -> str:
-        if args[0] == "status":
-            return " M ebl/fragmentarium/data/map/assur_polygon_inventory.json"
-        return "b" * 40
+        return "# branch.oid " + "b" * 40 + "\n? untracked-source.json"
 
     monkeypatch.setattr(transfer, "_git", dirty_git)
     output = transfer.build_archive(DEFAULT_OUTPUT_DIR, tmp_path / "transfer.tar.gz")

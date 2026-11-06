@@ -79,9 +79,7 @@ def test_archive_paths_are_safe_across_platforms(name: str) -> None:
 def test_archive_includes_verifiable_machine_contract(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(
-        transfer, "_git", lambda *args: "" if args[0] == "status" else "a" * 40
-    )
+    monkeypatch.setattr(transfer, "_git", lambda *args: "# branch.oid " + "a" * 40)
     output = transfer.build_archive(DEFAULT_OUTPUT_DIR, tmp_path / "transfer.tar.gz")
     with tarfile.open(output, "r:gz") as archive:
         manifest = archive.extractfile("ARTIFACT_MANIFEST.json")
@@ -98,13 +96,11 @@ def test_archive_includes_verifiable_machine_contract(
 def test_text_and_json_share_one_git_snapshot(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    calls = []
+    calls: list[tuple[str, ...]] = []
 
     def changing_git(*arguments: str) -> str:
-        if arguments[0] == "status":
-            return ""
         calls.append(arguments)
-        return ("a" if len(calls) == 1 else "b") * 40
+        return "# branch.oid " + ("a" if len(calls) == 1 else "b") * 40
 
     monkeypatch.setattr(transfer, "_git", changing_git)
     output = transfer.build_archive(DEFAULT_OUTPUT_DIR, tmp_path / "snapshot.tar.gz")
@@ -114,7 +110,9 @@ def test_text_and_json_share_one_git_snapshot(
         assert text is not None and machine is not None
         payload = json.loads(machine.read())
         assert f"commit: {payload['producer']['commit']}\n" in text.read().decode()
-    assert len(calls) == 1
+    assert calls == [
+        ("status", "--porcelain=v2", "--branch", "--untracked-files=normal")
+    ]
 
 
 @pytest.mark.parametrize(
