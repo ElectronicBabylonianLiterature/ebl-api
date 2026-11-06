@@ -3,15 +3,12 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-import sys
 import tempfile
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-
-from ebl.fragmentarium.application.map_artifact_generator import (  # noqa: E402
+from ebl.fragmentarium.application.map_artifact_generator import (
     DEFAULT_OUTPUT_DIR,
 )
-from scripts.maps.frontend_transfer_archive import build_archive  # noqa: E402
+from scripts.maps.frontend_transfer_archive import build_archive
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
