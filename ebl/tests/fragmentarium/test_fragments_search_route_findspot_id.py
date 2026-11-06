@@ -120,6 +120,6 @@ def test_search_rejects_repeated_findspot_parameters(
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.parametrize("value", [" 123 ", "0123"])
+@pytest.mark.parametrize("value", [" 123 ", "0123", "0" * 61 + "123"])
 def test_findspot_id_normalizes_padding_and_leading_zeros(value: str) -> None:
     assert parse_findspot_id({"findspotId": value})["findspotId"] == 123

@@ -133,8 +133,6 @@ def _parse_findspot_id(value: object, field: str) -> int:
     if not normalized or not normalized.isascii() or not normalized.isdecimal():
         raise DataError(f"{field} must be a non-negative decimal integer")
 
-    if len(normalized) > len(str(MAX_FINDSPOT_ID)):
-        raise DataError(f"{field} must not exceed {MAX_FINDSPOT_ID}")
     parsed = int(normalized)
     if parsed > MAX_FINDSPOT_ID:
         raise DataError(f"{field} must not exceed {MAX_FINDSPOT_ID}")
