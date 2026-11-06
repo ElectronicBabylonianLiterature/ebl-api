@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, cast
 from lark import Tree
 from lark.lexer import Token
 from lark.visitors import Transformer, v_args
@@ -17,6 +17,7 @@ from ebl.transliteration.domain.markup import (
     UrlPart,
 )
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.tokens import Token as EblToken
 
 MARKUP_PREFIXES = [
     "ebl_atf_at_line",
@@ -43,7 +44,8 @@ class MarkupTransformer(Transformer):
         self, language: Token, transliteration: Tree
     ) -> LanguagePart:
         return LanguagePart.of_transliteration(
-            Language.of_atf(f"%{language}"), transliteration.children
+            Language.of_atf(f"%{language}"),
+            cast(Sequence[EblToken], transliteration.children),
         )
 
     @v_args(inline=True)

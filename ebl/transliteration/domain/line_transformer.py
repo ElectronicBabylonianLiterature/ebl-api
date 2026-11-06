@@ -1,4 +1,5 @@
-from lark.visitors import v_args, VisitError
+from lark.visitors import v_args
+from lark.exceptions import VisitError
 from ebl.transliteration.domain.translation_line_transformer import (
     TranslationLineTransformer,
 )
