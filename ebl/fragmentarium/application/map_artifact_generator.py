@@ -13,7 +13,10 @@ from ebl.fragmentarium.application.map_artifact_report import (
     ArtifactReportSummary,
     render_artifact_report,
 )
-from ebl.fragmentarium.application.map_artifact_storage import publish_artifact_set
+from ebl.fragmentarium.application.map_artifact_storage import (
+    artifact_manifest_name,
+    publish_artifact_set,
+)
 from ebl.fragmentarium.application.map_artifact_types import (
     InventoryRecord,
     SiteArtifacts,
@@ -195,6 +198,17 @@ def write_site_artifacts(
         ),
         f"{prefix}_findspot_polygon_curation_report.json": str(artifacts["report"]),
     }
+    if curated_records_path is not None:
+        targets = (
+            output_dir / name
+            for name in (*serialized, artifact_manifest_name(prefix))
+        )
+        if any(
+            target.resolve() == curated_records_path.resolve()
+            or (target.exists() and target.samefile(curated_records_path))
+            for target in targets
+        ):
+            raise ValueError("Curated input must not alias an artifact publication target.")
     publish_artifact_set(output_dir, prefix, source_revision, serialized)
     return artifacts
 
