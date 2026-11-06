@@ -13,14 +13,12 @@ def test_generated_curation_template_can_be_completed_and_loaded(
 ) -> None:
     config = SITE_CONFIGS["KALHU"]
     artifacts = build_site_artifacts(config, " revision-1 ")
-    row = dict(artifacts["curation"][0])
-    row.update(
-        polygonIds=[artifacts["inventory"][0]["polygonId"]],
-        reviewer="reviewer-handle",
-        reviewDate="2026-09-25",
-    )
+    row = artifacts["curation"][0].copy()
+    row["polygonIds"] = [artifacts["inventory"][0]["polygonId"]]
+    row["reviewer"] = "reviewer-handle"
+    row["reviewDate"] = "2026-09-25"
     path = tmp_path / "curated.json"
-    template = [dict(item) for item in artifacts["curation"]]
+    template = [item.copy() for item in artifacts["curation"]]
     template[0] = row
     path.write_text(json.dumps(template), encoding="utf-8")
 
