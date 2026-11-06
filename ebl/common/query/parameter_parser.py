@@ -117,7 +117,10 @@ def parse_pages(parameters: Dict) -> Dict:
 
 
 def parse_genre(parameters: Dict) -> Dict:
-    genre = parameters.get("genre", "").split(":")
+    value = parameters.get("genre", "")
+    if not isinstance(value, str):
+        raise DataError("genre must be a single colon-separated string")
+    genre = value.split(":")
 
     return {**parameters, "genre": genre} if any(genre) else parameters
 
