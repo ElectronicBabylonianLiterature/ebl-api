@@ -1,4 +1,6 @@
 import pymongo
+from bson import ObjectId
+from typing import cast
 from ebl.corpus.application.schemas import (
     ChapterSchema,
     TextSchema,
@@ -82,13 +84,19 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
 
     def update(self, id_: ChapterId, chapter: Chapter) -> None:
         with storage_serialization():
-            update = ChapterSchema(
-                only=[
-                    "manuscripts",
-                    "uncertain_fragments",
-                    "lines",
-                    "signs",
-                    "parser_version",
-                ]
-            ).dump(chapter)
-        self._chapters.update_one(chapter_id_query(id_), {"$set": update})
+            update = cast(
+                dict,
+                ChapterSchema(
+                    only=[
+                        "manuscripts",
+                        "uncertain_fragments",
+                        "lines",
+                        "signs",
+                        "parser_version",
+                    ]
+                ).dump(chapter),
+            )
+        self._chapters.update_one(
+            chapter_id_query(id_),
+            {"$set": {**update, "_cacheRevision": str(ObjectId())}},
+        )

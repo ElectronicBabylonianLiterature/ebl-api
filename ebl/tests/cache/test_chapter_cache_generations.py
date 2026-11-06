@@ -128,7 +128,7 @@ def test_failed_mutation_finishes_generation(
 
     pytest.raises(ValueError, reject).match("rejected")
     assert database["chapter_cache_state"].find_one(
-        {"_id": str(chapter_id)}, projection={"epoch": 0}
+        {"_id": str(chapter_id)}, projection={"epoch": 0, "pendingUntil": 0}
     ) == {
         "_id": str(chapter_id),
         "pending": 0,

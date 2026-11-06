@@ -57,7 +57,8 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
     def find_chapter(self, id_: ChapterId) -> Chapter:
         try:
             chapter = self._chapters.find_one(
-                chapter_id_query(id_), projection={"_id": False}
+                chapter_id_query(id_),
+                projection={"_id": False, "_cacheRevision": False},
             )
             return cast(
                 Chapter,

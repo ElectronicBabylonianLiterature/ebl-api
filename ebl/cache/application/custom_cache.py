@@ -57,15 +57,27 @@ class ChapterCache(CustomCache):
         revision = self._chapter_state.revision(str(chapter_id))
         if revision is None:
             return create()
+        content_revision = self._chapter_state.content_revision(chapter_id)
+        if content_revision is None:
+            return create()
         cache_key = f"{CHAPTER_CACHE_KEY_PREFIX}{key}"
         try:
             cached = self.get(cache_key)
         except NotFoundError:
             cached = {}
-        if cached.get("chapterCacheRevision") == revision and isinstance(
-            cached.get("value"), dict
+        if (
+            cached.get("chapterCacheRevision") == revision
+            and cached.get("chapterContentRevision") == content_revision
+            and isinstance(cached.get("value"), dict)
         ):
             return cast(dict, cached["value"])
         value = create()
-        self.set(cache_key, {"chapterCacheRevision": revision, "value": value})
+        self.set(
+            cache_key,
+            {
+                "chapterCacheRevision": revision,
+                "chapterContentRevision": content_revision,
+                "value": value,
+            },
+        )
         return value

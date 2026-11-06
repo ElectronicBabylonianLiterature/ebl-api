@@ -58,7 +58,7 @@ def test_batch_worker_invalidates_every_chapter_and_line_display(
             chapter.id_
         ).parser_version == (ATF_PARSER_VERSION)
         assert database["chapter_cache_state"].find_one(
-            {"_id": str(chapter.id_)}, projection={"epoch": 0}
+            {"_id": str(chapter.id_)}, projection={"epoch": 0, "pendingUntil": 0}
         ) == {
             "_id": str(chapter.id_),
             "pending": 0,
@@ -88,7 +88,7 @@ def test_failed_batch_finishes_markers_and_reports_the_error(
     merged = result.merge(update_texts.State(updated=2))
     assert merged.to_tsv() == f"{error}\n# Updated: 2\n# Invalid: 1"
     assert database["chapter_cache_state"].find_one(
-        {"_id": str(cached_chapter.id_)}, projection={"epoch": 0}
+        {"_id": str(cached_chapter.id_)}, projection={"epoch": 0, "pendingUntil": 0}
     ) == {
         "_id": str(cached_chapter.id_),
         "pending": 0,

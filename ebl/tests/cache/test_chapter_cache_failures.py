@@ -31,7 +31,7 @@ def test_finish_failure_keeps_cache_bypassed(
             raise AutoReconnect("lost cache connection")
 
         monkeypatch.setattr(state._collection, "update_one", fail_finish)
-    assert "Chapter cache remains bypassed" in caplog.text
+    assert "chapter cache state update; content revision remains fenced" in caplog.text
     assert database["cache"].count_documents({}) == 0
     assert cache.get_or_create(
         chapter_id, str(chapter_id), lambda: {"value": "new"}
@@ -147,7 +147,7 @@ def test_concurrent_workers_share_atomic_pending_state(database: Database) -> No
         list(executor.map(finish, workers))
     assert str(workers[0].revision(chapter_key)).endswith(":16")
     assert database["chapter_cache_state"].find_one(
-        {"_id": chapter_key}, projection={"epoch": 0}
+        {"_id": chapter_key}, projection={"epoch": 0, "pendingUntil": 0}
     ) == {
         "_id": chapter_key,
         "pending": 0,
