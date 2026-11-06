@@ -106,7 +106,11 @@ def test_delayed_writer_commit_fences_cache_even_when_finish_fails(
     with patch.object(state._collection, "update_one", side_effect=AutoReconnect):
         state.finish_update(key)
     assert cache.get_or_create(chapter.id_, key, read) == {"parserVersion": "new"}
-    assert cache.get_or_create(chapter.id_, key, lambda: pytest.fail("warm cache")) == {
+
+    def unexpected_read() -> dict:
+        pytest.fail("warm cache")
+
+    assert cache.get_or_create(chapter.id_, key, unexpected_read) == {
         "parserVersion": "new"
     }
 
