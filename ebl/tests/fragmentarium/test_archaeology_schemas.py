@@ -22,7 +22,8 @@ def test_serialize_archaeology(
     with_findspot: bool, seeded_provenance_service: ProvenanceService
 ) -> None:
     archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
-    assert archaeology.site is not None
+    site = archaeology.site
+    assert site is not None
 
     schema = ArchaeologySchema(
         context={"provenance_service": seeded_provenance_service}
@@ -35,7 +36,7 @@ def test_serialize_archaeology(
         "excavationNumber": ExcavationNumberSchema().dump(
             archaeology.excavation_number
         ),
-        "site": archaeology.site.long_name,
+        "site": site.long_name,
         "isRegularExcavation": archaeology.regular_excavation,
         "date": DateRangeSchema().dump(archaeology.excavation_date),
         "findspotId": archaeology.findspot_id,
@@ -49,7 +50,8 @@ def test_deserialize_archaeology(
     with_findspot: bool, seeded_provenance_service: ProvenanceService
 ) -> None:
     archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
-    assert archaeology.site is not None
+    site = archaeology.site
+    assert site is not None
 
     assert (
         ArchaeologySchema(
@@ -59,7 +61,7 @@ def test_deserialize_archaeology(
                 "excavationNumber": ExcavationNumberSchema().dump(
                     archaeology.excavation_number
                 ),
-                "site": archaeology.site.long_name,
+                "site": site.long_name,
                 "isRegularExcavation": archaeology.regular_excavation,
                 "date": DateRangeSchema().dump(archaeology.excavation_date),
                 "findspotId": archaeology.findspot_id,
