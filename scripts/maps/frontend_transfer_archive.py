@@ -5,6 +5,7 @@ import hashlib
 from io import BytesIO
 import json
 from pathlib import Path
+import re
 import subprocess
 import tarfile
 from tempfile import NamedTemporaryFile
@@ -50,10 +51,15 @@ def _git_provenance() -> TransferProvenance:
         "status", "--porcelain=v2", "--branch", "--untracked-files=normal", "-z"
     ).split("\0")
     commit = next(
-        record.removeprefix("# branch.oid ")
-        for record in records
-        if record.startswith("# branch.oid ")
+        (
+            record.removeprefix("# branch.oid ")
+            for record in records
+            if record.startswith("# branch.oid ")
+        ),
+        "",
     )
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("Git status must identify a committed producer revision")
     return TransferProvenance(
         commit, any(record and not record.startswith("# ") for record in records)
     )
