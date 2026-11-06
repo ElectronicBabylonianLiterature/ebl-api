@@ -203,6 +203,12 @@ def test_map_data_uses_narrow_findspot_read(
     monkeypatch.setattr(findspot_repository, "find_all", reject_full_collection_read)
     response = cast(testing.Result, map_data.simulate_get("/findspots/map-data"))
     assert response.status == falcon.HTTP_OK
+    assert [item["findspotId"] for item in cast(dict, response.json)["findspots"]] == [
+        100,
+        101,
+        102,
+        104,
+    ]
 
 
 def test_map_data_rejects_missing_and_wrong_site_metadata(
