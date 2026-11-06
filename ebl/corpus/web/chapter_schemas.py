@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple, Type
+from typing import Any, Optional, Sequence, Tuple, Type, cast
 
 from lark.exceptions import ParseError, UnexpectedInput
 from marshmallow import EXCLUDE, Schema, ValidationError, fields, post_load, validate
@@ -49,15 +49,17 @@ __all__ = [
 
 
 class LineNumberString(fields.String):
-    def _serialize(self, value, attr, obj, **kwargs):
+    def _serialize(self, value: Any, attr: str | None, obj: Any, **kwargs: Any) -> Any:
         return super()._serialize(value.label, attr, obj, **kwargs)
 
-    def _deserialize(self, value, attr, data, **kwargs):
+    def _deserialize(
+        self, value: Any, attr: str | None, data: Any, **kwargs: Any
+    ) -> Any:
         try:
             deserialized = super()._deserialize(value, attr, data, **kwargs)
             return parse_line_number(deserialized)
         except (ValueError, ParseError, UnexpectedInput) as error:
-            raise ValidationError("Invalid line number.", attr) from error
+            raise ValidationError("Invalid line number.", cast(str, attr)) from error
 
 
 def _split_reconstruction(
@@ -115,7 +117,7 @@ class ApiLineVariantSchema(LineVariantSchema):
     )
 
     @post_load
-    def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
+    def make_line_variant(self, data: dict[str, Any], **kwargs: object) -> LineVariant:
         text, note, parallel_lines = _parse_reconstruction(data["reconstruction"])
         return LineVariant(
             text, note, tuple(data["manuscripts"]), parallel_lines, data["intertext"]
@@ -147,14 +149,14 @@ class ApiLineSchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    translation = fields.Function(
+    translation: fields.Field = fields.Function(
         lambda line: "\n".join(translation.atf for translation in line.translation),
         deserialize_translation,
         required=True,
     )
 
     @post_load
-    def make_line(self, data: dict, **kwargs) -> Line:
+    def make_line(self, data: dict[str, Any], **kwargs: object) -> Line:
         return Line(
             data["number"],
             tuple(data["variants"]),
