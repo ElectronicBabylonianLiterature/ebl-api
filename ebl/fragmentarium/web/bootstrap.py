@@ -80,6 +80,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository,
         context.photo_repository,
         context.cropped_sign_images_repository,
+        context.media.service if context.media else None,
     )
     corpus = Corpus(
         CorpusDependencies(

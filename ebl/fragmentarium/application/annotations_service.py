@@ -1,11 +1,12 @@
 from io import BytesIO
-from typing import Any, Callable, Dict, Sequence, Tuple, cast
+from typing import Any, Callable, Dict, Optional, Sequence, Tuple, cast
 
 import attr
 from PIL import Image
 
 from ebl.changelog import Changelog
 from ebl.ebl_ai_client import EblAiClient
+from ebl.errors import NotFoundError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
@@ -25,6 +26,7 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     SealAtLine,
 )
+from ebl.media.application.media_service import MediaService
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -47,10 +49,17 @@ class AnnotationsService:
     _fragments_repository: FragmentRepository
     _photos_repository: FileRepository
     _cropped_sign_images_repository: CroppedSignImagesRepository
+    _media: Optional[MediaService] = None
+
+    def _require_legacy_original(self, number: MuseumNumber) -> None:
+        # Removed legacy originals must not be read, even by annotation tooling.
+        if self._media is not None and not self._media.legacy_fallback_allowed(number):
+            raise NotFoundError(f"Photo of {number} is not available.")
 
     def generate_annotations(
         self, number: MuseumNumber, threshold: float = 0.3
     ) -> Annotations:
+        self._require_legacy_original(number)
         fragment_image = self._photo_repository.query_by_file_name(f"{number}.jpg")
         return self._ebl_ai_client.generate_annotations(
             number, fragment_image, threshold
@@ -93,6 +102,7 @@ class AnnotationsService:
     def _cropped_image_from_annotations(
         self, annotations: Annotations
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
+        self._require_legacy_original(annotations.fragment_number)
         fragment = self._fragments_repository.query_by_museum_number(
             annotations.fragment_number
         )
@@ -106,6 +116,7 @@ class AnnotationsService:
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
+        self._require_legacy_original(annotations.fragment_number)
         old_annotations = self._annotations_repository.query_by_museum_number(
             annotations.fragment_number
         )
