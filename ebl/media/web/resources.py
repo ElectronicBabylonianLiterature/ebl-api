@@ -18,6 +18,7 @@ from ebl.media.application.media_errors import (
     MediaRepresentationNotFoundError,
 )
 from ebl.media.application.media_runtime import MediaRuntime
+from ebl.media.web.request_metadata import bounded_json_body
 from ebl.media.application.media_management_requests import (
     MediaUploadRequest,
     MediaMutationRequest,
@@ -130,25 +131,6 @@ class MediaResource:
                 )
         return result
 
-    @staticmethod
-    def _json_body(req):
-        if req.content_length is not None and req.content_length > 16384:
-            raise falcon.HTTPPayloadTooLarge(
-                description="Media metadata exceeds 16 KiB."
-            )
-        content = req.bounded_stream.read(16385)
-        if len(content) > 16384:
-            raise falcon.HTTPPayloadTooLarge(
-                description="Media metadata exceeds 16 KiB."
-            )
-        try:
-            data = json.loads(content) if content else {}
-        except (ValueError, UnicodeDecodeError) as error:
-            raise DataError("Invalid JSON metadata.") from error
-        if not isinstance(data, dict):
-            raise DataError("Media metadata must be an object.")
-        return data
-
     def _authorize_associations(self, req, media):
         user = cast(User, req.context["user"])
         for association in media.associations:
@@ -235,7 +217,7 @@ class MediaResource:
             req, manager_only=operation != "edit"
         )
         number = self._authorized_fragment(req)
-        metadata = self._json_body(req)
+        metadata = bounded_json_body(req)
         try:
             media = management.mutate(
                 MediaMutationRequest(
