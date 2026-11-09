@@ -147,7 +147,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
-    photo = PhotoResource(finder)
+    photo = PhotoResource(finder, context.media.service if context.media else None)
     folios = FoliosResource(finder)
     chapters = ChaptersByFragmentResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)

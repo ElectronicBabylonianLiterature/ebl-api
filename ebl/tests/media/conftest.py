@@ -20,6 +20,29 @@ MediaRepositoryFactory = Callable[[Sequence[StoredMedia]], MediaRepository]
 RepresentationStoreFactory = Callable[[], MediaRepresentationStore]
 
 
+@pytest.fixture
+def management_runtime(media_database):
+    from ebl.media.application.default_media_service import DefaultMediaService
+    from ebl.media.application.media_management import MediaManagementService
+    from ebl.media.application.media_runtime import MediaRuntime
+    from ebl.media.infrastructure.grid_fs_media_representation_store import (
+        GridFsMediaRepresentationStore,
+    )
+    from ebl.media.infrastructure.mongo_media_management import (
+        MongoMediaManagementRepository,
+    )
+    from ebl.media.infrastructure.upload_images import UploadLimits, prepare_upload
+
+    repository = MongoMediaManagementRepository(media_database)
+    repository.create_indexes()
+    store = GridFsMediaRepresentationStore(media_database)
+    store.create_indexes()
+    management = MediaManagementService(
+        repository, store, prepare_upload, UploadLimits(max_bytes=1024 * 1024)
+    )
+    return MediaRuntime(DefaultMediaService(repository, store), store, management)
+
+
 @pytest.fixture(scope="session")
 def media_mongo_client(mongo_client: MongoClient) -> Iterator[MongoClient]:
     topology = mongo_client.admin.command("hello")

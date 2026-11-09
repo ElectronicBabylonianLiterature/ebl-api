@@ -1,12 +1,15 @@
 import json
 from typing import Optional
 
+import attr
+
 from ebl.common.domain.project import ResearchProject
 from ebl.media.application.media_stored import (
     StoredMedia,
     StoredMediaRepresentations,
     StoredThumbnailRepresentation,
 )
+from ebl.media.domain.publication import MediaSubmission, PublicationStatus, MediaRights
 from ebl.media.application.media_storage_identity import (
     StoredRepresentationHandle,
     StoredRepresentationRole,
@@ -113,6 +116,14 @@ def stored_document(stored: StoredMedia) -> dict:
         },
     }
     import_source = media.import_source
+    if media.rights is not None:
+        document["rights"] = attr.asdict(media.rights)
+    if media.submission is not None:
+        submission = media.submission
+        document["submission"] = {
+            **attr.asdict(submission),
+            "publication_status": submission.publication_status.value,
+        }
     if import_source is not None:
         document["importSource"] = source_document(import_source)
         document["sourceKey"] = source_key(import_source)
@@ -167,6 +178,19 @@ def load_stored(document: dict) -> StoredMedia:
         caption=document["caption"],
         attribution=document["attribution"],
         import_source=_load_source(document),
+        rights=MediaRights(**document["rights"]) if "rights" in document else None,
+        submission=(
+            MediaSubmission(
+                **{
+                    **document["submission"],
+                    "publication_status": PublicationStatus(
+                        document["submission"]["publication_status"]
+                    ),
+                }
+            )
+            if "submission" in document
+            else None
+        ),
     )
     return StoredMedia(
         media,

@@ -6,6 +6,11 @@ from ebl.common.domain.scopes import Scope
 
 class User(ABC):
     @property
+    def subject(self):
+        """Stable authenticated identity. Guests and script users have none."""
+        return None
+
+    @property
     @abstractmethod
     def profile(self) -> dict:
         raise NotImplementedError

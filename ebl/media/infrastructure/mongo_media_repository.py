@@ -16,6 +16,7 @@ from ebl.media.application.media_repository import MediaRepository
 from ebl.media.application.media_selection import fragment_media_in_order, with_primary
 from ebl.media.application.media_stored import StoredMedia
 from ebl.media.domain import Media, MediaId
+from ebl.media.domain.publication import is_published
 from ebl.media.infrastructure.media_documents import (
     load_stored,
     source_key,
@@ -133,7 +134,10 @@ class MongoMediaRepository(MongoMediaReader, MediaRepository):
                 session=session,
             )
             stored = tuple(load_stored(document) for document in documents)
-            if not any(item.media.id == media_id for item in stored):
+            if not any(
+                item.media.id == media_id and is_published(item.media)
+                for item in stored
+            ):
                 raise MediaNotFoundError(media_id)
             replacements = tuple(
                 attr.evolve(
