@@ -1,5 +1,7 @@
 """Independent regression cases from the upload authorization/security review."""
 
+from ebl.tests.media.test_media_management_uploads import MediaTestUser
+
 import uuid
 from io import BytesIO
 from typing import cast
@@ -128,7 +130,7 @@ def test_uncertain_durable_commit_preserves_files_and_idempotent_retry(
 def test_http_tombstone_keeps_an_already_open_gridfs_reader_alive(
     management_runtime,
 ) -> None:
-    api = client(management_runtime, manager=True)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
     item = upload(api).json["media"][0]
     stored = management_runtime.management.repository.find_stored_by_id(
         MediaId(item["id"])
@@ -178,7 +180,7 @@ def test_upload_preflight_accepts_authenticated_binary_metadata_headers(
 def test_mutation_requires_access_to_every_associated_fragment(
     management_runtime,
 ) -> None:
-    restricted_manager = client(management_runtime, manager=True)
+    restricted_manager = client(management_runtime, user=MediaTestUser(manager=True))
     contributor = client(management_runtime)
     item = upload(contributor).json["media"][0]
     identifier = MediaId(item["id"])
@@ -210,7 +212,9 @@ def test_mutation_requires_access_to_every_associated_fragment(
             ).status_code
             == 403
         )
-    authorized_manager = client(management_runtime, manager=True, fragment_access=True)
+    authorized_manager = client(
+        management_runtime, user=MediaTestUser(manager=True, fragment_access=True)
+    )
     assert (
         authorized_manager.simulate_post(
             f"/media/{identifier}/publish?fragment=K.1", json={}

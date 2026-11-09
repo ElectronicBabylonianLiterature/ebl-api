@@ -1,3 +1,4 @@
+from ebl.tests.media.test_media_management_uploads import MediaTestUser
 import pytest
 
 from ebl.media.infrastructure.media_recovery import recover_media
@@ -12,7 +13,7 @@ def test_offline_recovery_requires_quiescence(management_runtime, media_database
 def test_tombstone_recovery_is_explicit_and_preserves_other_files(
     management_runtime, media_database
 ):
-    api = client(management_runtime, manager=True)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
     first = upload(api).json["media"][0]
     second = upload(api).json["media"][0]
     assert api.simulate_delete(f"/media/{first['id']}?fragment=K.1").status_code == 204

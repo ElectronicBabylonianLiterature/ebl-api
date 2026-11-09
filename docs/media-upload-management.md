@@ -35,6 +35,10 @@ is supplied where applicable. Optional fields: `creator`, `copyrightHolder`,
 filenames have a 255-character cap. Original filenames/bytes cannot be replaced.
 SVG ingestion and animated images are deliberately unsupported.
 
+Metadata, bibliography identifiers, and review reasons must be valid UTF-8 text.
+Malformed Unicode is rejected with 422 before creating upload reservations or
+writing files; valid non-BMP characters remain supported.
+
 Canonical responses retain existing gallery representations, sort order, caption,
 attribution, and references. New records expose `publicationStatus`, `creator`,
 `sourceInstitution`, `copyrightHolder`, and `rightsStatement`. Management

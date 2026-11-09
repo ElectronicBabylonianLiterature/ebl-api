@@ -1,5 +1,7 @@
 """Independent review of legacy rights annotations and publication isolation."""
 
+from ebl.tests.media.test_media_management_uploads import MediaTestUser
+
 import attr
 import pytest
 
@@ -67,7 +69,9 @@ def test_annotation_cannot_be_used_to_publish_an_unreviewed_upload(
     pending = attr.evolve(photo_media(), submission=submission)
     repository = management_runtime.management.repository
     repository.create(stored_media(pending))
-    response = client(management_runtime, manager=True).simulate_patch(
+    response = client(
+        management_runtime, user=MediaTestUser(manager=True)
+    ).simulate_patch(
         f"/media/{pending.id}?fragment=K.1",
         json={"creator": "Annotated creator", "rightsStatement": "Corrected rights"},
     )
@@ -75,5 +79,5 @@ def test_annotation_cannot_be_used_to_publish_an_unreviewed_upload(
     resource = response.json["media"][0]
     assert resource["publicationStatus"] == "PENDING_REVIEW"
     assert "rightsAnnotated" not in resource
-    reader = client(management_runtime, contributor=False)
+    reader = client(management_runtime, user=MediaTestUser(contributor=False))
     assert reader.simulate_get("/media?fragment=K.1").json == {"media": []}

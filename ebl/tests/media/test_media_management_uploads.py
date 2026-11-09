@@ -1,8 +1,10 @@
 import hashlib
+from dataclasses import dataclass
 import io
 import json
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from typing import cast
 from urllib.parse import quote
 
 import attr
@@ -13,7 +15,9 @@ from PIL import Image
 
 from ebl import error_handler
 from ebl.common.domain.scopes import Scope
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.media.web.bootstrap import create_media_routes
+from ebl.media.application.media_management_requests import MediaMutationRequest
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -44,14 +48,20 @@ class Fragments:
         return [Scope.READ_CAIC_FRAGMENTS] if str(number) == "K.2" else []
 
 
-def client(
-    runtime,
-    *,
-    actor="auth0|contributor",
-    manager=False,
-    contributor=True,
-    fragment_access=False,
-):
+@dataclass(frozen=True)
+class MediaTestUser:
+    actor: str = "auth0|contributor"
+    manager: bool = False
+    contributor: bool = True
+    fragment_access: bool = False
+
+
+DEFAULT_MEDIA_TEST_USER = MediaTestUser()
+
+
+def client(runtime, *, user: MediaTestUser = DEFAULT_MEDIA_TEST_USER):
+    actor, manager = user.actor, user.manager
+    contributor, fragment_access = user.contributor, user.fragment_access
     scopes = []
     if manager:
         scopes.append("manage:fragment_media")
@@ -59,17 +69,17 @@ def client(
         scopes.append("upload:fragment_media")
     if fragment_access:
         scopes.append("read:CAIC-fragments")
-    user = Auth0User(
+    authenticated_user = Auth0User(
         {"sub": actor, "scope": " ".join(scopes)}, lambda: {"name": "Test"}
     )
 
     class Auth:
         def process_request(self, req, resp):
-            req.context["user"] = user
+            req.context["user"] = authenticated_user
 
     api = falcon.App(middleware=[Auth()])
     error_handler.set_up(api)
-    create_media_routes(api, Fragments(), runtime)
+    create_media_routes(api, cast(FragmentRepository, Fragments()), runtime)
     return testing.TestClient(api)
 
 
@@ -93,9 +103,10 @@ def test_upload_publication_gallery_original_and_tombstone(
 ):
     contributor = client(management_runtime)
     manager = client(
-        management_runtime, actor="auth0|manager", manager=True, contributor=False
+        management_runtime,
+        user=MediaTestUser(actor="auth0|manager", manager=True, contributor=False),
     )
-    reader = client(management_runtime, contributor=False)
+    reader = client(management_runtime, user=MediaTestUser(contributor=False))
     original = png()
     response = upload(contributor, content=original)
     assert response.status_code == 201, response.text
@@ -165,7 +176,8 @@ def test_upload_publication_gallery_original_and_tombstone(
 def test_readers_cannot_upload(management_runtime, fragment, expected):
     assert (
         upload(
-            client(management_runtime, contributor=False), fragment=fragment
+            client(management_runtime, user=MediaTestUser(contributor=False)),
+            fragment=fragment,
         ).status_code
         == expected
     )
@@ -178,8 +190,8 @@ def test_contributor_inaccessible_fragment(management_runtime):
 
 def test_contributor_and_cross_fragment_permissions(management_runtime):
     owner = client(management_runtime)
-    other = client(management_runtime, actor="auth0|other")
-    manager = client(management_runtime, manager=True)
+    other = client(management_runtime, user=MediaTestUser(actor="auth0|other"))
+    manager = client(management_runtime, user=MediaTestUser(manager=True))
     item = upload(owner).json["media"][0]
     path = f"/media/{item['id']}"
     assert other.simulate_get("/media?fragment=K.1&view=management").json == {
@@ -283,14 +295,17 @@ def test_invalid_binary_and_oversize(management_runtime):
 
 
 def test_disabled_write_routes(management_runtime):
-    api = client(attr.evolve(management_runtime, management=None), manager=True)
+    api = client(
+        attr.evolve(management_runtime, management=None),
+        user=MediaTestUser(manager=True),
+    )
     assert upload(api).status_code == 404
     assert api.simulate_get("/media?fragment=K.1").status_code == 200
     assert api.simulate_get("/media?fragment=K.1&view=management").status_code == 404
 
 
 def test_concurrent_primary_selection(management_runtime):
-    api = client(management_runtime, manager=True)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
     identifiers = [upload(api).json["media"][0]["id"] for _ in range(3)]
     for identifier in identifiers:
         assert (
@@ -304,13 +319,15 @@ def test_concurrent_primary_selection(management_runtime):
 
     def select(identifier):
         return management_runtime.management.mutate(
-            number,
-            MediaId(identifier),
-            "auth0|manager",
-            True,
-            "primary",
-            {},
-            lambda media: None,
+            MediaMutationRequest(
+                number,
+                MediaId(identifier),
+                "auth0|manager",
+                True,
+                "primary",
+                {},
+                lambda media: None,
+            )
         )
 
     with ThreadPoolExecutor(max_workers=3) as pool:
@@ -328,7 +345,8 @@ def test_manager_only_scope_can_upload_then_explicitly_publish_own_submission(
     management_runtime,
 ):
     api = client(
-        management_runtime, actor="auth0|manager", manager=True, contributor=False
+        management_runtime,
+        user=MediaTestUser(actor="auth0|manager", manager=True, contributor=False),
     )
     response = upload(api)
     assert response.status_code == 201

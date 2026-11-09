@@ -13,7 +13,8 @@ from pymongo import MongoClient
 from ebl.media.infrastructure.grid_fs_media_representation_store import (
     GridFsMediaRepresentationStore,
 )
-from ebl.media.infrastructure.media_documents import load_handle, load_stored
+from ebl.media.infrastructure.media_documents import load_stored
+from ebl.media.infrastructure.media_recovery_uploads import UploadReconciler
 from ebl.media.infrastructure.mongo_media_management import (
     MongoMediaManagementRepository,
 )
@@ -34,74 +35,17 @@ def recover_media(database, *, apply=False, quiescent=False):
     }
     actions = []
     for document in documents:
-        if document.get("state") == "deleted":
-            stored = load_stored(document)
-            actions.append({"action": "finish-tombstone", "mediaId": document["_id"]})
-            if apply:
-                for handle in stored.representations.handles:
-                    store.delete_representation(handle)
-                repository.finish_delete(stored)
-    for request in database.mediaUploadRequests.find({}):
-        current = database.media.find_one({"_id": request["mediaId"]})
-        # This also reconciles stale generations from a failed attempt followed by
-        # a successful retry. Committed reservations may still own such orphans.
-        unreferenced = tuple(
-            load_handle(record["handle"])
-            for record in database.mediaFiles.find(
-                {
-                    "handle.mediaId": request["mediaId"],
-                    "ownership": "owned",
-                    "deleted": {"$ne": True},
-                }
-            )
-            if record["handle"]["value"] not in referenced
-        )
-        if current is not None:
-            # Preserve uncertain commits and retained tombstones. Never infer absence
-            # from public queries, which deliberately omit unpublished/deleted items.
-            if unreferenced:
-                actions.append(
-                    {
-                        "action": "reconcile-orphans",
-                        "requestId": request["_id"],
-                        "count": len(unreferenced),
-                    }
-                )
-                if apply:
-                    for handle in unreferenced:
-                        store.delete_representation(handle)
-            elif request["state"] != "committed":
-                actions.append(
-                    {"action": "preserve-existing", "requestId": request["_id"]}
-                )
+        if document.get("state") != "deleted":
             continue
-        if request["state"] == "committed":
-            # A removed upload keeps its idempotency history and cannot reappear.
-            if unreferenced:
-                actions.append(
-                    {
-                        "action": "reconcile-orphans",
-                        "requestId": request["_id"],
-                        "count": len(unreferenced),
-                    }
-                )
-                if apply:
-                    for handle in unreferenced:
-                        store.delete_representation(handle)
-            continue
-        actions.append({"action": "recover-incomplete", "requestId": request["_id"]})
+        stored = load_stored(document)
+        actions.append({"action": "finish-tombstone", "mediaId": document["_id"]})
         if apply:
-            # Include registry entries whose write crashed before the journal callback.
-            for handle in unreferenced:
+            for handle in stored.representations.handles:
                 store.delete_representation(handle)
-            database.mediaUploadRequests.update_one(
-                {
-                    "_id": request["_id"],
-                    "lease": request["lease"],
-                    "state": request["state"],
-                },
-                {"$set": {"state": "failed", "recovered": True}},
-            )
+            repository.finish_delete(stored)
+    reconciler = UploadReconciler(database, store, referenced, apply)
+    for request in database.mediaUploadRequests.find({}):
+        actions.extend(reconciler.recover(request))
     return actions
 
 

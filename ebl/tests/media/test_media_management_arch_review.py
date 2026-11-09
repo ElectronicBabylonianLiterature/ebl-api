@@ -1,5 +1,7 @@
 """Independent architecture/recovery regression cases."""
 
+from ebl.tests.media.test_media_management_uploads import MediaTestUser
+
 import uuid
 
 import pytest
@@ -58,7 +60,7 @@ def test_failed_commit_retry_recovery_collects_superseded_upload_generation(
 def test_deleted_upload_does_not_allow_reuse_of_idempotency_identity(
     management_runtime, media_database
 ):
-    api = client(management_runtime, manager=True)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
     key = str(uuid.uuid4())
     item = upload(api, key=key).json["media"][0]
     assert api.simulate_delete(f"/media/{item['id']}?fragment=K.1").status_code == 204
@@ -73,7 +75,7 @@ def test_retry_then_remove_recovery_also_collects_old_failed_generation(
     repository = management_runtime.management.repository
     commit = repository.commit_upload
     key = str(uuid.uuid4())
-    api = client(management_runtime, manager=True)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
 
     def fail(*args, **kwargs):
         raise RuntimeError("Injected metadata commit failure")
@@ -120,9 +122,9 @@ def test_legacy_svg_photo_conversion_returns_structured_validation_error(
         media_representations=representations(original_mime_type="image/svg+xml")
     )
     management_runtime.management.repository.create(stored_media(legacy))
-    result = client(management_runtime, manager=True).simulate_patch(
-        f"/media/{legacy.id}?fragment=K.1", json={"type": "PHOTO"}
-    )
+    result = client(
+        management_runtime, user=MediaTestUser(manager=True)
+    ).simulate_patch(f"/media/{legacy.id}?fragment=K.1", json={"type": "PHOTO"})
     assert result.status_code == 422, result.text
     assert "description" in result.json
 
@@ -148,7 +150,7 @@ def test_http_remove_and_offline_cleanup_preserve_borrowed_legacy_original(
     management_runtime.management.repository.create(
         StoredMedia(legacy, StoredMediaRepresentations(handle))
     )
-    api = client(management_runtime, manager=True)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
     assert (
         api.simulate_get(f"/media/{identifier}/file?fragment=K.1").content == original
     )

@@ -18,6 +18,10 @@ from ebl.media.application.media_errors import (
     MediaRepresentationNotFoundError,
 )
 from ebl.media.application.media_runtime import MediaRuntime
+from ebl.media.application.media_management_requests import (
+    MediaUploadRequest,
+    MediaMutationRequest,
+)
 from ebl.media.application.media_schemas import FragmentMediaResponseDtoSchema
 from ebl.media.application.media_storage_identity import StoredRepresentationHandle
 from ebl.media.application.media_stored import StoredMedia
@@ -202,13 +206,15 @@ class MediaResource:
 
         try:
             media, created = management.upload(
-                number,
-                actor,
-                req.get_header("Idempotency-Key", required=True),
-                metadata,
-                req.bounded_stream,
-                req.content_length,
-                req.content_type,
+                MediaUploadRequest(
+                    number,
+                    actor,
+                    req.get_header("Idempotency-Key", required=True),
+                    metadata,
+                    req.bounded_stream,
+                    req.content_length,
+                    req.content_type,
+                )
             )
         except UploadTooLargeError as error:
             raise falcon.HTTPPayloadTooLarge(description=str(error)) from error
@@ -230,24 +236,17 @@ class MediaResource:
         )
         number = self._authorized_fragment(req)
         metadata = self._json_body(req)
-        if operation != "edit":
-            if set(metadata) - {"reason"} or (
-                "reason" in metadata
-                and (
-                    not isinstance(metadata["reason"], str)
-                    or len(metadata["reason"]) > 4000
-                )
-            ):
-                raise DataError("Invalid review reason.")
         try:
             media = management.mutate(
-                number,
-                _media_id(media_id),
-                actor,
-                manager,
-                operation,
-                metadata,
-                lambda item: self._authorize_associations(req, item),
+                MediaMutationRequest(
+                    number,
+                    _media_id(media_id),
+                    actor,
+                    manager,
+                    operation,
+                    metadata,
+                    lambda item: self._authorize_associations(req, item),
+                )
             )
         except MediaPermissionError as error:
             raise falcon.HTTPForbidden(description=str(error)) from error

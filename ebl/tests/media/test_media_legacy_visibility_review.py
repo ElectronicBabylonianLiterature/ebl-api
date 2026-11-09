@@ -1,6 +1,7 @@
 """Independent removal tests across canonical media and legacy fallback routes."""
 
 import falcon
+from dataclasses import dataclass
 import pytest
 from typing import cast
 from falcon import testing
@@ -66,9 +67,21 @@ def legacy_client(runtime, database, *, manager=False, fragment_access=False):
     return testing.TestClient(app)
 
 
+@dataclass(frozen=True)
+class LegacyMediaOptions:
+    filename: str = "K.1.jpg"
+    original_filename: str | None = None
+    associations: tuple | None = None
+
+
+DEFAULT_LEGACY_MEDIA_OPTIONS = LegacyMediaOptions()
+
+
 def add_legacy(
-    runtime, database, *, filename="K.1.jpg", original_filename=None, associations=None
+    runtime, database, options: LegacyMediaOptions = DEFAULT_LEGACY_MEDIA_OPTIONS
 ):
+    filename, original_filename = options.filename, options.original_filename
+    associations = options.associations
     original = image_bytes("JPEG")
     file_id = GridFS(database, "photos").put(
         original, filename=filename, contentType="image/jpeg"
@@ -139,8 +152,9 @@ def test_removing_an_unrelated_legacy_filename_preserves_canonical_fallback(
     identifier, original, _ = add_legacy(
         management_runtime,
         media_database,
-        filename="unrelated.jpg",
-        original_filename=claimed_name,
+        options=LegacyMediaOptions(
+            filename="unrelated.jpg", original_filename=claimed_name
+        ),
     )
     GridFS(media_database, "photos").put(
         original, filename="K.1.jpg", contentType="image/jpeg"
@@ -181,7 +195,12 @@ def test_cross_association_denial_cannot_write_legacy_suppression(
     identifier, _, _ = add_legacy(
         management_runtime,
         media_database,
-        associations=(association(fragment_id="K.1"), association(fragment_id="K.2")),
+        options=LegacyMediaOptions(
+            associations=(
+                association(fragment_id="K.1"),
+                association(fragment_id="K.2"),
+            )
+        ),
     )
     manager = legacy_client(management_runtime, media_database, manager=True)
     assert (

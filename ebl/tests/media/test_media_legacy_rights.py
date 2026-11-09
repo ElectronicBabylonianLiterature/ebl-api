@@ -1,3 +1,4 @@
+from ebl.tests.media.test_media_management_uploads import MediaTestUser
 import pytest
 from gridfs import GridFS
 
@@ -42,8 +43,8 @@ def test_manager_annotations_preserve_legacy_identity_bytes_and_publication(
     management_runtime, media_database, legacy_item
 ):
     identifier, original, file_id = legacy_item
-    api = client(management_runtime, manager=True)
-    reader = client(management_runtime, contributor=False)
+    api = client(management_runtime, user=MediaTestUser(manager=True))
+    reader = client(management_runtime, user=MediaTestUser(contributor=False))
     before = media_database.media.find_one({"_id": str(identifier)})
     initial = reader.simulate_get("/media?fragment=K.1").json["media"][0]
     assert "rightsAnnotated" not in initial
@@ -90,7 +91,7 @@ def test_legacy_annotations_do_not_fabricate_permission_attestation(
     management_runtime, legacy_item
 ):
     identifier, _, _ = legacy_item
-    manager = client(management_runtime, manager=True)
+    manager = client(management_runtime, user=MediaTestUser(manager=True))
     assert (
         manager.simulate_patch(
             f"/media/{identifier}?fragment=K.1", json={"permissionAttested": True}
