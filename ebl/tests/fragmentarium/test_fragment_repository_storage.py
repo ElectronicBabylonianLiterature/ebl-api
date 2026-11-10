@@ -1,6 +1,7 @@
 from typing import cast
 
 import attr
+import pytest
 
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
@@ -32,14 +33,18 @@ def test_created_fragment_loads_back_unchanged(fragment_repository):
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 
+@pytest.mark.parametrize("combined", [False, True])
 def test_updated_transliteration_keeps_only_real_name_breaks(
-    database, fragment_repository
+    database, fragment_repository, combined
 ):
     fragment = LemmatizedFragmentFactory.build()
     fragment_repository.create(fragment)
     updated = attr.evolve(fragment, text=parse_atf_lark(NAME_BREAK_ATF))
 
-    fragment_repository.update_field("transliteration", updated)
+    if combined:
+        fragment_repository.update_fields(("transliteration", "notes"), updated)
+    else:
+        fragment_repository.update_field("transliteration", updated)
 
     stored_text = find_stored_text(database, fragment)
     broken_line, plain_line = stored_text["lines"]

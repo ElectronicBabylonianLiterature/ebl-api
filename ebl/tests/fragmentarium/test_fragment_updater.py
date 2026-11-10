@@ -47,7 +47,7 @@ def test_update_edition(
     updater_context.expect_changelog(
         number, transliterated_fragment, transliterated_fragment
     )
-    updater_context.expect_update_field("transliteration", transliterated_fragment)
+    updater_context.expect_update_fields(["transliteration"], transliterated_fragment)
 
     result = fragment_updater.update_edition(
         number,

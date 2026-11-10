@@ -25,6 +25,7 @@ from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.corpus.application.query_pagination import parse_corpus_pagination
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -106,8 +107,12 @@ class ChaptersDisplayResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         chapter_id_str = str(chapter_id)
-        lines = parse_lines(req.get_param_as_list("lines", default=[]) or [])
-        variants = parse_lines(req.get_param_as_list("variants", default=[]) or [])
+        lines = parse_lines(
+            cast(Sequence[str], req.get_param_as_list("lines", default=[]) or [])
+        )
+        variants = parse_lines(
+            cast(Sequence[str], req.get_param_as_list("variants", default=[]) or [])
+        )
 
         dump = self._cache.get_or_create(
             chapter_id,
@@ -182,12 +187,15 @@ class CorpusQueryResource:
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         parse = flow(
-            parse_lemmas, parse_transliteration(self._transliteration_query_factory)
+            parse_lemmas,
+            parse_transliteration(self._transliteration_query_factory),
+            parse_corpus_pagination,
         )
 
-        resp.media = CorpusQueryResultSchema().dump(
-            self._corpus.query(parse(req.params))
-        )
+        query = parse(req.params)
+        resp.media = CorpusQueryResultSchema(
+            include_count_metadata="limit" in query
+        ).dump(self._corpus.query(query))
 
 
 class ChaptersAllResource:
