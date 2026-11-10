@@ -1,4 +1,9 @@
+from dataclasses import dataclass
+import json
+from threading import Thread
 from typing import Sequence, cast
+from urllib.request import urlopen
+from wsgiref.simple_server import make_server
 
 import falcon
 import pytest
@@ -22,6 +27,10 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQuerySummarySchema,
 )
 from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.fragmentarium.fragment_query_location_test_helpers import (
+    MALFORMED_MARKERS,
+    MALFORMED_MARKER_IDS,
+)
 from ebl.tests.fragmentarium.fragment_query_test_helpers import query_summary_of
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
@@ -97,13 +106,20 @@ def test_legacy_missing_text_has_exact_zero_matching_lines(text: dict) -> None:
     assert preview["totalMatchingLines"] == 0
 
 
-def test_malformed_marker_does_not_fail_other_search_results(
+@dataclass(frozen=True)
+class LocationSearch:
+    client: testing.TestClient
+    database: Database
+
+
+@pytest.fixture
+def location_search(
     client: testing.TestClient,
     fragmentarium: Fragmentarium,
     database: Database,
     sign_repository: MongoSignRepository,
     signs: Sequence[Sign],
-) -> None:
+) -> LocationSearch:
     for sign in signs:
         sign_repository.create(sign)
     for number in ("X.1", "X.2"):
@@ -114,28 +130,66 @@ def test_malformed_marker_does_not_fail_other_search_results(
                 signs="KU\nKU",
             )
         )
-    database["fragments"].update_one(
-        {"_id": "X.1"}, {"$set": {"text.lines.2.storedOnly": 1}}
-    )
+    return LocationSearch(client, database)
 
-    response = client.simulate_get(
-        "/fragments/query", params={"transliteration": "KU", "limit": "2"}
-    )
 
-    assert response.status == falcon.HTTP_OK
-    payload = cast(dict, cast(testing.Result, response).json)
+def query_locations_over_http(client: testing.TestClient) -> dict:
+    with make_server("127.0.0.1", 0, client.app) as server:
+        thread = Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            with urlopen(
+                f"http://127.0.0.1:{server.server_port}/fragments/query"
+                "?transliteration=KU&limit=2",
+                timeout=10,
+            ) as response:
+                assert response.status == 200
+                return cast(dict, json.loads(response.read()))
+        finally:
+            server.shutdown()
+            thread.join(timeout=10)
+
+
+@pytest.mark.parametrize("transport", ["falcon", "http"])
+@pytest.mark.parametrize(
+    "marker",
+    (*MALFORMED_MARKERS, None),
+    ids=(*MALFORMED_MARKER_IDS, "null-stored-line"),
+)
+def test_malformed_marker_does_not_fail_other_search_results(
+    location_search: LocationSearch,
+    marker: object,
+    transport: str,
+) -> None:
+    location_search.database["fragments"].update_one(
+        {"_id": "X.1"}, {"$set": {"text.lines.2": marker}}
+    )
+    if transport == "http":
+        payload = query_locations_over_http(location_search.client)
+    else:
+        response = location_search.client.simulate_get(
+            "/fragments/query", params={"transliteration": "KU", "limit": "2"}
+        )
+        assert response.status == falcon.HTTP_OK
+        payload = cast(dict, cast(testing.Result, response).json)
     assert len(payload["items"]) == 2
     previews = {
         item["museumNumber"]["number"]: item["matchingLinePreview"]
         for item in payload["items"]
     }
-    for line in previews["1"]["lines"]:
-        assert line["location"] == {
-            "surface": None,
-            "column": None,
-            "object": None,
-            "sealNumber": None,
-        }
+    if marker is None:
+        # Mongo's type projection omits the null row; its shifted matching index
+        # is skipped, leaving the valid preview before the damaged marker.
+        assert [line["index"] for line in previews["1"]["lines"]] == [1]
+        assert previews["1"]["lines"][0]["location"]["surface"] == "o"
+    else:
+        for line in previews["1"]["lines"]:
+            assert line["location"] == {
+                "surface": None,
+                "column": None,
+                "object": None,
+                "sealNumber": None,
+            }
     assert [line["location"]["surface"] for line in previews["2"]["lines"]] == [
         "o",
         "r",

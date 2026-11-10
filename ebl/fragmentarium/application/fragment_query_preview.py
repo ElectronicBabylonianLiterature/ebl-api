@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Sequence, cast
+from typing import Any, Dict, List, Mapping, Sequence, cast
 
 from marshmallow import EXCLUDE
 
@@ -9,8 +9,8 @@ from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 MAX_PREVIEW_LINES = 5
 
 
-def is_text_line(line: dict) -> bool:
-    return line.get("type") == "TextLine"
+def is_text_line(line: object) -> bool:
+    return isinstance(line, Mapping) and line.get("type") == "TextLine"
 
 
 def api_line_of(stored_line: dict) -> Dict[str, Any]:

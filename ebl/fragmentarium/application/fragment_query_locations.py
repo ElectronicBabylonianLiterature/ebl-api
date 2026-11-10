@@ -1,6 +1,7 @@
 from typing import Dict, Mapping, Sequence, TypedDict
 
 from marshmallow import EXCLUDE, RAISE, Schema, ValidationError, fields
+from roman import OutOfRangeError
 
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.domain.at_line import (
@@ -62,17 +63,19 @@ def locations_of_data(
     current = LineLabel(None, None, None, None, None)
     locations: Dict[int, FragmentQueryLineLocation] = {}
     schema = OneOfLineSchema()
-    for index, line in enumerate(lines):
-        if index > last_index:
-            break
-        if line.get("type") in LOCATION_LINE_TYPES:
-            try:
+    try:
+        for index, line in enumerate(lines):
+            if index > last_index:
+                break
+            if not isinstance(line, Mapping) or not isinstance(line.get("type"), str):
+                raise ValidationError("Stored lines require a string type.")
+            if line["type"] in LOCATION_LINE_TYPES:
                 current = advance_location(current, schema.load(line, unknown=RAISE))
-            except ValidationError:
-                return {
-                    selected_index: location_of(LineLabel(None, None, None, None, None))
-                    for selected_index in selected_indices
-                }
-        if index in selected_indices:
-            locations[index] = location_of(current)
+            if index in selected_indices:
+                locations[index] = location_of(current)
+    except (ValidationError, KeyError, ValueError, OutOfRangeError):
+        return {
+            selected_index: location_of(LineLabel(None, None, None, None, None))
+            for selected_index in selected_indices
+        }
     return locations
