@@ -2,6 +2,10 @@
 # Upgrade tracking: https://github.com/ElectronicBabylonianLiterature/ebl-api/issues/772
 FROM pypy:3.11-7.3.23
 
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y libjpeg62-turbo-dev zlib1g-dev && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN python -m pip install "pip==26.2.1"
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -19,6 +23,8 @@ RUN for attempt in 1 2 3; do \
       if [ "$attempt" -eq 3 ]; then exit 1; fi; \
       sleep $((attempt * 5)); \
     done
+
+RUN poetry run python -c "from io import BytesIO; from PIL import Image, features; assert features.check_codec('jpg'); data = BytesIO(); Image.new('RGB', (16, 12)).save(data, format='JPEG'); data.seek(0); image = Image.open(data); image.load(); image.thumbnail((8, 8)); assert image.size == (8, 6); image.save(BytesIO(), format='JPEG')"
 
 COPY ./ebl ./ebl
 
