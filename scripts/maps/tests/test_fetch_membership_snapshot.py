@@ -121,7 +121,7 @@ def test_snapshot_cli_reports_errors_without_overwriting_output(
     assert (
         snapshot.main(["--response-file", str(response), "--output", str(output)]) == 2
     )
-    assert capsys.readouterr().err.startswith("error: Canonical findspot response")
+    assert capsys.readouterr()[1].startswith("error: Canonical findspot response")
     assert output.read_text() == "existing snapshot"
 
 
