@@ -3,7 +3,7 @@ import re
 import pytest
 
 from ebl.sumerian_dictionary.domain.search_query import SumerianWordQuery
-from ebl.sumerian_dictionary.domain.sumerian_word import AttingerSense
+from ebl.sumerian_dictionary.domain.sumerian_word import AttingerSense, Epsd2Sense
 from ebl.sumerian_dictionary.infrastructure.mongo_sumerian_word_repository import (
     MongoSumerianWordRepository,
 )
@@ -11,7 +11,10 @@ from ebl.sumerian_dictionary.infrastructure.sumerian_search_pattern import (
     PRECOMPOSED_LATIN_RANGES,
     search_pattern,
 )
-from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import fold
+from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import (
+    DIGRAPHS,
+    fold,
+)
 from ebl.tests.factories.sumerian_dictionary import SumerianWordFactory
 from ebl.tests.sumerian_dictionary.conftest import InsertWords
 
@@ -70,3 +73,64 @@ def test_braces_and_combining_marks_are_skipped_between_characters() -> None:
 
     assert re.search(pattern, "{ĝeš}kim", re.IGNORECASE)
     assert re.search(pattern, "ĝeškim", re.IGNORECASE)
+
+
+def test_every_digraph_matches_the_pattern_of_its_fold() -> None:
+    missed = [
+        digraph
+        for digraph, _ in DIGRAPHS
+        if not re.fullmatch(search_pattern(fold(digraph)), digraph, re.IGNORECASE)
+    ]
+
+    assert missed == []
+
+
+@pytest.mark.parametrize("query", ["contest, dispute", "contest dispute"])
+def test_stored_comma_after_t_does_not_hide_an_english_sense(
+    sumerian_word_repository: MongoSumerianWordRepository,
+    insert_words: InsertWords,
+    query: str,
+) -> None:
+    sense = Epsd2Sense("1.", "contest, dispute, debate", "en")
+    insert_words(SumerianWordFactory.build(id="contest", epsd2_senses=(sense,)))
+
+    result = sumerian_word_repository.search(SumerianWordQuery(query))
+
+    assert [entry.id for entry in result.entries] == ["contest"]
+
+
+@pytest.mark.parametrize("query", ["bras, force", "bras force"])
+def test_stored_comma_after_s_does_not_hide_a_french_sense(
+    sumerian_word_repository: MongoSumerianWordRepository,
+    insert_words: InsertWords,
+    query: str,
+) -> None:
+    sense = AttingerSense("bras, force, vigueur", "fr", "att-1")
+    insert_words(SumerianWordFactory.build(id="arm", attinger_senses=(sense,)))
+
+    result = sumerian_word_repository.search(SumerianWordQuery(query))
+
+    assert [entry.id for entry in result.entries] == ["arm"]
+
+
+@pytest.mark.parametrize(
+    "stored,query",
+    [
+        ("Ninmunuszid", "Ninmunuszid"),
+        ("Ninmunuszid", "ninmunušid"),
+        ("tam₂-szi-lum", "tam2-szi-lum"),
+        ("t,u", "ṭu"),
+        ("s,a", "ṣa"),
+    ],
+)
+def test_ascii_digraphs_in_stored_forms_are_found(
+    sumerian_word_repository: MongoSumerianWordRepository,
+    insert_words: InsertWords,
+    stored: str,
+    query: str,
+) -> None:
+    insert_words(SumerianWordFactory.build(id="ascii", citation_form=stored))
+
+    result = sumerian_word_repository.search(SumerianWordQuery(query))
+
+    assert [entry.id for entry in result.entries] == ["ascii"]

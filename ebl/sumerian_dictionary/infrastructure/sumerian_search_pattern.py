@@ -1,8 +1,11 @@
 import re
-from typing import Dict, Mapping, Sequence
+from typing import Dict, Mapping, Sequence, Tuple
 
 from ebl.common.query.query_collation import CollatedFieldQuery, DataType, Fields
-from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import fold
+from ebl.sumerian_dictionary.infrastructure.sumerian_search_ranking import (
+    DIGRAPHS,
+    fold,
+)
 
 DATA_TYPE: DataType = "sumerian-dictionary"
 SEARCHED_FIELDS: Sequence[str] = Fields.SUMERIAN_DICTIONARY.value["COLLATED_FIELDS"]
@@ -24,16 +27,24 @@ def _letters_by_fold() -> Mapping[str, str]:
     return letters
 
 
+def _digraphs_by_fold() -> Mapping[str, Tuple[str, ...]]:
+    digraphs: Dict[str, Tuple[str, ...]] = {}
+    for digraph, replacement in DIGRAPHS:
+        if len(digraph) > 1:
+            folded = fold(replacement)
+            digraphs[folded] = (*digraphs.get(folded, ()), digraph)
+    return digraphs
+
+
 LETTERS_BY_FOLD = _letters_by_fold()
+DIGRAPHS_BY_FOLD = _digraphs_by_fold()
 
 
 def _class_members(pattern: str) -> str:
     return pattern[1:-1] if pattern.startswith("[") else pattern
 
 
-def _character_pattern(character: str) -> str:
-    if character == " ":
-        return SEPARATOR_PATTERN
+def _letter_pattern(character: str) -> str:
     collated = CollatedFieldQuery(character, SEARCHED_FIELDS[0], DATA_TYPE).value
     pattern = collated or re.escape(character)
     letters = LETTERS_BY_FOLD.get(character)
@@ -41,6 +52,17 @@ def _character_pattern(character: str) -> str:
         return pattern
     members = dict.fromkeys(_class_members(pattern) + letters)
     return f"[{''.join(members)}]"
+
+
+def _character_pattern(character: str) -> str:
+    if character == " ":
+        return SEPARATOR_PATTERN
+    pattern = _letter_pattern(character)
+    digraphs = DIGRAPHS_BY_FOLD.get(character)
+    if not digraphs:
+        return pattern
+    alternatives = "|".join(re.escape(digraph) for digraph in digraphs)
+    return f"(?:{alternatives}|{pattern})"
 
 
 def search_pattern(folded_query: str) -> str:
