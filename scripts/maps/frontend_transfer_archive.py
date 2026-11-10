@@ -11,8 +11,8 @@ import tarfile
 from tempfile import NamedTemporaryFile
 from typing import BinaryIO, cast
 
-from ebl.fragmentarium.application.map_geometry import CANONICAL_CRS
-from ebl.fragmentarium.application.map_polygon_identity import (
+from scripts.maps.map_geometry import CANONICAL_CRS
+from scripts.maps.map_polygon_identity import (
     contains_control_character,
 )
 from scripts.maps.frontend_transfer_contract import (

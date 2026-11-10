@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import hashlib
 import json
 
-from ebl.fragmentarium.application.map_geometry import CANONICAL_CRS
-from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
+from scripts.maps.map_geometry import CANONICAL_CRS
+from scripts.maps.map_site_config import SITE_CONFIGS
 from scripts.maps.frontend_transfer_validation import site_summary
 
 CONTRACT_MANIFEST = "ARTIFACT_MANIFEST.json"

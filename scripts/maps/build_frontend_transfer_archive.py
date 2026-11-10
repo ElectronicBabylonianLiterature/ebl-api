@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 import tempfile
 
-from ebl.fragmentarium.application.map_artifact_generator import (
+from scripts.maps.map_artifact_generator import (
     DEFAULT_OUTPUT_DIR,
 )
 from scripts.maps.frontend_transfer_archive import build_archive

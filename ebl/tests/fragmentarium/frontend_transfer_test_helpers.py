@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import shutil
 
-from ebl.fragmentarium.application.map_artifact_generator import DEFAULT_OUTPUT_DIR
+from scripts.maps.map_artifact_generator import DEFAULT_OUTPUT_DIR
 
 
 def copy_artifacts(tmp_path: Path) -> Path:

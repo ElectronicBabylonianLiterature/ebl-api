@@ -9,11 +9,11 @@ import tarfile
 
 import pytest
 
-from ebl.fragmentarium.application.map_artifact_generator import (
+from scripts.maps.map_artifact_generator import (
     DEFAULT_OUTPUT_DIR,
     write_site_artifacts,
 )
-from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
+from scripts.maps.map_site_config import SITE_CONFIGS
 from scripts.maps import frontend_transfer_archive as transfer
 from scripts.maps.frontend_transfer_manifest import read_artifact_sets
 

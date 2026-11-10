@@ -8,10 +8,10 @@ from ebl.fragmentarium.application.map_artifact_storage import (
     artifact_manifest_name,
 )
 from ebl.fragmentarium.application.map_json import load_strict_json
-from ebl.fragmentarium.application.map_polygon_identity import (
+from scripts.maps.map_polygon_identity import (
     contains_control_character,
 )
-from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
+from scripts.maps.map_site_config import SITE_CONFIGS
 
 ARTIFACT_SUFFIXES = (
     "polygon_inventory.json",

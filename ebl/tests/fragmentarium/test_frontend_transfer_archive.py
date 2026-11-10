@@ -10,7 +10,7 @@ from marshmallow import ValidationError
 import pytest
 
 from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
-from ebl.fragmentarium.application.map_artifact_generator import DEFAULT_OUTPUT_DIR
+from scripts.maps.map_artifact_generator import DEFAULT_OUTPUT_DIR
 from scripts.maps import frontend_transfer_archive as transfer
 
 EXPECTED_MEMBERS = (

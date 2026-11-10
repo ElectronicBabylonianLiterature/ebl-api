@@ -4,22 +4,22 @@ import re
 from typing import Mapping, cast
 from marshmallow import ValidationError
 
-from ebl.fragmentarium.application.map_artifact_types import (
+from scripts.maps.map_artifact_types import (
     CurationRecord,
     InventoryRecord,
 )
-from ebl.fragmentarium.application.map_curated_mappings import (
+from scripts.maps.map_curated_mappings import (
     CuratedMappingRecord,
     PendingCuratedCrosswalkRow,
 )
 from ebl.fragmentarium.application.map_json import load_strict_json
 from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
-from ebl.fragmentarium.application.map_polygon_identity import (
+from scripts.maps.map_polygon_identity import (
     contains_control_character,
     polygon_match_key,
     slugify,
 )
-from ebl.fragmentarium.application.map_site_config import CRS_EPSG, SITE_CONFIGS
+from scripts.maps.map_site_config import CRS_EPSG, SITE_CONFIGS
 
 MAPPING_LOCATION_KEYS = (
     "polygonIds",

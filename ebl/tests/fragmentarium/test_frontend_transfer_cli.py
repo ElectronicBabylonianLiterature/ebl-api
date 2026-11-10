@@ -5,7 +5,7 @@ import sys
 
 from scripts.maps import build_frontend_transfer_archive as cli
 from scripts.maps import frontend_transfer_archive as transfer
-from ebl.fragmentarium.application.map_artifact_generator import DEFAULT_OUTPUT_DIR
+from scripts.maps.map_artifact_generator import DEFAULT_OUTPUT_DIR
 
 
 def test_default_output_is_outside_repo_and_repeatable(
