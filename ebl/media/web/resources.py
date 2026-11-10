@@ -94,7 +94,19 @@ class MediaResource:
         return management, actor, manager, contributor
 
     @staticmethod
-    def _response(number, media, *, management=False):
+    def _shows_management_fields(item, viewer) -> bool:
+        if viewer is None or item.submission is None:
+            return False
+        actor, manager = viewer
+        return manager or item.submission.uploader_id == actor
+
+    @classmethod
+    def _response(cls, number, media, *, viewer=None):
+        """Serialize media; `viewer` is `(actor, is_manager)` for management views.
+
+        Management-only fields are attached per item, only for managers or the
+        item's own uploader. Other items are serialized like the public view.
+        """
         result = FragmentMediaResponseDtoSchema().dump(
             FragmentMediaResponseDto.of(number, media)
         )
@@ -108,7 +120,7 @@ class MediaResource:
                     copyrightHolder=submission.copyright_holder,
                     rightsStatement=submission.rights_statement,
                 )
-                if management:
+                if cls._shows_management_fields(item, viewer):
                     resource.update(
                         originalFilename=item.original_filename,
                         uploaderId=submission.uploader_id,
@@ -158,18 +170,20 @@ class MediaResource:
         management_view = req.get_param("view") == "management"
         if req.get_param("view") not in (None, "management"):
             raise DataError("Invalid media view.")
+        viewer = None
         if management_view:
             management, actor, manager, contributor = self._writer(req)
             media = management.list(number, actor, manager, contributor)
+            viewer = (actor, manager)
         else:
             media = self._runtime.service.list_fragment_media(number)
-        resp.media = self._response(number, media, management=management_view)
+        resp.media = self._response(number, media, viewer=viewer)
         if not self._runtime.service.legacy_fallback_allowed(number):
             resp.media["legacyFallbackAllowed"] = False
 
     def on_post(self, req: falcon.Request, resp: falcon.Response) -> None:
         _private_response(resp)
-        management, actor, _, _ = self._writer(req)
+        management, actor, manager, _ = self._writer(req)
         number = self._authorized_fragment(req)
         header = req.get_header("X-Media-Metadata", required=True)
         if len(header) > 16384:
@@ -178,7 +192,7 @@ class MediaResource:
             )
         try:
             metadata = json.loads(unquote(header, errors="strict"))
-        except (ValueError, UnicodeDecodeError) as error:
+        except (ValueError, UnicodeDecodeError, RecursionError) as error:
             raise DataError("Invalid media metadata header.") from error
         from ebl.media.infrastructure.upload_images import (
             UploadValidationError,
@@ -209,7 +223,7 @@ class MediaResource:
         except MediaConflictError as error:
             raise falcon.HTTPConflict(description=str(error)) from error
         resp.status = falcon.HTTP_201 if created else falcon.HTTP_200
-        resp.media = self._response(number, (media,), management=True)
+        resp.media = self._response(number, (media,), viewer=(actor, manager))
 
     def _mutate(self, req, resp, media_id, operation):
         _private_response(resp)
@@ -237,7 +251,7 @@ class MediaResource:
         if operation == "remove":
             resp.status = falcon.HTTP_204
         else:
-            resp.media = self._response(number, (media,), management=True)
+            resp.media = self._response(number, (media,), viewer=(actor, manager))
 
     def on_patch_item(self, req, resp, media_id):
         self._mutate(req, resp, media_id, "edit")
