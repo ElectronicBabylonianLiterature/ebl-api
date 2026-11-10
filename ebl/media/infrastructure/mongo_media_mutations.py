@@ -4,7 +4,11 @@ import uuid
 
 import attr
 
-from ebl.media.application.media_management_support import MediaConflictError, now
+from ebl.media.application.media_management_support import (
+    MediaConflictError,
+    MediaRevisionConflictError,
+    now,
+)
 from ebl.media.application.media_selection import with_primary
 from ebl.media.domain.publication import is_published
 from ebl.media.infrastructure.media_documents import handle_document, load_stored
@@ -17,7 +21,15 @@ class MongoMediaMutation:
         self.session = session
 
     def apply(self, stored):
+        # `change` authorizes first, so a mismatch is only revealed to callers
+        # allowed to act on the media. The comparison runs on the snapshot read
+        # of this transaction, under the media write lock, so no write can
+        # interleave between it and the save below.
         changed = self.command.change(stored.media)
+        expected, current = self.command.expected_revision, stored.media.revision
+        if expected is not None and expected != current:
+            raise MediaRevisionConflictError(expected, current)
+        changed = attr.evolve(changed, revision=current + 1)
         if self.command.operation == "primary":
             return self._primary(changed)
         if self.command.operation == "remove":
@@ -35,11 +47,12 @@ class MongoMediaMutation:
         )
         for document in peers:
             peer = load_stored(document)
-            updated = attr.evolve(
-                peer,
-                media=with_primary(peer.media, number, peer.media.id == identifier),
-            )
-            self.repository._replace(updated, self.session)
+            selected = peer.media.id == identifier
+            media = with_primary(peer.media, number, selected)
+            # Only the target's revision advances; peers merely lose the flag.
+            if selected:
+                media = attr.evolve(media, revision=changed.revision)
+            self.repository._replace(attr.evolve(peer, media=media), self.session)
         return with_primary(changed, number, True)
 
     def _remove(self, stored, changed):
@@ -53,6 +66,7 @@ class MongoMediaMutation:
                     "deletionToken": str(uuid.uuid4()),
                     "deletedAt": now(),
                     "deletedBy": self.command.actor,
+                    "revision": changed.revision,
                 }
             },
             session=self.session,

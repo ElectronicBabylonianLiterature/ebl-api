@@ -106,6 +106,7 @@ def stored_document(stored: StoredMedia) -> dict:
         "references": [reference.bibliography_id for reference in media.references],
         "caption": media.caption,
         "attribution": media.attribution,
+        "revision": media.revision,
         "representations": {
             "original": handle_document(handles.original),
             "display": handle_document(handles.display) if handles.display else None,
@@ -191,6 +192,7 @@ def load_stored(document: dict) -> StoredMedia:
             if "submission" in document
             else None
         ),
+        revision=document.get("revision", 0),
     )
     return StoredMedia(
         media,

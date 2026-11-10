@@ -1,4 +1,5 @@
 import json
+import re
 from urllib.parse import unquote
 from typing import Optional, cast
 
@@ -9,6 +10,8 @@ from ebl.common.domain.scopes import Scope
 from ebl.media.application.media_management import (
     MediaConflictError,
     MediaPermissionError,
+    MediaRevisionConflictError,
+    MediaRevisionRequiredError,
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.web.dtos import parse_museum_number
@@ -43,6 +46,20 @@ def _media_id(value: str) -> MediaId:
         return MediaId(value)
     except ValueError as error:
         raise DataError("Invalid media identifier.") from error
+
+
+_REVISION_TAG = re.compile(r'(?:"([0-9]{1,15})"|([0-9]{1,15}))')
+
+
+def _expected_revision(req: falcon.Request) -> Optional[int]:
+    """Parse `If-Match: "<revision>"` (quotes optional); None when absent."""
+    header = req.get_header("If-Match")
+    if header is None:
+        return None
+    match = _REVISION_TAG.fullmatch(header.strip())
+    if match is None:
+        raise DataError('If-Match must be a single media revision, e.g. "3".')
+    return int(match.group(1) or match.group(2))
 
 
 def _representation_handle(
@@ -100,6 +117,17 @@ class MediaResource:
         actor, manager = viewer
         return manager or item.submission.uploader_id == actor
 
+    @staticmethod
+    def _shows_revision(item, viewer) -> bool:
+        """Managers see every item's revision (legacy items included, since
+        they may act on them); contributors only their own submissions'."""
+        if viewer is None:
+            return False
+        actor, manager = viewer
+        return manager or (
+            item.submission is not None and item.submission.uploader_id == actor
+        )
+
     @classmethod
     def _response(cls, number, media, *, viewer=None):
         """Serialize media; `viewer` is `(actor, is_manager)` for management views.
@@ -141,6 +169,8 @@ class MediaResource:
                     rightsStatement=item.rights.rights_statement,
                     description=item.rights.description,
                 )
+            if cls._shows_revision(item, viewer):
+                resource["revision"] = item.revision
         return result
 
     def _authorize_associations(self, req, media):
@@ -232,6 +262,7 @@ class MediaResource:
         )
         number = self._authorized_fragment(req)
         metadata = bounded_json_body(req)
+        expected_revision = _expected_revision(req)
         try:
             media = management.mutate(
                 MediaMutationRequest(
@@ -242,16 +273,23 @@ class MediaResource:
                     operation,
                     metadata,
                     lambda item: self._authorize_associations(req, item),
+                    expected_revision,
                 )
             )
         except MediaPermissionError as error:
             raise falcon.HTTPForbidden(description=str(error)) from error
         except MediaConflictError as error:
             raise falcon.HTTPConflict(description=str(error)) from error
+        except MediaRevisionRequiredError as error:
+            raise falcon.HTTPPreconditionRequired(description=str(error)) from error
+        except MediaRevisionConflictError as error:
+            raise falcon.HTTPPreconditionFailed(description=str(error)) from error
         if operation == "remove":
             resp.status = falcon.HTTP_204
         else:
             resp.media = self._response(number, (media,), viewer=(actor, manager))
+            resp.set_header("ETag", f'"{media.revision}"')
+            resp.set_header("Access-Control-Expose-Headers", "ETag")
 
     def on_patch_item(self, req, resp, media_id):
         self._mutate(req, resp, media_id, "edit")

@@ -1,7 +1,7 @@
 """Internal commands keep transport, actor, and reservation data together."""
 
 from dataclasses import dataclass
-from typing import BinaryIO, Callable
+from typing import BinaryIO, Callable, Optional
 
 from ebl.media.application.media_stored import StoredMedia
 from ebl.media.domain import Media, MediaId
@@ -28,6 +28,8 @@ class MediaMutationRequest:
     operation: str
     metadata: dict
     authorize_associations: Callable[[Media], None]
+    # Revision the caller last saw (If-Match); None when the header was absent.
+    expected_revision: Optional[int] = None
 
 
 @dataclass(frozen=True)
@@ -47,3 +49,6 @@ class StoredMediaMutation:
     actor: str
     operation: str
     change: Callable[[Media], Media]
+    # Compared with the stored revision after `change` authorizes the caller,
+    # inside the same transaction as the write.
+    expected_revision: Optional[int] = None

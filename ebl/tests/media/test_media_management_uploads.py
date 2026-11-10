@@ -83,6 +83,10 @@ def client(runtime, *, user: MediaTestUser = DEFAULT_MEDIA_TEST_USER):
     return testing.TestClient(api)
 
 
+def if_match(revision):
+    return {"If-Match": f'"{revision}"'}
+
+
 def upload(api, metadata=None, content=None, key=None, fragment="K.1"):
     return api.simulate_post(
         "/media",
@@ -140,7 +144,9 @@ def test_upload_publication_gallery_original_and_tombstone(
     assert media_database["photos.files"].count_documents({}) == 0
     assert (
         manager.simulate_post(
-            f"/media/{identifier}/publish?fragment=K.1", json={}
+            f"/media/{identifier}/publish?fragment=K.1",
+            json={},
+            headers=if_match(item["revision"]),
         ).status_code
         == 200
     )
@@ -236,7 +242,9 @@ def test_contributor_and_cross_fragment_permissions(management_runtime):
     )
     assert (
         manager.simulate_post(
-            path + "/reject?fragment=K.1", json={"reason": "No permission evidence"}
+            path + "/reject?fragment=K.1",
+            json={"reason": "No permission evidence"},
+            headers=if_match(1),
         ).status_code
         == 200
     )
@@ -310,7 +318,9 @@ def test_concurrent_primary_selection(management_runtime):
     for identifier in identifiers:
         assert (
             api.simulate_post(
-                f"/media/{identifier}/publish?fragment=K.1", json={}
+                f"/media/{identifier}/publish?fragment=K.1",
+                json={},
+                headers=if_match(0),
             ).status_code
             == 200
         )
@@ -354,7 +364,11 @@ def test_manager_only_scope_can_upload_then_explicitly_publish_own_submission(
     assert item["publicationStatus"] == "PENDING_REVIEW"
     number = MuseumNumber.of("K.1")
     assert management_runtime.service.find_media_by_fragments((number,))[number] == ()
-    published = api.simulate_post(f"/media/{item['id']}/publish?fragment=K.1", json={})
+    published = api.simulate_post(
+        f"/media/{item['id']}/publish?fragment=K.1",
+        json={},
+        headers=if_match(item["revision"]),
+    )
     assert published.status_code == 200
     assert published.json["media"][0]["reviewerId"] == "auth0|manager"
     assert (

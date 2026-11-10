@@ -6,6 +6,7 @@ from ebl.tests.media.test_media_management_uploads import (
     METADATA,
     MediaTestUser,
     client,
+    if_match,
     png,
     upload,
 )
@@ -19,6 +20,7 @@ MANAGEMENT_ONLY_FIELDS = (
     "reviewerId",
     "reviewedAt",
     "reviewReason",
+    "revision",
 )
 PRIVATE_DESCRIPTION = "Private uploader note"
 
@@ -43,7 +45,9 @@ def _upload_owned_and_published(management_runtime):
     own_id = own.json["media"][0]["id"]
     foreign_id = foreign.json["media"][0]["id"]
     published = manager.simulate_post(
-        f"/media/{foreign_id}/publish?fragment=K.1", json={}
+        f"/media/{foreign_id}/publish?fragment=K.1",
+        json={},
+        headers=if_match(foreign.json["media"][0]["revision"]),
     )
     assert published.status_code == 200, published.text
     return owner, manager, own_id, foreign_id

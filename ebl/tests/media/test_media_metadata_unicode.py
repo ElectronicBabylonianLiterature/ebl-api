@@ -7,6 +7,7 @@ from ebl.tests.media.test_media_management_uploads import (
     METADATA,
     MediaTestUser,
     client,
+    if_match,
     upload,
 )
 
@@ -91,14 +92,14 @@ def test_valid_non_bmp_unicode_survives_upload_edit_and_review(management_runtim
     assert response.status_code == 201, response.text
     identifier = response.json["media"][0]["id"]
     assert response.json["media"][0]["caption"] == text
-    assert (
-        api.simulate_patch(
-            f"/media/{identifier}?fragment=K.1", json={"caption": text + " edited"}
-        ).status_code
-        == 200
+    edited = api.simulate_patch(
+        f"/media/{identifier}?fragment=K.1", json={"caption": text + " edited"}
     )
+    assert edited.status_code == 200
     published = api.simulate_post(
-        f"/media/{identifier}/publish?fragment=K.1", json={"reason": text}
+        f"/media/{identifier}/publish?fragment=K.1",
+        json={"reason": text},
+        headers=if_match(edited.json["media"][0]["revision"]),
     )
     assert published.status_code == 200
     assert published.json["media"][0]["reviewReason"] == text

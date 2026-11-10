@@ -192,6 +192,9 @@ class Media:
     rights: Optional[MediaRights] = attr.ib(
         default=None, kw_only=True, validator=optional_instance_of(MediaRights)
     )
+    # Optimistic-concurrency token: incremented by every management mutation.
+    # Stored records written before it existed read as 0.
+    revision: int = attr.ib(default=0, kw_only=True, validator=non_negative_int)
 
     def __attrs_post_init__(self) -> None:
         if self.submission is not None and self.rights is not None:

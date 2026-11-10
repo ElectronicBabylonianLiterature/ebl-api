@@ -21,6 +21,9 @@ Auth0 subject and a dedicated restricted permission.
 | `POST /media/{id}/reject?fragment=...` | `{reason?: string}` | `{media: [savedItem]}` |
 | `DELETE /media/{id}?fragment=...` | empty | `204`, metadata tombstone only |
 
+`publish` and `reject` require `If-Match`; `PATCH`, `primary`, and `DELETE`
+accept it optionally. See [Concurrency](#concurrency).
+
 Upload headers: `Content-Type: image/jpeg`, `image/png`, or `image/webp`;
 `Idempotency-Key`: a canonical UUID; `X-Media-Metadata`:
 `encodeURIComponent(JSON.stringify(metadata))`, at most 16 KiB. Standard bearer
@@ -43,10 +46,12 @@ Canonical responses retain existing gallery representations, sort order, caption
 attribution, and references. New records expose `publicationStatus`, `creator`,
 `sourceInstitution`, `copyrightHolder`, and `rightsStatement`. Management
 responses additionally expose `originalFilename`, `uploaderId`, `uploadedAt`,
-`permissionAttested`, `description`, `projects`, `reviewerId`, `reviewedAt`, and
-`reviewReason`. Management fields are returned only for items the caller
-uploaded, or for every listed item when the caller has `manage:fragment_media`;
-other items in a `view=management` listing use the canonical shape. Legacy
+`permissionAttested`, `description`, `projects`, `reviewerId`, `reviewedAt`,
+`reviewReason`, and `revision`. Management fields are returned only for items the
+caller uploaded, or for every listed item when the caller has
+`manage:fragment_media`; other items in a `view=management` listing use the
+canonical shape. Managers additionally receive `revision` on legacy items
+(which have no submission), since they may edit, select, or remove them. Legacy
 records lacking a submission field retain their existing published visibility.
 Malformed explicit submission metadata fails closed.
 Managers may annotate legacy creator, source, copyright, rights, and contextual
@@ -66,11 +71,45 @@ published managed photo while its legacy route returns 404.
 
 Errors use standard Falcon JSON errors: 403 permission denial, 404 inaccessible
 media/context or disabled routes, 409 duplicate payload mismatch/in-progress
-upload/invalid primary selection, 413 oversized content, 422 invalid metadata or
-image content, and 503 decoder capacity exhausted (`Retry-After: 10`). Keep the
-same idempotency key and metadata when retrying a failed transport; changing the
+upload/invalid primary selection, 412 stale `If-Match` revision, 413 oversized
+content, 422 invalid metadata, image content, or malformed `If-Match`, 428
+review without `If-Match`, and 503 decoder capacity exhausted
+(`Retry-After: 10`). Keep the same idempotency key and metadata when retrying a failed transport; changing the
 file or metadata requires a new key. An interrupted process reservation requires
 explicit offline recovery before retry, rather than unsafe automatic lease expiry.
+
+## Concurrency
+
+Every media item carries an integer `revision` (>= 0). New uploads start at 0;
+stored records written before the field existed read as 0, so no migration is
+needed. Each successful `PATCH`, `publish`, `reject`, `primary`, or `DELETE`
+increments the target item's revision by 1 in the same write. Selecting a primary
+also clears the flag on other items of the fragment without advancing their
+revisions. A replacement outside these mutations (such as an import in replace
+mode) never moves a stored revision backwards, but it does not bump an equal
+revision either; the repository-level `set_primary` used by
+`DefaultMediaService.set_primary_media` likewise leaves revisions unchanged.
+Neither path is reachable over HTTP, so do not run replace-mode imports while
+managers are reviewing the affected fragments.
+
+Clients send the revision they loaded as `If-Match: "<revision>"` (the quotes are
+optional; anything other than one decimal revision, including `*` and weak
+`W/` tags, is rejected with 422):
+
+- `POST /media/{id}/publish` and `POST /media/{id}/reject` require it; without it
+  they fail with `428 Precondition Required`. A manager can therefore never
+  publish or reject text that an uploader changed after it was reviewed.
+- `PATCH /media/{id}`, `POST /media/{id}/primary`, and `DELETE /media/{id}` verify
+  it when present.
+
+A revision that differs from the stored one fails with `412 Precondition Failed`
+("Media changed since it was loaded; reload and review again.") and changes
+nothing; clients should reload the management listing and review again. The
+comparison runs inside the mutation's transaction and media write lock, after the
+fragment, association, and edit-permission checks, so 404 and 403 take
+precedence and a mismatch is only revealed to callers allowed to act. Successful
+non-`DELETE` mutation responses also carry `ETag: "<revision>"` (exposed to CORS
+clients); the body's `revision` field carries the same value.
 
 ## Permissions and publication
 

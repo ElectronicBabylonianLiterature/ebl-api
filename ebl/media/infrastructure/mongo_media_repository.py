@@ -99,6 +99,15 @@ class MongoMediaRepository(MongoMediaReader, MediaRepository):
         )
         if previous is None:
             raise MediaNotFoundError(media.media.id)
+        previous_revision = previous.get("revision", 0)
+        if media.media.revision < previous_revision:
+            # A replacement built without the stored revision (e.g. an import in
+            # REPLACE mode) must not rewind it, or a stale If-Match could match.
+            self._collection.update_one(
+                {"_id": str(media.media.id)},
+                {"$set": {"revision": previous_revision + 1}},
+                session=session,
+            )
         return load_stored(previous)
 
     def replace(self, media: StoredMedia) -> StoredMedia:

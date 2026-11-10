@@ -23,6 +23,7 @@ from ebl.media.web.bootstrap import create_media_routes
 from ebl.tests.media.test_media_management_uploads import Fragments
 from ebl.tests.media.test_media_management_uploads import (
     client,
+    if_match,
     upload,
     png,
 )
@@ -217,7 +218,9 @@ def test_mutation_requires_access_to_every_associated_fragment(
     )
     assert (
         authorized_manager.simulate_post(
-            f"/media/{identifier}/publish?fragment=K.1", json={}
+            f"/media/{identifier}/publish?fragment=K.1",
+            json={},
+            headers=if_match(repository.find_stored_by_id(identifier).media.revision),
         ).status_code
         == 200
     )

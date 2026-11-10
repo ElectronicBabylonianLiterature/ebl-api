@@ -17,6 +17,8 @@ from ebl.media.application.media_metadata import (
 from ebl.media.application.media_management_support import (
     MediaConflictError as MediaConflictError,
     MediaPermissionError as MediaPermissionError,
+    MediaRevisionConflictError as MediaRevisionConflictError,
+    MediaRevisionRequiredError as MediaRevisionRequiredError,
     now as now,
 )
 from ebl.media.application.media_management_policy import (
@@ -31,6 +33,11 @@ from ebl.media.application.media_management_requests import (
     MediaUploadCommit,
     StoredMediaMutation,
 )
+
+
+# Reviews must name the exact revision the manager saw, so that an uploader's
+# concurrent edit can never be published or rejected unseen.
+REVISION_REQUIRED_OPERATIONS = frozenset({"publish", "reject"})
 
 
 class MediaManagementService:
@@ -153,6 +160,13 @@ class MediaManagementService:
             request.authorize_associations(media)
             if not editable_by(media, request.actor, request.manager):
                 raise MediaPermissionError("This submission cannot be edited.")
+            if (
+                request.operation in REVISION_REQUIRED_OPERATIONS
+                and request.expected_revision is None
+            ):
+                raise MediaRevisionRequiredError(
+                    "Reviews require If-Match with the media revision that was reviewed."
+                )
             if request.operation == "edit":
                 return apply_metadata(media, metadata)
             if request.operation in {"publish", "reject"}:
@@ -166,5 +180,6 @@ class MediaManagementService:
                 request.actor,
                 request.operation,
                 change,
+                request.expected_revision,
             )
         )
