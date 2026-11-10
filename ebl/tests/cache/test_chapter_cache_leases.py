@@ -25,7 +25,7 @@ def test_abandoned_writer_lease_recovers_without_counter_repair(
 ) -> None:
     state = MongoChapterCacheState(database)
     before = state.revision("chapter")
-    epoch = state.start_update("chapter")
+    state.start_update("chapter")
     assert state.revision("chapter") is None
     expire_writer(database, "chapter")
     recovered = state.revision("chapter")
@@ -39,7 +39,7 @@ def test_abandoned_writer_lease_recovers_without_counter_repair(
 
 def test_completed_writers_cannot_extend_an_abandoned_lease(database: Database) -> None:
     state = MongoChapterCacheState(database)
-    epoch = state.start_update("chapter")
+    state.start_update("chapter")
     abandoned = database["chapter_cache_state"].find_one({"_id": "chapter"})
     assert abandoned is not None
     for _ in range(3):
