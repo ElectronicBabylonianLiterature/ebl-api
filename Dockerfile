@@ -3,7 +3,7 @@
 FROM pypy:3.11-7.3.23
 
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y libjpeg62-turbo-dev zlib1g-dev && \
+    apt-get install --no-install-recommends -y libjpeg62-turbo-dev zlib1g-dev libwebp-dev && \
     rm -rf /var/lib/apt/lists/*
 
 RUN python -m pip install "pip==26.2.1"
@@ -24,7 +24,8 @@ RUN for attempt in 1 2 3; do \
       sleep $((attempt * 5)); \
     done
 
-RUN poetry run python -c "from io import BytesIO; from PIL import Image, features; assert features.check_codec('jpg'); data = BytesIO(); Image.new('RGB', (16, 12)).save(data, format='JPEG'); data.seek(0); image = Image.open(data); image.load(); image.thumbnail((8, 8)); assert image.size == (8, 6); image.save(BytesIO(), format='JPEG')"
+COPY scripts/verify_pillow_codecs.py /tmp/verify_pillow_codecs.py
+RUN poetry run python /tmp/verify_pillow_codecs.py && rm /tmp/verify_pillow_codecs.py
 
 COPY ./ebl ./ebl
 
