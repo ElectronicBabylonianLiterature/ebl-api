@@ -64,11 +64,10 @@ def test_create_annotations_never_reads_a_removed_original(
     when(retrieve_annotations_helpers).write_annotations(...).thenReturn(None)
 
     create_annotations(
-        [removed, kept],
+        without_removed_legacy_photos([removed, kept], MongoMediaReader(database)),
         "",
         "",
         photo_repository,
-        legacy_visibility=MongoMediaReader(database),
     )
 
     verify(photo_repository, times=0).query_by_file_name("K.1.jpg")

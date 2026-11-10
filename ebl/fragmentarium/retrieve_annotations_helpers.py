@@ -4,7 +4,7 @@ from io import BytesIO
 from itertools import zip_longest
 from os.path import join
 from pathlib import Path
-from typing import List, Optional, Sequence, Union, Tuple
+from typing import List, Sequence, Union, Tuple
 
 from PIL import Image
 
@@ -154,12 +154,9 @@ def create_annotations(
     output_folder_images: str,
     photo_repository: FileRepository,
     to_filter: Sequence[AnnotationValueType] = (),
-    legacy_visibility: Optional[MediaReader] = None,
 ) -> None:
-    if legacy_visibility is not None:
-        annotation_collection = without_removed_legacy_photos(
-            annotation_collection, legacy_visibility
-        )
+    """Export each annotation's legacy photo; callers drop removed photos first
+    with `without_removed_legacy_photos`."""
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
 

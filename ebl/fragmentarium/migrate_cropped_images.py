@@ -61,11 +61,11 @@ def with_removed_legacy_photos(
     """
     docs = iter(annotation_docs)
     while batch := list(islice(docs, VISIBILITY_BATCH_SIZE)):
-        numbers = [_museum_number(doc) for doc in batch]
+        parsed = [(doc, _museum_number(doc)) for doc in batch]
         removed = visibility.suppressed_legacy_fragments(
-            tuple(number for number in numbers if number is not None)
+            tuple(number for _, number in parsed if number is not None)
         )
-        for doc, number in zip(batch, numbers, strict=True):
+        for doc, number in parsed:
             yield doc, number is not None and number in removed
 
 

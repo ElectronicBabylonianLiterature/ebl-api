@@ -1,6 +1,8 @@
 import hashlib
+import struct
+import zlib
 from io import BytesIO
-from typing import BinaryIO, cast
+from typing import BinaryIO, Literal, cast
 from zlib import crc32
 
 import pytest
@@ -152,15 +154,28 @@ def test_rejects_png_with_valid_crc_but_corrupt_compressed_pixels() -> None:
             pytest.fail("Corrupt compressed pixels accepted")
 
 
+def sixteen_bit_greyscale_png(width: int, height: int, sample: int) -> bytes:
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        body = kind + data
+        return struct.pack(">I", len(data)) + body + struct.pack(">I", crc32(body))
+
+    row = b"\x00" + struct.pack(">H", sample) * width
+    header = struct.pack(">IIBBBBB", width, height, 16, 0, 0, 0, 0)
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", header)
+        + chunk(b"IDAT", zlib.compress(row * height))
+        + chunk(b"IEND", b"")
+    )
+
+
 @pytest.mark.parametrize("sample,expected", [(0, 0), (32768, 128), (65535, 255)])
 # The wider original also exercises resizing to the display bound.
 @pytest.mark.parametrize("width", [200, 3000])
 def test_sixteen_bit_greyscale_previews_keep_tone(
     sample: int, expected: int, width: int
 ) -> None:
-    content = BytesIO()
-    with Image.new("I;16", (width, 40), sample) as image:
-        image.save(content, format="PNG")
+    content = BytesIO(sixteen_bit_greyscale_png(width, 40, sample))
     with Image.open(BytesIO(content.getvalue())) as decoded:
         assert decoded.mode == "I;16"
     with prepare_upload(BytesIO(content.getvalue())) as prepared:
@@ -174,9 +189,12 @@ def test_sixteen_bit_greyscale_previews_keep_tone(
                 assert abs(red - expected) <= 2
 
 
-def exif_entry_offset(content: bytes, tag: int) -> tuple[int, str]:
+ByteOrder = Literal["big", "little"]
+
+
+def exif_entry_offset(content: bytes, tag: int) -> tuple[int, ByteOrder]:
     tiff = content.index(b"Exif\x00\x00") + 6
-    order = "big" if content[tiff : tiff + 2] == b"MM" else "little"
+    order: ByteOrder = "big" if content[tiff : tiff + 2] == b"MM" else "little"
     ifd = tiff + int.from_bytes(content[tiff + 4 : tiff + 8], order)
     for index in range(int.from_bytes(content[ifd : ifd + 2], order)):
         entry = ifd + 2 + 12 * index
