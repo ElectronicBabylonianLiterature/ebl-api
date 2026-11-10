@@ -809,8 +809,9 @@ Repeated cleanup is harmless, and deleted handles cannot be revived.
 
 Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
-registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
+the migration audit must validate dimensions and structural integrity. New owned
+raster writes validate dimensions and decode every frame before any registry or
+GridFS write. A 40,000,000-pixel limit applies to the canvas and
 the total of decoded frame pixels, independently of Pillow's global settings.
 WebP canvas dimensions are checked from a bounded header before creating a
 native decoder.
@@ -867,9 +868,11 @@ The frontend gallery requires this API before its rollout flag is enabled.
 
 `MEDIA_API_ENABLED=false` is the default. Set it to `true` and restart the
 backend to register the media routes and enrich fragment/query responses with
-`mediaSummary` and `legacyHasPhoto`. The latter reports whether the legacy photo
-exists independently of new media, including during a partial import. Disabling
-the flag restores the existing routes and response shape.
+`mediaSummary`. Existing `hasPhoto` values continue to report legacy-photo
+availability independently of imported media, including during a partial import.
+Existing `thumbnailPath` fields retain their legacy values; enrichment does not
+add that field to fragment detail or retrieve-all rows. Disabling the flag
+restores the existing routes and response shape.
 Existing photo and thumbnail routes remain available in both modes.
 
 The canonical endpoints are:
@@ -899,5 +902,5 @@ protected and available while unresolved sources are reviewed. A partial import,
 missing optional previews, or an empty media collection must preserve existing
 photo access. `thumbnailPath` retains its legacy meaning; clients use the new
 `mediaSummary.primary.thumbnail` through an authenticated loader when available.
-Clients retain the legacy photo choice when `legacyHasPhoto` is true, including
+Clients retain the legacy photo choice when `hasPhoto` is true, including
 when the media list already contains copies or other imported files.

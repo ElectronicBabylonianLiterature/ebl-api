@@ -212,6 +212,7 @@ def test_fragment_query_result_schema_roundtrip_and_compatibility():
         "matchCountTotal": 7,
         "isMatchCountTotalExact": True,
         "hasNextPage": None,
+        "totalDocuments": None,
         "bibliographyDocuments": {},
     }
 

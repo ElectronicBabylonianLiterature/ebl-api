@@ -27,3 +27,11 @@ def assert_served_without_caching(
         assert uncached_result.json == cached_result.json
 
     return assert_served
+
+
+@pytest.fixture
+def registered_sign_repository(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    return sign_repository

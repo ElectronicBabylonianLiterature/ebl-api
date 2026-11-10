@@ -64,6 +64,17 @@ def test_preview_excludes_non_text_lines():
 
 
 def test_preview_of_a_line_without_extra_fields():
-    line = {"type": "TextLine", "prefix": "1.", "content": []}
+    line = {
+        "type": "TextLine",
+        "prefix": "1.",
+        "lineNumber": {
+            "type": "LineNumber",
+            "number": 1,
+            "hasPrime": False,
+            "prefixModifier": None,
+            "suffixModifier": None,
+        },
+        "content": [],
+    }
 
     assert preview_line_of(2, line) == {**line, "index": 2}
