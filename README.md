@@ -540,18 +540,25 @@ and starting the application do not run a migration or prepare media indexes.
 
 This CLI imports unambiguous legacy `photos` originals into the media model.
 It does not load the historical September/October audit manifests: it generates
-its own version 1 JSONL plan. Planning is read-only, including index discovery
+its own version 2 JSONL plan. Planning is read-only, including index discovery
 and preview validation. It is a migration plan, not a replacement for the complete
 binary audit: mapping failures stop before reading that source's binary, and
 orphaned legacy thumbnails are outside its scope. No production migration is
 performed as part of implementing or testing this feature.
 
-The target database is always explicit. Set `MONGODB_URI` through the existing
-secret/environment mechanism, or select another variable with `--uri-env NAME`.
+The endpoint and database are always explicit. Set `EBL_MIGRATION_URI` through
+the existing secret/environment mechanism and pass
+`--uri-env EBL_MIGRATION_URI` to every command. The CLI never defaults to the
+API's `MONGODB_URI`. Results show the credential-free endpoint and database.
 The CLI does not initialize the web application and does not need Docker or a
 running `task start` process. All source revalidation and media reads use the
 primary, even when the URI requests secondary reads. Apply requires a replica
 set or sharded deployment supporting transactions; standalone MongoDB is rejected.
+
+MongoDB 4.4 and later are supported. Before 5.0, resumed scans can traverse
+the full source index. On MongoDB 4.4, a conflicting same-key filename index
+stops preparation with an explanatory error; the operator must review the
+existing indexes before trying again. No index is automatically dropped.
 
 Before any authorized write, retain a tested backup and arrange a pause of legacy
 photo/fragment mapping changes and competing media imports for the final plan and
@@ -574,7 +581,8 @@ read-only database credential where available:
 ```shell
 umask 077
 poetry run python -m ebl.io.media.backfill dry-run \
-  --database ebl --report media-plan.jsonl --generate-previews
+  --uri-env EBL_MIGRATION_URI --database ebl \
+  --report media-plan.jsonl --generate-previews
 ```
 
 The default processes every source in bounded batches of 100. `--batch-size`
@@ -613,7 +621,7 @@ Index preparation is an explicit, separately authorized write command:
 
 ```shell
 poetry run python -m ebl.io.media.backfill prepare-indexes \
-  --database ebl --confirm-database ebl
+  --uri-env EBL_MIGRATION_URI --database ebl --confirm-database ebl
 ```
 
 It requires existing `fragments` and `photos.files` collections, retains the
@@ -647,9 +655,11 @@ continuation use a distinct report:
 
 ```shell
 poetry run python -m ebl.io.media.backfill apply \
+  --uri-env EBL_MIGRATION_URI \
   --database ebl --confirm-database ebl --confirm-source-writes-paused \
   --plan media-plan.jsonl --report media-apply.jsonl --limit 100
 poetry run python -m ebl.io.media.backfill apply \
+  --uri-env EBL_MIGRATION_URI \
   --database ebl --confirm-database ebl --confirm-source-writes-paused \
   --plan media-plan.jsonl --report media-apply.jsonl --resume
 ```
@@ -664,7 +674,11 @@ delete legacy original bytes. No fragments, `hasPhoto` flags or legacy binaries
 are updated by this tool.
 
 Every acknowledged outcome and returned preview handle is flushed and fsynced to
-the report. After interruption, retain the plan and report and resume them; a
+the report or its `<report>.staging.jsonl` companion. Keep the schema 2 plan,
+report and staging companion together for recovery; schema 1 plans must be
+regenerated. Inspected photos and rejected sources use separate typed arrays,
+and handle events are kept outside the photo-outcome journal.
+After interruption, retain these files and resume them; a
 partial final journal line is discarded, earlier corruption is rejected. An
 uncertain metadata acknowledgement retains staged previews until reconciliation
 can establish which handles the current source owner references. The report's
@@ -973,8 +987,9 @@ Repeated cleanup is harmless, and deleted handles cannot be revived.
 
 Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
-registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
+the migration audit must validate dimensions and structural integrity. New owned
+raster writes validate dimensions and decode every frame before any registry or
+GridFS write. A 40,000,000-pixel limit applies to the canvas and
 the total of decoded frame pixels, independently of Pillow's global settings.
 WebP canvas dimensions are checked from a bounded header before creating a
 native decoder.
