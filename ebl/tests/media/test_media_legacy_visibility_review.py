@@ -22,6 +22,7 @@ from ebl.media.infrastructure.media_recovery import recover_media
 from ebl.media.web.bootstrap import create_media_routes
 from ebl.media.web.fragment_media_enricher import FragmentMediaEnricher
 from ebl.tests.media.factories import association
+from ebl.tests.media.web.helpers import body, get
 from ebl.tests.media.infrastructure.persistence_helpers import (
     image_bytes,
     image_representation,
@@ -114,8 +115,8 @@ def test_canonical_legacy_removal_hides_fallback_and_survives_cleanup(
     )
     manager = legacy_client(management_runtime, media_database, manager=True)
     reader = legacy_client(management_runtime, media_database)
-    assert reader.simulate_get("/fragments/K.1/photo").content == original
-    assert reader.simulate_get("/fragments/K.1/thumbnail/small").content == original
+    assert get(reader, "/fragments/K.1/photo").content == original
+    assert get(reader, "/fragments/K.1/thumbnail/small").content == original
     assert (
         manager.simulate_delete(f"/media/{identifier}?fragment=K.1").status_code == 204
     )
@@ -129,18 +130,18 @@ def test_canonical_legacy_removal_hides_fallback_and_survives_cleanup(
     for recover in (False, True):
         if recover:
             recover_media(media_database, apply=True, quiescent=True)
-        listing = reader.simulate_get("/media?fragment=K.1")
+        listing = get(reader, "/media?fragment=K.1")
         assert listing.status_code == 200
         assert listing.json == {"media": [], "legacyFallbackAllowed": False}
         detail = enricher.enrich(document, MuseumNumber.of("K.1"))
         row = enricher.enrich_rows([document])[0]
         for summary in (detail, row):
             assert summary["hasPhoto"] is False
-            assert summary["legacyHasPhoto"] is False
+            assert "legacyHasPhoto" not in summary
             assert summary["mediaSummary"] == {"count": 0, "types": []}
-            assert not summary.get("thumbnailPath")
-        assert reader.simulate_get("/fragments/K.1/photo").status_code == 404
-        assert reader.simulate_get("/fragments/K.1/thumbnail/small").status_code == 404
+            assert summary["thumbnailPath"] == document["thumbnailPath"]
+        assert get(reader, "/fragments/K.1/photo").status_code == 404
+        assert get(reader, "/fragments/K.1/thumbnail/small").status_code == 404
         assert GridFS(media_database, "photos").get(file_id).read() == original
         assert GridFS(media_database, "thumbnails").get(thumbnail_id).read() == original
 
@@ -164,10 +165,8 @@ def test_removing_an_unrelated_legacy_filename_preserves_canonical_fallback(
         manager.simulate_delete(f"/media/{identifier}?fragment=K.1").status_code == 204
     )
     reader = legacy_client(management_runtime, media_database)
-    assert reader.simulate_get("/media?fragment=K.1").json.get(
-        "legacyFallbackAllowed", True
-    )
-    assert reader.simulate_get("/fragments/K.1/photo").content == original
+    assert body(get(reader, "/media?fragment=K.1")).get("legacyFallbackAllowed", True)
+    assert get(reader, "/fragments/K.1/photo").content == original
 
 
 def test_removing_an_owned_upload_preserves_legacy_fallback(
@@ -178,15 +177,15 @@ def test_removing_an_owned_upload_preserves_legacy_fallback(
         original, filename="K.1.jpg", contentType="image/jpeg"
     )
     manager = legacy_client(management_runtime, media_database, manager=True)
-    identifier = upload(manager).json["media"][0]["id"]
+    uploaded = upload(manager)
+    assert isinstance(uploaded, testing.Result)
+    identifier = body(uploaded)["media"][0]["id"]
     assert (
         manager.simulate_delete(f"/media/{identifier}?fragment=K.1").status_code == 204
     )
     reader = legacy_client(management_runtime, media_database)
-    assert reader.simulate_get("/media?fragment=K.1").json.get(
-        "legacyFallbackAllowed", True
-    )
-    assert reader.simulate_get("/fragments/K.1/photo").content == original
+    assert body(get(reader, "/media?fragment=K.1")).get("legacyFallbackAllowed", True)
+    assert get(reader, "/fragments/K.1/photo").content == original
 
 
 def test_cross_association_denial_cannot_write_legacy_suppression(

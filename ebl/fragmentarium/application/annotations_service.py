@@ -26,7 +26,7 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     SealAtLine,
 )
-from ebl.media.application.media_service import MediaService
+from ebl.media.application.media_visibility import LegacyMediaVisibility
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -49,7 +49,7 @@ class AnnotationsService:
     _fragments_repository: FragmentRepository
     _photos_repository: FileRepository
     _cropped_sign_images_repository: CroppedSignImagesRepository
-    _media: Optional[MediaService] = None
+    _media: Optional[LegacyMediaVisibility] = None
 
     def _require_legacy_original(self, number: MuseumNumber) -> None:
         # Removed legacy originals must not be read, even by annotation tooling.

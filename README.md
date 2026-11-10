@@ -875,12 +875,17 @@ add that field to fragment detail or retrieve-all rows. Disabling the flag
 restores the existing routes and response shape.
 Existing photo and thumbnail routes remain available in both modes.
 
-Managed removal of a canonical legacy photograph is an explicit exception:
-the legacy photo and thumbnail routes return 404, and `legacyHasPhoto` is false.
-In that state, `hasPhoto` describes published managed photos and `thumbnailPath`
-is their primary thumbnail URL or `null`. Clients choose the legacy route using
-`legacyHasPhoto ?? hasPhoto`, as described in the
+After managed removal of a canonical legacy photograph, its legacy photo and
+thumbnail routes return 404 and `hasPhoto` is false. Existing `thumbnailPath`
+fields retain their legacy shape and value. Published managed photos remain
+available through `mediaSummary` and the media routes, as described in the
 [upload-management contract](docs/media-upload-management.md).
+
+Legacy removals remain enforced when `MEDIA_API_ENABLED=false`, including photo,
+thumbnail, annotation and cropped-sign reads. Fragment responses still report
+`hasPhoto: false` for removed originals while managed routes and `mediaSummary`
+remain disabled. This visibility check is read-only and creates no collections
+or indexes during startup. Guarded image responses stay private and uncached.
 
 The canonical endpoints are:
 

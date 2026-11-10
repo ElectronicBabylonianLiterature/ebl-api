@@ -62,13 +62,16 @@ fields; no uploader, review identity, or upload attestation is fabricated.
 When a removed canonical legacy photograph suppresses fallback, listings include
 `legacyFallbackAllowed: false`. Other listings retain the existing envelope.
 
-While `MEDIA_API_ENABLED=true`, fragment and fragment-search/query DTOs for a
-fragment with a removed legacy photograph report `legacyHasPhoto: false`;
-`hasPhoto` then reflects only published managed media of type `PHOTO`, and
-`thumbnailPath` is the published primary media thumbnail URL or `null`.
-Clients must decide whether to call `GET /fragments/{number}/photo` from
-`legacyHasPhoto ?? hasPhoto`, not from `hasPhoto` alone: a fragment can have a
-published managed photo while its legacy route returns 404.
+While `MEDIA_API_ENABLED=true`, fragment detail, search/query and retrieve-all
+DTOs report `hasPhoto: false` after a canonical legacy photograph is removed.
+Clients continue using `hasPhoto` to choose the legacy photo route. Existing
+`thumbnailPath` fields keep their legacy shape and value; enrichment never adds
+one to detail or retrieve-all rows. Published managed photos remain discoverable
+through `mediaSummary` and their media URLs, independently of legacy availability.
+Removal remains enforced with `MEDIA_API_ENABLED=false`: legacy image and
+annotation/cropped-sign reads consult the same read-only visibility guard,
+without registering managed endpoints or adding `mediaSummary`. Guarded images
+use private, uncached responses in both flag states.
 
 Errors use standard Falcon JSON errors: 403 permission denial, 404 inaccessible
 media/context or disabled routes, 409 duplicate payload mismatch/in-progress

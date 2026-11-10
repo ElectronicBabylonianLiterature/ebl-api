@@ -4,6 +4,7 @@ from sentry_sdk import isolation_scope
 
 import ebl.app
 from ebl.tests import test_app_bootstrap
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 bootstrap_environment = test_app_bootstrap.bootstrap_environment
@@ -19,6 +20,9 @@ def test_environment_enables_media_without_creating_media_collections(
     monkeypatch.setattr(ebl.app, "MongoClient", lambda _: database.client)
     context = ebl.app.create_context()
     assert context.media is not None
+    visibility = context.get_legacy_media_visibility()
+    assert visibility is not None
+    assert visibility.legacy_fallback_allowed(MuseumNumber.of("K.100"))
     assert not any(
         name.startswith("media") for name in database.list_collection_names()
     )
@@ -32,7 +36,14 @@ def test_environment_keeps_media_disabled(
     monkeypatch.setenv("MONGODB_DB", database.name)
     monkeypatch.setenv("MEDIA_API_ENABLED", enabled)
     monkeypatch.setattr(ebl.app, "MongoClient", lambda _: database.client)
-    assert ebl.app.create_context().media is None
+    context = ebl.app.create_context()
+    assert context.media is None
+    visibility = context.get_legacy_media_visibility()
+    assert visibility is not None
+    assert visibility.legacy_fallback_allowed(MuseumNumber.of("K.100"))
+    assert not any(
+        name.startswith("media") for name in database.list_collection_names()
+    )
 
 
 def test_authentication_callback_sets_isolated_sentry_user() -> None:

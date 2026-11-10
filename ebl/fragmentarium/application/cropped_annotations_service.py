@@ -15,7 +15,7 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationValueType,
 )
 from ebl.fragmentarium.domain.date import DateSchema
-from ebl.media.application.media_service import MediaService
+from ebl.media.application.media_visibility import LegacyMediaVisibility
 
 
 class CroppedAnnotationService:
@@ -24,7 +24,7 @@ class CroppedAnnotationService:
         annotations_repository: AnnotationsRepository,
         cropped_sign_images_repository: CroppedSignImagesRepository,
         fragment_repository: FragmentRepository,
-        media: Optional[MediaService] = None,
+        media: Optional[LegacyMediaVisibility] = None,
     ):
         self._media = media
         self._annotations_repository = annotations_repository
@@ -46,9 +46,12 @@ class CroppedAnnotationService:
     ) -> dict:
         fragment_number = str(annotations.fragment_number)
         if fragment_number not in date_cache:
-            date_cache[fragment_number] = DateSchema().dump(
+            date = DateSchema().dump(
                 self._fragment_repository.fetch_date(annotations.fragment_number)
             )
+            if not isinstance(date, dict):
+                raise TypeError("A fragment date must serialize to an object.")
+            date_cache[fragment_number] = date
         return date_cache[fragment_number]
 
     def _find_cropped_sign_image(
