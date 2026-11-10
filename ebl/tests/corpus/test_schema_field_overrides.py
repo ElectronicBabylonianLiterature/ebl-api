@@ -1,7 +1,9 @@
+import inspect
+from pathlib import Path
 from typing import Any, cast
 
 from ebl.common.domain.stage import Stage
-from marshmallow import class_registry, fields
+from marshmallow import fields
 
 from ebl.corpus.application import line_schemas, manuscript_schemas, schemas
 from ebl.corpus.application.id_schemas import TextIdSchema
@@ -20,13 +22,17 @@ from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.translation_line import TranslationLine
 
 
-def test_public_schema_imports_share_the_registered_classes() -> None:
+def test_public_schema_imports_reexport_the_original_classes() -> None:
     assert schemas.ManuscriptSchema is manuscript_schemas.ManuscriptSchema
     assert schemas.OldSiglumSchema is manuscript_schemas.OldSiglumSchema
     assert schemas.LineSchema is line_schemas.LineSchema
     assert schemas.LineVariantSchema is line_schemas.LineVariantSchema
     assert schemas.DictionaryLineSchema is line_schemas.DictionaryLineSchema
     assert schemas.ManuscriptLineSchema is line_schemas.ManuscriptLineSchema
+    assert (
+        schemas.DictionaryLinePaginationSchema
+        is line_schemas.DictionaryLinePaginationSchema
+    )
     for name in (
         "OldSiglumSchema",
         "ManuscriptSchema",
@@ -37,10 +43,15 @@ def test_public_schema_imports_share_the_registered_classes() -> None:
         "DictionaryLinePaginationSchema",
     ):
         schema = getattr(schemas, name)
-        assert schema.__module__ == "ebl.corpus.application.schemas"
-        assert (
-            class_registry.get_class(f"ebl.corpus.application.schemas.{name}") is schema
+        module = (
+            manuscript_schemas
+            if name in {"OldSiglumSchema", "ManuscriptSchema"}
+            else line_schemas
         )
+        assert inspect.getmodule(schema) is module
+        assert module.__file__ is not None
+        assert Path(inspect.getfile(schema)) == Path(module.__file__)
+        assert f"class {name}(Schema):" in inspect.getsource(schema)
 
 
 def test_chapter_info_translation_override_retains_structured_payload() -> None:
