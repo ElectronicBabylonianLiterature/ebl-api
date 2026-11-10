@@ -114,7 +114,7 @@ def test_retrieve_annotations_cli_skips_removed_legacy_photos(database, monkeypa
     assert listed == [[kept]]
 
 
-def _regenerate(when, database, fragment_numbers):
+def _regenerate(when, database, fragment_numbers, removed=()):
     annotations_collection = mock()
     when(annotations_collection).find({}).thenReturn(
         [{"fragmentNumber": str(number)} for number in fragment_numbers]
@@ -126,7 +126,8 @@ def _regenerate(when, database, fragment_numbers):
     annotations_repository = mock()
     cropped_repository = mock()
     service = mock()
-    for number in fragment_numbers:
+    # Strict stubs: only fragments that are actually regenerated are stubbed.
+    for number in (number for number in fragment_numbers if number not in removed):
         annotations = AnnotationsFactory.build(fragment_number=number)
         when(annotations_repository).query_by_museum_number(number).thenReturn(
             annotations
@@ -157,7 +158,7 @@ def test_regeneration_produces_no_crops_for_removed_legacy_photos(when, database
     _suppress(database, REMOVED)
 
     annotations_repository, cropped_repository, service = _regenerate(
-        when, database, [REMOVED, KEPT]
+        when, database, [REMOVED, KEPT], removed=(REMOVED,)
     )
 
     verify(annotations_repository, times=0).query_by_museum_number(REMOVED)
