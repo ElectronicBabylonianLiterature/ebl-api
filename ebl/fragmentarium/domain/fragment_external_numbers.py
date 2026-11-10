@@ -35,6 +35,9 @@ class ExternalNumbers:
     yale_peabody_number: str = ""
     oracc_numbers: Sequence[str] = ()
     seal_numbers: Sequence[str] = ()
+    mdz_number: str = ""
+    deutsches_museum_number: str = ""
+    smaek_number: str = ""
 
 
 class FragmentExternalNumbers:
@@ -162,3 +165,15 @@ class FragmentExternalNumbers:
     @property
     def seal_numbers(self) -> str:
         return self._get_external_number("seal")
+
+    @property
+    def mdz_number(self) -> str:
+        return self._get_external_number("mdz")
+
+    @property
+    def deutsches_museum_number(self) -> str:
+        return self._get_external_number("deutsches_museum")
+
+    @property
+    def smaek_number(self) -> str:
+        return self._get_external_number("smaek")

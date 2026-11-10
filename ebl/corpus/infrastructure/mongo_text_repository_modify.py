@@ -9,6 +9,9 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
 )
 from ebl.corpus.infrastructure.mongo_text_repository_base import MongoTextRepositoryBase
+from ebl.transliteration.application.storage_serialization import (
+    storage_serialization,
+)
 
 
 class MongoTextRepositoryModify(MongoTextRepositoryBase):
@@ -73,20 +76,19 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
         self._texts.insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
     def create_chapter(self, chapter: Chapter) -> None:
-        self._chapters.insert_one(ChapterSchema().dump(chapter))
+        with storage_serialization():
+            document = ChapterSchema().dump(chapter)
+        self._chapters.insert_one(document)
 
     def update(self, id_: ChapterId, chapter: Chapter) -> None:
-        self._chapters.update_one(
-            chapter_id_query(id_),
-            {
-                "$set": ChapterSchema(
-                    only=[
-                        "manuscripts",
-                        "uncertain_fragments",
-                        "lines",
-                        "signs",
-                        "parser_version",
-                    ]
-                ).dump(chapter)
-            },
-        )
+        with storage_serialization():
+            update = ChapterSchema(
+                only=[
+                    "manuscripts",
+                    "uncertain_fragments",
+                    "lines",
+                    "signs",
+                    "parser_version",
+                ]
+            ).dump(chapter)
+        self._chapters.update_one(chapter_id_query(id_), {"$set": update})

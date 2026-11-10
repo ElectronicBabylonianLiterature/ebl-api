@@ -100,6 +100,10 @@ class FragmentRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def update_fields(self, fields: Sequence[str], fragment: Fragment) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     def query(
         self, query: dict, user_scopes: Sequence[Scope] = ()
     ) -> Union[QueryResult, FragmentQueryResult]:
