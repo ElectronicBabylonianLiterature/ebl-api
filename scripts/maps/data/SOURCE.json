@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "source": "https://www.ebl.lmu.de/api/findspots",
+  "snapshot": "map_site_membership.v1.json",
+  "provenance": "The snapshot records the source response SHA-256, fetch timestamp and ETag. Only findspot IDs and site names are retained; duplicate and unknown memberships remain explicit.",
+  "refresh": "python -m scripts.maps.fetch_membership_snapshot --output scripts/maps/data/map_site_membership.v1.json",
+  "replay": "Supply --response-file, --fetched-at and --etag to reproduce a snapshot from the same saved raw response and metadata. sourceRevision checksums raw response bytes before projection.",
+  "knownSourceAmbiguity": "Findspot ID 1 occurs with both null and Umma membership. No site assignment is inferred from that ambiguity.",
+  "rights": {
+    "status": "maintainer-confirmation-pending",
+    "owner": null,
+    "license": null,
+    "note": "Public API availability does not establish redistribution rights. Maintainers must confirm the applicable permission and licence before merge."
+  }
+}

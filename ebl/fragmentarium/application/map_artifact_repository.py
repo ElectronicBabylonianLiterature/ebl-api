@@ -11,7 +11,7 @@ from ebl.fragmentarium.application.map_artifact_storage import (
 from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
 from ebl.fragmentarium.application.map_json import is_bson_int64, load_strict_json
 from ebl.fragmentarium.application.map_paths import MAP_DATA_DIR
-from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
+from ebl.fragmentarium.application.map_site_config import SITE_NAMES
 from ebl.fragmentarium.domain.map_location import MapLocation
 
 
@@ -30,18 +30,18 @@ class MapArtifactRepository:
     def known_site_ids(self) -> tuple[str, ...]:
         return tuple(
             site_id
-            for site_id in SITE_CONFIGS
+            for site_id in SITE_NAMES
             if (self._data_dir / artifact_manifest_name(site_id.lower())).is_file()
         )
 
     @staticmethod
     def supports_site(site_id: str) -> bool:
-        return site_id in SITE_CONFIGS
+        return site_id in SITE_NAMES
 
     @staticmethod
     def site_name(site_id: str) -> str:
         MapArtifactRepository._require_known_site(site_id)
-        return SITE_CONFIGS[site_id].site_name
+        return SITE_NAMES[site_id]
 
     def load_site_map_locations(self, site_id: str) -> dict[int, SiteMapLocation]:
         self._require_known_site(site_id)
@@ -100,7 +100,7 @@ class MapArtifactRepository:
 
     @staticmethod
     def _require_known_site(site_id: str) -> None:
-        if site_id not in SITE_CONFIGS:
+        if site_id not in SITE_NAMES:
             raise ValueError(f"Unknown map site ID: {site_id!r}.")
 
     @staticmethod

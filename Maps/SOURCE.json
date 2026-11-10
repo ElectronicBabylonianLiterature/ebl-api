@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "description": "Excavation GIS layers and working findspot spreadsheets retained from the reviewed map artifact source set.",
+  "origin": "Existing files introduced in eBL backend PR 810; original supplied paths are recorded per file.",
+  "rights": {
+    "status": "maintainer-confirmation-pending",
+    "owner": null,
+    "license": null,
+    "note": "No source-specific redistribution permission or licence has been established in this change. Maintainers must confirm rights and the applicable licence before merge."
+  },
+  "files": [
+    {
+      "path": "assur/assur-tafeln.ods",
+      "originalPath": "Assur LRZ/Assur Tafeln.ods",
+      "sha256": "9e4c556d29081b736ff3755d7b6dcb3ee813ff2a25ffcf63090984cc337dbf9a"
+    },
+    {
+      "path": "assur/Findspots/Findspots.cpg",
+      "originalPath": "Assur LRZ/Findspots/Findspots.cpg",
+      "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824"
+    },
+    {
+      "path": "assur/Findspots/Findspots.dbf",
+      "originalPath": "Assur LRZ/Findspots/Findspots.dbf",
+      "sha256": "c5cc7fe82848d07c4d29e944ccc059d694b0b519c6c6ac4bf97d1228728e10d1"
+    },
+    {
+      "path": "assur/Findspots/Findspots.prj",
+      "originalPath": "Assur LRZ/Findspots/Findspots.prj",
+      "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4"
+    },
+    {
+      "path": "assur/Findspots/Findspots.shp",
+      "originalPath": "Assur LRZ/Findspots/Findspots.shp",
+      "sha256": "30cea3ae5b2e349399df3fd62617717815c0823dea030b4d509a0e406e0b2cfe"
+    },
+    {
+      "path": "assur/Findspots/Findspots.shx",
+      "originalPath": "Assur LRZ/Findspots/Findspots.shx",
+      "sha256": "640634cfc0872b5e4265fa407d0242052df7167960d463195ec16f2989b84212"
+    },
+    {
+      "path": "kalhu/Findspots/Findspots.cpg",
+      "originalPath": "Kalhu LRZ/Findspots/Findspots.cpg",
+      "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824"
+    },
+    {
+      "path": "kalhu/Findspots/Findspots.dbf",
+      "originalPath": "Kalhu LRZ/Findspots/Findspots.dbf",
+      "sha256": "665e2694dd10e1384bfff7e3c3f9e8aee0d6bdb6d77886548b8c6921badc16cb"
+    },
+    {
+      "path": "kalhu/Findspots/Findspots.prj",
+      "originalPath": "Kalhu LRZ/Findspots/Findspots.prj",
+      "sha256": "f2e7fb14d55bdd8d6a3bc2c272a48729d8f9d0ad72936e20eae6a9a81c2fccd0"
+    },
+    {
+      "path": "kalhu/Findspots/Findspots.shp",
+      "originalPath": "Kalhu LRZ/Findspots/Findspots.shp",
+      "sha256": "699d3439d3f670f25e844170488bff49f95a108619963951457584517e7b54bc"
+    },
+    {
+      "path": "kalhu/Findspots/Findspots.shx",
+      "originalPath": "Kalhu LRZ/Findspots/Findspots.shx",
+      "sha256": "c914d675eb87698f20495305ade4344367ef38aee369e03fa04722649a73f774"
+    },
+    {
+      "path": "kalhu/kalhu-tafeln.ods",
+      "originalPath": "Kalhu LRZ/Kalhu Tafeln.ods",
+      "sha256": "379282d57efebf7060095a06b35f26dbca7628dc72bc2b6588f15788744051df"
+    },
+    {
+      "path": "nippur/Findspots/Findspots.cpg",
+      "originalPath": "Nippur LRZ/Findspots/Findspots.cpg",
+      "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824"
+    },
+    {
+      "path": "nippur/Findspots/Findspots.dbf",
+      "originalPath": "Nippur LRZ/Findspots/Findspots.dbf",
+      "sha256": "d8dae56a91e26891b3b3723819346bb8675784232356163a0ce2dcfb5e56b8c6"
+    },
+    {
+      "path": "nippur/Findspots/Findspots.prj",
+      "originalPath": "Nippur LRZ/Findspots/Findspots.prj",
+      "sha256": "f2e7fb14d55bdd8d6a3bc2c272a48729d8f9d0ad72936e20eae6a9a81c2fccd0"
+    },
+    {
+      "path": "nippur/Findspots/Findspots.shp",
+      "originalPath": "Nippur LRZ/Findspots/Findspots.shp",
+      "sha256": "e39c24ea35a4002943adf61f245984e04ed4ae58549f05290b18911569b53dcb"
+    },
+    {
+      "path": "nippur/Findspots/Findspots.shx",
+      "originalPath": "Nippur LRZ/Findspots/Findspots.shx",
+      "sha256": "16efda828d81d00f466958198736a7ddcf943016bdbedfde6cf0d75e30194351"
+    },
+    {
+      "path": "nippur/nippur-tafeln.ods",
+      "originalPath": "Nippur LRZ/Nippur Tafeln.ods",
+      "sha256": "4403567f7a235863f9d4a165657a295993189930c2730a0477024f45a0259782"
+    },
+    {
+      "path": "uruk/Findspots/Findspots.cpg",
+      "originalPath": "Uruk LRZ/Findspots/Findspots.cpg",
+      "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824"
+    },
+    {
+      "path": "uruk/Findspots/Findspots.dbf",
+      "originalPath": "Uruk LRZ/Findspots/Findspots.dbf",
+      "sha256": "4aba6970e87c8f374f3e3371844a51e597baa8b23c44b74488ff4dde37ec77ea"
+    },
+    {
+      "path": "uruk/Findspots/Findspots.prj",
+      "originalPath": "Uruk LRZ/Findspots/Findspots.prj",
+      "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4"
+    },
+    {
+      "path": "uruk/Findspots/Findspots.shp",
+      "originalPath": "Uruk LRZ/Findspots/Findspots.shp",
+      "sha256": "1f680342491a594959099e2f3b4e485e4f91985f72a6e61a650db3ea15a48c9e"
+    },
+    {
+      "path": "uruk/Findspots/Findspots.shx",
+      "originalPath": "Uruk LRZ/Findspots/Findspots.shx",
+      "sha256": "48e8c9ed7e58403650b53790b3d04d0a574993dca490b7b4bf87c7cf76dfcfa5"
+    },
+    {
+      "path": "uruk/uruk-tafeln-2025-07-24.ods",
+      "originalPath": "Uruk Tafeln aktualisiert 24-07-25.ods",
+      "sha256": "b84c2ea42346d4fdcece2c8dafe0e504c7cc33dfd74042fbe57dd399d7ce862f"
+    }
+  ]
+}

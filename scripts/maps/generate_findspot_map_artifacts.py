@@ -1,4 +1,4 @@
-from ebl.fragmentarium.application.map_artifact_cli import main
+from scripts.maps.map_artifact_cli import main
 
 
 if __name__ == "__main__":
