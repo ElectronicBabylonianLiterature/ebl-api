@@ -1,0 +1,46 @@
+from __future__ import annotations
+
+import re
+import unicodedata
+
+from scripts.maps.map_geometry import (
+    MultiPolygon,
+    canonical_geometry_checksum,
+)
+
+
+def contains_control_character(value: str) -> bool:
+    return any(unicodedata.category(character) == "Cc" for character in value)
+
+
+def slugify(name: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", name).casefold()
+    ascii_name = "".join(
+        character for character in decomposed if not unicodedata.combining(character)
+    )
+    slug = re.sub(
+        r"[^a-z0-9]+",
+        "-",
+        ascii_name,
+    ).strip("-")
+    if slug:
+        return slug
+    return "u" + "-".join(f"{ord(character):04x}" for character in name)
+
+
+def build_polygon_id(
+    prefix: str, name: str, canonical_geometry: MultiPolygon
+) -> tuple[str, str]:
+    if contains_control_character(name):
+        raise ValueError(f"Polygon name contains a control character: {name!r}")
+    checksum = canonical_geometry_checksum(canonical_geometry)
+    return f"{prefix}-{slugify(name)}-{checksum}", checksum
+
+
+def polygon_match_key(name: str) -> str:
+    return re.sub(r"^\d+", "", unicodedata.normalize("NFKC", name).strip())
+
+
+def normalize_label(value: str) -> str:
+    normalized = unicodedata.normalize("NFKC", value).strip()
+    return re.sub(r"\s+", " ", normalized).casefold()

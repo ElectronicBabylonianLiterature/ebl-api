@@ -39,8 +39,6 @@ __all__ = [
     "TextSchema",
     "UncertainFragmentAttestationSchema",
     "UncertainFragmentSchema",
-]
-__all__ += [
     "DictionaryLinePaginationSchema",
     "DictionaryLineSchema",
     "LineSchema",
