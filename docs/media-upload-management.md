@@ -9,17 +9,18 @@ The frontend upload PR uses the gallery foundation in frontend #839.
 All paths use `?fragment=` with a URL-encoded museum identifier. Every request
 checks fragment read access. Writes additionally require a stable authenticated
 Auth0 subject and a dedicated restricted permission.
+Every table entry also requires the fragment query parameter.
 
 | Request | Body | Result |
 | --- | --- | --- |
-| `GET /media?fragment=...` | none | Published gallery `{media: [...]}` |
-| `GET /media?fragment=...&view=management` | none | Published media and permitted submissions |
-| `POST /media?fragment=...` | one raw raster image | `201` new submission; `200` same retry |
-| `PATCH /media/{id}?fragment=...` | JSON metadata patch | `{media: [savedItem]}` |
-| `POST /media/{id}/primary?fragment=...` | `{}` | `{media: [savedItem]}` |
-| `POST /media/{id}/publish?fragment=...` | `{reason?: string}` | `{media: [savedItem]}` |
-| `POST /media/{id}/reject?fragment=...` | `{reason?: string}` | `{media: [savedItem]}` |
-| `DELETE /media/{id}?fragment=...` | empty | `204`, metadata tombstone only |
+| `GET /media` | none | Published gallery `{media: [...]}` |
+| `GET /media?view=management` | none | Published and permitted submissions |
+| `POST /media` | one raw raster image | `201` new; `200` same retry |
+| `PATCH /media/{id}` | JSON metadata patch | `{media: [savedItem]}` |
+| `POST /media/{id}/primary` | `{}` | `{media: [savedItem]}` |
+| `POST /media/{id}/publish` | `{reason?: string}` | `{media: [savedItem]}` |
+| `POST /media/{id}/reject` | `{reason?: string}` | `{media: [savedItem]}` |
+| `DELETE /media/{id}` | empty | `204`, metadata tombstone only |
 
 `publish` and `reject` require `If-Match`; `PATCH`, `primary`, and `DELETE`
 accept it optionally. See [Concurrency](#concurrency).
@@ -74,9 +75,10 @@ media/context or disabled routes, 409 duplicate payload mismatch/in-progress
 upload/invalid primary selection, 412 stale `If-Match` revision, 413 oversized
 content, 422 invalid metadata, image content, or malformed `If-Match`, 428
 review without `If-Match`, and 503 decoder capacity exhausted
-(`Retry-After: 10`). Keep the same idempotency key and metadata when retrying a failed transport; changing the
-file or metadata requires a new key. An interrupted process reservation requires
-explicit offline recovery before retry, rather than unsafe automatic lease expiry.
+(`Retry-After: 10`). Keep the same idempotency key and metadata when retrying a
+failed transport; changing the file or metadata requires a new key.
+An interrupted process reservation requires explicit offline recovery before
+retry, rather than unsafe automatic lease expiry.
 
 ## Concurrency
 
@@ -136,7 +138,8 @@ access, correct new-upload rights, publish, reject, select a published primary
 image, and remove media. Mutations involving multiple associated fragments also
 require access to every association. Legacy
 import provenance and original files remain unchanged when managers annotate
-rights; legacy upload attestation is rejected and rights are never inferred from EXIF.
+rights; legacy upload attestation is rejected and rights are never inferred
+from EXIF.
 
 New uploads always start `PENDING_REVIEW`, including manager uploads. Publishing
 is explicit and requires nonblank rights and permission attestation. Review
@@ -154,10 +157,11 @@ first write, an operator must explicitly run the foundation's
 There is no automatic index initialization on application startup.
 
 New metadata adds the optional `submission` document to `media` and an optional
-`rights` annotation document for manager corrections to legacy imagery. Existing records
-need no migration. `mediaUploadRequests` uses MongoDB's implicit unique `_id`
-index for actor/fragment/idempotency identity; it retains the content-and-metadata
-fingerprint, lease, canonical media ID, staged handles, and state. No TTL index
+`rights` annotation document for manager corrections to legacy imagery.
+Existing records need no migration. `mediaUploadRequests` uses MongoDB's implicit
+unique `_id` index for actor/fragment/idempotency identity; it retains the
+content-and-metadata fingerprint, lease, canonical media ID, staged handles,
+and state. No TTL index
 expires uncertain writes. Existing media ownership/source reservation indexes
 remain authoritative. Audit events use the existing `changelog` collection.
 `mediaLegacyVisibility` uses its implicit unique fragment `_id` to retain a
