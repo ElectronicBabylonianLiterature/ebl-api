@@ -15,7 +15,8 @@ def bounded_json_body(req: falcon.Request) -> dict:
         raise falcon.HTTPPayloadTooLarge(description="Media metadata exceeds 16 KiB.")
     try:
         data = json.loads(content) if content else {}
-    except (ValueError, UnicodeDecodeError) as error:
+    # 16 KiB of "[" exceeds the decoder's recursion limit: still invalid input.
+    except (ValueError, UnicodeDecodeError, RecursionError) as error:
         raise DataError("Invalid JSON metadata.") from error
     if not isinstance(data, dict):
         raise DataError("Media metadata must be an object.")

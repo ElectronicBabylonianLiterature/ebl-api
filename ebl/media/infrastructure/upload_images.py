@@ -17,7 +17,7 @@ from tempfile import SpooledTemporaryFile
 from threading import BoundedSemaphore, Lock
 from typing import BinaryIO, Callable, Iterator, cast
 
-from PIL import Image, ImageOps, UnidentifiedImageError
+from PIL import Image, ImageOps
 
 from ebl.media.application.media_store import MediaRepresentationStore
 from ebl.media.application.media_stored import (
@@ -46,6 +46,9 @@ THUMBNAIL_PIXELS = (
     (ThumbnailSize.MEDIUM, 480),
     (ThumbnailSize.LARGE, 720),
 )
+# "I;16N" is omitted: Pillow cannot rescale it faithfully, and accepted
+# formats (JPEG, PNG, WebP) never decode to it.
+HIGH_BIT_DEPTH_MODES = frozenset({"I", "I;16", "I;16L", "I;16B", "F"})
 
 
 class UploadValidationError(ValueError):
@@ -248,6 +251,29 @@ def _inspect(
     return representation
 
 
+def _eight_bit(image: Image.Image) -> Image.Image:
+    """Rescale high-bit-depth grayscale to 8-bit "L", closing the input if converted.
+
+    16-bit PNG greyscale decodes to "I;16"; a plain ``convert`` clips every
+    value above 255 to white, and LANCZOS resizing rejects the mode. Samples are
+    scaled over the full 16-bit range (value / 256, i.e. the high byte), not
+    stretched per image, so preview tones match the original's encoded values.
+    16-bit colour and grey+alpha PNGs already decode to 8-bit "RGB"/"RGBA".
+    """
+    if image.mode not in HIGH_BIT_DEPTH_MODES:
+        return image
+    with image:
+        if image.mode == "I;16":
+            # Stays two bytes per pixel; Pillow applies a 65536-entry lookup.
+            scaled = image.point(lambda value: value * (1 / 256))
+        else:
+            with image.convert("F") as floating:
+                scaled = floating.point(lambda value: value * (1 / 256))
+        with scaled:
+            # Out-of-range "I"/"F" samples are clamped to 0..255 here.
+            return scaled.convert("L")
+
+
 def _preview(source: Image.Image, pixels: int, stack: ExitStack) -> UploadContent:
     with source.copy() as image:
         image.thumbnail((pixels, pixels), Image.LANCZOS)
@@ -326,24 +352,24 @@ def prepare_upload(
                     source.load()
                     oriented = ImageOps.exif_transpose(source)
                 # Close the full original before copying derivatives. All later
-                # previews work from a single bounded display-sized raster.
-                with oriented:
-                    oriented.thumbnail((2560, 2560), Image.LANCZOS)
-                    display = _preview(oriented, 2560, stack)
+                # previews work from a single bounded display-sized 8-bit
+                # raster, so display and thumbnails share one tone mapping.
+                with _eight_bit(oriented) as raster:
+                    raster.thumbnail((2560, 2560), Image.LANCZOS)
+                    display = _preview(raster, 2560, stack)
                     thumbnails = tuple(
-                        (size, _preview(oriented, pixels, stack))
+                        (size, _preview(raster, pixels, stack))
                         for size, pixels in THUMBNAIL_PIXELS
                     )
-        except UploadValidationError:
+        except (UploadValidationError, MemoryError):
             raise
-        except (
-            Image.DecompressionBombError,
-            Image.DecompressionBombWarning,
-            UnidentifiedImageError,
-            OSError,
-            SyntaxError,
-            ValueError,
-        ) as error:
+        except Exception as error:
+            # This block only decodes, transforms and JPEG-encodes in memory:
+            # storage writes happen after prepare_upload yields. Malformed
+            # pixel or EXIF data surfaces from Pillow as arbitrary exception
+            # types (TypeError, AttributeError, struct.error, ...), including
+            # DecompressionBombError/Warning, UnidentifiedImageError, OSError,
+            # SyntaxError and ValueError. KeyboardInterrupt etc. propagate.
             raise UploadValidationError(
                 "Invalid or unsafe raster image content."
             ) from error

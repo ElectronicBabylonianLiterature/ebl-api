@@ -152,6 +152,69 @@ def test_rejects_png_with_valid_crc_but_corrupt_compressed_pixels() -> None:
             pytest.fail("Corrupt compressed pixels accepted")
 
 
+@pytest.mark.parametrize("sample,expected", [(0, 0), (32768, 128), (65535, 255)])
+# The wider original also exercises resizing to the display bound.
+@pytest.mark.parametrize("width", [200, 3000])
+def test_sixteen_bit_greyscale_previews_keep_tone(
+    sample: int, expected: int, width: int
+) -> None:
+    content = BytesIO()
+    with Image.new("I;16", (width, 40), sample) as image:
+        image.save(content, format="PNG")
+    with Image.open(BytesIO(content.getvalue())) as decoded:
+        assert decoded.mode == "I;16"
+    with prepare_upload(BytesIO(content.getvalue())) as prepared:
+        assert prepared.display.representation.width == min(width, 2560)
+        for item in [prepared.display] + [item for _, item in prepared.thumbnails]:
+            with Image.open(item.content) as preview:
+                red, green, blue = preview.convert("RGB").getpixel(
+                    (preview.width // 2, preview.height // 2)
+                )
+                assert red == green == blue
+                assert abs(red - expected) <= 2
+
+
+def exif_entry_offset(content: bytes, tag: int) -> tuple[int, str]:
+    tiff = content.index(b"Exif\x00\x00") + 6
+    order = "big" if content[tiff : tiff + 2] == b"MM" else "little"
+    ifd = tiff + int.from_bytes(content[tiff + 4 : tiff + 8], order)
+    for index in range(int.from_bytes(content[ifd : ifd + 2], order)):
+        entry = ifd + 2 + 12 * index
+        if int.from_bytes(content[entry : entry + 2], order) == tag:
+            return entry, order
+    raise AssertionError(f"EXIF tag {tag} not written")
+
+
+def test_rejects_malformed_exif_as_invalid_content() -> None:
+    output = BytesIO()
+    with Image.new("RGB", (80, 40), "red") as image:
+        exif = Image.Exif()
+        exif[274] = 6
+        exif[282] = 72.0
+        image.save(output, format="JPEG", exif=exif)
+    content = bytearray(output.getvalue())
+    # Retype XResolution from RATIONAL (5) to ASCII (2): orientation handling
+    # then fails re-serialising EXIF with a non-OSError (TypeError).
+    entry, order = exif_entry_offset(bytes(content), 282)
+    content[entry + 2 : entry + 4] = (2).to_bytes(2, order)
+    with pytest.raises(UploadValidationError, match="Invalid or unsafe") as error:
+        with prepare_upload(BytesIO(bytes(content))):
+            pytest.fail("Malformed EXIF accepted")
+    assert error.value.__cause__ is not None
+
+
+def test_memory_errors_are_not_reported_as_invalid_content(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def exhausted(image: Image.Image) -> Image.Image:
+        raise MemoryError()
+
+    monkeypatch.setattr(upload_images.ImageOps, "exif_transpose", exhausted)
+    with pytest.raises(MemoryError):
+        with prepare_upload(BytesIO(image_bytes())):
+            pytest.fail("Exhausted decoder accepted")
+
+
 @pytest.mark.parametrize("declared", [1, 100000])
 def test_rejects_length_mismatch(declared: int) -> None:
     with pytest.raises(UploadValidationError, match="length"):
