@@ -44,14 +44,25 @@ attribution, and references. New records expose `publicationStatus`, `creator`,
 `sourceInstitution`, `copyrightHolder`, and `rightsStatement`. Management
 responses additionally expose `originalFilename`, `uploaderId`, `uploadedAt`,
 `permissionAttested`, `description`, `projects`, `reviewerId`, `reviewedAt`, and
-`reviewReason`. Legacy records lacking a submission field retain their existing
-published visibility. Malformed explicit submission metadata fails closed.
+`reviewReason`. Management fields are returned only for items the caller
+uploaded, or for every listed item when the caller has `manage:fragment_media`;
+other items in a `view=management` listing use the canonical shape. Legacy
+records lacking a submission field retain their existing published visibility.
+Malformed explicit submission metadata fails closed.
 Managers may annotate legacy creator, source, copyright, rights, and contextual
 description without changing original provenance or publication. Only annotated
 legacy responses include `rightsAnnotated: true` and the corresponding text
 fields; no uploader, review identity, or upload attestation is fabricated.
 When a removed canonical legacy photograph suppresses fallback, listings include
 `legacyFallbackAllowed: false`. Other listings retain the existing envelope.
+
+While `MEDIA_API_ENABLED=true`, fragment and fragment-search/query DTOs for a
+fragment with a removed legacy photograph report `legacyHasPhoto: false`;
+`hasPhoto` then reflects only published managed media of type `PHOTO`, and
+`thumbnailPath` is the published primary media thumbnail URL or `null`.
+Clients must decide whether to call `GET /fragments/{number}/photo` from
+`legacyHasPhoto ?? hasPhoto`, not from `hasPhoto` alone: a fragment can have a
+published managed photo while its legacy route returns 404.
 
 Errors use standard Falcon JSON errors: 403 permission denial, 404 inaccessible
 media/context or disabled routes, 409 duplicate payload mismatch/in-progress
@@ -71,12 +82,20 @@ production roles or Auth0 settings:
 - Retain the existing `read:...-fragments` permissions for restricted fragments.
 
 Readers receive published imagery only, including summaries and binary UUID
-retrieval. Contributors can inspect their own unpublished submissions and edit
-their own `PENDING_REVIEW` captions/context. They cannot edit rights, publish,
-remove, or select primary media. Managers may upload without the contributor
-scope, review all media they can access, correct new-upload rights, publish,
-reject, select a published primary image, and remove media. Mutations involving
-multiple associated fragments also require access to every association. Legacy
+retrieval. Contributors can inspect their own unpublished submissions and, while
+an item they uploaded is `PENDING_REVIEW`, edit every metadata field except the
+rights fields `rightsStatement`, `copyrightHolder`, and `permissionAttested`
+(`RIGHTS_FIELDS` in `ebl/media/application/media_metadata.py`). Editable fields
+are `type`, `caption` (nonblank), `description`, `creator`, `sourceInstitution`,
+`attribution`, `references`, and `projects`; `originalFilename` is never
+editable. Because contributors can change `creator`, `sourceInstitution`, and
+`attribution` after attesting rights, managers must re-check attribution
+against the rights statement before publishing. Contributors cannot publish,
+reject, remove, or select primary media, nor edit others' or reviewed items.
+Managers may upload without the contributor scope, review all media they can
+access, correct new-upload rights, publish, reject, select a published primary
+image, and remove media. Mutations involving multiple associated fragments also
+require access to every association. Legacy
 import provenance and original files remain unchanged when managers annotate
 rights; legacy upload attestation is rejected and rights are never inferred from EXIF.
 
@@ -134,6 +153,13 @@ and removes stale legacy flags and paths from fragment/search summaries. Removin
 an unrelated imported file or an owned upload does not suppress another legacy
 photograph. Cleanup preserves these visibility markers and all borrowed bytes.
 
+Offline annotation tooling reads `mediaLegacyVisibility` directly, independent of
+`MEDIA_API_ENABLED`: `python -m ebl.fragmentarium.retrieve_annotations` omits
+fragments with a removed legacy photograph from the exported images, ground-truth
+files, and fragment list, and `python -m ebl.fragmentarium.migrate_cropped_images`
+regenerates no `cropped_sign_images` for them. Without visibility markers both
+tools behave as before.
+
 To inspect recovery work, run with the intended operator-provided `MONGODB_URI`:
 
 ```sh
@@ -174,7 +200,8 @@ changed by this PR.
 
 Run `pytest ebl/tests/media` against a disposable transactional MongoDB, then
 `ruff check ebl`, `ruff format --check ebl`, and the repository type/full test
-checks. `ebl.tests.media.e2e_server` provides a separate loopback browser-test
-harness with fixed test bearer roles, a dedicated disposable Mongo host check,
-real media routes/storage, and a random isolated database. It must never be
-deployed as the application server.
+checks. `ebl.tests.media.e2e_server` provides a separate browser-test harness
+that binds `0.0.0.0:8000` (all interfaces, for container networking; expose it
+only on an isolated test network) with fixed test bearer roles, a dedicated
+disposable Mongo host check, real media routes/storage, and a random isolated
+database. It must never be deployed as the application server.

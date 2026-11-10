@@ -3,7 +3,10 @@ import json
 import os
 from datetime import date
 from pathlib import Path
+from typing import Optional
 
+
+from pymongo.database import Database
 
 from ebl.app import create_context
 from ebl.fragmentarium.domain.annotation import (
@@ -20,7 +23,10 @@ from ebl.fragmentarium.retrieve_annotations_helpers import (
     sign_to_sign_ground_truth,
     write_annotations,
     write_fragment_numbers,
+    without_removed_legacy_photos,
 )
+from ebl.media.application.media_repository import MediaReader
+from ebl.media.infrastructure.mongo_media_reader import MongoMediaReader
 
 __all__ = [
     "AnnotationValueType",
@@ -35,7 +41,20 @@ __all__ = [
     "sign_to_sign_ground_truth",
     "write_annotations",
     "write_fragment_numbers",
+    "without_removed_legacy_photos",
 ]
+
+
+def legacy_photo_visibility(database: Optional[Database] = None) -> MediaReader:
+    # Suppression of removed legacy photos lives in mediaLegacyVisibility and is
+    # honoured regardless of MEDIA_API_ENABLED: the export reads raw `photos`.
+    if database is None:
+        from pymongo import MongoClient
+
+        database = MongoClient(os.environ["MONGODB_URI"]).get_database(
+            os.environ.get("MONGODB_DB")
+        )
+    return MongoMediaReader(database)
 
 
 def main(argv=None):
@@ -77,6 +96,7 @@ def main(argv=None):
         args.output_annotations = "./annotations/annotations"
         args.output_imgs = "./annotations/imgs"
 
+    database: Optional[Database] = None
     try:
         context = create_context()
         annotation_collection = context.annotations_repository.retrieve_all_non_empty()
@@ -102,6 +122,10 @@ def main(argv=None):
         annotations_repository = MongoAnnotationsRepository(database)
         photo_repository = GridFsFileRepository(database, "photos")
         annotation_collection = annotations_repository.retrieve_all_non_empty()
+
+    annotation_collection = without_removed_legacy_photos(
+        annotation_collection, legacy_photo_visibility(database)
+    )
 
     if args.filter:
         if args.filter not in ["finished", "unfinished", "selected"]:

@@ -11,6 +11,11 @@ from ebl.tests.factories.annotation import (
 )
 
 
+class _NoRemovedPhotos:
+    def suppressed_legacy_fragments(self, _numbers):
+        return frozenset()
+
+
 def test_create_annotations(photo_repository, when, photo):
     annotation = AnnotationsFactory.build()
 
@@ -73,6 +78,9 @@ def test_argument_parsing_defaults(when):
     mock_context = mock({"annotations_repository": mock(), "photo_repository": mock()})
     when(mock_context.annotations_repository).retrieve_all_non_empty().thenReturn([])
     when(retrieve_annotations).create_context().thenReturn(mock_context)
+    when(retrieve_annotations).legacy_photo_visibility(None).thenReturn(
+        _NoRemovedPhotos()
+    )
 
     created_dirs = []
 
@@ -123,6 +131,9 @@ def test_context_fallback_to_mongo(monkeypatch, when):
     when(retrieve_annotations).create_directory(...).thenReturn(None)
     when(retrieve_annotations).create_annotations(...).thenReturn(None)
     when(retrieve_annotations).write_fragment_numbers(...).thenReturn(None)
+    when(retrieve_annotations).legacy_photo_visibility(mock_db).thenReturn(
+        _NoRemovedPhotos()
+    )
 
     # Should not raise, should use fallback
     retrieve_annotations.main([])
@@ -130,3 +141,4 @@ def test_context_fallback_to_mongo(monkeypatch, when):
     verify(pymongo).MongoClient("mongodb://test:27017")
     verify(mongo_anno_module).MongoAnnotationsRepository(mock_db)
     verify(gridfs_module).GridFsFileRepository(mock_db, "photos")
+    verify(retrieve_annotations).legacy_photo_visibility(mock_db)

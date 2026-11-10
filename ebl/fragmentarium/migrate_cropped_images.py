@@ -1,10 +1,15 @@
 import logging
 import os
+from itertools import islice
+from typing import Iterable, Iterator, Optional, Tuple
 
 from pymongo import MongoClient
 from ebl.app import create_context
 from ebl.context import Context
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
+from ebl.media.application.media_repository import MediaReader
+from ebl.media.application.media_runtime import MediaRuntime
+from ebl.media.infrastructure.mongo_media_reader import MongoMediaReader
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +30,43 @@ def create_annotations_service(context: Context) -> AnnotationsService:
         context.fragment_repository,
         context.photo_repository,
         context.cropped_sign_images_repository,
+        context.media.service if isinstance(context.media, MediaRuntime) else None,
     )
+
+
+def legacy_photo_visibility(database) -> MediaReader:
+    # Removal of a legacy photo is recorded in mediaLegacyVisibility; read it
+    # directly so removed originals stay excluded even when the media API is off.
+    return MongoMediaReader(database)
+
+
+VISIBILITY_BATCH_SIZE = 500
+
+
+def _museum_number(doc: dict) -> Optional[MuseumNumber]:
+    try:
+        return MuseumNumber.of(doc["fragmentNumber"])
+    except Exception:
+        return None
+
+
+def with_removed_legacy_photos(
+    visibility: MediaReader, annotation_docs: Iterable[dict]
+) -> Iterator[Tuple[dict, bool]]:
+    """Pair each document with whether its legacy photo was removed.
+
+    Suppression is looked up once per batch rather than once per document.
+    Documents with an unparsable number are passed through for the caller to
+    report.
+    """
+    docs = iter(annotation_docs)
+    while batch := list(islice(docs, VISIBILITY_BATCH_SIZE)):
+        numbers = [_museum_number(doc) for doc in batch]
+        removed = visibility.suppressed_legacy_fragments(
+            tuple(number for number in numbers if number is not None)
+        )
+        for doc, number in zip(batch, numbers, strict=True):
+            yield doc, number is not None and number in removed
 
 
 def show_statistics(context: Context) -> tuple:
@@ -72,17 +113,28 @@ def regenerate_images(context: Context):
     cropped_sign_images_repository = context.cropped_sign_images_repository
     annotations_service = create_annotations_service(context)
     database = get_database()
+    visibility = legacy_photo_visibility(database)
 
     logger.info("Fetching all annotations...")
     annotations_collection = database["annotations"]
     annotations_cursor = annotations_collection.find({})
 
     processed_count = 0
+    skipped_count = 0
     error_count = 0
 
-    for annotation_doc in annotations_cursor:
+    for annotation_doc, legacy_photo_removed in with_removed_legacy_photos(
+        visibility, annotations_cursor
+    ):
         try:
             fragment_number = MuseumNumber.of(annotation_doc["fragmentNumber"])
+            if legacy_photo_removed:
+                # A removed legacy original must not be cropped again.
+                skipped_count += 1
+                logger.info(
+                    f"Skipping fragment {fragment_number}: legacy photo was removed"
+                )
+                continue
             annotations = annotations_repository.query_by_museum_number(fragment_number)
 
             if annotations.annotations:
@@ -115,7 +167,8 @@ def regenerate_images(context: Context):
             continue
 
     logger.info(
-        f"Regeneration completed. Processed {processed_count} fragments, {error_count} errors."
+        f"Regeneration completed. Processed {processed_count} fragments, "
+        f"skipped {skipped_count} with removed legacy photos, {error_count} errors."
     )
 
 
