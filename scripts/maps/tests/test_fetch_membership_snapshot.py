@@ -1,5 +1,6 @@
 import hashlib
-from io import BytesIO
+from contextlib import redirect_stderr
+from io import BytesIO, StringIO
 import json
 from pathlib import Path
 import runpy
@@ -112,16 +113,20 @@ def test_snapshot_cli_fetches_and_supplies_timestamp(
 
 
 def test_snapshot_cli_reports_errors_without_overwriting_output(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path,
 ) -> None:
     response, output = tmp_path / "response.json", tmp_path / "snapshot.json"
     response.write_text("{}")
     output.write_text("existing snapshot")
 
-    assert (
-        snapshot.main(["--response-file", str(response), "--output", str(output)]) == 2
-    )
-    assert capsys.readouterr()[1].startswith("error: Canonical findspot response")
+    error = StringIO()
+    with redirect_stderr(error):
+        result = snapshot.main(
+            ["--response-file", str(response), "--output", str(output)]
+        )
+
+    assert result == 2
+    assert error.getvalue().startswith("error: Canonical findspot response")
     assert output.read_text() == "existing snapshot"
 
 
