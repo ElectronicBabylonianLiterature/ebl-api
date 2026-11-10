@@ -7,11 +7,31 @@
 
 ## Table of contents
 
+* [Map artifact utilities](#map-artifact-utilities)
 * [Setup](#setup)
 * [Development](#development)
 * [Running the application](#running-the-application)
 * [Updating data](#updating-data)
 * [Acknowledgements](#acknowledgements)
+
+## Map artifact utilities
+
+Run the offline generators as modules from the repository root:
+
+```sh
+poetry run python -m scripts.maps.generate_findspot_map_artifacts \
+  --site ASSUR --source-revision <revision>
+poetry run python -m scripts.maps.build_frontend_transfer_archive \
+  --output /tmp/map-artifacts.tar.gz
+```
+
+Curation reports are versioned JSON. Keep unresolved template rows when
+submitting reviewed assignments. Site membership is checked against the
+versioned canonical findspot snapshot independently of the source spreadsheet.
+The transfer archive contains metadata; consumers supply GeoJSON satisfying
+the polygon ID and geometry checksum contract in `ARTIFACT_MANIFEST.json`.
+Per-site summaries distinguish `unresolvedCount` from `conflictCount`;
+`pendingCurationCount` is their sum and counts all rows awaiting curation.
 
 ## Setup
 
