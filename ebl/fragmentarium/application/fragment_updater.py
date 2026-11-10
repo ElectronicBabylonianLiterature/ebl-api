@@ -167,7 +167,7 @@ class FragmentUpdater:
 
         self._repository.update_field("archaeology", updated_fragment)
 
-        return self._create_result(updated_fragment)
+        return self._create_result(self._repository.query_by_museum_number(number))
 
     def update_colophon(
         self, number: MuseumNumber, colophon: Colophon, user: User

@@ -2,12 +2,12 @@ import pytest
 import json
 from pathlib import Path
 
-from ebl.fragmentarium.application.map_artifact_generator import (
+from scripts.maps.map_artifact_generator import (
     write_site_artifacts,
 )
 from ebl.fragmentarium.application.map_paths import MAP_DATA_DIR
-from ebl.fragmentarium.application.map_site_config import SITE_CONFIGS
-from ebl.fragmentarium.application.map_membership import load_membership_evidence
+from scripts.maps.map_site_config import SITE_CONFIGS
+from scripts.maps.map_membership import load_membership_evidence
 from ebl.fragmentarium.application.map_artifact_storage import read_validated_artifact
 
 

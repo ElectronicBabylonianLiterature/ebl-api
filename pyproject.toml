@@ -60,6 +60,7 @@ pymongo-inmemory = "*"
 pytest-xdist = "*"
 autopep8 = "^1.6.0"
 pre-commit = "*"
+types-python-dateutil = "^2.9.0.20261104"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

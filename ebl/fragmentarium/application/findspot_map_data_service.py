@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 import logging
+from threading import Lock
 from typing import Optional, Protocol, Sequence
 
 import attr
@@ -13,6 +14,7 @@ from ebl.fragmentarium.domain.findspot import Findspot
 from ebl.fragmentarium.domain.map_location import MapLocation
 
 MAX_JSON_SAFE_INTEGER = 2**53 - 1
+MAX_REPORTED_DROPPED_SETS = 128
 LOGGER = logging.getLogger(__name__)
 
 
@@ -47,6 +49,8 @@ class FindspotMapDataService:
         self._findspot_repository = findspot_repository
         self._fragment_repository = fragment_repository
         self._map_artifact_repository = map_artifact_repository
+        self._reported_dropped_ids: dict[frozenset[int], None] = {}
+        self._warning_lock = Lock()
 
     def find_map_data(
         self,
@@ -83,12 +87,9 @@ class FindspotMapDataService:
             ),
             key=lambda findspot: findspot.id_,
         )
-        dropped_ids = set(map_locations) - {findspot.id_ for findspot in findspots}
-        if dropped_ids:
-            LOGGER.warning(
-                "Map artifacts skipped findspots with missing or mismatched site metadata: %s",
-                sorted(dropped_ids),
-            )
+        self._warn_dropped_findspots(
+            frozenset(map_locations) - {findspot.id_ for findspot in findspots}
+        )
         counts = self._fragment_repository.count_fragments_by_findspot_ids(
             [findspot.id_ for findspot in findspots],
             user_scopes,
@@ -115,3 +116,17 @@ class FindspotMapDataService:
                 )
             )
         return result
+
+    def _warn_dropped_findspots(self, dropped_ids: frozenset[int]) -> None:
+        if not dropped_ids:
+            return
+        with self._warning_lock:
+            if dropped_ids in self._reported_dropped_ids:
+                return
+            if len(self._reported_dropped_ids) >= MAX_REPORTED_DROPPED_SETS:
+                del self._reported_dropped_ids[next(iter(self._reported_dropped_ids))]
+            self._reported_dropped_ids[dropped_ids] = None
+        LOGGER.warning(
+            "Map artifacts skipped findspots with missing or mismatched site metadata: %s",
+            sorted(dropped_ids),
+        )

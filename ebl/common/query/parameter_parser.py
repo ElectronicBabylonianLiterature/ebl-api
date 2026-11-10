@@ -162,18 +162,18 @@ def parse_findspot_ids(parameters: Dict) -> Dict:
 
     raw = parameters["findspotIds"]
     if not isinstance(raw, str):
-        raise DataError("findspotIds must be a single comma-separated string.")
+        raise DataError("findspotIds must be a single comma-separated string")
     if len(raw) > MAX_FINDSPOT_IDS_RAW_LENGTH:
         raise DataError(
-            f"findspotIds must not exceed {MAX_FINDSPOT_IDS_RAW_LENGTH} characters."
+            f"findspotIds must not exceed {MAX_FINDSPOT_IDS_RAW_LENGTH} characters"
         )
     values = [item.strip() for item in raw.split(",")]
     if len(values) > MAX_FINDSPOT_IDS:
         raise DataError(
-            f"findspotIds must not contain more than {MAX_FINDSPOT_IDS} values."
+            f"findspotIds must not contain more than {MAX_FINDSPOT_IDS} values"
         )
     if not values or any(not value for value in values):
-        raise DataError("findspotIds must not contain empty values.")
+        raise DataError("findspotIds must not contain empty values")
 
     ids = [_parse_findspot_id(value, "findspotIds") for value in values]
     selected_ids = set(ids)
@@ -184,7 +184,7 @@ def parse_findspot_ids(parameters: Dict) -> Dict:
     if len(selected_ids) > MAX_FINDSPOT_IDS:
         raise DataError(
             f"findspotId and findspotIds must not select more than "
-            f"{MAX_FINDSPOT_IDS} values."
+            f"{MAX_FINDSPOT_IDS} values"
         )
 
     return {**parameters, "findspotIds": sorted(set(ids))}
