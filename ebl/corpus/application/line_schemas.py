@@ -35,8 +35,6 @@ def manuscript_id() -> fields.Integer:
 
 
 class ManuscriptLineSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     manuscript_id = manuscript_id()
     labels = labels()
     line = fields.Nested(OneOfLineSchema, required=True)
@@ -59,8 +57,6 @@ class ManuscriptLineSchema(Schema):
 
 
 class LineVariantSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     reconstruction: fields.Field = fields.Nested(
         OneOfTokenSchema, required=True, many=True
     )
@@ -85,8 +81,6 @@ class LineVariantSchema(Schema):
 
 
 class LineSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     number = fields.Nested(OneOfLineNumberSchema, required=True)
     old_line_numbers = fields.Nested(
         OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=()
@@ -115,8 +109,6 @@ class LineSchema(Schema):
 
 
 class DictionaryLineSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     text_name = fields.String(required=True, data_key="textName")
     chapter_name = fields.String(
@@ -143,8 +135,6 @@ class DictionaryLineSchema(Schema):
 
 
 class DictionaryLinePaginationSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     dictionary_lines = fields.Nested(
         DictionaryLineSchema,
         required=True,
