@@ -1,4 +1,4 @@
-from typing import Iterable, Sequence, Type
+from typing import Iterable, Sequence, Type, cast
 
 from lark.lexer import Token
 from lark.tree import Tree
@@ -107,7 +107,10 @@ class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
         self, parts: Tree, modifiers: Sequence[Flag], closing_enclosures: Tree
     ) -> AkkadianWord:
         return AkkadianWord.of(
-            tuple(parts.children + closing_enclosures.children), modifiers
+            tuple(
+                cast(Sequence[EblToken], parts.children + closing_enclosures.children)
+            ),
+            modifiers,
         )
 
     def ebl_atf_text_line__normalized_modifiers(
@@ -138,9 +141,14 @@ class GreekTransformer(EnclosureTransformer, SignTransformer):
     def __init__(self):
         super().__init__()
 
-    def ebl_atf_text_line__greek_word(self, children) -> GreekWord:
+    def ebl_atf_text_line__greek_word(
+        self, children: Tree | Sequence[EblToken]
+    ) -> GreekWord:
         return GreekWord.of(
-            children.children if isinstance(children, Tree) else children
+            cast(
+                Sequence[EblToken],
+                children.children if isinstance(children, Tree) else children,
+            )
         )
 
     @v_args(inline=True)

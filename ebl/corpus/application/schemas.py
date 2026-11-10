@@ -1,272 +1,54 @@
-from ebl.common.domain.manuscript_type import ManuscriptType
-from typing import cast
-from marshmallow import (
-    Schema,
-    ValidationError,
-    fields,
-    post_load,
-    validate,
-    validates_schema,
-)
+from typing import Any
+
+from marshmallow import Schema, fields, post_load, validate
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.application.schemas import deserialize_provenance_record
-from ebl.common.domain.period import Period, PeriodModifier
-from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.corpus.application.id_schemas import TextIdSchema, ChapterIdSchema
+from ebl.corpus.application.line_schemas import (
+    DictionaryLinePaginationSchema as DictionaryLinePaginationSchema,
+    DictionaryLineSchema as DictionaryLineSchema,
+    LineSchema as LineSchema,
+    LineVariantSchema as LineVariantSchema,
+    ManuscriptLineSchema as ManuscriptLineSchema,
+    manuscript_id as manuscript_id,
+)
+from ebl.corpus.application.manuscript_schemas import (
+    ManuscriptSchema as ManuscriptSchema,
+    OldSiglumSchema as OldSiglumSchema,
+)
 from ebl.corpus.application.record_schemas import RecordSchema
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-)
-from ebl.corpus.domain.dictionary_line import DictionaryLine
-from ebl.corpus.domain.line import Line
-from ebl.corpus.domain.manuscript_line import ManuscriptLine
-from ebl.corpus.domain.line_variant import LineVariant
-from ebl.corpus.domain.manuscript import (
-    Manuscript,
-    OldSiglum,
-    is_invalid_non_standard_text,
-    is_invalid_standard_text,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.chapter_query import ChapterQueryColophonLinesSchema
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
+from ebl.corpus.domain.record import Record
+from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.corpus.domain.uncertain_fragment_attestation import (
     UncertainFragmentAttestation,
 )
-from ebl.corpus.domain.record import Record
-from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
-from ebl.fragmentarium.application.joins_schema import JoinsSchema
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.fragmentarium.domain.joins import Joins
 from ebl.schemas import ResearchProjectField, StageField, ValueEnumField
-from ebl.transliteration.application.label_schemas import labels
-from ebl.transliteration.application.line_number_schemas import (
-    OneOfLineNumberSchema,
-    OldLineNumberSchema,
-)
-from ebl.transliteration.application.line_schemas import (
-    NoteLineSchema,
-    TranslationLineSchema,
-)
-from ebl.transliteration.application.note_line_part_schemas import (
-    OneOfNoteLinePartSchema,
-)
-from ebl.transliteration.application.one_of_line_schema import (
-    OneOfLineSchema,
-    ParallelLineSchema,
-)
-from ebl.transliteration.application.text_schema import (
-    TextSchema as TransliterationSchema,
-)
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+from ebl.transliteration.application.label_schemas import labels as labels
+from ebl.transliteration.application.line_schemas import TranslationLineSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.genre import Genre
-from ebl.transliteration.domain.text import Text as Transliteration
-from ebl.corpus.domain.chapter_query import ChapterQueryColophonLinesSchema
 
 
-class OldSiglumSchema(Schema):
-    siglum = fields.String(required=True)
-    reference = fields.Nested(ReferenceSchema, required=True)
-
-    @post_load
-    def make_old_siglum(self, data, **kwargs) -> OldSiglum:
-        return OldSiglum(**data)
-
-
-class ManuscriptSchema(Schema):
-    id = fields.Integer(required=True)
-    siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
-    old_sigla = fields.Nested(
-        OldSiglumSchema,
-        required=False,
-        data_key="oldSigla",
-        many=True,
-        load_default=(),
-    )
-    museum_number: fields.Field = fields.Nested(
-        MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
-    )
-    accession = fields.String(required=True)
-    period_modifier = ValueEnumField(
-        PeriodModifier, required=True, data_key="periodModifier"
-    )
-    period = fields.Function(
-        lambda manuscript: manuscript.period.long_name,
-        lambda value: Period.from_name(value),
-        required=True,
-    )
-    provenance = fields.Method(
-        "serialize_provenance",
-        "deserialize_provenance",
-        required=True,
-    )
-    type = fields.Function(
-        lambda manuscript: manuscript.type.long_name,
-        lambda value: ManuscriptType.from_name(value),
-        required=True,
-    )
-    notes = fields.String(required=True)
-    colophon: fields.Field = fields.Nested(
-        TransliterationSchema, load_default=Transliteration()
-    )
-    unplaced_lines: fields.Field = fields.Nested(
-        TransliterationSchema, load_default=Transliteration(), data_key="unplacedLines"
-    )
-    references = fields.Nested(ReferenceSchema, many=True, required=True)
-    joins = fields.Pluck(JoinsSchema, "fragments", load_default=Joins(), load_only=True)
-    is_in_fragmentarium = fields.Boolean(
-        load_default=False, data_key="isInFragmentarium", load_only=True
-    )
-
-    @validates_schema
-    def validate_provenance(self, data, **kwargs):
-        provenace = data["provenance"]
-        period = data["period"]
-        type_ = data["type"]
-        if is_invalid_standard_text(provenace, period, type_):
-            raise ValidationError(
-                "period and type must be None if provenance is Standard Text"
-            )
-        elif is_invalid_non_standard_text(provenace, period, type_):
-            raise ValidationError(
-                "period and type must not be None if provenance is not Standard Text"
-            )
-
-    @post_load
-    def make_manuscript(self, data: dict, **kwargs) -> Manuscript:
-        return Manuscript(
-            data["id"],
-            data["siglum_disambiguator"],
-            tuple(data["old_sigla"]),
-            data["museum_number"],
-            data["accession"],
-            data["period_modifier"],
-            data["period"],
-            data["provenance"],
-            data["type"],
-            data["notes"],
-            data["colophon"],
-            data["unplaced_lines"],
-            tuple(data["references"]),
-            data["joins"],
-            data["is_in_fragmentarium"],
-        )
-
-    def serialize_provenance(self, manuscript: Manuscript) -> str:
-        return manuscript.provenance.long_name
-
-    def deserialize_provenance(self, value: str) -> ProvenanceRecord:
-        return cast(ProvenanceRecord, deserialize_provenance_record(self, value))
-
-
-def manuscript_id():
-    return fields.Integer(
-        required=True, data_key="manuscriptId", validate=validate.Range(min=1)
-    )
-
-
-class ManuscriptLineSchema(Schema):
-    manuscript_id = manuscript_id()
-    labels = labels()
-    line = fields.Nested(OneOfLineSchema, required=True)
-    paratext = fields.Nested(OneOfLineSchema, many=True, required=True)
-    omitted_words = fields.List(
-        fields.Integer(), required=True, data_key="omittedWords"
-    )
-
-    @post_load
-    def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
-        return ManuscriptLine(
-            data["manuscript_id"],
-            tuple(data["labels"]),
-            data["line"],
-            tuple(data["paratext"]),
-            tuple(data["omitted_words"]),
-        )
-
-
-class LineVariantSchema(Schema):
-    reconstruction: fields.Field = fields.Nested(
-        OneOfTokenSchema, required=True, many=True
-    )
-    note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
-    manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
-    parallel_lines = fields.Nested(
-        ParallelLineSchema, many=True, load_default=(), data_key="parallelLines"
-    )
-    intertext: fields.Field = fields.Nested(
-        OneOfNoteLinePartSchema, many=True, load_default=()
-    )
-
-    @post_load
-    def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
-        return LineVariant(
-            tuple(data["reconstruction"]),
-            data["note"],
-            tuple(data["manuscripts"]),
-            tuple(data["parallel_lines"]),
-            tuple(data["intertext"]),
-        )
-
-
-class LineSchema(Schema):
-    number = fields.Nested(OneOfLineNumberSchema, required=True)
-    old_line_numbers = fields.Nested(
-        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=()
-    )
-    variants = fields.Nested(
-        LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
-    )
-    is_second_line_of_parallelism = fields.Boolean(
-        required=True, data_key="isSecondLineOfParallelism"
-    )
-    is_beginning_of_section = fields.Boolean(
-        required=True, data_key="isBeginningOfSection"
-    )
-    translation = fields.Nested(TranslationLineSchema, many=True, load_default=())
-
-    @post_load
-    def make_line(self, data: dict, **kwargs) -> Line:
-        return Line(
-            data["number"],
-            tuple(data["variants"]),
-            tuple(data["old_line_numbers"]),
-            data["is_second_line_of_parallelism"],
-            data["is_beginning_of_section"],
-            tuple(data["translation"]),
-        )
-
-
-class DictionaryLineSchema(Schema):
-    text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
-    text_name = fields.String(required=True, data_key="textName")
-    chapter_name = fields.String(
-        required=True, validate=validate.Length(min=1), data_key="chapterName"
-    )
-    stage = StageField(required=True)
-    line = fields.Nested(LineSchema, required=True)
-    manuscripts = fields.Nested(ManuscriptSchema, required=True, many=True)
-
-    @post_load
-    def make_dictionary_line(self, data: dict, **kwargs) -> DictionaryLine:
-        return DictionaryLine(
-            data["text_id"],
-            data["text_name"],
-            data["chapter_name"],
-            data["stage"],
-            data["line"],
-            tuple(data["manuscripts"]),
-        )
-
-
-class DictionaryLinePaginationSchema(Schema):
-    dictionary_lines = fields.Nested(
-        DictionaryLineSchema,
-        required=True,
-        many=True,
-        data_key="dictionaryLines",
-    )
-    total_count = fields.Integer(required=True, data_key="totalCount")
+__all__ = [
+    "ChapterListingSchema",
+    "ChapterSchema",
+    "ManuscriptAttestationSchema",
+    "TextSchema",
+    "UncertainFragmentAttestationSchema",
+    "UncertainFragmentSchema",
+    "DictionaryLinePaginationSchema",
+    "DictionaryLineSchema",
+    "LineSchema",
+    "LineVariantSchema",
+    "ManuscriptLineSchema",
+    "ManuscriptSchema",
+    "OldSiglumSchema",
+    "labels",
+    "manuscript_id",
+]
 
 
 class ChapterSchema(Schema):
@@ -296,7 +78,7 @@ class ChapterSchema(Schema):
     )
 
     @post_load
-    def make_chapter(self, data: dict, **kwargs) -> Chapter:
+    def make_chapter(self, data: dict[str, Any], **kwargs: object) -> Chapter:
         return Chapter(
             data["text_id"],
             Classification(data["classification"]),
@@ -322,7 +104,9 @@ class UncertainFragmentSchema(Schema):
     )
 
     @post_load
-    def make_uncertain_fragment(self, data: dict, **kwargs) -> UncertainFragment:
+    def make_uncertain_fragment(
+        self, data: dict[str, Any], **kwargs: object
+    ) -> UncertainFragment:
         return UncertainFragment(data["museum_number"])
 
 
@@ -338,7 +122,9 @@ class ChapterListingSchema(Schema):
     )
 
     @post_load
-    def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
+    def make_chapter_listing(
+        self, data: dict[str, Any], **kwargs: object
+    ) -> ChapterListing:
         return ChapterListing(
             data["stage"],
             data["name"],
@@ -363,7 +149,7 @@ class TextSchema(Schema):
     projects = fields.List(ResearchProjectField(), load_default=())
 
     @post_load
-    def make_text(self, data: dict, **kwargs) -> Text:
+    def make_text(self, data: dict[str, Any], **kwargs: object) -> Text:
         return Text(
             data["genre"],
             data["category"],
@@ -390,7 +176,7 @@ class ManuscriptAttestationSchema(Schema):
 
     @post_load
     def make_manuscript_attestation(
-        self, data: dict, **kwargs
+        self, data: dict[str, Any], **kwargs: object
     ) -> ManuscriptAttestation:
         return ManuscriptAttestation(
             data["text"],
@@ -405,6 +191,6 @@ class UncertainFragmentAttestationSchema(Schema):
 
     @post_load
     def make_uncertain_fragment_attestation(
-        self, data: dict, **kwargs
+        self, data: dict[str, Any], **kwargs: object
     ) -> UncertainFragmentAttestation:
         return UncertainFragmentAttestation(data["text"], data["chapter_id"])
