@@ -257,6 +257,9 @@ def test_scopes():
         "sketchfab_number",
         "spurlock_number",
         "yale_peabody_number",
+        "mdz_number",
+        "deutsches_museum_number",
+        "smaek_number",
     ],
 )
 def test_external_number(number):
@@ -296,6 +299,9 @@ def test_external_numbers():
         nabucco_number="2259",
         digitale_keilschrift_bibliothek_number="P_ID=279&Z_CHK=40422",
         yale_peabody_number="BC.001863",
+        mdz_number="bsb00012887",
+        deutsches_museum_number="60639",
+        smaek_number="relief-architektur-5274",
     )
     fragment = FragmentFactory.build(external_numbers=external_numbers)
     assert fragment.external_numbers == external_numbers
