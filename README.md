@@ -711,6 +711,12 @@ tokes are not lemmatized correctly, check the log-file
 
 ## Chapter display cache deployment and recovery
 
+Before activation, API maintainers and the database operator must confirm the
+production read preference, inventory all API replicas and batch workers, and
+approve a deployment window that permits the quiescent procedure below.
+Chapter caching requires primary reads; other read preferences bypass caching
+and emit a warning when the cache-state repository is initialized.
+
 Chapter display caching uses revisions shared by every API worker and the
 `update_texts` batch worker. Pending writes bypass caches for a five-minute lease
 measured by the MongoDB server clock from the first outstanding writer.
@@ -722,6 +728,8 @@ indexed chapter lookup before reusing a cached display. This fence remains safe
 when a live writer takes longer than its lease, resumes after a pause, or cannot
 finish its cache-state cleanup. A cache built before that write cannot be reused
 after the new content token is visible. Legacy chapters need no migration.
+Writer completion is scoped to the epoch captured when that writer started,
+so a late completion cannot alter writer state recreated after metadata loss.
 
 Old workers do not participate in this protocol. Mixed old/new workers are
 unsafe during deployment or rollback; this is separate from normal operation,
@@ -847,8 +855,9 @@ Repeated cleanup is harmless, and deleted handles cannot be revived.
 
 Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
-registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
+the migration audit must validate dimensions and structural integrity. New owned
+raster writes validate dimensions and decode every frame before any registry or
+GridFS write. A 40,000,000-pixel limit applies to the canvas and
 the total of decoded frame pixels, independently of Pillow's global settings.
 WebP canvas dimensions are checked from a bounded header before creating a
 native decoder.

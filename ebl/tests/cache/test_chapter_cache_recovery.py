@@ -43,7 +43,9 @@ def test_existing_state_gets_epoch_without_losing_pending_writers(
         {"_id": "chapter", "pending": 1, "revision": 7}
     )
     assert state.revision("chapter") is None
-    state.finish_update("chapter")
+    initialized = database["chapter_cache_state"].find_one({"_id": "chapter"})
+    assert initialized is not None
+    state.finish_update("chapter", initialized["epoch"])
     assert str(state.revision("chapter")).endswith(":8")
     stored = database["chapter_cache_state"].find_one({"_id": "chapter"})
     assert stored is not None
@@ -87,14 +89,14 @@ def test_ambiguous_start_failure_keeps_pending_and_never_starts_mutation(
 ) -> None:
     state = MongoChapterCacheState(database)
     cache = ChapterCache(MongoCacheRepository(database), state)
-    original_update = state._collection.update_one
+    original_update = state._collection.find_one_and_update
     chapter_id = ChapterFactory.build().id_
 
-    def uncertain_update(filter_: dict, update: dict, upsert: bool = False) -> None:
-        original_update(filter_, update, upsert=upsert)
+    def uncertain_update(filter_: dict, update: list[dict], **options: object) -> None:
+        original_update(filter_, update, upsert=True)
         raise AutoReconnect("result lost after server accepted write")
 
-    with patch.object(state._collection, "update_one", uncertain_update):
+    with patch.object(state._collection, "find_one_and_update", uncertain_update):
         with pytest.raises(AutoReconnect):
             with cache.updating_chapter(chapter_id):
                 pytest.fail("mutation must not start after an ambiguous marker failure")
@@ -108,8 +110,8 @@ def test_quiescent_cleanup_preserves_unrelated_entries_and_recovers_only_on_requ
     state = MongoChapterCacheState(database)
     repository = MongoCacheRepository(database)
     state.start_update("abandoned")
-    state.start_update("finished")
-    state.finish_update("finished")
+    finished_epoch = state.start_update("finished")
+    state.finish_update("finished", finished_epoch)
     original_states = list(database["chapter_cache_state"].find({}).sort("_id"))
     repository.set(f"{CHAPTER_CACHE_KEY_PREFIX}abandoned", {"value": "stale"})
     repository.set("unrelated", {"value": "kept"})

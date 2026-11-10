@@ -25,26 +25,26 @@ def test_abandoned_writer_lease_recovers_without_counter_repair(
 ) -> None:
     state = MongoChapterCacheState(database)
     before = state.revision("chapter")
-    state.start_update("chapter")
+    epoch = state.start_update("chapter")
     assert state.revision("chapter") is None
     expire_writer(database, "chapter")
     recovered = state.revision("chapter")
     assert recovered is not None
     assert recovered != before
-    state.start_update("chapter")
+    epoch = state.start_update("chapter")
     assert state.revision("chapter") is not None
-    state.finish_update("chapter")
+    state.finish_update("chapter", epoch)
     assert state.revision("chapter") is not None
 
 
 def test_completed_writers_cannot_extend_an_abandoned_lease(database: Database) -> None:
     state = MongoChapterCacheState(database)
-    state.start_update("chapter")
+    epoch = state.start_update("chapter")
     abandoned = database["chapter_cache_state"].find_one({"_id": "chapter"})
     assert abandoned is not None
     for _ in range(3):
-        state.start_update("chapter")
-        state.finish_update("chapter")
+        epoch = state.start_update("chapter")
+        state.finish_update("chapter", epoch)
         stored = database["chapter_cache_state"].find_one({"_id": "chapter"})
         assert stored is not None
         assert stored["pendingUntil"] == abandoned["pendingUntil"]
@@ -52,32 +52,30 @@ def test_completed_writers_cannot_extend_an_abandoned_lease(database: Database) 
     expire_writer(database, "chapter")
     assert state.revision("chapter") is not None
     for _ in range(3):
-        state.start_update("chapter")
-        state.finish_update("chapter")
+        epoch = state.start_update("chapter")
+        state.finish_update("chapter", epoch)
         assert state.revision("chapter") is not None
 
 
 def test_late_finish_advances_revision_after_lease_expiry(database: Database) -> None:
     state = MongoChapterCacheState(database)
-    state.start_update("chapter")
+    epoch = state.start_update("chapter")
     expire_writer(database, "chapter")
     expired = state.revision("chapter")
-    state.finish_update("chapter")
+    state.finish_update("chapter", epoch)
     assert state.revision("chapter") != expired
     assert str(state.revision("chapter")).endswith(":2")
 
 
 def test_ambiguous_start_failure_recovers_after_expiry(database: Database) -> None:
     state = MongoChapterCacheState(database)
-    original = state._collection.update_one
+    original = state._collection.find_one_and_update
 
-    def uncertain_start(
-        filter_: dict, update: list[dict], upsert: bool = False
-    ) -> None:
-        original(filter_, update, upsert=upsert)
+    def uncertain_start(filter_: dict, update: list[dict], **options: object) -> None:
+        original(filter_, update, upsert=True)
         raise AutoReconnect("marker acknowledgement lost")
 
-    with patch.object(state._collection, "update_one", uncertain_start):
+    with patch.object(state._collection, "find_one_and_update", uncertain_start):
         with pytest.raises(AutoReconnect):
             state.start_update("chapter")
     assert state.revision("chapter") is None
@@ -99,12 +97,12 @@ def test_delayed_writer_commit_fences_cache_even_when_finish_fails(
             "parserVersion": text_repository.find_chapter(chapter.id_).parser_version
         }
 
-    state.start_update(key)
+    epoch = state.start_update(key)
     expire_writer(database, key)
     assert cache.get_or_create(chapter.id_, key, read) == {"parserVersion": "old"}
     text_repository.update(chapter.id_, attr.evolve(chapter, parser_version="new"))
     with patch.object(state._collection, "update_one", side_effect=AutoReconnect):
-        state.finish_update(key)
+        state.finish_update(key, epoch)
     assert cache.get_or_create(chapter.id_, key, read) == {"parserVersion": "new"}
 
     def unexpected_read() -> dict:

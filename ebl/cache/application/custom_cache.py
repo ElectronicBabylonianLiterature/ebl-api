@@ -44,12 +44,12 @@ class ChapterCache(CustomCache):
     @contextmanager
     def updating_chapter(self, chapter_id: ChapterId) -> Iterator[None]:
         chapter_key = str(chapter_id)
-        self._chapter_state.start_update(chapter_key)
+        epoch = self._chapter_state.start_update(chapter_key)
         try:
             self.delete_chapter(chapter_id)
             yield
         finally:
-            self._chapter_state.finish_update(chapter_key)
+            self._chapter_state.finish_update(chapter_key, epoch)
 
     def get_or_create(
         self, chapter_id: ChapterId, key: str, create: Callable[[], dict]

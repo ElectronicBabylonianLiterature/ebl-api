@@ -3,7 +3,7 @@ from time import monotonic
 from typing import Optional
 
 from bson import ObjectId
-from pymongo import ReadPreference
+from pymongo import ReadPreference, ReturnDocument
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import PyMongoError
@@ -109,8 +109,8 @@ class MongoChapterCacheState:
             else "missing"
         )
 
-    def start_update(self, chapter_key: str) -> None:
-        self._collection.update_one(
+    def start_update(self, chapter_key: str) -> str:
+        state = self._collection.find_one_and_update(
             {"_id": chapter_key},
             [
                 {
@@ -134,12 +134,18 @@ class MongoChapterCacheState:
                 }
             ],
             upsert=True,
+            return_document=ReturnDocument.AFTER,
+            projection={"epoch": 1},
         )
+        if state is None:
+            raise PyMongoError("Chapter cache writer marker was not acknowledged.")
+        return str(state["epoch"])
 
-    def finish_update(self, chapter_key: str) -> None:
+    def finish_update(self, chapter_key: str, epoch: str) -> None:
         try:
             self._collection.update_one(
-                {"_id": chapter_key}, {"$inc": {"pending": -1, "revision": 1}}
+                {"_id": chapter_key, "epoch": epoch, "pending": {"$gt": 0}},
+                {"$inc": {"pending": -1, "revision": 1}},
             )
         except PyMongoError:
             self._warn(

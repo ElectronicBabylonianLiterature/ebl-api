@@ -135,14 +135,15 @@ def test_concurrent_workers_share_atomic_pending_state(database: Database) -> No
     workers = [MongoChapterCacheState(database) for _ in range(8)]
     chapter_key = str(ChapterFactory.build().id_)
 
-    def start(worker: MongoChapterCacheState) -> None:
-        worker.start_update(chapter_key)
+    def start(worker: MongoChapterCacheState) -> str:
+        return worker.start_update(chapter_key)
 
     def finish(worker: MongoChapterCacheState) -> None:
-        worker.finish_update(chapter_key)
+        worker.finish_update(chapter_key, epochs[0])
 
     with ThreadPoolExecutor(max_workers=8) as executor:
-        list(executor.map(start, workers))
+        epochs = list(executor.map(start, workers))
+        assert len(set(epochs)) == 1
         assert workers[0].revision(chapter_key) is None
         list(executor.map(finish, workers))
     assert str(workers[0].revision(chapter_key)).endswith(":16")
