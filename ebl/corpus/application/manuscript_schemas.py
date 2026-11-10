@@ -24,8 +24,6 @@ from ebl.transliteration.domain.text import Text as Transliteration
 
 
 class OldSiglumSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     siglum = fields.String(required=True)
     reference = fields.Nested(ReferenceSchema, required=True)
 
@@ -35,8 +33,6 @@ class OldSiglumSchema(Schema):
 
 
 class ManuscriptSchema(Schema):
-    __module__ = "ebl.corpus.application.schemas"
-
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
     old_sigla = fields.Nested(
