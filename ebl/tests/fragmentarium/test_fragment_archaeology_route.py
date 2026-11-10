@@ -159,6 +159,10 @@ def test_fragment_get_surfaces_findspot_map_location(
         "source": "Assur Tafeln.ods",
         "sourceRevision": "2026-07-27",
     }
+    assert (
+        cast(dict, post_result.json)["archaeology"]
+        == cast(dict, get_result.json)["archaeology"]
+    )
 
 
 def test_invalid_excavation_number_update(
