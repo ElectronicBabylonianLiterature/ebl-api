@@ -1,15 +1,5 @@
 # Electronic Babylonian Library API
 
-Findspot responses may include a read-only `mapLocation` object. API clients
-must omit `findspot.mapLocation` when submitting archaeology updates with
-`POST /fragments/{number}/archaeology`; supplying it returns HTTP 422 without
-writing an update. Curated map locations belong to the canonical findspot
-read model.
-
-Before enabling clients that send `findspotId` or `findspotIds`, update every
-serving backend replica to support these filters. Older replicas ignore them,
-so a mixed-version rollout cannot guarantee findspot-restricted results.
-
 ![Build Status](https://github.com/ElectronicBabylonianLiterature/ebl-api/workflows/CI/badge.svg?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/maintainability)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/maintainability)
@@ -433,6 +423,24 @@ def on_post(self, req, resp):
 ```
 
 ## Running the application
+
+### API deployment
+
+Findspot responses may include a read-only `mapLocation` object. API clients
+must omit `findspot.mapLocation` when submitting archaeology updates with
+`POST /fragments/{number}/archaeology`; supplying it returns HTTP 422 without
+writing an update. Curated map locations belong to the canonical findspot
+read model.
+
+Before enabling clients that send `findspotId` or `findspotIds`, update every
+serving backend replica to support these filters. Older replicas ignore them,
+so a mixed-version rollout cannot guarantee findspot-restricted results.
+
+The database operator must prebuild the `fragments` index
+`{archaeology.findspotId: 1}` before deploying, or approve a startup build window.
+Otherwise, application startup builds the index and waits for it to finish.
+
+### Configuration
 
 The application reads the configuration from following environment variables:
 
