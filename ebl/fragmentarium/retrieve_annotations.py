@@ -35,6 +35,7 @@ __all__ = [
     "create_directory",
     "filter_annotation",
     "filter_empty_annotation",
+    "legacy_photo_visibility",
     "main",
     "parse_annotations",
     "prepare_annotations",
