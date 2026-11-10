@@ -1,17 +1,19 @@
 import pytest
-from Cryptodome.PublicKey import RSA
 from pymongo.database import Database
 from sentry_sdk import isolation_scope
 
 import ebl.app
-from ebl.tests.test_app_bootstrap import configure_environment
+from ebl.tests import test_app_bootstrap
 
 
+bootstrap_environment = test_app_bootstrap.bootstrap_environment
+
+
+@pytest.mark.usefixtures("bootstrap_environment")
 @pytest.mark.parametrize("enabled", ["true", "TRUE"])
 def test_environment_enables_media_without_creating_media_collections(
     database: Database, monkeypatch: pytest.MonkeyPatch, enabled: str
 ) -> None:
-    configure_environment(monkeypatch, RSA.generate(2048).public_key().export_key())
     monkeypatch.setenv("MONGODB_DB", database.name)
     monkeypatch.setenv("MEDIA_API_ENABLED", enabled)
     monkeypatch.setattr(ebl.app, "MongoClient", lambda _: database.client)
@@ -22,11 +24,11 @@ def test_environment_enables_media_without_creating_media_collections(
     )
 
 
+@pytest.mark.usefixtures("bootstrap_environment")
 @pytest.mark.parametrize("enabled", ["false", "", "invalid"])
 def test_environment_keeps_media_disabled(
     database: Database, monkeypatch: pytest.MonkeyPatch, enabled: str
 ) -> None:
-    configure_environment(monkeypatch, RSA.generate(2048).public_key().export_key())
     monkeypatch.setenv("MONGODB_DB", database.name)
     monkeypatch.setenv("MEDIA_API_ENABLED", enabled)
     monkeypatch.setattr(ebl.app, "MongoClient", lambda _: database.client)
