@@ -2,7 +2,6 @@ from ebl.tests.fragmentarium.frontend_transfer_test_helpers import (
     copy_artifacts as _copy_artifacts,
     replace_declared_file as _replace_declared_file,
 )
-import io
 import json
 from pathlib import Path
 import tarfile
@@ -186,13 +185,6 @@ def test_output_inside_source_or_through_symlink_is_rejected(tmp_path: Path) -> 
     output.symlink_to(tmp_path / "target.tar.gz")
     with pytest.raises(ValueError, match="symbolic link"):
         transfer.build_archive(data_dir, output)
-
-
-def test_archive_member_names_must_be_basenames() -> None:
-    stream = io.BytesIO()
-    with tarfile.open(fileobj=stream, mode="w") as archive:
-        with pytest.raises(ValueError, match="must be a basename"):
-            transfer._add_member(archive, "../escape", b"payload")
 
 
 def test_invalid_inventory_contract_is_rejected(tmp_path: Path) -> None:

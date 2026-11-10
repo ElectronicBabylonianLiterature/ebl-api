@@ -29,7 +29,7 @@ so a mixed-version rollout cannot guarantee findspot-restricted results.
 Run the offline generators as modules from the repository root:
 
 ```sh
-poetry run python -m ebl.fragmentarium.application.map_artifact_cli \
+poetry run python -m scripts.maps.generate_findspot_map_artifacts \
   --site ASSUR --source-revision <revision>
 poetry run python -m scripts.maps.build_frontend_transfer_archive \
   --output /tmp/map-artifacts.tar.gz
