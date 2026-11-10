@@ -40,9 +40,9 @@ __all__ = [
     "parse_annotations",
     "prepare_annotations",
     "sign_to_sign_ground_truth",
+    "without_removed_legacy_photos",
     "write_annotations",
     "write_fragment_numbers",
-    "without_removed_legacy_photos",
 ]
 
 
