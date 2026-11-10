@@ -13,16 +13,24 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 class MediaService(ABC):
+    def suppressed_legacy_fragments(
+        self, fragment_ids: Sequence[MuseumNumber]
+    ) -> frozenset[MuseumNumber]:
+        return frozenset()
+
+    def legacy_fallback_allowed(self, fragment_id: MuseumNumber) -> bool:
+        return fragment_id not in self.suppressed_legacy_fragments((fragment_id,))
+
     @abstractmethod
     def list_fragment_media(self, fragment_id: MuseumNumber) -> Sequence[Media]:
-        """Fragment's media in canonical order."""
+        """Published fragment media in canonical order (legacy imports are published)."""
         raise NotImplementedError
 
     @abstractmethod
     def find_media_by_fragments(
         self, fragment_ids: Sequence[MuseumNumber]
     ) -> Mapping[MuseumNumber, Sequence[Media]]:
-        """One batch read keyed by every requested fragment."""
+        """One published-only batch read keyed by every requested fragment."""
         raise NotImplementedError
 
     @abstractmethod

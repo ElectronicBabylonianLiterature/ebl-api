@@ -67,6 +67,7 @@ from ebl.provenance.infrastructure.mongo_provenance_repository import (
 )
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.media.web.bootstrap import create_media_runtime
+from ebl.media.infrastructure.mongo_media_reader import MongoMediaReader
 
 althaia.patch()
 
@@ -128,6 +129,7 @@ def create_context():
             if os.environ.get("MEDIA_API_ENABLED", "false").lower() == "true"
             else None
         ),
+        legacy_media_visibility=MongoMediaReader(database),
     )
 
 

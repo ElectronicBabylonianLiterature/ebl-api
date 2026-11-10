@@ -7,6 +7,7 @@ import attr
 from ebl.common.domain.project import ResearchProject
 from ebl.media.domain.mime import is_supported_raster_mime_type, is_svg_mime_type
 from ebl.media.domain.representations import MediaRepresentations
+from ebl.media.domain.publication import MediaSubmission, MediaRights
 from ebl.media.domain.validation import (
     instance_of,
     items_instance_of,
@@ -185,8 +186,21 @@ class Media:
     import_source: Optional[MediaImportSource] = attr.ib(
         default=None, validator=optional_instance_of(MediaImportSource)
     )
+    submission: Optional[MediaSubmission] = attr.ib(
+        default=None, kw_only=True, validator=optional_instance_of(MediaSubmission)
+    )
+    rights: Optional[MediaRights] = attr.ib(
+        default=None, kw_only=True, validator=optional_instance_of(MediaRights)
+    )
+    # Optimistic-concurrency token: incremented by every management mutation.
+    # Stored records written before it existed read as 0.
+    revision: int = attr.ib(default=0, kw_only=True, validator=non_negative_int)
 
     def __attrs_post_init__(self) -> None:
+        if self.submission is not None and self.rights is not None:
+            raise ValueError(
+                "Upload rights and legacy rights annotations cannot coexist."
+            )
         object.__setattr__(
             self,
             "associations",

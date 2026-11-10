@@ -52,6 +52,9 @@ def test_regenerate_images(when):
 
     annotations_service = mock()
     when(module).get_database().thenReturn(database)
+    visibility = mock()
+    when(visibility).suppressed_legacy_fragments(...).thenReturn(frozenset())
+    when(module).legacy_photo_visibility(database).thenReturn(visibility)
     when(module).create_annotations_service(context).thenReturn(annotations_service)
 
     module.regenerate_images(context)

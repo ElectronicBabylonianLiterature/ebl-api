@@ -15,6 +15,7 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationValueType,
 )
 from ebl.fragmentarium.domain.date import DateSchema
+from ebl.media.application.media_visibility import LegacyMediaVisibility
 
 
 class CroppedAnnotationService:
@@ -23,7 +24,9 @@ class CroppedAnnotationService:
         annotations_repository: AnnotationsRepository,
         cropped_sign_images_repository: CroppedSignImagesRepository,
         fragment_repository: FragmentRepository,
+        media: Optional[LegacyMediaVisibility] = None,
     ):
+        self._media = media
         self._annotations_repository = annotations_repository
         self._fragment_repository = fragment_repository
         self._cropped_sign_image_repository = cropped_sign_images_repository
@@ -43,9 +46,12 @@ class CroppedAnnotationService:
     ) -> dict:
         fragment_number = str(annotations.fragment_number)
         if fragment_number not in date_cache:
-            date_cache[fragment_number] = DateSchema().dump(
+            date = DateSchema().dump(
                 self._fragment_repository.fetch_date(annotations.fragment_number)
             )
+            if not isinstance(date, dict):
+                raise TypeError("A fragment date must serialize to an object.")
+            date_cache[fragment_number] = date
         return date_cache[fragment_number]
 
     def _find_cropped_sign_image(
@@ -96,6 +102,16 @@ class CroppedAnnotationService:
         annotations = self._annotations_repository.find_by_sign(
             sign, centroids_only, include_unclustered, cluster_id, script_filter
         )
+        if self._media is not None:
+            # Derivatives of a removed legacy original are not publicly served.
+            suppressed = self._media.suppressed_legacy_fragments(
+                [group.fragment_number for group in annotations]
+            )
+            annotations = [
+                group
+                for group in annotations
+                if group.fragment_number not in suppressed
+            ]
         cropped_image_annotations: List[dict] = []
         date_cache: Dict[str, dict] = {}
         image_cache: Dict[str, CroppedSignImage] = {}

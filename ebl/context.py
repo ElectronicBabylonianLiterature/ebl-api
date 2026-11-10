@@ -35,6 +35,7 @@ from ebl.provenance.application.provenance_repository import ProvenanceRepositor
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.media.application.media_runtime import MediaRuntime
+from ebl.media.application.media_visibility import LegacyMediaVisibility
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -64,6 +65,12 @@ class Context:
     provenance_service: ProvenanceService
     realia_repository: RealiaRepository
     media: Optional[MediaRuntime] = None
+    legacy_media_visibility: Optional[LegacyMediaVisibility] = None
+
+    def get_legacy_media_visibility(self) -> Optional[LegacyMediaVisibility]:
+        if self.legacy_media_visibility is not None:
+            return self.legacy_media_visibility
+        return self.media.service if self.media is not None else None
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

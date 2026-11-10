@@ -7,6 +7,15 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 class MediaReader(ABC):
+    def legacy_fallback_allowed(self, fragment_id: MuseumNumber) -> bool:
+        return fragment_id not in self.suppressed_legacy_fragments((fragment_id,))
+
+    def suppressed_legacy_fragments(
+        self, fragment_ids: Sequence[MuseumNumber]
+    ) -> frozenset[MuseumNumber]:
+        """Fragments whose removed legacy originals must not reappear as fallback."""
+        return frozenset()
+
     @abstractmethod
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
         """Return the current domain state, or None when no such media exists."""

@@ -26,6 +26,11 @@ class _Recorder:
         self.filters.append(list(to_filter))
 
 
+class _NoRemovedPhotos:
+    def suppressed_legacy_fragments(self, _numbers):
+        return frozenset()
+
+
 @pytest.fixture
 def cli(monkeypatch, tmp_path):
     recorder = _Recorder()
@@ -46,6 +51,11 @@ def cli(monkeypatch, tmp_path):
 
     monkeypatch.setattr(app, "create_context", lambda: _Context())
     monkeypatch.setattr(retrieve_annotations, "create_context", lambda: _Context())
+    monkeypatch.setattr(
+        retrieve_annotations,
+        "legacy_photo_visibility",
+        lambda _database=None: _NoRemovedPhotos(),
+    )
     for module in (retrieve_annotations, retrieve_annotations_helpers):
         monkeypatch.setattr(
             module, "create_annotations", recorder.create_annotations, raising=False

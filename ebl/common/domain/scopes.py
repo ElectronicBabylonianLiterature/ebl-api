@@ -49,6 +49,8 @@ class ScopeItem(Enum):
 
 
 class Scope(ScopeItem):
+    UPLOAD_FRAGMENT_MEDIA = ("upload:fragment_media", RESTRICTED)
+    MANAGE_FRAGMENT_MEDIA = ("manage:fragment_media", RESTRICTED)
     READ_CAIC_FRAGMENTS = ("read:CAIC-fragments", RESTRICTED)
     READ_ITALIANNINEVEH_FRAGMENTS = ("read:ITALIANNINEVEH-fragments", RESTRICTED)
     READ_SIPPARLIBRARY_FRAGMENTS = ("read:SIPPARLIBRARY-fragments", RESTRICTED)

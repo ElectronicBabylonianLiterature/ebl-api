@@ -26,6 +26,7 @@ def create_signs_routes(api: falcon.App, context: Context):
         context.annotations_repository,
         context.cropped_sign_images_repository,
         context.fragment_repository,
+        context.get_legacy_media_visibility(),
     )
 
     signs_images = CroppedAnnotationsResource(cropped_service)

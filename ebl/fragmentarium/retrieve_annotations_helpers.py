@@ -4,7 +4,7 @@ from io import BytesIO
 from itertools import zip_longest
 from os.path import join
 from pathlib import Path
-from typing import Sequence, Union, Tuple
+from typing import List, Sequence, Union, Tuple
 
 from PIL import Image
 
@@ -16,6 +16,7 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationValueType,
     AnnotationData,
 )
+from ebl.media.application.media_repository import MediaReader
 
 
 MINIMUM_BOUNDING_BOX_SIZE = 0.3
@@ -127,6 +128,26 @@ def prepare_annotations(
     return bounding_boxes, signs
 
 
+def without_removed_legacy_photos(
+    annotation_collection: Sequence[Annotations], visibility: MediaReader
+) -> List[Annotations]:
+    """Drop fragments whose legacy photo a manager removed.
+
+    Removal keeps the bytes in the `photos` bucket and only records suppression,
+    so exports reading that bucket must honour it themselves.
+    """
+    suppressed = visibility.suppressed_legacy_fragments(
+        [annotations.fragment_number for annotations in annotation_collection]
+    )
+    for number in sorted(str(number) for number in suppressed):
+        print(f"Skipping {number}: legacy photo was removed")
+    return [
+        annotations
+        for annotations in annotation_collection
+        if annotations.fragment_number not in suppressed
+    ]
+
+
 def create_annotations(
     annotation_collection: Sequence[Annotations],
     output_folder_annotations: str,
@@ -134,6 +155,8 @@ def create_annotations(
     photo_repository: FileRepository,
     to_filter: Sequence[AnnotationValueType] = (),
 ) -> None:
+    """Export each annotation's legacy photo; callers drop removed photos first
+    with `without_removed_legacy_photos`."""
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
 

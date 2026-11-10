@@ -80,6 +80,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository,
         context.photo_repository,
         context.cropped_sign_images_repository,
+        context.get_legacy_media_visibility(),
     )
     corpus = Corpus(
         CorpusDependencies(
@@ -92,7 +93,10 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         )
     )
     statistics = make_statistics_resource(context.cache, fragmentarium)
-    media = FragmentMediaEnricher(context.media.service if context.media else None)
+    media = FragmentMediaEnricher(
+        context.media.service if context.media else None,
+        context.get_legacy_media_visibility(),
+    )
     dto_factory = FragmentDtoFactory(context.realia_repository, media)
     fragments = FragmentsResource(finder, dto_factory)
 
@@ -147,7 +151,11 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
-    photo = PhotoResource(finder)
+    photo = PhotoResource(
+        finder,
+        context.media.service if context.media else None,
+        context.get_legacy_media_visibility(),
+    )
     folios = FoliosResource(finder)
     chapters = ChaptersByFragmentResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)

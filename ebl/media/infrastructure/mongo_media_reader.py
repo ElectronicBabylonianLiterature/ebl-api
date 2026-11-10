@@ -12,6 +12,7 @@ from ebl.media.application.media_selection import (
 )
 from ebl.media.application.media_stored import StoredMedia
 from ebl.media.domain import Media, MediaId, MediaImportSource
+from ebl.media.domain.publication import is_published
 from ebl.media.infrastructure.media_documents import load_stored, source_key
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -26,6 +27,21 @@ class MongoMediaReader(MediaReader):
     def _find(self, query: dict) -> Optional[StoredMedia]:
         document = self._collection.find_one({**query, "state": "active"})
         return load_stored(document) if document is not None else None
+
+    def suppressed_legacy_fragments(
+        self, fragment_ids: Sequence[MuseumNumber]
+    ) -> frozenset[MuseumNumber]:
+        if not fragment_ids:
+            return frozenset()
+        return frozenset(
+            MuseumNumber.of(document["_id"])
+            for document in self._database["mediaLegacyVisibility"].find(
+                {
+                    "_id": {"$in": [str(number) for number in fragment_ids]},
+                    "suppressed": True,
+                }
+            )
+        )
 
     def find_by_id(self, media_id: MediaId) -> Optional[Media]:
         stored = self.find_stored_by_id(media_id)
@@ -83,7 +99,21 @@ class MongoMediaReader(MediaReader):
         )
 
     def find_primary_media(self, fragment_id: MuseumNumber) -> Optional[Media]:
-        return primary_media_for(fragment_id, self.find_by_fragment(fragment_id))
+        return primary_media_for(
+            fragment_id,
+            tuple(
+                media
+                for media in self.find_by_fragment(fragment_id)
+                if is_published(media)
+            ),
+        )
 
     def find_primary_photo(self, fragment_id: MuseumNumber) -> Optional[Media]:
-        return primary_photo_for(fragment_id, self.find_by_fragment(fragment_id))
+        return primary_photo_for(
+            fragment_id,
+            tuple(
+                media
+                for media in self.find_by_fragment(fragment_id)
+                if is_published(media)
+            ),
+        )

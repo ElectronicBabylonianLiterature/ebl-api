@@ -24,6 +24,10 @@ class Auth0User(User):
         self._profile_factory = pydash.once(profile_factory)
 
     @property
+    def subject(self):
+        return self._access_token.get("sub")
+
+    @property
     def profile(self):
         return copy.deepcopy(self._profile_factory())
 
