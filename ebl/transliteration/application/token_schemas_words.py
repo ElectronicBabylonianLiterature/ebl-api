@@ -3,9 +3,13 @@ from typing import Callable, Dict, Sequence
 import pydash
 from marshmallow import fields, post_dump, post_load, validate
 
-from ebl.schemas import NameEnumField, ValueEnumField
+from ebl.schemas import NameEnumField
+from ebl.transliteration.application.storage_serialization import (
+    omitted_from_storage,
+    omitted_when_default,
+)
+from ebl.transliteration.application.token_fields import flag_list_field
 from ebl.transliteration.application.token_schemas_enclosures import BaseTokenSchema
-from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.normalized_akkadian import (
@@ -49,16 +53,27 @@ class BaseWordSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested("OneOfTokenSchema"), required=True)
     language = NameEnumField(Language, required=True)
     normalized = fields.Boolean(required=True)
-    lemmatizable = fields.Boolean()
-    alignable = fields.Boolean()
+    lemmatizable = fields.Boolean(metadata=omitted_from_storage())
+    alignable = fields.Boolean(metadata=omitted_from_storage())
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
-    alignment = fields.Integer(allow_none=True, load_default=None)
-    variant = fields.Nested("OneOfWordSchema", allow_none=True, load_default=None)
+    alignment = fields.Integer(
+        allow_none=True, load_default=None, metadata=omitted_when_default()
+    )
+    variant = fields.Nested(
+        "OneOfWordSchema",
+        allow_none=True,
+        load_default=None,
+        metadata=omitted_when_default(),
+    )
     has_variant_alignment = fields.Boolean(
-        load_default=False, data_key="hasVariantAlignment"
+        load_default=False,
+        data_key="hasVariantAlignment",
+        metadata=omitted_when_default(),
     )
     has_omitted_alignment = fields.Boolean(
-        load_default=False, data_key="hasOmittedAlignment"
+        load_default=False,
+        data_key="hasOmittedAlignment",
+        metadata=omitted_when_default(),
     )
     id_ = fields.String(data_key="id", allow_none=True)
     named_entities = fields.List(
@@ -66,12 +81,14 @@ class BaseWordSchema(BaseTokenSchema):
         data_key="namedEntities",
         dump_default=(),
         load_default=(),
+        metadata=omitted_when_default(),
     )
     realia = fields.List(
         fields.String(),
         data_key="realia",
         dump_default=(),
         load_default=(),
+        metadata=omitted_when_default(),
     )
 
 
@@ -106,7 +123,7 @@ class LoneDeterminativeSchema(AbstractWordSchema):
 
 
 class AkkadianWordSchema(BaseWordSchema):
-    modifiers = fields.List(ValueEnumField(Flag), load_default=list)
+    modifiers = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -144,7 +161,7 @@ class MetricalFootSeparatorSchema(BreakSchema):
 
 class GreekLetterSchema(BaseTokenSchema):
     letter = fields.String(required=True, validate=validate.Length(1, 1))
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    flags = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):

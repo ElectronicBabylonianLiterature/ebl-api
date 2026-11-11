@@ -3,17 +3,19 @@ from typing import Any, Dict, Sequence
 
 from marshmallow import fields, post_dump, post_load, pre_load, validate
 
-from ebl.schemas import ValueEnumField
 from ebl.transliteration.application.storage_serialization import (
-    OMIT_FROM_STORAGE_WHEN_DEFAULT,
     omit_stored_defaults,
+    omitted_when_default,
+)
+from ebl.transliteration.application.token_fields import (
+    flag_list_field,
+    modifier_list_field,
 )
 from ebl.transliteration.application.token_schemas_enclosures import (
     BaseTokenSchema,
     BrokenAwaySchema,
     ValueTokenSchema,
 )
-from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import (
     Determinative,
     Gloss,
@@ -78,12 +80,17 @@ class NamedSignSchema(BaseTokenSchema):
         fields.Nested(NameBreakSchema),
         load_default=list,
         data_key="nameBreaks",
-        metadata={OMIT_FROM_STORAGE_WHEN_DEFAULT: True},
+        metadata=omitted_when_default(),
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
-    modifiers = fields.List(fields.String(), load_default=list)
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
-    sign = fields.Nested("OneOfTokenSchema", allow_none=True, load_default=None)
+    modifiers = modifier_list_field()
+    flags = flag_list_field()
+    sign = fields.Nested(
+        "OneOfTokenSchema",
+        allow_none=True,
+        load_default=None,
+        metadata=omitted_when_default(),
+    )
 
     @post_dump
     def omit_defaults_from_storage(self, data, **kwargs):
@@ -118,7 +125,11 @@ class ReadingSchema(NamedSignSchema):
 
 
 class LogogramSchema(NamedSignSchema):
-    surrogate = fields.List(fields.Nested("OneOfTokenSchema"), load_default=())
+    surrogate = fields.List(
+        fields.Nested("OneOfTokenSchema"),
+        load_default=(),
+        metadata=omitted_when_default(),
+    )
 
     @post_load
     def make_token(self, data: Dict[str, Any], **kwargs) -> Logogram:
@@ -156,8 +167,8 @@ class VariantSchema(BaseTokenSchema):
 
 class GraphemeSchema(BaseTokenSchema):
     name = fields.String(required=True)
-    modifiers = fields.List(fields.String(), load_default=list)
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    modifiers = modifier_list_field()
+    flags = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):

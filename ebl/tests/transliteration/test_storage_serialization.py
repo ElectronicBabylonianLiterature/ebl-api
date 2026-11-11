@@ -2,10 +2,13 @@ import pytest
 from marshmallow import Schema, fields
 
 from ebl.transliteration.application.storage_serialization import (
+    OMIT_FROM_STORAGE,
     OMIT_FROM_STORAGE_WHEN_DEFAULT,
     is_omitted_from_storage,
     is_storage_serialization,
     omit_stored_defaults,
+    omitted_from_storage,
+    omitted_when_default,
     storage_serialization,
     stored_default,
 )
@@ -88,3 +91,28 @@ def test_omit_stored_defaults_keeps_marked_values_that_differ():
 
     with storage_serialization():
         assert omit_stored_defaults(ExampleSchema(), data) == data
+
+
+class DerivedSchema(Schema):
+    derived = fields.Boolean(metadata=omitted_from_storage())
+    kept = fields.Boolean()
+
+
+def test_the_metadata_helpers_mark_the_field():
+    assert omitted_when_default() == OMIT
+    assert omitted_from_storage() == {OMIT_FROM_STORAGE: True}
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_a_field_omitted_from_storage_is_omitted_whatever_its_value(value):
+    field = DerivedSchema().fields["derived"]
+
+    assert is_omitted_from_storage(field, value) is True
+
+
+def test_omit_stored_defaults_always_drops_fields_omitted_from_storage():
+    data = {"derived": True, "kept": True}
+
+    with storage_serialization():
+        assert omit_stored_defaults(DerivedSchema(), data) == {"kept": True}
+    assert omit_stored_defaults(DerivedSchema(), data) == data
