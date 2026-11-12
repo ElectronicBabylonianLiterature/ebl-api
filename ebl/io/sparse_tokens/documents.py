@@ -1,0 +1,127 @@
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, FrozenSet, Mapping, Optional, Sequence, cast
+
+from ebl.corpus.application.schemas import ChapterSchema
+from ebl.io.sparse_tokens.token_keys import dropped_keys, needs_sparse_rewrite
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.transliteration.application.storage_serialization import (
+    storage_serialization,
+)
+from ebl.transliteration.application.text_schema import TextSchema
+
+STORED_SIZE = "__storedSize"
+
+
+@dataclass(frozen=True)
+class TokenFields:
+    collection: str
+    fields: Sequence[str]
+    load: Callable[[Mapping[str, Any]], object]
+    dump: Callable[[object], Dict[str, Any]]
+    whole_document: bool
+    fields_may_be_missing: bool
+
+
+class MissingFields(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class Rewrite:
+    fields: Dict[str, Any]
+    lossless: bool
+    dropped_keys: FrozenSet[str]
+
+
+def load_fragment_text(document: Mapping[str, Any]) -> object:
+    return TextSchema().load(document["text"])
+
+
+def dump_fragment_text(text: object) -> Dict[str, Any]:
+    return {"text": TextSchema().dump(text)}
+
+
+def dump_chapter_lines(chapter: object) -> Dict[str, Any]:
+    return cast(
+        Dict[str, Any], ChapterSchema(only=["lines", "manuscripts"]).dump(chapter)
+    )
+
+
+def fragment_token_fields() -> TokenFields:
+    return TokenFields(
+        collection="fragments",
+        fields=("text",),
+        load=load_fragment_text,
+        dump=dump_fragment_text,
+        whole_document=False,
+        fields_may_be_missing=True,
+    )
+
+
+def chapter_token_fields(provenance_service: ProvenanceService) -> TokenFields:
+    def load(document: Mapping[str, Any]) -> object:
+        return ChapterSchema(context={"provenance_service": provenance_service}).load(
+            document
+        )
+
+    return TokenFields(
+        collection="chapters",
+        fields=("lines", "manuscripts"),
+        load=load,
+        dump=dump_chapter_lines,
+        whole_document=True,
+        fields_may_be_missing=False,
+    )
+
+
+def canonical(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: sorted(item)
+            if key == "enclosureType" and isinstance(item, list)
+            else canonical(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [canonical(item) for item in value]
+    return value
+
+
+def stored_fields(
+    token_fields: TokenFields, document: Mapping[str, Any]
+) -> Dict[str, Any]:
+    return {key: document[key] for key in token_fields.fields if key in document}
+
+
+def has_every_field(token_fields: TokenFields, document: Mapping[str, Any]) -> bool:
+    missing = [key for key in token_fields.fields if key not in document]
+    if missing and not token_fields.fields_may_be_missing:
+        raise MissingFields(f"missing {', '.join(missing)}")
+    return not missing
+
+
+def loadable(document: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        key: value for key, value in document.items() if key not in ("_id", STORED_SIZE)
+    }
+
+
+def rewrite_document(
+    token_fields: TokenFields, document: Mapping[str, Any], full_check: bool = False
+) -> Optional[Rewrite]:
+    if not has_every_field(token_fields, document):
+        return None
+    original = stored_fields(token_fields, document)
+    if not (full_check or needs_sparse_rewrite(original)):
+        return None
+    source = loadable(document)
+    loaded = token_fields.load(source)
+    with storage_serialization():
+        rewritten = token_fields.dump(loaded)
+    if canonical(rewritten) == canonical(original):
+        return None
+    return Rewrite(
+        fields=rewritten,
+        lossless=token_fields.load({**source, **rewritten}) == loaded,
+        dropped_keys=dropped_keys(original, rewritten),
+    )
