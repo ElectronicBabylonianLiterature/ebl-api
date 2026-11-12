@@ -1,9 +1,12 @@
 from marshmallow import fields, post_load
 
 from ebl.schemas import ValueEnumField
+from ebl.transliteration.application.token_fields import (
+    flag_list_field,
+    modifier_list_field,
+)
 from ebl.transliteration.application.token_schemas_enclosures import BaseTokenSchema
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
     EgyptianMetricalFeetSeparator,
 )
@@ -27,7 +30,7 @@ class UnknownNumberOfSignsSchema(BaseTokenSchema):
 
 
 class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    flags = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -60,8 +63,8 @@ class CommentaryProtocolSchema(BaseTokenSchema):
 
 class DividerSchema(BaseTokenSchema):
     divider = fields.String(required=True)
-    modifiers = fields.List(fields.String(), load_default=list)
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    modifiers = modifier_list_field()
+    flags = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -85,7 +88,7 @@ class ColumnSchema(BaseTokenSchema):
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    flags = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -97,7 +100,7 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
 
 class UnclearSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnumField(Flag), load_default=list)
+    flags = flag_list_field()
 
     @post_load
     def make_token(self, data, **kwargs):
