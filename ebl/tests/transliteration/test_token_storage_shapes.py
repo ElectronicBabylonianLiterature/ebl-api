@@ -48,7 +48,7 @@ def stored_token_dump(token) -> dict:
 
 
 @pytest.mark.parametrize("atf", ATFS)
-def test_storage_dump_omits_default_token_fields(atf):
+def test_storage_dump_omits_default_token_fields(atf: str) -> None:
     line = line_of(atf)
     stored_line = storage_dump(line)
 
@@ -57,7 +57,7 @@ def test_storage_dump_omits_default_token_fields(atf):
     assert not has_key(stored_line, "lemmatizable")
 
 
-def test_storage_dump_keeps_enclosure_types_that_are_not_empty():
+def test_storage_dump_keeps_enclosure_types_that_are_not_empty() -> None:
     stored_line = storage_dump(line_of(ATFS[0]))
     reading = stored_line["content"][0]["parts"][1]
 

@@ -98,19 +98,21 @@ class DerivedSchema(Schema):
     kept = fields.Boolean()
 
 
-def test_the_metadata_helpers_mark_the_field():
+def test_the_metadata_helpers_mark_the_field() -> None:
     assert omitted_when_default() == OMIT
     assert omitted_from_storage() == {OMIT_FROM_STORAGE: True}
 
 
 @pytest.mark.parametrize("value", [True, False])
-def test_a_field_omitted_from_storage_is_omitted_whatever_its_value(value):
+def test_a_field_omitted_from_storage_is_omitted_whatever_its_value(
+    value: bool,
+) -> None:
     field = DerivedSchema().fields["derived"]
 
     assert is_omitted_from_storage(field, value) is True
 
 
-def test_omit_stored_defaults_always_drops_fields_omitted_from_storage():
+def test_omit_stored_defaults_always_drops_fields_omitted_from_storage() -> None:
     data = {"derived": True, "kept": True}
 
     with storage_serialization():

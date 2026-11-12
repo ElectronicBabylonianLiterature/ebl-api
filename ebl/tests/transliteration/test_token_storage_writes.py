@@ -44,30 +44,30 @@ STORED_TOKENS = [stored_token(token) for token in TOKENS]
 
 
 @pytest.mark.parametrize("token", TOKENS, ids=lambda token: type(token).__name__)
-def test_a_stored_token_has_the_sparse_shape(token):
+def test_a_stored_token_has_the_sparse_shape(token: Token) -> None:
     assert stored_token(token) == sparse_tokens(api_dump(token))
 
 
 @pytest.mark.parametrize("token", TOKENS, ids=lambda token: type(token).__name__)
-def test_a_stored_token_loads_equal_to_the_token(token):
+def test_a_stored_token_loads_equal_to_the_token(token: Token) -> None:
     assert OneOfTokenSchema().load(stored_token(token)) == token
 
 
 @pytest.mark.parametrize("key", sorted(DERIVED_TOKEN_FIELDS))
-def test_derived_fields_are_never_stored(key):
+def test_derived_fields_are_never_stored(key: str) -> None:
     assert has_key([api_dump(token) for token in TOKENS], key)
     assert not has_key(STORED_TOKENS, key)
 
 
 @pytest.mark.parametrize("key", sorted(TOKEN_LOAD_DEFAULTS))
-def test_no_stored_token_holds_a_default_value(key):
+def test_no_stored_token_holds_a_default_value(key: str) -> None:
     assert TOKEN_LOAD_DEFAULTS[key] not in token_values(STORED_TOKENS, key)
 
 
-def test_non_default_word_fields_are_stored():
+def test_non_default_word_fields_are_stored() -> None:
     assert NON_DEFAULT_WORD_FIELDS <= set(stored_token(ALIGNED_WORD))
 
 
 @pytest.mark.parametrize("key", sorted(TOKEN_LOAD_DEFAULTS))
-def test_api_dumps_keep_every_default_field(key):
+def test_api_dumps_keep_every_default_field(key: str) -> None:
     assert has_key([api_dump(token) for token in TOKENS], key)

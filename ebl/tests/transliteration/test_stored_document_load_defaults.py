@@ -1,11 +1,13 @@
 import json
-from typing import Any, Dict, cast
+from typing import Any, Dict, Type, cast
 
 import pytest
+from factory.base import Factory
 from marshmallow import Schema
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
@@ -28,24 +30,24 @@ def assert_sparse_document_loads_equal(schema: Schema, document: object) -> None
     "factory", [TransliteratedFragmentFactory, LemmatizedFragmentFactory]
 )
 def test_a_stored_fragment_is_sparse_and_loads_equal_to_the_full_fragment(
-    factory, seeded_provenance_service
-):
+    factory: Type[Factory], seeded_provenance_service: ProvenanceService
+) -> None:
     schema = FragmentSchema(context={"provenance_service": seeded_provenance_service})
 
     assert_sparse_document_loads_equal(schema, factory.build())
 
 
 def test_a_stored_chapter_is_sparse_and_loads_equal_to_the_full_chapter(
-    seeded_provenance_service,
-):
+    seeded_provenance_service: ProvenanceService,
+) -> None:
     schema = ChapterSchema(context={"provenance_service": seeded_provenance_service})
 
     assert_sparse_document_loads_equal(schema, ChapterFactory.build())
 
 
 def test_a_stored_text_is_sparse_and_loads_equal_to_the_full_text(
-    seeded_provenance_service,
-):
+    seeded_provenance_service: ProvenanceService,
+) -> None:
     schema = TextSchema(context={"provenance_service": seeded_provenance_service})
 
     assert_sparse_document_loads_equal(schema, TextFactory.build())
