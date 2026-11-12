@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, FrozenSet, Mapping, Optional, Sequence, cast
 
 from ebl.corpus.application.schemas import ChapterSchema
-from ebl.io.sparse_tokens.token_keys import dropped_token_keys, needs_sparse_rewrite
+from ebl.io.sparse_tokens.token_keys import dropped_keys, needs_sparse_rewrite
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.transliteration.application.storage_serialization import (
     storage_serialization,
@@ -19,6 +19,11 @@ class TokenFields:
     load: Callable[[Mapping[str, Any]], object]
     dump: Callable[[object], Dict[str, Any]]
     whole_document: bool
+    fields_may_be_missing: bool
+
+
+class MissingFields(ValueError):
+    pass
 
 
 @dataclass(frozen=True)
@@ -49,6 +54,7 @@ def fragment_token_fields() -> TokenFields:
         load=load_fragment_text,
         dump=dump_fragment_text,
         whole_document=False,
+        fields_may_be_missing=True,
     )
 
 
@@ -64,6 +70,7 @@ def chapter_token_fields(provenance_service: ProvenanceService) -> TokenFields:
         load=load,
         dump=dump_chapter_lines,
         whole_document=True,
+        fields_may_be_missing=False,
     )
 
 
@@ -80,8 +87,17 @@ def canonical(value: Any) -> Any:
     return value
 
 
-def stored_fields(spec: TokenFields, document: Mapping[str, Any]) -> Dict[str, Any]:
-    return {key: document[key] for key in spec.fields if key in document}
+def stored_fields(
+    token_fields: TokenFields, document: Mapping[str, Any]
+) -> Dict[str, Any]:
+    return {key: document[key] for key in token_fields.fields if key in document}
+
+
+def has_every_field(token_fields: TokenFields, document: Mapping[str, Any]) -> bool:
+    missing = [key for key in token_fields.fields if key not in document]
+    if missing and not token_fields.fields_may_be_missing:
+        raise MissingFields(f"missing {', '.join(missing)}")
+    return not missing
 
 
 def loadable(document: Mapping[str, Any]) -> Dict[str, Any]:
@@ -91,21 +107,21 @@ def loadable(document: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 def rewrite_document(
-    spec: TokenFields, document: Mapping[str, Any], full_check: bool = False
+    token_fields: TokenFields, document: Mapping[str, Any], full_check: bool = False
 ) -> Optional[Rewrite]:
-    original = stored_fields(spec, document)
-    if len(original) < len(spec.fields):
+    if not has_every_field(token_fields, document):
         return None
+    original = stored_fields(token_fields, document)
     if not (full_check or needs_sparse_rewrite(original)):
         return None
     source = loadable(document)
-    loaded = spec.load(source)
+    loaded = token_fields.load(source)
     with storage_serialization():
-        rewritten = spec.dump(loaded)
+        rewritten = token_fields.dump(loaded)
     if canonical(rewritten) == canonical(original):
         return None
     return Rewrite(
         fields=rewritten,
-        lossless=spec.load({**source, **rewritten}) == loaded,
-        dropped_keys=dropped_token_keys(original, rewritten),
+        lossless=token_fields.load({**source, **rewritten}) == loaded,
+        dropped_keys=dropped_keys(original, rewritten),
     )

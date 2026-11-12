@@ -33,19 +33,19 @@ READ_BATCH_SIZE = 20
 
 def get_database() -> Database:
     client: MongoClient = MongoClient(os.environ["MONGODB_URI"])
-    return client.get_database(os.environ["MONGODB_DB"])
+    return client.get_database(os.environ.get("MONGODB_DB"))
 
 
-def token_field_specs(database: Database) -> List[TokenFields]:
+def all_token_fields(database: Database) -> List[TokenFields]:
     provenance_service = ProvenanceService(MongoProvenanceRepository(database))
     return [fragment_token_fields(), chapter_token_fields(provenance_service)]
 
 
-def read_pipeline(spec: TokenFields) -> List[Dict[str, Any]]:
+def read_pipeline(token_fields: TokenFields) -> List[Dict[str, Any]]:
     size = {STORED_SIZE: {"$bsonSize": "$$ROOT"}}
-    if spec.whole_document:
+    if token_fields.whole_document:
         return [{"$addFields": size}]
-    return [{"$project": {**dict.fromkeys(spec.fields, 1), **size}}]
+    return [{"$project": {**dict.fromkeys(token_fields.fields, 1), **size}}]
 
 
 def encoded_size(fields: Mapping[str, Any]) -> int:
@@ -58,14 +58,14 @@ def size_after(document: Mapping[str, Any], fields: Mapping[str, Any]) -> int:
 
 
 def checked_rewrite(
-    spec: TokenFields,
+    token_fields: TokenFields,
     document: Mapping[str, Any],
     report: CollectionReport,
     full_check: bool,
 ) -> Optional[Rewrite]:
     document_id = str(document["_id"])
     try:
-        rewrite = rewrite_document(spec, document, full_check)
+        rewrite = rewrite_document(token_fields, document, full_check)
     except Exception as error:
         report.unreadable[document_id] = f"{type(error).__name__}: {error}"[:500]
         return None
@@ -93,15 +93,18 @@ def record_change(
 
 
 def migrate_collection(
-    collection: Collection, spec: TokenFields, apply: bool, full_check: bool = False
+    collection: Collection,
+    token_fields: TokenFields,
+    apply: bool,
+    full_check: bool = False,
 ) -> CollectionReport:
-    report = CollectionReport(spec.collection)
+    report = CollectionReport(token_fields.collection)
     writer = BatchWriter(collection, report)
     for document in collection.aggregate(
-        read_pipeline(spec), batchSize=READ_BATCH_SIZE
+        read_pipeline(token_fields), batchSize=READ_BATCH_SIZE
     ):
         report.scanned += 1
-        rewrite = checked_rewrite(spec, document, report, full_check)
+        rewrite = checked_rewrite(token_fields, document, report, full_check)
         if rewrite is None:
             continue
         size = record_change(document, rewrite.fields, report)
@@ -119,13 +122,17 @@ def migrate(
 ) -> List[CollectionReport]:
     existing = set(database.list_collection_names())
     reports = []
-    for spec in token_field_specs(database):
-        if collections and spec.collection not in collections:
+    for token_fields in all_token_fields(database):
+        if collections and token_fields.collection not in collections:
             continue
-        if spec.collection not in existing:
-            logger.warning("%s: no such collection; skipping it", spec.collection)
+        if token_fields.collection not in existing:
+            logger.warning(
+                "%s: no such collection; skipping it", token_fields.collection
+            )
             continue
-        report = migrate_collection(database[spec.collection], spec, apply, full_check)
+        report = migrate_collection(
+            database[token_fields.collection], token_fields, apply, full_check
+        )
         report.log(apply)
         reports.append(report)
     return reports

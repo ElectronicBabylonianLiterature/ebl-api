@@ -4,6 +4,7 @@ import pytest
 
 from ebl.io.sparse_tokens.documents import (
     STORED_SIZE,
+    MissingFields,
     TokenFields,
     canonical,
     loadable,
@@ -13,23 +14,23 @@ from ebl.io.sparse_tokens.token_keys import (
     DERIVED_TOKEN_KEYS,
     OMITTABLE_TOKEN_KEYS,
     STORED_TOKEN_DEFAULTS,
-    dropped_token_keys,
+    dropped_keys,
     is_token,
+    key_counts,
     needs_sparse_rewrite,
-    token_key_counts,
 )
 
 TOKEN = {"type": "Reading", "value": "ku", "flags": [], "extra": 1}
 
 
-def lossy_spec() -> TokenFields:
+def lossy_token_fields() -> TokenFields:
     def load(document: Mapping[str, Any]) -> object:
         return document["text"]
 
     def dump(text: object) -> Dict[str, Any]:
         return {"text": "changed"}
 
-    return TokenFields("fragments", ("text",), load, dump, False)
+    return TokenFields("fragments", ("text",), load, dump, False, True)
 
 
 def test_omittable_token_keys_are_the_marked_fields() -> None:
@@ -60,16 +61,35 @@ def test_is_token(value: Any, expected: bool) -> None:
     assert is_token(value) is expected
 
 
-def test_token_key_counts_count_only_token_keys() -> None:
+def test_key_counts_count_every_key() -> None:
     document = {"lines": [{"type": "TextLine", "content": [TOKEN, TOKEN]}]}
 
-    assert token_key_counts(document) == {"type": 2, "value": 2, "flags": 2, "extra": 2}
+    assert key_counts(document) == {
+        "lines": 1,
+        "type": 3,
+        "content": 1,
+        "value": 2,
+        "flags": 2,
+        "extra": 2,
+    }
 
 
-def test_dropped_token_keys_ignore_omittable_keys() -> None:
+def test_dropped_keys_ignore_keys_omittable_for_the_token_type() -> None:
     rewritten = {"type": "Reading", "value": "ku"}
 
-    assert dropped_token_keys([TOKEN], [rewritten]) == {"extra"}
+    assert dropped_keys([TOKEN], [rewritten]) == {"extra"}
+
+
+def test_dropped_keys_report_line_keys() -> None:
+    line = {"type": "TextLine", "content": [], "lineKey": 1}
+
+    assert dropped_keys([line], [{"type": "TextLine", "content": []}]) == {"lineKey"}
+
+
+def test_a_key_omittable_only_for_another_token_type_is_reported() -> None:
+    word = {"type": "Word", "value": "ku", "flags": ["#"]}
+
+    assert dropped_keys([word], [{"type": "Word", "value": "ku"}]) == {"flags"}
 
 
 def test_canonical_sorts_enclosure_types_only() -> None:
@@ -86,15 +106,24 @@ def test_loadable_drops_the_id_and_the_size() -> None:
 
 
 def test_a_rewrite_that_does_not_reload_equal_is_not_lossless() -> None:
-    rewrite = rewrite_document(lossy_spec(), {"_id": 1, "text": [TOKEN]})
+    rewrite = rewrite_document(lossy_token_fields(), {"_id": 1, "text": [TOKEN]})
 
     assert rewrite is not None
     assert rewrite.lossless is False
     assert rewrite.fields == {"text": "changed"}
 
 
-def test_a_document_missing_a_field_is_not_rewritten() -> None:
-    assert rewrite_document(lossy_spec(), {"_id": 1}) is None
+def test_a_document_missing_an_optional_field_is_not_rewritten() -> None:
+    assert rewrite_document(lossy_token_fields(), {"_id": 1}) is None
+
+
+def test_a_document_missing_a_required_field_is_unreadable() -> None:
+    token_fields = TokenFields(
+        "chapters", ("lines", "manuscripts"), dict, lambda value: {}, True, False
+    )
+
+    with pytest.raises(MissingFields, match="missing manuscripts"):
+        rewrite_document(token_fields, {"_id": 1, "lines": []})
 
 
 PART = {"type": "ValueToken", "value": "k"}
@@ -117,7 +146,9 @@ def test_the_stored_defaults_and_derived_keys_come_from_the_schemas() -> None:
         ({**SPARSE_READING, "flags": []}, True),
         ({**SPARSE_READING, "lemmatizable": True}, True),
         ({**SPARSE_READING, "nameParts": [PART, BREAK, PART]}, True),
-        ({**SPARSE_READING, "nameParts": [PART, PART], "nameBreaks": []}, True),
+        ({**SPARSE_READING, "nameParts": [PART, PART], "nameBreaks": []}, False),
+        ({**SPARSE_READING, "nameParts": [PART, PART]}, True),
+        ({**SPARSE_READING, "nameBreaks": []}, True),
         ({**SPARSE_READING, "nameParts": [PART, PART], "nameBreaks": [BREAK]}, False),
         ({"type": "TextLine", "flags": []}, False),
     ],
@@ -128,7 +159,9 @@ def test_needs_sparse_rewrite(token: Dict[str, Any], expected: bool) -> None:
 
 def test_a_sparse_document_is_not_loaded() -> None:
     loaded: List[Mapping[str, Any]] = []
-    spec = TokenFields("fragments", ("text",), loaded.append, lambda value: {}, False)
+    token_fields = TokenFields(
+        "fragments", ("text",), loaded.append, lambda value: {}, False, True
+    )
 
-    assert rewrite_document(spec, {"_id": 1, "text": [SPARSE_READING]}) is None
+    assert rewrite_document(token_fields, {"_id": 1, "text": [SPARSE_READING]}) is None
     assert loaded == []

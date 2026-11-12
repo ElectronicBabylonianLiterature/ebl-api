@@ -218,3 +218,23 @@ def test_clear_cache(database: Database, apply: bool, remaining: int) -> None:
 
     assert clear_cache(database, apply) == 2
     assert database.cache.count_documents({}) == remaining
+
+
+def test_a_dropped_key_outside_tokens_is_reported(database: Database) -> None:
+    text = cast(dict, TextSchema().dump(parse_atf_lark("1-2. ku")))
+    text["lines"][0]["lineNumber"]["start"]["unknownKey"] = 1
+    database.fragments.insert_one({"_id": "X.9", "text": text})
+
+    [report] = migrate(database, apply=True)
+
+    assert report.dropped_keys == {"X.9": ["unknownKey"]}
+    assert report.written == 0
+
+
+def test_a_chapter_without_lines_is_unreadable(full_database: Database) -> None:
+    full_database.chapters.update_one({}, {"$unset": {"lines": ""}})
+
+    [_, report] = migrate(full_database, apply=True)
+
+    assert list(report.unreadable.values()) == ["MissingFields: missing lines"]
+    assert report.has_problems

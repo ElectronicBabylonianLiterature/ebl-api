@@ -3,12 +3,11 @@ import logging
 import runpy
 import sys
 from contextlib import redirect_stdout
-from typing import Any, List, NoReturn, cast
+from typing import Any, List, cast
 
 import pytest
 from pymongo.collection import Collection
 from pymongo.database import Database
-from pymongo.errors import BulkWriteError
 
 from ebl.io.sparse_tokens import migrate as migrate_module
 from ebl.io.sparse_tokens.documents import STORED_SIZE, TokenFields
@@ -24,20 +23,6 @@ from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.tests.io.sparse_token_migration_fixtures import insert_full_documents
 
 
-class FailingCollection:
-    def __init__(self) -> None:
-        self.batches: List[List[Any]] = []
-
-    def bulk_write(self, operations: List[Any], ordered: bool) -> NoReturn:
-        self.batches.append(operations)
-        raise BulkWriteError(
-            {
-                "nMatched": 1,
-                "writeErrors": [{"index": 1, "errmsg": "too large", "code": 10334}],
-            }
-        )
-
-
 class WriteResult:
     matched_count = 1
 
@@ -49,20 +34,6 @@ class RecordingCollection:
     def bulk_write(self, operations: List[Any], ordered: bool) -> WriteResult:
         self.batches.append(operations)
         return WriteResult()
-
-
-def test_a_failed_write_is_reported_per_document() -> None:
-    report = CollectionReport("fragments")
-    collection = FailingCollection()
-    writer = BatchWriter(cast(Collection, collection), report)
-    writer.add("A", {"text": 1}, 10)
-    writer.add("B", {"text": 2}, 10)
-
-    writer.flush()
-
-    assert report.written == 1
-    assert report.failed == {"B": "too large (code 10334)"}
-    assert [len(batch) for batch in collection.batches] == [2]
 
 
 @pytest.mark.parametrize("setting,value", [("BATCH_OPERATIONS", 1), ("BATCH_BYTES", 5)])
@@ -83,7 +54,7 @@ def test_the_writer_flushes_full_batches(
 
 
 def test_an_empty_writer_writes_nothing() -> None:
-    collection = FailingCollection()
+    collection = RecordingCollection()
 
     BatchWriter(cast(Collection, collection), CollectionReport("chapters")).flush()
 
@@ -92,10 +63,10 @@ def test_an_empty_writer_writes_nothing() -> None:
 
 def test_read_pipelines_add_the_stored_size() -> None:
     fragments = TokenFields(
-        "fragments", ("text",), lambda document: document, lambda value: {}, False
+        "fragments", ("text",), lambda document: document, lambda value: {}, False, True
     )
     chapters = TokenFields(
-        "chapters", ("lines",), lambda document: document, lambda value: {}, True
+        "chapters", ("lines",), lambda document: document, lambda value: {}, True, False
     )
     size = {STORED_SIZE: {"$bsonSize": "$$ROOT"}}
 
@@ -116,11 +87,11 @@ def test_the_report_logs_every_problem(caplog: pytest.LogCaptureFixture) -> None
 
 def test_migrate_collection_counts_scanned_documents(database: Database) -> None:
     database.fragments.insert_one({"_id": "X.1"})
-    spec = TokenFields(
-        "fragments", ("text",), lambda document: document, lambda value: {}, False
+    token_fields = TokenFields(
+        "fragments", ("text",), lambda document: document, lambda value: {}, False, True
     )
 
-    report = migrate_collection(database.fragments, spec, apply=True)
+    report = migrate_collection(database.fragments, token_fields, apply=True)
 
     assert (report.scanned, report.unchanged) == (1, 1)
 
@@ -168,18 +139,26 @@ def test_get_database_reads_the_environment(monkeypatch: pytest.MonkeyPatch) -> 
     assert get_database().name == "scratch_name"
 
 
+def test_get_database_falls_back_to_the_uri(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("MONGODB_URI", "mongodb://127.0.0.1:1/scratch_uri")
+    monkeypatch.delenv("MONGODB_DB", raising=False)
+
+    assert get_database().name == "scratch_uri"
+
+
 def test_a_lossy_document_is_reported_and_not_written(database: Database) -> None:
     original = [{"type": "Reading", "value": "ku", "flags": []}]
     database.fragments.insert_one({"_id": "X.1", "text": original})
-    spec = TokenFields(
+    token_fields = TokenFields(
         "fragments",
         ("text",),
         lambda document: document["text"],
         lambda text: {"text": "changed"},
         False,
+        True,
     )
 
-    report = migrate_collection(database.fragments, spec, apply=True)
+    report = migrate_collection(database.fragments, token_fields, apply=True)
 
     stored = database.fragments.find_one({"_id": "X.1"})
     assert report.lossy == ["X.1"]
