@@ -32,6 +32,7 @@ def test_a_failed_write_is_reported_per_document() -> None:
 
     assert report.written == 1
     assert report.failed == {"B": "too large (code 10334)"}
+    assert report.not_found == 0
     assert [len(batch) for batch in collection.batches] == [2]
 
 
@@ -59,7 +60,7 @@ def test_a_write_concern_error_fails_the_whole_batch() -> None:
 
     writer.flush()
 
-    assert report.written == 2
+    assert (report.written, report.not_found) == (2, 0)
     assert report.failed == {
         "A": "not confirmed: timed out (code 64)",
         "B": "not confirmed: timed out (code 64)",

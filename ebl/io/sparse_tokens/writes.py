@@ -32,17 +32,24 @@ class BatchWriter:
         self._document_ids, self._operations, self._bytes = [], [], 0
         try:
             result = self._collection.bulk_write(operations, ordered=False)
-            self._report.written += result.matched_count
+            self._record_matched(len(operations), result.matched_count, 0)
         except BulkWriteError as error:
             self._record_bulk_failures(document_ids, error)
         except PyMongoError as error:
             self._record_batch_failure(document_ids, f"{type(error).__name__}: {error}")
 
+    def _record_matched(self, operations: int, matched: int, errors: int) -> None:
+        self._report.written += matched
+        self._report.not_found += operations - matched - errors
+
     def _record_bulk_failures(
         self, document_ids: List[Any], error: BulkWriteError
     ) -> None:
-        self._report.written += error.details.get("nMatched", 0)
-        for write_error in error.details.get("writeErrors", []):
+        write_errors = error.details.get("writeErrors", [])
+        self._record_matched(
+            len(document_ids), error.details.get("nMatched", 0), len(write_errors)
+        )
+        for write_error in write_errors:
             self._report.failed[str(document_ids[write_error["index"]])] = (
                 f"{write_error.get('errmsg')} (code {write_error.get('code')})"
             )

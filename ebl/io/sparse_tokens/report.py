@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,8 @@ class CollectionReport:
     dropped_keys: Dict[str, List[str]] = field(default_factory=dict)
     oversized: Dict[str, int] = field(default_factory=dict)
     failed: Dict[str, str] = field(default_factory=dict)
+    not_found: int = 0
+    interrupted: Optional[str] = None
 
     @property
     def has_problems(self) -> bool:
@@ -28,6 +30,8 @@ class CollectionReport:
             self.dropped_keys,
             self.oversized,
             self.failed,
+            self.not_found,
+            self.interrupted,
         )
         return any(problems)
 
@@ -44,6 +48,7 @@ class CollectionReport:
             self.bytes_before,
             self.bytes_after,
         )
+        self._log_run_problems()
         for label, problems in (
             ("could not be read", self.unreadable),
             ("are not lossless and were left alone", self.lossy),
@@ -59,3 +64,15 @@ class CollectionReport:
                     problems if isinstance(problems, list) else problems.items()
                 ):
                     logger.error("  %s", item)
+
+    def _log_run_problems(self) -> None:
+        if self.interrupted:
+            logger.error(
+                "%s: scan stopped early: %s", self.collection, self.interrupted
+            )
+        if self.not_found:
+            logger.error(
+                "%s: %d updates matched no document (deleted during the run?)",
+                self.collection,
+                self.not_found,
+            )

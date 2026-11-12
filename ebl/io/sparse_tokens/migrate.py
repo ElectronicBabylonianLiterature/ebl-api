@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.common import MAX_BSON_SIZE
 from pymongo.database import Database
+from pymongo.errors import PyMongoError
 
 from ebl.io.sparse_tokens.documents import (
     STORED_SIZE,
@@ -100,16 +101,19 @@ def migrate_collection(
 ) -> CollectionReport:
     report = CollectionReport(token_fields.collection)
     writer = BatchWriter(collection, report)
-    for document in collection.aggregate(
-        read_pipeline(token_fields), batchSize=READ_BATCH_SIZE
-    ):
-        report.scanned += 1
-        rewrite = checked_rewrite(token_fields, document, report, full_check)
-        if rewrite is None:
-            continue
-        size = record_change(document, rewrite.fields, report)
-        if apply:
-            writer.add(document["_id"], rewrite.fields, size)
+    try:
+        for document in collection.aggregate(
+            read_pipeline(token_fields), batchSize=READ_BATCH_SIZE
+        ):
+            report.scanned += 1
+            rewrite = checked_rewrite(token_fields, document, report, full_check)
+            if rewrite is None:
+                continue
+            size = record_change(document, rewrite.fields, report)
+            if apply:
+                writer.add(document["_id"], rewrite.fields, size)
+    except PyMongoError as error:
+        report.interrupted = f"{type(error).__name__}: {error}"[:500]
     writer.flush()
     return report
 
