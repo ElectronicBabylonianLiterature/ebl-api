@@ -1,6 +1,14 @@
 import os
 import sys
 
+pytest_plugins = [
+    "ebl.tests.fixtures.repository_fixtures",
+    "ebl.tests.fixtures.service_fixtures",
+    "ebl.tests.fixtures.file_fixtures",
+    "ebl.tests.fixtures.data_fixtures",
+    "ebl.tests.fixtures.context_fixtures",
+]
+
 production_dbs = ["ebl", "ebldev"]
 current_db = os.environ.get("MONGODB_DB")
 

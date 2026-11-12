@@ -123,3 +123,31 @@ def test_uppercase_queries_collate_in_every_group(query: str, stored: str) -> No
 
 def test_letters_without_a_collation_group_stay_literal() -> None:
     assert CollatedFieldQuery("Bq", "_id", "realia").value == re.escape("Bq")
+
+
+@pytest.mark.parametrize("stored", ["ĝar", "ŋar", "ŊAR", "gar"])
+def test_sumerian_dictionary_g_includes_eng(stored: str) -> None:
+    value = CollatedFieldQuery("gar", "citationForm", "sumerian-dictionary").value
+
+    assert re.search(value, stored)
+
+
+def test_eng_query_is_collated_in_the_sumerian_dictionary() -> None:
+    value = CollatedFieldQuery("ŋar", "citationForm", "sumerian-dictionary").value
+
+    assert re.search(value, "ĝar")
+
+
+@pytest.mark.parametrize("data_type", ["dictionary", "realia", "colophons"])
+def test_other_data_types_keep_the_g_class(data_type: DataType) -> None:
+    field = Fields.findByDataType(data_type)["COLLATED_FIELDS"][0]
+
+    assert re.search(CollatedFieldQuery("gar", field, data_type).value, "ŋar") is None
+
+
+def test_sumerian_dictionary_fields_are_collated() -> None:
+    assert Fields.findByDataType("sumerian-dictionary") == (
+        Fields.SUMERIAN_DICTIONARY.value
+    )
+    assert Fields.use_collations("sumerian-dictionary", "aliases.form")
+    assert not Fields.use_wildcards("sumerian-dictionary", "citationForm")

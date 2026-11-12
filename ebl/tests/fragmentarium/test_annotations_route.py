@@ -1,4 +1,5 @@
 import json
+from typing import cast
 from itertools import zip_longest
 
 import falcon
@@ -7,7 +8,7 @@ import httpretty
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 
-from ebl.tests.conftest import create_test_photo
+from ebl.tests.fixtures.file_fixtures import create_test_photo
 from ebl.tests.factories.annotation import AnnotationsFactory, AnnotationFactory
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -82,12 +83,13 @@ def test_update(client, fragment_repository, photo_repository):
 
     post_result = client.simulate_post(url, body=body)
 
-    expected_json = AnnotationsSchema().dump(annotations)
+    expected_json = cast(dict, AnnotationsSchema().dump(annotations))
+    posted_json = cast(dict, post_result.json)
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.json["fragmentNumber"] == expected_json["fragmentNumber"]
+    assert posted_json["fragmentNumber"] == expected_json["fragmentNumber"]
     for annotation, expected_annotation in zip_longest(
-        post_result.json["annotations"],
+        posted_json["annotations"],
         expected_json["annotations"],
     ):
         assert annotation is not None
