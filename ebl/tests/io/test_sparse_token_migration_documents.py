@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, cast
 
 import pytest
 
@@ -7,6 +7,7 @@ from ebl.io.sparse_tokens.documents import (
     MissingFields,
     TokenFields,
     canonical,
+    fragment_token_fields,
     loadable,
     rewrite_document,
 )
@@ -19,6 +20,8 @@ from ebl.io.sparse_tokens.token_keys import (
     key_counts,
     needs_sparse_rewrite,
 )
+from ebl.transliteration.application.text_schema import TextSchema
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 TOKEN = {"type": "Reading", "value": "ku", "flags": [], "extra": 1}
 
@@ -65,12 +68,13 @@ def test_key_counts_count_every_key() -> None:
     document = {"lines": [{"type": "TextLine", "content": [TOKEN, TOKEN]}]}
 
     assert key_counts(document) == {
-        "lines": 1,
-        "type": 3,
-        "content": 1,
-        "value": 2,
-        "flags": 2,
-        "extra": 2,
+        (None, "lines"): 1,
+        (None, "type"): 1,
+        (None, "content"): 1,
+        ("Reading", "type"): 2,
+        ("Reading", "value"): 2,
+        ("Reading", "flags"): 2,
+        ("Reading", "extra"): 2,
     }
 
 
@@ -90,6 +94,25 @@ def test_a_key_omittable_only_for_another_token_type_is_reported() -> None:
     word = {"type": "Word", "value": "ku", "flags": ["#"]}
 
     assert dropped_keys([word], [{"type": "Word", "value": "ku"}]) == {"flags"}
+
+
+def test_a_key_kept_on_a_token_does_not_excuse_its_drop_elsewhere() -> None:
+    reading = {"type": "Reading", "value": "ku", "flags": ["#"]}
+    original = [reading, {"start": {"number": 1, "flags": ["#"]}}]
+    rewritten = [reading, {"start": {"number": 1}}]
+
+    assert dropped_keys(original, rewritten) == {"flags"}
+
+
+def test_a_line_number_key_dropped_next_to_a_flagged_token_is_reported() -> None:
+    text = cast(dict, TextSchema().dump(parse_atf_lark("1-2. ku#")))
+    text["lines"][0]["lineNumber"]["start"]["flags"] = ["#"]
+    document = {"_id": "X.9", "text": text, STORED_SIZE: 1000}
+
+    rewrite = rewrite_document(fragment_token_fields(), document, full_check=True)
+
+    assert rewrite is not None
+    assert rewrite.dropped_keys == {"flags"}
 
 
 def test_canonical_sorts_enclosure_types_only() -> None:

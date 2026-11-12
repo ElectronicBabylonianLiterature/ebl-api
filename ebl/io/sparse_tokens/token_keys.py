@@ -1,5 +1,5 @@
 from collections import Counter
-from typing import Any, Dict, FrozenSet, List
+from typing import Any, Dict, FrozenSet, List, Optional
 
 from marshmallow.fields import Field
 
@@ -70,28 +70,30 @@ def nested_values(value: Any) -> List[Any]:
     return list(value) if isinstance(value, list) else []
 
 
+def key_owner(value: Dict[str, Any]) -> Optional[str]:
+    return value["type"] if is_token(value) else None
+
+
 def key_counts(value: Any) -> Counter:
-    counts: Counter = Counter(value.keys() if isinstance(value, dict) else ())
+    counts: Counter = Counter()
+    if isinstance(value, dict):
+        owner = key_owner(value)
+        counts.update((owner, key) for key in value)
     for item in nested_values(value):
         counts.update(key_counts(item))
     return counts
 
 
-def omittable_key_counts(value: Any) -> Counter:
-    counts: Counter = Counter()
-    if is_token(value):
-        counts.update(set(value) & OMITTABLE_KEYS_BY_TYPE[value["type"]])
-    for item in nested_values(value):
-        counts.update(omittable_key_counts(item))
-    return counts
+def is_omittable(owner: Optional[str], key: str) -> bool:
+    return owner is not None and key in OMITTABLE_KEYS_BY_TYPE[owner]
 
 
 def dropped_keys(original: Any, rewritten: Any) -> FrozenSet[str]:
-    before = key_counts(original)
     after = key_counts(rewritten)
-    allowed = omittable_key_counts(original)
     return frozenset(
-        key for key, count in before.items() if count - after[key] > allowed[key]
+        key
+        for (owner, key), count in key_counts(original).items()
+        if count > after[(owner, key)] and not is_omittable(owner, key)
     )
 
 
