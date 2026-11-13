@@ -67,6 +67,10 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
 
+      - name: Install Pillow build dependencies
+        if: ${{ startsWith(matrix.python-version, 'pypy') }}
+        run: sudo apt-get install -y libjpeg-dev zlib1g-dev libwebp-dev
+
       - name: Install Python Dependencies
         id: install
         run: |
@@ -80,6 +84,9 @@ jobs:
             fi
             sleep $((attempt * 5))
           done
+
+      - name: Verify supported Pillow codecs
+        run: poetry run python scripts/verify_pillow_codecs.py
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
