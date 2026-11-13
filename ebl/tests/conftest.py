@@ -4,10 +4,9 @@ import json
 import os
 import uuid
 from pathlib import Path
-from typing import Any, List, Mapping, Sequence, Union
+from typing import Any, List, Mapping, Sequence, Union, cast
 
 import attr
-import pydash
 import pytest
 from PIL import Image
 from dictdiffer import diff
@@ -26,6 +25,7 @@ from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -129,7 +129,7 @@ def changelog(database):
 class TestWordRepository(MongoWordRepository):
     # Mongomock does not support $substrCP so we need to
     # stub the methods using it.
-    def query_by_lemma_prefix(self, _):
+    def query_by_lemma_prefix(self, query: str) -> Sequence:
         return [self._collection.find_one({})]
 
 
@@ -162,8 +162,11 @@ class TestBibliographyRepository(MongoBibliographyRepository):
     # Mongomock does not support $substrCP so we need to
     # stub the methods using it.
     def query_by_author_year_and_title(
-        self, _author=None, _year=None, _title=None, _greater_than=False
-    ):
+        self,
+        author: str | None = None,
+        year: int | None = None,
+        title: str | None = None,
+    ) -> Sequence[dict]:
         return [create_object_entry(self._collection.find_one({}))]
 
 
@@ -173,7 +176,9 @@ class TestSignRepository(MongoSignRepository):
     # https://github.com/mongomock/mongomock/issues/536
 
     def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
-        return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+        return [
+            cast(Sign, SignSchema(unknown=EXCLUDE).load(self._collection.find_one({})))
+        ]
 
 
 @pytest.fixture
@@ -495,6 +500,7 @@ def seeded_provenance_service(provenance_repository):
 
 @pytest.fixture
 def context(
+    database,
     ebl_ai_client,
     cropped_sign_images_repository,
     word_repository,
@@ -542,7 +548,9 @@ def context(
         findspot_repository=findspot_repository,
         realia_repository=realia_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
-        custom_cache=ChapterCache(mongo_cache_repository),
+        custom_cache=ChapterCache(
+            mongo_cache_repository, MongoChapterCacheState(database)
+        ),
         parallel_line_injector=parallel_line_injector,
     )
 
@@ -554,14 +562,19 @@ def client(context):
 
 
 class EnsureAnnotationPost:
+    def __init__(self, service: AnnotationsService) -> None:
+        self._service = service
+
     def on_post(self, req, resp):
-        return AnnotationResource(annotations_service).on_post(req, resp, "K.123")
+        return AnnotationResource(self._service).on_post(req, resp, "K.123")
 
 
 @pytest.fixture
-def guest_client(context):
+def guest_client(context, annotations_service):
     api = ebl.app.create_app(attr.evolve(context, auth_backend=NoneAuthBackend(Guest)))
-    api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
+    api.add_route(
+        "/fragments/K.123/annotations", EnsureAnnotationPost(annotations_service)
+    )
     return testing.TestClient(api)
 
 
@@ -720,9 +733,10 @@ def create_mongo_bibliography_entry():
     def _from_bibliography_entry(bibliography_entry: Union[dict, None] = None) -> dict:
         if not bibliography_entry:
             bibliography_entry = BibliographyEntryFactory.build()
-        return pydash.map_keys(
-            bibliography_entry, lambda _, key: "_id" if key == "id" else key
-        )
+        return {
+            "_id" if key == "id" else key: value
+            for key, value in cast(dict, bibliography_entry).items()
+        }
 
     return _from_bibliography_entry
 

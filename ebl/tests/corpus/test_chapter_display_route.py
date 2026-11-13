@@ -1,4 +1,5 @@
 from typing import Callable, cast
+from unittest.mock import patch
 
 import attr
 import falcon
@@ -6,6 +7,7 @@ import pytest
 from falcon import testing
 
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.text import Text
@@ -123,16 +125,40 @@ def test_get_partial(
     assert get_result.json == serialized_partial_chapter
 
 
-def test_get_cached(cached_client, text_repository, text, chapter, url):
+def test_get_cached_and_refresh_after_repository_update(
+    cached_client: testing.TestClient,
+    text_repository: MongoTextRepository,
+    text: Text,
+    chapter: Chapter,
+    url: str,
+) -> None:
     text_repository.create(text)
     text_repository.create_chapter(chapter)
-    first_result = cached_client.simulate_get(url)
-    assert first_result.status == falcon.HTTP_OK
-    updated_chapter = attr.evolve(chapter, lines=[])
-    text_repository.update(updated_chapter.id_, updated_chapter)
-    second_result = cached_client.simulate_get(url)
-    assert second_result.status == falcon.HTTP_OK
-    assert first_result.json == second_result.json
+    with patch.object(
+        Corpus,
+        "find_chapter_for_display",
+        autospec=True,
+        side_effect=Corpus.find_chapter_for_display,
+    ) as find_display:
+        first_result = simulate_get(cached_client, url)
+        assert first_result.status == falcon.HTTP_OK
+        cached_result = simulate_get(cached_client, url)
+        assert cached_result.status == falcon.HTTP_OK
+        assert first_result.json == cached_result.json
+        assert find_display.call_count == 1
+        updated_chapter = attr.evolve(chapter, lines=[])
+        text_repository.update(updated_chapter.id_, updated_chapter)
+        second_result = simulate_get(cached_client, url)
+        assert second_result.status == falcon.HTTP_OK
+        assert second_result.json == ChapterDisplaySchema().dump(
+            ChapterDisplay.of_chapter(text, updated_chapter)
+        )
+        assert first_result.json != second_result.json
+        assert find_display.call_count == 2
+        refreshed_cache_result = simulate_get(cached_client, url)
+        assert refreshed_cache_result.status == falcon.HTTP_OK
+        assert refreshed_cache_result.json == second_result.json
+        assert find_display.call_count == 2
 
 
 def test_get_too_large_to_cache(
