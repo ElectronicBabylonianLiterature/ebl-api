@@ -2,11 +2,16 @@ name: CI
 
 on:
   push:
-  pull_request:
     branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
   
   #Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.action == 'edited' && github.event.changes.base == null && github.run_id || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' && (github.event.action != 'edited' || github.event.changes.base != null) }}
 
 env:
   PIPENV_VENV_IN_PROJECT: 1
@@ -24,6 +29,7 @@ env:
 
 jobs:
   test:
+    if: github.event.action != 'edited' || github.event.changes.base != null
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -39,7 +45,7 @@ jobs:
     name: Test Python ${{ matrix.check_name }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Start MongoDB replica set
         run: |
@@ -53,14 +59,14 @@ jobs:
             'rs.initiate({_id: "ebl-test", members: [{_id: 0, host: "localhost:27017"}]})'
           timeout 60 bash -c 'until docker exec ebl-test-mongodb mongosh --quiet --eval "quit(db.hello().isWritablePrimary ? 0 : 1)" >/dev/null 2>&1; do sleep 1; done'
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl libssl-dev
+          sudo apt-get install -y curl libssl-dev proj-bin libproj-dev
 
       - name: Install Rust
         run: |
@@ -83,11 +89,11 @@ jobs:
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
-        run: poetry run ruff check ebl
+        run: poetry run ruff check ebl scripts
 
       - name: Code Style
         if: success() || steps.install.outcome == 'success'
-        run: poetry run ruff format --check ebl
+        run: poetry run ruff format --check ebl scripts
 
       - name: Type Check
         if: ${{ !startsWith(matrix.python-version, 'pypy') && (success() || steps.install.outcome == 'success') }}
@@ -106,7 +112,7 @@ jobs:
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x -n auto
+        run: poetry run pytest --cov=ebl --cov=scripts --cov-report term --cov-report xml -x -n auto
 
       - name: Diagnose MongoDB test failures
         if: failure()
@@ -114,23 +120,27 @@ jobs:
           docker ps --all --filter name=ebl-test-mongodb
           docker inspect --format '{{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}}' ebl-test-mongodb || true
           docker logs --tail 100 ebl-test-mongodb || true
+      - name: Normalize coverage paths
+        if: ${{ !startsWith(matrix.python-version, 'pypy') }}
+        run: >-
+          poetry run python -c 'import coverage; report = coverage.Coverage(source=["."]);
+          report.load(); report.xml_report(include=["ebl/*", "scripts/*"])'
 
-      - uses: qltysh/qlty-action/coverage@v1
+      - uses: qltysh/qlty-action/coverage@a2277a908db90c4c868832fb9204521fb940fdb4 # v1
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: coverage.xml
-          add-prefix: ebl/
 
   docker:
     if: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
     needs: [test]
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
 
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         with:
           registry: ebl.badw.de
@@ -138,7 +148,7 @@ jobs:
           password: ${{ secrets.EBL_REGISTRY_PASSWORD }}
 
       - id: docker_build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
         with:
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
           tags: |

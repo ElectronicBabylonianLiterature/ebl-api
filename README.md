@@ -809,7 +809,8 @@ Repeated cleanup is harmless, and deleted handles cannot be revived.
 
 Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
+the migration audit must validate dimensions and structural integrity. New owned
+raster writes validate dimensions and decode every frame before any
 registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
 the total of decoded frame pixels, independently of Pillow's global settings.
 WebP canvas dimensions are checked from a bounded header before creating a
