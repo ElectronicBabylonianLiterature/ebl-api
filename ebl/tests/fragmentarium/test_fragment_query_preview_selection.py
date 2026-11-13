@@ -27,7 +27,16 @@ def test_preview_of_stored_data_adds_only_source_index():
     stored_line = dumped_text(fragment.text)["lines"][0]
 
     assert matching_line_preview_of_data(dumped_text(fragment.text), (0,))["lines"] == [
-        {**stored_line, "index": 0}
+        {
+            **stored_line,
+            "index": 0,
+            "location": {
+                "surface": None,
+                "column": None,
+                "object": None,
+                "sealNumber": None,
+            },
+        }
     ]
 
 
@@ -47,8 +56,8 @@ def test_the_two_builders_differ_only_in_the_parser_version_key():
     from_data = matching_line_preview_of_data(dumped_text(fragment.text), (0,))
     from_domain = matching_line_preview_of(fragment.text, (0,))
 
-    assert set(from_data) == {"lines", "parserVersion"}
-    assert set(from_domain) == {"lines", "parser_version"}
+    assert set(from_data) == {"lines", "parserVersion", "totalMatchingLines"}
+    assert set(from_domain) == {"lines", "parser_version", "total_matching_lines"}
     assert FragmentQueryMatchingLinePreviewSchema().dump(from_domain) == from_data
 
 
@@ -71,7 +80,8 @@ def test_preview_carries_the_source_index_of_each_line():
 def test_preview_index_survives_deduplication_and_capping(long_text):
     preview = matching_line_preview_of(long_text, (99, 3, 3, 1, 7, 7, 2, 9, 4))
 
-    assert [line["index"] for line in preview["lines"]] == [3, 1, 7, 2, 9]
+    assert [line["index"] for line in preview["lines"]] == [1, 2, 3, 4, 7]
+    assert preview["total_matching_lines"] == 6
 
 
 def test_stored_data_preview_carries_the_same_indexes():
@@ -83,7 +93,7 @@ def test_stored_data_preview_carries_the_same_indexes():
         for line in matching_line_preview_of_data(
             dumped_text(fragment.text), matching_lines
         )["lines"]
-    ] == [5, 2, 8]
+    ] == [2, 5, 8]
 
 
 @pytest.mark.parametrize(
@@ -124,7 +134,7 @@ def test_preview_cap_skips_out_of_range_before_capping(long_text):
     [
         ((0, 1, 1, 2, 2, 3), ["1.", "2.", "3.", "4."]),
         ((0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5), ["1.", "2.", "3.", "4.", "5."]),
-        ((3, 1, 3, 2, 1, 4), ["4.", "2.", "3.", "5."]),
+        ((3, 1, 3, 2, 1, 4), ["2.", "3.", "4.", "5."]),
         ((99, 0, 0, 1, 2, 3, 4, 5), ["1.", "2.", "3.", "4.", "5."]),
     ],
 )
@@ -165,3 +175,23 @@ def test_preview_selects_only_text_lines_by_stored_type():
 
     assert [line["index"] for line in preview["lines"]] == [0, 2]
     assert [line["prefix"] for line in preview["lines"]] == ["1.", "2."]
+
+
+def test_preview_orders_unique_source_indexes_before_capping() -> None:
+    text = dumped_text(
+        parse_atf_lark(
+            "@obverse\n1. ku\n#note: note\n2. ku\n3. ku\n4. ku\n5. ku\n6. ku"
+        )
+    )
+    preview = matching_line_preview_of_data(text, [7, 6, 5, 4, 3, 7, 0, 2, -1, 99, 1])
+
+    assert [line["index"] for line in preview["lines"]] == [1, 3, 4, 5, 6]
+    assert [line["prefix"] for line in preview["lines"]] == [
+        "1.",
+        "2.",
+        "3.",
+        "4.",
+        "5.",
+    ]
+    assert preview["totalMatchingLines"] == 6
+    assert all(line["location"]["surface"] == "o" for line in preview["lines"])
