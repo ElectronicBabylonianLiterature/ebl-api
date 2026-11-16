@@ -233,10 +233,10 @@ unreferenced owned handles are cleaned. Failed cleanup can be retried safely.
    then frontend gallery and upload flags for the intended environment.
 
 Rollback: disable the frontend upload flag, then backend `MEDIA_UPLOAD_ENABLED`.
-Read-only gallery remains independent. Keep `MEDIA_API_ENABLED` enabled for
-published retrieval and persistent legacy removal enforcement. Disabling the media
-read foundation also disables its legacy visibility guard and can restore historical
-fallback access, so it is not a visibility-safe rollback after canonical removals.
+Read-only gallery remains independent. Disabling `MEDIA_API_ENABLED` removes
+managed routes and summaries while the independent persistent legacy-suppression
+guard continues enforcing canonical removals. Reverting to an older reader that
+lacks this guard can restore historical fallback access and is a separate risk.
 Retain submission and idempotency metadata, visibility markers, and owned files;
 do not restore an older reader that would ignore publication metadata while new
 unpublished records remain in its database. No production flags or data are

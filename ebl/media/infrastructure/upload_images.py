@@ -6,8 +6,6 @@ the legacy migration preview writer; no migration code or startup job is needed.
 """
 
 import hashlib
-import io
-import logging
 import os
 import warnings
 from contextlib import ExitStack, contextmanager
@@ -20,25 +18,18 @@ from typing import BinaryIO, Callable, Iterator, cast
 from PIL import Image, ImageOps
 
 from ebl.media.application.media_store import MediaRepresentationStore
-from ebl.media.application.media_stored import (
-    DisplayRepresentationWriteRequest,
-    OriginalRepresentationWriteRequest,
-    StoredMediaRepresentations,
-    StoredThumbnailRepresentation,
-    ThumbnailRepresentationWriteRequest,
-)
+from ebl.media.application.media_stored import StoredMediaRepresentations
 from ebl.media.application.media_storage_identity import StoredRepresentationHandle
-from ebl.media.domain import (
-    MediaChecksum,
-    MediaId,
-    MediaRepresentation,
-    MediaRepresentations,
-    ThumbnailSize,
-)
+from ebl.media.domain import MediaChecksum, MediaId, MediaRepresentation, ThumbnailSize
 from ebl.media.infrastructure.media_binary_validation import raster_mime_type
 from ebl.media.infrastructure.media_webp import webp_dimensions
+from ebl.media.infrastructure.prepared_upload import PreparedUpload, UploadContent
+from ebl.media.infrastructure.upload_previews import (
+    LANCZOS_RESAMPLING,
+    eight_bit,
+    preview,
+)
 
-LOGGER = logging.getLogger(__name__)
 DECODER_CONFIGURATION_LOCK = Lock()
 CHUNK_SIZE = 65_536
 THUMBNAIL_PIXELS = (
@@ -46,9 +37,6 @@ THUMBNAIL_PIXELS = (
     (ThumbnailSize.MEDIUM, 480),
     (ThumbnailSize.LARGE, 720),
 )
-# "I;16N" is omitted: Pillow cannot rescale it faithfully, and accepted
-# formats (JPEG, PNG, WebP) never decode to it.
-HIGH_BIT_DEPTH_MODES = frozenset({"I", "I;16", "I;16L", "I;16B", "F"})
 
 
 class UploadValidationError(ValueError):
@@ -92,90 +80,6 @@ class UploadLimits:
 
 
 DEFAULT_UPLOAD_LIMITS = UploadLimits()
-
-
-@dataclass(frozen=True)
-class UploadContent:
-    representation: MediaRepresentation
-    content: BinaryIO
-
-
-@dataclass(frozen=True)
-class PreparedUpload:
-    original: UploadContent
-    display: UploadContent
-    thumbnails: tuple[tuple[ThumbnailSize, UploadContent], ...]
-
-    @property
-    def representations(self) -> MediaRepresentations:
-        return MediaRepresentations(
-            self.original.representation,
-            tuple((size, item.representation) for size, item in self.thumbnails),
-            display=self.display.representation,
-        )
-
-    def store(
-        self,
-        store: MediaRepresentationStore,
-        media_id: MediaId,
-        on_staged: Callable[[StoredRepresentationHandle], None] | None = None,
-    ) -> StoredMediaRepresentations:
-        """Stage new versions, rolling back only these unpublished handles.
-
-        The application must journal handles through ``on_staged`` and commit
-        metadata only after this returns. A failed cleanup retains its registry
-        record for reconciliation; it never exposes incomplete media metadata.
-        Published-media removal must use the separate tombstone workflow.
-        """
-        handles: list[StoredRepresentationHandle] = []
-
-        def record(handle: StoredRepresentationHandle) -> StoredRepresentationHandle:
-            handles.append(handle)
-            if on_staged is not None:
-                on_staged(handle)
-            return handle
-
-        try:
-            self.original.content.seek(0)
-            original = record(
-                store.write_original(
-                    OriginalRepresentationWriteRequest(
-                        media_id, self.original.content, self.original.representation
-                    )
-                )
-            )
-            self.display.content.seek(0)
-            display = record(
-                store.write_display(
-                    DisplayRepresentationWriteRequest(
-                        media_id, self.display.content, self.display.representation
-                    )
-                )
-            )
-            thumbnails = []
-            for size, item in self.thumbnails:
-                item.content.seek(0)
-                handle = record(
-                    store.write_thumbnail(
-                        ThumbnailRepresentationWriteRequest(
-                            media_id, item.content, item.representation, size
-                        )
-                    )
-                )
-                thumbnails.append(StoredThumbnailRepresentation(size, handle))
-            return StoredMediaRepresentations(
-                original, tuple(thumbnails), display=display
-            )
-        except BaseException:
-            for handle in reversed(handles):
-                try:
-                    store.delete_representation(handle)
-                except Exception:
-                    LOGGER.exception(
-                        "Upload staging cleanup failed for owned handle %s",
-                        handle.value,
-                    )
-            raise
 
 
 def write_prepared(
@@ -231,7 +135,6 @@ def _inspect(
     content.seek(0)
     mime_type = raster_mime_type(content.read(12))
     content.seek(0)
-    # libwebp may allocate a canvas during Image.open: check its header first.
     dimensions = webp_dimensions(content)
     if dimensions is not None:
         _check_geometry(*dimensions, limits)
@@ -249,59 +152,6 @@ def _inspect(
         image.verify()
     content.seek(0)
     return representation
-
-
-def _eight_bit(image: Image.Image) -> Image.Image:
-    """Rescale high-bit-depth grayscale to 8-bit "L", closing the input if converted.
-
-    16-bit PNG greyscale decodes to "I;16"; a plain ``convert`` clips every
-    value above 255 to white, and LANCZOS resizing rejects the mode. Samples are
-    scaled over the full 16-bit range (value / 256, i.e. the high byte), not
-    stretched per image, so preview tones match the original's encoded values.
-    16-bit colour and grey+alpha PNGs already decode to 8-bit "RGB"/"RGBA".
-    """
-    if image.mode not in HIGH_BIT_DEPTH_MODES:
-        return image
-    with image:
-        if image.mode == "I;16":
-            # Stays two bytes per pixel; Pillow applies a 65536-entry lookup.
-            scaled = image.point(lambda value: value * (1 / 256))
-        else:
-            with image.convert("F") as floating:
-                scaled = floating.point(lambda value: value * (1 / 256))
-        with scaled:
-            # Out-of-range "I"/"F" samples are clamped to 0..255 here.
-            return scaled.convert("L")
-
-
-def _preview(source: Image.Image, pixels: int, stack: ExitStack) -> UploadContent:
-    with source.copy() as image:
-        image.thumbnail((pixels, pixels), Image.LANCZOS)
-        # Flatten transparent copies onto white, rather than replacing ink with black.
-        if image.mode in {"RGBA", "LA"} or (
-            image.mode == "P" and "transparency" in image.info
-        ):
-            with image.convert("RGBA") as rgba:
-                with Image.new("RGB", image.size, "white") as rgb:
-                    rgb.paste(rgba, mask=rgba.getchannel("A"))
-                    output = stack.enter_context(io.BytesIO())
-                    rgb.save(output, format="JPEG", quality=85, optimize=True)
-        else:
-            with image.convert("RGB") as rgb:
-                output = stack.enter_context(io.BytesIO())
-                rgb.save(output, format="JPEG", quality=85, optimize=True)
-        value = output.getvalue()
-        output.seek(0)
-        return UploadContent(
-            MediaRepresentation(
-                "image/jpeg",
-                image.width,
-                image.height,
-                len(value),
-                MediaChecksum(value=hashlib.sha256(value).hexdigest()),
-            ),
-            cast(BinaryIO, output),
-        )
 
 
 @contextmanager
@@ -326,14 +176,12 @@ def prepare_upload(
             ),
         )
         length, checksum = _spool(content, original, content_length, limits)
-        # lru_cache alone can invoke its factory twice on concurrent first use.
         with DECODER_CONFIGURATION_LOCK:
             slots = _decoder_slots()
         if not slots.acquire(blocking=False):
             raise UploadBusyError(
                 "Image processing is busy. Retry this upload shortly."
             )
-        # Include owned-store validation in the bound, not only preview decoding.
         stack.callback(slots.release)
         try:
             with warnings.catch_warnings():
@@ -348,28 +196,18 @@ def prepare_upload(
                         "Content-Type does not match the image's binary content."
                     )
                 with Image.open(original) as source:
-                    # verify() alone does not validate compressed pixel data.
                     source.load()
                     oriented = ImageOps.exif_transpose(source)
-                # Close the full original before copying derivatives. All later
-                # previews work from a single bounded display-sized 8-bit
-                # raster, so display and thumbnails share one tone mapping.
-                with _eight_bit(oriented) as raster:
-                    raster.thumbnail((2560, 2560), Image.LANCZOS)
-                    display = _preview(raster, 2560, stack)
+                with eight_bit(oriented) as raster:
+                    raster.thumbnail((2560, 2560), LANCZOS_RESAMPLING)
+                    display = preview(raster, 2560, stack)
                     thumbnails = tuple(
-                        (size, _preview(raster, pixels, stack))
+                        (size, preview(raster, pixels, stack))
                         for size, pixels in THUMBNAIL_PIXELS
                     )
         except (UploadValidationError, MemoryError):
             raise
         except Exception as error:
-            # This block only decodes, transforms and JPEG-encodes in memory:
-            # storage writes happen after prepare_upload yields. Malformed
-            # pixel or EXIF data surfaces from Pillow as arbitrary exception
-            # types (TypeError, AttributeError, struct.error, ...), including
-            # DecompressionBombError/Warning, UnidentifiedImageError, OSError,
-            # SyntaxError and ValueError. KeyboardInterrupt etc. propagate.
             raise UploadValidationError(
                 "Invalid or unsafe raster image content."
             ) from error

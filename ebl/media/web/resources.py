@@ -1,7 +1,6 @@
 import json
-import re
 from urllib.parse import unquote
-from typing import Optional, cast
+from typing import BinaryIO, Optional, cast
 
 import falcon
 
@@ -15,69 +14,25 @@ from ebl.media.application.media_management import (
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.web.dtos import parse_museum_number
-from ebl.media.application.media_dtos import FragmentMediaResponseDto
 from ebl.media.application.media_errors import (
     MediaNotFoundError,
-    MediaRepresentationNotFoundError,
 )
 from ebl.media.application.media_runtime import MediaRuntime
 from ebl.media.web.request_metadata import bounded_json_body
+from ebl.media.web.media_response import media_response
+from ebl.media.web.resource_helpers import (
+    _private_response,
+    _media_id,
+    _expected_revision,
+    _representation_handle,
+)
 from ebl.media.application.media_management_requests import (
     MediaUploadRequest,
     MediaMutationRequest,
 )
-from ebl.media.application.media_schemas import FragmentMediaResponseDtoSchema
-from ebl.media.application.media_storage_identity import StoredRepresentationHandle
-from ebl.media.application.media_stored import StoredMedia
-from ebl.media.domain import MediaId, ThumbnailSize
 from ebl.media.domain.mime import is_svg_mime_type
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
-
-
-def _private_response(response: falcon.Response) -> None:
-    response.set_header("Cache-Control", "private, no-store")
-    response.set_header("Vary", "Authorization")
-    response.set_header("X-Content-Type-Options", "nosniff")
-
-
-def _media_id(value: str) -> MediaId:
-    try:
-        return MediaId(value)
-    except ValueError as error:
-        raise DataError("Invalid media identifier.") from error
-
-
-_REVISION_TAG = re.compile(r'(?:"([0-9]{1,15})"|([0-9]{1,15}))')
-
-
-def _expected_revision(req: falcon.Request) -> Optional[int]:
-    """Parse `If-Match: "<revision>"` (quotes optional); None when absent."""
-    header = req.get_header("If-Match")
-    if header is None:
-        return None
-    match = _REVISION_TAG.fullmatch(header.strip())
-    if match is None:
-        raise DataError('If-Match must be a single media revision, e.g. "3".')
-    return int(match.group(1) or match.group(2))
-
-
-def _representation_handle(
-    stored: StoredMedia, representation: str, size: Optional[str]
-) -> StoredRepresentationHandle:
-    if representation == "file":
-        return stored.representations.original
-    if representation == "display":
-        handle = stored.representations.display
-    else:
-        try:
-            thumbnail_size = ThumbnailSize(size)
-        except ValueError as error:
-            raise DataError("Invalid thumbnail size.") from error
-        handle = stored.representations.thumbnail(thumbnail_size)
-    if handle is None:
-        raise MediaRepresentationNotFoundError(stored.media.id, representation)
-    return handle
 
 
 class MediaResource:
@@ -109,69 +64,6 @@ class MediaResource:
         ):
             raise falcon.HTTPForbidden()
         return management, actor, manager, contributor
-
-    @staticmethod
-    def _shows_management_fields(item, viewer) -> bool:
-        if viewer is None or item.submission is None:
-            return False
-        actor, manager = viewer
-        return manager or item.submission.uploader_id == actor
-
-    @staticmethod
-    def _shows_revision(item, viewer) -> bool:
-        """Managers see every item's revision (legacy items included, since
-        they may act on them); contributors only their own submissions'."""
-        if viewer is None:
-            return False
-        actor, manager = viewer
-        return manager or (
-            item.submission is not None and item.submission.uploader_id == actor
-        )
-
-    @classmethod
-    def _response(cls, number, media, *, viewer=None):
-        """Serialize media; `viewer` is `(actor, is_manager)` for management views.
-
-        Management-only fields are attached per item, only for managers or the
-        item's own uploader. Other items are serialized like the public view.
-        """
-        result = FragmentMediaResponseDtoSchema().dump(
-            FragmentMediaResponseDto.of(number, media)
-        )
-        for resource, item in zip(result["media"], media, strict=True):
-            if item.submission is not None:
-                submission = item.submission
-                resource.update(
-                    publicationStatus=submission.publication_status.value,
-                    creator=submission.creator,
-                    sourceInstitution=submission.source_institution,
-                    copyrightHolder=submission.copyright_holder,
-                    rightsStatement=submission.rights_statement,
-                )
-                if cls._shows_management_fields(item, viewer):
-                    resource.update(
-                        originalFilename=item.original_filename,
-                        uploaderId=submission.uploader_id,
-                        uploadedAt=submission.uploaded_at,
-                        permissionAttested=submission.permission_attested,
-                        description=submission.description,
-                        projects=[project.name for project in item.projects],
-                        reviewerId=submission.reviewer_id,
-                        reviewedAt=submission.reviewed_at,
-                        reviewReason=submission.review_reason,
-                    )
-            elif item.rights is not None:
-                resource.update(
-                    rightsAnnotated=True,
-                    creator=item.rights.creator,
-                    sourceInstitution=item.rights.source_institution,
-                    copyrightHolder=item.rights.copyright_holder,
-                    rightsStatement=item.rights.rights_statement,
-                    description=item.rights.description,
-                )
-            if cls._shows_revision(item, viewer):
-                resource["revision"] = item.revision
-        return result
 
     def _authorize_associations(self, req, media):
         user = cast(User, req.context["user"])
@@ -207,7 +99,7 @@ class MediaResource:
             viewer = (actor, manager)
         else:
             media = self._runtime.service.list_fragment_media(number)
-        resp.media = self._response(number, media, viewer=viewer)
+        resp.media = media_response(number, media, viewer=viewer)
         if not self._runtime.service.legacy_fallback_allowed(number):
             resp.media["legacyFallbackAllowed"] = False
 
@@ -215,14 +107,14 @@ class MediaResource:
         _private_response(resp)
         management, actor, manager, _ = self._writer(req)
         number = self._authorized_fragment(req)
-        header = req.get_header("X-Media-Metadata", required=True)
+        header = cast(str, req.get_header("X-Media-Metadata", required=True))
         if len(header) > 16384:
             raise falcon.HTTPPayloadTooLarge(
                 description="Media metadata exceeds 16 KiB."
             )
         try:
             metadata = json.loads(unquote(header, errors="strict"))
-        except (ValueError, UnicodeDecodeError, RecursionError) as error:
+        except (ValueError, RecursionError) as error:
             raise DataError("Invalid media metadata header.") from error
         from ebl.media.infrastructure.upload_images import (
             UploadValidationError,
@@ -235,9 +127,9 @@ class MediaResource:
                 MediaUploadRequest(
                     number,
                     actor,
-                    req.get_header("Idempotency-Key", required=True),
+                    cast(str, req.get_header("Idempotency-Key", required=True)),
                     metadata,
-                    req.bounded_stream,
+                    cast(BinaryIO, req.bounded_stream),
                     req.content_length,
                     req.content_type,
                 )
@@ -253,7 +145,7 @@ class MediaResource:
         except MediaConflictError as error:
             raise falcon.HTTPConflict(description=str(error)) from error
         resp.status = falcon.HTTP_201 if created else falcon.HTTP_200
-        resp.media = self._response(number, (media,), viewer=(actor, manager))
+        resp.media = media_response(number, (media,), viewer=(actor, manager))
 
     def _mutate(self, req, resp, media_id, operation):
         _private_response(resp)
@@ -287,7 +179,7 @@ class MediaResource:
         if operation == "remove":
             resp.status = falcon.HTTP_204
         else:
-            resp.media = self._response(number, (media,), viewer=(actor, manager))
+            resp.media = media_response(number, (media,), viewer=(actor, manager))
             resp.set_header("ETag", f'"{media.revision}"')
             resp.set_header("Access-Control-Expose-Headers", "ETag")
 
