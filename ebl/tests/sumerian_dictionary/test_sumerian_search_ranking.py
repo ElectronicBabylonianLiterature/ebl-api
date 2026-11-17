@@ -160,3 +160,10 @@ def test_malformed_fields_are_read_as_empty() -> None:
     document = candidate(citationForm=None, aliasForms=None, attestationCount="9")
 
     assert SumerianRelevanceRanker("x").rank(document) is None
+
+
+def test_the_id_breaks_a_tie_on_every_other_key() -> None:
+    second = candidate(_id="o0000002", citationForm="lugala")
+    first = candidate(_id="o0000001", citationForm="lugalb")
+
+    assert _sorted_ids("lugal", second, first) == ["o0000001", "o0000002"]
