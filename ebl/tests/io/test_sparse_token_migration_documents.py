@@ -17,13 +17,15 @@ from ebl.io.sparse_tokens.token_keys import (
     STORED_TOKEN_DEFAULTS,
     dropped_keys,
     is_token,
-    key_counts,
     needs_sparse_rewrite,
 )
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 TOKEN = {"type": "Reading", "value": "ku", "flags": [], "extra": 1}
+PART = {"type": "ValueToken", "value": "k"}
+BREAK = {"type": "BrokenAway", "value": "["}
+SPARSE_READING = {"type": "Reading", "value": "ku", "nameParts": [PART]}
 
 
 def lossy_token_fields() -> TokenFields:
@@ -64,18 +66,25 @@ def test_is_token(value: Any, expected: bool) -> None:
     assert is_token(value) is expected
 
 
-def test_key_counts_count_every_key() -> None:
-    document = {"lines": [{"type": "TextLine", "content": [TOKEN, TOKEN]}]}
+def test_keys_added_by_the_rewrite_are_not_dropped() -> None:
+    line = {"type": "TextLine", "content": [TOKEN]}
 
-    assert key_counts(document) == {
-        (None, "lines"): 1,
-        (None, "type"): 1,
-        (None, "content"): 1,
-        ("Reading", "type"): 2,
-        ("Reading", "value"): 2,
-        ("Reading", "flags"): 2,
-        ("Reading", "extra"): 2,
-    }
+    assert dropped_keys([line], [{**line, "prefix": "1. "}]) == frozenset()
+
+
+def test_a_dropped_list_item_reports_its_keys() -> None:
+    assert dropped_keys([{"lineKey": 1}], []) == {"lineKey"}
+
+
+def test_a_dict_replaced_by_a_value_reports_its_keys() -> None:
+    assert dropped_keys({"start": {"number": 1}}, {"start": 1}) == {"number"}
+
+
+def test_a_legacy_name_split_into_breaks_drops_no_key() -> None:
+    legacy = {**SPARSE_READING, "nameParts": [PART, BREAK, PART]}
+    split = {**SPARSE_READING, "nameParts": [PART, PART], "nameBreaks": [BREAK]}
+
+    assert dropped_keys([legacy], [split]) == frozenset()
 
 
 def test_dropped_keys_ignore_keys_omittable_for_the_token_type() -> None:
@@ -115,6 +124,18 @@ def test_a_line_number_key_dropped_next_to_a_flagged_token_is_reported() -> None
     assert rewrite.dropped_keys == {"flags"}
 
 
+def test_a_nested_key_is_not_excused_by_the_same_key_written_elsewhere() -> None:
+    text = cast(dict, TextSchema().dump(parse_atf_lark("1-2. ku")))
+    del text["lines"][0]["prefix"]
+    text["lines"][0]["lineNumber"]["start"]["prefix"] = "metadata"
+    document = {"_id": "X.9", "text": text, STORED_SIZE: 1000}
+
+    rewrite = rewrite_document(fragment_token_fields(), document, full_check=True)
+
+    assert rewrite is not None
+    assert rewrite.dropped_keys == {"prefix"}
+
+
 def test_canonical_sorts_enclosure_types_only() -> None:
     value = {"enclosureType": ["B", "A"], "parts": [{"flags": ["?", "!"]}]}
 
@@ -147,11 +168,6 @@ def test_a_document_missing_a_required_field_is_unreadable() -> None:
 
     with pytest.raises(MissingFields, match="missing manuscripts"):
         rewrite_document(token_fields, {"_id": 1, "lines": []})
-
-
-PART = {"type": "ValueToken", "value": "k"}
-BREAK = {"type": "BrokenAway", "value": "["}
-SPARSE_READING = {"type": "Reading", "value": "ku", "nameParts": [PART]}
 
 
 def test_the_stored_defaults_and_derived_keys_come_from_the_schemas() -> None:

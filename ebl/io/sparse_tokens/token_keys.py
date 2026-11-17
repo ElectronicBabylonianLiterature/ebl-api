@@ -1,5 +1,4 @@
-from collections import Counter
-from typing import Any, Dict, FrozenSet, List, Optional
+from typing import Any, Dict, FrozenSet, Iterator, List, Optional
 
 from marshmallow.fields import Field
 
@@ -74,27 +73,42 @@ def key_owner(value: Dict[str, Any]) -> Optional[str]:
     return value["type"] if is_token(value) else None
 
 
-def key_counts(value: Any) -> Counter:
-    counts: Counter = Counter()
-    if isinstance(value, dict):
-        owner = key_owner(value)
-        counts.update((owner, key) for key in value)
-    for item in nested_values(value):
-        counts.update(key_counts(item))
-    return counts
-
-
 def is_omittable(owner: Optional[str], key: str) -> bool:
     return owner is not None and key in OMITTABLE_KEYS_BY_TYPE[owner]
 
 
+def as_split_name(value: Dict[str, Any]) -> Dict[str, Any]:
+    if not (is_token(value) and is_legacy_name(value)):
+        return value
+    parts = value["nameParts"]
+    return {**value, "nameParts": parts[0::2], "nameBreaks": parts[1::2]}
+
+
+def dropped_dict_keys(original: Dict[str, Any], rewritten: Any) -> Iterator[str]:
+    kept = rewritten if isinstance(rewritten, dict) else {}
+    owner = key_owner(original)
+    for key, value in as_split_name(original).items():
+        if key in kept:
+            yield from dropped_key_names(value, kept[key])
+        elif not is_omittable(owner, key):
+            yield key
+
+
+def dropped_list_keys(original: List[Any], rewritten: Any) -> Iterator[str]:
+    kept = rewritten if isinstance(rewritten, list) else []
+    for index, item in enumerate(original):
+        yield from dropped_key_names(item, kept[index] if index < len(kept) else None)
+
+
+def dropped_key_names(original: Any, rewritten: Any) -> Iterator[str]:
+    if isinstance(original, dict):
+        yield from dropped_dict_keys(original, rewritten)
+    elif isinstance(original, list):
+        yield from dropped_list_keys(original, rewritten)
+
+
 def dropped_keys(original: Any, rewritten: Any) -> FrozenSet[str]:
-    after = key_counts(rewritten)
-    return frozenset(
-        key
-        for (owner, key), count in key_counts(original).items()
-        if count > after[(owner, key)] and not is_omittable(owner, key)
-    )
+    return frozenset(dropped_key_names(original, rewritten))
 
 
 def name_part_count(token: Dict[str, Any]) -> int:
