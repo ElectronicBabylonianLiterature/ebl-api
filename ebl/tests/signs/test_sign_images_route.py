@@ -1,5 +1,6 @@
 import falcon
 import pytest
+from falcon.testing import Result, TestClient as FalconTestClient
 
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
 from ebl.fragmentarium.domain.annotation import PcaClustering
@@ -110,68 +111,21 @@ def test_signs_get_with_centroids_only(
     assert result.status == falcon.HTTP_OK
 
 
+@pytest.mark.usefixtures("centroid_and_unclustered_sign_images")
 def test_signs_get_with_centroids_only_and_include_unclustered(
-    client,
-    annotations_repository,
-    photo_repository,
-    fragment_repository,
-    text_with_labels,
-    cropped_sign_images_repository,
-):
-    fragment = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("K.5"), text=text_with_labels
-    )
-    fragment_repository.create(fragment)
-
-    centroid_annotation = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0]),
-        cropped_sign=CroppedSignFactory.build(),
-        pca_clustering=PcaClustering(
-            cluster_id="test-centroid-cluster-id",
-            cluster_rank=0,
-            form="canonical1",
-            is_centroid=True,
-            cluster_size=10,
-            is_main=True,
-        ),
-    )
-
-    unclustered_annotation = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 1]),
-        cropped_sign=CroppedSignFactory.build(),
-        pca_clustering=None,
-    )
-
-    fragment_number = MuseumNumber("K", "5")
-    cropped_sign_images_repository.create_many(
-        [
-            CroppedSignImage(
-                centroid_annotation.cropped_sign.image_id,
-                Base64("centroid-base64-string"),
-                fragment_number,
-            ),
-            CroppedSignImage(
-                unclustered_annotation.cropped_sign.image_id,
-                Base64("unclustered-base64-string"),
-                fragment_number,
-            ),
-        ]
-    )
-    annotations_repository.create_or_update(
-        AnnotationsFactory.build(
-            fragment_number=fragment_number,
-            annotations=[centroid_annotation, unclustered_annotation],
-        )
-    )
-
+    client: FalconTestClient,
+) -> None:
     result = client.simulate_get(
         "/signs/signName/images?centroids_only=true&include_unclustered=true"
     )
 
+    assert isinstance(result, Result)
     assert result.status == falcon.HTTP_OK
-    assert len(result.json) == 2
+    payload = result.json
+    assert isinstance(payload, list)
+    assert len(payload) == 2
 
-    images = {item["image"] for item in result.json}
+    images = {item["image"] for item in payload}
     assert images == {"centroid-base64-string", "unclustered-base64-string"}
 
 

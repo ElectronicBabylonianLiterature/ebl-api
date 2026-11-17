@@ -1,21 +1,35 @@
+from typing import cast
+from collections.abc import Mapping, Sequence
+
+import pytest
+from pymongo.cursor import Cursor
+from pymongo.database import Database
+
 from ebl.common.domain.period import Period
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
 from ebl.fragmentarium.domain.fragment import Script
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import query_summary_of
 from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
     COLLECTION,
     create_transliteration_query_lines,
 )
+from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.sign import Sign
 
 
 def test_query_fragmentarium_transliteration_limit_summary_preserves_order(
-    fragment_repository, sign_repository, signs
-):
+    fragment_repository: MongoFragmentRepository,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+) -> None:
     for sign in signs:
         sign_repository.create(sign)
 
@@ -46,13 +60,16 @@ def test_query_fragmentarium_transliteration_limit_summary_preserves_order(
                 for fragment in fragments[1:3]
             ],
             "matchCountTotal": 4,
+            "totalDocuments": 4,
         }
     )
 
 
 def test_query_fragmentarium_transliteration_limit_count_none(
-    fragment_repository, sign_repository, signs
-):
+    fragment_repository: MongoFragmentRepository,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+) -> None:
     for sign in signs:
         sign_repository.create(sign)
 
@@ -82,8 +99,10 @@ def test_query_fragmentarium_transliteration_limit_count_none(
 
 
 def test_query_fragmentarium_transliteration_limit_count_page(
-    fragment_repository, sign_repository, signs
-):
+    fragment_repository: MongoFragmentRepository,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+) -> None:
     for sign in signs:
         sign_repository.create(sign)
 
@@ -132,8 +151,11 @@ def test_query_fragmentarium_transliteration_limit_count_page(
 
 
 def test_query_fragmentarium_limit_summary_hydrates_only_phase_one_ids(
-    monkeypatch, fragment_repository, sign_repository, signs
-):
+    monkeypatch: pytest.MonkeyPatch,
+    fragment_repository: MongoFragmentRepository,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+) -> None:
     for sign in signs:
         sign_repository.create(sign)
 
@@ -147,10 +169,12 @@ def test_query_fragmentarium_limit_summary_hydrates_only_phase_one_ids(
     fragment_repository.create(visible_fragment, sort_key=0)
     fragment_repository.create(hidden_fragment, sort_key=1)
 
-    summary_queries = []
+    summary_queries: list[Mapping[str, object]] = []
     original_find_many = fragment_repository._fragments.find_many
 
-    def find_many(query, *args, **kwargs):
+    def find_many(
+        query: Mapping[str, object], *args: object, **kwargs: object
+    ) -> Cursor[dict[str, object]]:
         summary_queries.append(query)
         return original_find_many(query, *args, **kwargs)
 
@@ -170,30 +194,36 @@ def test_query_fragmentarium_limit_summary_hydrates_only_phase_one_ids(
         {
             "items": [query_summary_of(visible_fragment, matching_lines=[0])],
             "matchCountTotal": 1,
+            "totalDocuments": 1,
         }
     )
     assert summary_queries == [{"_id": {"$in": [str(visible_fragment.number)]}}]
 
 
 def test_query_fragmentarium_number_limit_summary_parser_version_fallback(
-    database, fragment_repository
-):
+    database: Database[dict[str, object]],
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     fragment = FragmentFactory.build(number=MuseumNumber.of("X.500"))
     fragment_repository.create(fragment)
     database[COLLECTION].update_one(
         {"_id": str(fragment.number)}, {"$set": {"text.parser_version": None}}
     )
 
-    dumped = FragmentQueryResultSchema().dump(
-        fragment_repository.query({"number": str(fragment.number), "limit": 1})
+    dumped = cast(
+        dict,
+        FragmentQueryResultSchema().dump(
+            fragment_repository.query({"number": str(fragment.number), "limit": 1})
+        ),
     )
 
     assert dumped["items"][0]["matchingLinePreview"]["parserVersion"] is not None
 
 
 def test_query_fragmentarium_number_limit_summary_uses_bulk_photo_lookup(
-    database, fragment_repository
-):
+    database: Database[dict[str, object]],
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     fragment = FragmentFactory.build(number=MuseumNumber.of("X.501"))
     fragment_repository.create(fragment)
     database["photos.files"].insert_one({"filename": f"{fragment.number}.jpg"})
@@ -204,5 +234,6 @@ def test_query_fragmentarium_number_limit_summary_uses_bulk_photo_lookup(
         {
             "items": [query_summary_of(fragment, has_photo=True)],
             "matchCountTotal": 0,
+            "totalDocuments": 1,
         }
     )

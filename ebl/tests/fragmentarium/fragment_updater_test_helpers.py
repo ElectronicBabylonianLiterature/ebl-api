@@ -6,6 +6,7 @@ from ebl.changelog import Changelog
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.users.domain.user import User
 
@@ -15,6 +16,12 @@ FROZEN_TIME = "2018-09-07 15:41:24.032"
 
 def entry(number, fragment) -> dict:
     return {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))}
+
+
+def mutable_lemmatization_tokens(
+    lemmatization: Lemmatization,
+) -> list[list[LemmatizationToken]]:
+    return [list(line) for line in lemmatization.tokens]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -40,6 +47,9 @@ class UpdaterContext:
 
     def expect_update_field(self, field: str, fragment: Fragment) -> None:
         self.when(self.repository).update_field(field, fragment).thenReturn()
+
+    def expect_update_fields(self, fields: list[str], fragment: Fragment) -> None:
+        self.when(self.repository).update_fields(fields, fragment).thenReturn()
 
     def inject(self, fragment: Fragment) -> Fragment:
         return fragment.set_text(self.injector.inject_transliteration(fragment.text))

@@ -75,7 +75,7 @@ def test_query_fragmentarium_lemmas_not_found(client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([], 0)
+    assert result.json == query_result_of([], 0, total_documents=0)
 
 
 def test_query_fragmentarium_combined_query(
@@ -97,14 +97,15 @@ def test_query_fragmentarium_combined_query(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_item_of(fragment, matching_lines=[1, 3])],
-        2,
+        [query_item_of(fragment, matching_lines=[1, 3])], 2, total_documents=1
     )
 
 
 def test_query_fragmentarium_ignores_pagination_index(client, fragmentarium):
     genre = Genre(["CANONICAL", "Technical"], False)
-    fragments = FragmentFactory.build_batch(2, genres=(genre,), script=Script())
+    fragments = [
+        FragmentFactory.build(genres=(genre,), script=Script()) for _ in range(2)
+    ]
     for index, fragment in enumerate(fragments):
         fragmentarium.create(fragment, sort_key=index)
 
@@ -115,7 +116,7 @@ def test_query_fragmentarium_ignores_pagination_index(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_item_of(fragment) for fragment in fragments], 0
+        [query_item_of(fragment) for fragment in fragments], 0, total_documents=2
     )
 
 

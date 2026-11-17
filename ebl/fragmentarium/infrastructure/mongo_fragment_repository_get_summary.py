@@ -147,6 +147,7 @@ class MongoFragmentRepositoryGetSummary(MongoFragmentRepositoryBase):
                     "matchCountTotal": data.get("matchCountTotal", 0),
                     "isMatchCountTotalExact": data.get("isMatchCountTotalExact", True),
                     "hasNextPage": data.get("hasNextPage"),
+                    "totalDocuments": data.get("totalDocuments"),
                 }
             ),
         )

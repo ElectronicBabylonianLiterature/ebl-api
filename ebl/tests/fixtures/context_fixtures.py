@@ -6,6 +6,7 @@ from falcon_caching import Cache
 
 import ebl.context
 from ebl.cache.application.custom_cache import ChapterCache
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.sumerian_dictionary.infrastructure.mongo_sumerian_word_repository import (
     MongoSumerianWordRepository,
 )
@@ -45,11 +46,13 @@ def sumerian_word_repository(database) -> MongoSumerianWordRepository:
 
 @pytest.fixture
 def context(
-    request: pytest.FixtureRequest, user: User, mongo_cache_repository
+    request: pytest.FixtureRequest, user: User, database, mongo_cache_repository
 ) -> ebl.context.Context:
     return ebl.context.Context(
         auth_backend=NoneAuthBackend(lambda: user),
         cache=Cache({"CACHE_TYPE": "null"}),
-        custom_cache=ChapterCache(mongo_cache_repository),
+        custom_cache=ChapterCache(
+            mongo_cache_repository, MongoChapterCacheState(database)
+        ),
         **resolve_fixtures(request, CONTEXT_FIXTURES),
     )

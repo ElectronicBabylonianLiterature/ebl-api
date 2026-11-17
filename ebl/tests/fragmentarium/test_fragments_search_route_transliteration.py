@@ -52,6 +52,7 @@ def test_query_fragmentarium_transliteration(
             for fragment in transliterated_fragments
         ],
         3,
+        total_documents=3,
     )
     assert "matchingLinePreview" not in result.json["items"][0]
     assert "hasPhoto" not in result.json["items"][0]
@@ -138,7 +139,10 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_summary_of(fragment, matching_lines=[0])], 1, bibliography_documents={}
+        [query_summary_of(fragment, matching_lines=[0])],
+        1,
+        bibliography_documents={},
+        total_documents=1,
     )
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
     assert "description" in result.json["items"][0]
@@ -176,4 +180,5 @@ def test_query_fragmentarium_lemmas(
     assert result.json == query_result_of(
         [query_item_of(fragment, matching_lines=expected_lines)],
         len(expected_lines),
+        total_documents=1,
     )

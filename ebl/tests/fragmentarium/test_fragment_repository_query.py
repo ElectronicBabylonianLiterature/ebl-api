@@ -1,11 +1,17 @@
+from typing import cast
+from collections.abc import Iterator, Mapping, Sequence
 from itertools import zip_longest
 import random
 
 import attr
 import pytest
+from pymongo.database import Database
 
 from ebl.common.query.query_result import QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import query_item_of
@@ -16,13 +22,21 @@ from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
 )
 from ebl.common.domain.period import Period
 from ebl.fragmentarium.domain.fragment import Script
+from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.sign import Sign
 
 
-def test_query_fragmentarium_number(database, fragment_repository):
+def test_query_fragmentarium_number(
+    database: Database[dict[str, object]],
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many(
-        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+        [
+            cast(dict, SCHEMA.dump(fragment)),
+            cast(dict, SCHEMA.dump(FragmentFactory.build())),
+        ]
     )
 
     assert fragment_repository.query(
@@ -31,18 +45,25 @@ def test_query_fragmentarium_number(database, fragment_repository):
         {
             "items": [query_item_of(fragment)],
             "matchCountTotal": 0,
+            "totalDocuments": 1,
         }
     )
 
 
-def test_query_fragmentarium_not_found(fragment_repository):
+def test_query_fragmentarium_not_found(
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     assert fragment_repository.query({"number": "K.1"}) == QueryResult.create_empty()
 
 
-def test_query_aggregation_allows_disk_use(fragment_repository, monkeypatch):
-    aggregate_options = {}
+def test_query_aggregation_allows_disk_use(
+    fragment_repository: MongoFragmentRepository, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    aggregate_options: dict[str, object] = {}
 
-    def aggregate(_pipeline, **kwargs):
+    def aggregate(
+        _pipeline: Sequence[Mapping[str, object]], **kwargs: object
+    ) -> Iterator[dict[str, object]]:
         aggregate_options.update(kwargs)
         return iter([])
 
@@ -53,9 +74,12 @@ def test_query_aggregation_allows_disk_use(fragment_repository, monkeypatch):
     assert aggregate_options["allowDiskUse"] is True
 
 
-def test_query_fragmentarium_reference_id(database, fragment_repository):
+def test_query_fragmentarium_reference_id(
+    database: Database[dict[str, object]],
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     fragment = FragmentFactory.build(references=(ReferenceFactory.build(),))
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    database[COLLECTION].insert_one(cast(dict, SCHEMA.dump(fragment)))
 
     assert fragment_repository.query(
         {"bibId": fragment.references[0].id}
@@ -63,6 +87,7 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
         {
             "items": [query_item_of(fragment)],
             "matchCountTotal": 0,
+            "totalDocuments": 1,
         }
     )
 
@@ -70,11 +95,15 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
 @pytest.mark.parametrize(
     "pages", ["163", "no. 163", "161-163", "163-161pl. 163", "pl. 42 no. 163"]
 )
-def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
+def test_query_fragmentarium_id_and_pages(
+    pages: str,
+    database: Database[dict[str, object]],
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    database[COLLECTION].insert_one(cast(dict, SCHEMA.dump(fragment)))
 
     assert fragment_repository.query(
         {"bibId": fragment.references[0].id, "pages": "163"}
@@ -82,18 +111,21 @@ def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
         {
             "items": [query_item_of(fragment)],
             "matchCountTotal": 0,
+            "totalDocuments": 1,
         }
     )
 
 
 @pytest.mark.parametrize("pages", ["1631", "1163", "116311"])
 def test_empty_result_query_reference_id_and_pages(
-    pages, database, fragment_repository
-):
+    pages: str,
+    database: Database[dict[str, object]],
+    fragment_repository: MongoFragmentRepository,
+) -> None:
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
-    database[COLLECTION].insert_one(SCHEMA.dump(fragment))
+    database[COLLECTION].insert_one(cast(dict, SCHEMA.dump(fragment)))
 
     assert (
         fragment_repository.query({"bibId": fragment.references[0].id, "pages": "163"})
@@ -112,8 +144,12 @@ def test_empty_result_query_reference_id_and_pages(
     ],
 )
 def test_query_fragmentarium_transliteration(
-    string, expected_lines, fragment_repository, sign_repository, signs
-):
+    string: str,
+    expected_lines: list[int],
+    fragment_repository: MongoFragmentRepository,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+) -> None:
     for sign in signs:
         sign_repository.create(sign)
 
@@ -133,6 +169,7 @@ def test_query_fragmentarium_transliteration(
                     )
                 ],
                 "matchCountTotal": len(expected_lines) - (len(pattern) > 1),
+                "totalDocuments": 1,
             }
         )
         if expected_lines
@@ -142,7 +179,11 @@ def test_query_fragmentarium_transliteration(
     assert result == expected
 
 
-def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs):
+def test_query_fragmentarium_sorting(
+    fragment_repository: MongoFragmentRepository,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+) -> None:
     for sign in signs:
         sign_repository.create(sign)
 
@@ -178,5 +219,6 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
                 for fragment, fragment_lines in zip_longest(fragments, lines)
             ],
             "matchCountTotal": 5,
+            "totalDocuments": 4,
         }
     )

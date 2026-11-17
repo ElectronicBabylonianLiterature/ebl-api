@@ -9,7 +9,7 @@ from ebl.transliteration.application.line_schemas import (
 
 
 class ChapterInfoLineSchema(ApiLineSchema):
-    translation = fields.List(  # pyre-ignore[15]
+    translation = fields.List(
         fields.Nested(TranslationLineSchema), load_default=(), allow_none=True
     )
 

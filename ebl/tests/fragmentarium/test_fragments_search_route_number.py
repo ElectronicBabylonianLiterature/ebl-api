@@ -30,7 +30,9 @@ def test_query_fragmentarium_number(get_number, client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_item_of(fragment)], 0)
+    assert result.json == query_result_of(
+        [query_item_of(fragment)], 0, total_documents=1
+    )
 
 
 def test_query_fragmentarium_number_summary_only(client, fragmentarium):
@@ -44,7 +46,10 @@ def test_query_fragmentarium_number_summary_only(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_summary_of(fragment, has_photo=True)], 0, bibliography_documents={}
+        [query_summary_of(fragment, has_photo=True)],
+        0,
+        bibliography_documents={},
+        total_documents=1,
     )
     assert result.json["items"][0]["matchingLinePreview"]["lines"] == []
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
@@ -56,21 +61,21 @@ def test_query_fragmentarium_number_summary_only(client, fragmentarium):
 def test_query_fragmentarium_number_not_found(client):
     result = client.simulate_get("/fragments/query", params={"number": "K.1"})
 
-    assert result.json == query_result_of([], 0)
+    assert result.json == query_result_of([], 0, total_documents=0)
 
 
 def test_query_fragmentarium_empty_query_includes_count_metadata(client):
     result = client.simulate_get("/fragments/query")
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([], 0)
+    assert result.json == query_result_of([], 0, total_documents=0)
 
 
 def test_query_fragmentarium_pagination_index_only_matches_empty_query(client):
     result = client.simulate_get("/fragments/query", params={"paginationIndex": 999})
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([], 0)
+    assert result.json == query_result_of([], 0, total_documents=0)
 
 
 def test_query_fragmentarium_references(client, fragmentarium, bibliography, user):
@@ -95,4 +100,6 @@ def test_query_fragmentarium_references(client, fragmentarium, bibliography, use
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_item_of(fragment)], 0)
+    assert result.json == query_result_of(
+        [query_item_of(fragment)], 0, total_documents=1
+    )

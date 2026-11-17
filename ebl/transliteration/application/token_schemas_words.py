@@ -49,7 +49,7 @@ class BaseWordSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested("OneOfTokenSchema"), required=True)
     language = NameEnumField(Language, required=True)
     normalized = fields.Boolean(required=True)
-    lemmatizable = fields.Boolean(required=True)
+    lemmatizable = fields.Boolean()
     alignable = fields.Boolean()
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
     alignment = fields.Integer(allow_none=True, load_default=None)
@@ -106,7 +106,7 @@ class LoneDeterminativeSchema(AbstractWordSchema):
 
 
 class AkkadianWordSchema(BaseWordSchema):
-    modifiers = fields.List(ValueEnumField(Flag), required=True)
+    modifiers = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -144,7 +144,7 @@ class MetricalFootSeparatorSchema(BreakSchema):
 
 class GreekLetterSchema(BaseTokenSchema):
     letter = fields.String(required=True, validate=validate.Length(1, 1))
-    flags = fields.List(ValueEnumField(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), load_default=list)
 
     @post_load
     def make_token(self, data, **kwargs):
