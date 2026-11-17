@@ -107,6 +107,16 @@ Separating the arrays must not sever real relationships between the data:
   uniqueness, existence, referential integrity — must still be enforced across
   the **union** of both arrays.
 
+### Narrow exception: the existing token arrays
+
+The stored and API token arrays (`content`, `parts`, `nameParts`, …) predate
+this gate and are polymorphic: `OneOfTokenSchema` selects each token's schema by
+its stored `type`. Code that only **reads or migrates** that existing format may
+recognise a token by its `type` value in the same way, as the sparse-token
+migration (`ebl/io/sparse_tokens/`) does. It must not add a new mixed array or a
+new probe on other data. Any new data shape, and any redesign of the token
+format, follows the rules above in full.
+
 ### Why
 
 A mixed array pushes the type question onto every reader, forever. Each consumer
