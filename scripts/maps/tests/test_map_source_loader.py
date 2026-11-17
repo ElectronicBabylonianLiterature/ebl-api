@@ -1,0 +1,235 @@
+from pathlib import Path
+from dataclasses import replace
+
+import pytest
+
+import scripts.maps.map_source_loader as source_loader
+
+from scripts.maps.map_findspot_grouping import group_findspots
+from scripts.maps.map_mapping_rules import (
+    derive_row,
+    index_polygons_by_key,
+)
+from scripts.maps.map_site_config import SITE_CONFIGS
+
+
+def test_load_site_ods_rows_rejects_unexpected_header() -> None:
+    config = replace(SITE_CONFIGS["ASSUR"], ods_header=("site", "_id", "area"))
+
+    with pytest.raises(ValueError, match="Unexpected ODS header"):
+        source_loader.load_site_ods_rows(config)
+
+
+def test_load_site_ods_rows_skips_blank_id_rows() -> None:
+    rows = source_loader.load_site_ods_rows(SITE_CONFIGS["ASSUR"])
+
+    assert all(row.findspot_id for row in rows)
+
+
+def test_source_paths_and_loading_do_not_depend_on_working_directory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config = SITE_CONFIGS["ASSUR"]
+    assert config.ods_path.is_absolute()
+    assert config.shp_base.is_absolute()
+
+    monkeypatch.chdir(tmp_path)
+
+    assert source_loader.load_site_ods_rows(config)
+
+
+@pytest.mark.parametrize("raw_id", ["-1", "1.0", "١", str(2**63)])
+def test_load_site_ods_rows_rejects_invalid_findspot_ids(
+    monkeypatch: pytest.MonkeyPatch, raw_id: str
+) -> None:
+    config = SITE_CONFIGS["ASSUR"]
+    monkeypatch.setattr(
+        source_loader,
+        "read_ods_rows",
+        lambda path: (config.ods_header, (raw_id, "area", "sector", "site", "map")),
+    )
+
+    with pytest.raises(ValueError, match="Invalid findspot ID"):
+        source_loader.load_site_ods_rows(config)
+
+
+def test_group_findspots_deduplicates_agreeing_progressive_rows() -> None:
+    config = SITE_CONFIGS["KALHU"]
+    rows = (
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+    )
+    polygons = (
+        source_loader.MapPolygon(
+            name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"
+        ),
+    )
+    index = index_polygons_by_key(polygons)
+    derivations = tuple(derive_row(row, index, config) for row in rows)
+
+    groups = group_findspots(rows, derivations)
+
+    assert len(groups) == 1
+    assert groups[0].status == "resolved"
+    assert groups[0].polygon_id == "kalhu-d-xii-abc"
+
+
+def test_group_findspots_flags_disagreeing_rows_as_conflict() -> None:
+    config = SITE_CONFIGS["KALHU"]
+    rows = (
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+        source_loader.MapOdsRow(findspot_id=1, site_name=config.site_name, area="ZT"),
+    )
+    polygons = (
+        source_loader.MapPolygon(
+            name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"
+        ),
+        source_loader.MapPolygon(
+            name="ZT", polygon_id="kalhu-zt-def", geometry_checksum="def"
+        ),
+    )
+    index = index_polygons_by_key(polygons)
+    derivations = tuple(derive_row(row, index, config) for row in rows)
+
+    groups = group_findspots(rows, derivations)
+
+    assert len(groups) == 1
+    assert groups[0].status == "conflict"
+    assert groups[0].polygon_id is None
+
+
+def _ring(longitude: float) -> tuple:
+    return (
+        (longitude, 35.0),
+        (longitude, 35.1),
+        (longitude + 0.1, 35.1),
+        (longitude, 35.0),
+    )
+
+
+def _patch_polygon_sources(
+    monkeypatch: pytest.MonkeyPatch,
+    names: tuple[str, ...],
+    longitudes: tuple[float, ...],
+    wkt: str,
+) -> None:
+    monkeypatch.setattr(source_loader, "load_dbf_encoding", lambda path: "UTF-8")
+    monkeypatch.setattr(
+        source_loader,
+        "load_dbf_rows",
+        lambda path, encoding: tuple({"Name": name} for name in names),
+    )
+    monkeypatch.setattr(
+        source_loader,
+        "load_shp_polygon_geometries",
+        lambda path: tuple(((_ring(longitude),),) for longitude in longitudes),
+    )
+    monkeypatch.setattr(source_loader, "load_prj_wkt", lambda path: wkt)
+
+
+@pytest.mark.parametrize(
+    "names,longitudes,epsg,message",
+    [
+        (("A",), (43.0,), 3857, "does not match"),
+        (("A",), (200.0,), 4326, "plausible"),
+        (("A", "B"), (43.0,), 4326, "row counts differ"),
+        (("A", "A"), (43.0, 43.0), 4326, "must be unique"),
+    ],
+)
+def test_load_site_polygons_validates_sources(
+    monkeypatch: pytest.MonkeyPatch,
+    names: tuple[str, ...],
+    longitudes: tuple[float, ...],
+    epsg: int,
+    message: str,
+) -> None:
+    from pyproj import CRS
+
+    _patch_polygon_sources(monkeypatch, names, longitudes, CRS.from_epsg(epsg).to_wkt())
+
+    with pytest.raises(ValueError, match=message):
+        source_loader.load_site_polygons(SITE_CONFIGS["ASSUR"])
+
+
+def test_load_site_polygons_rejects_invalid_crs(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _patch_polygon_sources(monkeypatch, ("A",), (43.0,), "not a crs")
+
+    with pytest.raises(ValueError, match="CRS is invalid"):
+        source_loader.load_site_polygons(SITE_CONFIGS["ASSUR"])
+
+
+def test_load_site_ods_rows_rejects_empty_source(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(source_loader, "read_ods_rows", lambda path: ())
+
+    with pytest.raises(ValueError, match="contains no rows"):
+        source_loader.load_site_ods_rows(SITE_CONFIGS["ASSUR"])
+
+
+def test_group_findspots_flags_mixed_resolved_and_unresolved_rows_as_conflict() -> None:
+    config = SITE_CONFIGS["KALHU"]
+    rows = (
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="D XII"
+        ),
+        source_loader.MapOdsRow(
+            findspot_id=1, site_name=config.site_name, area="unknown"
+        ),
+    )
+    polygons = (
+        source_loader.MapPolygon(
+            name="D XII", polygon_id="kalhu-d-xii-abc", geometry_checksum="abc"
+        ),
+    )
+    index = index_polygons_by_key(polygons)
+    derivations = tuple(derive_row(row, index, config) for row in rows)
+
+    groups = group_findspots(rows, derivations)
+
+    assert groups[0].status == "conflict"
+    assert groups[0].polygon_id is None
+
+
+def test_derive_row_preserves_explicit_source_uncertainty() -> None:
+    config = SITE_CONFIGS["ASSUR"]
+    row = source_loader.MapOdsRow(
+        findspot_id=4392, site_name=config.site_name, area="gB4II?"
+    )
+    polygons = (
+        source_loader.MapPolygon(
+            name="gB4II", polygon_id="assur-gb4ii-abc", geometry_checksum="abc"
+        ),
+    )
+
+    derivation = derive_row(row, index_polygons_by_key(polygons), config)
+
+    assert derivation.status == "needs-human-curation"
+    assert derivation.polygon_id is None
+    assert derivation.matched_value == "gB4II?"
+
+
+@pytest.mark.parametrize("site_name", ["", "Wrong site"])
+def test_derive_row_requires_canonical_site_identity(site_name: str) -> None:
+    config = SITE_CONFIGS["ASSUR"]
+    row = source_loader.MapOdsRow(findspot_id=1, site_name=site_name, area="Area")
+    polygons = (
+        source_loader.MapPolygon(
+            name="Area",
+            polygon_id="assur-area-checksum",
+            geometry_checksum="checksum",
+        ),
+    )
+
+    derivation = derive_row(row, index_polygons_by_key(polygons), config)
+
+    assert derivation.status == "needs-human-curation"
+    assert derivation.polygon_id is None
