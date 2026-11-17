@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "siteId": "KALHU",
+  "siteName": "Kalḫu",
+  "membershipSourceRevision": "sha256:9f3812b818c0f3a1a234b13b7394f058acc53c2bc89cc1e743fc5deab3d88799",
+  "counts": {
+    "sourceRows": 24,
+    "sourceGroups": 18,
+    "verifiedMappings": 7,
+    "curatedMappings": 0,
+    "curatedMappingsWithoutSourceGroups": 0,
+    "unresolvedRows": 11,
+    "unresolvedGroups": 10,
+    "conflictRows": 2,
+    "conflictGroups": 1,
+    "invalidRows": 0
+  },
+  "deterministicRule": "normalize(ODS.area) == normalize(shapefile.Name without leading digits); when area is blank, fall back to normalize(ODS.building) == normalize(shapefile.Name without leading digits)",
+  "normalization": "Unicode NFKC, whitespace trimming and case folding; uncertainty markers preserved.",
+  "unresolvedLabels": [
+    {
+      "label": "A 50",
+      "count": 1
+    },
+    {
+      "label": "AS 411",
+      "count": 1
+    },
+    {
+      "label": "B 50",
+      "count": 1
+    },
+    {
+      "label": "C 50",
+      "count": 1
+    },
+    {
+      "label": "Governor's Palace",
+      "count": 1
+    },
+    {
+      "label": "Nabu Temple",
+      "count": 1
+    },
+    {
+      "label": "South-East Palace",
+      "count": 1
+    },
+    {
+      "label": "South-West Palace but probably originating in Central Palace",
+      "count": 1
+    },
+    {
+      "label": "Upper fill of trench (d. 13) outside north-west corner of Governor's Palace",
+      "count": 1
+    },
+    {
+      "label": "ZT4",
+      "count": 1
+    }
+  ]
+}
