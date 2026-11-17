@@ -21,9 +21,9 @@ def test_finish_failure_keeps_cache_bypassed(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    cache = ChapterCache(mongo_cache_repository, MongoChapterCacheState(database))
+    state = MongoChapterCacheState(database)
+    cache = ChapterCache(mongo_cache_repository, state)
     chapter_id = ChapterFactory.build().id_
-    state = cache._chapter_state
     with cache.updating_chapter(chapter_id):
         cache.get_or_create(chapter_id, str(chapter_id), lambda: {"value": "old"})
 
@@ -47,7 +47,8 @@ def test_state_read_failure_bypasses_existing_cache(
     caplog: pytest.LogCaptureFixture,
     preexisting: bool,
 ) -> None:
-    cache = ChapterCache(mongo_cache_repository, MongoChapterCacheState(database))
+    state = MongoChapterCacheState(database)
+    cache = ChapterCache(mongo_cache_repository, state)
     chapter_id: ChapterId = ChapterFactory.build().id_
     if preexisting:
         cache.get_or_create(chapter_id, str(chapter_id), lambda: {"value": "old"})
@@ -56,7 +57,7 @@ def test_state_read_failure_bypasses_existing_cache(
     def fail_read(*args: object, **kwargs: object) -> None:
         raise AutoReconnect("state unavailable")
 
-    monkeypatch.setattr(cache._chapter_state._collection, "find_one", fail_read)
+    monkeypatch.setattr(state._collection, "find_one", fail_read)
     with caplog.at_level(logging.WARNING):
         result = cache.get_or_create(
             chapter_id, str(chapter_id), lambda: {"value": "new"}

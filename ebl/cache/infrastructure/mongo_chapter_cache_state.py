@@ -8,6 +8,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import PyMongoError
 
+from ebl.cache.application.chapter_cache_state import ChapterCacheState
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.infrastructure.queries import chapter_id_query
 from ebl.transliteration.infrastructure.collections import CHAPTERS_COLLECTION
@@ -19,7 +20,7 @@ WARNING_INTERVAL_SECONDS = 60
 PENDING_LEASE_MILLISECONDS = 5 * 60 * 1000
 
 
-class MongoChapterCacheState:
+class MongoChapterCacheState(ChapterCacheState):
     def __init__(self, database: Database) -> None:
         self._collection: Collection = database[COLLECTION]
         self._chapters: Collection = database[CHAPTERS_COLLECTION]

@@ -32,13 +32,13 @@ class MongoCacheRepository(CacheRepository):
             {"cache_key": {"$regex": cache_key} if regex else cache_key}
         )
 
-    def get(self, cache_key: str) -> dict:
+    def get(self, cache_key: str, *, legacy_fallback: bool = True) -> dict:
         document = self._raw_collection.find_one(
             {"_id": self._document_id(cache_key)}, projection={"cache_key": 0, "_id": 0}
         )
         if document is not None:
             return document
-        if cache_key.startswith("chapter-display-v2:"):
+        if not legacy_fallback:
             raise NotFoundError("Cache entry not found.")
         return self._collection.find_one(
             {"cache_key": cache_key}, projection={"cache_key": 0, "_id": 0}

@@ -19,7 +19,9 @@ def test_custom_cache_get(mongo_cache_repository, database, when):
     custom_cache = ChapterCache(
         mongo_cache_repository, MongoChapterCacheState(database)
     )
-    when(mongo_cache_repository).get("test-key").thenReturn({"item": "test-item"})
+    when(mongo_cache_repository).get("test-key", legacy_fallback=True).thenReturn(
+        {"item": "test-item"}
+    )
     assert custom_cache.get("test-key") == {"item": "test-item"}
 
 

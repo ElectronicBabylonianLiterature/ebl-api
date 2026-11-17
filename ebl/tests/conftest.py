@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, List, Mapping, Sequence, Union, cast
 
 import attr
+import pydash
 import pytest
 from PIL import Image
 from dictdiffer import diff
@@ -561,20 +562,19 @@ def client(context):
     return testing.TestClient(api)
 
 
+@attr.s(auto_attribs=True)
 class EnsureAnnotationPost:
-    def __init__(self, service: AnnotationsService) -> None:
-        self._service = service
+    service: AnnotationsService
 
     def on_post(self, req, resp):
-        return AnnotationResource(self._service).on_post(req, resp, "K.123")
+        return AnnotationResource(self.service).on_post(req, resp, "K.123")
 
 
 @pytest.fixture
 def guest_client(context, annotations_service):
     api = ebl.app.create_app(attr.evolve(context, auth_backend=NoneAuthBackend(Guest)))
-    api.add_route(
-        "/fragments/K.123/annotations", EnsureAnnotationPost(annotations_service)
-    )
+    resource = EnsureAnnotationPost(annotations_service)
+    api.add_route("/fragments/K.123/annotations", resource)
     return testing.TestClient(api)
 
 
@@ -733,10 +733,9 @@ def create_mongo_bibliography_entry():
     def _from_bibliography_entry(bibliography_entry: Union[dict, None] = None) -> dict:
         if not bibliography_entry:
             bibliography_entry = BibliographyEntryFactory.build()
-        return {
-            "_id" if key == "id" else key: value
-            for key, value in cast(dict, bibliography_entry).items()
-        }
+        return pydash.map_keys(
+            cast(dict, bibliography_entry), lambda _, key: "_id" if key == "id" else key
+        )
 
     return _from_bibliography_entry
 

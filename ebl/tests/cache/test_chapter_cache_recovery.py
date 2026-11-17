@@ -192,4 +192,4 @@ def test_versioned_miss_does_not_fall_back_to_legacy_query(database: Database) -
         repository._collection, "find_one", side_effect=AssertionError("extra lookup")
     ):
         with pytest.raises(NotFoundError):
-            repository.get(f"{CHAPTER_CACHE_KEY_PREFIX}missing")
+            repository.get("any-namespace:missing", legacy_fallback=False)

@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from typing import Callable, Iterator, cast
 
 from ebl.cache.application.cache_repository import CacheRepository
-from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
+from ebl.cache.application.chapter_cache_state import ChapterCacheState
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.errors import NotFoundError
 
@@ -19,8 +19,8 @@ class CustomCache:
     def has(self, key: str) -> bool:
         return self._mongo_cache_repository.has(key)
 
-    def get(self, key: str) -> dict:
-        return self._mongo_cache_repository.get(key)
+    def get(self, key: str, *, legacy_fallback: bool = True) -> dict:
+        return self._mongo_cache_repository.get(key, legacy_fallback=legacy_fallback)
 
     def set(self, key: str, item: dict) -> None:
         self._mongo_cache_repository.set(key, item)
@@ -34,7 +34,7 @@ class CustomCache:
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class ChapterCache(CustomCache):
-    _chapter_state: MongoChapterCacheState
+    _chapter_state: ChapterCacheState
 
     def delete_chapter(self, chapter_id: ChapterId) -> None:
         chapter_key_pattern = rf"{re.escape(str(chapter_id))}(\sline-\d+)?$"
@@ -62,7 +62,7 @@ class ChapterCache(CustomCache):
             return create()
         cache_key = f"{CHAPTER_CACHE_KEY_PREFIX}{key}"
         try:
-            cached = self.get(cache_key)
+            cached = self.get(cache_key, legacy_fallback=False)
         except NotFoundError:
             cached = {}
         if (
