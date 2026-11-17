@@ -64,7 +64,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
                         "as": "textNames",
                     }
                 },
-                {"$project": {"_id": False}},
+                {"$project": {"_id": False, "_cacheRevision": False}},
                 {"$addFields": {"textName": {"$first": "$textNames"}}},
                 {"$addFields": {"textName": "$textName.name"}},
                 {"$project": {"textNames": False}},
