@@ -7,6 +7,7 @@ from ebl.fragmentarium.domain.archaeology import (
     Archaeology,
     ExcavationNumber,
 )
+from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
 from ebl.fragmentarium.domain.findspot import (
     BuildingType,
     ExcavationPlan,
@@ -14,12 +15,15 @@ from ebl.fragmentarium.domain.findspot import (
 )
 from ebl.common.application.schemas import deserialize_provenance_record
 from ebl.schemas import NameEnumField
-from marshmallow import Schema, fields, post_load
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
+from marshmallow import RAISE, Schema, fields, post_dump, post_load
 
 
 class ExcavationNumberSchema(AbstractMuseumNumberSchema):
     @post_load
-    def create_excavation_number(self, data, **kwargs) -> ExcavationNumber:
+    def create_excavation_number(
+        self, data: dict, **kwargs: object
+    ) -> ExcavationNumber:
         return ExcavationNumber(**data)
 
 
@@ -28,20 +32,20 @@ class ExcavationPlanSchema(Schema):
     references = fields.Nested(ReferenceSchema, many=True, load_default=())
 
     @post_load
-    def create_excavation_plan(self, data, **kwargs) -> ExcavationPlan:
+    def create_excavation_plan(self, data: dict, **kwargs: object) -> ExcavationPlan:
         data["references"] = tuple(data["references"])
         return ExcavationPlan(**data)
 
 
-class ProvenanceSiteMixin:
-    def serialize_site(self, obj):
+class ProvenanceSiteMixin(Schema):
+    def serialize_site(self, obj: Findspot | Archaeology) -> str | None:
         return getattr(obj.site, "long_name", None)
 
-    def deserialize_site(self, value):
+    def deserialize_site(self, value: object) -> ProvenanceRecord | None:
         return deserialize_provenance_record(self, value)
 
 
-class FindspotSchema(ProvenanceSiteMixin, Schema):
+class FindspotSchema(ProvenanceSiteMixin):
     id_ = fields.Integer(required=True, data_key="_id")
     site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     sector = fields.String()
@@ -54,7 +58,10 @@ class FindspotSchema(ProvenanceSiteMixin, Schema):
     date_range = fields.Nested(DateRangeSchema, data_key="date", allow_none=True)
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=())
     room = fields.String()
-    context = fields.String()
+    findspot_context = fields.String(attribute="context", data_key="context")
+    map_location = fields.Nested(
+        MapLocationSchema, allow_none=True, load_default=None, data_key="mapLocation"
+    )
     primary_context = fields.Boolean(
         data_key="primaryContext",
         allow_none=True,
@@ -62,12 +69,18 @@ class FindspotSchema(ProvenanceSiteMixin, Schema):
     notes = fields.String()
 
     @post_load
-    def create_findspot(self, data, **kwargs) -> Findspot:
+    def create_findspot(self, data: dict, **kwargs: object) -> Findspot:
         data["plans"] = tuple(data["plans"])
         return Findspot(**data)
 
+    @post_dump
+    def omit_missing_map_location(self, data: dict, **kwargs: object) -> dict:
+        if data.get("mapLocation") is None:
+            data.pop("mapLocation", None)
+        return data
 
-class ArchaeologySchema(ProvenanceSiteMixin, Schema):
+
+class ArchaeologySchema(ProvenanceSiteMixin):
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
@@ -87,5 +100,16 @@ class ArchaeologySchema(ProvenanceSiteMixin, Schema):
     )
 
     @post_load
-    def create_archaeology(self, data, **kwargs) -> Archaeology:
+    def create_archaeology(self, data: dict, **kwargs: object) -> Archaeology:
         return Archaeology(**data)
+
+
+class ArchaeologyInputSchema(ArchaeologySchema):
+    findspot = fields.Nested(
+        FindspotSchema(exclude=("map_location",), unknown=RAISE),
+        allow_none=True,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = RAISE

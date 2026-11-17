@@ -1,0 +1,53 @@
+from marshmallow import (
+    Schema,
+    ValidationError,
+    fields,
+    post_load,
+    validates_schema,
+    validate,
+)
+
+from ebl.fragmentarium.domain.map_location import (
+    MapLocation,
+    MapLocationMatchMethod,
+    MapLocationPrecision,
+)
+from ebl.schemas import ValueEnumField
+
+
+class MapLocationSchema(Schema):
+    polygon_ids = fields.List(
+        fields.String(validate=validate.Length(min=1)),
+        required=True,
+        data_key="polygonIds",
+        validate=validate.Length(min=1),
+    )
+    location_precision = ValueEnumField(
+        MapLocationPrecision, required=True, data_key="locationPrecision"
+    )
+    match_method = ValueEnumField(
+        MapLocationMatchMethod, required=True, data_key="matchMethod"
+    )
+    source = fields.String(required=True, validate=validate.Length(min=1))
+    source_revision = fields.String(
+        required=True, data_key="sourceRevision", validate=validate.Length(min=1)
+    )
+
+    @validates_schema
+    def validate_map_location(self, data: dict, **kwargs: object) -> None:
+        polygon_ids = [polygon_id.strip() for polygon_id in data["polygon_ids"]]
+        data["polygon_ids"] = polygon_ids
+        if len(set(polygon_ids)) != len(polygon_ids):
+            raise ValidationError("polygonIds must be unique.", "polygonIds")
+        if any(not polygon_id.strip() for polygon_id in polygon_ids):
+            raise ValidationError(
+                "polygonIds must not contain empty values.", "polygonIds"
+            )
+        if not data["source"].strip():
+            raise ValidationError("source must not be empty.", "source")
+        if not data["source_revision"].strip():
+            raise ValidationError("sourceRevision must not be empty.", "sourceRevision")
+
+    @post_load
+    def create_map_location(self, data: dict, **kwargs: object) -> MapLocation:
+        return MapLocation(**data)
