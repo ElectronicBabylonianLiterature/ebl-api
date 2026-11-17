@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "siteId": "ASSUR",
+  "siteName": "Aššur",
+  "membershipSourceRevision": "sha256:9f3812b818c0f3a1a234b13b7394f058acc53c2bc89cc1e743fc5deab3d88799",
+  "counts": {
+    "sourceRows": 346,
+    "sourceGroups": 346,
+    "verifiedMappings": 315,
+    "curatedMappings": 0,
+    "curatedMappingsWithoutSourceGroups": 0,
+    "unresolvedRows": 31,
+    "unresolvedGroups": 31,
+    "conflictRows": 0,
+    "conflictGroups": 0,
+    "invalidRows": 0
+  },
+  "deterministicRule": "normalize(ODS.area) == normalize(shapefile.Name without leading digits)",
+  "normalization": "Unicode NFKC, whitespace trimming and case folding; uncertainty markers preserved.",
+  "unresolvedLabels": [
+    {
+      "label": "<blank>",
+      "count": 7
+    },
+    {
+      "label": "Wohnquartier",
+      "count": 16
+    },
+    {
+      "label": "bE4V?",
+      "count": 1
+    },
+    {
+      "label": "gB4II?",
+      "count": 1
+    },
+    {
+      "label": "i3? town area",
+      "count": 1
+    },
+    {
+      "label": "town area",
+      "count": 5
+    }
+  ]
+}

@@ -126,6 +126,17 @@ class FragmentRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def count_fragments_by_findspot_ids(
+        self,
+        findspot_ids: Sequence[int],
+        user_scopes: Sequence[Scope],
+        script_period: Optional[str] = None,
+        script_period_modifier: Optional[str] = None,
+        genre: Optional[Sequence[str]] = None,
+    ) -> dict[int, int]:
+        raise NotImplementedError
+
+    @abstractmethod
     def list_all_fragments(self) -> Sequence[str]:
         raise NotImplementedError
 
