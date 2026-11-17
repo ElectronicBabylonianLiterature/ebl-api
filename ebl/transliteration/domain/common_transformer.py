@@ -1,5 +1,6 @@
 from typing import Sequence, Iterable
-from lark.visitors import Transformer, v_args, Token
+from lark.lexer import Token
+from lark.visitors import Transformer, v_args
 from ebl.transliteration.domain.labels import (
     Label,
     ColumnLabel,

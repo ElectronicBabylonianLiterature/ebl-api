@@ -1,5 +1,8 @@
-import factory
 import random
+from factory.declarations import List, SubFactory
+from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
+from factory.helpers import make_factory
 from ebl.fragmentarium.domain.colophon import (
     ColophonStatus,
     ColophonType,
@@ -20,63 +23,49 @@ PROVENANCE_VALUES = [
 ]
 
 
-class NameAttestationFactory(factory.Factory):
-    class Meta:
-        model = NameAttestation
+NameAttestationFactory = make_factory(
+    NameAttestation,
+    value=Faker("word"),
+    is_broken=Faker("boolean"),
+    is_uncertain=Faker("boolean"),
+)
 
-    value = factory.Faker("word")
-    is_broken = factory.Faker("boolean")
-    is_uncertain = factory.Faker("boolean")
+ProvenanceAttestationFactory = make_factory(
+    ProvenanceAttestation,
+    value=FuzzyChoice(PROVENANCE_VALUES),
+    is_broken=Faker("boolean"),
+    is_uncertain=Faker("boolean"),
+)
 
+IndividualTypeFactory = make_factory(
+    IndividualTypeAttestation,
+    value=FuzzyChoice(list(IndividualType)),
+    is_broken=Faker("boolean"),
+    is_uncertain=Faker("boolean"),
+)
+IndividualTypeFactory.__name__ = "IndividualTypeFactory"
 
-class ProvenanceAttestationFactory(factory.Factory):
-    class Meta:
-        model = ProvenanceAttestation
+IndividualAttestationFactory = make_factory(
+    IndividualAttestation,
+    name=SubFactory(NameAttestationFactory),
+    son_of=SubFactory(NameAttestationFactory),
+    grandson_of=SubFactory(NameAttestationFactory),
+    family=SubFactory(NameAttestationFactory),
+    native_of=SubFactory(ProvenanceAttestationFactory),
+    type=SubFactory(IndividualTypeFactory),
+)
 
-    value = factory.fuzzy.FuzzyChoice(PROVENANCE_VALUES)
-    is_broken = factory.Faker("boolean")
-    is_uncertain = factory.Faker("boolean")
-
-
-class IndividualTypeFactory(factory.Factory):
-    class Meta:
-        model = IndividualTypeAttestation
-
-    value = factory.fuzzy.FuzzyChoice(list(IndividualType))
-    is_broken = factory.Faker("boolean")
-    is_uncertain = factory.Faker("boolean")
-
-
-class IndividualAttestationFactory(factory.Factory):
-    class Meta:
-        model = IndividualAttestation
-
-    name = factory.SubFactory(NameAttestationFactory)
-    son_of = factory.SubFactory(NameAttestationFactory)
-    grandson_of = factory.SubFactory(NameAttestationFactory)
-    family = factory.SubFactory(NameAttestationFactory)
-    native_of = factory.SubFactory(ProvenanceAttestationFactory)
-    type = factory.SubFactory(IndividualTypeFactory)
-
-
-class ColophonFactory(factory.Factory):
-    class Meta:
-        model = Colophon
-
-    colophon_status = factory.fuzzy.FuzzyChoice(list(ColophonStatus))
-    colophon_ownership = factory.fuzzy.FuzzyChoice(list(ColophonOwnership))
-    colophon_types = factory.List(
-        [
-            factory.fuzzy.FuzzyChoice(list(ColophonType))
-            for _ in range(random.randint(1, 3))
-        ]
-    )
-    original_from = factory.SubFactory(ProvenanceAttestationFactory)
-    written_in = factory.SubFactory(ProvenanceAttestationFactory)
-    notes_to_scribal_process = factory.Faker("sentence")
-    individuals = factory.List(
-        [
-            factory.SubFactory(IndividualAttestationFactory)
-            for _ in range(random.randint(0, 2))
-        ]
-    )
+ColophonFactory = make_factory(
+    Colophon,
+    colophon_status=FuzzyChoice(list(ColophonStatus)),
+    colophon_ownership=FuzzyChoice(list(ColophonOwnership)),
+    colophon_types=List(
+        [FuzzyChoice(list(ColophonType)) for _ in range(random.randint(1, 3))]
+    ),
+    original_from=SubFactory(ProvenanceAttestationFactory),
+    written_in=SubFactory(ProvenanceAttestationFactory),
+    notes_to_scribal_process=Faker("sentence"),
+    individuals=List(
+        [SubFactory(IndividualAttestationFactory) for _ in range(random.randint(0, 2))]
+    ),
+)
