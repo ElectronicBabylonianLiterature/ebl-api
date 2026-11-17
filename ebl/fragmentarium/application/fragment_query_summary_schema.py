@@ -16,6 +16,9 @@ from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.application.fragment_query_locations import (
+    FragmentQueryLineLocationSchema,
+)
 from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.fragmentarium.domain.fragment_query_summary import (
@@ -98,6 +101,7 @@ class FragmentQueryPreviewLineSchema(Schema):
     type = fields.String(required=True, validate=validate.Equal("TextLine"))
     index = fields.Integer(required=True)
     line_number = fields.Dict(required=True, data_key="lineNumber")
+    location = fields.Nested(FragmentQueryLineLocationSchema)
     prefix = fields.String(required=True)
     content = fields.List(fields.Dict(), required=True)
 
@@ -108,6 +112,7 @@ class FragmentQueryMatchingLinePreviewSchema(Schema):
 
     lines = fields.Nested(FragmentQueryPreviewLineSchema, many=True, required=True)
     parser_version = fields.String(required=True, data_key="parserVersion")
+    total_matching_lines = fields.Integer(data_key="totalMatchingLines")
 
 
 class FragmentQuerySummarySchema(Schema):

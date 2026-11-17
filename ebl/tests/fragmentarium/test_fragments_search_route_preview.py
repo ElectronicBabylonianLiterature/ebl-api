@@ -38,7 +38,9 @@ def test_preview_line_carries_the_full_detail_line(client, matched_fragment):
     detail_line = detail["text"]["lines"][MATCHING_LINE_INDEX]
 
     assert line["index"] == MATCHING_LINE_INDEX
-    assert {key: value for key, value in line.items() if key != "index"} == detail_line
+    assert {
+        key: value for key, value in line.items() if key not in {"index", "location"}
+    } == detail_line
 
 
 def test_preview_contains_only_matching_lines(client, matched_fragment):
@@ -89,6 +91,7 @@ def test_preview_is_capped_while_match_count_stays_complete(
     assert item["matchCount"] == MATCHING_LINE_COUNT
     assert len(item["matchingLines"]) == MATCHING_LINE_COUNT
     assert result.json["matchCountTotal"] == MATCHING_LINE_COUNT
+    assert item["matchingLinePreview"]["totalMatchingLines"] == MATCHING_LINE_COUNT
     assert len(item["matchingLinePreview"]["lines"]) == MAX_PREVIEW_LINES
     assert [line["prefix"] for line in item["matchingLinePreview"]["lines"]] == [
         f"{index}." for index in range(1, MAX_PREVIEW_LINES + 1)
@@ -113,7 +116,7 @@ def test_preview_deduplicates_overlapping_multiline_matches(
 def test_preview_keeps_the_full_line_shape(client, matched_fragment):
     line = query_preview(client)["lines"][0]
 
-    assert set(line) == {"index", "type", "prefix", "content", "lineNumber"}
+    assert set(line) == {"index", "type", "prefix", "content", "lineNumber", "location"}
     assert line["content"][0]["value"]
 
 
