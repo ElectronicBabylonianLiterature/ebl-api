@@ -1,6 +1,5 @@
 import pytest
 
-from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
@@ -22,7 +21,6 @@ from ebl.transliteration.domain.text import Text
 @pytest.fixture
 def centroid_and_unclustered_sign_images(
     annotations_repository: AnnotationsRepository,
-    photo_repository: FileRepository,
     fragment_repository: FragmentRepository,
     text_with_labels: Text,
     cropped_sign_images_repository: CroppedSignImagesRepository,

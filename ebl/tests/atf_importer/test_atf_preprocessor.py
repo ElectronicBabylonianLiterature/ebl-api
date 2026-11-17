@@ -1,6 +1,7 @@
 import pytest
 import json
 from typing import List
+from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.logger import Logger
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
@@ -159,14 +160,59 @@ def test_lemma_line_c_type_is_lem_line(database, line):
     assert result["c_type"] == "lem_line"
 
 
+def stub_input(monkeypatch, answers: List[str]) -> List[str]:
+    remaining_answers = iter(answers)
+    given_answers: List[str] = []
+
+    def answer_then_refuse() -> str:
+        try:
+            given_answers.append(next(remaining_answers))
+        except StopIteration as error:
+            raise EOFError from error
+        return given_answers[-1]
+
+    monkeypatch.setattr("builtins.input", answer_then_refuse)
+    return given_answers
+
+
 def test_unparsable_line_falls_back_to_empty_tree(database, monkeypatch):
     legacy_atf_converter = LegacyAtfConverter(database, config, logger)
-
-    def refuse_input():
-        raise EOFError
-
-    monkeypatch.setattr("builtins.input", refuse_input)
+    stub_input(monkeypatch, [])
 
     tree = legacy_atf_converter._parse_and_validate_line("1. ((((")
 
     assert tree == legacy_atf_converter.ebl_parser.parse("")
+
+
+@pytest.mark.parametrize("line", ["Y", "x", "1", "#", "&", "@", "=", "", "x1"])
+def test_preprocess_single_character_line(line):
+    assert AtfPreprocessor(logger).preprocess_line(line) == line
+
+
+def test_preprocess_blank_line():
+    assert AtfPreprocessor(logger).preprocess_line(" ") == ""
+
+
+def test_preprocess_single_dollar_line_does_not_raise():
+    assert AtfPreprocessor(logger).preprocess_line("$").startswith("$")
+
+
+def test_single_hash_is_not_a_note_line():
+    assert AtfPreprocessor(logger)._handle_note_line("#") == "#"
+
+
+@pytest.mark.parametrize("answer", ["Y", "#"])
+def test_single_character_correction_prompts_again(database, monkeypatch, answer):
+    legacy_atf_converter = LegacyAtfConverter(database, config, logger)
+    given_answers = stub_input(monkeypatch, [answer, "1. a"])
+
+    tree = legacy_atf_converter._parse_and_validate_line("1. ((((")
+
+    assert given_answers == [answer, "1. a"]
+    assert tree == legacy_atf_converter.ebl_parser.parse("1. a")
+
+
+def test_single_sign_bracket_before_subscript():
+    preprocessor = AtfPreprocessor(logger)
+
+    assert preprocessor._move_brackets_before_subscripts("[a]₂") == "a₂# []"
