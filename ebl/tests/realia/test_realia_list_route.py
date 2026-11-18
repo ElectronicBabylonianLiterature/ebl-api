@@ -128,7 +128,7 @@ def test_list_age_bounds_total_staleness(
     cached_client,
 ) -> None:
     _seed_entry(realia_repository, bibliography_repository, id="Anu")
-    with freeze_time("2026-09-30 12:00:00") as frozen_time:
+    with freeze_time("2026-09-30 12:00:00", ignore=["pymongo"]) as frozen_time:
         cached_client.simulate_get(LIST_ROUTE)
         frozen_time.tick(DEFAULT_TIMEOUT - 1)
         stale_result = cached_client.simulate_get(LIST_ROUTE)
