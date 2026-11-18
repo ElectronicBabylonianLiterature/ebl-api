@@ -1,6 +1,6 @@
 from typing import Mapping, Optional
 
-from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE
+from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE, RAISE
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import (
@@ -101,7 +101,7 @@ class ReallexikonEntrySchema(Schema):
 
 class EblRealiaEntrySchema(Schema):
     class Meta:
-        unknown = EXCLUDE
+        unknown = RAISE
 
     id = fields.String(load_default="")
     transliteration = fields.String(load_default="")
@@ -114,7 +114,7 @@ class EblRealiaEntrySchema(Schema):
     remarks = fields.String(load_default="")
 
     @post_load
-    def make_entry(self, data, **kwargs) -> EblRealiaEntry:
+    def make_entry(self, data: dict, **kwargs: object) -> EblRealiaEntry:
         data["wikidata_id"] = tuple(data["wikidata_id"])
         return EblRealiaEntry(**data)
 

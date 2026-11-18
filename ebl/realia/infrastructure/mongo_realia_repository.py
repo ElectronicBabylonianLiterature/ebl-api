@@ -132,9 +132,9 @@ class MongoRealiaRepository(RealiaRepository):
         return list(ids)
 
     def _all_references(self, entry: RealiaEntry) -> List[Reference]:
-        optional_references = [rlex.reference for rlex in entry.reallexikon] + [
-            ebl.reference for ebl in entry.ebl_realia
-        ]
+        optional_references = [
+            reallexikon_entry.reference for reallexikon_entry in entry.reallexikon
+        ] + [ebl_realia_entry.reference for ebl_realia_entry in entry.ebl_realia]
         return list(entry.references) + [
             reference for reference in optional_references if reference is not None
         ]

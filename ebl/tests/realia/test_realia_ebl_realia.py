@@ -1,6 +1,9 @@
 from typing import cast
 
 import falcon
+import pytest
+from falcon import testing
+from marshmallow import ValidationError
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
@@ -92,6 +95,12 @@ def test_document_without_new_fields_loads_and_dumps_empty_lists() -> None:
     assert dumped["eblRealia"] == []
 
 
+@pytest.mark.parametrize("field", ["title", "afoVolume"])
+def test_ebl_realia_entry_rejects_fields_of_other_entry_types(field: str) -> None:
+    with pytest.raises(ValidationError):
+        EblRealiaEntrySchema().load({**STAR_ENTRY, field: "x"})
+
+
 def test_ebl_realia_entry_round_trip() -> None:
     entry = EblRealiaEntryFactory.build(reference=None)
 
@@ -123,17 +132,18 @@ def test_repository_injects_ebl_realia_bibliography(
 def test_get_star_by_realia_id(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,
-    client,
+    client: testing.TestClient,
 ) -> None:
     bibliography = BibliographyEntryFactory.build(id="jones2004study")
     bibliography_repository.create(bibliography)
     insert_stored(realia_repository, STAR_DOCUMENT)
 
-    result = client.simulate_get("/realia/by-id/realia_028434")
+    result = cast(testing.Result, client.simulate_get("/realia/by-id/realia_028434"))
 
     assert result.status == falcon.HTTP_OK
-    assert result.json["referenceType"] == ["eBL"]
-    [ebl_entry] = result.json["eblRealia"]
+    payload = cast(dict, result.json)
+    assert payload["referenceType"] == ["eBL"]
+    [ebl_entry] = payload["eblRealia"]
     assert {key: ebl_entry[key] for key in STAR_ENTRY if key != "reference"} == {
         key: value for key, value in STAR_ENTRY.items() if key != "reference"
     }
@@ -144,12 +154,13 @@ def test_get_star_by_realia_id(
 
 
 def test_get_entry_without_new_fields(
-    realia_repository: MongoRealiaRepository, client
+    realia_repository: MongoRealiaRepository, client: testing.TestClient
 ) -> None:
     insert_stored(realia_repository, {"_id": "Anu", "realiaId": "realia_000001"})
 
-    result = client.simulate_get("/realia/by-id/realia_000001")
+    result = cast(testing.Result, client.simulate_get("/realia/by-id/realia_000001"))
 
     assert result.status == falcon.HTTP_OK
-    assert result.json["referenceType"] == []
-    assert result.json["eblRealia"] == []
+    payload = cast(dict, result.json)
+    assert payload["referenceType"] == []
+    assert payload["eblRealia"] == []
