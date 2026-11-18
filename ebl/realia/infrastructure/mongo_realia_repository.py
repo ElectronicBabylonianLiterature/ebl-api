@@ -128,16 +128,8 @@ class MongoRealiaRepository(RealiaRepository):
     ) -> List[BibliographyId]:
         ids: set[BibliographyId] = set()
         for entry in entries:
-            ids.update(reference.id for reference in self._all_references(entry))
+            ids.update(reference.id for reference in entry.all_references)
         return list(ids)
-
-    def _all_references(self, entry: RealiaEntry) -> List[Reference]:
-        optional_references = [
-            reallexikon_entry.reference for reallexikon_entry in entry.reallexikon
-        ] + [ebl_realia_entry.reference for ebl_realia_entry in entry.ebl_realia]
-        return list(entry.references) + [
-            reference for reference in optional_references if reference is not None
-        ]
 
     def _fetch_bibliography_entries(
         self, reference_ids: List[BibliographyId]

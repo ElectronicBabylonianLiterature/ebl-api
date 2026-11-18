@@ -44,7 +44,7 @@ class EblRealiaEntry:
     normalisation: str = ""
     translation: str = ""
     identification: str = ""
-    pos: str = ""
+    part_of_speech: str = ""
     wikidata_id: Sequence[str] = ()
     reference: Optional[Reference] = None
     remarks: str = ""
@@ -64,3 +64,12 @@ class RealiaEntry:
     afo_cross_references: Sequence[AfoCrossReference] = ()
     reference_type: Sequence[str] = ()
     ebl_realia: Sequence[EblRealiaEntry] = ()
+
+    @property
+    def all_references(self) -> Sequence[Reference]:
+        section_references = [
+            reallexikon_entry.reference for reallexikon_entry in self.reallexikon
+        ] + [ebl_realia_entry.reference for ebl_realia_entry in self.ebl_realia]
+        return tuple(self.references) + tuple(
+            reference for reference in section_references if reference is not None
+        )

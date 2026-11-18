@@ -55,7 +55,7 @@ EblRealiaEntryFactory = make_factory(
     normalisation=Faker("word"),
     translation=Faker("sentence"),
     identification=Sequence(lambda n: f"star {n}"),
-    pos="CN",
+    part_of_speech="CN",
     wikidata_id=Sequence(lambda n: (f"Q{n}",)),
     reference=SubFactory(ReferenceFactory, with_document=True),
     remarks=Faker("sentence"),

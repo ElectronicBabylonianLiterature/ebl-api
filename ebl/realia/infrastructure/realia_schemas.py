@@ -108,7 +108,7 @@ class EblRealiaEntrySchema(Schema):
     normalisation = fields.String(load_default="")
     translation = fields.String(load_default="")
     identification = fields.String(load_default="")
-    pos = fields.String(load_default="")
+    part_of_speech = fields.String(data_key="pos", load_default="")
     wikidata_id = fields.List(fields.String(), data_key="wikidataId", load_default=list)
     reference = ReallexikonReferenceField(allow_none=True, load_default=None)
     remarks = fields.String(load_default="")

@@ -17,7 +17,11 @@ from ebl.tests.factories.bibliography import (
     BibliographyEntryFactory,
     ReferenceFactory,
 )
-from ebl.tests.factories.realia import EblRealiaEntryFactory, RealiaEntryFactory
+from ebl.tests.factories.realia import (
+    EblRealiaEntryFactory,
+    RealiaEntryFactory,
+    ReallexikonEntryFactory,
+)
 from ebl.tests.realia.realia_repository_helpers import (
     create_entry_with_bibliography,
     insert_stored,
@@ -78,7 +82,7 @@ def test_star_document_loads_reference_type_and_ebl_realia() -> None:
             transliteration="MÚL KUR šá DUR nu-nu",
             translation="The bright star of the ribbon of the fishes",
             identification="η Psc",
-            pos="CN",
+            part_of_speech="CN",
             wikidata_id=("Q14068",),
             reference=STAR_REFERENCE_MODEL,
         ),
@@ -109,6 +113,23 @@ def test_ebl_realia_entry_round_trip() -> None:
     assert dumped["wikidataId"] == list(entry.wikidata_id)
     assert dumped["reference"] is None
     assert EblRealiaEntrySchema().load(dumped) == entry
+
+
+def test_all_references_collects_every_section_and_skips_missing() -> None:
+    top_level, reallexikon, ebl_realia = ReferenceFactory.build_batch(3)
+    entry = RealiaEntryFactory.build(
+        references=(top_level,),
+        reallexikon=(
+            ReallexikonEntryFactory.build(reference=reallexikon),
+            ReallexikonEntryFactory.build(reference=None),
+        ),
+        ebl_realia=(
+            EblRealiaEntryFactory.build(reference=None),
+            EblRealiaEntryFactory.build(reference=ebl_realia),
+        ),
+    )
+
+    assert entry.all_references == (top_level, reallexikon, ebl_realia)
 
 
 def test_repository_injects_ebl_realia_bibliography(

@@ -15,11 +15,8 @@ def create_entry_with_bibliography(
     entry: RealiaEntry,
 ) -> None:
     realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
-    section_references = [
-        reallexikon_entry.reference for reallexikon_entry in entry.reallexikon
-    ] + [ebl_realia_entry.reference for ebl_realia_entry in entry.ebl_realia]
-    for reference in [*entry.references, *section_references]:
-        if reference is not None and reference.document:
+    for reference in entry.all_references:
+        if reference.document:
             bibliography_repository.create(reference.document)
 
 
