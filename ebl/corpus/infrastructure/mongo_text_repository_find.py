@@ -1,9 +1,7 @@
 from typing import cast
 
 from ebl.bibliography.application.reference_documents import hydrate_reference_documents
-from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
-    ChapterSchema,
     LineSchema,
     TextSchema,
 )
@@ -22,6 +20,12 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import (
     text_not_found,
     chapter_not_found,
     line_not_found,
+)
+
+
+from ebl.corpus.infrastructure.stored_manuscript_schemas import (
+    StoredChapterSchema as ChapterSchema,
+    StoredChapterDisplaySchema as ChapterDisplaySchema,
 )
 
 
