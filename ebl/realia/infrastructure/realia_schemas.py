@@ -12,6 +12,7 @@ from ebl.realia.domain.realia_entry import (
     AfoCrossReference,
     AfoRegisterEntry,
     CrossReference,
+    EblRealiaEntry,
     RealiaEntry,
     ReallexikonEntry,
 )
@@ -98,6 +99,26 @@ class ReallexikonEntrySchema(Schema):
         return ReallexikonEntry(**data)
 
 
+class EblRealiaEntrySchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.String(load_default="")
+    transliteration = fields.String(load_default="")
+    normalisation = fields.String(load_default="")
+    translation = fields.String(load_default="")
+    identification = fields.String(load_default="")
+    pos = fields.String(load_default="")
+    wikidata_id = fields.List(fields.String(), data_key="wikidataId", load_default=list)
+    reference = ReallexikonReferenceField(allow_none=True, load_default=None)
+    remarks = fields.String(load_default="")
+
+    @post_load
+    def make_entry(self, data, **kwargs) -> EblRealiaEntry:
+        data["wikidata_id"] = tuple(data["wikidata_id"])
+        return EblRealiaEntry(**data)
+
+
 class RealiaEntrySchema(Schema):
     class Meta:
         unknown = EXCLUDE
@@ -124,6 +145,12 @@ class RealiaEntrySchema(Schema):
         data_key="afoCrossReferences",
         load_default=list,
     )
+    reference_type = fields.List(
+        fields.String(), data_key="referenceType", load_default=list
+    )
+    ebl_realia = fields.List(
+        fields.Nested(EblRealiaEntrySchema), data_key="eblRealia", load_default=list
+    )
 
     @pre_load
     def treat_null_as_absent(self, data: object, **kwargs) -> object:
@@ -141,4 +168,6 @@ class RealiaEntrySchema(Schema):
         data["reallexikon"] = tuple(data["reallexikon"])
         data["cross_references"] = tuple(data["cross_references"])
         data["afo_cross_references"] = tuple(data["afo_cross_references"])
+        data["reference_type"] = tuple(data["reference_type"])
+        data["ebl_realia"] = tuple(data["ebl_realia"])
         return RealiaEntry(**data)

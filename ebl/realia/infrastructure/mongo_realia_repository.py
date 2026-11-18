@@ -1,6 +1,6 @@
 import attr
 import re
-from typing import Dict, List, Pattern, Sequence, Tuple, cast
+from typing import Dict, List, Optional, Pattern, Sequence, Tuple, TypeVar, cast
 
 from pymongo.database import Database
 
@@ -16,7 +16,11 @@ from ebl.common.query.query_collation import (
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.realia.application.realia_repository import RealiaRepository
-from ebl.realia.domain.realia_entry import RealiaEntry, ReallexikonEntry
+from ebl.realia.domain.realia_entry import (
+    EblRealiaEntry,
+    RealiaEntry,
+    ReallexikonEntry,
+)
 from ebl.realia.domain.reserved_identifiers import (
     RESERVED_REALIA_ID_PREFIXES,
     RESERVED_REALIA_IDS,
@@ -28,6 +32,8 @@ from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanke
 from ebl.realia.infrastructure.realia_stub_filter import non_redirect_stub_expression
 
 REALIA_COLLECTION = "realia"
+
+SectionEntry = TypeVar("SectionEntry", ReallexikonEntry, EblRealiaEntry)
 
 
 class MongoRealiaRepository(RealiaRepository):
@@ -122,12 +128,16 @@ class MongoRealiaRepository(RealiaRepository):
     ) -> List[BibliographyId]:
         ids: set[BibliographyId] = set()
         for entry in entries:
-            for ref in entry.references:
-                ids.add(ref.id)
-            for rlex in entry.reallexikon:
-                if rlex.reference is not None:
-                    ids.add(rlex.reference.id)
+            ids.update(reference.id for reference in self._all_references(entry))
         return list(ids)
+
+    def _all_references(self, entry: RealiaEntry) -> List[Reference]:
+        optional_references = [rlex.reference for rlex in entry.reallexikon] + [
+            ebl.reference for ebl in entry.ebl_realia
+        ]
+        return list(entry.references) + [
+            reference for reference in optional_references if reference is not None
+        ]
 
     def _fetch_bibliography_entries(
         self, reference_ids: List[BibliographyId]
@@ -149,7 +159,8 @@ class MongoRealiaRepository(RealiaRepository):
         return attr.evolve(
             entry,
             references=self._inject_references(entry.references, bibliography),
-            reallexikon=self._inject_reallexikon(entry.reallexikon, bibliography),
+            reallexikon=self._inject_section(entry.reallexikon, bibliography),
+            ebl_realia=self._inject_section(entry.ebl_realia, bibliography),
         )
 
     def _document_for(
@@ -165,19 +176,24 @@ class MongoRealiaRepository(RealiaRepository):
             for reference in references
         )
 
-    def _inject_reallexikon(
-        self, reallexikon: Sequence[ReallexikonEntry], bibliography: Dict[str, dict]
-    ) -> Tuple[ReallexikonEntry, ...]:
+    def _inject_optional_reference(
+        self, reference: Optional[Reference], bibliography: Dict[str, dict]
+    ) -> Optional[Reference]:
+        return (
+            None
+            if reference is None
+            else reference.set_document(self._document_for(reference.id, bibliography))
+        )
+
+    def _inject_section(
+        self, section: Sequence[SectionEntry], bibliography: Dict[str, dict]
+    ) -> Tuple[SectionEntry, ...]:
         return tuple(
-            (
-                rlex
-                if rlex.reference is None
-                else attr.evolve(
-                    rlex,
-                    reference=rlex.reference.set_document(
-                        self._document_for(rlex.reference.id, bibliography)
-                    ),
-                )
+            attr.evolve(
+                entry,
+                reference=self._inject_optional_reference(
+                    entry.reference, bibliography
+                ),
             )
-            for rlex in reallexikon
+            for entry in section
         )
