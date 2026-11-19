@@ -18,6 +18,8 @@ NULLABLE_FIELDS = [
     "reallexikon",
     "crossReferences",
     "afoCrossReferences",
+    "referenceType",
+    "eblRealia",
 ]
 
 
