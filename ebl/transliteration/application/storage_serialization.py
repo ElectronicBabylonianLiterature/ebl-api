@@ -5,6 +5,7 @@ from typing import Any, Dict, Iterator
 from marshmallow import Schema, fields, missing
 
 OMIT_FROM_STORAGE_WHEN_DEFAULT = "omit_from_storage_when_default"
+OMIT_FROM_STORAGE = "omit_from_storage"
 
 _storage_serialization = ContextVar[bool]("storage_serialization", default=False)
 
@@ -28,7 +29,17 @@ def stored_default(field: fields.Field) -> Any:
     return field._serialize(value, None, None)
 
 
+def omitted_when_default() -> Dict[str, bool]:
+    return {OMIT_FROM_STORAGE_WHEN_DEFAULT: True}
+
+
+def omitted_from_storage() -> Dict[str, bool]:
+    return {OMIT_FROM_STORAGE: True}
+
+
 def is_omitted_from_storage(field: fields.Field, value: Any) -> bool:
+    if field.metadata.get(OMIT_FROM_STORAGE, False):
+        return True
     return (
         field.metadata.get(OMIT_FROM_STORAGE_WHEN_DEFAULT, False)
         and field.load_default is not missing
