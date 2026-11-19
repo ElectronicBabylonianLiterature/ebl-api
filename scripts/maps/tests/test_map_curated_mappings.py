@@ -1,0 +1,218 @@
+import json
+from pathlib import Path
+
+import pytest
+
+from ebl.common.query.parameter_parser import MAX_FINDSPOT_ID
+from scripts.maps.map_curated_mappings import (
+    CuratedMappingRecord,
+    load_curated_mappings,
+    merge_verified_and_curated,
+)
+
+KNOWN_POLYGON_IDS = {"assur-a", "assur-b"}
+AUTHORITATIVE_FINDSPOT_IDS = {1}
+
+
+def _row(**overrides: object) -> dict[str, object]:
+    row: dict[str, object] = {
+        "findspotId": 1,
+        "siteId": "ASSUR",
+        "polygonIds": ["assur-a"],
+        "matchMethod": "curated",
+        "reviewer": "reviewer-handle",
+        "reviewDate": "2026-08-05",
+        "source": "manual review",
+        "sourceRevision": "2026-08-05",
+    }
+    row.update(overrides)
+    return row
+
+
+def _write(tmp_path: Path, rows: object) -> Path:
+    path = tmp_path / "curated.json"
+    path.write_text(json.dumps(rows), encoding="utf-8")
+    return path
+
+
+def _load(path: Path | None) -> tuple[CuratedMappingRecord, ...]:
+    return load_curated_mappings(
+        path, "ASSUR", KNOWN_POLYGON_IDS, AUTHORITATIVE_FINDSPOT_IDS
+    )
+
+
+def test_valid_reviewed_record_is_accepted(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row()])
+
+    records = _load(path)
+
+    assert records == (
+        {
+            "findspotId": 1,
+            "polygonIds": ["assur-a"],
+            "locationPrecision": "excavation-area",
+            "matchMethod": "curated",
+            "source": "manual review",
+            "sourceRevision": "2026-08-05",
+        },
+    )
+
+
+def test_missing_path_returns_empty() -> None:
+    assert _load(None) == ()
+
+
+@pytest.mark.parametrize("findspot_id", [0, 1, MAX_FINDSPOT_ID])
+def test_curated_findspot_ids_preserve_nonnegative_bson_integers(
+    tmp_path: Path, findspot_id: int
+) -> None:
+    path = _write(tmp_path, [_row(findspotId=findspot_id)])
+
+    records = load_curated_mappings(path, "ASSUR", KNOWN_POLYGON_IDS, {findspot_id})
+
+    assert records[0]["findspotId"] == findspot_id
+
+
+@pytest.mark.parametrize(
+    "findspot_id", [1.9, -0.5, 1.0, "1", True, False, None, -1, MAX_FINDSPOT_ID + 1]
+)
+def test_curated_findspot_ids_reject_coercion_and_out_of_range(
+    tmp_path: Path, findspot_id: object
+) -> None:
+    path = _write(tmp_path, [_row(findspotId=findspot_id)])
+
+    with pytest.raises(ValueError, match="findspotId"):
+        load_curated_mappings(
+            path, "ASSUR", KNOWN_POLYGON_IDS, {0, 1, -1, MAX_FINDSPOT_ID + 1}
+        )
+
+
+@pytest.mark.parametrize("field", ["reviewer", "reviewDate"])
+def test_unreviewed_placeholder_row_rejected(tmp_path: Path, field: str) -> None:
+    path = _write(tmp_path, [_row(**{field: ""})])
+
+    with pytest.raises(ValueError):
+        _load(path)
+
+
+def test_wrong_site_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(siteId="URUK")])
+
+    with pytest.raises(ValueError, match="siteId"):
+        _load(path)
+
+
+def test_unknown_polygon_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(polygonIds=["assur-z"])])
+
+    with pytest.raises(ValueError, match="unknown polygon"):
+        _load(path)
+
+
+def test_duplicate_findspot_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(), _row()])
+
+    with pytest.raises(ValueError, match="Duplicate curated findspot"):
+        _load(path)
+
+
+def test_duplicate_polygon_within_record_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(polygonIds=["assur-a", "assur-a"])])
+
+    with pytest.raises(ValueError):
+        _load(path)
+
+
+def test_empty_polygon_array_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(polygonIds=[])])
+
+    with pytest.raises(ValueError):
+        _load(path)
+
+
+def test_blank_polygon_identifier_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(polygonIds=["  "])])
+
+    with pytest.raises(ValueError, match="must not contain blanks"):
+        _load(path)
+
+
+def test_curated_document_requires_array(tmp_path: Path) -> None:
+    path = _write(tmp_path, {"rows": [_row()]})
+
+    with pytest.raises(ValueError, match="Expected a JSON array"):
+        _load(path)
+
+
+def test_unsupported_match_method_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(matchMethod="verified-source")])
+
+    with pytest.raises(ValueError):
+        _load(path)
+
+
+def test_missing_source_provenance_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(source="")])
+
+    with pytest.raises(ValueError):
+        _load(path)
+
+
+def test_unknown_authoritative_findspot_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, [_row(findspotId=2)])
+
+    with pytest.raises(ValueError, match="membership evidence"):
+        _load(path)
+
+
+@pytest.mark.parametrize(
+    "field", ["reviewer", "reviewDate", "source", "sourceRevision"]
+)
+def test_whitespace_only_required_text_rejected(tmp_path: Path, field: str) -> None:
+    path = _write(tmp_path, [_row(**{field: "  \t"})])
+
+    with pytest.raises(ValueError):
+        _load(path)
+
+
+def test_non_object_row_rejected(tmp_path: Path) -> None:
+    path = _write(tmp_path, ["not-an-object"])
+
+    with pytest.raises(ValueError, match="JSON objects"):
+        _load(path)
+
+
+def test_duplicate_json_keys_are_rejected(tmp_path: Path) -> None:
+    path = tmp_path / "curated.json"
+    path.write_text('{"rows": 1, "rows": 2}', encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Duplicate JSON key"):
+        _load(path)
+
+
+def _mapping(findspot_id: int, polygon_id: str) -> CuratedMappingRecord:
+    return {
+        "findspotId": findspot_id,
+        "polygonIds": [polygon_id],
+        "locationPrecision": "excavation-area",
+        "matchMethod": "curated",
+        "source": "manual review",
+        "sourceRevision": "2026-08-05",
+    }
+
+
+def test_merge_rejects_overlap_between_verified_and_curated() -> None:
+    verified = (_mapping(1, "assur-a"),)
+    curated = (_mapping(1, "assur-b"),)
+
+    with pytest.raises(ValueError, match="both verified and curated"):
+        merge_verified_and_curated(verified, curated)
+
+
+def test_merge_combines_disjoint_sets_sorted_by_findspot_id() -> None:
+    verified = (_mapping(2, "assur-a"),)
+    curated = (_mapping(1, "assur-b"),)
+
+    merged = merge_verified_and_curated(verified, curated)
+
+    assert [record["findspotId"] for record in merged] == [1, 2]
