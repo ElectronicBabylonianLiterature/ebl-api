@@ -14,7 +14,7 @@ from ebl.tests.media.in_memory_media import (
     InMemoryMediaRepository,
     InMemoryRepresentationStore,
 )
-from ebl.tests.media.infrastructure.replica_set import replica_set_client
+from ebl.tests.mongo_replica_set import transactional_client
 
 MediaRepositoryFactory = Callable[[Sequence[StoredMedia]], MediaRepository]
 RepresentationStoreFactory = Callable[[], MediaRepresentationStore]
@@ -22,12 +22,8 @@ RepresentationStoreFactory = Callable[[], MediaRepresentationStore]
 
 @pytest.fixture(scope="session")
 def media_mongo_client(mongo_client: MongoClient) -> Iterator[MongoClient]:
-    topology = mongo_client.admin.command("hello")
-    if topology.get("setName") or topology.get("msg") == "isdbgrid":
-        yield mongo_client
-    else:
-        with replica_set_client() as client:
-            yield client
+    with transactional_client(mongo_client) as client:
+        yield client
 
 
 @pytest.fixture

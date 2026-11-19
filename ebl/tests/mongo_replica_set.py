@@ -12,10 +12,12 @@ from pymongo.errors import PyMongoError
 from pymongo_inmemory.context import Context
 from pymongo_inmemory.downloader import download
 
+from ebl.mongo_transaction import supports_transactions
+
 
 STARTUP_TIMEOUT = 30.0
 SHUTDOWN_TIMEOUT = 10.0
-REPLICA_SET_NAME = "media-tests"
+REPLICA_SET_NAME = "ebl-tests"
 
 
 def _available_port() -> int:
@@ -83,7 +85,7 @@ def replica_set_client() -> Iterator[MongoClient]:
     executable = Path(download(Context())) / "mongod"
     executable.chmod(executable.stat().st_mode | 0o100)
     port = _available_port()
-    with TemporaryDirectory(prefix="ebl-media-tests-") as directory:
+    with TemporaryDirectory(prefix="ebl-replica-set-tests-") as directory:
         with (Path(directory) / "mongod.log").open("wb") as output:
             process = subprocess.Popen(
                 [
@@ -116,3 +118,12 @@ def replica_set_client() -> Iterator[MongoClient]:
                     yield client
             finally:
                 _stop_server(process)
+
+
+@contextmanager
+def transactional_client(mongo_client: MongoClient) -> Iterator[MongoClient]:
+    if supports_transactions(mongo_client):
+        yield mongo_client
+    else:
+        with replica_set_client() as client:
+            yield client

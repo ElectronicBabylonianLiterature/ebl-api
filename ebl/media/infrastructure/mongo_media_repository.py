@@ -2,10 +2,8 @@ import uuid
 from typing import Callable, Optional, Sequence, TypeVar
 
 import attr
-from pymongo import ReadPreference
 from pymongo.client_session import ClientSession
 from pymongo.errors import DuplicateKeyError
-from pymongo.read_concern import ReadConcern
 from pymongo.write_concern import WriteConcern
 
 from ebl.media.application.media_errors import (
@@ -31,6 +29,7 @@ from ebl.media.infrastructure.mongo_media_sources import (
     reserve_sources,
     verify_source_reservations,
 )
+from ebl.mongo_transaction import run_in_transaction, supports_transactions
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 Result = TypeVar("Result")
@@ -38,8 +37,7 @@ Result = TypeVar("Result")
 
 class MongoMediaRepository(MongoMediaReader, MediaRepository):
     def assert_writable_topology(self) -> None:
-        topology = self._database.client.admin.command("hello")
-        if not topology.get("setName") and topology.get("msg") != "isdbgrid":
+        if not supports_transactions(self._database.client):
             raise ValueError(
                 "Media writes require a MongoDB replica set or sharded cluster."
             )
@@ -63,13 +61,7 @@ class MongoMediaRepository(MongoMediaReader, MediaRepository):
                 raise ValueError("Media indexes must be initialized before writing.")
             return operation(session)
 
-        with self._database.client.start_session() as session:
-            return session.with_transaction(
-                locked_operation,
-                read_concern=ReadConcern("snapshot"),
-                write_concern=WriteConcern("majority"),
-                read_preference=ReadPreference.PRIMARY,
-            )
+        return run_in_transaction(self._database.client, locked_operation)
 
     @staticmethod
     def _active_document(media: StoredMedia) -> dict:
