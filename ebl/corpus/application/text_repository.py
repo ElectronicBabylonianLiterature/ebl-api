@@ -3,8 +3,10 @@ from typing import List, Optional, Sequence, Tuple, TypedDict
 from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.lines_page import LinesPage
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.manuscript import Manuscript
@@ -44,6 +46,14 @@ class TextRepository(ABC):
 
     @abstractmethod
     def find_line(self, id_: ChapterId, number: int) -> Line:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_chapter_outline(self, id_: ChapterId) -> ChapterOutline:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_lines_page(self, id_: ChapterId, offset: int, limit: int) -> LinesPage:
         raise NotImplementedError
 
     @abstractmethod

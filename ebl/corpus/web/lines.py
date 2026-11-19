@@ -5,9 +5,21 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.corpus.application.chapter_edit_reader import ChapterEditReader
 from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.lines_pagination import (
+    LinesView,
+    parse_lines_page_query,
+    parse_lines_view,
+)
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
+from ebl.corpus.web.chapter_outline_schemas import (
+    ChapterOutlineSchema,
+    create_lines_page_schema,
+)
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiLineSchema
 from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
@@ -40,16 +52,43 @@ class LinesImportSchema(Schema):
     atf = fields.String(required=True)
 
 
+def _dump_updated_chapter(chapter: Chapter, view: LinesView) -> dict:
+    return cast(
+        dict,
+        ChapterOutlineSchema().dump(ChapterOutline.of_chapter(chapter))
+        if view is LinesView.OUTLINE
+        else ApiChapterSchema().dump(chapter),
+    )
+
+
 class LinesResource:
     def __init__(
         self,
         corpus: Corpus,
         cache: ChapterCache,
         provenance_service: ProvenanceService,
+        reader: ChapterEditReader,
     ) -> None:
         self._corpus = corpus
         self._cache = cache
         self._provenance_service = provenance_service
+        self._reader = reader
+
+    def on_get(
+        self,
+        req: falcon.Request,
+        resp: falcon.Response,
+        genre: str,
+        category: str,
+        index: str,
+        stage: str,
+        name: str,
+    ) -> None:
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        pagination = parse_lines_page_query(req.params)
+        resp.media = create_lines_page_schema(pagination.include_tokens).dump(
+            self._reader.find_lines(chapter_id, pagination)
+        )
 
     @falcon.before(require_scope, "write:texts")
     def on_post(
@@ -63,6 +102,7 @@ class LinesResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
+        view = parse_lines_view(req.params)
         schema = LinesUpdateSchema(
             context={"provenance_service": self._provenance_service}
         )
@@ -75,7 +115,7 @@ class LinesResource:
             updated_chapter = self._corpus.update_lines(
                 chapter_id, cast(LinesUpdate, schema.load(req.media)), req.context.user
             )
-        resp.media = ApiChapterSchema().dump(updated_chapter)
+        resp.media = _dump_updated_chapter(updated_chapter, view)
 
 
 class LinesImportResource:

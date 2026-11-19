@@ -8,10 +8,10 @@ from ebl.corpus.application.schemas import (
     LineVariantSchema,
 )
 from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line_atf import reconstruction_to_atf, translation_to_atf
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.transliteration.application.line_number_schemas import OldLineNumberSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
-from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_line_number,
     parse_note_line,
@@ -96,12 +96,8 @@ class ApiLineVariantSchema(LineVariantSchema):
         unknown = EXCLUDE
 
     reconstruction = fields.Function(
-        lambda line: "".join(
-            [
-                convert_to_atf(None, line.reconstruction),
-                f"\n{line.note.atf}" if line.note else "",
-                *[f"\n{parallel_line.atf}" for parallel_line in line.parallel_lines],
-            ]
+        lambda line: reconstruction_to_atf(
+            line.reconstruction, line.note, line.parallel_lines
         ),
         lambda value: value,
         required=True,
@@ -150,7 +146,7 @@ class ApiLineSchema(Schema):
         required=True, data_key="isBeginningOfSection"
     )
     translation: fields.Field = fields.Function(
-        lambda line: "\n".join(translation.atf for translation in line.translation),
+        lambda line: translation_to_atf(line.translation),
         deserialize_translation,
         required=True,
     )
