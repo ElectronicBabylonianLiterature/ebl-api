@@ -4,6 +4,7 @@ import attr
 
 from ebl.common.domain.stage import Stage
 from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.line_atf import reconstruction_to_atf, translation_to_atf
 from ebl.corpus.domain.line_variant import LineVariant
@@ -80,9 +81,12 @@ class ChapterOutline:
     uncertain_fragments: Sequence[str]
     manuscripts: Sequence[ManuscriptOutline]
     lines: Sequence[LineOutline]
+    revision: str = LEGACY_REVISION
 
     @staticmethod
-    def of_chapter(chapter: Chapter) -> "ChapterOutline":
+    def of_chapter(
+        chapter: Chapter, revision: str = LEGACY_REVISION
+    ) -> "ChapterOutline":
         return ChapterOutline(
             chapter.text_id,
             chapter.classification,
@@ -96,4 +100,5 @@ class ChapterOutline:
                 LineOutline.of_line(index, line)
                 for index, line in enumerate(chapter.lines)
             ),
+            revision,
         )

@@ -5,9 +5,11 @@ from ebl.corpus.application.outline_schemas import load_chapter_outline
 from ebl.corpus.application.schemas import LineSchema
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.chapter_outline import ChapterOutline
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_page import LinesPage
 from ebl.corpus.infrastructure.mongo_text_repository_base import (
+    REVISION_FIELD,
     MongoTextRepositoryBase,
     chapter_not_found,
 )
@@ -41,6 +43,9 @@ OUTLINE_LINE_FIELDS: Sequence[str] = (
     "translation",
 )
 OUTLINE_VARIANT_FIELDS: Sequence[str] = ("reconstruction", "note", "parallelLines")
+REVISION_PROJECTION: Mapping[str, object] = {
+    "$ifNull": [f"${REVISION_FIELD}", LEGACY_REVISION]
+}
 
 
 def _pick_fields(variable: str, fields: Sequence[str]) -> dict:
@@ -86,6 +91,7 @@ def aggregate_chapter_outline(id_: ChapterId) -> List[dict]:
                     _pick_fields("manuscript", OUTLINE_MANUSCRIPT_FIELDS),
                 ),
                 "lines": _project_outline_lines(),
+                "revision": REVISION_PROJECTION,
             }
         },
     ]
@@ -109,6 +115,7 @@ def aggregate_lines_page(id_: ChapterId, offset: int, limit: int) -> List[dict]:
                 "_id": False,
                 "total": {"$size": "$lines"},
                 "lines": {"$slice": ["$lines", offset, limit]},
+                "revision": REVISION_PROJECTION,
             }
         },
     ]
@@ -132,4 +139,16 @@ class MongoTextRepositoryOutline(MongoTextRepositoryBase):
             id_, aggregate_lines_page(id_, offset, limit)
         )
         lines = cast(Sequence[Line], LineSchema().load(document["lines"], many=True))
-        return LinesPage(document["total"], offset, limit, tuple(lines))
+        return LinesPage(
+            document["total"], offset, limit, tuple(lines), document["revision"]
+        )
+
+    def find_chapter_revision(self, id_: ChapterId) -> str:
+        document = self._aggregate_chapter(
+            id_,
+            [
+                {"$match": chapter_id_query(id_)},
+                {"$project": {"_id": False, "revision": REVISION_PROJECTION}},
+            ],
+        )
+        return cast(str, document["revision"])

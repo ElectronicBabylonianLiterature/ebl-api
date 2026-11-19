@@ -13,6 +13,7 @@ from ebl.corpus.domain.chapter_outline import (
     ManuscriptOutline,
     museum_number_to_string,
 )
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.domain.line_atf import reconstruction_to_atf, translation_to_atf
 from ebl.corpus.domain.line_variant import prepare_reconstruction
 from ebl.provenance.application.provenance_service import ProvenanceService
@@ -86,6 +87,7 @@ class ChapterOutlineDocumentSchema(Schema):
     )
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
     lines = fields.Nested(LineOutlineDocumentSchema, many=True, required=True)
+    revision = fields.String(load_default=LEGACY_REVISION)
 
     @post_load
     def make_chapter_outline(
@@ -104,6 +106,7 @@ class ChapterOutlineDocumentSchema(Schema):
                 _make_line_outline(index, line)
                 for index, line in enumerate(data["lines"])
             ),
+            data["revision"],
         )
 
 

@@ -18,11 +18,15 @@ This repository holds the API half; the page itself is in ebl-frontend.
 - [x] 100 % coverage of every new or changed module
 - [x] Timed against Enūma eliš I replayed from production
 
+- [x] Step 1: review notes on pull request #827
+  - [x] qlty: responders take `**chapter`; two tests take one case object
+  - [x] Chapter revision on reads; stale saves and stale pages get 409
+  - [x] `qlty smells --include-tests` on the changed files: no findings
+  - [x] `task lint-md` (markdownlint): 0 errors
+
 ## Open
 
-- [ ] `qlty smells --include-tests` (qlty is not installed in the sandbox)
 - [ ] Save path on real data (the sandbox database has no sign list)
-- [ ] Permission to commit and push
 
 ## Later tasks
 

@@ -10,6 +10,8 @@ from ebl.corpus.application.lines_pagination import MAX_LINES_OFFSET
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_outline import ChapterOutline
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_page import LinesPage
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.corpus.infrastructure.mongo_text_repository_outline import (
@@ -62,6 +64,12 @@ def remove_optional_fields(chapter: Chapter) -> Chapter:
             for line in chapter.lines
         ),
     )
+
+
+def create_legacy_page(
+    total: int, offset: int, limit: int, lines: Sequence[Line]
+) -> LinesPage:
+    return LinesPage(total, offset, limit, lines, LEGACY_REVISION)
 
 
 @pytest.fixture
@@ -122,7 +130,9 @@ def test_chapter_outline_aggregation_projects_the_outline_document(
 
     documents = list(database[CHAPTERS_COLLECTION].aggregate(pipeline))
 
-    assert documents == [create_outline_document(outline_chapter)]
+    assert documents == [
+        {**create_outline_document(outline_chapter), "revision": LEGACY_REVISION}
+    ]
 
 
 def test_chapter_outline_aggregation_omits_fields_the_outline_does_not_need(
@@ -149,7 +159,7 @@ def test_find_lines_page(
     page = text_repository.find_lines_page(long_chapter.id_, offset, limit)
 
     assert len(expected_lines) > 0
-    assert page == LinesPage(LINE_COUNT, offset, limit, expected_lines)
+    assert page == create_legacy_page(LINE_COUNT, offset, limit, expected_lines)
 
 
 @pytest.mark.parametrize("offset", [LINE_COUNT, LINE_COUNT + 1, MAX_LINES_OFFSET])
@@ -158,7 +168,7 @@ def test_find_lines_page_past_the_end(
 ) -> None:
     page = text_repository.find_lines_page(long_chapter.id_, offset, 50)
 
-    assert page == LinesPage(LINE_COUNT, offset, 50, ())
+    assert page == create_legacy_page(LINE_COUNT, offset, 50, ())
 
 
 def test_find_lines_page_of_chapter_without_lines(
@@ -169,7 +179,7 @@ def test_find_lines_page_of_chapter_without_lines(
 
     page = text_repository.find_lines_page(chapter.id_, 0, 10)
 
-    assert page == LinesPage(0, 0, 10, ())
+    assert page == create_legacy_page(0, 0, 10, ())
 
 
 def test_lines_page_aggregation_returns_total_and_slice(
@@ -180,7 +190,9 @@ def test_lines_page_aggregation_returns_total_and_slice(
 
     documents = list(database[CHAPTERS_COLLECTION].aggregate(pipeline))
 
-    assert documents == [{"total": LINE_COUNT, "lines": stored_lines[2:5]}]
+    assert documents == [
+        {"total": LINE_COUNT, "lines": stored_lines[2:5], "revision": LEGACY_REVISION}
+    ]
 
 
 def test_finding_selects_chapter_by_id(
@@ -194,7 +206,7 @@ def test_finding_selects_chapter_by_id(
         page = text_repository.find_lines_page(chapter.id_, 0, 50)
 
         assert outline == ChapterOutline.of_chapter(chapter)
-        assert page == LinesPage(len(chapter.lines), 0, 50, chapter.lines)
+        assert page == create_legacy_page(len(chapter.lines), 0, 50, chapter.lines)
 
 
 @pytest.mark.parametrize(

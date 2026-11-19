@@ -2,6 +2,7 @@ from ebl.corpus.application.lines_pagination import LinesPageQuery
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.chapter_outline import ChapterOutline
+from ebl.corpus.domain.chapter_revision import require_revision
 from ebl.corpus.domain.lines_page import LinesPage
 
 
@@ -15,6 +16,8 @@ class ChapterEditReader:
     def find_lines(
         self, chapter_id: ChapterId, pagination: LinesPageQuery
     ) -> LinesPage:
-        return self._repository.find_lines_page(
+        page = self._repository.find_lines_page(
             chapter_id, pagination.offset, pagination.limit
         )
+        require_revision(chapter_id, pagination.revision, page.revision)
+        return page

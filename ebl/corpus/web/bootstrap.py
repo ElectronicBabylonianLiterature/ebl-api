@@ -1,6 +1,7 @@
 import falcon
 from ebl.context import Context
 from ebl.corpus.application.chapter_edit_reader import ChapterEditReader
+from ebl.corpus.application.chapter_lines_writer import ChapterLinesWriter
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.web.alignments import AlignmentResource
 from ebl.corpus.web.chapter_outline import ChapterOutlineResource
@@ -31,16 +32,15 @@ from ebl.transliteration.application.transliteration_query_factory import (
 
 
 def create_corpus_routes(api: falcon.App, context: Context):
-    corpus = Corpus(
-        CorpusDependencies(
-            repository=context.text_repository,
-            bibliography=context.get_bibliography(),
-            changelog=context.changelog,
-            sign_repository=context.sign_repository,
-            parallel_line_injector=context.parallel_line_injector,
-            provenance_service=context.provenance_service,
-        )
+    dependencies = CorpusDependencies(
+        repository=context.text_repository,
+        bibliography=context.get_bibliography(),
+        changelog=context.changelog,
+        sign_repository=context.sign_repository,
+        parallel_line_injector=context.parallel_line_injector,
+        provenance_service=context.provenance_service,
     )
+    corpus = Corpus(dependencies)
 
     chapter_edit_reader = ChapterEditReader(context.text_repository)
 
@@ -61,7 +61,10 @@ def create_corpus_routes(api: falcon.App, context: Context):
         corpus, context.custom_cache, context.provenance_service
     )
     lines = LinesResource(
-        corpus, context.custom_cache, context.provenance_service, chapter_edit_reader
+        ChapterLinesWriter(dependencies),
+        context.custom_cache,
+        context.provenance_service,
+        chapter_edit_reader,
     )
     chapter_outline = ChapterOutlineResource(chapter_edit_reader)
     lines_import = LinesImportResource(corpus, context.custom_cache)

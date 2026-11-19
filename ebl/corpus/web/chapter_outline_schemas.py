@@ -55,6 +55,7 @@ class ChapterOutlineSchema(Schema):
     )
     manuscripts = fields.Nested(ManuscriptOutlineSchema, many=True, required=True)
     lines = fields.Nested(LineOutlineSchema, many=True, required=True)
+    revision = fields.String(required=True)
 
 
 class LinesPageSchema(Schema):
@@ -62,6 +63,7 @@ class LinesPageSchema(Schema):
     offset = fields.Integer(required=True)
     limit = fields.Integer(required=True)
     lines = fields.Nested(ApiLineSchema, many=True, required=True)
+    revision = fields.String(required=True)
 
 
 def create_lines_page_schema(include_tokens: bool) -> LinesPageSchema:

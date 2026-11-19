@@ -8,6 +8,7 @@ from falcon import testing
 
 from ebl.common.domain.stage import Stage
 from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.outline_support import (
     OUTLINE_CHAPTER_KEYS,
@@ -28,7 +29,9 @@ LINE_COUNT = 12
 STANDARD_BABYLONIAN = Stage.STANDARD_BABYLONIAN.long_name
 
 
-def create_expected_outline(chapter: Chapter) -> Dict[str, Any]:
+def create_expected_outline(
+    chapter: Chapter, revision: str = LEGACY_REVISION
+) -> Dict[str, Any]:
     chapter_dto = create_chapter_dto(chapter)
     sigla = {
         manuscript.id: str(manuscript.siglum) for manuscript in chapter.manuscripts
@@ -48,6 +51,7 @@ def create_expected_outline(chapter: Chapter) -> Dict[str, Any]:
             create_expected_outline_line(index, line)
             for index, line in enumerate(chapter_dto["lines"])
         ],
+        "revision": revision,
     }
 
 
@@ -117,6 +121,7 @@ def test_get_outline_follows_the_contract(
     assert outline["lines"][0]["translation"] == "#tr.en.(2): When on high\n#tr.ar: bar"
     assert [variant["manuscriptIds"] for variant in variants] == [[1, 5], []]
     assert variants[0]["reconstruction"].endswith("\n#note: a note\n// (name 7)")
+    assert outline["revision"] == "legacy"
 
 
 def test_get_outline_as_guest(
@@ -144,10 +149,12 @@ def test_get_outline_is_not_cached(
     text_repository.update(chapter.id_, updated_chapter)
 
     second_result = get_outline(cached_client, chapter)
+    revision = text_repository.find_chapter_revision(chapter.id_)
 
     assert first_result.json == create_expected_outline(chapter)
-    assert second_result.json == create_expected_outline(updated_chapter)
-    assert second_result.json != first_result.json
+    assert second_result.json == create_expected_outline(updated_chapter, revision)
+    assert second_result.json != create_expected_outline(chapter, revision)
+    assert revision != LEGACY_REVISION
 
 
 @pytest.mark.parametrize(

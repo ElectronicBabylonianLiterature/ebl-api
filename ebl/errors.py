@@ -10,5 +10,9 @@ class DataError(Exception):
     pass
 
 
+class ConflictError(Exception):
+    pass
+
+
 class Defect(Exception):
     pass

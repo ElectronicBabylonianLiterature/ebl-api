@@ -6,6 +6,7 @@ from marshmallow import Schema
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_outline import ChapterOutline
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.web.chapter_outline_schemas import ChapterOutlineSchema
 from ebl.errors import NotFoundError
 from ebl.provenance.application.provenance_repository import ProvenanceRepository
@@ -141,8 +142,10 @@ def create_expected_outline_line(
     }
 
 
-def dump_outline(chapter: Chapter) -> dict[str, Any]:
-    return dump_to_dict(ChapterOutlineSchema(), ChapterOutline.of_chapter(chapter))
+def dump_outline(chapter: Chapter, revision: str = LEGACY_REVISION) -> dict[str, Any]:
+    return dump_to_dict(
+        ChapterOutlineSchema(), ChapterOutline.of_chapter(chapter, revision)
+    )
 
 
 def remove_key(document: Mapping[str, Any], removed_key: str) -> dict[str, Any]:

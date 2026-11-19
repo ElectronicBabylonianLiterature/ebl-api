@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 import pytest
 
@@ -11,10 +11,12 @@ from ebl.corpus.application.lines_pagination import (
     LinesView,
     parse_lines_page_query,
     parse_lines_view,
+    parse_revision,
 )
 from ebl.errors import DataError
 
 Parameters = Dict[str, Union[str, List[str]]]
+REVISION = "6aff54f935de52a4db0c81df"
 
 
 def test_limits() -> None:
@@ -38,6 +40,17 @@ def test_parse_lines_page_query() -> None:
     parameters: Parameters = {"offset": "20", "limit": "25", "tokens": "true"}
 
     assert parse_lines_page_query(parameters) == LinesPageQuery(20, 25, True)
+
+
+def test_parse_lines_page_query_with_revision() -> None:
+    parameters: Parameters = {"offset": "20", "revision": REVISION}
+
+    assert parse_lines_page_query(parameters) == LinesPageQuery(20, 10, False, REVISION)
+
+
+def test_lines_page_query_has_no_revision_by_default() -> None:
+    assert LinesPageQuery().revision is None
+    assert parse_lines_page_query({"tokens": "true"}).revision is None
 
 
 def test_parse_lines_page_query_ignores_other_parameters() -> None:
@@ -98,11 +111,45 @@ def test_parse_tokens(tokens: str, expected: bool) -> None:
             {"tokens": ["true", "false"]},
             "tokens must be true or false, got ['true', 'false'] instead",
         ),
+        ({"revision": ""}, "revision must be a non-empty string, got '' instead"),
+        (
+            {"revision": ["a", "b"]},
+            "revision must be a non-empty string, got ['a', 'b'] instead",
+        ),
     ],
 )
 def test_parse_invalid_lines_page_query(parameters: Parameters, message: str) -> None:
     with pytest.raises(DataError) as error:
         parse_lines_page_query(parameters)
+
+    assert str(error.value) == message
+
+
+@pytest.mark.parametrize(
+    "parameters,expected",
+    [
+        ({}, None),
+        ({"offset": "3", "view": "outline"}, None),
+        ({"revision": REVISION}, REVISION),
+        ({"revision": "legacy"}, "legacy"),
+        ({"revision": " "}, " "),
+    ],
+)
+def test_parse_revision(parameters: Parameters, expected: Optional[str]) -> None:
+    assert parse_revision(parameters) == expected
+
+
+@pytest.mark.parametrize(
+    "revision,message",
+    [
+        ("", "revision must be a non-empty string, got '' instead"),
+        (["a", "b"], "revision must be a non-empty string, got ['a', 'b'] instead"),
+        ([], "revision must be a non-empty string, got [] instead"),
+    ],
+)
+def test_parse_invalid_revision(revision: Union[str, List[str]], message: str) -> None:
+    with pytest.raises(DataError) as error:
+        parse_revision({"revision": revision})
 
     assert str(error.value) == message
 

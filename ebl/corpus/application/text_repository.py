@@ -57,6 +57,16 @@ class TextRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def find_chapter_revision(self, id_: ChapterId) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_at_revision(
+        self, id_: ChapterId, chapter: Chapter, revision: str
+    ) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
     def list(self) -> List[Text]:
         raise NotImplementedError
 

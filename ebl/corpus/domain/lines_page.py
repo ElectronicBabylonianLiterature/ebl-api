@@ -11,3 +11,4 @@ class LinesPage:
     offset: int
     limit: int
     lines: Sequence[Line]
+    revision: str

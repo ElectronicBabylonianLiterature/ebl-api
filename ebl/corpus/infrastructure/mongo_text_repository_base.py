@@ -4,6 +4,7 @@ from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.text import TextId
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.infrastructure.collections import (
@@ -22,6 +23,13 @@ def chapter_not_found(id_: ChapterId) -> Exception:
 
 def line_not_found(id_: ChapterId, number: int) -> Exception:
     return NotFoundError(f"Chapter {id_} line {number} not found.")
+
+
+REVISION_FIELD = "_cacheRevision"
+
+
+def revision_query(revision: str) -> dict:
+    return {REVISION_FIELD: None if revision == LEGACY_REVISION else revision}
 
 
 class MongoTextRepositoryBase(TextRepository):

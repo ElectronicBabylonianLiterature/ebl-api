@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Mapping, Sequence
+from typing import Mapping, Optional, Sequence
 
 import attr
 
@@ -29,6 +29,7 @@ class LinesPageQuery:
     offset: int = DEFAULT_LINES_OFFSET
     limit: int = DEFAULT_LINES_LIMIT
     include_tokens: bool = False
+    revision: Optional[str] = None
 
 
 def _parse_offset(parameters: Mapping[str, object]) -> int:
@@ -57,11 +58,19 @@ def _parse_tokens(parameters: Mapping[str, object]) -> bool:
     return tokens == TOKENS_ENABLED
 
 
+def parse_revision(parameters: Mapping[str, object]) -> Optional[str]:
+    revision = parameters.get("revision")
+    if revision is None or (isinstance(revision, str) and revision):
+        return revision
+    raise DataError(f"revision must be a non-empty string, got {revision!r} instead")
+
+
 def parse_lines_page_query(parameters: Mapping[str, object]) -> LinesPageQuery:
     return LinesPageQuery(
         _parse_offset(parameters),
         _parse_limit(parameters),
         _parse_tokens(parameters),
+        parse_revision(parameters),
     )
 
 

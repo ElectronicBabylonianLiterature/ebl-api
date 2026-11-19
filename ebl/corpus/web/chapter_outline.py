@@ -9,15 +9,6 @@ class ChapterOutlineResource:
     def __init__(self, reader: ChapterEditReader) -> None:
         self._reader = reader
 
-    def on_get(
-        self,
-        _: falcon.Request,
-        resp: falcon.Response,
-        genre: str,
-        category: str,
-        index: str,
-        stage: str,
-        name: str,
-    ) -> None:
-        chapter_id = create_chapter_id(genre, category, index, stage, name)
+    def on_get(self, _: falcon.Request, resp: falcon.Response, **chapter: str) -> None:
+        chapter_id = create_chapter_id(**chapter)
         resp.media = ChapterOutlineSchema().dump(self._reader.find_outline(chapter_id))

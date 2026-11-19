@@ -1,6 +1,7 @@
 import json
 from typing import Any, Dict, Iterator, Sequence
 
+import attr
 import pytest
 
 from ebl.common.domain.stage import Stage
@@ -11,6 +12,7 @@ from ebl.corpus.domain.chapter_outline import (
     LineVariantOutline,
     ManuscriptOutline,
 )
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.domain.lines_page import LinesPage
 from ebl.corpus.web.chapter_outline_schemas import (
     LINE_TOKEN_FIELDS,
@@ -32,6 +34,7 @@ from ebl.tests.transliteration.storage_test_helpers import has_key
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text_id import TextId
 
+REVISION = "6aff54f935de52a4db0c81df"
 OUTLINE = ChapterOutline(
     TextId(Genre.LITERATURE, 1, 2),
     Classification.ANCIENT,
@@ -55,6 +58,7 @@ OUTLINE = ChapterOutline(
             ),
         ),
     ),
+    REVISION,
 )
 OUTLINE_DTO = {
     "textId": {"genre": "L", "category": 1, "index": 2},
@@ -82,6 +86,7 @@ OUTLINE_DTO = {
             ],
         }
     ],
+    "revision": REVISION,
 }
 
 
@@ -101,6 +106,12 @@ def dump_lines_page(page: LinesPage, include_tokens: bool) -> Dict[str, Any]:
 
 def test_dump_chapter_outline() -> None:
     assert ChapterOutlineSchema().dump(OUTLINE) == OUTLINE_DTO
+
+
+def test_dump_chapter_outline_without_revision() -> None:
+    outline = attr.evolve(OUTLINE, revision=LEGACY_REVISION)
+
+    assert ChapterOutlineSchema().dump(outline) == {**OUTLINE_DTO, "revision": "legacy"}
 
 
 def test_dumped_chapter_outline_is_json() -> None:
@@ -158,7 +169,7 @@ def test_dumped_arrays_hold_one_data_type() -> None:
 
 def test_dump_lines_page_with_tokens() -> None:
     chapter = create_outline_chapter()
-    page = LinesPage(len(chapter.lines), 1, 2, chapter.lines[1:3])
+    page = LinesPage(len(chapter.lines), 1, 2, chapter.lines[1:3], REVISION)
     dto = dump_lines_page(page, True)
 
     assert dto == {
@@ -166,13 +177,14 @@ def test_dump_lines_page_with_tokens() -> None:
         "offset": 1,
         "limit": 2,
         "lines": create_chapter_dto(chapter)["lines"][1:3],
+        "revision": REVISION,
     }
     assert has_key(dto, "reconstructionTokens") and has_key(dto, "atfTokens")
 
 
 def test_dump_lines_page_without_tokens() -> None:
     chapter = create_outline_chapter()
-    page = LinesPage(len(chapter.lines), 0, 10, chapter.lines)
+    page = LinesPage(len(chapter.lines), 0, 10, chapter.lines, LEGACY_REVISION)
     dto = dump_lines_page(page, False)
 
     assert dto == {
@@ -182,6 +194,7 @@ def test_dump_lines_page_without_tokens() -> None:
         "lines": [
             remove_token_fields(line) for line in create_chapter_dto(chapter)["lines"]
         ],
+        "revision": "legacy",
     }
     assert dto["lines"] == ApiLineSchema(exclude=LINE_TOKEN_FIELDS).dump(
         chapter.lines, many=True
@@ -191,7 +204,7 @@ def test_dump_lines_page_without_tokens() -> None:
 
 def test_lines_page_schemas_do_not_share_excluded_fields() -> None:
     chapter = create_outline_chapter()
-    page = LinesPage(len(chapter.lines), 0, 10, chapter.lines)
+    page = LinesPage(len(chapter.lines), 0, 10, chapter.lines, LEGACY_REVISION)
     dump_lines_page(page, False)
 
     assert dump_lines_page(page, True)["lines"] == create_chapter_dto(chapter)["lines"]
@@ -199,9 +212,10 @@ def test_lines_page_schemas_do_not_share_excluded_fields() -> None:
 
 @pytest.mark.parametrize("include_tokens", [True, False])
 def test_dump_empty_lines_page(include_tokens: bool) -> None:
-    assert dump_lines_page(LinesPage(3, 7, 50, ()), include_tokens) == {
+    assert dump_lines_page(LinesPage(3, 7, 50, (), REVISION), include_tokens) == {
         "total": 3,
         "offset": 7,
         "limit": 50,
         "lines": [],
+        "revision": REVISION,
     }
