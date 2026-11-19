@@ -135,7 +135,7 @@ jobs:
           poetry run python -c 'import coverage; report = coverage.Coverage(source=["."]);
           report.load(); report.xml_report(include=["ebl/*", "scripts/*"])'
 
-      - uses: qltysh/qlty-action/coverage@a2277a908db90c4c868832fb9204521fb940fdb4 # v1
+      - uses: qltysh/qlty-action/coverage@0ff2178667bf8eb28ed0013a7ef54857a24d4056 # v2.7.0
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: coverage.xml
@@ -147,9 +147,9 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
-      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         with:
           registry: ebl.badw.de
@@ -157,7 +157,7 @@ jobs:
           password: ${{ secrets.EBL_REGISTRY_PASSWORD }}
 
       - id: docker_build
-        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
           tags: |
