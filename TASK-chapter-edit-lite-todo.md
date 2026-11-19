@@ -23,6 +23,7 @@ This repository holds the API half; the page itself is in ebl-frontend.
   - [x] Chapter revision on reads; stale saves and stale pages get 409
   - [x] `qlty smells --include-tests` on the changed files: no findings
   - [x] `task lint-md` (markdownlint): 0 errors
+- [x] Step 2 (frontend only): reduced to the split view
 
 ## Open
 
