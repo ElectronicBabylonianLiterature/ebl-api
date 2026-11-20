@@ -4,10 +4,10 @@ from pymongo.collation import Collation
 from ebl.common.query.aggregation_matchers import match_all, text_id_pairs
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
-from ebl.corpus.application.schemas import (
-    ChapterSchema,
-    DictionaryLineSchema,
-    ManuscriptSchema,
+from ebl.corpus.infrastructure.stored_manuscript_schemas import (
+    StoredChapterSchema as ChapterSchema,
+    StoredDictionaryLineSchema as DictionaryLineSchema,
+    StoredManuscriptSchema as ManuscriptSchema,
 )
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.dictionary_line import DictionaryLine
