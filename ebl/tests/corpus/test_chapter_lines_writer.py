@@ -5,7 +5,7 @@ import attr
 import pytest
 from pymongo.database import Database
 
-from ebl.corpus.application.chapter_lines_writer import ChapterLinesWriter
+from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_revision import (
@@ -35,8 +35,8 @@ def chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
 
 
 @pytest.fixture
-def writer(corpus_dependencies: CorpusDependencies) -> ChapterLinesWriter:
-    return ChapterLinesWriter(corpus_dependencies)
+def writer(corpus_dependencies: CorpusDependencies) -> ChapterEditWriter:
+    return ChapterEditWriter(corpus_dependencies)
 
 
 def create_invalid_update(chapter: Chapter) -> LinesUpdate:
@@ -46,13 +46,13 @@ def create_invalid_update(chapter: Chapter) -> LinesUpdate:
     return LinesUpdate([], set(), {0: duplicated_line})
 
 
-def test_writer_is_a_corpus(writer: ChapterLinesWriter) -> None:
+def test_writer_is_a_corpus(writer: ChapterEditWriter) -> None:
     assert isinstance(writer, Corpus)
 
 
 @pytest.mark.parametrize("revision", [None, LEGACY_REVISION])
 def test_save_lines_of_never_updated_chapter(
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     text_repository: MongoTextRepository,
     chapter: Chapter,
     user: User,
@@ -70,7 +70,7 @@ def test_save_lines_of_never_updated_chapter(
 
 
 def test_save_lines_returns_the_chapter_update_lines_returns(
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     corpus: Corpus,
     text_repository: MongoTextRepository,
     chapter: Chapter,
@@ -94,7 +94,7 @@ def test_save_lines_returns_the_chapter_update_lines_returns(
 @pytest.mark.parametrize("revision", [None, LEGACY_REVISION])
 def test_save_lines_writes_one_changelog_entry(
     database: Database,
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     chapter: Chapter,
     user: User,
     revision: str,
@@ -108,7 +108,7 @@ def test_save_lines_writes_one_changelog_entry(
 
 def test_save_lines_at_the_revision_of_the_previous_save(
     database: Database,
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     text_repository: MongoTextRepository,
     chapter: Chapter,
     user: User,
@@ -130,7 +130,7 @@ def test_save_lines_at_the_revision_of_the_previous_save(
 
 
 def test_save_lines_at_stale_revision(
-    database: Database, writer: ChapterLinesWriter, chapter: Chapter, user: User
+    database: Database, writer: ChapterEditWriter, chapter: Chapter, user: User
 ) -> None:
     lines = create_lines_update(update_chapter(chapter, EDITED_INDEX), EDITED_INDEX)
     stored_chapter = find_stored_chapter(database, chapter)
@@ -145,7 +145,7 @@ def test_save_lines_at_stale_revision(
 
 def test_save_lines_does_not_overwrite_a_concurrent_update(
     database: Database,
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     text_repository: MongoTextRepository,
     chapter: Chapter,
     monkeypatch: pytest.MonkeyPatch,
@@ -174,7 +174,7 @@ def test_save_lines_does_not_overwrite_a_concurrent_update(
 @pytest.mark.parametrize("revision", [None, LEGACY_REVISION])
 def test_save_invalid_lines(
     database: Database,
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     chapter: Chapter,
     user: User,
     revision: str,
@@ -191,7 +191,7 @@ def test_save_invalid_lines(
 @pytest.mark.parametrize("revision", [None, LEGACY_REVISION, STALE_REVISION])
 def test_save_lines_of_unknown_chapter(
     database: Database,
-    writer: ChapterLinesWriter,
+    writer: ChapterEditWriter,
     chapter: Chapter,
     user: User,
     revision: str,

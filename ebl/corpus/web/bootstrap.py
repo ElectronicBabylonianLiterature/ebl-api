@@ -1,7 +1,7 @@
 import falcon
 from ebl.context import Context
 from ebl.corpus.application.chapter_edit_reader import ChapterEditReader
-from ebl.corpus.application.chapter_lines_writer import ChapterLinesWriter
+from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.web.alignments import AlignmentResource
 from ebl.corpus.web.chapter_outline import ChapterOutlineResource
@@ -41,6 +41,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
         provenance_service=context.provenance_service,
     )
     corpus = Corpus(dependencies)
+    chapter_edit_writer = ChapterEditWriter(dependencies)
 
     chapter_edit_reader = ChapterEditReader(context.text_repository)
 
@@ -58,16 +59,16 @@ def create_corpus_routes(api: falcon.App, context: Context):
     alignment = AlignmentResource(corpus, context.custom_cache)
     manuscript_lemmatization = LemmatizationResource(corpus, context.custom_cache)
     manuscript = ManuscriptsResource(
-        corpus, context.custom_cache, context.provenance_service
+        chapter_edit_writer, context.custom_cache, context.provenance_service
     )
     lines = LinesResource(
-        ChapterLinesWriter(dependencies),
+        chapter_edit_writer,
         context.custom_cache,
         context.provenance_service,
         chapter_edit_reader,
     )
     chapter_outline = ChapterOutlineResource(chapter_edit_reader)
-    lines_import = LinesImportResource(corpus, context.custom_cache)
+    lines_import = LinesImportResource(chapter_edit_writer, context.custom_cache)
     colophons = CorpusColophonsResource(corpus)
     unplaced_lines = UnplacedLinesResource(corpus)
     extant_lines = ExtantLinesResource(corpus)

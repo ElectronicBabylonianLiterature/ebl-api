@@ -88,3 +88,24 @@
 - `mypy` from the system install reports `context=` errors under
   marshmallow 4; with the project interpreter it reports errors only in
   files this task did not touch.
+
+## Step 3: light, revision-checked import and manuscripts saves
+
+- `POST {chapter}/import` and `POST {chapter}/manuscripts` accept
+  `view=outline` and `revision` with the same meaning as on
+  `POST {chapter}/lines`: the outline with the new revision instead of the
+  full chapter, and 409 when the chapter has changed. Without the
+  parameters both respond exactly as before.
+- `ChapterLinesWriter` became `ChapterEditWriter` with `save_lines`,
+  `save_imported_lines` and `save_manuscripts`; the response switch is
+  shared in `web/saved_chapter.py`.
+- With a revision the revision is checked before bibliography references
+  are injected, so a stale revision with an unknown reference gives 409.
+- `Corpus.update_manuscripts` uses the shared reference injection; its
+  behaviour is unchanged.
+- Gates: `ruff`, `flake8`, `pyre`, `pyright` clean; qlty no findings;
+  `task lint-md` 0 errors; corpus tests 875 passed with 100 % coverage of
+  the new and changed modules; full suite 6858 passed, 2 skipped,
+  1 xfailed.
+- Short `pytest -n 3` runs of one or two files sometimes fail with
+  `CursorNotFound`; this also happens on the unchanged tree.
