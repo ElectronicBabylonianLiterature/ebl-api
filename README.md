@@ -432,6 +432,16 @@ must omit `findspot.mapLocation` when submitting archaeology updates with
 writing an update. Curated map locations belong to the canonical findspot
 read model.
 
+Before enabling clients that send `findspotId` or `findspotIds`, update every
+serving backend replica to support these filters. Older replicas ignore them,
+so a mixed-version rollout cannot guarantee findspot-restricted results.
+
+The database operator must prebuild the `fragments` index
+`{archaeology.findspotId: 1}` before deploying, or approve a startup build window.
+Otherwise, application startup builds the index and waits for it to finish.
+
+### Configuration
+
 The application reads the configuration from following environment variables:
 
  ```dotenv
