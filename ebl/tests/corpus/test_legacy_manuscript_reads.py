@@ -1,10 +1,16 @@
-from typing import Callable
+import json
+from typing import Callable, cast
 
 import attr
 import pytest
+from falcon import testing
 from pymongo.database import Database
 
 from ebl.corpus.application.text_repository import TextRepository
+from ebl.corpus.domain.text import Text
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.corpus.mongo_text_repository_fixtures import (
     CHAPTER_WITH_QUERY_LEMMA,
@@ -35,6 +41,7 @@ CHAPTER = attr.evolve(
     signs=("KU",),
 )
 READS: dict[str, Callable[[TextRepository], object]] = {
+    "text": lambda repository: repository.find(CHAPTER.text_id),
     "chapter": lambda repository: repository.find_chapter(CHAPTER.id_),
     "display": lambda repository: repository.find_chapter_for_display(CHAPTER.id_),
     "manuscripts": lambda repository: repository.query_manuscripts_by_chapter(
@@ -64,6 +71,10 @@ def test_all_repository_reads_accept_legacy_manuscripts_without_rewriting_storag
     when_chapter_in_collection(database, chapter=CHAPTER)
     expected = READS[operation](text_repository)
     assert expected
+    if operation == "text":
+        assert cast(Text, expected).chapters
+    elif operation == "transliteration":
+        assert isinstance(expected, tuple) and expected[0]
     database[CHAPTERS_COLLECTION].update_many(
         {},
         {
@@ -79,7 +90,9 @@ def test_all_repository_reads_accept_legacy_manuscripts_without_rewriting_storag
 
 
 def test_fragment_corpus_route_accepts_legacy_manuscript(
-    database: Database, client, fragment_repository
+    database: Database,
+    client: testing.TestClient,
+    fragment_repository: MongoFragmentRepository,
 ) -> None:
     when_text_in_collection(database, text=attr.evolve(LITERATURE_TEXT, references=()))
     when_chapter_in_collection(database, chapter=CHAPTER)
@@ -93,6 +106,7 @@ def test_fragment_corpus_route_accepts_legacy_manuscript(
         },
     )
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber("X", "42")))
-    response = client.simulate_get("/fragments/X.42/corpus")
+    response = cast(testing.Result, client.simulate_get("/fragments/X.42/corpus"))
     assert response.status_code == 200
-    assert len(response.json["manuscriptAttestations"]) == 1
+    payload = json.loads(response.content)
+    assert len(payload["manuscriptAttestations"]) == 1
