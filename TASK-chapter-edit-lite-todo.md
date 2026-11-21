@@ -34,6 +34,12 @@ This repository holds the API half; the page itself is in ebl-frontend.
   - [x] No stored write without a storable changelog entry
   - [x] Chapter and revision of a revision save come from one read
 
+## In progress
+
+- [ ] Step 5: alignment and lemmatization per line. Built in both
+  repositories and pushed as work in progress; verification, browser
+  check and screenshots are still to do (see the log).
+
 ## Open
 
 - [ ] Save path on real data (the sandbox database has no sign list)

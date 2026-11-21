@@ -10,6 +10,7 @@ from ebl.tests.corpus.chapter_edit_support import (
     create_import_edit,
     create_manuscripts_edit,
 )
+from ebl.tests.corpus.line_annotation_kinds import ANNOTATION_KINDS
 from ebl.tests.corpus.line_move_support import create_move_request
 from ebl.tests.corpus.lines_edit_support import (
     EDITED_INDEX,
@@ -21,6 +22,9 @@ from ebl.tests.corpus.lines_edit_support import (
 RequestFactory = Callable[[Chapter], ChapterEditRequest]
 ChapterRead = Tuple[Chapter, str]
 READ_METHOD = "find_chapter_with_revision"
+ANNOTATED_INDEX = 1
+REVISION_REQUIRED = "revision is required"
+INVALID_REVISION = "revision must be a non-empty string, got {} instead"
 
 
 def create_lines_request(chapter: Chapter) -> ChapterEditRequest:
@@ -41,8 +45,17 @@ SAVES_WITHOUT_REVISION: Sequence[RequestFactory] = (
 SAVES_AT_REVISION: Sequence[RequestFactory] = (
     *SAVES_WITHOUT_REVISION,
     create_line_move_request,
+    *(
+        partial(kind.create_new_request, index=ANNOTATED_INDEX)
+        for kind in ANNOTATION_KINDS
+    ),
 )
-SAVE_IDS: Sequence[str] = ("import", "manuscripts", "lines", "move")
+SAVE_WITHOUT_REVISION_IDS: Sequence[str] = ("import", "manuscripts", "lines")
+SAVE_IDS: Sequence[str] = (
+    *SAVE_WITHOUT_REVISION_IDS,
+    "move",
+    *(kind.name for kind in ANNOTATION_KINDS),
+)
 
 
 def update_after_read(

@@ -11,7 +11,6 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.line_move import LineMove
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
 from ebl.tests.corpus.chapter_edit_support import ChapterEditRequest, post_edit
 from ebl.tests.corpus.line_move_support import (
     LINE_COUNT,
@@ -23,8 +22,13 @@ from ebl.tests.corpus.line_move_support import (
     reorder,
 )
 from ebl.tests.corpus.lines_edit_support import find_stored_chapter, read_json
-from ebl.tests.corpus.outline_support import dump_to_dict, remove_key
-from ebl.tests.corpus.support import create_chapter_url, simulate_get
+from ebl.tests.corpus.outline_support import remove_key
+from ebl.tests.corpus.support import (
+    create_chapter_url,
+    dump_line_details,
+    get_line,
+    simulate_get,
+)
 from ebl.tests.factories.corpus import TextFactory
 
 CACHED_READS: Sequence[Tuple[str, str]] = (
@@ -46,23 +50,8 @@ def chapter(text_repository: MongoTextRepository, move_chapter: Chapter) -> Chap
     return move_chapter
 
 
-def dump_line_details(chapter: Chapter, index: int) -> Dict[str, Any]:
-    return dump_to_dict(
-        LineDetailsDisplaySchema(),
-        LineDetailsDisplay.from_line_manuscripts(
-            chapter.lines[index], chapter.manuscripts
-        ),
-    )
-
-
 def find_display_lines(result: testing.Result) -> List[Dict[str, Any]]:
     return [remove_key(line, "originalIndex") for line in read_json(result)["lines"]]
-
-
-def get_line(
-    client: testing.TestClient, chapter: Chapter, number: object
-) -> testing.Result:
-    return simulate_get(client, create_chapter_url(chapter, f"/lines/{number}"))
 
 
 @pytest.mark.parametrize("index", range(LINE_COUNT))

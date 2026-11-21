@@ -25,9 +25,11 @@ from ebl.tests.corpus.lines_edit_support import (
     find_stored_chapter,
     read_json,
 )
+from ebl.tests.corpus.revision_save_support import (
+    INVALID_REVISION,
+    REVISION_REQUIRED,
+)
 
-REVISION_REQUIRED = "revision is required"
-INVALID_REVISION = "revision must be a non-empty string, got {} instead"
 INVALID_POSITION = "Invalid line move: {} is not a line position (number of lines: 4)."
 SAME_POSITION = "Invalid line move: the line is already at that position."
 MALFORMED_BODIES: Sequence[Tuple[object, Sequence[str]]] = (

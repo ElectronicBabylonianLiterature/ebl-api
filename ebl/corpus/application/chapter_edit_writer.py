@@ -4,6 +4,7 @@ from typing import Callable, Optional
 import attr
 
 from ebl.changelog import create_entry, is_storable
+from ebl.corpus.application.alignment_updater import LineAlignmentUpdater
 from ebl.corpus.application.chapter_changelog import (
     ChapterDiff,
     ChapterDiffer,
@@ -11,12 +12,15 @@ from ebl.corpus.application.chapter_changelog import (
     create_line_move_diff,
 )
 from ebl.corpus.application.corpus import COLLECTION, Corpus
+from ebl.corpus.application.lemmatization import LineLemmatization
+from ebl.corpus.application.lemmatization_updater import LineLemmatizationUpdater
 from ebl.corpus.application.line_move_updater import LineMoveUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
     inject_references_to_submitted_manuscripts,
 )
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
+from ebl.corpus.domain.alignment import LineAlignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_revision import require_revision
 from ebl.corpus.domain.line_move import LineMove
@@ -89,6 +93,24 @@ class ChapterEditWriter(Corpus):
             revision,
             user,
             partial(create_line_move_diff, move),
+        )
+
+    def save_line_alignment(
+        self, id_: ChapterId, alignment: LineAlignment, revision: str, user: User
+    ) -> SavedChapter:
+        return self._save_at_revision(
+            id_, LineAlignmentUpdater(alignment).update, revision, user
+        )
+
+    def save_line_lemmatization(
+        self,
+        id_: ChapterId,
+        lemmatization: LineLemmatization,
+        revision: str,
+        user: User,
+    ) -> SavedChapter:
+        return self._save_at_revision(
+            id_, LineLemmatizationUpdater(lemmatization).update, revision, user
         )
 
     def _with_stored_revision(self, chapter: Chapter) -> SavedChapter:

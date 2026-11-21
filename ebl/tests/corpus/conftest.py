@@ -1,3 +1,4 @@
+from itertools import chain
 from typing import Callable, List
 
 import attr
@@ -17,9 +18,18 @@ from ebl.tests.corpus.chapter_edit_support import (
     ChapterEdit,
     ChapterEditKind,
 )
+from ebl.tests.corpus.line_alignment_errors import INVALID_ALIGNMENTS
+from ebl.tests.corpus.line_annotation_kind import AnnotationKind, InvalidAnnotation
+from ebl.tests.corpus.line_annotation_kinds import ANNOTATION_KINDS
+from ebl.tests.corpus.line_annotation_support import create_annotation_chapter
+from ebl.tests.corpus.line_lemmatization_errors import INVALID_LEMMATIZATIONS
 from ebl.tests.corpus.line_move_support import (
     create_extent_chapter,
     create_move_chapter,
+)
+from ebl.tests.corpus.lines_edit_support import (
+    count_chapter_changelog_entries,
+    find_stored_chapter,
 )
 from ebl.tests.corpus.support import (
     ANY_USER,
@@ -87,6 +97,37 @@ def move_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapte
 @pytest.fixture
 def extent_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
     return store_editable_chapter(create_extent_chapter())
+
+
+@pytest.fixture
+def annotation_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
+    return store_editable_chapter(create_annotation_chapter())
+
+
+@pytest.fixture
+def assert_nothing_saved(
+    database: Database, annotation_chapter: Chapter
+) -> Callable[[], None]:
+    stored_chapter = find_stored_chapter(database, annotation_chapter)
+
+    def assert_unchanged() -> None:
+        assert find_stored_chapter(database, annotation_chapter) == stored_chapter
+        assert count_chapter_changelog_entries(database) == 0
+
+    return assert_unchanged
+
+
+@pytest.fixture(params=ANNOTATION_KINDS, ids=lambda kind: kind.name)
+def annotation_kind(request: pytest.FixtureRequest) -> AnnotationKind:
+    return request.param
+
+
+@pytest.fixture(
+    params=tuple(chain(INVALID_ALIGNMENTS, INVALID_LEMMATIZATIONS)),
+    ids=lambda invalid: invalid.name,
+)
+def invalid_annotation(request: pytest.FixtureRequest) -> InvalidAnnotation:
+    return request.param
 
 
 @pytest.fixture(params=CHAPTER_EDIT_KINDS, ids=lambda edit_kind: edit_kind.suffix)

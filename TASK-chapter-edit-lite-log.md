@@ -152,3 +152,22 @@
 - Browser run with the frontend against this API, seeded chapter with
   alignment and lemmas: 27 checks passed; every full line object is
   identical before and after each move.
+
+## Step 5: alignment and lemmatization per line (work in progress)
+
+Paused on 21 November; pushed unfinished so the work is not lost.
+
+- Built, with tests, but NOT yet verified by the lead:
+  `POST {chapter}/lines/{number}/alignment?view=outline&revision=` and
+  `POST {chapter}/lines/{number}/lemmatization?view=outline&revision=`
+  (body: the entry of that one line in the whole-chapter request;
+  revision required; same effect as the whole-chapter updater for that
+  line), and `POST /lemmas/batch` (body `{"words": [{"word",
+  "isNormalized"}]}`, 1 to 200 entries; answers, per word and in request
+  order, exactly what `GET /lemmas` answers).
+- The builder was cut off during its final gates and wrote no report.
+- To do: read the diff; run every gate (ruff, flake8, pyre, pyright,
+  qlty, full suite with nothing else using MongoDB, 100 % coverage of
+  the changed modules, files at most 250 lines); mutation check; write
+  down the exact error statuses and messages for the frontend's test
+  double; browser check with the frontend; screenshots for the user.

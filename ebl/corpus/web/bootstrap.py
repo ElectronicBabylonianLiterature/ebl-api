@@ -17,6 +17,10 @@ from ebl.corpus.web.chapters import (
 from ebl.corpus.web.colophons import CorpusColophonsResource
 from ebl.corpus.web.extant_lines import ExtantLinesResource
 from ebl.corpus.web.lemmatizations import LemmatizationResource
+from ebl.corpus.web.line_annotations import (
+    LineAlignmentResource,
+    LineLemmatizationResource,
+)
 from ebl.corpus.web.line_move import LineMoveResource
 from ebl.corpus.web.lines import LinesImportResource, LinesResource, LineResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
@@ -69,6 +73,10 @@ def create_corpus_routes(api: falcon.App, context: Context):
         chapter_edit_reader,
     )
     line_move = LineMoveResource(chapter_edit_writer, context.custom_cache)
+    line_alignment = LineAlignmentResource(chapter_edit_writer, context.custom_cache)
+    line_lemmatization = LineLemmatizationResource(
+        chapter_edit_writer, context.custom_cache
+    )
     chapter_outline = ChapterOutlineResource(chapter_edit_reader)
     lines_import = LinesImportResource(chapter_edit_writer, context.custom_cache)
     colophons = CorpusColophonsResource(corpus)
@@ -98,6 +106,8 @@ def create_corpus_routes(api: falcon.App, context: Context):
     api.add_route(f"{chapter_url}/lines", lines)
     api.add_route(f"{chapter_url}/lines/move", line_move)
     api.add_route(f"{chapter_url}/lines/{{number}}", chapters_line)
+    api.add_route(f"{chapter_url}/lines/{{number}}/alignment", line_alignment)
+    api.add_route(f"{chapter_url}/lines/{{number}}/lemmatization", line_lemmatization)
     api.add_route(f"{chapter_url}/import", lines_import)
     api.add_route(f"{chapter_url}/colophons", colophons)
     api.add_route(f"{chapter_url}/unplaced_lines", unplaced_lines)

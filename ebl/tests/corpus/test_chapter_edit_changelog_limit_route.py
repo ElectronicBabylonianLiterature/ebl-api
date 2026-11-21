@@ -20,6 +20,7 @@ from ebl.tests.corpus.lines_edit_support import (
 )
 from ebl.tests.corpus.revision_save_support import (
     SAVE_IDS,
+    SAVE_WITHOUT_REVISION_IDS,
     SAVES_AT_REVISION,
     SAVES_WITHOUT_REVISION,
     RequestFactory,
@@ -95,7 +96,9 @@ def test_stale_revision_is_reported_before_the_changelog_limit(
     assert count_chapter_changelog_entries(database) == 0
 
 
-@pytest.mark.parametrize("create_request", SAVES_WITHOUT_REVISION, ids=SAVE_IDS[:-1])
+@pytest.mark.parametrize(
+    "create_request", SAVES_WITHOUT_REVISION, ids=SAVE_WITHOUT_REVISION_IDS
+)
 def test_save_without_revision_is_not_checked_against_the_changelog_limit(
     client: testing.TestClient,
     database: Database,
