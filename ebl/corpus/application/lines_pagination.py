@@ -65,6 +65,13 @@ def parse_revision(parameters: Mapping[str, object]) -> Optional[str]:
     raise DataError(f"revision must be a non-empty string, got {revision!r} instead")
 
 
+def parse_required_revision(parameters: Mapping[str, object]) -> str:
+    revision = parse_revision(parameters)
+    if revision is None:
+        raise DataError("revision is required")
+    return revision
+
+
 def parse_lines_page_query(parameters: Mapping[str, object]) -> LinesPageQuery:
     return LinesPageQuery(
         _parse_offset(parameters),

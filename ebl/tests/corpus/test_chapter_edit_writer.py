@@ -6,8 +6,7 @@ import pytest
 from pymongo.database import Database
 
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
-from ebl.corpus.application.corpus import CorpusDependencies
-from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_revision import (
     LEGACY_REVISION,
     chapter_revision_conflict,
@@ -21,6 +20,7 @@ from ebl.tests.corpus.lines_edit_support import (
     find_stored_chapter,
 )
 from ebl.tests.corpus.outline_support import create_outline_chapter
+from ebl.tests.corpus.revision_save_support import update_after_read
 from ebl.tests.corpus.support import ANY_USER
 
 REVISIONS = (None, LEGACY_REVISION)
@@ -29,11 +29,6 @@ REVISIONS = (None, LEGACY_REVISION)
 @pytest.fixture
 def chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
     return store_editable_chapter(create_outline_chapter())
-
-
-@pytest.fixture
-def writer(corpus_dependencies: CorpusDependencies) -> ChapterEditWriter:
-    return ChapterEditWriter(corpus_dependencies)
 
 
 @pytest.mark.parametrize("revision", REVISIONS)
@@ -128,17 +123,8 @@ def test_save_does_not_overwrite_a_concurrent_update(
     chapter: Chapter,
     edit_kind: ChapterEditKind,
 ) -> None:
-    find_chapter = text_repository.find_chapter
-
-    def find_chapter_before_concurrent_update(id_: ChapterId) -> Chapter:
-        found_chapter = find_chapter(id_)
-        text_repository.update(id_, chapter)
-        return found_chapter
-
     with pytest.MonkeyPatch.context() as patch:
-        patch.setattr(
-            text_repository, "find_chapter", find_chapter_before_concurrent_update
-        )
+        update_after_read(patch, text_repository, chapter)
         with pytest.raises(ConflictError, match="expected revision legacy"):
             edit_kind.create_edit(chapter, 0).save(
                 writer, chapter.id_, LEGACY_REVISION, ANY_USER

@@ -1,4 +1,4 @@
-from typing import List, Mapping
+from typing import Callable, List, Mapping
 from unittest.mock import Mock
 
 import attr
@@ -103,3 +103,65 @@ def test_null_revision_is_the_legacy_revision(
     )
 
     assert find_stored_chapter(database, chapter)[REVISION_FIELD] == new_revision
+
+
+@pytest.mark.parametrize(
+    "stored_revision",
+    [{"$unset": {REVISION_FIELD: ""}}, {"$set": {REVISION_FIELD: None}}],
+    ids=["absent", "null"],
+)
+def test_find_chapter_with_revision_of_a_chapter_at_the_legacy_revision(
+    database: Database,
+    text_repository: MongoTextRepository,
+    chapter: Chapter,
+    stored_revision: Mapping[str, object],
+) -> None:
+    database[CHAPTERS_COLLECTION].update_many({}, stored_revision)
+
+    assert text_repository.find_chapter_with_revision(chapter.id_) == (
+        text_repository.find_chapter(chapter.id_),
+        LEGACY_REVISION,
+    )
+
+
+def test_find_chapter_with_revision_after_an_update(
+    database: Database, text_repository: MongoTextRepository, chapter: Chapter
+) -> None:
+    updated_chapter = attr.evolve(chapter, lines=chapter.lines[1:])
+    revision = text_repository.update_at_revision(
+        chapter.id_, updated_chapter, LEGACY_REVISION
+    )
+
+    found_chapter, found_revision = text_repository.find_chapter_with_revision(
+        chapter.id_
+    )
+
+    assert found_chapter == text_repository.find_chapter(chapter.id_)
+    assert found_chapter.lines == updated_chapter.lines
+    assert found_revision == revision
+    assert found_revision == find_stored_chapter(database, chapter)[REVISION_FIELD]
+
+
+def test_chapter_and_revision_are_read_from_the_same_document(
+    text_repository: MongoTextRepository,
+    chapter: Chapter,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    expected = (text_repository.find_chapter(chapter.id_), LEGACY_REVISION)
+
+    def update_after(read: Callable[..., object]) -> Callable[..., object]:
+        def read_before_concurrent_update(*args: object, **kwargs: object) -> object:
+            result = read(*args, **kwargs)
+            text_repository.update(chapter.id_, attr.evolve(chapter, lines=()))
+            return result
+
+        return read_before_concurrent_update
+
+    for read_method in ("find_one", "aggregate"):
+        monkeypatch.setattr(
+            text_repository._chapters,
+            read_method,
+            update_after(getattr(text_repository._chapters, read_method)),
+        )
+
+    assert text_repository.find_chapter_with_revision(chapter.id_) == expected

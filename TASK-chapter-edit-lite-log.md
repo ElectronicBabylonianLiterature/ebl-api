@@ -109,3 +109,46 @@
   1 xfailed.
 - Short `pytest -n 3` runs of one or two files sometimes fail with
   `CursorNotFound`; this also happens on the unchanged tree.
+
+## Step 4: move a line
+
+- `POST {chapter}/lines/move?view=outline&revision=` with the body
+  `{"from": i, "to": j}` removes the stored line at `from` and inserts it
+  at `to`. The line is not rebuilt: variants, manuscript lines, alignment
+  and lemmatization stay as stored, and line numbers do not change. Signs
+  are recomputed; the parser version is untouched.
+- The revision is required (422 without one); a stale one answers 409.
+  A position out of range, an unchanged position and a move that breaks a
+  translation extent answer 422; a malformed body answers 400. In all
+  these cases nothing is stored and no changelog entry is written.
+- A move records a compact changelog entry in the usual dictdiffer
+  format: remove the line at `from`, add it at `to`, plus the changed
+  signs. It replays with `dictdiffer.patch`. On a chapter the size of
+  Enūma eliš I it takes 0.19 to 0.28 MB; the generic diff took 28.8 MB
+  and did not fit MongoDB's 16 MB limit.
+- `dictdiffer.revert` does not undo a move entry;
+  `patch(reversed(swap(diff)))` does. A test pins this.
+- Every save with a revision now builds its changelog entry and checks
+  it against the 16 MB limit before the update. An entry that does not
+  fit answers 422 and nothing is stored. Before, the chapter was stored
+  and the request answered 500 without an entry. Until step 7 this can
+  refuse a delete or insert near the start of a very large chapter.
+- A save with a revision reads the chapter and its revision in one read
+  and checks that revision, so content from a lagging replica set member
+  cannot overwrite a newer edit.
+- Reviews, each finding re-checked: stored-data integrity (no defect in
+  the move), rules and test strength (three test gaps, fixed: the
+  changelog entry of every save with a revision is replayed in a test;
+  the move test chapter has uncertain fragments; shared move constants).
+- A move takes 11 to 12 s on a chapter the size of Enūma eliš I (full
+  load, signs, full rewrite): step 7.
+- Tests: the move test chapter uses a fixed text id, because
+  `TextIdFactory` runs past the Roman numeral 4999 in long serial runs.
+  Short `pytest -n` runs can end with a server selection timeout when two
+  workers share one in-memory MongoDB; CI uses a real MongoDB.
+- Gates: `ruff`, `flake8`, `pyre`, `pyright` clean; qlty no findings;
+  `task lint-md` 0 errors; full suite 7227 passed, 2 skipped, 1 xfailed;
+  100 % line and branch coverage of the 11 new and changed modules.
+- Browser run with the frontend against this API, seeded chapter with
+  alignment and lemmas: 27 checks passed; every full line object is
+  identical before and after each move.

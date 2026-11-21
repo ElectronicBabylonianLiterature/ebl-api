@@ -6,8 +6,8 @@ import pytest
 from pymongo.database import Database
 
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
-from ebl.corpus.application.corpus import Corpus, CorpusDependencies
-from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_revision import (
     LEGACY_REVISION,
     chapter_revision_conflict,
@@ -25,6 +25,7 @@ from ebl.tests.corpus.lines_edit_support import (
     update_chapter,
 )
 from ebl.tests.corpus.outline_support import create_outline_chapter
+from ebl.tests.corpus.revision_save_support import update_after_read
 from ebl.tests.corpus.support import ANY_USER
 from ebl.users.domain.user import User
 
@@ -32,11 +33,6 @@ from ebl.users.domain.user import User
 @pytest.fixture
 def chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
     return store_editable_chapter(create_outline_chapter())
-
-
-@pytest.fixture
-def writer(corpus_dependencies: CorpusDependencies) -> ChapterEditWriter:
-    return ChapterEditWriter(corpus_dependencies)
 
 
 def create_invalid_update(chapter: Chapter) -> LinesUpdate:
@@ -152,16 +148,7 @@ def test_save_lines_does_not_overwrite_a_concurrent_update(
 ) -> None:
     concurrent_chapter = update_chapter(chapter, 0, OTHER_EDITED_NUMBER)
     lines = create_lines_update(update_chapter(chapter, EDITED_INDEX), EDITED_INDEX)
-    find_chapter = text_repository.find_chapter
-
-    def find_chapter_before_concurrent_update(id_: ChapterId) -> Chapter:
-        found_chapter = find_chapter(id_)
-        text_repository.update(id_, concurrent_chapter)
-        return found_chapter
-
-    monkeypatch.setattr(
-        text_repository, "find_chapter", find_chapter_before_concurrent_update
-    )
+    update_after_read(monkeypatch, text_repository, concurrent_chapter)
 
     with pytest.raises(ConflictError, match="expected revision legacy"):
         writer.save_lines(chapter.id_, lines, LEGACY_REVISION, ANY_USER)

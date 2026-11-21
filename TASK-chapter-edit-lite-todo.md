@@ -26,10 +26,25 @@ This repository holds the API half; the page itself is in ebl-frontend.
 - [x] Step 2 (frontend only): reduced to the split view
 - [x] Step 3: `view=outline` and `revision` on `POST {chapter}/import` and
   `POST {chapter}/manuscripts`
+- [x] Step 4: move a line
+  - [x] `POST {chapter}/lines/move?view=outline&revision=` with the body
+    `{"from": i, "to": j}`; the stored line moves intact
+  - [x] The revision is required; a stale one answers 409
+  - [x] Compact changelog entry for a move
+  - [x] No stored write without a storable changelog entry
+  - [x] Chapter and revision of a revision save come from one read
 
 ## Open
 
 - [ ] Save path on real data (the sandbox database has no sign list)
+
+- [ ] MongoDB read preference on production: with reads from a lagging
+  member a save now answers 409 where it should succeed (never a lost
+  edit)
+
+## Rule for every step
+
+- At the end of each step the user gets a few screenshots of the feature.
 
 ## Later tasks
 
@@ -60,7 +75,7 @@ Chosen version: C, split view. Model: Fable 5.2.
    - Needs an API operation that moves the stored line (not delete and
      re-add), the revision check from step 1, and a control in the split
      view (move up or down, or move after line N).
-   - To decide: whether line numbers are renumbered when a line moves.
+   - Decided: line numbers are not renumbered. Done.
 5. Alignment and lemmatization per line, with per-line save endpoints and
    batched word lookups.
 6. New rule, keep existing alignments per manuscript line: if a
@@ -72,11 +87,24 @@ Chosen version: C, split view. Model: Fable 5.2.
      get automatic suggestions.
    - To decide: whether a re-align button per manuscript line is wanted.
 7. Faster saving on the server: rewrite only the changed line.
+   - A move takes 11 to 12 s on a chapter the size of Enūma eliš I.
+   - Compact changelog entries for deletes and inserts. Until then such
+     a save near the start of a very large chapter is refused with 422,
+     because its changelog entry would not fit MongoDB's 16 MB limit.
 8. Replace the classic page at `/edit`; remove the old components and the
    legacy data source. The `craco.config.js` coverage list edit needs
    approval.
 
 Estimate: about 22 to 37 hours of work in total.
+
+## Separate pull requests (not part of this one)
+
+- Intertext with paragraph marks crashes the chapter view: small frontend
+  fix against master. Waiting for the go-ahead.
+- Bracket validation in the corpus parser: manuscript lines accept
+  unbalanced brackets. Audit of the existing texts first. Goes with it: a
+  line save with an invalid enclosure in the reconstruction answers 500.
+- Several intertexts per line: after step 8.
 
 ## Where to use Fable 5.2 with Ultracode
 

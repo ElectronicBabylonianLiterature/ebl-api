@@ -211,6 +211,9 @@ def test_update_at_revision_changes_only_the_selected_chapter(
         lambda repository, chapter: repository.find_chapter_revision(
             create_missing_id(chapter)
         ),
+        lambda repository, chapter: repository.find_chapter_with_revision(
+            create_missing_id(chapter)
+        ),
         lambda repository, chapter: repository.update_at_revision(
             create_missing_id(chapter), chapter, LEGACY_REVISION
         ),

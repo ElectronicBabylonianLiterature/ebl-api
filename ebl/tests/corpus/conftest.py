@@ -8,13 +8,18 @@ from pymongo.database import Database
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.cache.infrastructure.mongo_cache_repository import COLLECTION
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.chapter_edit_support import (
     CHAPTER_EDIT_KINDS,
     ChapterEdit,
     ChapterEditKind,
+)
+from ebl.tests.corpus.line_move_support import (
+    create_extent_chapter,
+    create_move_chapter,
 )
 from ebl.tests.corpus.support import (
     ANY_USER,
@@ -67,6 +72,21 @@ def store_editable_chapter(
         return chapter
 
     return store
+
+
+@pytest.fixture
+def writer(corpus_dependencies: CorpusDependencies) -> ChapterEditWriter:
+    return ChapterEditWriter(corpus_dependencies)
+
+
+@pytest.fixture
+def move_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
+    return store_editable_chapter(create_move_chapter())
+
+
+@pytest.fixture
+def extent_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
+    return store_editable_chapter(create_extent_chapter())
 
 
 @pytest.fixture(params=CHAPTER_EDIT_KINDS, ids=lambda edit_kind: edit_kind.suffix)
