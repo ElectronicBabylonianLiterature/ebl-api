@@ -4,6 +4,9 @@ from ebl.corpus.infrastructure.mongo_text_repository_list import MongoTextReposi
 from ebl.corpus.infrastructure.mongo_text_repository_modify import (
     MongoTextRepositoryModify,
 )
+from ebl.corpus.infrastructure.mongo_text_repository_outline import (
+    MongoTextRepositoryOutline,
+)
 from ebl.corpus.infrastructure.mongo_text_repository_query import (
     MongoTextRepositoryQuery,
 )
@@ -14,6 +17,7 @@ class MongoTextRepository(
     MongoTextRepositoryGet,
     MongoTextRepositoryList,
     MongoTextRepositoryModify,
+    MongoTextRepositoryOutline,
     MongoTextRepositoryQuery,
 ):
     pass

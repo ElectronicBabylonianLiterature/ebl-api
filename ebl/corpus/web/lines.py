@@ -5,11 +5,20 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.corpus.application.chapter_edit_reader import ChapterEditReader
+from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
 from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.lines_pagination import (
+    parse_lines_page_query,
+    parse_lines_view,
+    parse_revision,
+)
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
-from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiLineSchema
+from ebl.corpus.web.chapter_outline_schemas import create_lines_page_schema
+from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
+from ebl.corpus.web.saved_chapter import dump_saved_chapter
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.errors import NotFoundError
 from ebl.marshmallowschema import validate
@@ -43,26 +52,38 @@ class LinesImportSchema(Schema):
 class LinesResource:
     def __init__(
         self,
-        corpus: Corpus,
+        writer: ChapterEditWriter,
         cache: ChapterCache,
         provenance_service: ProvenanceService,
+        reader: ChapterEditReader,
     ) -> None:
-        self._corpus = corpus
+        self._writer = writer
         self._cache = cache
         self._provenance_service = provenance_service
+        self._reader = reader
+
+    def on_get(
+        self,
+        req: falcon.Request,
+        resp: falcon.Response,
+        **chapter: str,
+    ) -> None:
+        chapter_id = create_chapter_id(**chapter)
+        pagination = parse_lines_page_query(req.params)
+        resp.media = create_lines_page_schema(pagination.include_tokens).dump(
+            self._reader.find_lines(chapter_id, pagination)
+        )
 
     @falcon.before(require_scope, "write:texts")
     def on_post(
         self,
         req: UserRequest,
         resp: falcon.Response,
-        genre: str,
-        category: str,
-        index: str,
-        stage: str,
-        name: str,
+        **chapter: str,
     ) -> None:
-        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        chapter_id = create_chapter_id(**chapter)
+        view = parse_lines_view(req.params)
+        revision = parse_revision(req.params)
         schema = LinesUpdateSchema(
             context={"provenance_service": self._provenance_service}
         )
@@ -72,15 +93,18 @@ class LinesResource:
                 title="Request data failed validation", description=errors
             )
         with self._cache.updating_chapter(chapter_id):
-            updated_chapter = self._corpus.update_lines(
-                chapter_id, cast(LinesUpdate, schema.load(req.media)), req.context.user
+            saved = self._writer.save_lines(
+                chapter_id,
+                cast(LinesUpdate, schema.load(req.media)),
+                revision,
+                req.context.user,
             )
-        resp.media = ApiChapterSchema().dump(updated_chapter)
+        resp.media = dump_saved_chapter(saved, view)
 
 
 class LinesImportResource:
-    def __init__(self, corpus: Corpus, cache: ChapterCache):
-        self._corpus = corpus
+    def __init__(self, writer: ChapterEditWriter, cache: ChapterCache) -> None:
+        self._writer = writer
         self._cache = cache
 
     @falcon.before(require_scope, "write:texts")
@@ -89,18 +113,16 @@ class LinesImportResource:
         self,
         req: UserRequest,
         resp: falcon.Response,
-        genre: str,
-        category: str,
-        index: str,
-        stage: str,
-        name: str,
+        **chapter: str,
     ) -> None:
-        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        chapter_id = create_chapter_id(**chapter)
+        view = parse_lines_view(req.params)
+        revision = parse_revision(req.params)
         with self._cache.updating_chapter(chapter_id):
-            updated_chapter = self._corpus.import_lines(
-                chapter_id, req.media["atf"], req.context.user
+            saved = self._writer.save_imported_lines(
+                chapter_id, req.media["atf"], revision, req.context.user
             )
-        resp.media = ApiChapterSchema().dump(updated_chapter)
+        resp.media = dump_saved_chapter(saved, view)
 
 
 class LineResource:
@@ -112,14 +134,10 @@ class LineResource:
         self,
         _,
         resp: falcon.Response,
-        genre: str,
-        category: str,
-        index: str,
-        stage: str,
-        name: str,
         number: str,
+        **chapter: str,
     ) -> None:
-        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        chapter_id = create_chapter_id(**chapter)
         cache_id = f"{str(chapter_id)} line-{number}"
 
         def create() -> dict:

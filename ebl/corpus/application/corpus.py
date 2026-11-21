@@ -6,15 +6,16 @@ from ebl.common.query.query_result import CorpusQueryResult
 from ebl.changelog import Changelog
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
+from ebl.corpus.application.chapter_changelog import dump_chapter_document
 from ebl.corpus.application.manuscript_reference_injector import (
     ManuscriptReferenceInjector,
+    inject_references_to_submitted_manuscripts,
 )
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
-from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
@@ -27,7 +28,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.corpus.domain.text import Text, TextId
-from ebl.errors import DataError, Defect, NotFoundError
+from ebl.errors import Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -166,17 +167,15 @@ class Corpus:
         uncertain_fragments: Sequence[MuseumNumber],
         user: User,
     ) -> Chapter:
-        try:
-            injector = ManuscriptReferenceInjector(self._bibliography)
-            manuscripts = tuple(
-                injector.inject_manuscript(manuscript) for manuscript in manuscripts
-            )
-        except NotFoundError as error:
-            raise DataError(error) from error
-
         return self._update_chapter(
             id_,
-            ManuscriptUpdater(manuscripts, uncertain_fragments, self._sign_repository),
+            ManuscriptUpdater(
+                inject_references_to_submitted_manuscripts(
+                    self._bibliography, manuscripts
+                ),
+                uncertain_fragments,
+                self._sign_repository,
+            ),
             user,
         )
 
@@ -217,9 +216,12 @@ class Corpus:
             raise Defect(error) from error
 
     def _create_changelog(self, old: Chapter, new: Chapter, user: User) -> None:
-        old_dict: dict = {**ChapterSchema().dump(old), "_id": old.id_.to_tuple()}
-        new_dict: dict = {**ChapterSchema().dump(new), "_id": new.id_.to_tuple()}
-        self._changelog.create(COLLECTION, user.profile, old_dict, new_dict)
+        self._changelog.create(
+            COLLECTION,
+            user.profile,
+            dump_chapter_document(old),
+            dump_chapter_document(new),
+        )
 
     def _inject_parallels(self, chapter: ChapterDisplay) -> ChapterDisplay:
         return attr.evolve(

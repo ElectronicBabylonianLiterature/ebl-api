@@ -7,7 +7,7 @@ from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
-from ebl.errors import Defect
+from ebl.errors import DataError, Defect, NotFoundError
 
 
 class ManuscriptReferenceInjector(ChapterVisitor):
@@ -60,3 +60,15 @@ class ManuscriptReferenceInjector(ChapterVisitor):
             )
             for old_siglum in old_sigla
         )
+
+
+def inject_references_to_submitted_manuscripts(
+    bibliography: Bibliography, manuscripts: Sequence[Manuscript]
+) -> Sequence[Manuscript]:
+    try:
+        injector = ManuscriptReferenceInjector(bibliography)
+        return tuple(
+            injector.inject_manuscript(manuscript) for manuscript in manuscripts
+        )
+    except NotFoundError as error:
+        raise DataError(error) from error

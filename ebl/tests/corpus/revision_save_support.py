@@ -1,0 +1,68 @@
+from functools import partial
+from typing import Callable, Sequence, Tuple
+
+import pytest
+
+from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
+from ebl.tests.corpus.chapter_edit_support import (
+    ChapterEditRequest,
+    create_import_edit,
+    create_manuscripts_edit,
+)
+from ebl.tests.corpus.line_move_support import create_move_request
+from ebl.tests.corpus.lines_edit_support import (
+    EDITED_INDEX,
+    LINES_SUFFIX,
+    create_body,
+    update_chapter,
+)
+
+RequestFactory = Callable[[Chapter], ChapterEditRequest]
+ChapterRead = Tuple[Chapter, str]
+READ_METHOD = "find_chapter_with_revision"
+
+
+def create_lines_request(chapter: Chapter) -> ChapterEditRequest:
+    return ChapterEditRequest(
+        LINES_SUFFIX, create_body(update_chapter(chapter, EDITED_INDEX), EDITED_INDEX)
+    )
+
+
+def create_line_move_request(chapter: Chapter) -> ChapterEditRequest:
+    return create_move_request(0, len(chapter.lines) - 1)
+
+
+SAVES_WITHOUT_REVISION: Sequence[RequestFactory] = (
+    partial(create_import_edit, step=0),
+    partial(create_manuscripts_edit, step=0),
+    create_lines_request,
+)
+SAVES_AT_REVISION: Sequence[RequestFactory] = (
+    *SAVES_WITHOUT_REVISION,
+    create_line_move_request,
+)
+SAVE_IDS: Sequence[str] = ("import", "manuscripts", "lines", "move")
+
+
+def update_after_read(
+    patch: pytest.MonkeyPatch,
+    text_repository: MongoTextRepository,
+    concurrent_chapter: Chapter,
+) -> None:
+    read = text_repository.find_chapter_with_revision
+
+    def read_before_concurrent_update(id_: ChapterId) -> ChapterRead:
+        chapter_read = read(id_)
+        text_repository.update(id_, concurrent_chapter)
+        return chapter_read
+
+    patch.setattr(text_repository, READ_METHOD, read_before_concurrent_update)
+
+
+def read_from_lagging_member(
+    patch: pytest.MonkeyPatch,
+    text_repository: MongoTextRepository,
+    lagging_read: ChapterRead,
+) -> None:
+    patch.setattr(text_repository, READ_METHOD, lambda _: lagging_read)
