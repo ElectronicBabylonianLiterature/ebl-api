@@ -33,12 +33,10 @@ This repository holds the API half; the page itself is in ebl-frontend.
   - [x] Compact changelog entry for a move
   - [x] No stored write without a storable changelog entry
   - [x] Chapter and revision of a revision save come from one read
-
-## In progress
-
-- [ ] Step 5: alignment and lemmatization per line. Built in both
-  repositories and pushed as work in progress; verification, browser
-  check and screenshots are still to do (see the log).
+- [x] Step 5: alignment and lemmatization per line
+  - [x] `POST {chapter}/lines/{number}/alignment` and `.../lemmatization`
+  - [x] `POST /lemmas/batch`
+  - [x] Lemma query selects chapters, lines and variants before unwinding
 
 ## Open
 
@@ -54,9 +52,9 @@ This repository holds the API half; the page itself is in ebl-frontend.
 
 ## Later tasks
 
-- [ ] Sparse alignment and lemmatization saves keyed by line index
+- [x] Alignment and lemmatization saves per line (step 5)
 - [ ] Faster write path: update only the changed line
-- [ ] Revision check on save (409 on conflict)
+- [x] Revision check on save (409 on conflict)
 
 ## Next phase (decided after the mock-ups)
 
@@ -111,6 +109,8 @@ Estimate: about 22 to 37 hours of work in total.
   unbalanced brackets. Audit of the existing texts first. Goes with it: a
   line save with an invalid enclosure in the reconstruction answers 500.
 - Several intertexts per line: after step 8.
+- Lemma suggestions: database indexes on token values, or a precomputed
+  table of words and their lemmas. Needs timings from production.
 
 ## Where to use Fable 5.2 with Ultracode
 

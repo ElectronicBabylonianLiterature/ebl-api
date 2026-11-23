@@ -8,6 +8,36 @@ from ebl.mongo_collection import MongoCollection
 COLLECTION = "fragments"
 
 
+def _select(path: str, is_requested_word: dict) -> dict:
+    return {"$match": {f"{path}.cleanValue": is_requested_word}}
+
+
+def _unwind_chapter_tokens(
+    arrays: Sequence[str], tokens: str, is_requested_word: dict
+) -> dict:
+    path = ".".join([*arrays, tokens])
+    has_requested_word = _select(path, is_requested_word)
+    return {
+        "$unionWith": {
+            "coll": "chapters",
+            "pipeline": [
+                has_requested_word,
+                {"$project": {path: 1}},
+                *(
+                    stage
+                    for depth in range(1, len(arrays) + 1)
+                    for stage in (
+                        {"$unwind": f"${'.'.join(arrays[:depth])}"},
+                        has_requested_word,
+                    )
+                ),
+                {"$project": {"tokens": f"${path}"}},
+                {"$unwind": "$tokens"},
+            ],
+        }
+    }
+
+
 def aggregate_lemmas(words: Sequence[str], is_normalized: bool) -> List[dict]:
     is_requested_word = {"$in": list(words)}
     return [
@@ -23,34 +53,15 @@ def aggregate_lemmas(words: Sequence[str], is_normalized: bool) -> List[dict]:
         },
         {"$project": {"lines": "$text.lines"}},
         {"$unwind": "$lines"},
+        _select("lines.content", is_requested_word),
         {"$project": {"tokens": "$lines.content"}},
         {"$unwind": "$tokens"},
-        {
-            "$unionWith": {
-                "coll": "chapters",
-                "pipeline": [
-                    {"$unwind": "$lines"},
-                    {"$project": {"variants": "$lines.variants"}},
-                    {"$unwind": "$variants"},
-                    {"$project": {"tokens": "$variants.reconstruction"}},
-                    {"$unwind": "$tokens"},
-                ],
-            }
-        },
-        {
-            "$unionWith": {
-                "coll": "chapters",
-                "pipeline": [
-                    {"$unwind": "$lines"},
-                    {"$project": {"variants": "$lines.variants"}},
-                    {"$unwind": "$variants"},
-                    {"$project": {"manuscripts": "$variants.manuscripts"}},
-                    {"$unwind": "$manuscripts"},
-                    {"$project": {"tokens": "$manuscripts.line.content"}},
-                    {"$unwind": "$tokens"},
-                ],
-            }
-        },
+        _unwind_chapter_tokens(
+            ("lines", "variants"), "reconstruction", is_requested_word
+        ),
+        _unwind_chapter_tokens(
+            ("lines", "variants", "manuscripts"), "line.content", is_requested_word
+        ),
         {
             "$match": {
                 "tokens.cleanValue": is_requested_word,

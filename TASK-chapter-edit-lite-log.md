@@ -153,21 +153,42 @@
   alignment and lemmas: 27 checks passed; every full line object is
   identical before and after each move.
 
-## Step 5: alignment and lemmatization per line (work in progress)
+## Step 5: alignment and lemmatization per line
 
-Paused on 21 November; pushed unfinished so the work is not lost.
-
-- Built, with tests, but NOT yet verified by the lead:
-  `POST {chapter}/lines/{number}/alignment?view=outline&revision=` and
+- `POST {chapter}/lines/{number}/alignment?view=outline&revision=` and
   `POST {chapter}/lines/{number}/lemmatization?view=outline&revision=`
-  (body: the entry of that one line in the whole-chapter request;
-  revision required; same effect as the whole-chapter updater for that
-  line), and `POST /lemmas/batch` (body `{"words": [{"word",
-  "isNormalized"}]}`, 1 to 200 entries; answers, per word and in request
-  order, exactly what `GET /lemmas` answers).
-- The builder was cut off during its final gates and wrote no report.
-- To do: read the diff; run every gate (ruff, flake8, pyre, pyright,
-  qlty, full suite with nothing else using MongoDB, 100 % coverage of
-  the changed modules, files at most 250 lines); mutation check; write
-  down the exact error statuses and messages for the frontend's test
-  double; browser check with the frontend; screenshots for the user.
+  save one line. The body is the entry of that line in the whole-chapter
+  request: `{"alignment": [[manuscript alignment]]}`, one list per
+  variant, or `{"lemmatization": [variant lemmatization]}`.
+- The effect is exactly that of the whole-chapter updater for that one
+  line; the per-line logic is shared with `AlignmentUpdater` and
+  `LemmatizationUpdater`. A test compares both for every line. The
+  whole-chapter endpoints behave as before.
+- Both go through `_save_at_revision`: the revision is required (422
+  "revision is required"), a stale one answers 409, and one replayable
+  changelog entry is written after the update.
+- Refused with 422 and nothing stored: a position out of range
+  ("Invalid line: N is not a line position (number of lines: M)."), a
+  wrong number of variants, manuscripts or tokens ("Invalid number of
+  ... Got X, expected Y."), a value that does not match ("Invalid
+  alignment" / "Invalid lemmatization"), duplicate alignment indices.
+  A position that is not a number answers 404; a malformed body 400.
+- `POST /lemmas/batch` with `{"words": [{"word", "isNormalized"}]}`, 1
+  to 200 entries, answers in request order `{"word", "isNormalized",
+  "lemmas"}`, where `lemmas` is exactly the answer of `GET /lemmas` for
+  that word. It runs one aggregation per `isNormalized` value and one
+  dictionary query for the whole batch.
+- `GET /lemmas` now orders lemmas with equal counts by lemma id; before,
+  their order was whatever the database returned.
+- Lemma query: every part first selects the chapters, then the lines,
+  variants and manuscript lines that contain a requested word, and keeps
+  only the token arrays, before unwinding tokens. Before, every token of
+  every chapter was unwound for each request. A test compares the counts
+  with the same pipeline without the selections. The chapters are still
+  scanned once per request: indexes or a precomputed table are a
+  separate pull request.
+- Gates: `ruff`, `flake8`, `pyre`, `pyright` clean; qlty no findings;
+  full suite 7633 passed, 2 skipped, 1 xfailed; 100 % line and branch
+  coverage of the 13 new and changed modules; no file over 250 lines.
+- Browser run with the frontend against this API: 22 checks passed. A
+  save of one line changes only that line.
