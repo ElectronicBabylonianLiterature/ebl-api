@@ -80,7 +80,8 @@ and I/O on each replica-set member; monitor progress and replication lag.
 - Re-run the **unhinted** real `PatternMatcher` pipeline with
   `explain("queryPlanner")`, checking that a representative selective
   lemma lookup actually chooses an index-supported plan. The isolated
-  automated test uses a hint to verify the access path is possible;
+  automated test uses a hint and asserts that the lemma predicate narrows
+  the index scan to point bounds for AND, OR, LINE and PHRASE searches;
   it does **not** guarantee the optimizer chooses it for every query.
 - Compare search results, order, permissions, paginated totals and counts
   against the baseline for AND/OR/LINE/PHRASE and punctuation/whitespace
