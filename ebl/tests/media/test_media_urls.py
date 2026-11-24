@@ -24,17 +24,17 @@ MEDIA_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
         (MuseumNumber("Š", "1"), "%C5%A0.1"),
     ],
 )
-def test_fragment_media_original_url_encodes_fragment_path_segment(
+def test_fragment_media_original_url_encodes_fragment_query_parameter(
     fragment_id: MuseumNumber, encoded_fragment_id: str
 ) -> None:
     assert fragment_media_original_url(fragment_id, MEDIA_ID) == (
-        f"/fragments/{encoded_fragment_id}/media/{MEDIA_ID}/file"
+        f"/media/{MEDIA_ID}/file?fragment={encoded_fragment_id}"
     )
 
 
-def test_fragment_media_display_url_encodes_fragment_path_segment() -> None:
+def test_fragment_media_display_url_encodes_fragment_query_parameter() -> None:
     assert fragment_media_display_url(MuseumNumber("A/B", "1"), MEDIA_ID) == (
-        f"/fragments/A%2FB.1/media/{MEDIA_ID}/display"
+        f"/media/{MEDIA_ID}/display?fragment=A%2FB.1"
     )
 
 
@@ -43,7 +43,7 @@ def test_fragment_media_thumbnail_url_encodes_dynamic_path_segments() -> None:
         fragment_media_thumbnail_url(
             MuseumNumber("A? 1", "1"), MEDIA_ID, ThumbnailSize.SMALL
         )
-        == f"/fragments/A%3F%201.1/media/{MEDIA_ID}/thumbnail/small"
+        == f"/media/{MEDIA_ID}/thumbnail/small?fragment=A%3F%201.1"
     )
 
 
@@ -52,7 +52,7 @@ def test_fragment_media_url_keeps_route_separators_structured() -> None:
         fragment_media_thumbnail_url(
             MuseumNumber("A/B", "1"), MEDIA_ID, ThumbnailSize.MEDIUM
         )
-        == f"/fragments/A%2FB.1/media/{MEDIA_ID}/thumbnail/medium"
+        == f"/media/{MEDIA_ID}/thumbnail/medium?fragment=A%2FB.1"
     )
 
 
@@ -61,7 +61,7 @@ def test_media_uuid_and_thumbnail_size_remain_readable() -> None:
         fragment_media_thumbnail_url(
             MuseumNumber.of("K.123"), MEDIA_ID, ThumbnailSize.LARGE
         )
-        == f"/fragments/K.123/media/{MEDIA_ID}/thumbnail/large"
+        == f"/media/{MEDIA_ID}/thumbnail/large?fragment=K.123"
     )
 
 
