@@ -1,4 +1,4 @@
-from typing import Any, Mapping, cast, Sequence, Optional
+from typing import Any, List, Mapping, Optional, Sequence, Union, cast
 import inflect
 from bson import ObjectId
 from pymongo.client_session import ClientSession
@@ -15,6 +15,8 @@ def singlar(noun: str) -> str:
 
 
 Session = Optional[ClientSession]
+Document = Mapping[str, Any]
+Update = Union[Mapping[str, Any], Sequence[Mapping[str, Any]]]
 
 
 def retries_on_reconnect(session: Session) -> bool:
@@ -28,18 +30,18 @@ class MongoCollection:
         self.__resource_noun = singlar(collection)
 
     def insert_many(
-        self, documents: Sequence[dict], ordered=True, session: Session = None
-    ):
+        self, documents: Sequence[dict], ordered: bool = True, session: Session = None
+    ) -> List[Any]:
         return (
             self.__get_collection()
             .insert_many(documents, ordered=ordered, session=session)
             .inserted_ids
         )
 
-    def exists(self, query, session: Session = None) -> bool:
+    def exists(self, query: Document, session: Session = None) -> bool:
         return bool(self.__get_collection().find_one(query, session=session))
 
-    def insert_one(self, document, session: Session = None):
+    def insert_one(self, document: Document, session: Session = None) -> Any:
         try:
             return self.__insert_one(document, session)
         except DuplicateKeyError:
@@ -77,8 +79,12 @@ class MongoCollection:
         return self.__get_collection().aggregate(pipeline, **kwargs)
 
     def replace_one(
-        self, document, filter_=None, upsert=False, session: Session = None
-    ):
+        self,
+        document: Document,
+        filter_: Optional[Document] = None,
+        upsert: bool = False,
+        session: Session = None,
+    ) -> UpdateResult:
         result = self.__get_collection().replace_one(
             filter_ or {"_id": document["_id"]}, document, upsert, session=session
         )
@@ -101,7 +107,9 @@ class MongoCollection:
         if result.deleted_count == 0:
             raise self.__not_found_error()
 
-    def update_one(self, query, update, session: Session = None):
+    def update_one(
+        self, query: Document, update: Update, session: Session = None
+    ) -> UpdateResult:
         try:
             result = self.__update_one(query, update, session)
         except AutoReconnect:
@@ -113,7 +121,7 @@ class MongoCollection:
         return result
 
     def update_one_by_id(
-        self, id_: object, update, session: Session = None
+        self, id_: object, update: Update, session: Session = None
     ) -> UpdateResult:
         try:
             return self.update_one({"_id": id_}, update, session)
@@ -123,7 +131,7 @@ class MongoCollection:
     def update_many(self, query, update, **kwargs):
         return self.__get_collection().update_many(query, update, **kwargs)
 
-    def count_documents(self, query, session: Session = None) -> int:
+    def count_documents(self, query: Document, session: Session = None) -> int:
         return self.__get_collection().count_documents(query, session=session)
 
     def create_index(self, index, **kwargs):
@@ -139,10 +147,12 @@ class MongoCollection:
         values = self.__get_collection().distinct(field, query or {})
         return [value for value in values if not isinstance(value, ObjectId)]
 
-    def __insert_one(self, document, session: Session):
+    def __insert_one(self, document: Document, session: Session) -> Any:
         return self.__get_collection().insert_one(document, session=session).inserted_id
 
-    def __update_one(self, query, update, session: Session) -> UpdateResult:
+    def __update_one(
+        self, query: Document, update: Update, session: Session
+    ) -> UpdateResult:
         return self.__get_collection().update_one(query, update, session=session)
 
     def __not_found_error(self) -> NotFoundError:
