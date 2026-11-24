@@ -44,6 +44,8 @@ This repository holds the API half; the page itself is in ebl-frontend.
   - [x] Changelog entries from the changed lines only
   - [x] Only changed lines and fields are written
   - [x] Alignment and lemmatization of a line without loading the chapter
+- [x] Step 8 (ebl-frontend only): new editor at `/edit`
+- [ ] Deploy this API before or with the frontend of ebl-frontend #869
 
 ## Open
 

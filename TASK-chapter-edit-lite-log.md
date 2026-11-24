@@ -280,3 +280,10 @@ No endpoint, request or response changed.
 - Browser runs with the frontend against this server: editing, add,
   delete, import and manuscripts 31 of 31; moving lines 27 of 27; the
   keyboard flow 24 of 24.
+
+## Step 8: the new editor replaces the classic page (ebl-frontend)
+
+- Nothing changed in this repository. The frontend's `/edit` page now uses
+  only the endpoints added on this branch (outline, lines, the saves at a
+  revision), so this API must be deployed before or together with that
+  frontend. The classic whole-chapter endpoints stay for other clients.
