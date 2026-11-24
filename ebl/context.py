@@ -35,6 +35,9 @@ from ebl.provenance.application.provenance_repository import ProvenanceRepositor
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.media.application.media_runtime import MediaRuntime
+from ebl.sumerian_dictionary.application.sumerian_word_repository import (
+    SumerianWordRepository,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -63,6 +66,7 @@ class Context:
     provenance_repository: ProvenanceRepository
     provenance_service: ProvenanceService
     realia_repository: RealiaRepository
+    sumerian_word_repository: SumerianWordRepository
     media: Optional[MediaRuntime] = None
 
     def get_bibliography(self):
