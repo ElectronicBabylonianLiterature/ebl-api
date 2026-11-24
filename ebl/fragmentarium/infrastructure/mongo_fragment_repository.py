@@ -17,7 +17,6 @@ from ebl.transliteration.application.storage_serialization import (
     storage_serialization,
 )
 
-
 FRAGMENT_LEMMA_COLLATED_INDEX_NAME = "fragment_unique_lemma_en_numeric_shifted"
 
 

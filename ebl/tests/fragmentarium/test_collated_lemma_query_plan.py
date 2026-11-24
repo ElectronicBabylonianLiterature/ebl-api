@@ -1,9 +1,3 @@
-"""Verify that lemma search can use the explicitly provisioned collated index.
-
-This tests the index-supported access path with a hint in an isolated MongoDB.
-Unhinted plan choice and production speedups require representative DB checks.
-"""
-
 from typing import Any, List
 
 import pytest
@@ -91,8 +85,6 @@ def test_collated_lemma_index_bounds_the_search_lemma_predicate(
     operator: LemmaQueryType,
 ) -> None:
     lemmas = ["ana I", "kīdu I"]
-    # Stored lemmas are arrays, so real data makes the index multikey. On an
-    # empty collection MongoDB would intersect $all bounds into an empty range.
     fragment_repository.create(
         LemmatizedFragmentFactory.build(number=MuseumNumber.of("K.1")), sort_key=0
     )
@@ -123,29 +115,41 @@ def test_collated_lemma_index_bounds_the_search_lemma_predicate(
     assert index_scans
     for index_scan in index_scans:
         intervals = index_scan["indexBounds"][LEMMA_FIELD]
-        # A hint alone yields an unbounded [MinKey, MaxKey] scan; the lemma
-        # predicate must narrow the scan to the requested lemma keys.
         assert intervals
         assert len(intervals) <= len(lemmas)
         assert all(_is_point_interval(interval) for interval in intervals)
         assert not any("MinKey" in interval for interval in intervals)
 
 
-@pytest.mark.parametrize("lemma", ["ana I", "ana  I", "anaI", "ana-I", "ANA I"])
+@pytest.mark.parametrize(
+    "lemma,is_match",
+    [
+        ("ana I", True),
+        ("ana  I", True),
+        ("anaI", True),
+        ("ana-I", True),
+        ("ANA I", False),
+    ],
+)
 @pytest.mark.parametrize("operator", [LemmaQueryType.AND, LemmaQueryType.OR])
 def test_collated_lemma_index_preserves_results_for_lemma_variants(
     fragment_repository: MongoFragmentRepository,
     lemma: str,
+    is_match: bool,
     operator: LemmaQueryType,
 ) -> None:
+    number = MuseumNumber.of("K.1")
     fragment_repository.create(
-        LemmatizedFragmentFactory.build(number=MuseumNumber.of("K.1")), sort_key=0
+        LemmatizedFragmentFactory.build(number=number), sort_key=0
     )
     query = {"lemmaOperator": operator, "lemmas": (lemma,)}
     page_query = {**query, "limit": 1, "count": "exact"}
     before = fragment_repository.query(query)
     page_before = fragment_repository.query(page_query)
 
+    assert [item.museum_number for item in before.items] == (
+        [number] if is_match else []
+    )
     fragment_repository.create_collated_lemma_index()
 
     assert fragment_repository.query(query) == before

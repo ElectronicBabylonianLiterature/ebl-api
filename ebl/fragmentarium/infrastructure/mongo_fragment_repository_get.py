@@ -41,7 +41,6 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended imp
     MongoFragmentRepositoryGetExtended,
 )
 
-
 FRAGMENT_QUERY_COLLATION = Collation(
     locale="en", numericOrdering=True, alternate="shifted"
 )

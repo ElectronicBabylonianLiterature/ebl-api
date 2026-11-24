@@ -72,6 +72,8 @@ separate, authorized maintenance process configured to use the same
 database. Do not run either operation on an unverified replica or with
 hardcoded credentials. The index build may consume significant CPU, disk
 and I/O on each replica-set member; monitor progress and replication lag.
+Once built, the additional multikey index also adds storage and write cost
+to every fragment save, so include write latency in the acceptance checks.
 
 ## Acceptance (read-only)
 
