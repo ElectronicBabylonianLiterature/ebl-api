@@ -9,6 +9,12 @@ from ebl.corpus.domain.line import Line
 from ebl.errors import DataError
 
 
+def create_invalid_line_error(index: int, line_count: int) -> DataError:
+    return DataError(
+        f"Invalid line: {index} is not a line position (number of lines: {line_count})."
+    )
+
+
 def require_count(
     error_class: Type[Exception], subject: str, got: int, expected: int
 ) -> None:
@@ -69,10 +75,7 @@ class LineUpdater(ChapterUpdater):
     def _update_chapter(self, chapter: Chapter) -> Chapter:
         line_count = len(chapter.lines)
         if not 0 <= self._index < line_count:
-            raise DataError(
-                f"Invalid line: {self._index} is not a line position "
-                f"(number of lines: {line_count})."
-            )
+            raise create_invalid_line_error(self._index, line_count)
         return attr.evolve(
             chapter,
             lines=tuple(

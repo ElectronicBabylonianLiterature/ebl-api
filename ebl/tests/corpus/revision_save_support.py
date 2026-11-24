@@ -4,6 +4,7 @@ from typing import Callable, Sequence, Tuple
 import pytest
 
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.line_snapshot import LineSnapshot
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.chapter_edit_support import (
     ChapterEditRequest,
@@ -24,6 +25,7 @@ from ebl.tests.corpus.word_instances_support import MOVE_CHAPTER_WORD, NEW_LEMMA
 RequestFactory = Callable[[Chapter], ChapterEditRequest]
 ChapterRead = Tuple[Chapter, str]
 READ_METHOD = "find_chapter_with_revision"
+LINE_READ_METHOD = "find_line_with_revision"
 ANNOTATED_INDEX = 1
 REVISION_REQUIRED = "revision is required"
 INVALID_REVISION = "revision must be a non-empty string, got {} instead"
@@ -94,4 +96,12 @@ def read_from_lagging_member(
     text_repository: MongoTextRepository,
     lagging_read: ChapterRead,
 ) -> None:
+    chapter, revision = lagging_read
     patch.setattr(text_repository, READ_METHOD, lambda _: lagging_read)
+    patch.setattr(
+        text_repository,
+        LINE_READ_METHOD,
+        lambda _, index: LineSnapshot(
+            chapter.lines[index], len(chapter.lines), chapter.manuscripts, revision
+        ),
+    )

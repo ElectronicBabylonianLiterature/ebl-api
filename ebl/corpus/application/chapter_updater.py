@@ -1,9 +1,18 @@
 from abc import ABC, abstractmethod
 from functools import singledispatchmethod
-from typing import Optional
+from typing import Callable, Optional, TypeVar
 
 from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
 from ebl.errors import DataError, Defect
+
+T = TypeVar("T")
+
+
+def try_update(update: Callable[[], T]) -> T:
+    try:
+        return update()
+    except ValueError as error:
+        raise DataError(error)
 
 
 class ChapterUpdater(ABC, ChapterVisitor):
@@ -46,10 +55,7 @@ class ChapterUpdater(ABC, ChapterVisitor):
         pass
 
     def _try_update_chapter(self, chapter: Chapter) -> Chapter:
-        try:
-            return self._update_chapter(chapter)
-        except ValueError as error:
-            raise DataError(error)
+        return try_update(lambda: self._update_chapter(chapter))
 
     def _validate_chapter(self, chapter: Chapter) -> None:
         pass

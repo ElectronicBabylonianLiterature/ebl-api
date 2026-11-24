@@ -75,18 +75,22 @@ class AlignmentUpdater(EachLineUpdater):
         return align_line(line, self._alignment.get_line(index))
 
 
+def align_line_at(alignment: LineAlignment, line: Line) -> Line:
+    require_manuscript_token_counts(
+        AlignmentError,
+        line,
+        [
+            [len(manuscript.alignment) for manuscript in variant]
+            for variant in alignment.variants
+        ],
+    )
+    return align_line(line, alignment.variants)
+
+
 class LineAlignmentUpdater(LineUpdater):
     def __init__(self, alignment: LineAlignment) -> None:
         super().__init__(alignment.index)
         self._alignment = alignment
 
     def _update_line(self, line: Line) -> Line:
-        require_manuscript_token_counts(
-            AlignmentError,
-            line,
-            [
-                [len(manuscript.alignment) for manuscript in variant]
-                for variant in self._alignment.variants
-            ],
-        )
-        return align_line(line, self._alignment.variants)
+        return align_line_at(self._alignment, line)

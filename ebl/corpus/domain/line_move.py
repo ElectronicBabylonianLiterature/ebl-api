@@ -1,8 +1,10 @@
-from typing import Sequence
+from typing import Sequence, TypeVar
 
 import attr
 
-from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line_layout import LineLayout
+
+T = TypeVar("T")
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -10,11 +12,16 @@ class LineMove:
     source: int
     target: int
 
-    def apply(self, lines: Sequence[Line]) -> Sequence[Line]:
+    def apply(self, lines: Sequence[T]) -> Sequence[T]:
         self._validate(len(lines))
         reordered = [line for index, line in enumerate(lines) if index != self.source]
         reordered.insert(self.target, lines[self.source])
         return tuple(reordered)
+
+    def create_layout(self, line_count: int) -> LineLayout:
+        return LineLayout(
+            tuple(self.apply(range(line_count))), frozenset({self.target})
+        )
 
     def _validate(self, line_count: int) -> None:
         for name, position in (("from", self.source), ("to", self.target)):

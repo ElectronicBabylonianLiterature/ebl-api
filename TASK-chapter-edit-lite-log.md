@@ -217,3 +217,66 @@
   coverage of the new and changed modules.
 - Browser run with the frontend, keys only: 24 checks passed; the
   chapter-wide update changed 24 instances in 12 lines and nothing else.
+
+## Step 7: faster saving on the server
+
+No endpoint, request or response changed.
+
+- Measured first on Enūma eliš I (162 lines, 75 manuscripts, 10.2 MB): of
+  a 48 s save of one line's alignment, 14 s were the load, 23 s the
+  changelog diff of two full dumps and 11 s the dump for the update.
+- Changelog: every save at a revision records an entry built from the
+  changed lines only. Each change knows its layout (which old position
+  every new line came from); a line is unchanged when it has a source and
+  equals the old line. Edited lines are diffed under `["lines", i]`,
+  removed lines are one `remove` in descending order, new and moved lines
+  one `add` in ascending order, then the changed fields. Entries replay
+  with `dictdiffer.patch`. Deleting the first line of Enūma eliš I records
+  0.21 MB; before it needed 28.7 MB and was refused.
+- Storage: `update_at_revision` is one revision-conditional update with an
+  aggregation pipeline. The new `lines` array is `$concatArrays` of
+  `$slice` runs of stored, unchanged lines and of the dumped changed
+  lines; every dumped value is inside `$literal` (ATF has strings that
+  start with `$`). Unchanged lines and fields are not rewritten: they stay
+  byte for byte as stored.
+- Alignment and lemmatization of one line do not load the chapter: one
+  aggregation reads the line, the line count, the revision and the
+  manuscripts; one conditional `$set` writes `lines.<i>` and the revision.
+  The checks the change can affect are kept; checks on content it does not
+  touch are not re-run. The `view=outline` answer is read after the update
+  and carries the revision of this save, so a save by someone else in
+  between shows up as 409 on the next request.
+- Equivalence is tested against the old full path kept as a test
+  reference: 270 change cases on a small chapter, seeded random layouts
+  and save sequences, every save at route level in three views; stored
+  documents, replayed entries and response bodies are compared.
+- Enūma eliš I, whole save with the outline answer, idle machine:
+
+  | Save | Before | After |
+  | --- | --- | --- |
+  | alignment of one line | 48.0 s | 0.7 s |
+  | lemmatization of one line | 46.4 s | 0.6 s |
+  | line text edit | 55.1 s | 19.4 s |
+  | move first to last | 28.1 s | 15.2 s |
+  | delete first line | 51.9 s | 16.3 s |
+  | append a line | 50.0 s | 15.8 s |
+  | word instances | 46.4 s | 18.7 s |
+
+- The saves that still take 15 to 19 s load the whole chapter (14.8 s).
+  Next, in a separate pull request: move and delete need only a projection
+  and the stored sign rows; an edit needs the projection and one line;
+  word instances only the lines that contain the word. `ChapterSchema.load`
+  costs 9 ms per manuscript line and is worth profiling on its own.
+- The slices rely on every writer changing `_cacheRevision`. The
+  repository's two updates do; a script that edits `lines` directly must
+  set a new revision as well.
+- Four source symbols are now used by tests only (`create_chapter_diff`,
+  `create_line_move_diff`, `LineAlignmentUpdater`,
+  `LineLemmatizationUpdater`): the old path as the reference.
+- Gates: `ruff`, `flake8`, `pyre`, `pyright` clean; qlty no findings;
+  full suite 8703 passed, 2 skipped, 1 xfailed; 100 % line and branch
+  coverage of the 21 new and changed modules; no file over 250 lines.
+  The builder killed 39 mutations.
+- Browser runs with the frontend against this server: editing, add,
+  delete, import and manuscripts 31 of 31; moving lines 27 of 27; the
+  keyboard flow 24 of 24.

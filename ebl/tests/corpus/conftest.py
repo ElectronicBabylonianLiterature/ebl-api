@@ -1,3 +1,4 @@
+import dataclasses
 from itertools import chain
 from typing import Callable, List
 
@@ -7,6 +8,8 @@ import pytest
 from falcon import testing
 from pymongo.database import Database
 
+import ebl.app
+import ebl.context
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.cache.infrastructure.mongo_cache_repository import COLLECTION
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
@@ -31,6 +34,11 @@ from ebl.tests.corpus.lines_edit_support import (
     count_chapter_changelog_entries,
     find_stored_chapter,
 )
+from ebl.tests.corpus.reference_save_support import (
+    ChapterCopies,
+    ReferenceChapterEditWriter,
+    ReferenceTextRepository,
+)
 from ebl.tests.corpus.support import (
     ANY_USER,
     allow_references,
@@ -39,6 +47,7 @@ from ebl.tests.corpus.support import (
 )
 from ebl.tests.corpus.word_instances_support import create_instances_chapter
 from ebl.tests.factories.corpus import TextFactory
+from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign
 
@@ -104,6 +113,46 @@ def store_text(text_repository: MongoTextRepository) -> Callable[[Chapter], Chap
 @pytest.fixture
 def writer(corpus_dependencies: CorpusDependencies) -> ChapterEditWriter:
     return ChapterEditWriter(corpus_dependencies)
+
+
+@pytest.fixture
+def reference_repository(
+    database: Database, seeded_provenance_service: ProvenanceService
+) -> ReferenceTextRepository:
+    return ReferenceTextRepository(database, seeded_provenance_service)
+
+
+@pytest.fixture
+def reference_writer(
+    corpus_dependencies: CorpusDependencies,
+    reference_repository: ReferenceTextRepository,
+) -> ChapterEditWriter:
+    return ReferenceChapterEditWriter(
+        dataclasses.replace(corpus_dependencies, repository=reference_repository)
+    )
+
+
+@pytest.fixture
+def reference_client(
+    context: ebl.context.Context, reference_repository: ReferenceTextRepository
+) -> testing.TestClient:
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(
+            "ebl.corpus.web.bootstrap.ChapterEditWriter", ReferenceChapterEditWriter
+        )
+        api = ebl.app.create_app(
+            attr.evolve(context, text_repository=reference_repository)
+        )
+    return testing.TestClient(api)
+
+
+@pytest.fixture
+def copies(
+    database: Database,
+    text_repository: MongoTextRepository,
+    reference_repository: ReferenceTextRepository,
+) -> ChapterCopies:
+    return ChapterCopies(database, text_repository, reference_repository)
 
 
 @pytest.fixture

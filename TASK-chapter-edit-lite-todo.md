@@ -40,6 +40,10 @@ This repository holds the API half; the page itself is in ebl-frontend.
   - [x] `GET` and `POST {chapter}/lemmatization/instances`: one lemma for
     every instance of a word in the chapter
 - [x] Step 6 dropped by the user (not needed with per-line saves)
+- [x] Step 7: faster saving
+  - [x] Changelog entries from the changed lines only
+  - [x] Only changed lines and fields are written
+  - [x] Alignment and lemmatization of a line without loading the chapter
 
 ## Open
 
@@ -56,7 +60,9 @@ This repository holds the API half; the page itself is in ebl-frontend.
 ## Later tasks
 
 - [x] Alignment and lemmatization saves per line (step 5)
-- [ ] Faster write path: update only the changed line
+- [x] Faster write path: update only the changed line (step 7)
+- [ ] Saves of text, add, delete, move and word instances without the
+  full chapter load (separate pull request)
 - [x] Revision check on save (409 on conflict)
 
 ## Next phase (decided after the mock-ups)

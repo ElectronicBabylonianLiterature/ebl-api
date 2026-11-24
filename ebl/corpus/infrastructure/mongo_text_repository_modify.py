@@ -1,12 +1,18 @@
 import pymongo
 from bson import ObjectId
-from typing import cast
+from typing import Callable, Mapping, cast
 from ebl.corpus.application.schemas import (
     ChapterSchema,
     TextSchema,
 )
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.chapter_change import KEEP_NOTHING, KeptContent
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.text import Text
+from ebl.corpus.infrastructure.chapter_update_pipeline import (
+    create_chapter_update,
+    create_lines_update,
+)
 from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
 )
@@ -110,13 +116,33 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
         )
 
     def update_at_revision(
-        self, id_: ChapterId, chapter: Chapter, revision: str
+        self,
+        id_: ChapterId,
+        chapter: Chapter,
+        revision: str,
+        kept: KeptContent = KEEP_NOTHING,
+    ) -> str:
+        return self._update_at_revision(
+            id_,
+            revision,
+            lambda new_revision: create_chapter_update(chapter, kept, new_revision),
+        )
+
+    def update_lines_at_revision(
+        self, id_: ChapterId, lines: Mapping[int, Line], revision: str
+    ) -> str:
+        return self._update_at_revision(
+            id_, revision, lambda new_revision: create_lines_update(lines, new_revision)
+        )
+
+    def _update_at_revision(
+        self, id_: ChapterId, revision: str, create_update: Callable[[str], object]
     ) -> str:
         new_revision = str(ObjectId())
         try:
             self._chapters.update_one(
                 {**chapter_id_query(id_), **revision_query(revision)},
-                self._create_update(chapter, new_revision),
+                create_update(new_revision),
             )
         except NotFoundError as error:
             stored_revision = self.find_chapter_revision(id_)

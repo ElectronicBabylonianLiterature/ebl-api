@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Sequence, Tuple, TypedDict
+from typing import List, Mapping, Optional, Sequence, Tuple, TypedDict
 from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter import Chapter, ChapterId
+from ebl.corpus.domain.chapter_change import KEEP_NOTHING, KeptContent
 from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.transliteration.domain.genre import Genre
 from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line_snapshot import LineSnapshot
 from ebl.corpus.domain.lines_page import LinesPage
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.domain.dictionary_line import DictionaryLine
@@ -66,7 +68,21 @@ class TextRepository(ABC):
 
     @abstractmethod
     def update_at_revision(
-        self, id_: ChapterId, chapter: Chapter, revision: str
+        self,
+        id_: ChapterId,
+        chapter: Chapter,
+        revision: str,
+        kept: KeptContent = KEEP_NOTHING,
+    ) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def find_line_with_revision(self, id_: ChapterId, index: int) -> LineSnapshot:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_lines_at_revision(
+        self, id_: ChapterId, lines: Mapping[int, Line], revision: str
     ) -> str:
         raise NotImplementedError
 

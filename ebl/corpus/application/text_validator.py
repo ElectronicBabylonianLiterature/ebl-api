@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import Optional
+from typing import Optional, Sequence
 
 import pydash
 
@@ -12,7 +12,7 @@ from ebl.corpus.domain.chapter import (
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
-from ebl.corpus.domain.manuscript import Siglum
+from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
 from ebl.transliteration.domain.greek_tokens import GreekWord
@@ -23,13 +23,13 @@ from ebl.transliteration.domain.word_tokens import Word
 
 def data_error(
     source: Exception,
-    chapter: Chapter,
+    manuscripts: Sequence[Manuscript],
     line_number: AbstractLineNumber,
     manuscript_id: int,
 ) -> Exception:
     siglum = [
         manuscript.siglum
-        for manuscript in chapter.manuscripts
+        for manuscript in manuscripts
         if manuscript.id == manuscript_id
     ][0]
     return DataError(f"Invalid line {line_number.atf} {siglum}. {source}")
@@ -49,7 +49,28 @@ class AlignmentVisitor(TokenVisitor):
 
     def validate(self):
         if duplicates := pydash.duplicates(self.alignments):
-            raise AlignmentError(duplicates)
+            raise AlignmentError(str(duplicates))
+
+
+def validate_manuscript_line(
+    manuscript_line: ManuscriptLine,
+    line_number: AbstractLineNumber,
+    manuscripts: Sequence[Manuscript],
+) -> None:
+    try:
+        alignment_validator = AlignmentVisitor()
+        manuscript_line.line.accept(alignment_validator)
+        alignment_validator.validate()
+    except AlignmentError as error:
+        raise data_error(
+            error, manuscripts, line_number, manuscript_line.manuscript_id
+        ) from error
+
+
+def validate_line(line: Line, manuscripts: Sequence[Manuscript]) -> None:
+    for variant in line.variants:
+        for manuscript_line in variant.manuscripts:
+            validate_manuscript_line(manuscript_line, line.number, manuscripts)
 
 
 def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter) -> str:
@@ -112,11 +133,6 @@ class TextValidator(ChapterVisitor):
 
     @visit.register(ManuscriptLine)
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
-        try:
-            alignment_validator = AlignmentVisitor()
-            manuscript_line.line.accept(alignment_validator)
-            alignment_validator.validate()
-        except AlignmentError as error:
-            raise data_error(
-                error, self.chapter, self.line.number, manuscript_line.manuscript_id
-            ) from error
+        validate_manuscript_line(
+            manuscript_line, self.line.number, self.chapter.manuscripts
+        )

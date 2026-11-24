@@ -2,12 +2,14 @@ from typing import List, Mapping, Sequence, cast
 
 from ebl.corpus.application.lines_pagination import MAX_LINES_OFFSET
 from ebl.corpus.application.outline_schemas import load_chapter_outline
-from ebl.corpus.application.schemas import LineSchema
+from ebl.corpus.application.schemas import LineSchema, ManuscriptSchema
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line_snapshot import LineSnapshot
 from ebl.corpus.domain.lines_page import LinesPage
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.infrastructure.mongo_text_repository_base import (
     REVISION_FIELD,
     MongoTextRepositoryBase,
@@ -78,6 +80,14 @@ def _project_outline_lines() -> dict:
     )
 
 
+def _project_outline_manuscripts() -> dict:
+    return _map(
+        "$manuscripts",
+        "manuscript",
+        _pick_fields("manuscript", OUTLINE_MANUSCRIPT_FIELDS),
+    )
+
+
 def aggregate_chapter_outline(id_: ChapterId) -> List[dict]:
     return [
         {"$match": chapter_id_query(id_)},
@@ -85,11 +95,7 @@ def aggregate_chapter_outline(id_: ChapterId) -> List[dict]:
             "$project": {
                 "_id": False,
                 **dict.fromkeys(OUTLINE_CHAPTER_FIELDS, True),
-                "manuscripts": _map(
-                    "$manuscripts",
-                    "manuscript",
-                    _pick_fields("manuscript", OUTLINE_MANUSCRIPT_FIELDS),
-                ),
+                "manuscripts": _project_outline_manuscripts(),
                 "lines": _project_outline_lines(),
                 "revision": REVISION_PROJECTION,
             }
@@ -121,6 +127,29 @@ def aggregate_lines_page(id_: ChapterId, offset: int, limit: int) -> List[dict]:
     ]
 
 
+def _project_line(index: int) -> dict:
+    return (
+        {"$slice": ["$lines", index, 1]}
+        if 0 <= index <= MAX_LINES_OFFSET
+        else {"$literal": []}
+    )
+
+
+def aggregate_line_snapshot(id_: ChapterId, index: int) -> List[dict]:
+    return [
+        {"$match": chapter_id_query(id_)},
+        {
+            "$project": {
+                "_id": False,
+                "total": {"$size": "$lines"},
+                "lines": _project_line(index),
+                "manuscripts": _project_outline_manuscripts(),
+                "revision": REVISION_PROJECTION,
+            }
+        },
+    ]
+
+
 class MongoTextRepositoryOutline(MongoTextRepositoryBase):
     def _aggregate_chapter(self, id_: ChapterId, pipeline: List[dict]) -> dict:
         try:
@@ -141,6 +170,22 @@ class MongoTextRepositoryOutline(MongoTextRepositoryBase):
         lines = cast(Sequence[Line], LineSchema().load(document["lines"], many=True))
         return LinesPage(
             document["total"], offset, limit, tuple(lines), document["revision"]
+        )
+
+    def find_line_with_revision(self, id_: ChapterId, index: int) -> LineSnapshot:
+        document = self._aggregate_chapter(id_, aggregate_line_snapshot(id_, index))
+        lines = cast(Sequence[Line], LineSchema().load(document["lines"], many=True))
+        manuscripts = cast(
+            Sequence[Manuscript],
+            ManuscriptSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(document["manuscripts"], many=True),
+        )
+        return LineSnapshot(
+            next(iter(lines), None),
+            document["total"],
+            tuple(manuscripts),
+            document["revision"],
         )
 
     def find_chapter_revision(self, id_: ChapterId) -> str:

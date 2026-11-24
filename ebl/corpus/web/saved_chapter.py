@@ -10,7 +10,6 @@ from ebl.corpus.application.lines_pagination import (
     parse_required_revision,
 )
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.corpus.web.chapter_outline_schemas import ChapterOutlineSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.text_utils import create_chapter_id
@@ -23,9 +22,7 @@ RevisionSave = Callable[[ChapterId, str, User], SavedChapter]
 def dump_saved_chapter(saved: SavedChapter, view: LinesView) -> dict:
     return cast(
         dict,
-        ChapterOutlineSchema().dump(
-            ChapterOutline.of_chapter(saved.chapter, saved.revision)
-        )
+        ChapterOutlineSchema().dump(saved.outline)
         if view is LinesView.OUTLINE
         else ApiChapterSchema().dump(saved.chapter),
     )

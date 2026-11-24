@@ -103,26 +103,30 @@ class LemmatizationUpdater(EachLineUpdater):
         )
 
 
+def lemmatize_line_at(lemmatization: LineLemmatization, line: Line) -> Line:
+    variants = lemmatization.variants
+    require_manuscript_token_counts(
+        LemmatizationError,
+        line,
+        [
+            [len(manuscript) for manuscript in variant.manuscripts]
+            for variant in variants
+        ],
+    )
+    for index, variant in enumerate(line.variants):
+        require_count(
+            LemmatizationError,
+            f"reconstruction tokens in variant {index}",
+            len(variants[index].reconstruction),
+            len(variant.reconstruction),
+        )
+    return lemmatize_line(line, lemmatization)
+
+
 class LineLemmatizationUpdater(LineUpdater):
     def __init__(self, lemmatization: LineLemmatization) -> None:
         super().__init__(lemmatization.index)
         self._lemmatization = lemmatization
 
     def _update_line(self, line: Line) -> Line:
-        variants = self._lemmatization.variants
-        require_manuscript_token_counts(
-            LemmatizationError,
-            line,
-            [
-                [len(manuscript) for manuscript in variant.manuscripts]
-                for variant in variants
-            ],
-        )
-        for index, variant in enumerate(line.variants):
-            require_count(
-                LemmatizationError,
-                f"reconstruction tokens in variant {index}",
-                len(variants[index].reconstruction),
-                len(variant.reconstruction),
-            )
-        return lemmatize_line(line, self._lemmatization)
+        return lemmatize_line_at(self._lemmatization, line)

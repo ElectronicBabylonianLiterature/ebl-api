@@ -19,13 +19,11 @@ class LinesUpdater(ChapterUpdater):
         self._lines: List[Line] = []
 
     def _visit_lines(self, chapter: Chapter) -> None:
-        for index, line in enumerate(chapter.lines):
-            if index in self._lines_update.edited:
-                self._lines.append(
-                    self._lines_update.edited[index].set_variant_alignment_flags()
-                )
-            elif index not in self._lines_update.deleted:
-                self._lines.append(line.set_variant_alignment_flags())
+        edited = self._lines_update.edited
+        self._lines = [
+            edited.get(index, chapter.lines[index]).set_variant_alignment_flags()
+            for index in self._lines_update.find_kept(len(chapter.lines))
+        ]
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
         return self._sign_updater.update(
