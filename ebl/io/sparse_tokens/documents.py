@@ -10,6 +10,7 @@ from ebl.transliteration.application.storage_serialization import (
 from ebl.transliteration.application.text_schema import TextSchema
 
 STORED_SIZE = "__storedSize"
+PRIVATE_FIELDS = frozenset(("_id", "_cacheRevision", STORED_SIZE))
 
 
 @dataclass(frozen=True)
@@ -101,9 +102,7 @@ def has_every_field(token_fields: TokenFields, document: Mapping[str, Any]) -> b
 
 
 def loadable(document: Mapping[str, Any]) -> Dict[str, Any]:
-    return {
-        key: value for key, value in document.items() if key not in ("_id", STORED_SIZE)
-    }
+    return {key: value for key, value in document.items() if key not in PRIVATE_FIELDS}
 
 
 def rewrite_document(
