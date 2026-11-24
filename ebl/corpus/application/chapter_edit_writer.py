@@ -20,6 +20,7 @@ from ebl.corpus.application.manuscript_reference_injector import (
     inject_references_to_submitted_manuscripts,
 )
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
+from ebl.corpus.application.word_instances_updater import WordInstancesLemmatizer
 from ebl.corpus.domain.alignment import LineAlignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_revision import require_revision
@@ -27,6 +28,7 @@ from ebl.corpus.domain.line_move import LineMove
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscripts_update import ManuscriptsUpdate
 from ebl.corpus.domain.parser import parse_chapter
+from ebl.corpus.domain.word_instances import WordLemma
 from ebl.errors import DataError
 from ebl.users.domain.user import User
 
@@ -111,6 +113,13 @@ class ChapterEditWriter(Corpus):
     ) -> SavedChapter:
         return self._save_at_revision(
             id_, LineLemmatizationUpdater(lemmatization).update, revision, user
+        )
+
+    def save_word_lemma(
+        self, id_: ChapterId, word_lemma: WordLemma, revision: str, user: User
+    ) -> SavedChapter:
+        return self._save_at_revision(
+            id_, WordInstancesLemmatizer(word_lemma).update, revision, user
         )
 
     def _with_stored_revision(self, chapter: Chapter) -> SavedChapter:

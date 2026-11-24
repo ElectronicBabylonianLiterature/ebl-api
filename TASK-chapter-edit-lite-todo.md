@@ -37,6 +37,9 @@ This repository holds the API half; the page itself is in ebl-frontend.
   - [x] `POST {chapter}/lines/{number}/alignment` and `.../lemmatization`
   - [x] `POST /lemmas/batch`
   - [x] Lemma query selects chapters, lines and variants before unwinding
+  - [x] `GET` and `POST {chapter}/lemmatization/instances`: one lemma for
+    every instance of a word in the chapter
+- [x] Step 6 dropped by the user (not needed with per-line saves)
 
 ## Open
 
@@ -89,7 +92,9 @@ Chosen version: C, split view. Model: Fable 5.2.
      alignments is overwritten.
    - Other manuscript lines of the same line that have no alignment still
      get automatic suggestions.
-   - To decide: whether a re-align button per manuscript line is wanted.
+   - Dropped by the user: alignment is saved line by line and only
+     accepted suggestions are stored, so an editor leaves aligned lines
+     alone.
 7. Faster saving on the server: rewrite only the changed line.
    - A move takes 11 to 12 s on a chapter the size of Enūma eliš I.
    - Compact changelog entries for deletes and inserts. Until then such

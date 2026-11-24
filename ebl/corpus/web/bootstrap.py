@@ -31,6 +31,7 @@ from ebl.corpus.web.texts import (
     TextsAllResource,
 )
 from ebl.corpus.web.unplaced_lines import UnplacedLinesResource
+from ebl.corpus.web.word_instances import WordInstancesResource
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
@@ -77,6 +78,9 @@ def create_corpus_routes(api: falcon.App, context: Context):
     line_lemmatization = LineLemmatizationResource(
         chapter_edit_writer, context.custom_cache
     )
+    word_instances = WordInstancesResource(
+        chapter_edit_writer, context.custom_cache, chapter_edit_reader
+    )
     chapter_outline = ChapterOutlineResource(chapter_edit_reader)
     lines_import = LinesImportResource(chapter_edit_writer, context.custom_cache)
     colophons = CorpusColophonsResource(corpus)
@@ -101,6 +105,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     api.add_route(f"{chapter_url}/display", chapters_display)
     api.add_route(f"{chapter_url}/alignment", alignment)
     api.add_route(f"{chapter_url}/lemmatization", manuscript_lemmatization)
+    api.add_route(f"{chapter_url}/lemmatization/instances", word_instances)
     api.add_route(f"{chapter_url}/manuscripts", manuscript)
     api.add_route(f"{chapter_url}/outline", chapter_outline)
     api.add_route(f"{chapter_url}/lines", lines)

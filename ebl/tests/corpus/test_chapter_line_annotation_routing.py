@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Callable, Sequence
 
 import falcon
 import pytest
@@ -34,7 +34,6 @@ from ebl.tests.corpus.support import (
     get_line,
     simulate_get,
 )
-from ebl.tests.factories.corpus import TextFactory
 
 CACHED_SUFFIXES: Sequence[str] = ("/display", "/lines/0")
 UNROUTED_SUFFIXES: Sequence[str] = (
@@ -47,16 +46,9 @@ UNROUTED_SUFFIXES: Sequence[str] = (
 
 @pytest.fixture
 def chapter(
-    text_repository: MongoTextRepository, annotation_chapter: Chapter
+    store_text: Callable[[Chapter], Chapter], annotation_chapter: Chapter
 ) -> Chapter:
-    text_repository.create(
-        TextFactory.build(
-            genre=annotation_chapter.text_id.genre,
-            category=annotation_chapter.text_id.category,
-            index=annotation_chapter.text_id.index,
-        )
-    )
-    return annotation_chapter
+    return store_text(annotation_chapter)
 
 
 def find_revision(result: testing.Result) -> str:

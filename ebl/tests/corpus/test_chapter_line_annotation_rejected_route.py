@@ -1,4 +1,4 @@
-from typing import Callable, Sequence, Tuple
+from typing import Callable, Tuple
 
 import falcon
 import pytest
@@ -19,21 +19,10 @@ from ebl.tests.corpus.line_annotation_support import (
     create_new_alignment,
 )
 from ebl.tests.corpus.lines_edit_support import read_json
-from ebl.tests.corpus.revision_save_support import (
-    INVALID_REVISION,
-    REVISION_REQUIRED,
-)
+from ebl.tests.corpus.revision_save_support import REFUSED_QUERIES
 
 INVALID_POSITION = "Invalid line: {} is not a line position (number of lines: 5)."
 LINE_NOT_FOUND = "{} line {} not found."
-REFUSED_QUERIES: Sequence[Tuple[str, str]] = (
-    ("", REVISION_REQUIRED),
-    ("view=outline", REVISION_REQUIRED),
-    ("view=chapter", REVISION_REQUIRED),
-    ("view=outline&revision=", INVALID_REVISION.format("''")),
-    ("revision=a&revision=b", INVALID_REVISION.format("['a', 'b']")),
-    ("view=lines&revision=legacy", "unexpected view 'lines'"),
-)
 
 
 def test_invalid_annotation_is_refused(

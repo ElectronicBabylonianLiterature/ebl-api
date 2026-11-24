@@ -192,3 +192,28 @@
   coverage of the 13 new and changed modules; no file over 250 lines.
 - Browser run with the frontend against this API: 22 checks passed. A
   save of one line changes only that line.
+
+## Step 5, follow-up: one lemma for every instance of a word
+
+- `GET {chapter}/lemmatization/instances?word=&revision=` counts the
+  instances of a word: lemmatizable word tokens with that clean value in
+  the reconstructions and manuscript lines of every variant. It answers
+  `{"word", "words", "lemmatized", "lines", "revision"}`.
+- `POST {chapter}/lemmatization/instances?view=outline&revision=` with
+  `{"word", "uniqueLemma"}` gives every instance that lemma, whatever it
+  had before (user decision), through `_save_at_revision`. Only instance
+  tokens change.
+- Refused with 422 and nothing stored: no instance of the word; every
+  instance already has exactly that lemma. An empty lemma id is refused
+  with 400. Lemma ids are not checked against the dictionary, as in the
+  other lemmatization saves.
+- The count loads the whole chapter, so that count and save use one
+  definition of an instance; on a very large chapter it takes seconds.
+- Step 6 (keep existing alignments per manuscript line) is dropped by the
+  user.
+- Gates: `ruff`, `flake8`, `pyre`, `pyright` clean; qlty no findings (the
+  move and word-instances handlers share `RevisionSaveResponder`); full
+  suite 7819 passed, 2 skipped, 1 xfailed; 100 % line and branch
+  coverage of the new and changed modules.
+- Browser run with the frontend, keys only: 24 checks passed; the
+  chapter-wide update changed 24 instances in 12 lines and nothing else.

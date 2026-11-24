@@ -18,6 +18,8 @@ from ebl.tests.corpus.lines_edit_support import (
     create_body,
     update_chapter,
 )
+from ebl.tests.corpus.word_instances_requests import create_word_lemma_request
+from ebl.tests.corpus.word_instances_support import MOVE_CHAPTER_WORD, NEW_LEMMA
 
 RequestFactory = Callable[[Chapter], ChapterEditRequest]
 ChapterRead = Tuple[Chapter, str]
@@ -25,6 +27,14 @@ READ_METHOD = "find_chapter_with_revision"
 ANNOTATED_INDEX = 1
 REVISION_REQUIRED = "revision is required"
 INVALID_REVISION = "revision must be a non-empty string, got {} instead"
+REFUSED_QUERIES: Sequence[Tuple[str, str]] = (
+    ("", REVISION_REQUIRED),
+    ("view=outline", REVISION_REQUIRED),
+    ("view=chapter", REVISION_REQUIRED),
+    ("view=outline&revision=", INVALID_REVISION.format("''")),
+    ("revision=a&revision=b", INVALID_REVISION.format("['a', 'b']")),
+    ("view=lines&revision=legacy", "unexpected view 'lines'"),
+)
 
 
 def create_lines_request(chapter: Chapter) -> ChapterEditRequest:
@@ -35,6 +45,10 @@ def create_lines_request(chapter: Chapter) -> ChapterEditRequest:
 
 def create_line_move_request(chapter: Chapter) -> ChapterEditRequest:
     return create_move_request(0, len(chapter.lines) - 1)
+
+
+def create_word_instances_request(_: Chapter) -> ChapterEditRequest:
+    return create_word_lemma_request(MOVE_CHAPTER_WORD, list(NEW_LEMMA))
 
 
 SAVES_WITHOUT_REVISION: Sequence[RequestFactory] = (
@@ -49,12 +63,14 @@ SAVES_AT_REVISION: Sequence[RequestFactory] = (
         partial(kind.create_new_request, index=ANNOTATED_INDEX)
         for kind in ANNOTATION_KINDS
     ),
+    create_word_instances_request,
 )
 SAVE_WITHOUT_REVISION_IDS: Sequence[str] = ("import", "manuscripts", "lines")
 SAVE_IDS: Sequence[str] = (
     *SAVE_WITHOUT_REVISION_IDS,
     "move",
     *(kind.name for kind in ANNOTATION_KINDS),
+    "instances",
 )
 
 

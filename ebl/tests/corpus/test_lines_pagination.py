@@ -12,7 +12,9 @@ from ebl.corpus.application.lines_pagination import (
     parse_lines_page_query,
     parse_lines_view,
     parse_required_revision,
+    parse_required_text,
     parse_revision,
+    parse_text,
 )
 from ebl.errors import DataError
 
@@ -177,6 +179,32 @@ def test_parse_required_revision(revision: str) -> None:
 def test_parse_invalid_required_revision(parameters: Parameters, message: str) -> None:
     with pytest.raises(DataError) as error:
         parse_required_revision(parameters)
+
+    assert str(error.value) == message
+
+
+def test_parse_text_reads_the_named_parameter() -> None:
+    parameters: Parameters = {"word": "ana", "revision": REVISION}
+
+    assert parse_text(parameters, "word") == "ana"
+    assert parse_required_text(parameters, "word") == "ana"
+    assert parse_text(parameters, "lemma") is None
+
+
+@pytest.mark.parametrize(
+    "parameters,message",
+    [
+        ({"revision": REVISION}, "word is required"),
+        ({"word": ""}, "word must be a non-empty string, got '' instead"),
+        (
+            {"word": ["a", "b"]},
+            "word must be a non-empty string, got ['a', 'b'] instead",
+        ),
+    ],
+)
+def test_parse_invalid_required_text(parameters: Parameters, message: str) -> None:
+    with pytest.raises(DataError) as error:
+        parse_required_text(parameters, "word")
 
     assert str(error.value) == message
 

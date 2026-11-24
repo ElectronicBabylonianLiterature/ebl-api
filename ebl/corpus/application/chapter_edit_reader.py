@@ -1,9 +1,12 @@
+from typing import Optional
+
 from ebl.corpus.application.lines_pagination import LinesPageQuery
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.corpus.domain.chapter_revision import require_revision
 from ebl.corpus.domain.lines_page import LinesPage
+from ebl.corpus.domain.word_instances import WordInstances
 
 
 class ChapterEditReader:
@@ -21,3 +24,12 @@ class ChapterEditReader:
         )
         require_revision(chapter_id, pagination.revision, page.revision)
         return page
+
+    def find_word_instances(
+        self, chapter_id: ChapterId, word: str, revision: Optional[str]
+    ) -> WordInstances:
+        chapter, loaded_revision = self._repository.find_chapter_with_revision(
+            chapter_id
+        )
+        require_revision(chapter_id, revision, loaded_revision)
+        return WordInstances.of_lines(chapter.lines, word, loaded_revision)

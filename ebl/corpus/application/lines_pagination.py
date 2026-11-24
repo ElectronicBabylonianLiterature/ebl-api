@@ -58,18 +58,26 @@ def _parse_tokens(parameters: Mapping[str, object]) -> bool:
     return tokens == TOKENS_ENABLED
 
 
+def parse_text(parameters: Mapping[str, object], name: str) -> Optional[str]:
+    text = parameters.get(name)
+    if text is None or (isinstance(text, str) and text):
+        return text
+    raise DataError(f"{name} must be a non-empty string, got {text!r} instead")
+
+
+def parse_required_text(parameters: Mapping[str, object], name: str) -> str:
+    text = parse_text(parameters, name)
+    if text is None:
+        raise DataError(f"{name} is required")
+    return text
+
+
 def parse_revision(parameters: Mapping[str, object]) -> Optional[str]:
-    revision = parameters.get("revision")
-    if revision is None or (isinstance(revision, str) and revision):
-        return revision
-    raise DataError(f"revision must be a non-empty string, got {revision!r} instead")
+    return parse_text(parameters, "revision")
 
 
 def parse_required_revision(parameters: Mapping[str, object]) -> str:
-    revision = parse_revision(parameters)
-    if revision is None:
-        raise DataError("revision is required")
-    return revision
+    return parse_required_text(parameters, "revision")
 
 
 def parse_lines_page_query(parameters: Mapping[str, object]) -> LinesPageQuery:

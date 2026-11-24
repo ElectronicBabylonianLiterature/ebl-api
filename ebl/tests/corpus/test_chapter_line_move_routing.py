@@ -10,7 +10,6 @@ from ebl.cache.infrastructure.mongo_cache_repository import COLLECTION
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.line_move import LineMove
-from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.chapter_edit_support import ChapterEditRequest, post_edit
 from ebl.tests.corpus.line_move_support import (
     LINE_COUNT,
@@ -29,7 +28,6 @@ from ebl.tests.corpus.support import (
     get_line,
     simulate_get,
 )
-from ebl.tests.factories.corpus import TextFactory
 
 CACHED_READS: Sequence[Tuple[str, str]] = (
     ("find_chapter_for_display", "/display"),
@@ -39,15 +37,8 @@ CACHED_SUFFIXES: Sequence[str] = tuple(suffix for _, suffix in CACHED_READS)
 
 
 @pytest.fixture
-def chapter(text_repository: MongoTextRepository, move_chapter: Chapter) -> Chapter:
-    text_repository.create(
-        TextFactory.build(
-            genre=move_chapter.text_id.genre,
-            category=move_chapter.text_id.category,
-            index=move_chapter.text_id.index,
-        )
-    )
-    return move_chapter
+def chapter(store_text: Callable[[Chapter], Chapter], move_chapter: Chapter) -> Chapter:
+    return store_text(move_chapter)
 
 
 def find_display_lines(result: testing.Result) -> List[Dict[str, Any]]:

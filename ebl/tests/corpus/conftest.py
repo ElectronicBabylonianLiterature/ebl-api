@@ -37,6 +37,8 @@ from ebl.tests.corpus.support import (
     allow_signs,
     simulate_get,
 )
+from ebl.tests.corpus.word_instances_support import create_instances_chapter
+from ebl.tests.factories.corpus import TextFactory
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign
 
@@ -85,6 +87,21 @@ def store_editable_chapter(
 
 
 @pytest.fixture
+def store_text(text_repository: MongoTextRepository) -> Callable[[Chapter], Chapter]:
+    def store(chapter: Chapter) -> Chapter:
+        text_repository.create(
+            TextFactory.build(
+                genre=chapter.text_id.genre,
+                category=chapter.text_id.category,
+                index=chapter.text_id.index,
+            )
+        )
+        return chapter
+
+    return store
+
+
+@pytest.fixture
 def writer(corpus_dependencies: CorpusDependencies) -> ChapterEditWriter:
     return ChapterEditWriter(corpus_dependencies)
 
@@ -105,16 +122,34 @@ def annotation_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> 
 
 
 @pytest.fixture
-def assert_nothing_saved(
-    database: Database, annotation_chapter: Chapter
+def instances_chapter(store_editable_chapter: Callable[[Chapter], Chapter]) -> Chapter:
+    return store_editable_chapter(create_instances_chapter())
+
+
+def create_unchanged_assertion(
+    database: Database, chapter: Chapter
 ) -> Callable[[], None]:
-    stored_chapter = find_stored_chapter(database, annotation_chapter)
+    stored_chapter = find_stored_chapter(database, chapter)
 
     def assert_unchanged() -> None:
-        assert find_stored_chapter(database, annotation_chapter) == stored_chapter
+        assert find_stored_chapter(database, chapter) == stored_chapter
         assert count_chapter_changelog_entries(database) == 0
 
     return assert_unchanged
+
+
+@pytest.fixture
+def assert_nothing_saved(
+    database: Database, annotation_chapter: Chapter
+) -> Callable[[], None]:
+    return create_unchanged_assertion(database, annotation_chapter)
+
+
+@pytest.fixture
+def assert_instances_unchanged(
+    database: Database, instances_chapter: Chapter
+) -> Callable[[], None]:
+    return create_unchanged_assertion(database, instances_chapter)
 
 
 @pytest.fixture(params=ANNOTATION_KINDS, ids=lambda kind: kind.name)
