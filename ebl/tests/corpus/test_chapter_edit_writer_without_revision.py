@@ -5,6 +5,7 @@ import attr
 import pytest
 
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
+from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.manuscripts_update import ManuscriptsUpdate
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.errors import DataError
@@ -28,7 +29,7 @@ from ebl.tests.corpus.test_corpus import (
 
 
 @dataclass(frozen=True)
-class ImportingLinesDependencies:
+class WriterDependencies:
     writer: ChapterEditWriter
     text_repository: Any
     bibliography: Any
@@ -41,10 +42,8 @@ class ImportingLinesDependencies:
 
 
 @pytest.fixture
-def importing_lines_dependencies(
-    request: pytest.FixtureRequest,
-) -> ImportingLinesDependencies:
-    return ImportingLinesDependencies(
+def dependencies(request: pytest.FixtureRequest) -> WriterDependencies:
+    return WriterDependencies(
         writer=request.getfixturevalue("writer"),
         text_repository=request.getfixturevalue("text_repository"),
         bibliography=request.getfixturevalue("bibliography"),
@@ -57,9 +56,21 @@ def importing_lines_dependencies(
     )
 
 
-def test_updating_manuscripts(
-    writer, text_repository, bibliography, changelog, signs, sign_repository, user, when
-) -> None:
+def expect_update(dependencies: WriterDependencies, updated_chapter: Chapter) -> None:
+    expect_find_and_update_chapter(
+        dependencies.bibliography,
+        dependencies.changelog,
+        CHAPTER_WITHOUT_DOCUMENTS,
+        updated_chapter,
+        dependencies.signs,
+        dependencies.sign_repository,
+        dependencies.text_repository,
+        dependencies.user,
+        dependencies.when,
+    )
+
+
+def test_updating_manuscripts(dependencies: WriterDependencies) -> None:
     uncertain_fragments = (MuseumNumber.of("K.1"),)
     updated_chapter = attr.evolve(
         CHAPTER,
@@ -86,22 +97,15 @@ def test_updating_manuscripts(
         uncertain_fragments=uncertain_fragments,
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
     )
-    expect_find_and_update_chapter(
-        bibliography,
-        changelog,
-        CHAPTER_WITHOUT_DOCUMENTS,
-        updated_chapter,
-        signs,
-        sign_repository,
-        text_repository,
-        user,
-        when,
-    )
+    expect_update(dependencies, updated_chapter)
 
     manuscripts = (updated_chapter.manuscripts[0],)
     assert (
-        writer.save_manuscripts(
-            CHAPTER.id_, ManuscriptsUpdate(manuscripts, uncertain_fragments), None, user
+        dependencies.writer.save_manuscripts(
+            CHAPTER.id_,
+            ManuscriptsUpdate(manuscripts, uncertain_fragments),
+            None,
+            dependencies.user,
         ).chapter
         == updated_chapter
     )
@@ -142,18 +146,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
         )
 
 
-def test_importing_lines(
-    importing_lines_dependencies: ImportingLinesDependencies,
-) -> None:
-    writer = importing_lines_dependencies.writer
-    text_repository = importing_lines_dependencies.text_repository
-    bibliography = importing_lines_dependencies.bibliography
-    changelog = importing_lines_dependencies.changelog
-    signs = importing_lines_dependencies.signs
-    sign_repository = importing_lines_dependencies.sign_repository
-    user = importing_lines_dependencies.user
-    when = importing_lines_dependencies.when
-    seeded_provenance_service = importing_lines_dependencies.provenance_service
+def test_importing_lines(dependencies: WriterDependencies) -> None:
     line_number = CHAPTER_WITHOUT_DOCUMENTS.lines[-1].number.number + 1
     siglum = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].siglum
     atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
@@ -161,24 +154,16 @@ def test_importing_lines(
         CHAPTER,
         lines=(  # pyre-ignore[60]
             *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
-            *parse_chapter(atf, CHAPTER.manuscripts, seeded_provenance_service),
+            *parse_chapter(atf, CHAPTER.manuscripts, dependencies.provenance_service),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
-    expect_find_and_update_chapter(
-        bibliography,
-        changelog,
-        CHAPTER_WITHOUT_DOCUMENTS,
-        updated_chapter,
-        signs,
-        sign_repository,
-        text_repository,
-        user,
-        when,
-    )
+    expect_update(dependencies, updated_chapter)
 
     assert (
-        writer.save_imported_lines(CHAPTER.id_, atf, None, user).chapter
+        dependencies.writer.save_imported_lines(
+            CHAPTER.id_, atf, None, dependencies.user
+        ).chapter
         == updated_chapter
     )
