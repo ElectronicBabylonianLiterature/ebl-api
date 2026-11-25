@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "2026-08-05",
+  "files": {
+    "kalhu_findspot_polygon_curation_report.json": "8e81376d47fdffd0ce6be9e801190bfdff45ef743a3e68794fccccf05a95be24",
+    "kalhu_findspot_polygon_curation_template.json": "5b505367f6a8e00db65b8ed230e029f4dba8fdd073059d01dea384d4868d3a2b",
+    "kalhu_findspot_polygon_mappings.json": "1087f25de4a1be86a6badf17e94ef435eccd70d58c995c97466e34467c50dea6",
+    "kalhu_polygon_inventory.json": "ee69f7835f03904b1d6bf3180bf3e090775f461320bf83b5a7f80f6862c5e23c"
+  }
+}
