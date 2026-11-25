@@ -56,6 +56,12 @@ BAYERISCHE_STAATSBIBLIOTHEK: MuseumEntry = (
     "DE",
     "https://www.bsb-muenchen.de/",
 )
+BIRMINGHAM_MUSEUM_AND_ART_GALLERY: MuseumEntry = (
+    "Birmingham Museum and Art Gallery",
+    "Birmingham",
+    "GB",
+    "https://www.birminghammuseums.org.uk/",
+)
 BRYN_MAWR_COLLEGE: MuseumEntry = (
     "Bryn Mawr College Special Collections",
     "Bryn Mawr",
