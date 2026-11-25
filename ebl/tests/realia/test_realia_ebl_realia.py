@@ -3,7 +3,6 @@ from typing import cast
 import falcon
 import pytest
 from falcon import testing
-from marshmallow import ValidationError
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
@@ -100,9 +99,10 @@ def test_document_without_new_fields_loads_and_dumps_empty_lists() -> None:
 
 
 @pytest.mark.parametrize("field", ["title", "afoVolume"])
-def test_ebl_realia_entry_rejects_fields_of_other_entry_types(field: str) -> None:
-    with pytest.raises(ValidationError):
-        EblRealiaEntrySchema().load({**STAR_ENTRY, field: "x"})
+def test_ebl_realia_entry_ignores_unknown_stored_fields(field: str) -> None:
+    assert EblRealiaEntrySchema().load(
+        {**STAR_ENTRY, field: "x"}
+    ) == EblRealiaEntrySchema().load(STAR_ENTRY)
 
 
 def test_ebl_realia_entry_round_trip() -> None:
@@ -185,3 +185,22 @@ def test_get_entry_without_new_fields(
     payload = cast(dict, result.json)
     assert payload["referenceType"] == []
     assert payload["eblRealia"] == []
+
+
+def test_get_entry_with_unknown_stored_ebl_realia_field(
+    realia_repository: MongoRealiaRepository, client: testing.TestClient
+) -> None:
+    insert_stored(
+        realia_repository,
+        {
+            "_id": "Anu",
+            "realiaId": "realia_000001",
+            "eblRealia": [{"id": "ebl_1", "title": "x"}],
+        },
+    )
+
+    result = cast(testing.Result, client.simulate_get("/realia/by-id/realia_000001"))
+
+    assert result.status == falcon.HTTP_OK
+    assert cast(dict, result.json)["eblRealia"][0]["id"] == "ebl_1"
+    assert "title" not in cast(dict, result.json)["eblRealia"][0]

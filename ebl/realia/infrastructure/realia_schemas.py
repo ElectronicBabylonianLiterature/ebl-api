@@ -1,6 +1,6 @@
 from typing import Mapping, Optional
 
-from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE, RAISE
+from marshmallow import Schema, fields, post_load, pre_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import (
@@ -18,7 +18,7 @@ from ebl.realia.domain.realia_entry import (
 )
 
 
-class ReallexikonReferenceField(fields.Field):
+class SectionReferenceField(fields.Field):
     def _serialize(self, value, attr, obj, **kwargs):
         return None if value is None else ApiReferenceSchema().dump(value)
 
@@ -92,7 +92,7 @@ class ReallexikonEntrySchema(Schema):
 
     id = fields.String(load_default="")
     title = fields.String(load_default="")
-    reference = ReallexikonReferenceField(allow_none=True, load_default=None)
+    reference = SectionReferenceField(allow_none=True, load_default=None)
 
     @post_load
     def make_entry(self, data, **kwargs) -> ReallexikonEntry:
@@ -101,7 +101,7 @@ class ReallexikonEntrySchema(Schema):
 
 class EblRealiaEntrySchema(Schema):
     class Meta:
-        unknown = RAISE
+        unknown = EXCLUDE
 
     id = fields.String(load_default="")
     transliteration = fields.String(load_default="")
@@ -110,7 +110,7 @@ class EblRealiaEntrySchema(Schema):
     identification = fields.String(load_default="")
     part_of_speech = fields.String(data_key="pos", load_default="")
     wikidata_id = fields.List(fields.String(), data_key="wikidataId", load_default=list)
-    reference = ReallexikonReferenceField(allow_none=True, load_default=None)
+    reference = SectionReferenceField(allow_none=True, load_default=None)
     remarks = fields.String(load_default="")
 
     @post_load
