@@ -47,6 +47,10 @@ from ebl.dossiers.web.bootstrap import create_dossiers_routes
 from ebl.provenance.web.bootstrap import create_provenance_routes
 from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.realia.web.bootstrap import create_realia_routes
+from ebl.sumerian_dictionary.infrastructure.mongo_sumerian_word_repository import (
+    MongoSumerianWordRepository,
+)
+from ebl.sumerian_dictionary.web.bootstrap import create_sumerian_dictionary_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
@@ -67,6 +71,7 @@ from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.media.web.bootstrap import create_media_runtime
 
 althaia.patch()
 
@@ -120,9 +125,15 @@ def create_context():
         provenance_repository=provenance_repository,
         provenance_service=provenance_service,
         realia_repository=MongoRealiaRepository(database),
+        sumerian_word_repository=MongoSumerianWordRepository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
+        media=(
+            create_media_runtime(database)
+            if os.environ.get("MEDIA_API_ENABLED", "false").lower() == "true"
+            else None
+        ),
     )
 
 
@@ -152,6 +163,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_dossiers_routes(api, context)
     create_provenance_routes(api, context)
     create_realia_routes(api, context)
+    create_sumerian_dictionary_routes(api, context)
 
     return api
 
