@@ -4,8 +4,8 @@ from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 
 from ebl.schemas import NameEnumField
 from ebl.transliteration.application.storage_serialization import (
-    OMIT_FROM_STORAGE_WHEN_DEFAULT,
     omit_stored_defaults,
+    omitted_when_default,
 )
 from ebl.transliteration.domain.enclosure_tokens import (
     AccidentalOmission,
@@ -35,12 +35,15 @@ class BaseTokenSchema(Schema):
     value = fields.String(required=True)
     clean_value = fields.String(data_key="cleanValue")
     enclosure_type = fields.List(
-        NameEnumField(EnclosureType), load_default=list, data_key="enclosureType"
+        NameEnumField(EnclosureType),
+        load_default=list,
+        data_key="enclosureType",
+        metadata=omitted_when_default(),
     )
     erasure = NameEnumField(
         ErasureState,
         load_default=ErasureState.NONE,
-        metadata={OMIT_FROM_STORAGE_WHEN_DEFAULT: True},
+        metadata=omitted_when_default(),
     )
 
     @post_dump
