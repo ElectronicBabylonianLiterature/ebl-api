@@ -1,12 +1,14 @@
 from itertools import chain
 from typing import Any, Dict, Iterable, cast
 
+import pytest
 from falcon import testing
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
+from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign
 from ebl.users.domain.user import Guest
@@ -29,6 +31,16 @@ def allow_references(chapter: Chapter, bibliography: Bibliography) -> None:
 def allow_signs(signs: Iterable[Sign], sign_list: SignRepository) -> None:
     for sign in signs:
         sign_list.create(sign)
+
+
+def store_chapter(request: pytest.FixtureRequest) -> Chapter:
+    allow_signs(
+        request.getfixturevalue("signs"), request.getfixturevalue("sign_repository")
+    )
+    chapter = ChapterFactory.build()
+    allow_references(chapter, request.getfixturevalue("bibliography"))
+    request.getfixturevalue("text_repository").create_chapter(chapter)
+    return chapter
 
 
 def create_chapter_dto(chapter: Chapter) -> dict:

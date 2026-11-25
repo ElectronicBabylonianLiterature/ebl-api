@@ -1,24 +1,17 @@
 import json
 
-import attr
 import falcon
 import pytest
 
 from ebl.corpus.domain.chapter import Chapter
-from ebl.dictionary.domain.word import WordId
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.tests.corpus.support import (
     allow_references,
     allow_signs,
     create_chapter_dto,
     create_chapter_url,
 )
+from ebl.tests.corpus.lemmatized_chapter_support import lemmatize_first_line
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
-from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.tokens import Joiner
-from ebl.transliteration.domain.word_tokens import Word
 
 
 DTO = {
@@ -56,72 +49,7 @@ def test_updating_lemmatization_invalidates_chapter_display_cache(
     text_repository.create_chapter(chapter)
     first_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
     assert first_result.status == falcon.HTTP_OK
-    updated_chapter = attr.evolve(
-        chapter,
-        lines=(
-            attr.evolve(
-                chapter.lines[0],
-                variants=(
-                    attr.evolve(
-                        chapter.lines[0].variants[0],
-                        reconstruction=(
-                            chapter.lines[0].variants[0].reconstruction[0],
-                            chapter.lines[0]
-                            .variants[0]
-                            .reconstruction[1]
-                            .set_unique_lemma(
-                                LemmatizationToken(
-                                    chapter.lines[0]
-                                    .variants[0]
-                                    .reconstruction[1]
-                                    .value,
-                                    (WordId("aklu I"),),
-                                )
-                            ),
-                            *chapter.lines[0].variants[0].reconstruction[2:6],
-                            chapter.lines[0]
-                            .variants[0]
-                            .reconstruction[6]
-                            .set_unique_lemma(
-                                LemmatizationToken(
-                                    chapter.lines[0]
-                                    .variants[0]
-                                    .reconstruction[6]
-                                    .value,
-                                    (),
-                                )
-                            ),
-                        ),
-                        manuscripts=(
-                            attr.evolve(
-                                chapter.lines[0].variants[0].manuscripts[0],
-                                line=TextLine.of_iterable(
-                                    chapter.lines[0]
-                                    .variants[0]
-                                    .manuscripts[0]
-                                    .line.line_number,
-                                    (
-                                        Word.of(
-                                            [
-                                                Reading.of_name("ku"),
-                                                Joiner.hyphen(),
-                                                BrokenAway.open(),
-                                                Reading.of_name("nu"),
-                                                Joiner.hyphen(),
-                                                Reading.of_name("ši"),
-                                                BrokenAway.close(),
-                                            ],
-                                            unique_lemma=[WordId("aklu I")],
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    )
+    updated_chapter = lemmatize_first_line(chapter)
 
     expected = create_chapter_dto(updated_chapter)
 
@@ -167,15 +95,9 @@ def test_updating_invalid_stage(
         ({}, falcon.HTTP_BAD_REQUEST),
     ],
 )
-def test_updating_invalid_lemmatization(
-    dto, expected_status, client, bibliography, sign_repository, signs, text_repository
-):
-    allow_signs(signs, sign_repository)
-    chapter = ChapterFactory.build()
-    allow_references(chapter, bibliography)
-    text_repository.create_chapter(chapter)
+def test_updating_invalid_lemmatization(dto, expected_status, client, stored_chapter):
     post_result = client.simulate_post(
-        create_chapter_url(chapter, "/lemmatization"), body=json.dumps(dto)
+        create_chapter_url(stored_chapter, "/lemmatization"), body=json.dumps(dto)
     )
 
     assert post_result.status == expected_status

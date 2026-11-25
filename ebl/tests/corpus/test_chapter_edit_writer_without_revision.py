@@ -19,9 +19,10 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 
 
-from ebl.tests.corpus.test_corpus import (
+from ebl.tests.corpus.corpus_test_support import (
     CHAPTER,
     CHAPTER_WITHOUT_DOCUMENTS,
+    UpdateDependencies,
     expect_bibliography,
     expect_find_and_update_chapter,
     expect_invalid_references,
@@ -31,13 +32,7 @@ from ebl.tests.corpus.test_corpus import (
 @dataclass(frozen=True)
 class WriterDependencies:
     writer: ChapterEditWriter
-    text_repository: Any
-    bibliography: Any
-    changelog: Any
-    signs: Any
-    sign_repository: Any
-    user: Any
-    when: Any
+    update: UpdateDependencies
     provenance_service: Any
 
 
@@ -45,28 +40,14 @@ class WriterDependencies:
 def dependencies(request: pytest.FixtureRequest) -> WriterDependencies:
     return WriterDependencies(
         writer=request.getfixturevalue("writer"),
-        text_repository=request.getfixturevalue("text_repository"),
-        bibliography=request.getfixturevalue("bibliography"),
-        changelog=request.getfixturevalue("changelog"),
-        signs=request.getfixturevalue("signs"),
-        sign_repository=request.getfixturevalue("sign_repository"),
-        user=request.getfixturevalue("user"),
-        when=request.getfixturevalue("when"),
+        update=UpdateDependencies.of(request),
         provenance_service=request.getfixturevalue("seeded_provenance_service"),
     )
 
 
 def expect_update(dependencies: WriterDependencies, updated_chapter: Chapter) -> None:
     expect_find_and_update_chapter(
-        dependencies.bibliography,
-        dependencies.changelog,
-        CHAPTER_WITHOUT_DOCUMENTS,
-        updated_chapter,
-        dependencies.signs,
-        dependencies.sign_repository,
-        dependencies.text_repository,
-        dependencies.user,
-        dependencies.when,
+        dependencies.update, CHAPTER_WITHOUT_DOCUMENTS, updated_chapter
     )
 
 
@@ -105,7 +86,7 @@ def test_updating_manuscripts(dependencies: WriterDependencies) -> None:
             CHAPTER.id_,
             ManuscriptsUpdate(manuscripts, uncertain_fragments),
             None,
-            dependencies.user,
+            dependencies.update.user,
         ).chapter
         == updated_chapter
     )
@@ -163,7 +144,7 @@ def test_importing_lines(dependencies: WriterDependencies) -> None:
 
     assert (
         dependencies.writer.save_imported_lines(
-            CHAPTER.id_, atf, None, dependencies.user
+            CHAPTER.id_, atf, None, dependencies.update.user
         ).chapter
         == updated_chapter
     )

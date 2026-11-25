@@ -21,6 +21,7 @@ from ebl.tests.corpus.chapter_edit_support import (
     ChapterEdit,
     ChapterEditKind,
 )
+from ebl.tests.corpus.corpus_test_support import UpdateDependencies
 from ebl.tests.corpus.line_alignment_errors import INVALID_ALIGNMENTS
 from ebl.tests.corpus.line_annotation_kind import AnnotationKind, InvalidAnnotation
 from ebl.tests.corpus.line_annotation_kinds import ANNOTATION_KINDS
@@ -44,6 +45,7 @@ from ebl.tests.corpus.support import (
     allow_references,
     allow_signs,
     simulate_get,
+    store_chapter,
 )
 from ebl.tests.corpus.word_instances_support import create_instances_chapter
 from ebl.tests.factories.corpus import TextFactory
@@ -231,3 +233,13 @@ def save_sibling_without_revision(
         )
 
     return save
+
+
+@pytest.fixture
+def update_dependencies(request: pytest.FixtureRequest) -> UpdateDependencies:
+    return UpdateDependencies.of(request)
+
+
+@pytest.fixture
+def stored_chapter(request: pytest.FixtureRequest) -> Chapter:
+    return store_chapter(request)
