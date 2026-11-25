@@ -110,10 +110,12 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
             )
         return {"$set": {**update, REVISION_FIELD: revision}}
 
-    def update(self, id_: ChapterId, chapter: Chapter) -> None:
+    def update(self, id_: ChapterId, chapter: Chapter) -> str:
+        revision = str(ObjectId())
         self._chapters.update_one(
-            chapter_id_query(id_), self._create_update(chapter, str(ObjectId()))
+            chapter_id_query(id_), self._create_update(chapter, revision)
         )
+        return revision
 
     def update_at_revision(
         self,

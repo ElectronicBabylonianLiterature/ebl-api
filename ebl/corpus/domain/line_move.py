@@ -19,8 +19,8 @@ class LineMove:
         return tuple(reordered)
 
     def create_layout(self, line_count: int) -> LineLayout:
-        return LineLayout(
-            tuple(self.apply(range(line_count))), frozenset({self.target})
+        return LineLayout.of_sources(
+            self.apply(range(line_count)), moved=frozenset({self.target})
         )
 
     def _validate(self, line_count: int) -> None:

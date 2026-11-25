@@ -32,6 +32,7 @@ def test_random_saves_store_what_the_full_path_stores(
     current = writer.find_chapter(chapter.id_)
     revisions = [LEGACY_REVISION, LEGACY_REVISION]
     errors: List[str] = []
+    unchanged = 0
 
     for step in range(STEPS):
         save = create_random_save(random, current, step)
@@ -45,6 +46,10 @@ def test_random_saves_store_what_the_full_path_stores(
         if saved is None or reference_saved is None:
             errors.append(error)
             continue
+        if saved.chapter == current:
+            assert [saved.revision, reference_saved.revision] == revisions
+            unchanged += 1
+            continue
         entry = find_chapter_changelog_entries(copies.database)[-2]
         assert dictdiffer.patch(
             entry["diff"], dump_chapter_document(current)
@@ -55,6 +60,6 @@ def test_random_saves_store_what_the_full_path_stores(
         revisions = [saved.revision, reference_saved.revision]
 
     assert len(find_chapter_changelog_entries(copies.database)) == 2 * (
-        STEPS - len(errors)
+        STEPS - len(errors) - unchanged
     )
     assert len(errors) < STEPS / 2

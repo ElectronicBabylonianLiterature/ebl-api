@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Sequence
 
 import attr
 import pytest
@@ -33,7 +33,6 @@ from ebl.tests.corpus.line_move_support import (
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-Sources = Sequence[Optional[int]]
 ALL_FIELDS = frozenset({LINES_FIELD, *CHAPTER_FIELDS})
 
 
@@ -146,7 +145,9 @@ def test_removed_line(chapter: Chapter, position: int) -> None:
     after = LINE_COUNT - position - 1
 
     change = create_layout_change(
-        chapter, [chapter.lines[index] for index in sources], sources
+        chapter,
+        [chapter.lines[index] for index in sources],
+        tuple(enumerate(sources)),
     )
 
     assert change.removed == [(position, chapter.lines[position])]
@@ -189,7 +190,7 @@ def test_mixed_change(chapter: Chapter) -> None:
     change = create_layout_change(
         chapter,
         [new_line, edited_line, moved_line, chapter.lines[3]],
-        [None, 2, 0, 3],
+        [(1, 2), (2, 0), (3, 3)],
         [2],
     )
 
@@ -215,10 +216,15 @@ def test_every_changed_field_is_found(chapter: Chapter) -> None:
 
 
 @pytest.mark.parametrize(
-    "sources", [(0, 1, 2), (0, 1, 2, 3, None), (0, 1, 2, LINE_COUNT)]
+    "layout",
+    [
+        LineLayout.in_place(3),
+        LineLayout.of_sources(range(LINE_COUNT), 1),
+        LineLayout.of_sources((0, 1, 2, LINE_COUNT)),
+    ],
 )
 def test_layout_that_does_not_fit_the_chapters(
-    chapter: Chapter, sources: Sources
+    chapter: Chapter, layout: LineLayout
 ) -> None:
     with pytest.raises(ValueError, match="does not fit a change from 4 to 4 lines"):
-        ChapterChange(chapter, chapter, LineLayout(sources))
+        ChapterChange(chapter, chapter, layout)

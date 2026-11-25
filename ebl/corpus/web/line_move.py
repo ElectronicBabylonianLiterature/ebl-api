@@ -1,5 +1,3 @@
-from typing import cast
-
 import falcon
 from marshmallow import Schema, fields, post_load
 from marshmallow.validate import Range
@@ -39,12 +37,6 @@ class LineMoveResource:
         resp: falcon.Response,
         **chapter: str,
     ) -> None:
-        move = cast(LineMove, LineMoveSchema().load(req.media))
         self._responder.respond(
-            req,
-            resp,
-            chapter,
-            lambda chapter_id, revision, user: self._writer.move_line(
-                chapter_id, move, revision, user
-            ),
+            req, resp, chapter, LineMoveSchema(), self._writer.move_line
         )

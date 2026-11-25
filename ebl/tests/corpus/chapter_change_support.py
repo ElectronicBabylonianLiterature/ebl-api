@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence
+from typing import Sequence
 
 import attr
 import bson
@@ -12,7 +12,7 @@ from ebl.corpus.application.chapter_changelog import (
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_change import ChapterChange
 from ebl.corpus.domain.line import Line
-from ebl.corpus.domain.line_layout import LineLayout
+from ebl.corpus.domain.line_layout import LineLayout, LinePlacement
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.tests.corpus.line_move_support import (
@@ -102,7 +102,7 @@ def create_lines_update(
 def create_layout_change(
     chapter: Chapter,
     lines: Sequence[Line],
-    sources: Sequence[Optional[int]],
+    placements: Sequence[LinePlacement],
     moved: Sequence[int] = (),
 ) -> ChapterChange:
     return ChapterChange(
@@ -113,17 +113,18 @@ def create_layout_change(
             signs=create_signs(lines),
             parser_version=OTHER_PARSER_VERSION,
         ),
-        LineLayout(tuple(sources), frozenset(moved)),
+        LineLayout(len(lines), tuple(placements), frozenset(moved)),
     )
 
 
 def insert_line(chapter: Chapter, position: int) -> ChapterChange:
-    sources: List[Optional[int]] = [None]
-    sources[:0] = range(position)
-    sources.extend(range(position, len(chapter.lines)))
+    placements = [
+        (source if source < position else source + 1, source)
+        for source in range(len(chapter.lines))
+    ]
     lines = list(chapter.lines)
     lines.insert(position, create_new_line(FIRST_NEW_NUMBER))
-    return create_layout_change(chapter, lines, sources)
+    return create_layout_change(chapter, lines, placements)
 
 
 def store_diff(diff: ChapterDiff) -> ChapterDiff:

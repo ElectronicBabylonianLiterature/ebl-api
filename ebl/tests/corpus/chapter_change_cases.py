@@ -1,6 +1,6 @@
 from itertools import chain, product, starmap
 from random import Random
-from typing import Callable, List, Optional, Sequence, Tuple
+from typing import Callable, List, Sequence, Tuple
 
 import attr
 
@@ -35,6 +35,8 @@ from ebl.tests.corpus.line_annotation_kinds import ANNOTATION_KINDS
 from ebl.tests.corpus.line_move_support import LINE_COUNT, MOVES
 from ebl.tests.corpus.word_instances_support import MOVE_CHAPTER_WORD, NEW_LEMMA
 from ebl.transliteration.application.sign_repository import SignRepository
+
+__all__ = ("CHANGE_CASES", "SEEDS")
 
 ChangeFactory = Callable[[Chapter, SignRepository], ChapterChange]
 NEW_COUNTS: Sequence[int] = (0, 1, 2)
@@ -145,7 +147,7 @@ def create_random_layout_change(chapter: Chapter, random: Random) -> ChapterChan
     count = len(chapter.lines)
     removed = _pick_positions(random, count, 4)
     edited = _pick_positions(random, count, 4)
-    placed: List[Tuple[Optional[int], Line]] = [
+    kept: List[Tuple[int, Line]] = [
         (
             index,
             edit_line(line, FIRST_EDITED_NUMBER + index) if index in edited else line,
@@ -153,17 +155,27 @@ def create_random_layout_change(chapter: Chapter, random: Random) -> ChapterChan
         for index, line in enumerate(chapter.lines)
         if index not in removed
     ]
-    moved = [placed.pop(random.randrange(len(placed))) for _ in range(2) if placed]
-    for number in range(random.randrange(3)):
-        placed.insert(
-            random.randrange(len(placed) + 1),
-            (None, create_new_line(FIRST_NEW_NUMBER + number)),
-        )
-    for placement in moved:
-        placed.insert(random.randrange(len(placed) + 1), placement)
+    moved = [kept.pop(random.randrange(len(kept))) for _ in range(2) if kept]
+    new_lines = [
+        create_new_line(FIRST_NEW_NUMBER + number)
+        for number in range(random.randrange(3))
+    ]
+    size = len(kept) + len(moved) + len(new_lines)
+    free = sorted(random.sample(range(size), len(moved) + len(new_lines)))
+    moved_positions = sorted(random.sample(free, len(moved)))
+    new_positions = [position for position in free if position not in moved_positions]
+    stable_positions = [position for position in range(size) if position not in free]
+    placed = {
+        **{stable_positions[index]: entry for index, entry in enumerate(kept)},
+        **{moved_positions[index]: entry for index, entry in enumerate(moved)},
+    }
+    lines = {
+        **{position: line for position, (_, line) in placed.items()},
+        **{new_positions[index]: line for index, line in enumerate(new_lines)},
+    }
     return create_layout_change(
         chapter,
-        [line for _, line in placed],
-        [source for source, _ in placed],
-        [placed.index(placement) for placement in moved],
+        [lines[position] for position in range(size)],
+        sorted((position, source) for position, (source, _) in placed.items()),
+        moved_positions,
     )

@@ -1,5 +1,3 @@
-from typing import cast
-
 import falcon
 from marshmallow import Schema, fields, post_load
 from marshmallow.validate import Length
@@ -64,12 +62,6 @@ class WordInstancesResource:
     @falcon.before(require_scope, "write:texts")
     @validate(WordLemmaSchema())
     def on_post(self, req: UserRequest, resp: falcon.Response, **chapter: str) -> None:
-        word_lemma = cast(WordLemma, WordLemmaSchema().load(req.media))
         self._responder.respond(
-            req,
-            resp,
-            chapter,
-            lambda chapter_id, revision, user: self._writer.save_word_lemma(
-                chapter_id, word_lemma, revision, user
-            ),
+            req, resp, chapter, WordLemmaSchema(), self._writer.save_word_lemma
         )

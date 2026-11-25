@@ -50,11 +50,11 @@ def test_chapter_view_is_the_chapter_the_corpus_returns(
     client: testing.TestClient,
     chapter: Chapter,
     edit_kind: ChapterEditKind,
-    save_sibling_with_corpus: Callable[[Chapter, ChapterEdit], Chapter],
+    save_sibling_without_revision: Callable[[Chapter, ChapterEdit], Chapter],
     query_string: str,
 ) -> None:
     edit = edit_kind.create_edit(chapter, 0)
-    expected = save_sibling_with_corpus(chapter, edit)
+    expected = save_sibling_without_revision(chapter, edit)
 
     result = post_edit(client, chapter, edit, query_string)
 

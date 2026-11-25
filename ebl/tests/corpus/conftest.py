@@ -13,7 +13,7 @@ import ebl.context
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.cache.infrastructure.mongo_cache_repository import COLLECTION
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
-from ebl.corpus.application.corpus import Corpus, CorpusDependencies
+from ebl.corpus.application.corpus import CorpusDependencies
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.chapter_edit_support import (
@@ -220,14 +220,14 @@ def edit_kind(request: pytest.FixtureRequest) -> ChapterEditKind:
 
 
 @pytest.fixture
-def save_sibling_with_corpus(
-    corpus: Corpus, text_repository: MongoTextRepository
+def save_sibling_without_revision(
+    writer: ChapterEditWriter, text_repository: MongoTextRepository
 ) -> Callable[[Chapter, ChapterEdit], Chapter]:
     def save(chapter: Chapter, edit: ChapterEdit) -> Chapter:
         sibling = attr.evolve(chapter, name=f"{chapter.name} sibling")
         text_repository.create_chapter(sibling)
         return attr.evolve(
-            edit.save_with_corpus(corpus, sibling.id_, ANY_USER), name=chapter.name
+            edit.save(writer, sibling.id_, None, ANY_USER).chapter, name=chapter.name
         )
 
     return save

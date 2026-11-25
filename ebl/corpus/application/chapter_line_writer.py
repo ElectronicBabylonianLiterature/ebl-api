@@ -1,7 +1,5 @@
 from functools import partial
-from typing import Callable, Mapping
-
-import attr
+from typing import Callable
 
 from ebl.changelog import create_entry, is_storable
 from ebl.corpus.application.alignment_updater import align_line_at
@@ -16,7 +14,6 @@ from ebl.corpus.application.saved_chapter import SavedChapter
 from ebl.corpus.application.text_validator import validate_line
 from ebl.corpus.domain.alignment import LineAlignment
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.corpus.domain.chapter_revision import require_revision
 from ebl.corpus.domain.line import Line
 from ebl.errors import DataError
@@ -26,10 +23,6 @@ LineUpdate = Callable[[Line], Line]
 CHANGE_TOO_LARGE = (
     "The change is too large to be recorded in the changelog. Nothing was saved."
 )
-
-
-def _find_changed_lines(index: int, old: Line, new: Line) -> Mapping[int, Line]:
-    return {} if new == old else {index: new}
 
 
 class ChapterLineWriter(Corpus):
@@ -64,23 +57,23 @@ class ChapterLineWriter(Corpus):
         if old_line is None:
             raise create_invalid_line_error(index, snapshot.line_count)
         new_line = try_update(lambda: update(old_line))
+        if new_line == old_line:
+            return self._find_saved(id_, revision)
         validate_line(new_line, snapshot.manuscripts)
         entry = self._prepare_changelog_entry(
             id_, create_line_diff(index, old_line, new_line), user
         )
         new_revision = self._repository.update_lines_at_revision(
-            id_, _find_changed_lines(index, old_line, new_line), revision
+            id_, {index: new_line}, revision
         )
         self._changelog.insert(entry)
-        return SavedChapter(
-            new_revision,
-            partial(self.find_chapter, id_),
-            partial(self._find_outline_at, id_, new_revision),
-        )
+        return self._find_saved(id_, new_revision)
 
-    def _find_outline_at(self, id_: ChapterId, revision: str) -> ChapterOutline:
-        return attr.evolve(
-            ChapterEditReader(self._repository).find_outline(id_), revision=revision
+    def _find_saved(self, id_: ChapterId, revision: str) -> SavedChapter:
+        return SavedChapter(
+            revision,
+            partial(self.find_chapter, id_),
+            partial(ChapterEditReader(self._repository).find_outline, id_),
         )
 
     def _prepare_changelog_entry(

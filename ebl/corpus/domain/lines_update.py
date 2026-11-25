@@ -1,4 +1,3 @@
-from itertools import chain, repeat
 from typing import Mapping, Sequence, Set
 
 import attr
@@ -21,6 +20,4 @@ class LinesUpdate:
         ]
 
     def create_layout(self, line_count: int) -> LineLayout:
-        return LineLayout(
-            tuple(chain(self.find_kept(line_count), repeat(None, len(self.new))))
-        )
+        return LineLayout.of_sources(self.find_kept(line_count), len(self.new))

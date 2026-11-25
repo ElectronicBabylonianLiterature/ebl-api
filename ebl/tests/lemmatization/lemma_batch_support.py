@@ -22,6 +22,8 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import LanguageShift, Token, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
+__all__ = ("WORD_IDS",)
+
 Query = Tuple[str, bool]
 BATCH_URL = "/lemmas/batch"
 NO_LEMMA: Lemma = ()

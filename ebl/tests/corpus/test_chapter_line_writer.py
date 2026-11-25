@@ -117,7 +117,7 @@ def test_line_save_does_not_overwrite_a_concurrent_update(
     assert count_chapter_changelog_entries(copies.database) == 0
 
 
-def test_outline_of_a_line_save_carries_the_revision_of_that_save(
+def test_outline_of_a_line_save_carries_the_revision_it_was_read_at(
     writer: ChapterEditWriter,
     copies: ChapterCopies,
     annotation_chapter: Chapter,
@@ -132,14 +132,14 @@ def test_outline_of_a_line_save_carries_the_revision_of_that_save(
 
     outline = saved.outline
 
-    assert outline.revision == saved.revision
-    assert (
-        text_repository.find_chapter_revision(annotation_chapter.id_) != saved.revision
+    assert outline.revision != saved.revision
+    assert outline.revision == text_repository.find_chapter_revision(
+        annotation_chapter.id_
     )
     assert outline.lines[1].number == OTHER_EDITED_NUMBER.label
 
 
-def test_saving_the_stored_annotation_keeps_the_stored_form_of_the_line(
+def test_saving_the_stored_annotation_changes_nothing(
     client: testing.TestClient,
     copies: ChapterCopies,
     annotation_chapter: Chapter,
@@ -158,11 +158,11 @@ def test_saving_the_stored_annotation_keeps_the_stored_form_of_the_line(
     assert result.status == falcon.HTTP_OK
     assert copies.find_raw_lines(annotation_chapter) == stored_lines
     assert OPTIONAL_FIELD not in stored_chapter["lines"][0]
-    assert find_stored_chapter(database, annotation_chapter) == {
-        **stored_chapter,
-        REVISION_FIELD: read_json(result)["revision"],
-    }
-    assert count_chapter_changelog_entries(database) == 1
+    assert find_stored_chapter(database, annotation_chapter) == stored_chapter
+    assert read_json(result)["revision"] == stored_chapter.get(
+        REVISION_FIELD, LEGACY_REVISION
+    )
+    assert count_chapter_changelog_entries(database) == 0
 
 
 @pytest.mark.parametrize("writer_name", ["writer", "reference_writer"])

@@ -36,11 +36,11 @@ def test_save_returns_the_chapter_the_corpus_returns(
     writer: ChapterEditWriter,
     chapter: Chapter,
     edit_kind: ChapterEditKind,
-    save_sibling_with_corpus: Callable[[Chapter, ChapterEdit], Chapter],
+    save_sibling_without_revision: Callable[[Chapter, ChapterEdit], Chapter],
     revision: str,
 ) -> None:
     edit = edit_kind.create_edit(chapter, 0)
-    expected = save_sibling_with_corpus(chapter, edit)
+    expected = save_sibling_without_revision(chapter, edit)
 
     saved = edit.save(writer, chapter.id_, revision, ANY_USER)
 

@@ -65,12 +65,12 @@ def _validate_layout(
     instance: "ChapterChange", _attribute: object, value: LineLayout
 ) -> None:
     old_count = len(instance.old.lines)
-    if len(value.sources) != len(instance.new.lines) or any(
+    if value.size != len(instance.new.lines) or any(
         source >= old_count for _, source in value.placements
     ):
         raise ValueError(
-            f"Line layout {list(value.sources)} does not fit a change from "
-            f"{old_count} to {len(instance.new.lines)} lines."
+            f"Line layout {list(value.placements)} of {value.size} lines does not "
+            f"fit a change from {old_count} to {len(instance.new.lines)} lines."
         )
 
 

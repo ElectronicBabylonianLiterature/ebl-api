@@ -18,6 +18,8 @@ from ebl.tests.corpus.line_annotation_support import (
     replace_item,
 )
 
+__all__ = ("INVALID_LEMMATIZATIONS",)
+
 LemmatizationChange = Callable[[LineLemmatizations], LineLemmatizations]
 TokenChange = Callable[[LemmatizationToken], LemmatizationToken]
 INVALID_LEMMATIZATION = "Invalid lemmatization"

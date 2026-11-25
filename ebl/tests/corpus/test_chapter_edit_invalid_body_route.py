@@ -1,5 +1,5 @@
 import json
-from typing import Callable
+from typing import Callable, Dict, Sequence
 
 import falcon
 import pytest
@@ -22,7 +22,10 @@ from ebl.tests.corpus.lines_edit_support import (
 from ebl.tests.corpus.outline_support import create_outline_chapter
 
 GUARDED_QUERY = "view=outline&revision=legacy"
-EMPTY_MANUSCRIPTS = {"manuscripts": [], "uncertainFragments": []}
+EMPTY_MANUSCRIPTS: Dict[str, Sequence[object]] = {
+    "manuscripts": [],
+    "uncertainFragments": [],
+}
 REJECTED_REQUESTS = (
     (ChapterEditRequest(IMPORT_SUFFIX, "{}"), falcon.HTTP_BAD_REQUEST),
     (

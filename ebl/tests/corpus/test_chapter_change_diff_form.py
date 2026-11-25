@@ -82,7 +82,7 @@ def test_change_diff_orders_edits_removes_adds_and_fields(chapter: Chapter) -> N
     change = create_layout_change(
         chapter,
         [new_line, edited_line, chapter.lines[0], chapter.lines[3]],
-        [None, 2, 0, 3],
+        [(1, 2), (2, 0), (3, 3)],
         [2],
     )
 
@@ -173,7 +173,7 @@ def test_change_diff_dumps_a_moved_line_that_changed_in_both_forms(
 ) -> None:
     moved_line = edit_line(chapter.lines[0], FIRST_EDITED_NUMBER)
     change = create_layout_change(
-        chapter, [*chapter.lines[1:], moved_line], [1, 2, 3, 0], [3]
+        chapter, [*chapter.lines[1:], moved_line], tuple(enumerate((1, 2, 3, 0))), [3]
     )
 
     diff = create_change_diff(change)

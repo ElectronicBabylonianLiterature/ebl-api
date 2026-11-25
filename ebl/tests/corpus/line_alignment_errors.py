@@ -16,6 +16,8 @@ from ebl.tests.corpus.line_annotation_support import (
 )
 from ebl.transliteration.domain.alignment import AlignmentToken
 
+__all__ = ("INVALID_ALIGNMENTS",)
+
 AlignmentChange = Callable[[LineAlignments], LineAlignments]
 ManuscriptPosition = Tuple[int, int]
 TokenChange = Callable[[AlignmentToken], AlignmentToken]

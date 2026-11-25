@@ -86,7 +86,7 @@ def create_dollar_change(chapter: Chapter) -> ChapterChange:
                 ),
             )
         ),
-        LineLayout((0, 1, None, 2, 3)),
+        LineLayout(5, ((0, 0), (1, 1), (3, 2), (4, 3))),
     )
 
 

@@ -99,7 +99,7 @@ class TextRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def update(self, id_: ChapterId, chapter: Chapter) -> None:
+    def update(self, id_: ChapterId, chapter: Chapter) -> str:
         raise NotImplementedError
 
     @abstractmethod

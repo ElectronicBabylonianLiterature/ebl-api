@@ -12,6 +12,8 @@ from ebl.corpus.application.chapter_line_writer import (
     CHANGE_TOO_LARGE,
     ChapterLineWriter,
 )
+from ebl.corpus.application.chapter_updater import ChapterUpdater
+from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
     inject_references_to_submitted_manuscripts,
 )
@@ -36,7 +38,9 @@ class ChapterEditWriter(ChapterLineWriter):
         self, id_: ChapterId, lines: LinesUpdate, revision: Optional[str], user: User
     ) -> SavedChapter:
         return (
-            self._with_stored_revision(self.update_lines(id_, lines, user))
+            self._save_without_revision(
+                id_, LinesUpdater(lines, self._sign_repository), user
+            )
             if revision is None
             else self._save_at_revision(
                 id_, partial(change_lines, lines, self._sign_repository), revision, user
@@ -47,7 +51,11 @@ class ChapterEditWriter(ChapterLineWriter):
         self, id_: ChapterId, atf: str, revision: Optional[str], user: User
     ) -> SavedChapter:
         return (
-            self._with_stored_revision(self.import_lines(id_, atf, user))
+            self._save_without_revision(
+                id_,
+                LinesUpdater(self._parse_lines(id_, atf), self._sign_repository),
+                user,
+            )
             if revision is None
             else self._save_at_revision(
                 id_, partial(self._import_lines, atf), revision, user
@@ -62,10 +70,10 @@ class ChapterEditWriter(ChapterLineWriter):
         user: User,
     ) -> SavedChapter:
         return (
-            self._with_stored_revision(
-                self.update_manuscripts(
-                    id_, update.manuscripts, update.uncertain_fragments, user
-                )
+            self._save_without_revision(
+                id_,
+                self._create_manuscript_updater(update),
+                user,
             )
             if revision is None
             else self._save_at_revision(
@@ -90,15 +98,27 @@ class ChapterEditWriter(ChapterLineWriter):
             user,
         )
 
-    def _with_stored_revision(self, chapter: Chapter) -> SavedChapter:
+    def _save_without_revision(
+        self, id_: ChapterId, updater: ChapterUpdater, user: User
+    ) -> SavedChapter:
+        old_chapter = self.find_chapter(id_)
+        new_chapter = updater.update(old_chapter)
         return SavedChapter.of_chapter(
-            chapter, self._repository.find_chapter_revision(chapter.id_)
+            new_chapter, self.update_chapter(id_, old_chapter, new_chapter, user)
+        )
+
+    def _parse_lines(self, id_: ChapterId, atf: str) -> LinesUpdate:
+        manuscripts = self.find_chapter(id_).manuscripts
+        return LinesUpdate(
+            parse_chapter(atf, manuscripts, self._provenance_service), set(), {}
         )
 
     def _save_at_revision(
         self, id_: ChapterId, change: ChapterChanger, revision: str, user: User
     ) -> SavedChapter:
         chapter_change = change(self._find_chapter_at_revision(id_, revision))
+        if chapter_change.new == chapter_change.old:
+            return SavedChapter.of_chapter(chapter_change.new, revision)
         self._validate_chapter(chapter_change.new)
         entry = self._prepare_changelog_entry(
             chapter_change.old.id_, create_change_diff(chapter_change), user
@@ -124,12 +144,17 @@ class ChapterEditWriter(ChapterLineWriter):
         self, update: ManuscriptsUpdate, chapter: Chapter
     ) -> ChapterChange:
         return change_in_place(
-            ManuscriptUpdater(
-                inject_references_to_submitted_manuscripts(
-                    self._bibliography, update.manuscripts
-                ),
-                update.uncertain_fragments,
-                self._sign_repository,
-            ).update,
+            self._create_manuscript_updater(update).update,
             chapter,
+        )
+
+    def _create_manuscript_updater(
+        self, update: ManuscriptsUpdate
+    ) -> ManuscriptUpdater:
+        return ManuscriptUpdater(
+            inject_references_to_submitted_manuscripts(
+                self._bibliography, update.manuscripts
+            ),
+            update.uncertain_fragments,
+            self._sign_repository,
         )

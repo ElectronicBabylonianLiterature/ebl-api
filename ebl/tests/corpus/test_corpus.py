@@ -1,9 +1,7 @@
-from dataclasses import dataclass
-from typing import Any, cast
+from typing import cast
 
 import attr
 import pytest
-from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.application.corpus import Corpus
 
 from ebl.corpus.application.lemmatization import (
@@ -18,10 +16,8 @@ from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.lines_update import LinesUpdate
-from ebl.corpus.domain.parser import parse_chapter
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.tests.corpus.support import ANY_USER
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
@@ -31,7 +27,6 @@ from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import AbstractWord, Word
@@ -53,36 +48,6 @@ CHAPTER_WITHOUT_DOCUMENTS = attr.evolve(
         for manuscript in CHAPTER.manuscripts
     ),
 )
-
-
-@dataclass(frozen=True)
-class ImportingLinesDependencies:
-    corpus: Corpus
-    text_repository: Any
-    bibliography: Any
-    changelog: Any
-    signs: Any
-    sign_repository: Any
-    user: Any
-    when: Any
-    provenance_service: Any
-
-
-@pytest.fixture
-def importing_lines_dependencies(
-    request: pytest.FixtureRequest,
-) -> ImportingLinesDependencies:
-    return ImportingLinesDependencies(
-        corpus=request.getfixturevalue("corpus"),
-        text_repository=request.getfixturevalue("text_repository"),
-        bibliography=request.getfixturevalue("bibliography"),
-        changelog=request.getfixturevalue("changelog"),
-        signs=request.getfixturevalue("signs"),
-        sign_repository=request.getfixturevalue("sign_repository"),
-        user=request.getfixturevalue("user"),
-        when=request.getfixturevalue("when"),
-        provenance_service=request.getfixturevalue("seeded_provenance_service"),
-    )
 
 
 def expect_bibliography(bibliography, when) -> None:
@@ -122,9 +87,12 @@ def expect_chapter_update(
     when(changelog).create(
         CHAPTERS_COLLECTION,
         user.profile,
-        {**ChapterSchema().dump(old_chapter), "_id": old_chapter.id_.to_tuple()},
         {
-            **ChapterSchema().dump(updated_chapter),
+            **cast(dict, ChapterSchema().dump(old_chapter)),
+            "_id": old_chapter.id_.to_tuple(),
+        },
+        {
+            **cast(dict, ChapterSchema().dump(updated_chapter)),
             "_id": updated_chapter.id_.to_tuple(),
         },
     ).thenReturn()
@@ -229,7 +197,7 @@ def test_find_chapter_for_display(
 def test_search_lemma(corpus: Corpus, text_repository, when) -> None:
     lemma = "testlemma I"
     dictionary_line = DictionaryLine(
-        TextIdSchema().dump(TEXT.id),
+        TEXT.id,
         TEXT.name,
         CHAPTER.name,
         CHAPTER.stage,
@@ -418,7 +386,7 @@ def test_updating_alignment(
         when,
     )
 
-    alignment = Alignment(
+    chapter_alignment = Alignment(
         (
             (
                 (
@@ -430,7 +398,9 @@ def test_updating_alignment(
             ),
         )
     )
-    assert corpus.update_alignment(CHAPTER.id_, alignment, user) == updated_chapter
+    assert (
+        corpus.update_alignment(CHAPTER.id_, chapter_alignment, user) == updated_chapter
+    )
 
 
 def test_updating_manuscript_lemmatization(
@@ -589,85 +559,6 @@ def test_invalid_alignment(
         corpus.update_alignment(CHAPTER.id_, alignment, ANY_USER)
 
 
-def test_updating_manuscripts(
-    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
-) -> None:
-    uncertain_fragments = (MuseumNumber.of("K.1"),)
-    updated_chapter = attr.evolve(
-        CHAPTER,
-        manuscripts=(
-            attr.evolve(
-                CHAPTER.manuscripts[0],
-                colophon=Transliteration.of_iterable(
-                    [
-                        TextLine.of_iterable(
-                            LineNumber(1, True), (Word.of([Reading.of_name("ba")]),)
-                        )
-                    ]
-                ),
-                unplaced_lines=Transliteration.of_iterable(
-                    [
-                        TextLine.of_iterable(
-                            LineNumber(1, True), (Word.of([Reading.of_name("ku")]),)
-                        )
-                    ]
-                ),
-                notes="Updated manuscript.",
-            ),
-        ),
-        uncertain_fragments=uncertain_fragments,
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
-    )
-    expect_find_and_update_chapter(
-        bibliography,
-        changelog,
-        CHAPTER_WITHOUT_DOCUMENTS,
-        updated_chapter,
-        signs,
-        sign_repository,
-        text_repository,
-        user,
-        when,
-    )
-
-    manuscripts = (updated_chapter.manuscripts[0],)
-    assert (
-        corpus.update_manuscripts(CHAPTER.id_, manuscripts, uncertain_fragments, user)
-        == updated_chapter
-    )
-
-
-@pytest.mark.parametrize(
-    "manuscripts",
-    [
-        (),
-        (
-            CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
-            CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
-        ),
-    ],
-)
-def test_invalid_manuscripts(
-    manuscripts, corpus, text_repository, bibliography, when
-) -> None:
-    when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
-        CHAPTER_WITHOUT_DOCUMENTS
-    )
-    expect_bibliography(bibliography, when)
-    with pytest.raises(DataError):
-        corpus.update_manuscripts(CHAPTER.id_, manuscripts, (), ANY_USER)
-
-
-def test_update_manuscripts_raises_exception_if_invalid_references(
-    corpus, text_repository, bibliography, when
-) -> None:
-    manuscripts = CHAPTER.manuscripts
-    expect_invalid_references(bibliography, when)
-
-    with pytest.raises(DataError):
-        corpus.update_manuscripts(CHAPTER.id_, manuscripts, (), ANY_USER)
-
-
 def test_updating_lines_edit(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
@@ -820,45 +711,6 @@ def test_updating_lines_add(
         )
         == updated_chapter
     )
-
-
-def test_importing_lines(
-    importing_lines_dependencies: ImportingLinesDependencies,
-) -> None:
-    corpus = importing_lines_dependencies.corpus
-    text_repository = importing_lines_dependencies.text_repository
-    bibliography = importing_lines_dependencies.bibliography
-    changelog = importing_lines_dependencies.changelog
-    signs = importing_lines_dependencies.signs
-    sign_repository = importing_lines_dependencies.sign_repository
-    user = importing_lines_dependencies.user
-    when = importing_lines_dependencies.when
-    seeded_provenance_service = importing_lines_dependencies.provenance_service
-    line_number = CHAPTER_WITHOUT_DOCUMENTS.lines[-1].number.number + 1
-    siglum = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].siglum
-    atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
-    updated_chapter = attr.evolve(
-        CHAPTER,
-        lines=(  # pyre-ignore[60]
-            *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
-            *parse_chapter(atf, CHAPTER.manuscripts, seeded_provenance_service),
-        ),
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
-        parser_version=ATF_PARSER_VERSION,
-    )
-    expect_find_and_update_chapter(
-        bibliography,
-        changelog,
-        CHAPTER_WITHOUT_DOCUMENTS,
-        updated_chapter,
-        signs,
-        sign_repository,
-        text_repository,
-        user,
-        when,
-    )
-
-    assert corpus.import_lines(CHAPTER.id_, atf, user) == updated_chapter
 
 
 def test_merging_lines(

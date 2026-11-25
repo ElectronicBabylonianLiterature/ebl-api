@@ -5,7 +5,6 @@ import attr
 from falcon import testing
 
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter, SavedChapter
-from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.manuscripts_update import ManuscriptsUpdate
 from ebl.tests.corpus.outline_support import dump_outline
@@ -30,7 +29,6 @@ class ChapterEditRequest:
 @attr.s(frozen=True, auto_attribs=True)
 class ChapterEdit(ChapterEditRequest):
     save: Callable[[ChapterEditWriter, ChapterId, Optional[str], User], SavedChapter]
-    save_with_corpus: Callable[[Corpus, ChapterId, User], Chapter]
     update_outline: Callable[[Outline], Outline]
 
 
@@ -54,7 +52,6 @@ def _create_import_edit(
         lambda writer, id_, revision, user: writer.save_imported_lines(
             id_, atf, revision, user
         ),
-        lambda corpus, id_, user: corpus.import_lines(id_, atf, user),
         update_outline,
     )
 
@@ -130,9 +127,6 @@ def _create_manuscripts_edit(
         create_manuscripts_body(chapter, update),
         lambda writer, id_, revision, user: writer.save_manuscripts(
             id_, update, revision, user
-        ),
-        lambda corpus, id_, user: corpus.update_manuscripts(
-            id_, update.manuscripts, update.uncertain_fragments, user
         ),
         replace_manuscripts,
     )

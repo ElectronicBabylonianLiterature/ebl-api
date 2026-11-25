@@ -40,6 +40,8 @@ from ebl.transliteration.domain.tokens import LanguageShift, Token, ValueToken
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 
+__all__ = ("MOVES",)
+
 T = TypeVar("T")
 MOVE_SUFFIX = "/lines/move"
 MOVE_QUERY = "view=outline&revision=legacy"
