@@ -1,19 +1,29 @@
+from typing import cast
+from ebl.provenance.application.provenance_service import ProvenanceService
+
 import pytest
+from marshmallow import ValidationError
 from ebl.fragmentarium.application.archaeology_schemas import (
+    ArchaeologyInputSchema,
     ArchaeologySchema,
     ExcavationNumberSchema,
     FindspotSchema,
 )
 from ebl.fragmentarium.application.date_schemas import DateRangeSchema
 from ebl.fragmentarium.domain.archaeology import Archaeology
+from ebl.fragmentarium.domain.findspot import Findspot
 from ebl.tests.factories.archaeology import (
     ArchaeologyFactory,
 )
 
 
 @pytest.mark.parametrize("with_findspot", [True, False])
-def test_serialize_archaeology(with_findspot, seeded_provenance_service):
+def test_serialize_archaeology(
+    with_findspot: bool, seeded_provenance_service: ProvenanceService
+) -> None:
     archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
+    site = archaeology.site
+    assert site is not None
 
     schema = ArchaeologySchema(
         context={"provenance_service": seeded_provenance_service}
@@ -26,7 +36,7 @@ def test_serialize_archaeology(with_findspot, seeded_provenance_service):
         "excavationNumber": ExcavationNumberSchema().dump(
             archaeology.excavation_number
         ),
-        "site": archaeology.site.long_name,
+        "site": site.long_name,
         "isRegularExcavation": archaeology.regular_excavation,
         "date": DateRangeSchema().dump(archaeology.excavation_date),
         "findspotId": archaeology.findspot_id,
@@ -36,8 +46,12 @@ def test_serialize_archaeology(with_findspot, seeded_provenance_service):
 
 
 @pytest.mark.parametrize("with_findspot", [True, False])
-def test_deserialize_archaeology(with_findspot, seeded_provenance_service):
+def test_deserialize_archaeology(
+    with_findspot: bool, seeded_provenance_service: ProvenanceService
+) -> None:
     archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
+    site = archaeology.site
+    assert site is not None
 
     assert (
         ArchaeologySchema(
@@ -47,7 +61,7 @@ def test_deserialize_archaeology(with_findspot, seeded_provenance_service):
                 "excavationNumber": ExcavationNumberSchema().dump(
                     archaeology.excavation_number
                 ),
-                "site": archaeology.site.long_name,
+                "site": site.long_name,
                 "isRegularExcavation": archaeology.regular_excavation,
                 "date": DateRangeSchema().dump(archaeology.excavation_date),
                 "findspotId": archaeology.findspot_id,
@@ -64,30 +78,59 @@ def test_deserialize_archaeology(with_findspot, seeded_provenance_service):
 
 @pytest.mark.parametrize("empty_site_value", [None, ""])
 def test_deserialize_archaeology_empty_site_returns_none(
-    empty_site_value, seeded_provenance_service
-):
+    empty_site_value: str | None, seeded_provenance_service: ProvenanceService
+) -> None:
     schema = ArchaeologySchema(
         context={"provenance_service": seeded_provenance_service}
     )
-    result = schema.load(
-        {
-            "excavationNumber": None,
-            "site": empty_site_value,
-            "isRegularExcavation": False,
-        }
+    result = cast(
+        Archaeology,
+        schema.load(
+            {
+                "excavationNumber": None,
+                "site": empty_site_value,
+                "isRegularExcavation": False,
+            }
+        ),
     )
     assert result.site is None
 
 
 @pytest.mark.parametrize("empty_site_value", [None, ""])
 def test_deserialize_findspot_empty_site_returns_none(
-    empty_site_value, seeded_provenance_service
-):
+    empty_site_value: str | None, seeded_provenance_service: ProvenanceService
+) -> None:
     schema = FindspotSchema(context={"provenance_service": seeded_provenance_service})
-    result = schema.load(
-        {
-            "_id": 1,
-            "site": empty_site_value,
-        }
+    result = cast(
+        Findspot,
+        schema.load(
+            {
+                "_id": 1,
+                "site": empty_site_value,
+            }
+        ),
     )
     assert result.site is None
+
+
+@pytest.mark.parametrize("with_findspot", [True, False])
+def test_archaeology_input_accepts_existing_fields(
+    with_findspot: bool, seeded_provenance_service: ProvenanceService
+) -> None:
+    archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
+    context = {"provenance_service": seeded_provenance_service}
+    payload = cast(dict, ArchaeologySchema(context=context).dump(archaeology))
+
+    assert ArchaeologyInputSchema(context=context).load(payload) == archaeology
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"findspot": {"_id": 1, "mapLocation": None}},
+        {"unexpected": "value"},
+    ],
+)
+def test_archaeology_input_rejects_unknown_fields(payload: dict) -> None:
+    with pytest.raises(ValidationError):
+        ArchaeologyInputSchema().load(payload)

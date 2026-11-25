@@ -424,6 +424,14 @@ def on_post(self, req, resp):
 
 ## Running the application
 
+### API deployment
+
+Findspot responses may include a read-only `mapLocation` object. API clients
+must omit `findspot.mapLocation` when submitting archaeology updates with
+`POST /fragments/{number}/archaeology`; supplying it returns HTTP 422 without
+writing an update. Curated map locations belong to the canonical findspot
+read model.
+
 The application reads the configuration from following environment variables:
 
  ```dotenv
