@@ -709,6 +709,52 @@ If lines are faulty, fix them manually and retry the import process. If
 tokes are not lemmatized correctly, check the log-file
 `lemmatization_log.txt`.
 
+## Chapter display cache deployment and recovery
+
+Before activation, API maintainers and the database operator must confirm the
+production read preference, inventory all API replicas and batch workers, and
+approve a deployment window that permits the quiescent procedure below.
+Chapter caching requires primary reads; other read preferences bypass caching
+and emit a warning when the cache-state repository is initialized.
+
+Chapter display caching uses revisions shared by every API worker and the
+`update_texts` batch worker. Pending writes bypass caches for a five-minute lease
+measured by the MongoDB server clock from the first outstanding writer.
+Overlapping writers do not extend that deadline, so abandoned leases expire
+automatically even when other edits continue.
+Every successful chapter update also replaces a private `_cacheRevision` token
+in the same atomic write as its content. Readers check that token with a bounded,
+indexed chapter lookup before reusing a cached display. This fence remains safe
+when a live writer takes longer than its lease, resumes after a pause, or cannot
+finish its cache-state cleanup. A cache built before that write cannot be reused
+after the new content token is visible. Legacy chapters need no migration.
+Writer completion is scoped to the epoch captured when that writer started,
+so a late completion cannot alter writer state recreated after metadata loss.
+
+Old workers do not participate in this protocol. Mixed old/new workers are
+unsafe during deployment or rollback; this is separate from normal operation,
+where expired writer leases recover automatically. Before first activation,
+after rollback, or after any overlap with old writers:
+
+1. Stop **all** old and new chapter readers, writers, and batch jobs, and wait
+   for every in-flight request and job to finish.
+2. With workers still stopped, run the cleanup against an explicitly selected
+   endpoint and database:
+
+   ```sh
+   poetry run python -m ebl.cache.clear_versioned_chapter_cache \
+     --uri-env CACHE_RECOVERY_URI --database DATABASE --confirm-quiescent
+   ```
+
+3. Start only workers implementing this protocol.
+
+The command deletes only private `chapter-display-v2:` payloads and normally
+preserves chapter revision/pending metadata. Add `--repair-pending` only while
+quiescent to clear abandoned counters, including pre-lease legacy state. Repair
+rotates the epoch and increments the revision. Never run recovery while any
+reader or writer remains active; a request could otherwise repopulate a cache
+after cleanup. The command is not part of ordinary request handling.
+
 ## Acknowledgements
 
 CSL-JSON schema is based on
@@ -809,7 +855,8 @@ Repeated cleanup is harmless, and deleted handles cannot be revived.
 
 Adoption checks complete byte count, SHA-256 when present, and raster signature
 against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New owned raster writes validate dimensions and decode every frame before any
+the migration audit must validate dimensions and structural integrity. New owned
+raster writes validate dimensions and decode every frame before any
 registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
 the total of decoded frame pixels, independently of Pillow's global settings.
 WebP canvas dimensions are checked from a bounded header before creating a
@@ -857,3 +904,49 @@ CI starts a local single-node replica set. Local media tests reuse an existing
 replica-set test client or start a temporary instance using the existing
 `pymongo-inmemory` downloader. Test databases have unique names and are removed
 after use. Production connection settings are not needed.
+
+## Media API rollout
+
+The media API builds on the persistence layer (#785, already merged). The
+migration branch also depends on persistence and can be reviewed independently
+of this API.
+The frontend gallery requires this API before its rollout flag is enabled.
+
+`MEDIA_API_ENABLED=false` is the default. Set it to `true` and restart the
+backend to register the media routes and enrich fragment/query responses with
+`mediaSummary`. Existing `hasPhoto` values continue to report legacy-photo
+availability independently of imported media, including during a partial import.
+Existing `thumbnailPath` fields retain their legacy values; enrichment does not
+add that field to fragment detail or retrieve-all rows. Disabling the flag
+restores the existing routes and response shape.
+Existing photo and thumbnail routes remain available in both modes.
+
+The canonical endpoints are:
+
+* `GET /media?fragment=K.1`
+* `GET /media/{media_id}/file?fragment=K.1`
+* `GET /media/{media_id}/display?fragment=K.1`
+* `GET /media/{media_id}/thumbnail/{size}?fragment=K.1`
+
+The fragment query parameter is required and percent-encoded; this allows museum
+numbers containing slashes to round-trip through Falcon. List and binary reads
+check the fragment's existing permissions. Binary URLs require the same
+credentials as listing, are private and non-cacheable, and never expose GridFS
+identifiers. SVG originals remain attachment-only.
+
+Before the first media write, explicitly initialize the repository and storage
+indexes with `MongoMediaRepository.create_indexes()` and
+`GridFsMediaRepresentationStore.create_indexes()`. The persistence implementation
+requires a replica set or sharded cluster for transactional writes. Runtime
+construction and media reads do not create these indexes or trigger a backfill.
+The migration PR provides the operational commands and resumable import workflow;
+no production migration is executed by this change.
+
+For rollout, deploy the compatible backend, run and verify the separately
+scheduled migration, then enable the frontend gallery. Keep legacy originals
+protected and available while unresolved sources are reviewed. A partial import,
+missing optional previews, or an empty media collection must preserve existing
+photo access. `thumbnailPath` retains its legacy meaning; clients use the new
+`mediaSummary.primary.thumbnail` through an authenticated loader when available.
+Clients retain the legacy photo choice when `hasPhoto` is true, including
+when the media list already contains copies or other imported files.

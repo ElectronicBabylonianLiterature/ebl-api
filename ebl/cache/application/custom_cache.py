@@ -1,7 +1,15 @@
 import attr
+import re
+from contextlib import contextmanager
+from typing import Callable, Iterator, cast
 
 from ebl.cache.application.cache_repository import CacheRepository
+from ebl.cache.application.chapter_cache_state import ChapterCacheState
 from ebl.corpus.domain.chapter import ChapterId
+from ebl.errors import NotFoundError
+
+
+CHAPTER_CACHE_KEY_PREFIX = "chapter-display-v2:"
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
@@ -11,8 +19,8 @@ class CustomCache:
     def has(self, key: str) -> bool:
         return self._mongo_cache_repository.has(key)
 
-    def get(self, key: str) -> dict:
-        return self._mongo_cache_repository.get(key)
+    def get(self, key: str, *, legacy_fallback: bool = True) -> dict:
+        return self._mongo_cache_repository.get(key, legacy_fallback=legacy_fallback)
 
     def set(self, key: str, item: dict) -> None:
         self._mongo_cache_repository.set(key, item)
@@ -26,5 +34,50 @@ class CustomCache:
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class ChapterCache(CustomCache):
+    _chapter_state: ChapterCacheState
+
     def delete_chapter(self, chapter_id: ChapterId) -> None:
-        self.delete_all(pattern=rf"^{str(chapter_id)}(\sline-\d+)?$")
+        chapter_key_pattern = rf"{re.escape(str(chapter_id))}(\sline-\d+)?$"
+        self.delete_all(pattern=f"^{chapter_key_pattern}")
+        self.delete_all(pattern=f"^{CHAPTER_CACHE_KEY_PREFIX}{chapter_key_pattern}")
+
+    @contextmanager
+    def updating_chapter(self, chapter_id: ChapterId) -> Iterator[None]:
+        chapter_key = str(chapter_id)
+        epoch = self._chapter_state.start_update(chapter_key)
+        try:
+            self.delete_chapter(chapter_id)
+            yield
+        finally:
+            self._chapter_state.finish_update(chapter_key, epoch)
+
+    def get_or_create(
+        self, chapter_id: ChapterId, key: str, create: Callable[[], dict]
+    ) -> dict:
+        revision = self._chapter_state.revision(str(chapter_id))
+        if revision is None:
+            return create()
+        content_revision = self._chapter_state.content_revision(chapter_id)
+        if content_revision is None:
+            return create()
+        cache_key = f"{CHAPTER_CACHE_KEY_PREFIX}{key}"
+        try:
+            cached = self.get(cache_key, legacy_fallback=False)
+        except NotFoundError:
+            cached = {}
+        if (
+            cached.get("chapterCacheRevision") == revision
+            and cached.get("chapterContentRevision") == content_revision
+            and isinstance(cached.get("value"), dict)
+        ):
+            return cast(dict, cached["value"])
+        value = create()
+        self.set(
+            cache_key,
+            {
+                "chapterCacheRevision": revision,
+                "chapterContentRevision": content_revision,
+                "value": value,
+            },
+        )
+        return value

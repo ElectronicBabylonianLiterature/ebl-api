@@ -1,4 +1,6 @@
 import subprocess
+import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -13,15 +15,18 @@ def process() -> Mock:
     return Mock(poll=Mock(return_value=None))
 
 
-def test_ready_poll_retries_connection_failures(
-    monkeypatch: pytest.MonkeyPatch, process: Mock
-) -> None:
+@pytest.fixture
+def clock(monkeypatch: pytest.MonkeyPatch) -> Mock:
+    clock = Mock(monotonic=Mock(side_effect=time.monotonic))
+    monkeypatch.setattr(replica_set, "time", clock)
+    return clock
+
+
+def test_ready_poll_retries_connection_failures(clock: Mock, process: Mock) -> None:
     ready = Mock(side_effect=[ConnectionFailure("Starting"), False, True])
-    pause = Mock()
-    monkeypatch.setattr(replica_set.time, "sleep", pause)
     replica_set._wait_until_ready(process, ready)
     assert ready.call_count == 3
-    assert pause.call_count == 2
+    assert clock.sleep.call_count == 2
 
 
 def test_ready_poll_rejects_exited_server(process: Mock) -> None:
@@ -30,18 +35,21 @@ def test_ready_poll_rejects_exited_server(process: Mock) -> None:
         replica_set._wait_until_ready(process, Mock())
 
 
-def test_ready_poll_is_bounded(monkeypatch: pytest.MonkeyPatch, process: Mock) -> None:
-    monkeypatch.setattr(replica_set.time, "monotonic", Mock(side_effect=[0, 31]))
+def test_ready_poll_is_bounded(clock: Mock, process: Mock) -> None:
+    clock.monotonic.side_effect = [0, 31]
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        executor.submit(time.monotonic).result(timeout=5)
+        executor.submit(time.monotonic).result(timeout=5)
+    ready = Mock()
     with pytest.raises(RuntimeError, match="did not become ready"):
-        replica_set._wait_until_ready(process, Mock())
+        replica_set._wait_until_ready(process, ready)
+    assert clock.monotonic.call_count == 2
+    ready.assert_not_called()
 
 
-def test_ready_timeout_preserves_connection_failure(
-    monkeypatch: pytest.MonkeyPatch, process: Mock
-) -> None:
+def test_ready_timeout_preserves_connection_failure(clock: Mock, process: Mock) -> None:
     connection_error = ConnectionFailure("Starting")
-    monkeypatch.setattr(replica_set.time, "monotonic", Mock(side_effect=[0, 1, 31]))
-    monkeypatch.setattr(replica_set.time, "sleep", Mock())
+    clock.monotonic.side_effect = [0, 1, 31]
     with pytest.raises(RuntimeError, match="did not become ready") as raised:
         replica_set._wait_until_ready(process, Mock(side_effect=connection_error))
     assert raised.value.__cause__ is connection_error

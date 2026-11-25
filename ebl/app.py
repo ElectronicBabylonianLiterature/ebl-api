@@ -15,6 +15,7 @@ from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.cache.application.cache import create_cache
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
+from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
 from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -46,6 +47,10 @@ from ebl.dossiers.web.bootstrap import create_dossiers_routes
 from ebl.provenance.web.bootstrap import create_provenance_routes
 from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.realia.web.bootstrap import create_realia_routes
+from ebl.sumerian_dictionary.infrastructure.mongo_sumerian_word_repository import (
+    MongoSumerianWordRepository,
+)
+from ebl.sumerian_dictionary.web.bootstrap import create_sumerian_dictionary_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
@@ -66,6 +71,7 @@ from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.media.web.bootstrap import create_media_runtime
 
 althaia.patch()
 
@@ -94,7 +100,7 @@ def create_context():
     cache = create_cache()
     cache_repository = MongoCacheRepository(database)
     cache_repository.create_indexes()
-    custom_cache = ChapterCache(cache_repository)
+    custom_cache = ChapterCache(cache_repository, MongoChapterCacheState(database))
     provenance_repository = MongoProvenanceRepository(database)
     provenance_service = ProvenanceService(provenance_repository)
     return Context(
@@ -119,9 +125,15 @@ def create_context():
         provenance_repository=provenance_repository,
         provenance_service=provenance_service,
         realia_repository=MongoRealiaRepository(database),
+        sumerian_word_repository=MongoSumerianWordRepository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
+        media=(
+            create_media_runtime(database)
+            if os.environ.get("MEDIA_API_ENABLED", "false").lower() == "true"
+            else None
+        ),
     )
 
 
@@ -151,6 +163,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_dossiers_routes(api, context)
     create_provenance_routes(api, context)
     create_realia_routes(api, context)
+    create_sumerian_dictionary_routes(api, context)
 
     return api
 

@@ -4,7 +4,9 @@ from enum import Enum
 from typing import Dict, Iterable, Literal, Mapping, Sequence
 from urllib.parse import parse_qsl
 
-DataType = Literal["dictionary", "afo-register", "colophons", "realia"]
+DataType = Literal[
+    "dictionary", "afo-register", "colophons", "realia", "sumerian-dictionary"
+]
 
 REALIA_STRIP_CHARS = str.maketrans("", "", "“”„ʾ‘’'")
 
@@ -34,6 +36,19 @@ class Fields(Enum):
         "WILDCARD_FIELDS": [],
         "MARKDOWN_FIELDS": [],
     }
+    SUMERIAN_DICTIONARY = {
+        "COLLATED_FIELDS": [
+            "citationForm",
+            "lemma",
+            "aliases.form",
+            "guideWord",
+            "attingerSenses.meaning",
+            "epsd2Senses.meaning",
+            "akkadianEquivalents.wordId",
+        ],
+        "WILDCARD_FIELDS": [],
+        "MARKDOWN_FIELDS": [],
+    }
 
     @staticmethod
     def findByDataType(data_type: DataType) -> Mapping[str, Sequence[str]]:
@@ -45,6 +60,8 @@ class Fields(Enum):
             return Fields.COLOPHONS.value
         elif data_type == "realia":
             return Fields.REALIA.value
+        elif data_type == "sumerian-dictionary":
+            return Fields.SUMERIAN_DICTIONARY.value
         else:
             raise ValueError("Invalid data type")
 
@@ -98,6 +115,20 @@ WILDCARD_AND_COLLATION_MATCHERS: Dict[str, Dict[str, str]] = {
     "collation +": {"wildcard": r"[+₊]", "regex": r"[+₊]"},
 }
 
+DATA_TYPE_COLLATION_OVERRIDES: Mapping[DataType, Dict[str, Dict[str, str]]] = {
+    "sumerian-dictionary": {
+        "collation G": {"wildcard": r"[gĝğŋGĜĞŊ]", "regex": r"[gĝğŋGĜĞŊ]"},
+    },
+}
+
+
+def collation_matchers(data_type: DataType) -> Dict[str, Dict[str, str]]:
+    return {
+        **WILDCARD_AND_COLLATION_MATCHERS,
+        **DATA_TYPE_COLLATION_OVERRIDES.get(data_type, {}),
+    }
+
+
 markdown_escape = r"(\*|\^)*"
 
 
@@ -131,7 +162,7 @@ class CollatedFieldQuery:
     def all_wildcards(self) -> str:
         return r"|".join(
             expression["wildcard"]
-            for expression in WILDCARD_AND_COLLATION_MATCHERS.values()
+            for expression in collation_matchers(self.data_type).values()
         )
 
     def _make_regexp(self) -> str:
@@ -158,7 +189,7 @@ class CollatedFieldQuery:
         )
 
     def _wildcards_to_regexp(self, segment: str) -> str:
-        for type, expression in WILDCARD_AND_COLLATION_MATCHERS.items():
+        for type, expression in collation_matchers(self.data_type).items():
             if not self._is_regex(segment, type, expression):
                 continue
             return self._process_expression(segment, expression)

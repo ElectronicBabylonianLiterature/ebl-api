@@ -7,7 +7,7 @@ class CacheRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get(self, cache_key: str) -> dict:
+    def get(self, cache_key: str, *, legacy_fallback: bool = True) -> dict:
         raise NotImplementedError
 
     @abstractmethod
