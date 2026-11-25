@@ -1,4 +1,4 @@
-from typing import List, cast
+from typing import List, Optional, cast
 
 import attr
 import falcon
@@ -53,6 +53,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 from ebl.transliteration.domain.text import Text
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_fragment_read_scope
+from ebl.media.web.fragment_media_enricher import FragmentMediaEnricher
 
 
 def _parse_fragment_query(parameters, *parsers):
@@ -67,10 +68,12 @@ class FragmentsRetrieveAllResource:
         repository: FragmentRepository,
         photos_repository: FileRepository,
         realia_repository: RealiaRepository,
+        media: Optional[FragmentMediaEnricher] = None,
     ):
         self._repo = repository
         self._photos = photos_repository
         self._realia_repository = realia_repository
+        self._media = media or FragmentMediaEnricher()
 
     def _parse_skip(self, skip: str, total_count: int) -> int:
         try:
@@ -105,7 +108,10 @@ class FragmentsRetrieveAllResource:
                 document_realia_info(fragment, info_by_realia_id)
             )
             fragments_.append(fragment)
-        resp.media = {"totalCount": total_count, "fragments": fragments_}
+        resp.media = {
+            "totalCount": total_count,
+            "fragments": self._media.enrich_rows(fragments_),
+        }
 
 
 class FragmentsResource:
@@ -137,10 +143,12 @@ class FragmentsQueryResource:
         repository: FragmentRepository,
         transliteration_query_factory: TransliterationQueryFactory,
         bibliography_repository: BibliographyRepository,
+        media: Optional[FragmentMediaEnricher] = None,
     ):
         self._repository = repository
         self._transliteration_query_factory = transliteration_query_factory
         self._bibliography_repository = bibliography_repository
+        self._media = media or FragmentMediaEnricher()
 
     def _enrich(self, result: FragmentQueryResult) -> FragmentQueryResult:
         return attr.evolve(
@@ -186,6 +194,9 @@ class FragmentsQueryResource:
             if isinstance(result, FragmentQueryResult)
             else QueryResultSchema(include_count_metadata=True).dump(result)
         )
+        if isinstance(result, FragmentQueryResult):
+            document = cast(dict, resp.media)
+            document["items"] = self._media.enrich_rows(document["items"])
 
 
 class FragmentAuthorizedScopesResource:

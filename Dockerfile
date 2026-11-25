@@ -2,6 +2,10 @@
 # Upgrade tracking: https://github.com/ElectronicBabylonianLiterature/ebl-api/issues/772
 FROM pypy:3.11-7.3.23
 
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y libjpeg62-turbo-dev zlib1g-dev libwebp-dev && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN python -m pip install "pip==26.2.1"
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -19,6 +23,9 @@ RUN for attempt in 1 2 3; do \
       if [ "$attempt" -eq 3 ]; then exit 1; fi; \
       sleep $((attempt * 5)); \
     done
+
+COPY scripts/verify_pillow_codecs.py /tmp/verify_pillow_codecs.py
+RUN poetry run python /tmp/verify_pillow_codecs.py && rm /tmp/verify_pillow_codecs.py
 
 COPY ./ebl ./ebl
 
