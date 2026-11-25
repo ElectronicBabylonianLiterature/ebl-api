@@ -1,26 +1,30 @@
 import attr
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.dictionary_line import DictionaryLine
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.errors import Defect, NotFoundError
 from ebl.tests.corpus.corpus_test_support import (
     CHAPTER,
     CHAPTER_WITHOUT_DOCUMENTS,
     TEXT,
+    When,
     expect_bibliography,
 )
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 
 
-def test_list_all_texts(text_repository) -> None:
+def test_list_all_texts(text_repository: MongoTextRepository) -> None:
     text_repository.create(TEXT)
     assert text_repository.list_all_texts() == [
         {"index": TEXT.index, "category": TEXT.category, "genre": TEXT.genre.value}
     ]
 
 
-def test_list_all_chapters(text_repository) -> None:
+def test_list_all_chapters(text_repository: MongoTextRepository) -> None:
     text_repository.create_chapter(CHAPTER)
     assert text_repository.list_all_chapters() == [
         {
@@ -33,19 +37,31 @@ def test_list_all_chapters(text_repository) -> None:
     ]
 
 
-def test_find_text(corpus, text_repository, bibliography, when) -> None:
+def test_find_text(
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
+) -> None:
     when(text_repository).find(TEXT.id).thenReturn(TEXT)
 
     assert corpus.find(TEXT.id) == TEXT
 
 
-def test_listing_texts(corpus, text_repository, when) -> None:
+def test_listing_texts(
+    corpus: Corpus, text_repository: MongoTextRepository, when: When
+) -> None:
     when(text_repository).list().thenReturn([TEXT])
 
     assert corpus.list() == [TEXT]
 
 
-def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
+def test_find_chapter(
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
+) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
@@ -55,7 +71,10 @@ def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
 
 
 def test_find_chapter_for_display(
-    corpus, text_repository, parallel_line_injector, when
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    parallel_line_injector: ParallelLineInjector,
+    when: When,
 ) -> None:
     chapter_display = ChapterDisplay.of_chapter(TEXT, CHAPTER)
     injected_chapter_display = attr.evolve(
@@ -83,7 +102,9 @@ def test_find_chapter_for_display(
     assert corpus.find_chapter_for_display(CHAPTER.id_) == injected_chapter_display
 
 
-def test_search_lemma(corpus: Corpus, text_repository, when) -> None:
+def test_search_lemma(
+    corpus: Corpus, text_repository: MongoTextRepository, when: When
+) -> None:
     lemma = "testlemma I"
     dictionary_line = DictionaryLine(
         TEXT.id,
@@ -98,7 +119,12 @@ def test_search_lemma(corpus: Corpus, text_repository, when) -> None:
     assert corpus.search_lemma(lemma, None) == (dictionary_line,)
 
 
-def test_find_line(corpus, text_repository, bibliography, when) -> None:
+def test_find_line(
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
+) -> None:
     number = 0
     when(text_repository).find_line(CHAPTER.id_, number).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS.lines[number]
@@ -115,7 +141,10 @@ def test_find_line(corpus, text_repository, bibliography, when) -> None:
 
 
 def test_find_line_with_manuscript_joins(
-    corpus, text_repository, bibliography, when
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     expect_bibliography(bibliography, when)
     when(text_repository).query_manuscripts_with_joins_by_chapter(
@@ -131,7 +160,12 @@ def test_find_line_with_manuscript_joins(
     )
 
 
-def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
+def test_find_manuscripts(
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
+) -> None:
     expect_bibliography(bibliography, when)
     when(text_repository).query_manuscripts_by_chapter(CHAPTER.id_).thenReturn(
         CHAPTER.manuscripts
@@ -141,7 +175,10 @@ def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
 
 
 def test_find_manuscripts_with_joins(
-    corpus, text_repository, bibliography, when
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     expect_bibliography(bibliography, when)
     when(text_repository).query_manuscripts_with_joins_by_chapter(
@@ -152,7 +189,10 @@ def test_find_manuscripts_with_joins(
 
 
 def test_find_chapter_raises_exception_if_references_not_found(
-    corpus, text_repository, bibliography, when
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS

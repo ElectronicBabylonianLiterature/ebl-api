@@ -1,3 +1,5 @@
+from typing import Any, Callable
+
 import pytest
 
 from ebl.dictionary.application.dictionary_service import Dictionary
@@ -46,7 +48,10 @@ def test_query_lemmas_of_no_words(
 
 
 def test_find_lemmas_of_many_looks_every_word_up_once(
-    dictionary: Dictionary, word: dict, lemma_repository: MongoLemmaRepository, when
+    dictionary: Dictionary,
+    word: dict,
+    lemma_repository: MongoLemmaRepository,
+    when: Callable[[object], Any],
 ) -> None:
     suggestion_finder = SuggestionFinder(dictionary, lemma_repository)
     other_word = {**word, "_id": "other I"}

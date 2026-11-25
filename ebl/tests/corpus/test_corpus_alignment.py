@@ -1,13 +1,17 @@
-from typing import cast
+from typing import Optional, cast
 
 import attr
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.corpus_test_support import (
     CHAPTER,
     CHAPTER_WITHOUT_DOCUMENTS,
     UpdateDependencies,
+    When,
     expect_bibliography,
     expect_find_and_update_chapter,
 )
@@ -32,7 +36,7 @@ from ebl.transliteration.domain.word_tokens import AbstractWord, Word
     ],
 )
 def test_updating_alignment(
-    variant, corpus, update_dependencies: UpdateDependencies
+    variant: Optional[Word], corpus: Corpus, update_dependencies: UpdateDependencies
 ) -> None:
     alignment = 1
     omitted_words = (6,)
@@ -158,7 +162,11 @@ def test_updating_alignment(
     ],
 )
 def test_invalid_alignment(
-    alignment, corpus, text_repository, bibliography, when
+    alignment: Alignment,
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS

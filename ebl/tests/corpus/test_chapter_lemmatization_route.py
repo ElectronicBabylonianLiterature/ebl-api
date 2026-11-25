@@ -1,18 +1,25 @@
 import json
+from typing import Sequence
 
 import falcon
 import pytest
+from falcon import testing
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
+from ebl.tests.corpus.lemmatized_chapter_support import lemmatize_first_line
 from ebl.tests.corpus.support import (
     allow_references,
     allow_signs,
     create_chapter_dto,
     create_chapter_url,
+    simulate_get,
+    simulate_post,
 )
-from ebl.tests.corpus.lemmatized_chapter_support import lemmatize_first_line
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
-
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.sign import Sign
 
 DTO = {
     "lemmatization": [
@@ -35,8 +42,12 @@ DTO = {
 
 
 def test_updating_lemmatization_invalidates_chapter_display_cache(
-    cached_client, bibliography, sign_repository, signs, text_repository
-):
+    cached_client: testing.TestClient,
+    bibliography: Bibliography,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+    text_repository: MongoTextRepository,
+) -> None:
     allow_signs(signs, sign_repository)
     chapter: Chapter = ChapterFactory.build()
     text = TextFactory.build(
@@ -47,32 +58,36 @@ def test_updating_lemmatization_invalidates_chapter_display_cache(
     text_repository.create(text)
     allow_references(chapter, bibliography)
     text_repository.create_chapter(chapter)
-    first_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
+    first_result = simulate_get(cached_client, create_chapter_url(chapter, "/display"))
     assert first_result.status == falcon.HTTP_OK
     updated_chapter = lemmatize_first_line(chapter)
 
     expected = create_chapter_dto(updated_chapter)
 
-    post_result = cached_client.simulate_post(
-        create_chapter_url(chapter, "/lemmatization"), body=json.dumps(DTO)
+    post_result = simulate_post(
+        cached_client, create_chapter_url(chapter, "/lemmatization"), json.dumps(DTO)
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected
 
-    get_result = cached_client.simulate_get(create_chapter_url(chapter))
+    get_result = simulate_get(cached_client, create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == expected
 
-    second_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
+    second_result = simulate_get(cached_client, create_chapter_url(chapter, "/display"))
     assert second_result.status == falcon.HTTP_OK
     assert first_result.json != second_result.json
 
 
 def test_updating_invalid_stage(
-    client, bibliography, sign_repository, signs, text_repository
-):
+    client: testing.TestClient,
+    bibliography: Bibliography,
+    sign_repository: SignRepository,
+    signs: Sequence[Sign],
+    text_repository: MongoTextRepository,
+) -> None:
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
     allow_references(chapter, bibliography)
@@ -95,7 +110,9 @@ def test_updating_invalid_stage(
         ({}, falcon.HTTP_BAD_REQUEST),
     ],
 )
-def test_updating_invalid_lemmatization(dto, expected_status, client, stored_chapter):
+def test_updating_invalid_lemmatization(
+    dto: dict, expected_status: str, client: testing.TestClient, stored_chapter: Chapter
+) -> None:
     post_result = client.simulate_post(
         create_chapter_url(stored_chapter, "/lemmatization"), body=json.dumps(dto)
     )

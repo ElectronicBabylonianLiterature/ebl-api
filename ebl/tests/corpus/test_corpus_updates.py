@@ -1,5 +1,6 @@
 import attr
 
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.lemmatization import (
     ChapterLemmatization,
     LineVariantLemmatization,
@@ -16,7 +17,9 @@ from ebl.tests.corpus.corpus_test_support import (
 from ebl.tests.corpus.lemmatized_chapter_support import lemmatize_first_line
 
 
-def test_update_chapter(corpus, update_dependencies: UpdateDependencies) -> None:
+def test_update_chapter(
+    corpus: Corpus, update_dependencies: UpdateDependencies
+) -> None:
     updated_chapter = attr.evolve(CHAPTER, version="New Version")
     expect_chapter_update(
         update_dependencies, CHAPTER_WITHOUT_DOCUMENTS, updated_chapter
@@ -31,7 +34,7 @@ def test_update_chapter(corpus, update_dependencies: UpdateDependencies) -> None
 
 
 def test_updating_manuscript_lemmatization(
-    corpus, update_dependencies: UpdateDependencies
+    corpus: Corpus, update_dependencies: UpdateDependencies
 ) -> None:
     updated_chapter = lemmatize_first_line(CHAPTER)
     expect_find_and_update_chapter(

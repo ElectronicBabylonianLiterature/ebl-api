@@ -53,6 +53,12 @@ def simulate_get(client: testing.TestClient, url: str) -> testing.Result:
     return result
 
 
+def simulate_post(client: testing.TestClient, url: str, body: str) -> testing.Result:
+    result = client.simulate_post(url, body=body)
+    assert isinstance(result, testing.Result)
+    return result
+
+
 def create_chapter_url(chapter: Chapter, suffix: str = "") -> str:
     return (
         f"/texts/{chapter.text_id.genre.value}"

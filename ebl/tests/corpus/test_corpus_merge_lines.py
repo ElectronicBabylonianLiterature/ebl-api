@@ -1,16 +1,20 @@
 import attr
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError
 from ebl.tests.corpus.corpus_test_support import (
     CHAPTER,
     CHAPTER_WITHOUT_DOCUMENTS,
     UpdateDependencies,
+    When,
     expect_bibliography,
     expect_find_and_update_chapter,
 )
@@ -24,7 +28,7 @@ from ebl.transliteration.domain.tokens import LanguageShift, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 
 
-def test_merging_lines(corpus, update_dependencies: UpdateDependencies) -> None:
+def test_merging_lines(corpus: Corpus, update_dependencies: UpdateDependencies) -> None:
     reconstruction = (
         LanguageShift.normalized_akkadian(),
         AkkadianWord.of((ValueToken.of("buāru"),)),
@@ -112,7 +116,10 @@ def test_merging_lines(corpus, update_dependencies: UpdateDependencies) -> None:
 
 
 def test_update_lines_raises_exception_if_invalid_signs(
-    corpus, text_repository, bibliography, when
+    corpus: Corpus,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     lines = LinesUpdate([], set(), dict(enumerate(CHAPTER.lines)))
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(

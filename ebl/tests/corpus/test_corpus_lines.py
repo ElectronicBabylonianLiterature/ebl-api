@@ -2,6 +2,7 @@ from typing import cast
 
 import attr
 
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.tests.corpus.corpus_test_support import (
     CHAPTER,
@@ -18,7 +19,9 @@ from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 
 
-def test_updating_lines_edit(corpus, update_dependencies: UpdateDependencies) -> None:
+def test_updating_lines_edit(
+    corpus: Corpus, update_dependencies: UpdateDependencies
+) -> None:
     omitted_words = tuple(
         index
         for manuscript in CHAPTER.lines[0].variants[0].manuscripts
@@ -88,7 +91,9 @@ def test_updating_lines_edit(corpus, update_dependencies: UpdateDependencies) ->
     )
 
 
-def test_updating_lines_delete(corpus, update_dependencies: UpdateDependencies) -> None:
+def test_updating_lines_delete(
+    corpus: Corpus, update_dependencies: UpdateDependencies
+) -> None:
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=CHAPTER.lines[1:],
@@ -107,7 +112,9 @@ def test_updating_lines_delete(corpus, update_dependencies: UpdateDependencies) 
     )
 
 
-def test_updating_lines_add(corpus, update_dependencies: UpdateDependencies) -> None:
+def test_updating_lines_add(
+    corpus: Corpus, update_dependencies: UpdateDependencies
+) -> None:
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(

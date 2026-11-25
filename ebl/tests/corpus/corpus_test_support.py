@@ -1,14 +1,22 @@
 from dataclasses import dataclass
 from itertools import chain
-from typing import Any, cast
+from typing import Any, Callable, Sequence, cast
 
 import attr
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
+from ebl.changelog import Changelog
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.errors import NotFoundError
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
+from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.sign import Sign
+from ebl.users.domain.user import User
+
+When = Callable[[object], Any]
 
 CHAPTERS_COLLECTION = "chapters"
 TEXT = TextFactory.build()
@@ -30,13 +38,13 @@ CHAPTER_WITHOUT_DOCUMENTS = attr.evolve(
 
 @dataclass(frozen=True)
 class UpdateDependencies:
-    text_repository: Any
-    bibliography: Any
-    changelog: Any
-    signs: Any
-    sign_repository: Any
-    user: Any
-    when: Any
+    text_repository: MongoTextRepository
+    bibliography: Bibliography
+    changelog: Changelog
+    signs: Sequence[Sign]
+    sign_repository: SignRepository
+    user: User
+    when: When
 
     @classmethod
     def of(cls, request: pytest.FixtureRequest) -> "UpdateDependencies":
@@ -51,7 +59,7 @@ class UpdateDependencies:
         )
 
 
-def expect_bibliography(bibliography, when) -> None:
+def expect_bibliography(bibliography: Bibliography, when: When) -> None:
     for manuscript in CHAPTER.manuscripts:
         for reference in chain(
             manuscript.references,
@@ -60,11 +68,11 @@ def expect_bibliography(bibliography, when) -> None:
             when(bibliography).find(reference.id).thenReturn(reference.document)
 
 
-def expect_invalid_references(bibliography, when) -> None:
+def expect_invalid_references(bibliography: Bibliography, when: When) -> None:
     when(bibliography).find(...).thenRaise(NotFoundError())
 
 
-def expect_signs(signs, sign_repository) -> None:
+def expect_signs(signs: Sequence[Sign], sign_repository: SignRepository) -> None:
     for sign in signs:
         sign_repository.create(sign)
 

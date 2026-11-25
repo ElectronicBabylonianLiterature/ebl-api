@@ -1,39 +1,42 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Sequence
 
 import attr
 import pytest
 
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
 from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.manuscripts_update import ManuscriptsUpdate
 from ebl.corpus.domain.parser import parse_chapter
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.errors import DataError
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.tests.corpus.corpus_test_support import (
+    CHAPTER,
+    CHAPTER_WITHOUT_DOCUMENTS,
+    UpdateDependencies,
+    When,
+    expect_bibliography,
+    expect_find_and_update_chapter,
+    expect_invalid_references,
+)
 from ebl.tests.corpus.support import ANY_USER
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 
 
-from ebl.tests.corpus.corpus_test_support import (
-    CHAPTER,
-    CHAPTER_WITHOUT_DOCUMENTS,
-    UpdateDependencies,
-    expect_bibliography,
-    expect_find_and_update_chapter,
-    expect_invalid_references,
-)
-
-
 @dataclass(frozen=True)
 class WriterDependencies:
     writer: ChapterEditWriter
     update: UpdateDependencies
-    provenance_service: Any
+    provenance_service: ProvenanceService
 
 
 @pytest.fixture
@@ -103,7 +106,11 @@ def test_updating_manuscripts(dependencies: WriterDependencies) -> None:
     ],
 )
 def test_invalid_manuscripts(
-    manuscripts, writer, text_repository, bibliography, when
+    manuscripts: Sequence[Manuscript],
+    writer: ChapterEditWriter,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
@@ -116,7 +123,10 @@ def test_invalid_manuscripts(
 
 
 def test_update_manuscripts_raises_exception_if_invalid_references(
-    writer, text_repository, bibliography, when
+    writer: ChapterEditWriter,
+    text_repository: MongoTextRepository,
+    bibliography: Bibliography,
+    when: When,
 ) -> None:
     manuscripts = CHAPTER.manuscripts
     expect_invalid_references(bibliography, when)
