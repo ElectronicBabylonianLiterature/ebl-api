@@ -72,7 +72,8 @@ class CollectionReport:
             )
         if self.not_found:
             logger.error(
-                "%s: %d updates matched no document (deleted during the run?)",
+                "%s: %d updates matched no document "
+                "(edited or deleted during the run; re-run to migrate them)",
                 self.collection,
                 self.not_found,
             )

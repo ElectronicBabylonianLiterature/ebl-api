@@ -91,9 +91,10 @@ def test_an_update_that_matches_no_document_is_logged(
     with caplog.at_level(logging.ERROR):
         report.log(apply=True)
 
-    assert "chapters: 2 updates matched no document (deleted during the run?)" in (
-        caplog.messages
-    )
+    assert (
+        "chapters: 2 updates matched no document "
+        "(edited or deleted during the run; re-run to migrate them)"
+    ) in caplog.messages
 
 
 def test_a_clean_report_has_no_problems() -> None:

@@ -46,7 +46,8 @@ def read_pipeline(token_fields: TokenFields) -> List[Dict[str, Any]]:
     size = {STORED_SIZE: {"$bsonSize": "$$ROOT"}}
     if token_fields.whole_document:
         return [{"$addFields": size}]
-    return [{"$project": {**dict.fromkeys(token_fields.fields, 1), **size}}]
+    projected = [*token_fields.fields, *token_fields.guard_fields]
+    return [{"$project": {**dict.fromkeys(projected, 1), **size}}]
 
 
 def encoded_size(fields: Mapping[str, Any]) -> int:
@@ -83,6 +84,12 @@ def checked_rewrite(
     return None
 
 
+def write_guard(
+    token_fields: TokenFields, document: Mapping[str, Any]
+) -> Dict[str, Any]:
+    return {key: document.get(key) for key in token_fields.guard_fields}
+
+
 def record_change(
     document: Mapping[str, Any], fields: Mapping[str, Any], report: CollectionReport
 ) -> int:
@@ -111,7 +118,12 @@ def migrate_collection(
                 continue
             size = record_change(document, rewrite.fields, report)
             if apply:
-                writer.add(document["_id"], rewrite.fields, size)
+                writer.add(
+                    document["_id"],
+                    rewrite.fields,
+                    size,
+                    write_guard(token_fields, document),
+                )
     except PyMongoError as error:
         report.interrupted = f"{type(error).__name__}: {error}"[:500]
     writer.flush()

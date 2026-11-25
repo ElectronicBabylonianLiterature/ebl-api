@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Mapping, Optional
 
 from pymongo import UpdateOne
 from pymongo.collection import Collection
@@ -18,9 +18,16 @@ class BatchWriter:
         self._operations: List[UpdateOne] = []
         self._bytes = 0
 
-    def add(self, document_id: Any, fields: Dict[str, Any], size: int) -> None:
+    def add(
+        self,
+        document_id: Any,
+        fields: Dict[str, Any],
+        size: int,
+        guard: Optional[Mapping[str, Any]] = None,
+    ) -> None:
         self._document_ids.append(document_id)
-        self._operations.append(UpdateOne({"_id": document_id}, {"$set": fields}))
+        query = {**(guard or {}), "_id": document_id}
+        self._operations.append(UpdateOne(query, {"$set": fields}))
         self._bytes += size
         if len(self._operations) >= BATCH_OPERATIONS or self._bytes >= BATCH_BYTES:
             self.flush()

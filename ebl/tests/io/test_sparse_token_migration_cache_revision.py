@@ -1,7 +1,12 @@
+from typing import Any, Mapping, Optional
+
 import pytest
 from pymongo.database import Database
 
+from ebl.io.sparse_tokens import migrate as migrate_module
+from ebl.io.sparse_tokens.documents import Rewrite, TokenFields
 from ebl.io.sparse_tokens.migrate import migrate
+from ebl.io.sparse_tokens.report import CollectionReport
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.tests.fragmentarium.stored_line_shapes import sparse_tokens
 from ebl.tests.io.sparse_token_migration_fixtures import (
@@ -12,6 +17,8 @@ from ebl.tests.io.sparse_token_migration_fixtures import (
 )
 
 CACHE_REVISION = "6740a1b2c3d4e5f6a7b8c9d0"
+EDITED_REVISION = "6740a1b2c3d4e5f6a7b8c9d1"
+EDITED_LINES = [{"number": "edited during the run"}]
 
 
 @pytest.fixture
@@ -57,3 +64,41 @@ def test_a_sparse_chapter_with_a_cache_revision_passes_the_full_check(
     assert (report.scanned, report.unchanged, report.changed) == (1, 1, 0)
     assert not report.has_problems
     assert stored_chapter(full_database) == before
+
+
+def edit_after_reading(monkeypatch: pytest.MonkeyPatch, database: Database) -> None:
+    checked_rewrite = migrate_module.checked_rewrite
+
+    def read_then_edit(
+        token_fields: TokenFields,
+        document: Mapping[str, Any],
+        report: CollectionReport,
+        full_check: bool,
+    ) -> Optional[Rewrite]:
+        rewrite = checked_rewrite(token_fields, document, report, full_check)
+        database.chapters.update_one(
+            {"_id": document["_id"]},
+            {"$set": {"lines": EDITED_LINES, "_cacheRevision": EDITED_REVISION}},
+        )
+        return rewrite
+
+    monkeypatch.setattr(migrate_module, "checked_rewrite", read_then_edit)
+
+
+@pytest.mark.parametrize("has_cache_revision", [False, True])
+def test_a_chapter_edited_during_the_run_is_not_overwritten(
+    full_database: Database,
+    monkeypatch: pytest.MonkeyPatch,
+    has_cache_revision: bool,
+) -> None:
+    if has_cache_revision:
+        set_cache_revision(full_database)
+    edit_after_reading(monkeypatch, full_database)
+
+    [report] = migrate(full_database, apply=True, collections=["chapters"])
+
+    assert (report.changed, report.written, report.not_found) == (1, 0, 1)
+    assert report.has_problems
+    chapter = stored_chapter(full_database)
+    assert chapter["_cacheRevision"] == EDITED_REVISION
+    assert chapter["lines"] == EDITED_LINES

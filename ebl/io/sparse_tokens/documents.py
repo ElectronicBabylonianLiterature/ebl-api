@@ -21,6 +21,7 @@ class TokenFields:
     dump: Callable[[object], Dict[str, Any]]
     whole_document: bool
     fields_may_be_missing: bool
+    guard_fields: Sequence[str] = ()
 
 
 class MissingFields(ValueError):
@@ -72,6 +73,7 @@ def chapter_token_fields(provenance_service: ProvenanceService) -> TokenFields:
         dump=dump_chapter_lines,
         whole_document=True,
         fields_may_be_missing=False,
+        guard_fields=("_cacheRevision",),
     )
 
 
