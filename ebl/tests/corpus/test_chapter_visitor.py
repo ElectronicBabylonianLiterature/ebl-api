@@ -1,5 +1,6 @@
 from ebl.corpus.domain.chapter import ChapterVisitor
-from ebl.tests.factories.corpus import ManuscriptFactory, ManuscriptLineFactory
+from ebl.tests.factories.corpus import ManuscriptFactory
+from ebl.tests.factories.corpus_lines import ManuscriptLineFactory
 
 
 def test_base_visitor_visiting_any_chapter_item_is_a_no_op() -> None:

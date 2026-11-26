@@ -1,4 +1,8 @@
-import factory
+from factory.base import Factory
+from factory.declarations import Sequence, SubFactory
+from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
+from ebl.tests.factories.factory_meta import FactoryMeta
 
 from ebl.tests.factories.ids import ChapterNameFactory, TextIdFactory
 from ebl.transliteration.domain.atf import Surface
@@ -14,45 +18,43 @@ from ebl.transliteration.domain.parallel_line import (
 )
 
 
-class LabelsFactory(factory.Factory):
-    class Meta:
+class LabelsFactory(Factory):
+    class Meta(FactoryMeta):
         model = Labels
 
     object = None
-    surface = factory.fuzzy.FuzzyChoice(
-        [None, SurfaceLabel.from_label(Surface.OBVERSE)]
-    )
+    surface = FuzzyChoice([None, SurfaceLabel.from_label(Surface.OBVERSE)])
     column = None
 
 
-class ParallelFragmentFactory(factory.Factory):
-    class Meta:
+class ParallelFragmentFactory(Factory):
+    class Meta(FactoryMeta):
         model = ParallelFragment
 
-    has_cf = factory.Faker("boolean")
-    museum_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    has_duplicates = factory.Faker("boolean")
-    labels = factory.SubFactory(LabelsFactory)
+    has_cf = Faker("boolean")
+    museum_number = Sequence(lambda n: MuseumNumber("X", str(n)))
+    has_duplicates = Faker("boolean")
+    labels = SubFactory(LabelsFactory)
     line_number = LineNumber(1)
     exists = None
 
 
-class ParallelTextFactory(factory.Factory):
-    class Meta:
+class ParallelTextFactory(Factory):
+    class Meta(FactoryMeta):
         model = ParallelText
 
-    has_cf = factory.Faker("boolean")
-    text = factory.SubFactory(TextIdFactory)
-    chapter = factory.SubFactory(ChapterNameFactory)
+    has_cf = Faker("boolean")
+    text = SubFactory(TextIdFactory)
+    chapter = SubFactory(ChapterNameFactory)
     line_number = LineNumber(1)
     exists = None
     implicit_chapter = None
 
 
-class ParallelCompositionFactory(factory.Factory):
-    class Meta:
+class ParallelCompositionFactory(Factory):
+    class Meta(FactoryMeta):
         model = ParallelComposition
 
-    has_cf = factory.Faker("boolean")
-    name = factory.Faker("sentence")
+    has_cf = Faker("boolean")
+    name = Faker("sentence")
     line_number = LineNumber(1)

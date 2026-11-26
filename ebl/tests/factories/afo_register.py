@@ -1,15 +1,17 @@
-import factory
+from factory.base import Factory
+from factory.declarations import LazyAttribute, Sequence
+from factory.faker import Faker
+from ebl.tests.factories.factory_meta import FactoryMeta
 from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecord,
     AfoRegisterRecordSuggestion,
 )
-from faker import Faker
-from typing import Sequence
+import faker
 from natsort import natsorted
 
 PUBLICATIONS = ["StOr", "Al.T.", "OECT", "VS", "STT", "CCT", "CM", "CST", "SAAB"]
 
-fake = Faker()
+fake = faker.Faker()
 
 
 def get_afo_number() -> str:
@@ -28,7 +30,7 @@ def get_text_number() -> str:
     return f"Nr. {fake.random_int(min=1, max=300)}"
 
 
-def get_text_numbers() -> Sequence[str]:
+def get_text_numbers() -> list[str]:
     return [get_text_number() for _ in range(0, fake.random_int(min=1, max=15))]
 
 
@@ -45,22 +47,22 @@ def get_discussed_by() -> str:
     )
 
 
-class AfoRegisterRecordFactory(factory.Factory):
-    class Meta:
+class AfoRegisterRecordFactory(Factory):
+    class Meta(FactoryMeta):
         model = AfoRegisterRecord
 
-    afo_number = factory.LazyAttribute(lambda obj: get_afo_number())
-    page = factory.LazyAttribute(lambda obj: get_page())
-    text = factory.LazyAttribute(lambda obj: get_text())
-    text_number = factory.Sequence(lambda n: f"Nr. {n}")
-    lines_discussed = factory.LazyAttribute(lambda obj: get_lines_discussed())
-    discussed_by = factory.LazyAttribute(lambda obj: get_discussed_by())
-    discussed_by_notes = factory.Faker("sentence")
+    afo_number = LazyAttribute(lambda obj: get_afo_number())
+    page = LazyAttribute(lambda obj: get_page())
+    text = LazyAttribute(lambda obj: get_text())
+    text_number = Sequence(lambda n: f"Nr. {n}")
+    lines_discussed = LazyAttribute(lambda obj: get_lines_discussed())
+    discussed_by = LazyAttribute(lambda obj: get_discussed_by())
+    discussed_by_notes = Faker("sentence")
 
 
-class AfoRegisterRecordSuggestionFactory(factory.Factory):
-    class Meta:
+class AfoRegisterRecordSuggestionFactory(Factory):
+    class Meta(FactoryMeta):
         model = AfoRegisterRecordSuggestion
 
-    text = factory.LazyAttribute(lambda obj: get_text())
-    text_numbers = factory.LazyAttribute(lambda obj: natsorted(get_text_numbers()))
+    text = LazyAttribute(lambda obj: get_text())
+    text_numbers = LazyAttribute(lambda obj: natsorted(get_text_numbers()))

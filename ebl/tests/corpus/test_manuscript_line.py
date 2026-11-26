@@ -4,7 +4,7 @@ import attr
 import pytest
 
 from ebl.corpus.domain.line import ManuscriptLine
-from ebl.tests.factories.corpus import ManuscriptLineFactory
+from ebl.tests.factories.corpus_lines import ManuscriptLineFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import DollarLine, StateDollarLine
 from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel

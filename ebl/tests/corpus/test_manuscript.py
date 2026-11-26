@@ -6,7 +6,7 @@ from ebl.common.domain.period import Period
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
-from ebl.tests.factories.corpus import ManuscriptLineFactory
+from ebl.tests.factories.corpus_lines import ManuscriptLineFactory
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber

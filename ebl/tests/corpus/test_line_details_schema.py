@@ -6,11 +6,10 @@ from ebl.corpus.web.display_schemas import (
     LineDetailsDisplaySchema,
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (
-    ChapterFactory,
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
+from ebl.tests.factories.corpus_lines import (
     LineFactory,
     LineVariantFactory,
-    ManuscriptFactory,
     ManuscriptLineFactory,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema

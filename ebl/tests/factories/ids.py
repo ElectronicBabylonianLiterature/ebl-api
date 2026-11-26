@@ -1,4 +1,8 @@
-import factory
+from factory.base import Factory
+from factory.declarations import Sequence
+from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
+from ebl.tests.factories.factory_meta import FactoryMeta
 from ebl.transliteration.domain.genre import Genre
 
 from ebl.transliteration.domain.parallel_line import ChapterName
@@ -6,19 +10,19 @@ from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 
 
-class TextIdFactory(factory.Factory):
-    class Meta:
+class TextIdFactory(Factory):
+    class Meta(FactoryMeta):
         model = TextId
 
-    genre = factory.fuzzy.FuzzyChoice(Genre)
-    category = factory.Sequence(lambda n: n)
-    index = factory.Sequence(lambda n: n)
+    genre = FuzzyChoice(Genre)
+    category = Sequence(lambda n: n % 5000)
+    index = Sequence(lambda n: n)
 
 
-class ChapterNameFactory(factory.Factory):
-    class Meta:
+class ChapterNameFactory(Factory):
+    class Meta(FactoryMeta):
         model = ChapterName
 
-    stage = factory.fuzzy.FuzzyChoice(Stage)
-    version = factory.Faker("sentence")
-    name = factory.Faker("sentence")
+    stage = FuzzyChoice(Stage)
+    version = Faker("sentence")
+    name = Faker("sentence")

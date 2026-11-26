@@ -1,32 +1,37 @@
-import factory
+from typing import Tuple
+
+from factory.base import Factory
+from factory.declarations import Sequence, SubFactory
+from factory.faker import Faker
+from ebl.tests.factories.factory_meta import FactoryMeta
 
 from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 
 
-class GeoCoordinateFactory(factory.Factory):
-    class Meta:
+class GeoCoordinateFactory(Factory):
+    class Meta(FactoryMeta):
         model = GeoCoordinate
 
-    latitude = factory.Faker("latitude")
-    longitude = factory.Faker("longitude")
-    uncertainty_radius_km = factory.Faker("pyfloat", min_value=0, max_value=10)
-    notes = factory.Faker("sentence")
+    latitude = Faker("latitude")
+    longitude = Faker("longitude")
+    uncertainty_radius_km = Faker("pyfloat", min_value=0, max_value=10)
+    notes = Faker("sentence")
 
 
-class ProvenanceRecordFactory(factory.Factory):
-    class Meta:
+class ProvenanceRecordFactory(Factory):
+    class Meta(FactoryMeta):
         model = ProvenanceRecord
 
-    id = factory.Sequence(lambda n: f"PROV_{n}")
-    long_name = factory.Faker("city")
-    abbreviation = factory.Faker("lexify", text="???")
+    id = Sequence(lambda n: f"PROV_{n}")
+    long_name = Faker("city")
+    abbreviation = Faker("lexify", text="???")
     parent = None
-    cigs_key = factory.Faker("lexify", text="???")
-    sort_key = factory.Faker("random_int", min=0, max=100)
-    coordinates = factory.SubFactory(GeoCoordinateFactory)
+    cigs_key = Faker("lexify", text="???")
+    sort_key = Faker("random_int", min=0, max=100)
+    coordinates = SubFactory(GeoCoordinateFactory)
 
 
-def build_provenance_records():
+def build_provenance_records() -> Tuple[ProvenanceRecord, ...]:
     return (
         ProvenanceRecord(
             id="STANDARD_TEXT", long_name="Standard Text", abbreviation="Std"

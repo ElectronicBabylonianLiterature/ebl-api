@@ -1,8 +1,7 @@
+from typing import Optional, cast
+
 import attr
-from ebl.bibliography.application.reference_schema import (
-    ApiReferenceSchema,
-    ReferenceSchema,
-)
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.application.schemas import ChapterSchema, OldSiglumSchema
 from ebl.corpus.application.record_schemas import (
@@ -13,15 +12,13 @@ from ebl.corpus.application.record_schemas import (
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.record import Author, AuthorRole, Translator
-from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import (
-    ChapterFactory,
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
+from ebl.tests.factories.corpus_lines import (
     LineFactory,
     LineVariantFactory,
-    ManuscriptFactory,
     ManuscriptLineFactory,
 )
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -85,19 +82,16 @@ def strip_documents(chapter: Chapter) -> Chapter:
     )
 
 
-def get_museum_number(manuscript: Manuscript, include_documents: bool):
-    if include_documents:
-        return str(manuscript.museum_number) if manuscript.museum_number else ""
-
-    return manuscript.museum_number and MuseumNumberSchema().dump(
-        manuscript.museum_number
+def get_museum_number(manuscript: Manuscript) -> Optional[dict]:
+    museum_number = manuscript.museum_number
+    return (
+        None
+        if museum_number is None
+        else cast(dict, MuseumNumberSchema().dump(museum_number))
     )
 
 
-def to_dict(chapter: Chapter, include_documents=False):
-    OLD_SIGLUM_SCHEMA = ApiOldSiglumSchema if include_documents else OldSiglumSchema
-    REFERENCE_SCHEMA = ApiReferenceSchema if include_documents else ReferenceSchema
-
+def to_dict(chapter: Chapter) -> dict:
     return {
         "textId": {
             "genre": chapter.text_id.genre.value,
@@ -116,8 +110,8 @@ def to_dict(chapter: Chapter, include_documents=False):
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
-                "oldSigla": OLD_SIGLUM_SCHEMA().dump(manuscript.old_sigla, many=True),
-                "museumNumber": get_museum_number(manuscript, include_documents),
+                "oldSigla": OldSiglumSchema().dump(manuscript.old_sigla, many=True),
+                "museumNumber": get_museum_number(manuscript),
                 "accession": manuscript.accession,
                 "periodModifier": manuscript.period_modifier.value,
                 "period": manuscript.period.long_name,
@@ -126,7 +120,7 @@ def to_dict(chapter: Chapter, include_documents=False):
                 "notes": manuscript.notes,
                 "colophon": TextSchema().dump(manuscript.colophon),
                 "unplacedLines": TextSchema().dump(manuscript.unplaced_lines),
-                "references": REFERENCE_SCHEMA().dump(manuscript.references, many=True),
+                "references": ReferenceSchema().dump(manuscript.references, many=True),
             }
             for manuscript in chapter.manuscripts
         ],
