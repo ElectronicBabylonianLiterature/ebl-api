@@ -75,6 +75,12 @@ VORDERASIATISCHES_MUSEUM: MuseumEntry = (
     "DE",
     "https://www.smb.museum/en/museums-institutions/vorderasiatisches-museum/home/",
 )
+WORLD_MUSEUM_LIVERPOOL: MuseumEntry = (
+    "World Museum",
+    "Liverpool",
+    "GB",
+    "https://www.liverpoolmuseums.org.uk/world-museum",
+)
 YALE_PEABODY_COLLECTION: MuseumEntry = (
     "Yale Peabody Museum, Yale Babylonian Collection",
     "New Haven",

@@ -3,9 +3,8 @@ from typing import cast
 import pytest
 
 from ebl.tests.fragmentarium.stored_line_shapes import (
-    STORAGE_DEFAULTS,
     legacy_shape,
-    sparse_shape,
+    sparse_tokens,
 )
 from ebl.tests.transliteration.storage_test_helpers import has_key, stored_dump
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
@@ -49,13 +48,20 @@ def stored_token_dump(token) -> dict:
 
 
 @pytest.mark.parametrize("atf", ATFS)
-def test_storage_dump_omits_default_erasure_and_empty_name_breaks(atf):
+def test_storage_dump_omits_default_token_fields(atf: str) -> None:
     line = line_of(atf)
     stored_line = storage_dump(line)
 
-    assert stored_line == sparse_shape(api_dump(line), STORAGE_DEFAULTS)
+    assert stored_line == sparse_tokens(api_dump(line))
     assert not has_key(stored_line, "erasure")
-    assert has_key(stored_line, "enclosureType")
+    assert not has_key(stored_line, "lemmatizable")
+
+
+def test_storage_dump_keeps_enclosure_types_that_are_not_empty() -> None:
+    stored_line = storage_dump(line_of(ATFS[0]))
+    reading = stored_line["content"][0]["parts"][1]
+
+    assert reading["enclosureType"] == ["BROKEN_AWAY"]
 
 
 def test_storage_dump_keeps_real_name_breaks():
