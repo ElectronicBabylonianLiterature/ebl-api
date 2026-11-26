@@ -41,6 +41,11 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended imp
     MongoFragmentRepositoryGetExtended,
 )
 
+FRAGMENT_QUERY_COLLATION = Collation(
+    locale="en", numericOrdering=True, alternate="shifted"
+)
+
+
 RETRIEVE_ALL_LIMIT = 1000
 
 
@@ -131,9 +136,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryGetSummary):
                 PatternMatcher(
                     query, self._provenance_service, user_scopes
                 ).build_pipeline(),
-                collation=Collation(
-                    locale="en", numericOrdering=True, alternate="shifted"
-                ),
+                collation=FRAGMENT_QUERY_COLLATION,
                 allowDiskUse=True,
             )
             if set(query) - {"lemmaOperator"}
@@ -149,9 +152,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryGetSummary):
         return load_query_result(
             self._fragments.aggregate(
                 aggregate_latest(),
-                collation=Collation(
-                    locale="en", numericOrdering=True, alternate="shifted"
-                ),
+                collation=FRAGMENT_QUERY_COLLATION,
             )
         )
 

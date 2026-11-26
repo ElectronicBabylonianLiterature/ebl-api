@@ -6,6 +6,7 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_create import (
     MongoFragmentRepositoryCreate,
 )
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get import (
+    FRAGMENT_QUERY_COLLATION,
     MongoFragmentRepositoryGet,
 )
 from ebl.fragmentarium.infrastructure.queries import (
@@ -15,6 +16,8 @@ from ebl.fragmentarium.infrastructure.queries import (
 from ebl.transliteration.application.storage_serialization import (
     storage_serialization,
 )
+
+FRAGMENT_LEMMA_COLLATED_INDEX_NAME = "fragment_unique_lemma_en_numeric_shifted"
 
 
 class MongoFragmentRepository(
@@ -62,6 +65,13 @@ class MongoFragmentRepository(
             ]
         )
         self._fragments.create_index([("_sortKey", pymongo.ASCENDING)])
+
+    def create_collated_lemma_index(self) -> str:
+        return self._fragments.create_index(
+            [("text.lines.content.uniqueLemma", pymongo.ASCENDING)],
+            name=FRAGMENT_LEMMA_COLLATED_INDEX_NAME,
+            collation=FRAGMENT_QUERY_COLLATION,
+        )
 
     def _create_join_indexes(self) -> None:
         self._joins.create_index(

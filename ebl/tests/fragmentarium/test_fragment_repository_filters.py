@@ -175,10 +175,15 @@ def test_query_lemmas(
     fragment_repository.create(fragment, sort_key=0)
     fragment_repository.create(fragment_with_phrase, sort_key=1)
 
-    assert (
-        fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
-        == expected
-    )
+    query = {"lemmaOperator": query_type, "lemmas": lemmas}
+    page_query = {**query, "limit": 1, "count": "exact"}
+    before = fragment_repository.query(query)
+    page_before = fragment_repository.query(page_query)
+
+    assert before == expected
+    fragment_repository.create_collated_lemma_index()
+    assert fragment_repository.query(query) == before
+    assert fragment_repository.query(page_query) == page_before
 
 
 def test_fetch_scopes(fragment_repository: FragmentRepository):
