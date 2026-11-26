@@ -67,11 +67,6 @@ class MongoFragmentRepository(
         self._fragments.create_index([("_sortKey", pymongo.ASCENDING)])
 
     def create_collated_lemma_index(self) -> str:
-        """Explicitly build the query-collated lemma index during a planned rollout.
-
-        Do not call this from create_indexes(): that runs on API startup, and
-        building a large index during an ordinary deployment is unsafe.
-        """
         return self._fragments.create_index(
             [("text.lines.content.uniqueLemma", pymongo.ASCENDING)],
             name=FRAGMENT_LEMMA_COLLATED_INDEX_NAME,

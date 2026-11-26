@@ -1,6 +1,7 @@
 from typing import Any, List
 
 import pytest
+from bson.codec_options import CodecOptions
 from pymongo.database import Database
 
 from ebl.common.query.query_result import LemmaQueryType
@@ -70,6 +71,23 @@ def _is_point_interval(interval: str) -> bool:
     return len(bounds) == 2 and bounds[0] == bounds[1]
 
 
+def _winning_plan(plan: dict) -> dict:
+    if "queryPlanner" in plan:
+        return plan["queryPlanner"]["winningPlan"]
+    return plan["stages"][0]["$cursor"]["queryPlanner"]["winningPlan"]
+
+
+def _has_collection_scan(value: Any) -> bool:
+    if isinstance(value, dict):
+        return value.get("stage") == "COLLSCAN" or any(
+            _has_collection_scan(item) for item in value.values()
+        )
+    if isinstance(value, list):
+        return any(_has_collection_scan(item) for item in value)
+    return False
+
+
+@pytest.mark.parametrize("use_hint", [True, False], ids=["hinted", "unhinted"])
 @pytest.mark.parametrize(
     "operator",
     [
@@ -83,12 +101,23 @@ def test_collated_lemma_index_bounds_the_search_lemma_predicate(
     database: Database,
     fragment_repository: MongoFragmentRepository,
     operator: LemmaQueryType,
+    use_hint: bool,
 ) -> None:
     lemmas = ["ana I", "kīdu I"]
     fragment_repository.create(
         LemmatizedFragmentFactory.build(number=MuseumNumber.of("K.1")), sort_key=0
     )
-    fragment_repository.create_collated_lemma_index()
+    fragment_repository.create_indexes()
+    database[COLLECTION].insert_many(
+        [
+            {
+                "museumNumber": {"prefix": "K", "number": str(index), "suffix": ""},
+                "text": {"lines": [{"content": [{"uniqueLemma": ["unrelated I"]}]}]},
+                "_sortKey": index,
+            }
+            for index in range(2, 302)
+        ]
+    )
     pipeline = PatternMatcher(
         {
             "lemmas": lemmas,
@@ -99,19 +128,30 @@ def test_collated_lemma_index_bounds_the_search_lemma_predicate(
         fragment_repository._provenance_service,
     ).build_pipeline()
 
+    command = {
+        "aggregate": COLLECTION,
+        "pipeline": pipeline,
+        "cursor": {},
+        "collation": FRAGMENT_QUERY_COLLATION.document,
+    }
+    codec_options: CodecOptions[dict[str, Any]] = CodecOptions(
+        unicode_decode_error_handler="replace"
+    )
+    if not use_hint:
+        before = database.command(
+            "explain", command, verbosity="queryPlanner", codec_options=codec_options
+        )
+        assert _has_collection_scan(_winning_plan(before))
+    fragment_repository.create_collated_lemma_index()
+    if use_hint:
+        command["hint"] = FRAGMENT_LEMMA_COLLATED_INDEX_NAME
     plan = database.command(
-        "explain",
-        {
-            "aggregate": COLLECTION,
-            "pipeline": pipeline,
-            "cursor": {},
-            "collation": FRAGMENT_QUERY_COLLATION.document,
-            "hint": FRAGMENT_LEMMA_COLLATED_INDEX_NAME,
-        },
-        verbosity="queryPlanner",
+        "explain", command, verbosity="queryPlanner", codec_options=codec_options
     )
 
-    index_scans = _find_collated_lemma_index_scans(plan)
+    winning_plan = _winning_plan(plan)
+    assert not _has_collection_scan(winning_plan)
+    index_scans = _find_collated_lemma_index_scans(winning_plan)
     assert index_scans
     for index_scan in index_scans:
         intervals = index_scan["indexBounds"][LEMMA_FIELD]

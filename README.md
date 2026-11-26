@@ -950,3 +950,39 @@ photo access. `thumbnailPath` retains its legacy meaning; clients use the new
 `mediaSummary.primary.thumbnail` through an authenticated loader when available.
 Clients retain the legacy photo choice when `hasPhoto` is true, including
 when the media list already contains copies or other imported files.
+
+## Fragment lemma search index rollout
+
+Lemma queries use `{locale: "en", numericOrdering: true, alternate: "shifted"}`.
+The additive `fragment_unique_lemma_en_numeric_shifted` index matches that
+collation and retains the existing simple-collation index. It is built only by
+`MongoFragmentRepository.create_collated_lemma_index()`, outside API startup.
+
+Before an approved build, the database operator must verify the database, TLS
+connection, replica topology, collection collation and existing index definitions;
+stop if the index name already has an unexpected definition. Record unhinted
+`queryPlanner` plans for representative AND, OR, LINE and PHRASE pipelines, plus
+latency, resource usage and replication lag. Rehearse in staging and approve a
+window with sufficient CPU, disk and I/O capacity before running:
+
+```javascript
+db.getSiblingDB("<verified-app-database>").fragments.createIndex(
+  { "text.lines.content.uniqueLemma": 1 },
+  {
+    name: "fragment_unique_lemma_en_numeric_shifted",
+    collation: { locale: "en", numericOrdering: true, alternate: "shifted" }
+  }
+)
+```
+
+Afterwards, verify the exact key/collation and the retained simple index on the
+replicas. Repeat the real unhinted pipelines with `queryPlanner` (avoid production
+`executionStats`); compare results, order, permissions and paginated exact totals.
+Check rare/common lemmas and punctuation/whitespace variants. Monitor sustained
+p50/p95/p99 latency, 499/429/5xx rates, memory, I/O, replication lag and write cost.
+Synthetic plan tests do not establish production performance or guarantee every
+query chooses this index; common-lemma sort/count costs remain.
+
+If resource pressure requires recovery, coordinate the operator's MongoDB abort
+procedure. An API rollback must not automatically drop either index. Any later
+removal of the additional index requires a separate approved database operation.
