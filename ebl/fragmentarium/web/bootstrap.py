@@ -9,6 +9,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
 from ebl.fragmentarium.web.edition import EditionResource
 from ebl.fragmentarium.web.findspots import FindspotResource
+from ebl.fragmentarium.web.findspot_map_data import FindspotMapDataResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
@@ -48,6 +49,9 @@ from ebl.fragmentarium.web.archaeology import ArchaeologyResource
 from ebl.fragmentarium.web.fragments_afo_register import (
     AfoRegisterFragmentsQueryResource,
 )
+from ebl.fragmentarium.application.findspot_map_data_service import (
+    FindspotMapDataService,
+)
 from ebl.corpus.web.chapters import ChaptersByFragmentResource
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
@@ -55,7 +59,7 @@ from ebl.media.web.bootstrap import create_media_routes
 from ebl.media.web.fragment_media_enricher import FragmentMediaEnricher
 
 
-def create_fragmentarium_routes(api: falcon.App, context: Context):
+def create_fragmentarium_routes(api: falcon.App, context: Context) -> None:
     context.fragment_repository.create_indexes()
     context.annotations_repository.create_indexes()
 
@@ -151,6 +155,14 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     folios = FoliosResource(finder)
     chapters = ChaptersByFragmentResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)
+    findspot_map_data = FindspotMapDataResource(
+        FindspotMapDataService(
+            context.findspot_repository,
+            context.fragment_repository,
+            context.map_artifact_repository,
+        ),
+        provenance_service,
+    )
 
     all_fragments = FragmentsListResource(context.fragment_repository)
     all_signs = make_all_fragment_signs_resource(
@@ -198,6 +210,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/all-ocred-signs", all_ocred_signs),
         ("/fragments/colophon-names", colophon_names),
         ("/findspots", findspots),
+        ("/findspots/map-data", findspot_map_data),
         ("/fragments/{number}/scopes", scopes),
         ("/fragments/{number}/named-entities", named_entities),
     ]
