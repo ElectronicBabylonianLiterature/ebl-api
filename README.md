@@ -950,3 +950,13 @@ photo access. `thumbnailPath` retains its legacy meaning; clients use the new
 `mediaSummary.primary.thumbnail` through an authenticated loader when available.
 Clients retain the legacy photo choice when `hasPhoto` is true, including
 when the media list already contains copies or other imported files.
+
+## Findspot map locations
+
+Findspot responses from `GET /findspots` and the `archaeology.findspot` of
+`GET /fragments/{number}` may include a read-only `mapLocation` object. API
+clients must omit `findspot.mapLocation` when submitting archaeology updates
+with `POST /fragments/{number}/archaeology`; supplying it returns HTTP 422
+without writing an update. Curated map locations belong to the canonical
+findspot read model, and the archaeology update response returns that stored
+read model, including `mapLocation`.
