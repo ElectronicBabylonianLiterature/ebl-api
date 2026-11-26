@@ -4,11 +4,6 @@ from pymongo.collation import Collation
 from ebl.common.query.aggregation_matchers import match_all, text_id_pairs
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
-from ebl.corpus.application.schemas import (
-    ChapterSchema,
-    DictionaryLineSchema,
-    ManuscriptSchema,
-)
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.manuscript import Manuscript
@@ -23,6 +18,11 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_text_title,
 )
+from ebl.corpus.infrastructure.stored_manuscript_schemas import (
+    StoredChapterSchema,
+    StoredDictionaryLineSchema,
+    StoredManuscriptSchema,
+)
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.transliteration.domain.genre import Genre
@@ -36,8 +36,8 @@ from ebl.corpus.infrastructure.mongo_text_repository_query_fragment import (
 
 
 class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
-    def _manuscript_schema(self) -> ManuscriptSchema:
-        return ManuscriptSchema(
+    def _manuscript_schema(self) -> StoredManuscriptSchema:
+        return StoredManuscriptSchema(
             context={"provenance_service": self._provenance_service}
         )
 
@@ -75,7 +75,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
         )
         chapters = cast(
             Sequence[Chapter],
-            ChapterSchema(
+            StoredChapterSchema(
                 context={"provenance_service": self._provenance_service}
             ).load(filter_query_by_transliteration(query, cursor), many=True),
         )
@@ -141,7 +141,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
 
         return cast(
             Sequence[DictionaryLine],
-            DictionaryLineSchema(
+            StoredDictionaryLineSchema(
                 context={"provenance_service": self._provenance_service}
             ).load(self._limit_by_genre(lemma_lines), many=True),
         )

@@ -1,8 +1,8 @@
-from typing import List, Sequence, TypedDict, cast
+from typing import Any, Dict, List, Sequence, TypedDict, cast
 from ebl.corpus.application.schemas import (
-    ManuscriptAttestationSchema,
     UncertainFragmentAttestationSchema,
 )
+from ebl.corpus.application.text_repository import CorpusFragmentsMapping
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.corpus.domain.uncertain_fragment_attestation import (
     UncertainFragmentAttestation,
@@ -10,12 +10,14 @@ from ebl.corpus.domain.uncertain_fragment_attestation import (
 from ebl.corpus.infrastructure.queries import (
     join_text,
 )
+from ebl.corpus.infrastructure.stored_manuscript_schemas import (
+    StoredManuscriptAttestationSchema,
+)
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.corpus.infrastructure.mongo_text_repository_base import (
     MongoTextRepositoryBase,
 )
-from ebl.corpus.application.text_repository import CorpusFragmentsMapping
 
 
 class MuseumNumberMapping(TypedDict):
@@ -36,7 +38,9 @@ def get_museum_number_mappings(
                 "suffix": museum_number["suffix"],
             },
         )
-        for museum_number in MuseumNumberSchema().dump(museum_numbers, many=True)
+        for museum_number in cast(
+            List[Dict[str, Any]], MuseumNumberSchema().dump(museum_numbers, many=True)
+        )
     ]
 
 
@@ -79,9 +83,12 @@ class MongoTextRepositoryQueryFragment(MongoTextRepositoryBase):
                 {"$unwind": "$text"},
             ]
         )
-        return ManuscriptAttestationSchema(
-            context={"provenance_service": self._provenance_service}
-        ).load(cursor, many=True)
+        return cast(
+            List[ManuscriptAttestation],
+            StoredManuscriptAttestationSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(cursor, many=True),
+        )
 
     def query_corpus_by_uncertain_fragments(
         self, museum_numbers: List[MuseumNumber]
@@ -120,9 +127,12 @@ class MongoTextRepositoryQueryFragment(MongoTextRepositoryBase):
                 {"$unwind": "$text"},
             ]
         )
-        return UncertainFragmentAttestationSchema(
-            context={"provenance_service": self._provenance_service}
-        ).load(cursor, many=True)
+        return cast(
+            List[UncertainFragmentAttestation],
+            UncertainFragmentAttestationSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(cursor, many=True),
+        )
 
     def query_corpus_by_related_fragments(
         self, museum_numbers: List[MuseumNumber]

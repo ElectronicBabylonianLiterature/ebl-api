@@ -7,6 +7,7 @@ OWN_CONTENT_ARRAY_FIELDS: Sequence[str] = (
     "afoRegister",
     "references",
     "afoCrossReferences",
+    "eblRealia",
 )
 
 

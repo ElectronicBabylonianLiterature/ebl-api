@@ -1,9 +1,7 @@
 from typing import cast
 
 from ebl.bibliography.application.reference_documents import hydrate_reference_documents
-from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
-    ChapterSchema,
     LineSchema,
     TextSchema,
 )
@@ -16,13 +14,17 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_chapters,
 )
-from ebl.errors import NotFoundError
 from ebl.corpus.infrastructure.mongo_text_repository_base import (
     MongoTextRepositoryBase,
     text_not_found,
     chapter_not_found,
     line_not_found,
 )
+from ebl.corpus.infrastructure.stored_manuscript_schemas import (
+    StoredChapterSchema,
+    StoredChapterDisplaySchema,
+)
+from ebl.errors import NotFoundError
 
 
 class MongoTextRepositoryFind(MongoTextRepositoryBase):
@@ -62,7 +64,7 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
             )
             return cast(
                 Chapter,
-                ChapterSchema(
+                StoredChapterSchema(
                     context={"provenance_service": self._provenance_service}
                 ).load(chapter),
             )
@@ -75,7 +77,7 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
             return cast(
                 ChapterDisplay,
-                ChapterDisplaySchema(
+                StoredChapterDisplaySchema(
                     context={"provenance_service": self._provenance_service}
                 ).load(
                     {
