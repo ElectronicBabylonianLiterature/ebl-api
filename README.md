@@ -7,11 +7,26 @@
 
 ## Table of contents
 
+* [Documentation](#documentation)
 * [Setup](#setup)
 * [Development](#development)
 * [Running the application](#running-the-application)
 * [Updating data](#updating-data)
 * [Acknowledgements](#acknowledgements)
+
+## Documentation
+
+The [backend documentation](https://github.com/ElectronicBabylonianLiterature/generic-documentation/blob/master/backend-docs/README.md)
+contains the detailed reference material:
+
+* [Data model and storage](https://github.com/ElectronicBabylonianLiterature/generic-documentation/blob/master/backend-docs/02-data-model.md)
+  — collections, media ownership, indexes, and chapter cache state.
+* [API contract](https://github.com/ElectronicBabylonianLiterature/generic-documentation/blob/master/backend-docs/03-api-contract.md)
+  — endpoints, authorization, media reads, map locations, and findspot filters.
+* [Lifecycle and compatibility](https://github.com/ElectronicBabylonianLiterature/generic-documentation/blob/master/backend-docs/04-lifecycle-and-compatibility.md)
+  — coordinated backend/client rollouts and mixed-version requirements.
+* [Operations](https://github.com/ElectronicBabylonianLiterature/generic-documentation/blob/master/backend-docs/05-operations.md)
+  — cache recovery, media preparation/migration, and findspot index deployment.
 
 ## Setup
 
@@ -709,244 +724,9 @@ If lines are faulty, fix them manually and retry the import process. If
 tokes are not lemmatized correctly, check the log-file
 `lemmatization_log.txt`.
 
-## Chapter display cache deployment and recovery
-
-Before activation, API maintainers and the database operator must confirm the
-production read preference, inventory all API replicas and batch workers, and
-approve a deployment window that permits the quiescent procedure below.
-Chapter caching requires primary reads; other read preferences bypass caching
-and emit a warning when the cache-state repository is initialized.
-
-Chapter display caching uses revisions shared by every API worker and the
-`update_texts` batch worker. Pending writes bypass caches for a five-minute lease
-measured by the MongoDB server clock from the first outstanding writer.
-Overlapping writers do not extend that deadline, so abandoned leases expire
-automatically even when other edits continue.
-Every successful chapter update also replaces a private `_cacheRevision` token
-in the same atomic write as its content. Readers check that token with a bounded,
-indexed chapter lookup before reusing a cached display. This fence remains safe
-when a live writer takes longer than its lease, resumes after a pause, or cannot
-finish its cache-state cleanup. A cache built before that write cannot be reused
-after the new content token is visible. Legacy chapters need no migration.
-Writer completion is scoped to the epoch captured when that writer started,
-so a late completion cannot alter writer state recreated after metadata loss.
-
-Old workers do not participate in this protocol. Mixed old/new workers are
-unsafe during deployment or rollback; this is separate from normal operation,
-where expired writer leases recover automatically. Before first activation,
-after rollback, or after any overlap with old writers:
-
-1. Stop **all** old and new chapter readers, writers, and batch jobs, and wait
-   for every in-flight request and job to finish.
-2. With workers still stopped, run the cleanup against an explicitly selected
-   endpoint and database:
-
-   ```sh
-   poetry run python -m ebl.cache.clear_versioned_chapter_cache \
-     --uri-env CACHE_RECOVERY_URI --database DATABASE --confirm-quiescent
-   ```
-
-3. Start only workers implementing this protocol.
-
-The command deletes only private `chapter-display-v2:` payloads and normally
-preserves chapter revision/pending metadata. Add `--repair-pending` only while
-quiescent to clear abandoned counters, including pre-lease legacy state. Repair
-rotates the epoch and increments the revision. Never run recovery while any
-reader or writer remains active; a request could otherwise repopulate a cache
-after cleanup. The command is not part of ordinary request handling.
-
 ## Acknowledgements
 
 CSL-JSON schema is based on
 [citation-style-language/schema](https://github.com/citation-style-language/schema)
 Copyright (c) 2007-2018 Citation Style Language and contributors.
 Licensed under MIT License.
-
-## Media persistence and legacy storage
-
-### Scope and merge order
-
-This is the persistence foundation for the media API and migration branches.
-Merge this branch first. The API and migration branches both depend on these
-adapters and can then be merged independently. The frontend gallery depends on
-the API contract and must only be enabled after backend deployment and migration
-verification.
-
-Merging this code does not run a migration, create database indexes, or change
-existing photo routes. No production database was accessed during development.
-
-### Database prerequisites
-
-All metadata mutations require a MongoDB replica set or sharded cluster with
-transaction support. Reads do not require transactions. Call
-`MongoMediaRepository.assert_writable_topology()` for a read-only preflight.
-Unsupported standalone servers fail before any mutation.
-
-Metadata mutations acquire the same transaction lock in `mediaLocks`, then commit
-with snapshot reads, primary read preference, and majority write concern. This
-serializes imports, replacements, primary selection, and deletion. The initial
-migration should use bounded batches and measured throughput; it should not
-launch many competing metadata writers.
-
-Both concrete adapters use primary reads even when the supplied database has a
-secondary read preference. This prevents stale metadata or registry reads during
-retry, deletion, and immediate reads after an import.
-
-Primary selection is atomic. Explicit creation or replacement still preserves
-the supplied primary flags, as required by the existing contracts. A later
-explicit primary creation can introduce another primary; the migration should
-default to non-primary records until its selection policy is applied.
-
-### Explicit index preparation
-
-The migration command will call the following operations only in an explicitly
-authorized preparation/apply phase, never during a dry run or application import:
-
-```python
-repository = MongoMediaRepository(database)
-store = GridFsMediaRepresentationStore(database)
-repository.assert_writable_topology()
-repository.create_indexes()
-store.create_indexes()
-```
-
-The adapters use these collections and indexes:
-
-| Collection | Index or state | Purpose |
-| --- | --- | --- |
-| `media` | Unique `_id_` | Public media identity |
-| `media` | `media_import_source` on `sourceKey` | Import-source lookup |
-| `media` | `media_fragment_state` | Batch fragment reads and visible state |
-| `mediaSources` | Unique `_id_` (full source) | Import-source reservation |
-| `mediaSources` | `media_source_owner` | Reservation cleanup by media |
-| `mediaLocks` | Unique `_id_`, document `writes` | Transaction serialization |
-| `mediaFiles` | Unique `_id_` | Immutable logical representation handle |
-| `mediaFiles` | `media_file_recovery` | Find owned pending writes |
-| `media.files` | `filename_1_uploadDate_1` | Standard GridFS file lookup |
-| `media.chunks` | Unique `files_id_1_n_1` | Standard GridFS chunk identity |
-
-The source reservation contains system, container, and typed file identity.
-An ObjectId and a string with identical characters remain different sources.
-Reservation owners can switch atomically during a multi-record source swap;
-uniqueness is enforced by the reservation's unique identifier and the shared
-transaction, rather than a unique index on the media document's lookup field.
-
-Index preparation checks existing media/reservation consistency first. It
-derives each canonical source key from the stored import source, rejects missing
-or mismatched keys, and verifies every reservation owner. It refuses inconsistent
-preexisting records instead of silently repairing them.
-Index preparation does not import originals or create gallery records.
-Preparation and migration readiness share the index definitions in
-`media_indexes.py`, including each collection's implicit unique identifier.
-Named indexes are created with simple collation so their behavior does not
-depend on a collection's default collation.
-
-### Binary ownership
-
-Legacy adoption permits only the existing `photos` and `thumbnails` buckets.
-Adopted handles are server-internal; public DTOs never contain file IDs or
-registry handles. Open and delete operations require an exact match of media,
-representation, role, and thumbnail size against the immutable registry record.
-
-New writes own files only in `media.files` and `media.chunks`. Every write receives
-a fresh logical handle and file ID. Deleting an adopted representation only
-tombstones its registry entry; it never deletes legacy chunks or file metadata.
-Repeated cleanup is harmless, and deleted handles cannot be revived.
-
-Adoption checks complete byte count, SHA-256 when present, and raster signature
-against the supplied metadata. It does not pixel-decode large legacy originals;
-the migration audit must validate dimensions and structural integrity. New owned
-raster writes validate dimensions and decode every frame before any
-registry or GridFS write. A 40,000,000-pixel limit applies to the canvas and
-the total of decoded frame pixels, independently of Pillow's global settings.
-WebP canvas dimensions are checked from a bounded header before creating a
-native decoder.
-The adapter currently accepts JPEG, PNG, and WebP. SVG writes fail closed until
-an explicit sanitizer is added.
-
-Legacy protection applies to the new adapters. Existing maintenance jobs and
-direct database operations remain capable of deleting legacy bytes. In
-particular, the old thumbnail generator clears its thumbnail bucket. The
-migration should generate owned previews instead of adopting those thumbnails,
-and operators must preserve adopted original file IDs.
-
-### Failure recovery and deletion
-
-A failed or interrupted owned upload has a registry entry with `ready=false`.
-It is never readable. An exception during writing deletes only that upload's
-owned file and marks its registry entry deleted. A process crash can leave
-pending entries for a later explicit recovery command to inspect.
-
-Retain an adopted registration when metadata creation fails, so retrying the
-same audited source reuses the protected handle. Do not apply generic binary
-cleanup to borrowed handles on a failed import. Generated previews may be
-cleaned up by their exact owned handles.
-
-Replacement returns superseded handles without deleting their bytes. Physical
-cleanup must wait until readers holding those handles have finished; the store
-does not coordinate active streams. This rollout's read-only media HTTP API
-exposes no replacement or deletion routes, and the migration preserves existing
-records.
-
-Metadata deletion first hides the media and reserves its import source.
-The returned `StoredMedia.deletion_token` identifies that exact deletion
-generation. Pass the returned object unchanged to `finish_delete` after binary
-cleanup. An old completion cannot remove a later identical deletion generation.
-
-### Verification
-
-New tests run against an isolated replica set, exercise actual transactions,
-and cover source collisions, atomic source swaps, failed batches, concurrent
-promotions, typed source identities, stale deletion completion, protected
-legacy bytes, forged handles, interrupted writes, and binary validation.
-
-CI starts a local single-node replica set. Local media tests reuse an existing
-replica-set test client or start a temporary instance using the existing
-`pymongo-inmemory` downloader. Test databases have unique names and are removed
-after use. Production connection settings are not needed.
-
-## Media API rollout
-
-The media API builds on the persistence layer (#785, already merged). The
-migration branch also depends on persistence and can be reviewed independently
-of this API.
-The frontend gallery requires this API before its rollout flag is enabled.
-
-`MEDIA_API_ENABLED=false` is the default. Set it to `true` and restart the
-backend to register the media routes and enrich fragment/query responses with
-`mediaSummary`. Existing `hasPhoto` values continue to report legacy-photo
-availability independently of imported media, including during a partial import.
-Existing `thumbnailPath` fields retain their legacy values; enrichment does not
-add that field to fragment detail or retrieve-all rows. Disabling the flag
-restores the existing routes and response shape.
-Existing photo and thumbnail routes remain available in both modes.
-
-The canonical endpoints are:
-
-* `GET /media?fragment=K.1`
-* `GET /media/{media_id}/file?fragment=K.1`
-* `GET /media/{media_id}/display?fragment=K.1`
-* `GET /media/{media_id}/thumbnail/{size}?fragment=K.1`
-
-The fragment query parameter is required and percent-encoded; this allows museum
-numbers containing slashes to round-trip through Falcon. List and binary reads
-check the fragment's existing permissions. Binary URLs require the same
-credentials as listing, are private and non-cacheable, and never expose GridFS
-identifiers. SVG originals remain attachment-only.
-
-Before the first media write, explicitly initialize the repository and storage
-indexes with `MongoMediaRepository.create_indexes()` and
-`GridFsMediaRepresentationStore.create_indexes()`. The persistence implementation
-requires a replica set or sharded cluster for transactional writes. Runtime
-construction and media reads do not create these indexes or trigger a backfill.
-The migration PR provides the operational commands and resumable import workflow;
-no production migration is executed by this change.
-
-For rollout, deploy the compatible backend, run and verify the separately
-scheduled migration, then enable the frontend gallery. Keep legacy originals
-protected and available while unresolved sources are reviewed. A partial import,
-missing optional previews, or an empty media collection must preserve existing
-photo access. `thumbnailPath` retains its legacy meaning; clients use the new
-`mediaSummary.primary.thumbnail` through an authenticated loader when available.
-Clients retain the legacy photo choice when `hasPhoto` is true, including
-when the media list already contains copies or other imported files.

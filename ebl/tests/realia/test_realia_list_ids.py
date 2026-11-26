@@ -122,6 +122,7 @@ def test_list_non_redirect_ids_orders_equivalent_ids_deterministically(
             "afoCrossReferences",
             [{"id": "a", "lemma": "b", "afoVolume": "1", "page": "2"}],
         ),
+        ("eblRealia", [{"id": "MÚL KUR šá DUR nu-nu"}]),
     ],
 )
 def test_list_non_redirect_ids_lists_entries_with_own_content(
