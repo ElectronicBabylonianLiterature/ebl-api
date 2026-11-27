@@ -135,7 +135,7 @@ jobs:
           poetry run python -c 'import coverage; report = coverage.Coverage(source=["."]);
           report.load(); report.xml_report(include=["ebl/*", "scripts/*"])'
 
-      - uses: qltysh/qlty-action/coverage@0ff2178667bf8eb28ed0013a7ef54857a24d4056 # v2.7.0
+      - uses: qltysh/qlty-action/coverage@56bee2d751c94b7bd8de22f64c9b5f398048e13f # v2.8.1
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
