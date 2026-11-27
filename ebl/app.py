@@ -40,6 +40,9 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
+from ebl.signs.infrastructure.mongo_mes_zl_kap2_repository import (
+    MongoMesZlKap2Repository,
+)
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.afo_register.web.bootstrap import create_afo_register_routes
@@ -126,6 +129,7 @@ def create_context():
         provenance_service=provenance_service,
         realia_repository=MongoRealiaRepository(database),
         sumerian_word_repository=MongoSumerianWordRepository(database),
+        mes_zl_kap2_repository=MongoMesZlKap2Repository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),

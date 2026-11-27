@@ -7,6 +7,9 @@ from falcon_caching import Cache
 import ebl.context
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_chapter_cache_state import MongoChapterCacheState
+from ebl.signs.infrastructure.mongo_mes_zl_kap2_repository import (
+    MongoMesZlKap2Repository,
+)
 from ebl.sumerian_dictionary.infrastructure.mongo_sumerian_word_repository import (
     MongoSumerianWordRepository,
 )
@@ -35,6 +38,7 @@ CONTEXT_FIXTURES: Mapping[str, str] = {
     "findspot_repository": "findspot_repository",
     "realia_repository": "realia_repository",
     "sumerian_word_repository": "sumerian_word_repository",
+    "mes_zl_kap2_repository": "mes_zl_kap2_repository",
     "parallel_line_injector": "parallel_line_injector",
 }
 
@@ -42,6 +46,11 @@ CONTEXT_FIXTURES: Mapping[str, str] = {
 @pytest.fixture
 def sumerian_word_repository(database) -> MongoSumerianWordRepository:
     return MongoSumerianWordRepository(database)
+
+
+@pytest.fixture
+def mes_zl_kap2_repository(database) -> MongoMesZlKap2Repository:
+    return MongoMesZlKap2Repository(database)
 
 
 @pytest.fixture

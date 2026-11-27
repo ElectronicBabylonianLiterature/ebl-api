@@ -93,5 +93,6 @@ class Scope(ScopeItem):
     WRITE_TEXTS = ("write:texts", RESTRICTED)
     READ_WORDS = ("read:words", OPEN)
     READ_SUMERIAN_LEX = ("read:sumerian-lex", RESTRICTED)
+    READ_MESZL_KAP2 = ("read:meszl-kap2", RESTRICTED)
     READ_TEXTS = ("read:texts", OPEN)
     WRITE_WORDS = ("write:words", RESTRICTED)
