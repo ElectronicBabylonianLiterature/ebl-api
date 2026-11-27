@@ -6,6 +6,7 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
+from ebl.signs.domain.mes_zl_kap2 import MES_ZL_LIST
 from ebl.signs.infrastructure.sign_unicode_lookup import get_unicode_from_atf
 from ebl.signs.infrastructure.sign_schemas import (
     COLLECTION,
@@ -86,7 +87,7 @@ class MongoSignRepository(SignRepository):
                                     "$filter": {
                                         "input": "$lists",
                                         "as": "item",
-                                        "cond": {"$eq": ["$$item.name", "MZL"]},
+                                        "cond": {"$eq": ["$$item.name", MES_ZL_LIST]},
                                     }
                                 }
                             },

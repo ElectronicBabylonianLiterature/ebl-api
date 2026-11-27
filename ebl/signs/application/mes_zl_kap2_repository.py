@@ -1,31 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Sequence
 
-import attr
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class MesZlKap2Entry:
-    """An entry of Borger, MesZL² Kapitel II, keyed by its MesZL number."""
-
-    number: str
-    text: str
-
-
-def mes_zl_number_variants(number: str) -> list[str]:
-    """MesZL numbers may be written with a prime (′) or an apostrophe (')."""
-    stripped = number.strip()
-    return list(
-        dict.fromkeys(
-            [stripped, stripped.replace("'", "′"), stripped.replace("′", "'")]
-        )
-    )
+from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry
 
 
 class MesZlKap2Repository(ABC):
     @abstractmethod
-    def find(self, number: str) -> MesZlKap2Entry: ...
-
-    @abstractmethod
-    def find_many(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
-        """The entries for these numbers, in their order; missing ones skipped."""
+    def find_by_numbers(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
+        raise NotImplementedError()

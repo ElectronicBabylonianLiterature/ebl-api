@@ -1,45 +1,30 @@
-from typing import Sequence
+from typing import Mapping, Sequence
 
 from pymongo.database import Database
 
-from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
-from ebl.signs.application.mes_zl_kap2_repository import (
-    MesZlKap2Entry,
-    MesZlKap2Repository,
-    mes_zl_number_variants,
-)
+from ebl.signs.application.mes_zl_kap2_repository import MesZlKap2Repository
+from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry, mes_zl_number_variants
 
 COLLECTION = "meszl_kap2"
 
 
-def _entry(document: dict) -> MesZlKap2Entry:
-    # An alias (e.g. eBL's 115a for Borger's 115) names the entry it shows.
-    return MesZlKap2Entry(document.get("number", document["_id"]), document["text"])
+def first_entry(
+    spellings: Sequence[str], entries: Mapping[str, MesZlKap2Entry]
+) -> MesZlKap2Entry | None:
+    return next((entries[key] for key in spellings if key in entries), None)
 
 
 class MongoMesZlKap2Repository(MesZlKap2Repository):
-    def __init__(self, database: Database):
+    def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
 
-    def find(self, number: str) -> MesZlKap2Entry:
-        try:
-            document = self._collection.find_one(
-                {"_id": {"$in": mes_zl_number_variants(number)}}
-            )
-        except NotFoundError as error:
-            raise NotFoundError(
-                f"No MesZL Kapitel II entry for number {number}."
-            ) from error
-        return _entry(document)
-
-    def find_many(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
-        entries: list[MesZlKap2Entry] = []
-        for number in numbers:
-            try:
-                entry = self.find(number)
-            except NotFoundError:
-                continue
-            if entry not in entries:
-                entries.append(entry)
-        return entries
+    def find_by_numbers(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
+        spellings = [mes_zl_number_variants(number) for number in numbers]
+        keys = [key for variants in spellings for key in variants]
+        stored = {
+            document["_id"]: MesZlKap2Entry(document["number"], document["text"])
+            for document in self._collection.find_many({"_id": {"$in": keys}})
+        }
+        found = (first_entry(variants, stored) for variants in spellings)
+        return list(dict.fromkeys(entry for entry in found if entry is not None))

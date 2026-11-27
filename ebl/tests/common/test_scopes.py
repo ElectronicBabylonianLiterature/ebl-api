@@ -37,3 +37,11 @@ def test_sumerian_lex_scope_is_restricted() -> None:
     assert scope is Scope.READ_SUMERIAN_LEX
     assert scope.is_restricted is True
     assert str(scope) == "read:sumerian-lex"
+
+
+def test_meszl_kap2_scope_is_restricted() -> None:
+    scope = Scope.from_string("read:meszl-kap2")
+
+    assert scope is Scope.READ_MESZL_KAP2
+    assert scope.is_restricted is True
+    assert str(scope) == "read:meszl-kap2"
