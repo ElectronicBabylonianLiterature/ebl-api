@@ -7,7 +7,7 @@ from unittest.mock import Mock
 import pytest
 from pymongo.errors import ConnectionFailure
 
-from ebl.tests.media.infrastructure import replica_set
+from ebl.tests import mongo_replica_set as replica_set
 
 
 @pytest.fixture
@@ -94,7 +94,9 @@ def test_initialization_failure_stops_process(
 
 def test_replica_set_supports_commit_and_abort() -> None:
     with replica_set.replica_set_client() as client:
-        collection = client.get_database("media_test_helper").get_collection("records")
+        collection = client.get_database("replica_set_test_helper").get_collection(
+            "records"
+        )
         with client.start_session() as session:
             with session.start_transaction():
                 collection.insert_one({"_id": "committed"}, session=session)

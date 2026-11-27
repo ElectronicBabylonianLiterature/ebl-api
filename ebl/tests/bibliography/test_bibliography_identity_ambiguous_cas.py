@@ -44,7 +44,9 @@ def test_ambiguous_identity_cas_confirms_the_persisted_identity(
     update_calls = {"count": 0}
 
     def ambiguous_update(
-        query: dict[str, object], update: dict[str, object]
+        query: dict[str, object],
+        update: dict[str, object],
+        session: object = None,
     ) -> UpdateResult:
         update_calls["count"] += 1
         result = raw_collection.update_one(query, update)

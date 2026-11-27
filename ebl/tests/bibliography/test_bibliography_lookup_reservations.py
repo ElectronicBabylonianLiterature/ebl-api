@@ -103,7 +103,7 @@ def test_ambiguous_insert_does_not_accept_another_operations_pending_claim(
     mocked_collection = Mock(wraps=raw_collection)
     insert_calls = {"count": 0}
 
-    def ambiguous_insert(document: dict[str, object]) -> object:
+    def ambiguous_insert(document: dict[str, object], session: object = None) -> object:
         insert_calls["count"] += 1
         if insert_calls["count"] == 1:
             raw_collection.insert_one(
