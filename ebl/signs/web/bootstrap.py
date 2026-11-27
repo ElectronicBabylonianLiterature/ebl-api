@@ -18,7 +18,7 @@ from ebl.signs.web.cropped_annotations import (
 )
 
 
-def create_signs_routes(api: falcon.App, context: Context):
+def create_signs_routes(api: falcon.App, context: Context) -> None:
     signs_search = SignsSearch(context.sign_repository)
     signs = SignsResource(context.sign_repository)
     ordered_signs = SignsOrderResource(context.sign_repository)

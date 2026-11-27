@@ -5,7 +5,9 @@ SECOND = MesZlKap2Entry("580", "580\tSecond entry.")
 PRIMED = MesZlKap2Entry("214′", "214′\tPrimed entry.")
 SHARED = MesZlKap2Entry("115", "115\tShared entry.")
 
+ALIASES = {SHARED.number: ["115a", "115b"]}
+
 DOCUMENTS = [
-    {"_id": entry.number, "number": entry.number, "text": entry.text}
+    {"_id": entry.number, "text": entry.text, "aliases": ALIASES.get(entry.number, [])}
     for entry in (FIRST, SECOND, PRIMED, SHARED)
-] + [{"_id": "115a", "number": SHARED.number, "text": SHARED.text}]
+]

@@ -6,6 +6,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 SignName = NewType("SignName", str)
+MES_ZL_LIST = "MZL"
 
 
 @attr.s(frozen=True, auto_attribs=True)

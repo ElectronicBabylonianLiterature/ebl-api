@@ -1,18 +1,17 @@
-from typing import Mapping, Sequence
+from typing import Mapping, Sequence, cast
 
 from pymongo.database import Database
 
 from ebl.mongo_collection import MongoCollection
 from ebl.signs.application.mes_zl_kap2_repository import MesZlKap2Repository
-from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry, mes_zl_number_variants
+from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry, normalize_mes_zl_number
+from ebl.signs.infrastructure.mes_zl_kap2_schemas import MesZlKap2DocumentSchema
 
 COLLECTION = "meszl_kap2"
 
 
-def first_entry(
-    spellings: Sequence[str], entries: Mapping[str, MesZlKap2Entry]
-) -> MesZlKap2Entry | None:
-    return next((entries[key] for key in spellings if key in entries), None)
+def load_entry(document: Mapping) -> MesZlKap2Entry:
+    return cast(MesZlKap2Entry, MesZlKap2DocumentSchema().load(document))
 
 
 class MongoMesZlKap2Repository(MesZlKap2Repository):
@@ -20,11 +19,22 @@ class MongoMesZlKap2Repository(MesZlKap2Repository):
         self._collection = MongoCollection(database, COLLECTION)
 
     def find_by_numbers(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
-        spellings = [mes_zl_number_variants(number) for number in numbers]
-        keys = [key for variants in spellings for key in variants]
-        stored = {
-            document["_id"]: MesZlKap2Entry(document["number"], document["text"])
-            for document in self._collection.find_many({"_id": {"$in": keys}})
-        }
-        found = (first_entry(variants, stored) for variants in spellings)
-        return list(dict.fromkeys(entry for entry in found if entry is not None))
+        keys = list(
+            dict.fromkeys(
+                normalize_mes_zl_number(number) for number in numbers if number.strip()
+            )
+        )
+        if not keys:
+            return []
+        entries_by_key: dict[str, MesZlKap2Entry] = {}
+        for document in self._collection.find_many(
+            {"$or": [{"_id": {"$in": keys}}, {"aliases": {"$in": keys}}]}
+        ):
+            entry = load_entry(document)
+            for key in [document["_id"], *document["aliases"]]:
+                entries_by_key[key] = entry
+        unique: dict[str, MesZlKap2Entry] = {}
+        for key in keys:
+            if key in entries_by_key:
+                unique.setdefault(entries_by_key[key].number, entries_by_key[key])
+        return list(unique.values())

@@ -4,19 +4,17 @@ import attr
 import falcon
 import pytest
 from falcon import testing
-from pymongo.database import Database
 from falcon_auth import NoneAuthBackend
 
 import ebl.app
 from ebl.context import Context
-from ebl.signs.infrastructure.mongo_mes_zl_kap2_repository import COLLECTION
 from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry
-from ebl.tests.signs.mes_zl_kap2_data import DOCUMENTS, FIRST, PRIMED, SECOND, SHARED
+from ebl.tests.signs.mes_zl_kap2_data import FIRST, PRIMED, SECOND, SHARED
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName
 from ebl.users.infrastructure.auth0 import Auth0User
 
-FULL_EDITOR_SCOPES = "read:words write:words read:texts write:texts"
+BASE_SCOPES = "read:words"
 
 
 def sign(name: str, *lists: SignListRecord) -> Sign:
@@ -34,17 +32,12 @@ def client_with_scopes(context: Context, scopes: str) -> testing.TestClient:
 
 @pytest.fixture
 def full_editor_client(context: Context) -> testing.TestClient:
-    return client_with_scopes(context, f"{FULL_EDITOR_SCOPES} read:meszl-kap2")
+    return client_with_scopes(context, f"{BASE_SCOPES} read:meszl-kap2")
 
 
 @pytest.fixture
 def client_without_scope(context: Context) -> testing.TestClient:
-    return client_with_scopes(context, FULL_EDITOR_SCOPES)
-
-
-@pytest.fixture
-def mes_zl_kap2_entries(database: Database) -> None:
-    database[COLLECTION].insert_many([dict(document) for document in DOCUMENTS])
+    return client_with_scopes(context, BASE_SCOPES)
 
 
 def get(client: testing.TestClient, path: str) -> testing.Result:
@@ -65,6 +58,7 @@ def test_returns_the_entries_of_all_mes_zl_numbers(
             SignListRecord("ABZ", "367"),
             SignListRecord("MZL", "579"),
             SignListRecord("MZL", "580"),
+            SignListRecord("MZL", "579"),
         )
     )
     result = get(full_editor_client, "/signs/ŠE/meszl-kap2")
@@ -107,6 +101,7 @@ def test_requires_the_scope(
     result = get(client_without_scope, "/signs/ŠE/meszl-kap2")
     assert result.status == falcon.HTTP_FORBIDDEN
     assert FIRST.text not in result.text
+    assert "Cache-Control" not in result.headers
 
 
 def test_checks_the_scope_before_the_sign(

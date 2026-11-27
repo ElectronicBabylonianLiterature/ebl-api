@@ -106,6 +106,53 @@ network policy, so qlty Cloud's verdict on the PR is the gate.
 **History:** merge with "Squash and merge". This keeps the deleted
 copyrighted test text out of master without rewriting the pushed branch.
 
+## Second review (merciless)
+
+Findings and what was done:
+
+- R2-1 (blocker): the task files were committed while the review file said
+  they were not. The claim is corrected. They stay committed until the user
+  asks to remove them, and must be removed before merging.
+- R2-2 (blocker): qlty was not run. It is still blocked here (qlty.sh is not
+  reachable). The duplicated fixture `mes_zl_kap2_entries` was moved into
+  `ebl/tests/signs/conftest.py`.
+- R2-3 (major): aliases were full copies of an entry, told apart by
+  comparing `_id` with `number`. Fixed: one document per entry,
+  `{_id, text, aliases: [...]}`, and entries are de-duplicated by number.
+- R2-4 (major): spellings were handled at query time. Fixed: numbers are
+  normalized to Borger's prime (′) for `'`, `’` and `ʹ`, both in the importer
+  and in the lookup. The variants and precedence code is gone.
+- R2-5 (major): the precedence rule had no test. This is moot after R2-4;
+  normalization is tested for every look-alike.
+- R2-6 (major): documents were read without the schema. Fixed:
+  `MesZlKap2DocumentSchema` loads them, and malformed documents raise a
+  ValidationError (tested).
+- R2-7 (major): copyrighted text is in the PR history, and GitHub keeps
+  `refs/pull/838/head`. This is the owner's decision: squash-merge, or
+  rewrite the history or open a clean PR. Not changed without an explicit
+  request.
+- R2-8 (major): an alias resolves without saying so. Not changed: the
+  response is the set of Borger's entries under his numbers, and the UI does
+  not need to know which of the sign's numbers matched.
+- Minor findings, all fixed:
+  - `MES_ZL_LIST` moved to `ebl/transliteration/domain/sign.py`.
+  - `mes_zl_numbers` moved to the domain module.
+  - Empty and blank numbers return early without querying.
+  - Type hints added to `context_fixtures.py` and `create_signs_routes`.
+  - New tests: duplicate MZL numbers, and no Cache-Control on a 403.
+- Nits: the test scopes are now minimal and the imports sorted. The `get`
+  helper is kept, because pyright needs the `cast` (same pattern as
+  `ebl/tests/media/web/helpers.py`).
+
+Gates after the second round:
+
+- ruff format and check: clean.
+- flake8, mypy and pyright: clean.
+- pyre: no type errors.
+- Tests: signs, common, transliteration and app bootstrap, 2514 passed.
+- Coverage: 100% on every changed module.
+- Live service check: repeated with the new storage format, same results.
+
 ## Comment status tracking
 
 - Resolved by code changes, pending re-review on the next push:
@@ -117,5 +164,6 @@ copyrighted test text out of master without rewriting the pushed branch.
 
 1. Push the fixes and let Sourcery, CodeQL and qlty re-review.
 2. Merge with "Squash and merge".
-3. Remove the `TASK-meszl-kap2-*.md` files before merging. They are not
-   committed.
+3. Remove the `TASK-meszl-kap2-*.md` files before merging. They are
+   committed on the branch.
+4. Decide how to handle the PR history (R2-7).

@@ -18,3 +18,8 @@
 - qlty could not be installed (qlty.sh blocked by network policy).
 - Import script (outside repo): upsert-then-prune, `number` on every document,
   HethZI → HethZL typo fix in entry 183.
+- Second, merciless review. Reworked the storage format: one document per
+  entry with an `aliases` list and canonical prime numbers. Added schema
+  loading, moved the domain helpers, deduplicated the fixture, added tests.
+- Error found by the review: the review file said the task files were not
+  committed, but the stop hook had them committed. Corrected.

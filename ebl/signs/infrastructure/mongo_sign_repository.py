@@ -6,7 +6,6 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
-from ebl.signs.domain.mes_zl_kap2 import MES_ZL_LIST
 from ebl.signs.infrastructure.sign_unicode_lookup import get_unicode_from_atf
 from ebl.signs.infrastructure.sign_schemas import (
     COLLECTION,
@@ -15,7 +14,7 @@ from ebl.signs.infrastructure.sign_schemas import (
     SignSchema,
 )
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.sign import Sign, SignName
+from ebl.transliteration.domain.sign import MES_ZL_LIST, Sign, SignName
 
 __all__ = [
     "COLLECTION",

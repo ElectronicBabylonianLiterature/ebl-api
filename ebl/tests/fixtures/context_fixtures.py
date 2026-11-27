@@ -3,6 +3,7 @@ from typing import Mapping
 import pytest
 from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
+from pymongo.database import Database
 
 import ebl.context
 from ebl.cache.application.custom_cache import ChapterCache
@@ -49,7 +50,7 @@ def sumerian_word_repository(database) -> MongoSumerianWordRepository:
 
 
 @pytest.fixture
-def mes_zl_kap2_repository(database) -> MongoMesZlKap2Repository:
+def mes_zl_kap2_repository(database: Database) -> MongoMesZlKap2Repository:
     return MongoMesZlKap2Repository(database)
 
 
