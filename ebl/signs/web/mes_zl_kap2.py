@@ -24,7 +24,7 @@ class MesZlKap2Resource:
 
     @falcon.before(require_scope, READ_SCOPE)
     @cache_control(["private", "no-store"])
-    def on_get(self, _request: Request, resp: Response, sign_name: str) -> None:
+    def on_get(self, _request: Request, response: Response, sign_name: str) -> None:
         sign = self._signs.find(SignName(sign_name))
         entries = self._entries.find_by_numbers(mes_zl_numbers(sign))
-        resp.media = MesZlKap2EntrySchema(many=True).dump(entries)
+        response.media = MesZlKap2EntrySchema(many=True).dump(entries)
