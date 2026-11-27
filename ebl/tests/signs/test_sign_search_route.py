@@ -12,11 +12,9 @@ def test_signs_get(client, sign_repository):
     sign = Sign(
         name=SignName("test"),
         fossey=[
-            Fossey(
-                sign="""<svg height="10" width="10">
+            Fossey(sign="""<svg height="10" width="10">
                 <circle cx="5" cy="5" r="4" stroke="black" stroke-width="3" fill="red" />
-                </svg> """
-            ),
+                </svg> """),
             Fossey(number=1),
         ],
     )

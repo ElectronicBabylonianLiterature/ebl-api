@@ -4,7 +4,7 @@ from ebl.context import Context
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
-from ebl.signs.web.mes_zl_kap2 import MesZlKap2Resource, MesZlKap2SectionResource
+from ebl.signs.web.mes_zl_kap2 import MesZlKap2Resource
 from ebl.signs.web.sign_search import SignsSearch
 from ebl.signs.web.signs import (
     SignsResource,
@@ -41,10 +41,6 @@ def create_signs_routes(api: falcon.App, context: Context):
     api.add_route("/signs", signs_search)
     api.add_route("/signs/{sign_name}", signs)
     api.add_route("/signs/{sign_name}/meszl-kap2", mes_zl_kap2)
-    api.add_route(
-        "/meszl-kap2/{section}",
-        MesZlKap2SectionResource(context.mes_zl_kap2_repository),
-    )
     api.add_route("/signs/{sign_name}/images", signs_images)
     api.add_route("/signs/{sign_name}/images/cluster/{cluster_id}", cluster_images)
 

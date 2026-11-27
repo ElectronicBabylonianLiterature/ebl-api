@@ -30,16 +30,3 @@ class MesZlKap2Resource:
         entries = self._entries.find_many(mes_zl_numbers(sign))
         resp.cache_control = ["private", "no-store"]
         resp.media = [{"number": entry.number, "text": entry.text} for entry in entries]
-
-
-class MesZlKap2SectionResource:
-    """The Einleitung and the two Anhänge of Kapitel II."""
-
-    def __init__(self, entries: MesZlKap2Repository):
-        self._entries = entries
-
-    @falcon.before(require_scope, READ_SCOPE)
-    def on_get(self, _req: Request, resp: Response, section: str) -> None:
-        text = self._entries.find_section(section)
-        resp.cache_control = ["private", "no-store"]
-        resp.media = {"section": section, "text": text}

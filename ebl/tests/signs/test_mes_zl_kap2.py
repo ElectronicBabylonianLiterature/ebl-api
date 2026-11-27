@@ -21,8 +21,6 @@ from ebl.users.infrastructure.auth0 import Auth0User
 
 SE_TEXT = "579\t𒊺\t**— ŠE — ŠL 367 — ASy 212**\nFossey p736-739."
 ENTRIES = {
-    "_Einleitung": "Kapitel II",
-    "_Anhang 2": "2. Anhang",
     "579": SE_TEXT,
     "214′": "214′\t…",
     "264": "264\t𒈚",
@@ -80,16 +78,6 @@ def test_find_many(mes_zl_kap2_repository: MongoMesZlKap2Repository, imported) -
     ]
 
 
-def test_find_section(
-    mes_zl_kap2_repository: MongoMesZlKap2Repository, imported
-) -> None:
-    assert mes_zl_kap2_repository.find_section("einleitung") == "Kapitel II"
-    with pytest.raises(NotFoundError):
-        mes_zl_kap2_repository.find_section("anhang-1")
-    with pytest.raises(NotFoundError):
-        mes_zl_kap2_repository.find_section("_id")
-
-
 def test_find_missing(mes_zl_kap2_repository: MongoMesZlKap2Repository) -> None:
     with pytest.raises(NotFoundError):
         mes_zl_kap2_repository.find("1")
@@ -130,23 +118,6 @@ def test_route_returns_entries_of_all_numbers(
         {"number": "264", "text": "264\t𒈚"},
         {"number": "516", "text": "516\t𒇽𒃵"},
     ]
-
-
-def test_section_route(full_editor_client, imported) -> None:
-    result = full_editor_client.simulate_get("/meszl-kap2/anhang-2")
-    assert result.status == falcon.HTTP_OK
-    assert result.json == {"section": "anhang-2", "text": "2. Anhang"}
-    assert "no-store" in result.headers["Cache-Control"]
-
-
-def test_section_route_unknown(full_editor_client, imported) -> None:
-    result = full_editor_client.simulate_get("/meszl-kap2/579")
-    assert result.status == falcon.HTTP_NOT_FOUND
-
-
-def test_section_route_requires_scope(client, imported) -> None:
-    result = client.simulate_get("/meszl-kap2/einleitung")
-    assert result.status == falcon.HTTP_FORBIDDEN
 
 
 def test_route_sign_without_mes_zl_number(

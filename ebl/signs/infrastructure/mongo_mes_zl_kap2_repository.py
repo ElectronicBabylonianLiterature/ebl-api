@@ -5,7 +5,6 @@ from pymongo.database import Database
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.signs.application.mes_zl_kap2_repository import (
-    SECTIONS,
     MesZlKap2Entry,
     MesZlKap2Repository,
     mes_zl_number_variants,
@@ -44,11 +43,3 @@ class MongoMesZlKap2Repository(MesZlKap2Repository):
             if entry not in entries:
                 entries.append(entry)
         return entries
-
-    def find_section(self, section: str) -> str:
-        if section not in SECTIONS:
-            raise NotFoundError(f"No MesZL Kapitel II section {section}.")
-        try:
-            return self._collection.find_one({"_id": SECTIONS[section]})["text"]
-        except NotFoundError as error:
-            raise NotFoundError(f"No MesZL Kapitel II section {section}.") from error
