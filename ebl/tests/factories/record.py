@@ -1,20 +1,24 @@
-import factory.fuzzy
+from factory.base import Factory
+from factory.declarations import List, SubFactory
+from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
+from ebl.tests.factories.factory_meta import FactoryMeta
 
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.tests.factories.collections import TupleFactory
+from ebl.tests.factories.collections import TUPLE_FACTORY
 
 
-class RecordEntryFactory(factory.Factory):
-    class Meta:
+class RecordEntryFactory(Factory):
+    class Meta(FactoryMeta):
         model = RecordEntry
 
-    user = factory.Faker("last_name")
-    type = factory.fuzzy.FuzzyChoice(RecordType)
-    date = factory.Faker("iso8601")
+    user = Faker("last_name")
+    type = FuzzyChoice(RecordType)
+    date = Faker("iso8601")
 
 
-class RecordFactory(factory.Factory):
-    class Meta:
+class RecordFactory(Factory):
+    class Meta(FactoryMeta):
         model = Record
 
-    entries = factory.List([factory.SubFactory(RecordEntryFactory)], TupleFactory)
+    entries = List([SubFactory(RecordEntryFactory)], TUPLE_FACTORY)
