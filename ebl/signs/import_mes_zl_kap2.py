@@ -2,7 +2,10 @@
 
 The input is a JSON object keyed by MesZL number; each value is the entry text
 (``"<number>\\t<sign>\\t**— NAME — …**\\n…"``). The introduction is stored under
-the key ``_Einleitung``. Existing entries are replaced.
+the key ``_Einleitung``. Existing entries are replaced. Placeholders and
+sequences for Borger's drawings are recoded for Borger Akkadian v0.9.14 (see
+``ebl.signs.mes_zl_kap2_recodings``); the import reports how often each was
+found.
 
 Usage::
 
@@ -24,6 +27,7 @@ from ebl.signs.infrastructure.mongo_mes_zl_kap2_repository import (
     MongoMesZlKap2Repository,
 )
 from ebl.signs.infrastructure.sign_schemas import COLLECTION as SIGNS_COLLECTION
+from ebl.signs.mes_zl_kap2_recodings import recode_kap2
 
 logger = logging.getLogger(__name__)
 
@@ -67,11 +71,13 @@ def mes_zl_numbers_of_signs(database) -> list[str]:
 
 def run_import(database, entries: Mapping[str, str], dry_run: bool = False) -> dict:
     unmatched = unmatched_numbers(entries, mes_zl_numbers_of_signs(database))
-    imported = 0 if dry_run else MongoMesZlKap2Repository(database).replace_all(entries)
+    recoded, recodings = recode_kap2(entries)
+    imported = 0 if dry_run else MongoMesZlKap2Repository(database).replace_all(recoded)
     return {
         "entries": len(entries),
         "imported": imported,
         "unmatched": list(unmatched),
+        "recodings": recodings,
         "dry_run": dry_run,
     }
 
@@ -101,7 +107,15 @@ def main(argv: Sequence[str]) -> int:
             len(report["unmatched"]),
             ", ".join(report["unmatched"]),
         )
-    return 0
+    for recoding in report["recodings"]:
+        logger.info(
+            "Borger %s: %s of %s passages%s",
+            recoding.recoding.mes_zl,
+            recoding.found,
+            recoding.recoding.expected,
+            "" if recoding.is_expected else " (unexpected count, NOT recoded)",
+        )
+    return 0 if all(recoding.is_expected for recoding in report["recodings"]) else 1
 
 
 if __name__ == "__main__":

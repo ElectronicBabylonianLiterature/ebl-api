@@ -136,12 +136,13 @@ def test_unmatched_numbers() -> None:
 def test_run_import(database, sign_repository: SignRepository) -> None:
     sign_repository.create(sign("ŠE", SignListRecord("MZL", "579")))
     report = run_import(database, ENTRIES)
-    assert report == {
+    assert {key: value for key, value in report.items() if key != "recodings"} == {
         "entries": 3,
         "imported": 3,
         "unmatched": ["214′"],
         "dry_run": False,
     }
+    assert all(recoding.found == 0 for recoding in report["recodings"])
     assert MongoMesZlKap2Repository(database).find("579").text == SE_TEXT
 
 
@@ -150,3 +151,10 @@ def test_run_import_dry_run(database) -> None:
     assert report["imported"] == 0
     with pytest.raises(NotFoundError):
         MongoMesZlKap2Repository(database).find("579")
+
+
+def test_run_import_recodes_borger_glyphs(database) -> None:
+    run_import(database, {"1": "⟦098a⟧", "92": "⟦098a⟧", "98": "⟦098a⟧ siehe n1."})
+    assert MongoMesZlKap2Repository(database).find("98").text == (
+        "\U001000cf siehe n1."
+    )
