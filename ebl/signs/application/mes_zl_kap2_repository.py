@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Sequence
 
 import attr
 
@@ -9,6 +10,13 @@ class MesZlKap2Entry:
 
     number: str
     text: str
+
+
+SECTIONS = {
+    "einleitung": "_Einleitung",
+    "anhang-1": "_Anhang 1",
+    "anhang-2": "_Anhang 2",
+}
 
 
 def mes_zl_number_variants(number: str) -> list[str]:
@@ -24,3 +32,11 @@ def mes_zl_number_variants(number: str) -> list[str]:
 class MesZlKap2Repository(ABC):
     @abstractmethod
     def find(self, number: str) -> MesZlKap2Entry: ...
+
+    @abstractmethod
+    def find_many(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
+        """The entries for these numbers, in their order; missing ones skipped."""
+
+    @abstractmethod
+    def find_section(self, section: str) -> str:
+        """The text of the Einleitung or an Anhang (keys of SECTIONS)."""

@@ -20,7 +20,15 @@ from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName
 from ebl.users.infrastructure.auth0 import Auth0User
 
 SE_TEXT = "579\t𒊺\t**— ŠE — ŠL 367 — ASy 212**\nFossey p736-739."
-ENTRIES = {"_Einleitung": "Kapitel II", "579": SE_TEXT, "214′": "214′\t…"}
+ENTRIES = {
+    "_Einleitung": "Kapitel II",
+    "_Anhang 2": "2. Anhang",
+    "579": SE_TEXT,
+    "214′": "214′\t…",
+    "264": "264\t𒈚",
+    "516": "516\t𒇽𒃵",
+    "115": "115\t𒋓",
+}
 
 
 def sign(name: str, *lists: SignListRecord) -> Sign:
@@ -41,6 +49,7 @@ def full_editor_client(context: Context) -> testing.TestClient:
 def imported(database) -> None:
     database[COLLECTION].insert_many(
         [{"_id": number, "text": text} for number, text in ENTRIES.items()]
+        + [{"_id": "115a", "number": "115", "text": ENTRIES["115"]}]
     )
 
 
@@ -57,6 +66,28 @@ def test_find_accepts_apostrophe_for_prime(
     mes_zl_kap2_repository: MongoMesZlKap2Repository, imported
 ) -> None:
     assert mes_zl_kap2_repository.find("214'").number == "214′"
+
+
+def test_find_alias(mes_zl_kap2_repository: MongoMesZlKap2Repository, imported) -> None:
+    assert mes_zl_kap2_repository.find("115a") == MesZlKap2Entry("115", "115\t𒋓")
+
+
+def test_find_many(mes_zl_kap2_repository: MongoMesZlKap2Repository, imported) -> None:
+    assert mes_zl_kap2_repository.find_many(["516", "999", "264", "115", "115a"]) == [
+        MesZlKap2Entry("516", "516\t𒇽𒃵"),
+        MesZlKap2Entry("264", "264\t𒈚"),
+        MesZlKap2Entry("115", "115\t𒋓"),
+    ]
+
+
+def test_find_section(
+    mes_zl_kap2_repository: MongoMesZlKap2Repository, imported
+) -> None:
+    assert mes_zl_kap2_repository.find_section("einleitung") == "Kapitel II"
+    with pytest.raises(NotFoundError):
+        mes_zl_kap2_repository.find_section("anhang-1")
+    with pytest.raises(NotFoundError):
+        mes_zl_kap2_repository.find_section("_id")
 
 
 def test_find_missing(mes_zl_kap2_repository: MongoMesZlKap2Repository) -> None:
@@ -83,8 +114,39 @@ def test_route_returns_entry(
     )
     result = full_editor_client.simulate_get("/signs/ŠE/meszl-kap2")
     assert result.status == falcon.HTTP_OK
-    assert result.json == {"number": "579", "text": SE_TEXT}
+    assert result.json == [{"number": "579", "text": SE_TEXT}]
     assert "no-store" in result.headers["Cache-Control"]
+
+
+def test_route_returns_entries_of_all_numbers(
+    full_editor_client, sign_repository: SignRepository, imported
+) -> None:
+    sign_repository.create(
+        sign("LU₂@s", SignListRecord("MZL", "264"), SignListRecord("MZL", "516"))
+    )
+    result = full_editor_client.simulate_get("/signs/LU₂@s/meszl-kap2")
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [
+        {"number": "264", "text": "264\t𒈚"},
+        {"number": "516", "text": "516\t𒇽𒃵"},
+    ]
+
+
+def test_section_route(full_editor_client, imported) -> None:
+    result = full_editor_client.simulate_get("/meszl-kap2/anhang-2")
+    assert result.status == falcon.HTTP_OK
+    assert result.json == {"section": "anhang-2", "text": "2. Anhang"}
+    assert "no-store" in result.headers["Cache-Control"]
+
+
+def test_section_route_unknown(full_editor_client, imported) -> None:
+    result = full_editor_client.simulate_get("/meszl-kap2/579")
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_section_route_requires_scope(client, imported) -> None:
+    result = client.simulate_get("/meszl-kap2/einleitung")
+    assert result.status == falcon.HTTP_FORBIDDEN
 
 
 def test_route_sign_without_mes_zl_number(
@@ -92,7 +154,8 @@ def test_route_sign_without_mes_zl_number(
 ) -> None:
     sign_repository.create(sign("X", SignListRecord("ABZ", "1")))
     result = full_editor_client.simulate_get("/signs/X/meszl-kap2")
-    assert result.status == falcon.HTTP_NOT_FOUND
+    assert result.status == falcon.HTTP_OK
+    assert result.json == []
 
 
 def test_route_number_without_entry(
@@ -100,4 +163,10 @@ def test_route_number_without_entry(
 ) -> None:
     sign_repository.create(sign("Y", SignListRecord("MZL", "999")))
     result = full_editor_client.simulate_get("/signs/Y/meszl-kap2")
+    assert result.status == falcon.HTTP_OK
+    assert result.json == []
+
+
+def test_route_unknown_sign(full_editor_client, imported) -> None:
+    result = full_editor_client.simulate_get("/signs/NOSUCH/meszl-kap2")
     assert result.status == falcon.HTTP_NOT_FOUND
