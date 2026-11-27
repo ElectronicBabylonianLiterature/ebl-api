@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-17",
+  "decision": "asset-specific-redistribution-permission-not-verified",
+  "scope": [
+    "The 24 GIS sidecar and ODS files inventoried in Maps/SOURCE.json.",
+    "The findspot/site membership snapshot documented in scripts/maps/data/SOURCE.json.",
+    "Permission for generated derivatives is not established by this research."
+  ],
+  "publicEvidence": [
+    {
+      "id": "repository-software-license",
+      "url": "https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/77d8a0b1e04cf3aa5eb45a351a7cc2c529d01c5a/LICENSE",
+      "observedLicense": "MIT",
+      "statedScope": "Software and associated documentation.",
+      "assessment": "This is evidence of the repository software licence; it does not identify the supplier, rights holder or permission chain for the separately supplied GIS and spreadsheet inputs."
+    },
+    {
+      "id": "library-editions-license",
+      "url": "https://www.ebl.lmu.de/about/library/",
+      "corroboratingSource": "https://github.com/ElectronicBabylonianLiterature/ebl-frontend/blob/master/src/about/ui/fragmentarium.tsx",
+      "observedLicense": "CC-BY-NC-SA-4.0",
+      "termsUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "statedScope": "Editions in the Library.",
+      "assessment": "The statement does not expressly name these GIS files, working spreadsheets or the findspot API membership snapshot. No licence is assigned to those inputs from this statement."
+    },
+    {
+      "id": "caic-digital-platform",
+      "url": "https://caic.badw.de/en/about-caic/digital-platform.html",
+      "observedLicense": null,
+      "statedScope": "Project description of contextual maps, data and editions.",
+      "assessment": "The page explains the map platform and public access but supplies no asset-specific redistribution grant for these files."
+    },
+    {
+      "id": "archaeology-provenance",
+      "url": "https://www.ebl.lmu.de/about/archaeology",
+      "corroboratingSource": "https://github.com/ElectronicBabylonianLiterature/ebl-frontend/blob/master/src/about/ui/archaeology.tsx",
+      "observedLicense": null,
+      "statedScope": "Archaeological data provenance and data-model description.",
+      "assessment": "Credits for Nineveh and Nippur cataloguing do not establish the authorship or licence of all four GIS/ODS source sets."
+    },
+    {
+      "id": "public-findspot-api",
+      "url": "https://www.ebl.lmu.de/api/findspots",
+      "inspectedOn": "2026-11-17",
+      "httpStatus": 200,
+      "contentType": "application/json",
+      "licenseResponseHeaderFound": false,
+      "licenseLinkHeaderFound": false,
+      "assessment": "Public availability is documented. No licence declaration was found in the inspected response headers; that observation is not a permission grant."
+    }
+  ],
+  "embeddedEvidence": {
+    "odsFiles": [
+      "assur/assur-tafeln.ods",
+      "kalhu/kalhu-tafeln.ods",
+      "nippur/nippur-tafeln.ods",
+      "uruk/uruk-tafeln-2025-07-24.ods"
+    ],
+    "odsMetaXml": "All four meta.xml files contain timestamps, editing statistics and a LibreOffice generator, but no creator or licence/rights declaration.",
+    "shapefileSidecars": "The inventoried CPG/DBF/PRJ/SHP/SHX files have no accompanying source licence in the supplied file set.",
+    "sourceCitationExamples": {
+      "ASSUR": "andrae1938assur@beilage",
+      "KALHU": "RN2323@201",
+      "NIPPUR": "RN2747@pl5",
+      "URUK": "eichmann1989uruk@Abb2"
+    },
+    "citationAssessment": "These are bibliographic pointers recorded in the ODS map column. They are not treated as grants to redistribute the source plans or traced geometry.",
+    "dataIntegrity": "The source-file SHA-256 inventory and the membership snapshot remain unchanged."
+  },
+  "remainingConfirmation": {
+    "scope": "Each GIS source family, the four spreadsheets and the API-derived snapshot; include the intended generated map/export outputs.",
+    "evidenceNeeded": [
+      "An authoritative source-specific licence or written redistribution permission.",
+      "Identification of the rights holder or an authorized supplier/maintainer.",
+      "The allowed redistribution and derivative-use scope, and required attribution/notices."
+    ],
+    "mergeHold": "Retain the maintainer permission/licensing prerequisite on PR #810 until this evidence is recorded.",
+    "contactStatus": "No third party was contacted and no permission was inferred or invented."
+  }
+}
