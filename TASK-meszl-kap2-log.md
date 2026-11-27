@@ -23,3 +23,5 @@
   loading, moved the domain helpers, deduplicated the fixture, added tests.
 - Error found by the review: the review file said the task files were not
   committed, but the stop hook had them committed. Corrected.
+- At the user's request, removed the prime normalizer from the API. The
+  data scripts now clean the numbers (′) before the import.

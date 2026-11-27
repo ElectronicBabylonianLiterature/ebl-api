@@ -1,22 +1,5 @@
-import pytest
-
-from ebl.signs.domain.mes_zl_kap2 import mes_zl_numbers, normalize_mes_zl_number
+from ebl.signs.domain.mes_zl_kap2 import mes_zl_numbers
 from ebl.transliteration.domain.sign import Sign, SignListRecord, SignName
-
-
-@pytest.mark.parametrize(
-    "number,expected",
-    [
-        ("579", "579"),
-        (" 214' ", "214′"),
-        ("214’", "214′"),
-        ("214ʹ", "214′"),
-        ("146''", "146′′"),
-        ("214′", "214′"),
-    ],
-)
-def test_normalize_mes_zl_number(number: str, expected: str) -> None:
-    assert normalize_mes_zl_number(number) == expected
 
 
 def test_mes_zl_numbers() -> None:

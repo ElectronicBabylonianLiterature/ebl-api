@@ -4,7 +4,7 @@ from pymongo.database import Database
 
 from ebl.mongo_collection import MongoCollection
 from ebl.signs.application.mes_zl_kap2_repository import MesZlKap2Repository
-from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry, normalize_mes_zl_number
+from ebl.signs.domain.mes_zl_kap2 import MesZlKap2Entry
 from ebl.signs.infrastructure.mes_zl_kap2_schemas import MesZlKap2DocumentSchema
 
 COLLECTION = "meszl_kap2"
@@ -19,11 +19,7 @@ class MongoMesZlKap2Repository(MesZlKap2Repository):
         self._collection = MongoCollection(database, COLLECTION)
 
     def find_by_numbers(self, numbers: Sequence[str]) -> Sequence[MesZlKap2Entry]:
-        keys = list(
-            dict.fromkeys(
-                normalize_mes_zl_number(number) for number in numbers if number.strip()
-            )
-        )
+        keys = list(dict.fromkeys(numbers))
         if not keys:
             return []
         entries_by_key: dict[str, MesZlKap2Entry] = {}

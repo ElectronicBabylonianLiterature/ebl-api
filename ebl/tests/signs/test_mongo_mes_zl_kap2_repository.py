@@ -17,11 +17,11 @@ def test_keeps_the_order_of_the_numbers(
 
 
 @pytest.mark.usefixtures("mes_zl_kap2_entries")
-@pytest.mark.parametrize("number", ["214'", "214’", "214ʹ", " 214′ "])
-def test_normalizes_primes(
-    mes_zl_kap2_repository: MongoMesZlKap2Repository, number: str
+def test_matches_primes_exactly(
+    mes_zl_kap2_repository: MongoMesZlKap2Repository,
 ) -> None:
-    assert mes_zl_kap2_repository.find_by_numbers([number]) == [PRIMED]
+    assert mes_zl_kap2_repository.find_by_numbers(["214′"]) == [PRIMED]
+    assert mes_zl_kap2_repository.find_by_numbers(["214'"]) == []
 
 
 @pytest.mark.usefixtures("mes_zl_kap2_entries")
@@ -40,7 +40,7 @@ def test_skips_numbers_without_entry(
     assert mes_zl_kap2_repository.find_by_numbers(["999", "579"]) == [FIRST]
 
 
-@pytest.mark.parametrize("numbers", [[], ["", "  "]])
+@pytest.mark.parametrize("numbers", [[], [""]])
 def test_without_numbers(
     mes_zl_kap2_repository: MongoMesZlKap2Repository, numbers: list[str]
 ) -> None:

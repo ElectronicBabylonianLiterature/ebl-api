@@ -119,11 +119,13 @@ Findings and what was done:
 - R2-3 (major): aliases were full copies of an entry, told apart by
   comparing `_id` with `number`. Fixed: one document per entry,
   `{_id, text, aliases: [...]}`, and entries are de-duplicated by number.
-- R2-4 (major): spellings were handled at query time. Fixed: numbers are
-  normalized to Borger's prime (′) for `'`, `’` and `ʹ`, both in the importer
-  and in the lookup. The variants and precedence code is gone.
-- R2-5 (major): the precedence rule had no test. This is moot after R2-4;
-  normalization is tested for every look-alike.
+- R2-4 (major): spellings were handled at query time. Fixed at the source,
+  at the user's request: the data scripts write every MesZL number with
+  Borger's prime (′), both in `signs.lists` and in `meszl_kap2`. The API
+  matches numbers exactly and has no normalizer; an apostrophe does not
+  match (tested).
+- R2-5 (major): the precedence rule had no test. This is moot after R2-4:
+  there is a single spelling, and exact matching is tested.
 - R2-6 (major): documents were read without the schema. Fixed:
   `MesZlKap2DocumentSchema` loads them, and malformed documents raise a
   ValidationError (tested).

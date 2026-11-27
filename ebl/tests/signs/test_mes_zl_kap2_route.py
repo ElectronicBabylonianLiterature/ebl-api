@@ -68,11 +68,11 @@ def test_returns_the_entries_of_all_mes_zl_numbers(
 
 
 @pytest.mark.usefixtures("mes_zl_kap2_entries")
-def test_resolves_apostrophes_and_aliases(
+def test_resolves_primes_and_aliases(
     full_editor_client: testing.TestClient, sign_repository: SignRepository
 ) -> None:
     sign_repository.create(
-        sign("X", SignListRecord("MZL", "214'"), SignListRecord("MZL", "115a"))
+        sign("X", SignListRecord("MZL", "214′"), SignListRecord("MZL", "115a"))
     )
     result = get(full_editor_client, "/signs/X/meszl-kap2")
     assert result.json == entries_json(PRIMED, SHARED)
