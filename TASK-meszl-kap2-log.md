@@ -3,7 +3,8 @@
 - Removed the Einleitung/Anhänge display at the user's request; committed.
 - Opened the PR (ebl-api #838 / ebl-frontend #872).
 - Started an independent harsh review of the branch diff against origin/master.
-- Review verdict: request changes (pyre error, unrelated reformat, N queries, conventions, test gaps, history).
+- Review verdict: request changes (pyre error, unrelated reformat, N queries,
+  conventions, test gaps, history).
 - Error made: formatted with black instead of ruff format, which reformatted
   test_sign_search_route.py; restored it from origin/master.
 - Error made: mypy/pyright first run against `origin/master` (two-dot) picked up
