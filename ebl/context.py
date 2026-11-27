@@ -21,6 +21,7 @@ from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
 from ebl.lemmatization.application.suggestion_finder import LemmaRepository
+from ebl.signs.application.mes_zl_kap2_repository import MesZlKap2Repository
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -67,6 +68,7 @@ class Context:
     provenance_service: ProvenanceService
     realia_repository: RealiaRepository
     sumerian_word_repository: SumerianWordRepository
+    mes_zl_kap2_repository: MesZlKap2Repository
     media: Optional[MediaRuntime] = None
 
     def get_bibliography(self):

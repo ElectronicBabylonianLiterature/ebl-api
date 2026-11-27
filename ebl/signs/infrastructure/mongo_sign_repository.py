@@ -14,7 +14,7 @@ from ebl.signs.infrastructure.sign_schemas import (
     SignSchema,
 )
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.sign import Sign, SignName
+from ebl.transliteration.domain.sign import MES_ZL_LIST, Sign, SignName
 
 __all__ = [
     "COLLECTION",
@@ -86,7 +86,7 @@ class MongoSignRepository(SignRepository):
                                     "$filter": {
                                         "input": "$lists",
                                         "as": "item",
-                                        "cond": {"$eq": ["$$item.name", "MZL"]},
+                                        "cond": {"$eq": ["$$item.name", MES_ZL_LIST]},
                                     }
                                 }
                             },

@@ -1,4 +1,5 @@
 import pytest
+from pymongo.database import Database
 
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
@@ -7,6 +8,9 @@ from ebl.fragmentarium.application.cropped_sign_images_repository import (
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.annotation import PcaClustering
+from ebl.signs.infrastructure.mongo_mes_zl_kap2_repository import (
+    COLLECTION as MES_ZL_KAP2_COLLECTION,
+)
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
@@ -14,6 +18,7 @@ from ebl.tests.factories.annotation import (
     CroppedSignFactory,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.tests.signs.mes_zl_kap2_data import DOCUMENTS as MES_ZL_KAP2_DOCUMENTS
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 
@@ -68,4 +73,11 @@ def centroid_and_unclustered_sign_images(
             fragment_number=fragment_number,
             annotations=[centroid_annotation, unclustered_annotation],
         )
+    )
+
+
+@pytest.fixture
+def mes_zl_kap2_entries(database: Database) -> None:
+    database[MES_ZL_KAP2_COLLECTION].insert_many(
+        [dict(document) for document in MES_ZL_KAP2_DOCUMENTS]
     )
