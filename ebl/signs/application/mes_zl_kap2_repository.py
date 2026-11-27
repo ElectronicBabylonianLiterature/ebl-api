@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Mapping
 
 import attr
 
@@ -25,6 +24,3 @@ def mes_zl_number_variants(number: str) -> list[str]:
 class MesZlKap2Repository(ABC):
     @abstractmethod
     def find(self, number: str) -> MesZlKap2Entry: ...
-
-    @abstractmethod
-    def replace_all(self, entries: Mapping[str, str]) -> int: ...

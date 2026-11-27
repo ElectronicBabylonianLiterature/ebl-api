@@ -1,5 +1,3 @@
-from typing import Mapping
-
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
@@ -16,7 +14,6 @@ COLLECTION = "meszl_kap2"
 class MongoMesZlKap2Repository(MesZlKap2Repository):
     def __init__(self, database: Database):
         self._collection = MongoCollection(database, COLLECTION)
-        self._raw_collection = database[COLLECTION]
 
     def find(self, number: str) -> MesZlKap2Entry:
         try:
@@ -28,12 +25,3 @@ class MongoMesZlKap2Repository(MesZlKap2Repository):
                 f"No MesZL Kapitel II entry for number {number}."
             ) from error
         return MesZlKap2Entry(document["_id"], document["text"])
-
-    def replace_all(self, entries: Mapping[str, str]) -> int:
-        # A full re-import: the wrapped collection refuses to delete nothing.
-        self._raw_collection.delete_many({})
-        if entries:
-            self._raw_collection.insert_many(
-                [{"_id": number, "text": text} for number, text in entries.items()]
-            )
-        return len(entries)
