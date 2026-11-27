@@ -1,13 +1,12 @@
-from typing import List, Optional
+from typing import List, Optional, cast
 import pytest
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.application.signs_updater import SignsUpdater
 from ebl.corpus.domain.chapter import Chapter
-from ebl.tests.factories.corpus import (
-    ChapterFactory,
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
+from ebl.tests.factories.corpus_lines import (
     LineFactory,
     LineVariantFactory,
-    ManuscriptFactory,
     ManuscriptLineFactory,
 )
 from ebl.transliteration.domain.line_number import LineNumber
@@ -155,7 +154,7 @@ def update_and_serialize_signs(
     signs_updater: SignsUpdater, chapter: Chapter
 ) -> List[Optional[str]]:
     updated_chapter = signs_updater.update(chapter)
-    return ChapterSchema().dump(updated_chapter)["signs"]
+    return cast(dict, ChapterSchema().dump(updated_chapter))["signs"]
 
 
 def test_empty_manuscript(

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, cast
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.record_schemas import RecordSchema
@@ -8,15 +8,18 @@ from ebl.corpus.web.chapter_schemas import (
     ApiOldSiglumSchema,
 )
 from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
+    ChapterQueryColophonLinesFactory,
+    ManuscriptFactory,
+)
+from ebl.tests.factories.corpus_lines import (
     LineFactory,
     LineVariantFactory,
-    ManuscriptFactory,
     ManuscriptLineFactory,
-    ChapterQueryColophonLinesFactory,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.line_number_schemas import OldLineNumberSchema
@@ -24,7 +27,39 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
+
+
+def text_line_content_atf(line: TextLine) -> str:
+    content_start = len(line.line_number.atf) + 1
+    return line.atf[content_start:]
+
+
+def manuscript_line_atf(manuscript_line: ManuscriptLine) -> str:
+    line = manuscript_line.line
+    line_atf = text_line_content_atf(line) if isinstance(line, TextLine) else ""
+    return "\n".join(
+        [line_atf, *[paratext.atf for paratext in manuscript_line.paratext]]
+    ).strip()
+
+
+def manuscript_line_number(manuscript_line: ManuscriptLine) -> str:
+    line = manuscript_line.line
+    return line.line_number.atf[:-1] if isinstance(line, TextLine) else ""
+
+
+def serialize_manuscript_line(manuscript_line: ManuscriptLine) -> dict:
+    return {
+        "manuscriptId": manuscript_line.manuscript_id,
+        "labels": [label.to_value() for label in manuscript_line.labels],
+        "number": manuscript_line_number(manuscript_line),
+        "atf": manuscript_line_atf(manuscript_line),
+        "atfTokens": cast(dict, OneOfLineSchema().dump(manuscript_line.line))[
+            "content"
+        ],
+        "omittedWords": list(manuscript_line.omitted_words),
+    }
 
 
 def create(include_documents: bool) -> Tuple[Chapter, dict]:
@@ -96,39 +131,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                         ),
                         "intertext": "".join(part.value for part in variant.intertext),
                         "manuscripts": [
-                            {
-                                "manuscriptId": manuscript_line.manuscript_id,
-                                "labels": [
-                                    label.to_value() for label in manuscript_line.labels
-                                ],
-                                "number": (
-                                    ""
-                                    if manuscript_line.is_empty
-                                    else manuscript_line.line.line_number.atf[:-1]
-                                ),
-                                "atf": "\n".join(
-                                    [
-                                        (
-                                            ""
-                                            if manuscript_line.is_empty
-                                            else manuscript_line.line.atf[
-                                                len(
-                                                    manuscript_line.line.line_number.atf
-                                                )
-                                                + 1 :
-                                            ]
-                                        ),
-                                        *[
-                                            line.atf
-                                            for line in manuscript_line.paratext
-                                        ],
-                                    ]
-                                ).strip(),
-                                "atfTokens": OneOfLineSchema().dump(
-                                    manuscript_line.line
-                                )["content"],
-                                "omittedWords": list(manuscript_line.omitted_words),
-                            }
+                            serialize_manuscript_line(manuscript_line)
                             for manuscript_line in variant.manuscripts
                         ],
                     }
@@ -168,7 +171,7 @@ def test_serialize_manuscript() -> None:
         "colophon": manuscript.colophon.atf,
         "unplacedLines": manuscript.unplaced_lines.atf,
         "references": ApiReferenceSchema().dump(manuscript.references, many=True),
-        "joins": JoinsSchema().dump(manuscript.joins)["fragments"],
+        "joins": cast(dict, JoinsSchema().dump(manuscript.joins))["fragments"],
         "isInFragmentarium": manuscript.is_in_fragmentarium,
     }
 

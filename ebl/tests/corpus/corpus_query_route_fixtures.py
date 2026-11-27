@@ -4,11 +4,10 @@ from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.corpus.mongo_text_repository_fixtures import LITERATURE_TEXT
-from ebl.tests.factories.corpus import (
-    ChapterFactory,
+from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
+from ebl.tests.factories.corpus_lines import (
     LineFactory,
     LineVariantFactory,
-    ManuscriptFactory,
     ManuscriptLineFactory,
 )
 from ebl.transliteration.domain.genre import Genre

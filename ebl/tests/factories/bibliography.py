@@ -1,11 +1,15 @@
-import factory.fuzzy
+from factory.base import Factory
+from factory.declarations import List, SelfAttribute, Sequence, SubFactory, Trait
+from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
+from ebl.tests.factories.factory_meta import FactoryMeta
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
-from ebl.tests.factories.collections import TupleFactory
+from ebl.tests.factories.collections import TUPLE_FACTORY
 
 
-class BibliographyEntryFactory(factory.Factory):
-    class Meta:
+class BibliographyEntryFactory(Factory):
+    class Meta(FactoryMeta):
         model = dict
         rename = {
             "container_title": "container-title",
@@ -36,21 +40,17 @@ class BibliographyEntryFactory(factory.Factory):
     ]
 
 
-class ReferenceFactory(factory.Factory):
-    class Meta:
+class ReferenceFactory(Factory):
+    class Meta(FactoryMeta):
         model = Reference
 
     class Params:
-        with_document = factory.Trait(
-            document=factory.SubFactory(
-                BibliographyEntryFactory, id=factory.SelfAttribute("..id")
-            )
+        with_document = Trait(
+            document=SubFactory(BibliographyEntryFactory, id=SelfAttribute("..id"))
         )
 
-    id = factory.Sequence(lambda n: BibliographyId(f"RN.{n}"))
-    type = factory.fuzzy.FuzzyChoice(ReferenceType)
-    pages = factory.Sequence(lambda n: f"{n}-{n + 2}, {n + 5}")
-    notes = factory.Faker("paragraph")
-    lines_cited = factory.List(
-        [factory.Sequence(lambda n: f"r. iii*! {n}'.{n + 1}a")], TupleFactory
-    )
+    id = Sequence(lambda n: BibliographyId(f"RN.{n}"))
+    type = FuzzyChoice(ReferenceType)
+    pages = Sequence(lambda n: f"{n}-{n + 2}, {n + 5}")
+    notes = Faker("paragraph")
+    lines_cited = List([Sequence(lambda n: f"r. iii*! {n}'.{n + 1}a")], TUPLE_FACTORY)

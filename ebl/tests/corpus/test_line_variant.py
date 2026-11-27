@@ -4,10 +4,7 @@ import pytest
 
 from ebl.corpus.domain.line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
-from ebl.tests.factories.corpus import (
-    LineVariantFactory,
-    ManuscriptLineFactory,
-)
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway

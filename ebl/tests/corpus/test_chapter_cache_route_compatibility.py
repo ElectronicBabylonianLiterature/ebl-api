@@ -9,7 +9,7 @@ from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.corpus import test_chapter_cache_races
 from ebl.tests.corpus.support import create_chapter_url, simulate_get
-from ebl.tests.factories.corpus import LineFactory, LineVariantFactory
+from ebl.tests.factories.corpus_lines import LineFactory, LineVariantFactory
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.tokens import ValueToken
 
