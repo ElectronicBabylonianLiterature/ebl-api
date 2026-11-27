@@ -16,10 +16,9 @@ from ebl.tests.corpus.chapter_edit_support import ChapterEditRequest, post_edit
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
-    LineVariantFactory,
     ManuscriptFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.tests.factories.parallel_line import (
     ParallelCompositionFactory,
     ParallelFragmentFactory,

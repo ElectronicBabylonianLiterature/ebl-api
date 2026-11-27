@@ -13,10 +13,9 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
-    LineVariantFactory,
     ManuscriptFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.tests.lemmatization.lemma_batch_support import (
     MANUSCRIPT_TOKENS,
     QUERIES,

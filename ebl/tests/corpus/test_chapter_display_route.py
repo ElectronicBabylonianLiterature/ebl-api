@@ -13,7 +13,8 @@ from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.text import Text
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.tests.corpus.support import create_chapter_url, simulate_get
-from ebl.tests.factories.corpus import ChapterFactory, TextFactory, LineFactory
+from ebl.tests.factories.corpus import ChapterFactory, TextFactory
+from ebl.tests.factories.corpus_lines import LineFactory
 from ebl.transliteration.application.parallel_line_injector import (
     ParallelLineInjector,
 )

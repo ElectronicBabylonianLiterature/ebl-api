@@ -24,8 +24,8 @@ from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
     ManuscriptFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import ManuscriptLineFactory
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber

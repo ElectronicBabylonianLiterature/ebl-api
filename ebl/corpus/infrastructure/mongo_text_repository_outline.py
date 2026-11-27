@@ -2,7 +2,7 @@ from typing import List, Mapping, Sequence, cast
 
 from ebl.corpus.application.lines_pagination import MAX_LINES_OFFSET
 from ebl.corpus.application.outline_schemas import load_chapter_outline
-from ebl.corpus.application.schemas import LineSchema, ManuscriptSchema
+from ebl.corpus.application.schemas import LineSchema
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.chapter_outline import ChapterOutline
 from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
@@ -16,6 +16,10 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import (
     chapter_not_found,
 )
 from ebl.corpus.infrastructure.queries import chapter_id_query
+from ebl.corpus.infrastructure.stored_manuscript_schemas import (
+    StoredChapterOutlineDocumentSchema,
+    StoredManuscriptSchema,
+)
 
 OUTLINE_CHAPTER_FIELDS: Sequence[str] = (
     "textId",
@@ -161,6 +165,7 @@ class MongoTextRepositoryOutline(MongoTextRepositoryBase):
         return load_chapter_outline(
             self._aggregate_chapter(id_, aggregate_chapter_outline(id_)),
             self._provenance_service,
+            StoredChapterOutlineDocumentSchema,
         )
 
     def find_lines_page(self, id_: ChapterId, offset: int, limit: int) -> LinesPage:
@@ -177,7 +182,7 @@ class MongoTextRepositoryOutline(MongoTextRepositoryBase):
         lines = cast(Sequence[Line], LineSchema().load(document["lines"], many=True))
         manuscripts = cast(
             Sequence[Manuscript],
-            ManuscriptSchema(
+            StoredManuscriptSchema(
                 context={"provenance_service": self._provenance_service}
             ).load(document["manuscripts"], many=True),
         )

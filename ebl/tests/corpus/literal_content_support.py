@@ -8,9 +8,8 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.tests.corpus.line_move_support import MANUSCRIPT_IDS
 from ebl.tests.factories.corpus import (
     LineFactory,
-    LineVariantFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.line import EmptyLine

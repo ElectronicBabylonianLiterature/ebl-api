@@ -10,9 +10,8 @@ from ebl.lemmatization.domain.lemmatization import Lemma
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
-    LineVariantFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord

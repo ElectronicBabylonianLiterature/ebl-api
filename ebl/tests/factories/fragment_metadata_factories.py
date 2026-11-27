@@ -2,9 +2,9 @@ import random
 from typing import cast
 
 import pydash
-import factory.fuzzy
 from factory.declarations import Iterator, List, Sequence, SubFactory
 from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
 from factory.helpers import make_factory
 
 from ebl.common.domain.period import Period, PeriodModifier
@@ -28,7 +28,7 @@ from ebl.fragmentarium.domain.date import (
 )
 from ebl.chronology.chronology import chronology, King
 
-TUPLE_FACTORY = "ebl.tests.factories.collections.TupleFactory"
+from ebl.tests.factories.collections import TUPLE_FACTORY
 
 
 JoinFactory = make_factory(
@@ -47,8 +47,8 @@ JoinFactory = make_factory(
 
 ScriptFactory = make_factory(
     Script,
-    period=factory.fuzzy.FuzzyChoice(set(Period) - {Period.NONE}),
-    period_modifier=factory.fuzzy.FuzzyChoice(set(PeriodModifier)),
+    period=FuzzyChoice(set(Period) - {Period.NONE}),
+    period_modifier=FuzzyChoice(set(PeriodModifier)),
     uncertain=Faker("boolean"),
 )
 

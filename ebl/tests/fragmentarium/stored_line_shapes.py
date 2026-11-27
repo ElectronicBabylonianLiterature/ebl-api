@@ -3,7 +3,6 @@ from typing import Any, Dict
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 SPARSE_DEFAULTS: Dict[str, Any] = {"erasure": "NONE", "enclosureType": []}
-STORAGE_DEFAULTS: Dict[str, Any] = {"erasure": "NONE", "nameBreaks": []}
 TOKEN_TYPES = frozenset(OneOfTokenSchema.type_schemas)
 TOKEN_LOAD_DEFAULTS: Dict[str, Any] = {
     "erasure": "NONE",
@@ -28,16 +27,34 @@ def is_omittable_token_field(key: str, value: Any) -> bool:
     )
 
 
+def is_omittable_name_breaks(token: Dict[str, Any], key: str) -> bool:
+    return (
+        key == "nameBreaks"
+        and token[key] == []
+        and len(token.get("nameParts", [])) <= 1
+    )
+
+
+def is_token(value: Dict[str, Any]) -> bool:
+    return isinstance(value.get("type"), str) and value["type"] in TOKEN_TYPES
+
+
+def is_omitted_token_key(value: Dict[str, Any], key: str) -> bool:
+    return is_token(value) and (
+        is_omittable_token_field(key, value[key])
+        or is_omittable_name_breaks(value, key)
+    )
+
+
 def sparse_tokens(value: Any) -> Any:
     if isinstance(value, list):
         return [sparse_tokens(item) for item in value]
     if not isinstance(value, dict):
         return value
-    is_token = isinstance(value.get("type"), str) and value["type"] in TOKEN_TYPES
     return {
         key: sparse_tokens(item)
         for key, item in value.items()
-        if not (is_token and is_omittable_token_field(key, item))
+        if not is_omitted_token_key(value, key)
     }
 
 

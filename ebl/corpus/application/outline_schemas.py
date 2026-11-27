@@ -1,4 +1,4 @@
-from typing import Any, Mapping, cast
+from typing import Any, Mapping, Type, cast
 
 from marshmallow import Schema, fields, post_load
 
@@ -111,11 +111,11 @@ class ChapterOutlineDocumentSchema(Schema):
 
 
 def load_chapter_outline(
-    document: Mapping[str, Any], provenance_service: ProvenanceService
+    document: Mapping[str, Any],
+    provenance_service: ProvenanceService,
+    schema: Type[ChapterOutlineDocumentSchema] = ChapterOutlineDocumentSchema,
 ) -> ChapterOutline:
     return cast(
         ChapterOutline,
-        ChapterOutlineDocumentSchema(
-            context={"provenance_service": provenance_service}
-        ).load(document),
+        schema(context={"provenance_service": provenance_service}).load(document),
     )

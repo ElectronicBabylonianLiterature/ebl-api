@@ -3,12 +3,14 @@ from ebl.corpus.domain.text import Text
 from ebl.dictionary.domain.word import WordId
 from ebl.tests.factories.corpus import (
     ChapterFactory,
+    ChapterQueryColophonLinesFactory,
+    ManuscriptFactory,
+    TextFactory,
+)
+from ebl.tests.factories.corpus_lines import (
     LineFactory,
     LineVariantFactory,
-    ManuscriptFactory,
     ManuscriptLineFactory,
-    TextFactory,
-    ChapterQueryColophonLinesFactory,
 )
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.line_number import LineNumber

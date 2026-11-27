@@ -22,8 +22,8 @@ from ebl.tests.corpus.outline_support import (
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
-    LineVariantFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory
 from ebl.tests.transliteration.storage_test_helpers import has_key
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (

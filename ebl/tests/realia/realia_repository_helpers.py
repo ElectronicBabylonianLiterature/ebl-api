@@ -15,15 +15,9 @@ def create_entry_with_bibliography(
     entry: RealiaEntry,
 ) -> None:
     realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
-    for reference in entry.references:
+    for reference in entry.all_references:
         if reference.document:
             bibliography_repository.create(reference.document)
-    for reallexikon_entry in entry.reallexikon:
-        if (
-            reallexikon_entry.reference is not None
-            and reallexikon_entry.reference.document
-        ):
-            bibliography_repository.create(reallexikon_entry.reference.document)
 
 
 def insert_minimal(realia_repository: MongoRealiaRepository, identifier: str) -> None:

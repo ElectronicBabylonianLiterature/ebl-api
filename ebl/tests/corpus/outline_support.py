@@ -15,10 +15,9 @@ from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
-    LineVariantFactory,
     ManuscriptFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.tests.factories.provenance import build_provenance_records
 from ebl.tests.transliteration.storage_test_helpers import stored_dump
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange

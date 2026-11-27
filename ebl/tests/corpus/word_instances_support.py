@@ -17,9 +17,8 @@ from ebl.tests.corpus.line_move_support import (
 )
 from ebl.tests.factories.corpus import (
     LineFactory,
-    LineVariantFactory,
-    ManuscriptLineFactory,
 )
+from ebl.tests.factories.corpus_lines import LineVariantFactory, ManuscriptLineFactory
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber

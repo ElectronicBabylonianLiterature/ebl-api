@@ -1,9 +1,9 @@
 import random
 from typing import List as TypingList, Sequence as TypingSequence
 
-import factory.fuzzy
 from factory.declarations import Iterator, List, Sequence, SubFactory
 from factory.faker import Faker
+from factory.fuzzy import FuzzyChoice
 from factory.helpers import make_factory
 
 from ebl.common.domain.accession import Accession
@@ -88,7 +88,7 @@ FragmentFactory = make_factory(
     Fragment,
     number=Sequence(lambda n: MuseumNumber("X", str(n))),
     accession=Sequence(lambda n: Accession("A", str(n))),
-    museum=factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN]),
+    museum=FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN]),
     collection=Faker("word"),
     publication=Faker("sentence"),
     acquisitions=List([SubFactory(AcquisitionFactory), SubFactory(AcquisitionFactory)]),

@@ -1,6 +1,7 @@
 from ebl.corpus.domain.chapter import make_title
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
-from ebl.tests.factories.corpus import ChapterFactory, LineFactory, TextFactory
+from ebl.tests.factories.corpus import ChapterFactory, TextFactory
+from ebl.tests.factories.corpus_lines import LineFactory
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.translation_line import (
     TranslationLine,
