@@ -43,6 +43,13 @@ CHAPTER = attr.evolve(
 READS: dict[str, Callable[[TextRepository], object]] = {
     "text": lambda repository: repository.find(CHAPTER.text_id),
     "chapter": lambda repository: repository.find_chapter(CHAPTER.id_),
+    "chapter_with_revision": lambda repository: repository.find_chapter_with_revision(
+        CHAPTER.id_
+    ),
+    "outline": lambda repository: repository.find_chapter_outline(CHAPTER.id_),
+    "line_snapshot": lambda repository: repository.find_line_with_revision(
+        CHAPTER.id_, 0
+    ),
     "display": lambda repository: repository.find_chapter_for_display(CHAPTER.id_),
     "manuscripts": lambda repository: repository.query_manuscripts_by_chapter(
         CHAPTER.id_

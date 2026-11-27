@@ -12,6 +12,12 @@ class ManuscriptLineAlignment:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class LineAlignment:
+    index: int
+    variants: Sequence[Sequence[ManuscriptLineAlignment]]
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Alignment:
     _lines: Sequence[Sequence[Sequence[ManuscriptLineAlignment]]]
 

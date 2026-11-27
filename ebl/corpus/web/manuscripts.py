@@ -4,12 +4,11 @@ from marshmallow import Schema, fields
 
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.provenance.application.provenance_service import ProvenanceService
-from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.web.chapter_schemas import (
-    ApiChapterSchema,
-    ApiManuscriptSchema,
-    MuseumNumberString,
-)
+from ebl.corpus.application.chapter_edit_writer import ChapterEditWriter
+from ebl.corpus.application.lines_pagination import parse_lines_view, parse_revision
+from ebl.corpus.domain.manuscripts_update import ManuscriptsUpdate
+from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, MuseumNumberString
+from ebl.corpus.web.saved_chapter import dump_saved_chapter
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
 from ebl.users.web.user_request import UserRequest
@@ -25,11 +24,11 @@ class ManuscriptDtoSchema(Schema):
 class ManuscriptsResource:
     def __init__(
         self,
-        corpus: Corpus,
+        writer: ChapterEditWriter,
         cache: ChapterCache,
         provenance_service: ProvenanceService,
     ) -> None:
-        self._corpus = corpus
+        self._writer = writer
         self._cache = cache
         self._provenance_service = provenance_service
 
@@ -37,14 +36,10 @@ class ManuscriptsResource:
         self,
         req: falcon.Request,
         resp: falcon.Response,
-        genre: str,
-        category: str,
-        index: str,
-        stage: str,
-        name: str,
+        **chapter: str,
     ) -> None:
-        chapter_id = create_chapter_id(genre, category, index, stage, name)
-        manuscripts = self._corpus.find_manuscripts_with_joins(chapter_id)
+        chapter_id = create_chapter_id(**chapter)
+        manuscripts = self._writer.find_manuscripts_with_joins(chapter_id)
         resp.media = ApiManuscriptSchema().dump(manuscripts, many=True)
 
     @falcon.before(require_scope, "write:texts")
@@ -52,13 +47,11 @@ class ManuscriptsResource:
         self,
         req: UserRequest,
         resp: falcon.Response,
-        genre: str,
-        category: str,
-        index: str,
-        stage: str,
-        name: str,
+        **chapter: str,
     ) -> None:
-        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        chapter_id = create_chapter_id(**chapter)
+        view = parse_lines_view(req.params)
+        revision = parse_revision(req.params)
         schema = ManuscriptDtoSchema(
             context={"provenance_service": self._provenance_service}
         )
@@ -69,10 +62,12 @@ class ManuscriptsResource:
             )
         dto = cast(dict, schema.load(req.media))
         with self._cache.updating_chapter(chapter_id):
-            updated_chapter = self._corpus.update_manuscripts(
+            saved = self._writer.save_manuscripts(
                 chapter_id,
-                dto["manuscripts"],
-                tuple(dto["uncertain_fragments"]),
+                ManuscriptsUpdate(
+                    dto["manuscripts"], tuple(dto["uncertain_fragments"])
+                ),
+                revision,
                 req.context.user,
             )
-        resp.media = ApiChapterSchema().dump(updated_chapter)
+        resp.media = dump_saved_chapter(saved, view)

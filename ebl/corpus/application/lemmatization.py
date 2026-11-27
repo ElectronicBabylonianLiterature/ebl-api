@@ -11,4 +11,10 @@ class LineVariantLemmatization:
     manuscripts: Sequence[Sequence[LemmatizationToken]]
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class LineLemmatization:
+    index: int
+    variants: Sequence[LineVariantLemmatization]
+
+
 ChapterLemmatization = Sequence[Sequence[LineVariantLemmatization]]

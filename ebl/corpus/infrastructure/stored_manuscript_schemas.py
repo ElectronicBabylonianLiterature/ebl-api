@@ -2,6 +2,7 @@ from marshmallow import fields
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.corpus.application.outline_schemas import ChapterOutlineDocumentSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
     DictionaryLineSchema,
@@ -24,6 +25,10 @@ class StoredChapterSchema(ChapterSchema):
 
 
 class StoredChapterDisplaySchema(ChapterDisplaySchema):
+    manuscripts = fields.Nested(StoredManuscriptSchema, many=True, required=True)
+
+
+class StoredChapterOutlineDocumentSchema(ChapterOutlineDocumentSchema):
     manuscripts = fields.Nested(StoredManuscriptSchema, many=True, required=True)
 
 

@@ -1,41 +1,53 @@
 import logging
+from typing import NoReturn
 
 import falcon
 
 from ebl.dispatcher import DispatchError
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import ConflictError, DataError, DuplicateError, NotFoundError
 from ebl.lemmatization.domain.lemmatization import LemmatizationError
 from ebl.transliteration.domain.alignment import AlignmentError
 
 
-def http_error(_req, _resp, ex, _params):
+def http_error(
+    _req: falcon.Request, _resp: falcon.Response, ex: Exception, _params: dict
+) -> NoReturn:
     raise ex
 
 
-def unexpected_error(_req, _resp, _ex, _params):
+def unexpected_error(
+    _req: falcon.Request, _resp: falcon.Response, _ex: Exception, _params: dict
+) -> NoReturn:
     logging.exception("Unexpected Exception")
     raise falcon.HTTPInternalServerError()
 
 
-def unprocessable_entity(_req, _resp, ex, _params):
+def unprocessable_entity(
+    _req: falcon.Request, _resp: falcon.Response, ex: Exception, _params: dict
+) -> NoReturn:
     raise falcon.HTTPUnprocessableEntity(description=str(ex))
 
 
-def not_found_error(_req, _resp, ex, _params):
+def not_found_error(
+    _req: falcon.Request, _resp: falcon.Response, ex: Exception, _params: dict
+) -> NoReturn:
     raise falcon.HTTPNotFound(description=str(ex))
 
 
-def duplicate_error(_req, _resp, ex, _params):
+def conflict_error(
+    _req: falcon.Request, _resp: falcon.Response, ex: Exception, _params: dict
+) -> NoReturn:
     raise falcon.HTTPConflict(description=str(ex))
 
 
-def set_up(api):
+def set_up(api: falcon.App) -> None:
     api.add_error_handler(Exception, unexpected_error)
     api.add_error_handler(AlignmentError, unprocessable_entity)
     api.add_error_handler(DispatchError, unprocessable_entity)
     api.add_error_handler(LemmatizationError, unprocessable_entity)
     api.add_error_handler(NotFoundError, not_found_error)
-    api.add_error_handler(DuplicateError, duplicate_error)
+    api.add_error_handler(DuplicateError, conflict_error)
+    api.add_error_handler(ConflictError, conflict_error)
     api.add_error_handler(DataError, unprocessable_entity)
     api.add_error_handler(falcon.HTTPError, http_error)
     api.add_error_handler(falcon.HTTPStatus, http_error)

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Callable, Mapping, Optional, TypeVar
 
 from marshmallow import Schema, fields, post_load, ValidationError
 
@@ -12,6 +12,22 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import (
 )
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.word_tokens import AbstractWord
+
+
+VariantParser = Callable[[str, Language], AbstractWord]
+VARIANT_PARSERS: Mapping[str, VariantParser] = {
+    "Word": lambda atf, language: parse_word(atf).set_language(language),
+    "AkkadianWord": lambda atf, _: parse_normalized_akkadian_word(atf),
+    "GreekWord": lambda atf, language: parse_greek_word(atf).set_language(language),
+}
+T = TypeVar("T")
+
+
+def _find_variant_option(options: Mapping[str, T], data: dict, field: str) -> T:
+    try:
+        return options[data[field]]
+    except KeyError as error:
+        raise ValidationError(f"Invalid {field} {data[field]}.", field) from error
 
 
 class AlignmentTokenSchema(Schema):
@@ -29,26 +45,17 @@ class AlignmentTokenSchema(Schema):
 
     @staticmethod
     def _create_variant(data: dict) -> Optional[AbstractWord]:
-        variant = data.get("variant")
-        return (
-            AlignmentTokenSchema._create_word(
-                variant, data["type"], Language[data["language"]]
-            )
-            if variant
-            else None
-        )
+        return AlignmentTokenSchema._parse_variant(data) if data["variant"] else None
 
     @staticmethod
-    def _create_word(atf: str, type_: str, language: Language) -> AbstractWord:
+    def _parse_variant(data: dict) -> AbstractWord:
+        language = _find_variant_option(Language.__members__, data, "language")
+        parse = _find_variant_option(VARIANT_PARSERS, data, "type")
         try:
-            return {
-                "Word": lambda: parse_word(atf).set_language(language),
-                "AkkadianWord": lambda: parse_normalized_akkadian_word(atf),
-                "GreekWord": lambda: parse_greek_word(atf).set_language(language),
-            }[type_]()
+            return parse(data["variant"], language)
         except PARSE_ERRORS as error:
             raise ValidationError(
-                f"Invalid value {atf} for {type_}.", "variant"
+                f"Invalid value {data['variant']} for {data['type']}.", "variant"
             ) from error
 
 

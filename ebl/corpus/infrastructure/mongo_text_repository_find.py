@@ -1,4 +1,4 @@
-from typing import cast
+from typing import Optional, Tuple, cast
 
 from ebl.bibliography.application.reference_documents import hydrate_reference_documents
 from ebl.corpus.application.schemas import (
@@ -7,6 +7,7 @@ from ebl.corpus.application.schemas import (
 )
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.chapter_revision import LEGACY_REVISION
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.queries import (
@@ -15,6 +16,7 @@ from ebl.corpus.infrastructure.queries import (
     join_chapters,
 )
 from ebl.corpus.infrastructure.mongo_text_repository_base import (
+    REVISION_FIELD,
     MongoTextRepositoryBase,
     text_not_found,
     chapter_not_found,
@@ -62,14 +64,30 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
                 chapter_id_query(id_),
                 projection={"_id": False, "_cacheRevision": False},
             )
-            return cast(
-                Chapter,
-                StoredChapterSchema(
-                    context={"provenance_service": self._provenance_service}
-                ).load(chapter),
+            return self._load_chapter(chapter)
+        except NotFoundError as error:
+            raise chapter_not_found(id_) from error
+
+    def find_chapter_with_revision(self, id_: ChapterId) -> Tuple[Chapter, str]:
+        try:
+            chapter = self._chapters.find_one(
+                chapter_id_query(id_), projection={"_id": False}
+            )
+            revision: Optional[str] = chapter.pop(REVISION_FIELD, None)
+            return (
+                self._load_chapter(chapter),
+                LEGACY_REVISION if revision is None else revision,
             )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
+
+    def _load_chapter(self, chapter: dict) -> Chapter:
+        return cast(
+            Chapter,
+            StoredChapterSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(chapter),
+        )
 
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         try:
